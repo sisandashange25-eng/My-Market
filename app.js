@@ -1,3 +1,7 @@
+const SUPABASE_URL = "https://gaccizzlwswwynattgda.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdhY2Npenpsd3N3d3luYXR0Z2RhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5NzU5MTQsImV4cCI6MjEwNTU1MTkxNH0.-H0PuF99TWnE8cH3Ecb-NAJh4ml0txAzeyLoCF6foXA";
+const SUPABASE_ANON_KEY = SUPABASE_KEY;
+
 function sellerCentre() {
   const name = prompt("Enter your store name:");
 
