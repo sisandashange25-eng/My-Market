@@ -320,7 +320,7 @@ async function checkout() {
 
 
     const orderResponse = await fetch(
-      SUPABASE_URL + "/rest/v1/orders",
+      SUPABASE_URL + "/rest/v1/Orders",
       {
         method: "POST",
 
@@ -384,7 +384,7 @@ async function checkout() {
 
 
     const itemsResponse = await fetch(
-      SUPABASE_URL + "/rest/v1/orders_items",
+      SUPABASE_URL + "/rest/v1/Orders_items",
       {
         method: "POST",
 
