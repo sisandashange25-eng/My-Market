@@ -8,6 +8,6 @@
 <div class="toolbar"><h2 id="heading">All products</h2><select id="sort" onchange="renderProducts()"><option value="popular">Popular</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></div>
 <section id="products" class="grid"></section></main>
 <aside id="cart" class="drawer"><button class="close" onclick="toggleCart()">✕</button><h2>Your Cart</h2><div id="cartItems"></div><div class="total">Total: R<span id="total">0.00</span></div><button class="checkout" onclick="checkout()">Continue to checkout</button></aside>
-<footer><strong>ZavaMarket</strong><br><span>Shop smart. Shop local. Shop Zava.</span><br><small>© 2026 ZavaMarket • Seller Centre • Customer Support</small></footer>
+<footer><strong>ZavaMarket</strong><br><span>Shop smart. Shop local. Shop Zava.</span><br><small>© 2026 ZavaMarket • <a href="#" onclick="sellerCentre()">Seller Centre</a> • Customer Support</small></footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="app.js"></script>
