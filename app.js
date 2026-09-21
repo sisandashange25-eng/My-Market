@@ -145,16 +145,135 @@ function toggleCart() {
   updateCart();
 }
 
-function checkout() {
+async function checkout() {
   if (!cart.length) {
     alert("Your cart is empty.");
     return;
   }
 
-  alert(
-    "ZavaMarket is connected to its database. " +
-    "Real customer accounts, payments and order processing are the next step."
-  );
+  const customerId = prompt("Enter your Customer ID:");
+
+  if (!customerId) {
+    alert("Customer ID is required.");
+    return;
+  }
+
+  const deliveryAddress = prompt("Enter your delivery address:");
+
+  if (!deliveryAddress) {
+    alert("Delivery address is required.");
+    return;
+  }
+
+  let total = 0;
+  const orderItems = [];
+  const counts = {};
+
+  cart.forEach(id => {
+    counts[id] = (counts[id] || 0) + 1;
+  });
+
+  for (const [id, quantity] of Object.entries(counts)) {
+    const product = products.find(p => p.id == id);
+
+    if (!product) continue;
+
+    total += product.price * quantity;
+
+    orderItems.push({
+      Products_id: product.id,
+      Quantity: quantity,
+      Price: product.price
+    });
+  }
+
+  try {
+    const orderResponse = await fetch(
+      SUPABASE_URL + "/rest/v1/Orders",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify({
+          Customer_id: customerId,
+          Total: total,
+          Status: "Pending",
+          Delivery_address: deliveryAddress
+        })
+      }
+    );
+
+    if (!orderResponse.ok) {
+      const errorText = await orderResponse.text();
+      console.log("Order error:", errorText);
+      alert("Could not create order.\n\n" + errorText);
+      return;
+    }
+
+    const orderData = await orderResponse.json();
+
+    if (!orderData || !orderData.length || !orderData[0].id) {
+      alert("Order was created, but the order ID could not be retrieved.");
+      return;
+    }
+
+    const orderId = orderData[0].id;
+
+    const items = orderItems.map(item => ({
+      Order_id: orderId,
+      Products_id: item.Products_id,
+      Quantity: item.Quantity,
+      Price: item.Price
+    }));
+
+    const itemsResponse = await fetch(
+      SUPABASE_URL + "/rest/v1/Orders_items",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify(items)
+      }
+    );
+
+    if (!itemsResponse.ok) {
+      const errorText = await itemsResponse.text();
+      console.log("Order items error:", errorText);
+
+      alert(
+        "Order was created, but the order items could not be saved.\n\n" +
+        errorText
+      );
+
+      return;
+    }
+
+    cart = [];
+    save();
+    updateCart();
+
+    alert(
+      "Order placed successfully! 🎉\n\n" +
+      "Order ID: " + orderId + "\n" +
+      "Total: R" + total.toFixed(2)
+    );
+
+  } catch (error) {
+    console.log("Checkout error:", error);
+
+    alert(
+      "Checkout failed.\n\n" +
+      "Please check your internet connection."
+    );
+  }
 }
 
 async function sellerCentre() {
