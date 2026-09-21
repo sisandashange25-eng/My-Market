@@ -1,135 +1,277 @@
 <!doctype html>
 <html lang="en">
-
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>ZavaMarket Seller Dashboard</title>
 
 <style>
+*{box-sizing:border-box}
 
-* {
-  box-sizing: border-box;
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f5f6f8;
+color:#222;
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f6f8;
-  color: #222;
+header{
+background:#111827;
+color:white;
+padding:18px;
 }
 
-header {
-  background: #111827;
-  color: white;
-  padding: 18px;
+header h1{
+margin:0;
+font-size:22px;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 22px;
+header p{
+margin:5px 0 0;
+opacity:.8;
 }
 
-header p {
-  margin: 5px 0 0;
-  opacity: .8;
+main{
+max-width:700px;
+margin:20px auto;
+padding:15px;
 }
 
-main {
-  max-width: 700px;
-  margin: 20px auto;
-  padding: 15px;
+.card{
+background:white;
+border-radius:14px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 3px 15px rgba(0,0,0,.08);
 }
 
-.card {
-  background: white;
-  border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 3px 15px rgba(0,0,0,.08);
+h2{
+margin-top:0;
 }
 
-h2 {
-  margin-top: 0;
+label{
+display:block;
+margin-top:15px;
+font-weight:bold;
 }
 
-label {
-  display: block;
-  margin-top: 15px;
-  font-weight: bold;
+input,textarea,select{
+width:100%;
+padding:12px;
+margin-top:7px;
+border:1px solid #ddd;
+border-radius:8px;
+font-size:16px;
 }
 
-input,
-textarea,
-select {
-  width: 100%;
-  padding: 12px;
-  margin-top: 7px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
+textarea{
+min-height:100px;
+resize:vertical;
 }
 
-textarea {
-  min-height: 100px;
-  resize: vertical;
+button{
+width:100%;
+padding:13px;
+margin-top:18px;
+border:0;
+border-radius:8px;
+background:#111827;
+color:white;
+font-size:16px;
+font-weight:bold;
 }
 
-button {
-  width: 100%;
-  padding: 13px;
-  margin-top: 18px;
-  border: 0;
-  border-radius: 8px;
-  background: #111827;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+.message{
+margin-top:15px;
+padding:12px;
+border-radius:8px;
+display:none;
 }
 
-button:active {
-  transform: scale(.98);
+.success{
+background:#dcfce7;
+color:#166534;
 }
 
-.message {
-  margin-top: 15px;
-  padding: 12px;
-  border-radius: 8px;
-  display: none;
+.error{
+background:#fee2e2;
+color:#991b1b;
 }
 
-.success {
-  background: #dcfce7;
-  color: #166534;
+.back{
+background:#6b7280;
 }
-
-.error {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-.back {
-  background: #6b7280;
-}
-
 </style>
-
 </head>
 
 <body>
 
 <header>
-
 <h1>🛍️ ZavaMarket Seller Dashboard</h1>
-
 <p>Add and manage your products</p>
-
 </header>
-
 
 <main>
 
 <div class="card">
 
-<h2>Add a Product</
+<h2>Add a Product</h2>
+
+<label>Product name</label>
+<input id="name" type="text" placeholder="Example: Wireless Headphones">
+
+<label>Description</label>
+<textarea id="description" placeholder="Describe your product"></textarea>
+
+<label>Price (R)</label>
+<input id="price" type="number" step="0.01" placeholder="299.00">
+
+<label>Stock</label>
+<input id="stock" type="number" placeholder="10">
+
+<label>Category</label>
+<select id="category">
+<option value="Electronics">Electronics</option>
+<option value="Fashion">Fashion</option>
+<option value="Home">Home</option>
+<option value="Beauty">Beauty</option>
+</select>
+
+<label>Product image URL</label>
+<input id="image_url" type="url" placeholder="https://...">
+
+<button type="button" onclick="addProduct()">
+Add Product
+</button>
+
+<div id="message" class="message"></div>
+
+</div>
+
+<div class="card">
+
+<h2>Seller information</h2>
+
+<p>
+Your products will appear on ZavaMarket after they are added.
+</p>
+
+<button type="button" class="back" onclick="goBack()">
+← Back to ZavaMarket
+</button>
+
+</div>
+
+</main>
+
+<script>
+
+const SUPABASE_URL =
+"https://gaccizzlwswwynattgda.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
+async function addProduct(){
+
+const name=document.getElementById("name").value.trim();
+const description=document.getElementById("description").value.trim();
+const price=document.getElementById("price").value;
+const stock=document.getElementById("stock").value;
+const category=document.getElementById("category").value;
+const image_url=document.getElementById("image_url").value.trim();
+
+if(!name || !price || !stock){
+
+showMessage(
+"Please enter the product name, price and stock.",
+false
+);
+
+return;
+}
+
+try{
+
+const response=await fetch(
+SUPABASE_URL+"/rest/v1/products",
+{
+method:"POST",
+
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY,
+"Content-Type":"application/json",
+"Prefer":"return=minimal"
+},
+
+body:JSON.stringify({
+name:name,
+description:description,
+price:Number(price),
+stock:Number(stock),
+category:category,
+image_url:image_url,
+active:true
+})
+}
+);
+
+if(!response.ok){
+
+const errorText=await response.text();
+
+showMessage(
+"Product could not be added: "+errorText,
+false
+);
+
+return;
+}
+
+showMessage(
+"Product added successfully! 🎉",
+true
+);
+
+document.getElementById("name").value="";
+document.getElementById("description").value="";
+document.getElementById("price").value="";
+document.getElementById("stock").value="";
+document.getElementById("image_url").value="";
+
+}catch(error){
+
+console.log(error);
+
+showMessage(
+"Something went wrong. Please try again.",
+false
+);
+
+}
+
+}
+
+function showMessage(text,success){
+
+const box=document.getElementById("message");
+
+box.textContent=text;
+
+box.className=
+"message "+(success?"success":"error");
+
+box.style.display="block";
+}
+
+function goBack(){
+
+window.location.href="Index.html";
+
+}
+
+</script>
+
+</body>
+</html>
