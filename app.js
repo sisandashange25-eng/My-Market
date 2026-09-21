@@ -13,7 +13,7 @@ function sellerCentre() {
     return;
   }
 
-  fetch(SUPABASE_URL + "/rest/v1/Sellers", {
+  fetch(SUPABASE_URL + "/rest/v1/sellers", {
     method: "POST",
     headers: {
       "apikey": SUPABASE_KEY,
