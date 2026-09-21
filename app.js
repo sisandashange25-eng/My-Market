@@ -39,27 +39,12 @@ async function loadProducts() {
         price: Number(p.price),
         cat: p.category || "Other",
         icon: "🛍️",
-        seller: "Zava Seller"
+seller: "Zava Seller",
+image_url: p.image_url || ""
       }));
     }
 
-    renderProducts();
-    updateCart();
-
-  } catch (error) {
-    console.log("Using demo products:", error);
-    renderProducts();
-    updateCart();
-  }
-}
-
-function setCategory(c) {
-  category = c;
-  document.getElementById("heading").textContent = c + " products";
-  renderProducts();
-}
-
-function renderProducts() {
+   function renderProducts() {
   const searchBox = document.getElementById("search");
   const sortBox = document.getElementById("sort");
 
@@ -77,14 +62,19 @@ function renderProducts() {
   document.getElementById("products").innerHTML =
     filtered.map(x => `
       <article class="card">
-        <div class="pic">${x.icon}</div>
+        <div class="pic">
+          ${x.image_url
+            ? `<img src="${x.image_url}" alt="${x.name}" style="width:100%;height:100%;object-fit:cover;">`
+            : `<span>${x.icon || "🛍️"}</span>`
+          }
+        </div>
         <h3>${x.name}</h3>
         <div class="seller">${x.seller}</div>
         <div class="price">R${x.price.toFixed(2)}</div>
         <button class="add" onclick="add(${x.id})">Add to cart</button>
       </article>
     `).join("") || "<p>No products found.</p>";
-}
+        } 
 
 function add(id) {
   cart.push(id);
