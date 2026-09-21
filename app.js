@@ -151,16 +151,23 @@ async function checkout() {
     return;
   }
 
-  const customerId = prompt("Enter your Customer ID:");
+  const fullName = prompt("Enter your full name:");
 
-  if (!customerId) {
-    alert("Customer ID is required.");
+  if (!fullName || !fullName.trim()) {
+    alert("Full name is required.");
+    return;
+  }
+
+  const phone = prompt("Enter your phone number:");
+
+  if (!phone || !phone.trim()) {
+    alert("Phone number is required.");
     return;
   }
 
   const deliveryAddress = prompt("Enter your delivery address:");
 
-  if (!deliveryAddress) {
+  if (!deliveryAddress || !deliveryAddress.trim()) {
     alert("Delivery address is required.");
     return;
   }
@@ -187,165 +194,16 @@ async function checkout() {
     });
   }
 
-  try {
-    const orderResponse = await fetch(
-      SUPABASE_URL + "/rest/v1/Orders",
-      {
-        method: "POST",
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": "Bearer " + SUPABASE_KEY,
-          "Content-Type": "application/json",
-          "Prefer": "return=representation"
-        },
-        body: JSON.stringify({
-          Customer_id: customerId,
-          Total: total,
-          Status: "Pending",
-          Delivery_address: deliveryAddress
-        })
-      }
-    );
-
-    if (!orderResponse.ok) {
-      const errorText = await orderResponse.text();
-      console.log("Order error:", errorText);
-      alert("Could not create order.\n\n" + errorText);
-      return;
-    }
-
-    const orderData = await orderResponse.json();
-
-    if (!orderData || !orderData.length || !orderData[0].id) {
-      alert("Order was created, but the order ID could not be retrieved.");
-      return;
-    }
-
-    const orderId = orderData[0].id;
-
-    const items = orderItems.map(item => ({
-      Order_id: orderId,
-      Products_id: item.Products_id,
-      Quantity: item.Quantity,
-      Price: item.Price
-    }));
-
-    const itemsResponse = await fetch(
-      SUPABASE_URL + "/rest/v1/Orders_items",
-      {
-        method: "POST",
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": "Bearer " + SUPABASE_KEY,
-          "Content-Type": "application/json",
-          "Prefer": "return=minimal"
-        },
-        body: JSON.stringify(items)
-      }
-    );
-
-    if (!itemsResponse.ok) {
-      const errorText = await itemsResponse.text();
-      console.log("Order items error:", errorText);
-
-      alert(
-        "Order was created, but the order items could not be saved.\n\n" +
-        errorText
-      );
-
-      return;
-    }
-
-    cart = [];
-    save();
-    updateCart();
-
-    alert(
-      "Order placed successfully! 🎉\n\n" +
-      "Order ID: " + orderId + "\n" +
-      "Total: R" + total.toFixed(2)
-    );
-
-  } catch (error) {
-    console.log("Checkout error:", error);
-
-    alert(
-      "Checkout failed.\n\n" +
-      "Please check your internet connection."
-    );
-  }
-}
-
-async function sellerCentre() {
-
-  const name = prompt("Enter your store name:");
-
-  if (!name) {
-    alert("Seller registration cancelled.");
-    return;
-  }
-
-  const email = prompt("Enter your email address:");
-
-  if (!email) {
-    alert("Seller registration cancelled.");
+  if (!orderItems.length) {
+    alert("Could not find the products in your cart.");
     return;
   }
 
   try {
-
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/sellers",
+    // STEP 1: Create customer profile
+    const profileResponse = await fetch(
+      SUPABASE_URL + "/rest/v1/Profiles",
       {
         method: "POST",
-
         headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": "Bearer " + SUPABASE_KEY,
-          "Content-Type": "application/json",
-          "Prefer": "return=minimal"
-        },
-
-        body: JSON.stringify({
-          store_name: name,
-          email: email,
-          approved: false
-        })
-      }
-    );
-
-    if (!response.ok) {
-
-      const errorText = await response.text();
-
-      console.log("Supabase seller error:", errorText);
-
-      alert(
-        "Seller registration failed.\n\n" +
-        errorText
-      );
-
-      return;
-    }
-
-    alert(
-      "Seller application submitted successfully! 🎉\n\n" +
-      "Store: " + name + "\n" +
-      "Email: " + email + "\n\n" +
-      "Your application is waiting for approval."
-    );
-
-  } catch (error) {
-
-    console.log("Seller registration error:", error);
-
-    alert(
-      "Seller registration failed.\n\n" +
-      "Please check your internet connection and try again."
-    );
-  }
-}
-
-renderProducts();
-updateCart();
-loadProducts();
+          "apikey
