@@ -158,4 +158,6 @@ alert(
 );
 }
 
+renderProducts();
+updateCart();
 loadProducts();
