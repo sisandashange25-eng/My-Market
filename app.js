@@ -149,3 +149,6 @@ function checkout() {
 }
 
 loadProducts();
+function sellerCentre() {
+  alert("Seller Centre is coming next. We will add seller registration and product uploads here.");
+}
