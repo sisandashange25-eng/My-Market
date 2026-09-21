@@ -277,7 +277,7 @@ async function checkout() {
         },
 
         body: JSON.stringify({
-          Full_name: fullName.trim(),
+          full_name: fullName.trim(),
           Phone: phone.trim(),
           Role: "customer"
         })
