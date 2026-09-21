@@ -192,8 +192,10 @@ function sellerCentre() {
       approved: false
     })
   })
-  .then(response => {
+  .then(async response => {
     if (!response.ok) {
+      const errorText = await response.text();
+      console.log("Supabase seller error:", errorText);
       throw new Error("Seller registration failed");
     }
 
@@ -205,10 +207,10 @@ function sellerCentre() {
     );
   })
   .catch(error => {
-    console.log(error);
+    console.log("Seller registration error:", error);
 
     alert(
-      "Could not submit the seller application.\n\n" +
+      "Seller registration failed.\n\n" +
       "Please try again."
     );
   });
