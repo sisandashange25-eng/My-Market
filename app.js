@@ -56,7 +56,8 @@ function renderProducts() {
 async function loadProducts() {
   try {
     const response = await fetch(
-      SUPABASE_URL + "/rest/v1/products?select=*&active=eq.true&order=id.desc",
+      SUPABASE_URL + "/rest/v1/Profiles",
+      {
       {
         headers: {
           "apikey": SUPABASE_KEY,
