@@ -148,7 +148,28 @@ function checkout() {
   );
 }
 
-loadProducts();
 function sellerCentre() {
-  alert("Seller Centre is coming next. We will add seller registration and product uploads here.");
+  const name = prompt("Enter your store name:");
+
+  if (!name) {
+    alert("Seller registration cancelled.");
+    return;
+  }
+
+  const email = prompt("Enter your email address:");
+
+  if (!email) {
+    alert("Seller registration cancelled.");
+    return;
+  }
+
+  alert(
+    "Seller Centre\n\n" +
+    "Store: " + name + "\n" +
+    "Email: " + email + "\n\n" +
+    "Registration form is working. " +
+    "Next we will connect it to Supabase accounts."
+  );
 }
+
+loadProducts();
