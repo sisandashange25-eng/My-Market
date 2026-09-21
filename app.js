@@ -134,7 +134,7 @@ alert(
 );
 }
 
-async function sellerCentre() {
+function sellerCentre() {
 const name = prompt("Enter your store name:");
 
 if (!name) {
@@ -149,80 +149,13 @@ alert("Seller registration cancelled.");
 return;
 }
 
-const password = prompt("Create a password (at least 6 characters):");
-
-if (!password || password.length < 6) {
-alert("Password must be at least 6 characters.");
-return;
-}
-
-try {
-const signupResponse = await fetch(
-SUPABASE_URL + "/auth/v1/signup",
-{
-method: "POST",
-headers: {
-"apikey": SUPABASE_KEY,
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-email: email,
-password: password
-})
-}
-);
-
-const signupData = await signupResponse.json();
-
-if (!signupResponse.ok) {
-  throw new Error(
-    signupData.msg ||
-    signupData.message ||
-    signupData.error_description ||
-    "Account creation failed."
-  );
-}
-
-const userId = signupData.user?.id;
-
-if (!userId) {
-  throw new Error("Account was not created.");
-}
-
-const sellerResponse = await fetch(
-  SUPABASE_URL + "/rest/v1/Sellers",
-  {
-    method: "POST",
-    headers: {
-      "apikey": SUPABASE_KEY,
-      "Authorization": "Bearer " + SUPABASE_KEY,
-      "Content-Type": "application/json",
-      "Prefer": "return=minimal"
-    },
-    body: JSON.stringify({
-      user_id: userId,
-      store_name: name,
-      description: "",
-      approved: false
-    })
-  }
-);
-
-if (!sellerResponse.ok) {
-  const errorText = await sellerResponse.text();
-  throw new Error(errorText || "Seller store could not be saved.");
-}
-
 alert(
-  "Seller registration successful!\n\n" +
-  "Store: " + name + "\n" +
-  "Email: " + email
+"Seller Centre\n\n" +
+"Store: " + name + "\n" +
+"Email: " + email + "\n\n" +
+"Registration form is working. " +
+"Next we will connect it to Supabase accounts."
 );
-
-} catch (error) {
-console.error(error);
-alert("Seller registration failed: " + error.message);
-}
 }
 
 loadProducts();
