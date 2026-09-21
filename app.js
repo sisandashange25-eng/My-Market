@@ -13,115 +13,37 @@ function sellerCentre() {
     return;
   }
 
-  const password = prompt(
-    "Create a password (at least 6 characters):"
-  );
-
-  if (!password) {
-    alert("Seller registration cancelled.");
-    return;
-  }
-
-  if (password.length < 6) {
-    alert("Password must be at least 6 characters.");
-    return;
-  }
-
-  fetch(SUPABASE_URL + "/auth/v1/signup", {
+  fetch(SUPABASE_URL + "/rest/v1/Sellers", {
     method: "POST",
     headers: {
       "apikey": SUPABASE_KEY,
-      "Content-Type": "application/json"
+      "Authorization": "Bearer " + SUPABASE_KEY,
+      "Content-Type": "application/json",
+      "Prefer": "return=minimal"
     },
     body: JSON.stringify({
+      store_name: name,
       email: email,
-      password: password
+      approved: false
     })
   })
-  .then(response => response.json())
-  .then(data => {
-
-    if (data.error || data.msg) {
-      alert(
-        "Registration failed:\n\n" +
-        (data.error_description || data.msg || data.error)
-      );
-      return;
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Seller registration failed");
     }
 
     alert(
-      "Seller account created successfully! 🎉\n\n" +
+      "Seller application submitted successfully! 🎉\n\n" +
       "Store: " + name + "\n" +
       "Email: " + email + "\n\n" +
-      "Your account is now registered with ZavaMarket."
+      "Your application is waiting for approval."
     );
-
   })
   .catch(error => {
     console.log(error);
-    alert("Something went wrong. Please try again.");
-  });
-}function sellerCentre() {
-  const name = prompt("Enter your store name:");
-
-  if (!name) {
-    alert("Seller registration cancelled.");
-    return;
-  }
-
-  const email = prompt("Enter your email address:");
-
-  if (!email) {
-    alert("Seller registration cancelled.");
-    return;
-  }
-
-  const password = prompt(
-    "Create a password (at least 6 characters):"
-  );
-
-  if (!password) {
-    alert("Seller registration cancelled.");
-    return;
-  }
-
-  if (password.length < 6) {
-    alert("Password must be at least 6 characters.");
-    return;
-  }
-
-  fetch(SUPABASE_URL + "/auth/v1/signup", {
-    method: "POST",
-    headers: {
-      "apikey": SUPABASE_KEY,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email: email,
-      password: password
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-
-    if (data.error || data.msg) {
-      alert(
-        "Registration failed:\n\n" +
-        (data.error_description || data.msg || data.error)
-      );
-      return;
-    }
-
     alert(
-      "Seller account created successfully! 🎉\n\n" +
-      "Store: " + name + "\n" +
-      "Email: " + email + "\n\n" +
-      "Your account is now registered with ZavaMarket."
+      "Could not submit the seller application.\n\n" +
+      "Please try again."
     );
-
-  })
-  .catch(error => {
-    console.log(error);
-    alert("Something went wrong. Please try again.");
   });
 }
