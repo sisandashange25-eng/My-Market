@@ -39,12 +39,28 @@ async function loadProducts() {
         price: Number(p.price),
         cat: p.category || "Other",
         icon: "🛍️",
-seller: "Zava Seller",
-image_url: p.image_url || ""
+        seller: "Zava Seller",
+        image_url: p.image_url || ""
       }));
     }
 
-   function renderProducts() {
+    renderProducts();
+    updateCart();
+
+  } catch (error) {
+    console.log("Using demo products:", error);
+    renderProducts();
+    updateCart();
+  }
+}
+
+function setCategory(c) {
+  category = c;
+  document.getElementById("heading").textContent = c + " products";
+  renderProducts();
+}
+
+function renderProducts() {
   const searchBox = document.getElementById("search");
   const sortBox = document.getElementById("sort");
 
@@ -63,9 +79,10 @@ image_url: p.image_url || ""
     filtered.map(x => `
       <article class="card">
         <div class="pic">
-          ${x.image_url
-            ? `<img src="${x.image_url}" alt="${x.name}" style="width:100%;height:100%;object-fit:cover;">`
-            : `<span>${x.icon || "🛍️"}</span>`
+          ${
+            x.image_url
+              ? `<img src="${x.image_url}" alt="${x.name}" style="width:100%;height:100%;object-fit:cover;">`
+              : `<span>${x.icon || "🛍️"}</span>`
           }
         </div>
         <h3>${x.name}</h3>
@@ -74,7 +91,7 @@ image_url: p.image_url || ""
         <button class="add" onclick="add(${x.id})">Add to cart</button>
       </article>
     `).join("") || "<p>No products found.</p>";
-        } 
+}
 
 function add(id) {
   cart.push(id);
