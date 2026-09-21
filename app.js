@@ -1,18 +1,15 @@
 const SUPABASE_URL = "https://gaccizzlwswwynattgda.supabase.co";
 const SUPABASE_KEY = "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
-const { createClient } = window.supabase;
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
 const demoProducts = [
-  {id:1,name:"Wireless Earbuds",price:299,cat:"Electronics",icon:"🎧",seller:"Tech Store"},
-  {id:2,name:"Smart Watch",price:499,cat:"Electronics",icon:"⌚",seller:"Gadget Hub"},
-  {id:3,name:"Classic Sneakers",price:699,cat:"Fashion",icon:"👟",seller:"Urban Wear"},
-  {id:4,name:"Hoodie",price:399,cat:"Fashion",icon:"🧥",seller:"Urban Wear"},
-  {id:5,name:"Kitchen Blender",price:549,cat:"Home",icon:"🥤",seller:"Home World"},
-  {id:6,name:"Skincare Set",price:249,cat:"Beauty",icon:"🧴",seller:"Beauty Shop"},
-  {id:7,name:"Bluetooth Speaker",price:379,cat:"Electronics",icon:"🔊",seller:"Tech Store"},
-  {id:8,name:"Bedside Lamp",price:199,cat:"Home",icon:"💡",seller:"Home World"}
+{id:1,name:"Wireless Earbuds",price:299,cat:"Electronics",icon:"🎧",seller:"Tech Store"},
+{id:2,name:"Smart Watch",price:499,cat:"Electronics",icon:"⌚",seller:"Gadget Hub"},
+{id:3,name:"Classic Sneakers",price:699,cat:"Fashion",icon:"👟",seller:"Urban Wear"},
+{id:4,name:"Hoodie",price:399,cat:"Fashion",icon:"🧥",seller:"Urban Wear"},
+{id:5,name:"Kitchen Blender",price:549,cat:"Home",icon:"🥤",seller:"Home World"},
+{id:6,name:"Skincare Set",price:249,cat:"Beauty",icon:"🧴",seller:"Beauty Shop"},
+{id:7,name:"Bluetooth Speaker",price:379,cat:"Electronics",icon:"🔊",seller:"Tech Store"},
+{id:8,name:"Bedside Lamp",price:199,cat:"Home",icon:"💡",seller:"Home World"}
 ];
 
 let products = demoProducts;
@@ -20,207 +17,212 @@ let category = "All";
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
 async function loadProducts() {
-  try {
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/products?select=*&active=eq.true&order=id.desc",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": "Bearer " + SUPABASE_KEY
-        }
-      }
-    );
+try {
+const response = await fetch(
+SUPABASE_URL + "/rest/v1/products?select=*&active=eq.true&order=id.desc",
+{
+headers: {
+"apikey": SUPABASE_KEY,
+"Authorization": "Bearer " + SUPABASE_KEY
+}
+}
+);
 
-    if (!response.ok) throw new Error("Could not load products");
+if (!response.ok) throw new Error("Could not load products");
 
-    const data = await response.json();
+const data = await response.json();
 
-    if (Array.isArray(data) && data.length > 0) {
-      products = data.map(p => ({
-        id: p.id,
-        name: p.name,
-        price: Number(p.price),
-        cat: p.category || "Other",
-        icon: "🛍️",
-        seller: "Zava Seller",
-        image_url: p.image_url || ""
-      }));
-    }
+if (Array.isArray(data) && data.length > 0) {
+  products = data.map(p => ({
+    id: p.id,
+    name: p.name,
+    price: Number(p.price),
+    cat: p.category || "Other",
+    icon: "🛍️",
+    seller: "Zava Seller",
+    image_url: p.image_url || ""
+  }));
+}
 
-    renderProducts();
-    updateCart();
+renderProducts();
+updateCart();
 
-  } catch (error) {
-    console.log("Using demo products:", error);
-    renderProducts();
-    updateCart();
-  }
+} catch (error) {
+console.log("Using demo products:", error);
+renderProducts();
+updateCart();
+}
 }
 
 function setCategory(c) {
-  category = c;
-  document.getElementById("heading").textContent = c + " products";
-  renderProducts();
+category = c;
+document.getElementById("heading").textContent = c + " products";
+renderProducts();
 }
 
 function renderProducts() {
-  const searchBox = document.getElementById("search");
-  const sortBox = document.getElementById("sort");
+const searchBox = document.getElementById("search");
+const sortBox = document.getElementById("sort");
 
-  let q = searchBox ? searchBox.value.toLowerCase() : "";
-  let s = sortBox ? sortBox.value : "popular";
+let q = searchBox ? searchBox.value.toLowerCase() : "";
+let s = sortBox ? sortBox.value : "popular";
 
-  let filtered = products.filter(x =>
-    (category === "All" || x.cat === category) &&
-    x.name.toLowerCase().includes(q)
-  );
+let filtered = products.filter(x =>
+(category === "All" || x.cat === category) &&
+x.name.toLowerCase().includes(q)
+);
 
-  if (s === "low") filtered.sort((a,b) => a.price - b.price);
-  if (s === "high") filtered.sort((a,b) => b.price - a.price);
+if (s === "low") filtered.sort((a,b) => a.price - b.price);
+if (s === "high") filtered.sort((a,b) => b.price - a.price);
 
-  document.getElementById("products").innerHTML =
-    filtered.map(x => `
-      <article class="card">
-        <div class="pic">
-          ${
-            x.image_url
-              ? `<img src="${x.image_url}" alt="${x.name}" style="width:100%;height:100%;object-fit:cover;">`
-              : `<span>${x.icon || "🛍️"}</span>`
-          }
-        </div>
-        <h3>${x.name}</h3>
-        <div class="seller">${x.seller}</div>
-        <div class="price">R${x.price.toFixed(2)}</div>
-        <button class="add" onclick="add(${x.id})">Add to cart</button>
-      </article>
-    `).join("") || "<p>No products found.</p>";
+document.getElementById("products").innerHTML =
+filtered.map(x => "<article class="card"> <div class="pic"> ${ x.image_url ?"<img src="${x.image_url}" alt="${x.name}" style="width:100%;height:100%;object-fit:cover;">":"<span>${x.icon || "🛍️"}</span>"} </div> <h3>${x.name}</h3> <div class="seller">${x.seller}</div> <div class="price">R${x.price.toFixed(2)}</div> <button class="add" onclick="add(${x.id})">Add to cart</button> </article>").join("") || "<p>No products found.</p>";
 }
 
 function add(id) {
-  cart.push(id);
-  save();
-  updateCart();
-  alert("Added to cart");
+cart.push(id);
+save();
+updateCart();
+alert("Added to cart");
 }
 
 function save() {
-  localStorage.setItem("cart", JSON.stringify(cart));
+localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 function updateCart() {
-  document.getElementById("cartCount").textContent = cart.length;
+document.getElementById("cartCount").textContent = cart.length;
 
-  let counts = {};
-  cart.forEach(id => counts[id] = (counts[id] || 0) + 1);
+let counts = {};
+cart.forEach(id => counts[id] = (counts[id] || 0) + 1);
 
-  let total = 0;
+let total = 0;
 
-  document.getElementById("cartItems").innerHTML =
-    Object.entries(counts).map(([id,n]) => {
-      let x = products.find(p => p.id == id);
+document.getElementById("cartItems").innerHTML =
+Object.entries(counts).map(([id,n]) => {
+let x = products.find(p => p.id == id);
 
-      if (!x) return "";
+  if (!x) return "";
 
-      total += x.price * n;
+  total += x.price * n;
 
-      return `
-        <div class="cartrow">
-          <span>${x.name} × ${n}</span>
-          <b>R${(x.price * n).toFixed(2)}</b>
-        </div>
-      `;
-    }).join("") || "<p>Your cart is empty.</p>";
+  return `
+    <div class="cartrow">
+      <span>${x.name} × ${n}</span>
+      <b>R${(x.price * n).toFixed(2)}</b>
+    </div>
+  `;
+}).join("") || "<p>Your cart is empty.</p>";
 
-  document.getElementById("total").textContent = total.toFixed(2);
+document.getElementById("total").textContent = total.toFixed(2);
 }
 
 function toggleCart() {
-  document.getElementById("cart").classList.toggle("open");
-  updateCart();
+document.getElementById("cart").classList.toggle("open");
+updateCart();
 }
 
 function checkout() {
-  if (!cart.length) {
-    alert("Your cart is empty.");
-    return;
-  }
+if (!cart.length) {
+alert("Your cart is empty.");
+return;
+}
 
-  alert(
-    "ZavaMarket is connected to its database. " +
-    "Real customer accounts, payments and order processing are the next step."
-  );
+alert(
+"ZavaMarket is connected to its database. " +
+"Real customer accounts, payments and order processing are the next step."
+);
 }
 
 async function sellerCentre() {
-  const name = prompt("Enter your store name:");
+const name = prompt("Enter your store name:");
 
-  if (!name) {
-    alert("Seller registration cancelled.");
-    return;
+if (!name) {
+alert("Seller registration cancelled.");
+return;
+}
+
+const email = prompt("Enter your email address:");
+
+if (!email) {
+alert("Seller registration cancelled.");
+return;
+}
+
+const password = prompt("Create a password (at least 6 characters):");
+
+if (!password || password.length < 6) {
+alert("Password must be at least 6 characters.");
+return;
+}
+
+try {
+const signupResponse = await fetch(
+SUPABASE_URL + "/auth/v1/signup",
+{
+method: "POST",
+headers: {
+"apikey": SUPABASE_KEY,
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+email: email,
+password: password
+})
+}
+);
+
+const signupData = await signupResponse.json();
+
+if (!signupResponse.ok) {
+  throw new Error(
+    signupData.msg ||
+    signupData.message ||
+    signupData.error_description ||
+    "Account creation failed."
+  );
+}
+
+const userId = signupData.user?.id;
+
+if (!userId) {
+  throw new Error("Account was not created.");
+}
+
+const sellerResponse = await fetch(
+  SUPABASE_URL + "/rest/v1/Sellers",
+  {
+    method: "POST",
+    headers: {
+      "apikey": SUPABASE_KEY,
+      "Authorization": "Bearer " + SUPABASE_KEY,
+      "Content-Type": "application/json",
+      "Prefer": "return=minimal"
+    },
+    body: JSON.stringify({
+      user_id: userId,
+      store_name: name,
+      description: "",
+      approved: false
+    })
   }
+);
 
-  const email = prompt("Enter your email address:");
+if (!sellerResponse.ok) {
+  const errorText = await sellerResponse.text();
+  throw new Error(errorText || "Seller store could not be saved.");
+}
 
-  if (!email) {
-    alert("Seller registration cancelled.");
-    return;
-  }
+alert(
+  "Seller registration successful!\n\n" +
+  "Store: " + name + "\n" +
+  "Email: " + email
+);
 
-  const password = prompt("Create a password (at least 6 characters):");
-
-  if (!password || password.length < 6) {
-    alert("Password must be at least 6 characters.");
-    return;
-  }
-
-  try {
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password
-    });
-
-    if (error) throw error;
-
-    const userId = data.user?.id;
-
-    if (!userId) {
-      throw new Error("Account was not created.");
-    }
-
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/Sellers",
-      {
-        method: "POST",
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": "Bearer " + SUPABASE_KEY,
-          "Content-Type": "application/json",
-          "Prefer": "return=minimal"
-        },
-        body: JSON.stringify({
-          user_id: userId,
-          store_name: name,
-          description: "",
-          approved: false
-        })
-      }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
-    }
-
-    alert(
-      "Seller registration successful!\n\n" +
-      "Store: " + name + "\n" +
-      "Email: " + email
-    );
-
-  } catch (error) {
-    console.error(error);
-    alert("Seller registration failed: " + error.message);
-  }
+} catch (error) {
+console.error(error);
+alert("Seller registration failed: " + error.message);
+}
 }
 
 loadProducts();
