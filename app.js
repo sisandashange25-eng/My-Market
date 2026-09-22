@@ -313,7 +313,7 @@ async function checkout() {
     }
 
 
-    const customerId = profileData[0].Id;
+    const customerId = profileData[0].id;
 
 
     alert("Creating your order...");
