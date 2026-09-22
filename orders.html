@@ -7,70 +7,181 @@
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f6f7f9;color:#111}
-header{background:#111;color:white;padding:20px;text-align:center}
-.logo{font-size:25px;font-weight:bold}
-.logo span{color:#ff7a00}
-main{max-width:600px;margin:30px auto;padding:20px}
-.card{background:white;border-radius:18px;padding:25px;box-shadow:0 5px 20px rgba(0,0,0,.08)}
-h1{margin-top:0}
-input{width:100%;padding:15px;border:1px solid #ddd;border-radius:10px;font-size:16px;margin:10px 0}
-button{border:0;border-radius:10px;padding:14px 18px;font-size:16px;cursor:pointer}
-.find{width:100%;background:#ff7a00;color:white;font-weight:bold}
-.order{background:#f8f8f8;border-radius:14px;padding:20px;margin-top:20px}
-.status{display:inline-block;padding:8px 14px;border-radius:20px;background:#fff0df;color:#e66b00;font-weight:bold}
-.track{width:100%;margin-top:15px;background:#111;color:white}
-.back{margin-top:20px;background:#eee}
-footer{text-align:center;padding:30px;color:#777}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f6f7f9;
+color:#111;
+}
+
+header{
+background:#111;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+.logo{
+font-size:25px;
+font-weight:bold;
+}
+
+.logo span{
+color:#ff7a00;
+}
+
+main{
+max-width:600px;
+margin:30px auto;
+padding:20px;
+}
+
+.card{
+background:white;
+border-radius:18px;
+padding:25px;
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+h1{
+margin-top:0;
+}
+
+input{
+width:100%;
+padding:15px;
+border:1px solid #ddd;
+border-radius:10px;
+font-size:16px;
+margin:10px 0;
+}
+
+button{
+border:0;
+border-radius:10px;
+padding:14px 18px;
+font-size:16px;
+cursor:pointer;
+}
+
+.find{
+width:100%;
+background:#ff7a00;
+color:white;
+font-weight:bold;
+}
+
+.order{
+background:#f8f8f8;
+border-radius:14px;
+padding:20px;
+margin-top:20px;
+}
+
+.status{
+display:inline-block;
+padding:8px 14px;
+border-radius:20px;
+background:#fff0df;
+color:#e66b00;
+font-weight:bold;
+}
+
+.track{
+width:100%;
+margin-top:15px;
+background:#111;
+color:white;
+}
+
+.back{
+margin-top:20px;
+background:#eee;
+}
+
+footer{
+text-align:center;
+padding:30px;
+color:#777;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<div class="logo">Zava<span>Market</span></div>
+
+<div class="logo">
+Zava<span>Market</span>
+</div>
+
 <div>My Orders</div>
+
 </header>
 
 <main>
+
 <div class="card">
 
 <h1>📦 My Orders</h1>
 
-<p>Enter the phone number you used when placing your order.</p>
+<p>
+Enter the phone number you used when placing your order.
+</p>
 
-<input id="phone" type="tel" placeholder="Phone number">
+<input
+id="phone"
+type="tel"
+placeholder="Phone number"
+>
 
-<button class="find" onclick="findOrders()">
+<button
+class="find"
+onclick="findOrders()"
+>
 Find My Orders
 </button>
 
 <div id="result"></div>
 
-<button class="back" onclick="window.location.href='index.html'">
+<button
+class="back"
+onclick="window.location.href='index.html'"
+>
 ← Back to ZavaMarket
 </button>
 
 </div>
+
 </main>
 
 <footer>
+
 <strong>ZavaMarket</strong><br>
+
 Shop smart. Shop local. Shop Zava.
+
 </footer>
+
 
 <script>
 
-const SUPABASE_URL="https://gaccizzlwswwynattgda.supabase.co";
+const SUPABASE_URL=
+"https://gaccizzlwswwynattgda.supabase.co";
 
-const SUPABASE_KEY="sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+const SUPABASE_KEY=
+"sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
 
 async function findOrders(){
 
-const phone=document.getElementById("phone").value.trim();
+const phone=
+document.getElementById("phone").value.trim();
 
-const result=document.getElementById("result");
+const result=
+document.getElementById("result");
+
 
 if(!phone){
 
@@ -80,94 +191,84 @@ return;
 
 }
 
-result.innerHTML="<p>Loading your orders...</p>";
+
+result.innerHTML=
+"<p>Loading your orders...</p>";
 
 
 try{
 
-const profileResponse=await fetch(
+
+const response=await fetch(
 
 SUPABASE_URL+
-"/rest/v1/profiles?phone=eq."+
-encodeURIComponent(phone)+
-"&select=id",
+"/rest/v1/rpc/get_orders_by_phone",
 
 {
+
+method:"POST",
 
 headers:{
 
 "apikey":SUPABASE_KEY,
 
-"Authorization":"Bearer "+SUPABASE_KEY
+"Authorization":
+"Bearer "+SUPABASE_KEY,
 
-}
+"Content-Type":
+"application/json"
+
+},
+
+body:JSON.stringify({
+
+user_phone:phone
+
+})
 
 }
 
 );
 
 
-const profiles=await profileResponse.json();
+if(!response.ok){
 
-console.log("PROFILE:",profiles);
-
-
-if(!profiles.length){
-
-result.innerHTML="<p>No customer found with that phone number.</p>";
-
-return;
-
-}
-
-
-const customerId=profiles[0].id;
-
-
-const orderResponse=await fetch(
-
-SUPABASE_URL+
-"/rest/v1/orders?customer_id=eq."+
-customerId+
-"&select=id,total,status,delivery_address,created_at"+
-"&order=id.desc",
-
-{
-
-headers:{
-
-"apikey":SUPABASE_KEY,
-
-"Authorization":"Bearer "+SUPABASE_KEY
-
-}
-
-}
-
+throw new Error(
+await response.text()
 );
 
+}
 
-const orders=await orderResponse.json();
+
+const orders=
+await response.json();
+
 
 console.log("ORDERS:",orders);
 
 
 if(!orders.length){
 
-result.innerHTML="<p>No orders found for this customer.</p>";
+result.innerHTML=
+"<p>No orders found for this phone number.</p>";
 
 return;
 
 }
 
 
-result.innerHTML=orders.map(order=>`
+result.innerHTML=
+orders.map(order=>`
 
 <div class="order">
 
-<h2>📦 Order #${order.id}</h2>
+<h2>
+📦 Order #${order.id}
+</h2>
 
-<div class="status">${order.status}</div>
+<div class="status">
+${order.status}
+</div>
 
 <p>
 💰 <strong>Total:</strong>
@@ -200,7 +301,8 @@ onclick="window.location.href='track.html?order=${order.id}'"
 
 console.error(error);
 
-result.innerHTML="<p>Error loading orders.</p>";
+result.innerHTML=
+"<p>Error loading orders.</p>";
 
 }
 
