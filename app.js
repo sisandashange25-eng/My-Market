@@ -100,7 +100,7 @@ async function loadProducts() {
         price: Number(p.price),
         cat: p.category || "Other",
         icon: "🛍️",
-        seller: p.seller || "Zava Seller",
+        seller:"Zava Seller",
         image_url: p.image_url || ""
       }));
 
