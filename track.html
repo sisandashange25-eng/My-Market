@@ -123,6 +123,76 @@ button{
   color:#991b1b;
 }
 
+/* ORDER PROGRESS */
+
+.progress{
+  margin:25px 0;
+}
+
+.progress-title{
+  font-weight:bold;
+  margin-bottom:18px;
+}
+
+.step{
+  display:flex;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.circle{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#e5e7eb;
+  color:#6b7280;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  flex-shrink:0;
+}
+
+.step.active .circle{
+  background:#111827;
+  color:white;
+}
+
+.step-text{
+  margin-left:12px;
+}
+
+.step-text strong{
+  display:block;
+}
+
+.step-text span{
+  font-size:13px;
+  color:#777;
+}
+
+.line{
+  width:3px;
+  height:18px;
+  background:#e5e7eb;
+  margin-left:18px;
+  margin-top:-18px;
+  margin-bottom:0;
+}
+
+.line.active{
+  background:#111827;
+}
+
+.cancelled{
+  padding:12px;
+  border-radius:10px;
+  background:#fee2e2;
+  color:#991b1b;
+  font-weight:bold;
+  margin:15px 0;
+}
+
 footer{
   text-align:center;
   padding:30px 15px;
@@ -196,6 +266,100 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
 "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
+
+function createProgress(status){
+
+  const steps = [
+    "Pending",
+    "Processing",
+    "Shipped",
+    "Delivered"
+  ];
+
+  if(status === "Cancelled"){
+
+    return `
+      <div class="cancelled">
+        ❌ This order has been cancelled.
+      </div>
+    `;
+
+  }
+
+  const currentIndex =
+    steps.indexOf(status);
+
+  return `
+
+    <div class="progress">
+
+      <div class="progress-title">
+        Delivery Progress
+      </div>
+
+
+      <div class="step ${currentIndex >= 0 ? "active" : ""}">
+
+        <div class="circle">✓</div>
+
+        <div class="step-text">
+          <strong>Order Placed</strong>
+          <span>Your order has been received.</span>
+        </div>
+
+      </div>
+
+
+      <div class="line ${currentIndex >= 1 ? "active" : ""}"></div>
+
+
+      <div class="step ${currentIndex >= 1 ? "active" : ""}">
+
+        <div class="circle">✓</div>
+
+        <div class="step-text">
+          <strong>Processing</strong>
+          <span>Your order is being prepared.</span>
+        </div>
+
+      </div>
+
+
+      <div class="line ${currentIndex >= 2 ? "active" : ""}"></div>
+
+
+      <div class="step ${currentIndex >= 2 ? "active" : ""}">
+
+        <div class="circle">✓</div>
+
+        <div class="step-text">
+          <strong>Shipped</strong>
+          <span>Your order is on the way.</span>
+        </div>
+
+      </div>
+
+
+      <div class="line ${currentIndex >= 3 ? "active" : ""}"></div>
+
+
+      <div class="step ${currentIndex >= 3 ? "active" : ""}">
+
+        <div class="circle">✓</div>
+
+        <div class="step-text">
+          <strong>Delivered</strong>
+          <span>Your order has arrived.</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
 
 
 async function trackOrder(){
@@ -293,6 +457,10 @@ async function trackOrder(){
             ${order.status}
           </span>
         </p>
+
+
+        ${createProgress(order.status)}
+
 
         <div class="row">
           <span class="label">💰 Total:</span>
