@@ -1,18 +1,12 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>ZavaMarket — My Orders</title>
 
 <style>
-
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
   margin:0;
@@ -38,33 +32,20 @@ header{
 }
 
 main{
-  max-width:650px;
-  margin:25px auto;
+  max-width:600px;
+  margin:30px auto;
   padding:20px;
 }
 
 .card{
   background:white;
   border-radius:18px;
-  padding:22px;
-  margin-bottom:15px;
+  padding:25px;
   box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
 
-.order{
-  border:1px solid #eee;
-  border-radius:14px;
-  padding:18px;
-  margin-top:15px;
-}
-
-.status{
-  display:inline-block;
-  padding:7px 12px;
-  border-radius:20px;
-  background:#fff0df;
-  color:#e66b00;
-  font-weight:bold;
+h1{
+  margin-top:0;
 }
 
 input{
@@ -76,99 +57,101 @@ input{
   margin:10px 0;
 }
 
+button{
+  border:0;
+  border-radius:10px;
+  padding:14px 18px;
+  font-size:16px;
+  cursor:pointer;
+}
+
 .find{
   width:100%;
   background:#ff7a00;
   color:white;
-  border:0;
-  border-radius:10px;
-  padding:14px;
-  font-size:16px;
+  font-weight:bold;
+}
+
+.order{
+  background:#f8f8f8;
+  border-radius:14px;
+  padding:20px;
+  margin-top:20px;
+}
+
+.status{
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:20px;
+  background:#fff0df;
+  color:#e66b00;
   font-weight:bold;
 }
 
 .track{
   width:100%;
   margin-top:15px;
-  background:#ff7a00;
+  background:#111;
   color:white;
-  border:0;
-  border-radius:10px;
-  padding:14px;
-  font-size:16px;
-  font-weight:bold;
 }
 
 .back{
+  margin-top:20px;
   background:#eee;
-  border:0;
-  border-radius:10px;
-  padding:14px 18px;
-  margin-top:10px;
 }
 
-.empty{
+footer{
   text-align:center;
-  padding:30px 10px;
+  padding:30px;
   color:#777;
 }
-
 </style>
-
 </head>
-
 
 <body>
 
 <header>
-
-  <div class="logo">
-    Zava<span>Market</span>
-  </div>
-
+  <div class="logo">Zava<span>Market</span></div>
   <div>My Orders</div>
-
 </header>
-
 
 <main>
 
-  <div class="card">
+<div class="card">
 
-    <h1>📦 My Orders</h1>
+<h1>📦 My Orders</h1>
 
-    <p>
-      Enter the phone number you used when placing your order.
-    </p>
+<p>
+Enter the phone number you used when placing your order.
+</p>
 
-    <input
-      id="phone"
-      type="tel"
-      placeholder="Phone number"
-    >
+<input
+  id="phone"
+  type="tel"
+  placeholder="Phone number"
+>
 
-    <button
-      class="find"
-      onclick="loadOrders()"
-    >
-      Find My Orders
-    </button>
+<button class="find" onclick="findOrders()">
+  Find My Orders
+</button>
 
-  </div>
+<div id="result"></div>
 
+<button
+  class="back"
+  onclick="window.location.href='index.html'"
+>
+  ← Back to ZavaMarket
+</button>
 
-  <div id="orders"></div>
-
-
-  <button
-    class="back"
-    onclick="window.location.href='index.html'"
-  >
-    ← Back to ZavaMarket
-  </button>
+</div>
 
 </main>
 
+<footer>
+<strong>ZavaMarket</strong><br>
+Shop smart. Shop local. Shop Zava.
+</footer>
 
 <script>
 
@@ -179,221 +162,149 @@ const SUPABASE_KEY =
 "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
 
-async function loadOrders(){
+async function findOrders(){
 
   const phone =
     document.getElementById("phone").value.trim();
 
-  const box =
-    document.getElementById("orders");
-
+  const result =
+    document.getElementById("result");
 
   if(!phone){
-
     alert("Please enter your phone number.");
-
     return;
   }
 
-
-  box.innerHTML =
-    "<div class='card'>Loading your orders...</div>";
-
+  result.innerHTML = "<p>Loading your orders...</p>";
 
   try{
 
-    /* FIND CUSTOMER */
+    /* FIND CUSTOMER PROFILE */
 
-    const profileResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/profiles?phone=eq." +
-        encodeURIComponent(phone) +
-        "&select=id,full_name,phone",
-
-        {
-          method:"GET",
-
-          headers:{
-            "apikey":SUPABASE_KEY,
-            "Authorization":
-              "Bearer " + SUPABASE_KEY
-          }
+    const profileResponse = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/profiles" +
+      "?phone=eq." +
+      encodeURIComponent(phone) +
+      "&select=id,full_name,phone",
+      {
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":"Bearer "+SUPABASE_KEY
         }
-
-      );
-
-
-    const profileText =
-      await profileResponse.text();
-
-
-    console.log(
-      "Profile response:",
-      profileText
+      }
     );
 
-
     if(!profileResponse.ok){
-
-      throw new Error(profileText);
-
+      throw new Error(
+        await profileResponse.text()
+      );
     }
 
-
     const profiles =
-      JSON.parse(profileText);
+      await profileResponse.json();
 
+    console.log("Profiles:",profiles);
 
     if(!profiles.length){
 
-      box.innerHTML =
-        "<div class='card empty'>" +
-        "No customer found with that phone number." +
-        "</div>";
+      result.innerHTML =
+        "<p>No customer found with that phone number.</p>";
 
       return;
     }
-
 
     const customerId =
       profiles[0].id;
 
 
-    console.log(
-      "Customer ID:",
-      customerId
-    );
-
-
     /* FIND ORDERS */
 
-    const ordersResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/orders?customer_id=eq." +
-        encodeURIComponent(customerId) +
-        "&select=id,total,status,delivery_address,created_at" +
-        "&order=id.desc",
-
-        {
-          method:"GET",
-
-          headers:{
-            "apikey":SUPABASE_KEY,
-            "Authorization":
-              "Bearer " + SUPABASE_KEY
-          }
+    const ordersResponse = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/orders" +
+      "?customer_id=eq." +
+      customerId +
+      "&select=id,total,status,delivery_address,created_at" +
+      "&order=id.desc",
+      {
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":"Bearer "+SUPABASE_KEY
         }
-
-      );
-
-
-    const ordersText =
-      await ordersResponse.text();
-
-
-    console.log(
-      "Orders response:",
-      ordersText
+      }
     );
 
-
     if(!ordersResponse.ok){
-
-      throw new Error(ordersText);
-
+      throw new Error(
+        await ordersResponse.text()
+      );
     }
 
-
     const orders =
-      JSON.parse(ordersText);
+      await ordersResponse.json();
+
+    console.log("Orders:",orders);
 
 
     if(!orders.length){
 
-      box.innerHTML =
-        "<div class='card empty'>" +
-        "No orders found for this customer." +
-        "</div>";
+      result.innerHTML =
+        "<p>No orders found for this customer.</p>";
 
       return;
     }
 
 
-    box.innerHTML =
+    /* DISPLAY ORDERS */
+
+    result.innerHTML =
       orders.map(order => `
 
-        <div class="card order">
+        <div class="order">
 
-          <h2>
-            📦 Order #${order.id}
-          </h2>
+          <h2>📦 Order #${order.id}</h2>
 
           <div class="status">
             ${order.status}
           </div>
 
           <p>
-            💰 Total:
-            <strong>
-              R${Number(order.total).toFixed(2)}
-            </strong>
+            💰 <strong>Total:</strong>
+            R${Number(order.total).toFixed(2)}
           </p>
 
           <p>
-            🏠
+            🏠 <strong>Delivery:</strong>
             ${order.delivery_address || "Not provided"}
           </p>
 
           <p>
-            🕐
-            ${new Date(
-              order.created_at
-            ).toLocaleString()}
+            🕐 <strong>Ordered:</strong>
+            ${new Date(order.created_at).toLocaleString()}
           </p>
 
           <button
             class="track"
-            onclick="trackOrder(${order.id})"
+            onclick="window.location.href='track.html?order=${order.id}'"
           >
-            Track this order
+            📦 Track Order
           </button>
 
         </div>
 
       `).join("");
 
-
   }catch(error){
 
-    console.log(
-      "My Orders error:",
-      error
-    );
+    console.error(error);
 
-    box.innerHTML =
-      "<div class='card empty'>" +
-      "Could not load your orders.<br><br>" +
-      error.message +
-      "</div>";
-
+    result.innerHTML =
+      "<p>Could not load your orders. Please try again.</p>";
   }
-
-}
-
-
-function trackOrder(id){
-
-  window.location.href =
-    "track.html?order=" + id;
-
 }
 
 </script>
 
 </body>
-
 </html>
