@@ -43,19 +43,17 @@ function renderProducts() {
       <article class="card">
 
         <div class="pic">
-
           ${
             x.image_url
               ? `<img src="${x.image_url}" alt="${x.name}" style="width:100%;height:100%;object-fit:cover;">`
               : `<span>🛍️</span>`
           }
-
         </div>
 
         <h3>${x.name}</h3>
 
         <div class="seller">
-          ${x.seller || "Zava Seller"}
+          ${x.seller}
         </div>
 
         <div class="price">
@@ -76,8 +74,9 @@ async function loadProducts() {
 
   try {
 
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/products?select=*&order=id.desc",
+    const productsResponse = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/products?select=*&order=id.desc",
       {
         headers: {
           "apikey": SUPABASE_KEY,
@@ -86,18 +85,51 @@ async function loadProducts() {
       }
     );
 
-    if (!response.ok) {
+    if (!productsResponse.ok) {
 
-      const errorText = await response.text();
-
-      alert("Products error:\n\n" + errorText);
+      alert(
+        "Products error:\n\n" +
+        await productsResponse.text()
+      );
 
       return;
     }
 
-    const data = await response.json();
+    const productData = await productsResponse.json();
 
-    products = data.map(p => ({
+
+    const sellersResponse = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/sellers?select=id,store_name",
+      {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
+
+
+    let sellers = [];
+
+    if (sellersResponse.ok) {
+
+      sellers = await sellersResponse.json();
+
+    }
+
+
+    const sellerMap = {};
+
+    sellers.forEach(seller => {
+
+      sellerMap[seller.id] =
+        (seller.store_name || "Zava Seller").trim();
+
+    });
+
+
+    products = productData.map(p => ({
 
       id: p.id,
 
@@ -107,19 +139,25 @@ async function loadProducts() {
 
       cat: p.category || "Other",
 
-      seller: "ZAVAMARKET",
+      seller:
+        sellerMap[p.seller_id] || "Zava Seller",
 
       image_url: p.image_url || ""
 
     }));
 
+
     renderProducts();
 
     updateCart();
 
+
   } catch (error) {
 
-    alert("Could not load products:\n\n" + error.message);
+    alert(
+      "Could not load products:\n\n" +
+      error.message
+    );
 
   }
 
@@ -133,7 +171,10 @@ function setCategory(c) {
   const heading = document.getElementById("heading");
 
   if (heading) {
-    heading.textContent = c + " products";
+
+    heading.textContent =
+      c + " products";
+
   }
 
   renderProducts();
@@ -156,67 +197,102 @@ function add(id) {
 
 function save() {
 
-  localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
 
 }
 
 
 function updateCart() {
 
-  const cartCount = document.getElementById("cartCount");
+  const cartCount =
+    document.getElementById("cartCount");
 
-  const cartItems = document.getElementById("cartItems");
+  const cartItems =
+    document.getElementById("cartItems");
 
-  const totalBox = document.getElementById("total");
+  const totalBox =
+    document.getElementById("total");
+
 
   if (!cartCount || !cartItems || !totalBox) {
+
     return;
+
   }
 
-  cartCount.textContent = cart.length;
+
+  cartCount.textContent =
+    cart.length;
+
 
   let counts = {};
 
+
   cart.forEach(id => {
 
-    counts[id] = (counts[id] || 0) + 1;
+    counts[id] =
+      (counts[id] || 0) + 1;
 
   });
 
+
   let total = 0;
+
 
   cartItems.innerHTML =
 
-    Object.entries(counts).map(([id, n]) => {
+    Object.entries(counts)
+      .map(([id, n]) => {
 
-      const x = products.find(p => p.id == id);
+        const x =
+          products.find(
+            p => p.id == id
+          );
 
-      if (!x) return "";
+        if (!x) return "";
 
-      total += Number(x.price) * n;
 
-      return `
+        total +=
+          Number(x.price) * n;
 
-        <div class="cartrow">
 
-          <span>${x.name} × ${n}</span>
+        return `
 
-          <b>R${(Number(x.price) * n).toFixed(2)}</b>
+          <div class="cartrow">
 
-        </div>
+            <span>
+              ${x.name} × ${n}
+            </span>
 
-      `;
+            <b>
+              R${(
+                Number(x.price) * n
+              ).toFixed(2)}
+            </b>
 
-    }).join("") || "<p>Your cart is empty.</p>";
+          </div>
 
-  totalBox.textContent = total.toFixed(2);
+        `;
+
+      })
+      .join("") ||
+
+      "<p>Your cart is empty.</p>";
+
+
+  totalBox.textContent =
+    total.toFixed(2);
 
 }
 
 
 function toggleCart() {
 
-  const cartBox = document.getElementById("cart");
+  const cartBox =
+    document.getElementById("cart");
 
   if (!cartBox) return;
 
@@ -237,7 +313,9 @@ async function checkout() {
 
   }
 
-  const fullName = prompt("Enter your full name:");
+
+  const fullName =
+    prompt("Enter your full name:");
 
   if (!fullName || !fullName.trim()) {
 
@@ -247,7 +325,9 @@ async function checkout() {
 
   }
 
-  const phone = prompt("Enter your phone number:");
+
+  const phone =
+    prompt("Enter your phone number:");
 
   if (!phone || !phone.trim()) {
 
@@ -257,9 +337,14 @@ async function checkout() {
 
   }
 
-  const deliveryAddress = prompt("Enter your delivery address:");
 
-  if (!deliveryAddress || !deliveryAddress.trim()) {
+  const deliveryAddress =
+    prompt("Enter your delivery address:");
+
+  if (
+    !deliveryAddress ||
+    !deliveryAddress.trim()
+  ) {
 
     alert("Checkout cancelled.");
 
@@ -267,205 +352,272 @@ async function checkout() {
 
   }
 
+
   const counts = {};
+
 
   cart.forEach(id => {
 
-    counts[id] = (counts[id] || 0) + 1;
+    counts[id] =
+      (counts[id] || 0) + 1;
 
   });
+
 
   let total = 0;
 
   const orderItems = [];
 
-  for (const [id, quantity] of Object.entries(counts)) {
 
-    const product = products.find(p => p.id == id);
+  for (
+    const [id, quantity]
+    of Object.entries(counts)
+  ) {
+
+    const product =
+      products.find(
+        p => p.id == id
+      );
+
 
     if (!product) {
 
-      alert("One of the products in your cart could not be found.");
+      alert(
+        "One of the products in your cart could not be found."
+      );
 
       return;
 
     }
 
-    const price = Number(product.price);
 
-    total += price * quantity;
+    const price =
+      Number(product.price);
+
+
+    total +=
+      price * quantity;
+
 
     orderItems.push({
 
-      Products_id: product.id,
+      Products_id:
+        product.id,
 
-      Quantity: quantity,
+      Quantity:
+        quantity,
 
-      Price: price
+      Price:
+        price
 
     });
 
   }
 
+
   try {
 
-    const profileResponse = await fetch(
+    const profileResponse =
+      await fetch(
 
-      SUPABASE_URL + "/rest/v1/profiles",
+        SUPABASE_URL +
+        "/rest/v1/profiles",
 
-      {
+        {
 
-        method: "POST",
+          method: "POST",
 
-        headers: {
+          headers: {
 
-          "apikey": SUPABASE_KEY,
+            "apikey":
+              SUPABASE_KEY,
 
-          "Authorization": "Bearer " + SUPABASE_KEY,
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY,
 
-          "Content-Type": "application/json",
+            "Content-Type":
+              "application/json",
 
-          "Prefer": "return=representation"
+            "Prefer":
+              "return=representation"
 
-        },
+          },
 
-        body: JSON.stringify({
+          body:
+            JSON.stringify({
 
-          full_name: fullName.trim(),
+              full_name:
+                fullName.trim(),
 
-          phone: phone.trim(),
+              phone:
+                phone.trim(),
 
-          role: "customer"
+              role:
+                "customer"
 
-        })
+            })
 
-      }
+        }
 
-    );
+      );
+
 
     if (!profileResponse.ok) {
 
       alert(
-
         "Customer profile could not be created.\n\n" +
-
         await profileResponse.text()
-
       );
 
       return;
 
     }
 
-    const profileData = await profileResponse.json();
 
-    const customerId = profileData[0].id;
+    const profileData =
+      await profileResponse.json();
 
-    const orderResponse = await fetch(
 
-      SUPABASE_URL + "/rest/v1/orders",
+    const customerId =
+      profileData[0].id;
 
-      {
 
-        method: "POST",
+    const orderResponse =
+      await fetch(
 
-        headers: {
+        SUPABASE_URL +
+        "/rest/v1/orders",
 
-          "apikey": SUPABASE_KEY,
+        {
 
-          "Authorization": "Bearer " + SUPABASE_KEY,
+          method: "POST",
 
-          "Content-Type": "application/json",
+          headers: {
 
-          "Prefer": "return=representation"
+            "apikey":
+              SUPABASE_KEY,
 
-        },
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY,
 
-        body: JSON.stringify({
+            "Content-Type":
+              "application/json",
 
-          customer_id: customerId,
+            "Prefer":
+              "return=representation"
 
-          total: total,
+          },
 
-          status: "Pending",
+          body:
+            JSON.stringify({
 
-          delivery_address: deliveryAddress.trim()
+              customer_id:
+                customerId,
 
-        })
+              total:
+                total,
 
-      }
+              status:
+                "Pending",
 
-    );
+              delivery_address:
+                deliveryAddress.trim()
+
+            })
+
+        }
+
+      );
+
 
     if (!orderResponse.ok) {
 
       alert(
-
         "Order could not be created.\n\n" +
-
         await orderResponse.text()
-
       );
 
       return;
 
     }
 
-    const orderData = await orderResponse.json();
 
-    const orderId = orderData[0].id;
+    const orderData =
+      await orderResponse.json();
 
-    const itemsToInsert = orderItems.map(item => ({
 
-      order_id: orderId,
+    const orderId =
+      orderData[0].id;
 
-      product_id: item.Products_id,
 
-      quantity: item.Quantity,
+    const itemsToInsert =
+      orderItems.map(item => ({
 
-      price: item.Price
+        order_id:
+          orderId,
 
-    }));
+        product_id:
+          item.Products_id,
 
-    const itemsResponse = await fetch(
+        quantity:
+          item.Quantity,
 
-      SUPABASE_URL + "/rest/v1/order_items",
+        price:
+          item.Price
 
-      {
+      }));
 
-        method: "POST",
 
-        headers: {
+    const itemsResponse =
+      await fetch(
 
-          "apikey": SUPABASE_KEY,
+        SUPABASE_URL +
+        "/rest/v1/order_items",
 
-          "Authorization": "Bearer " + SUPABASE_KEY,
+        {
 
-          "Content-Type": "application/json",
+          method: "POST",
 
-          "Prefer": "return=minimal"
+          headers: {
 
-        },
+            "apikey":
+              SUPABASE_KEY,
 
-        body: JSON.stringify(itemsToInsert)
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY,
 
-      }
+            "Content-Type":
+              "application/json",
 
-    );
+            "Prefer":
+              "return=minimal"
+
+          },
+
+          body:
+            JSON.stringify(
+              itemsToInsert
+            )
+
+        }
+
+      );
+
 
     if (!itemsResponse.ok) {
 
       alert(
-
         "The order was created, but the products could not be added.\n\n" +
-
         await itemsResponse.text()
-
       );
 
       return;
 
     }
+
 
     cart = [];
 
@@ -473,27 +625,39 @@ async function checkout() {
 
     updateCart();
 
+
     alert(
 
       "Order placed successfully! 🎉\n\n" +
 
-      "Order ID: " + orderId + "\n" +
+      "Order ID: " +
+      orderId +
 
-      "Total: R" + total.toFixed(2)
+      "\nTotal: R" +
+      total.toFixed(2)
 
     );
 
-    const cartBox = document.getElementById("cart");
+
+    const cartBox =
+      document.getElementById("cart");
+
 
     if (cartBox) {
 
-      cartBox.classList.remove("open");
+      cartBox.classList.remove(
+        "open"
+      );
 
     }
 
+
   } catch (error) {
 
-    alert("Checkout failed:\n\n" + error.message);
+    alert(
+      "Checkout failed:\n\n" +
+      error.message
+    );
 
   }
 
@@ -502,87 +666,109 @@ async function checkout() {
 
 async function sellerCentre() {
 
-  const name = prompt("Enter your store name:");
+  const name =
+    prompt("Enter your store name:");
 
   if (!name) {
 
-    alert("Seller registration cancelled.");
+    alert(
+      "Seller registration cancelled."
+    );
 
     return;
 
   }
 
-  const email = prompt("Enter your email address:");
+
+  const email =
+    prompt("Enter your email address:");
 
   if (!email) {
 
-    alert("Seller registration cancelled.");
+    alert(
+      "Seller registration cancelled."
+    );
 
     return;
 
   }
 
+
   try {
 
-    const response = await fetch(
+    const response =
+      await fetch(
 
-      SUPABASE_URL + "/rest/v1/sellers",
+        SUPABASE_URL +
+        "/rest/v1/sellers",
 
-      {
+        {
 
-        method: "POST",
+          method: "POST",
 
-        headers: {
+          headers: {
 
-          "apikey": SUPABASE_KEY,
+            "apikey":
+              SUPABASE_KEY,
 
-          "Authorization": "Bearer " + SUPABASE_KEY,
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY,
 
-          "Content-Type": "application/json",
+            "Content-Type":
+              "application/json",
 
-          "Prefer": "return=minimal"
+            "Prefer":
+              "return=minimal"
 
-        },
+          },
 
-        body: JSON.stringify({
+          body:
+            JSON.stringify({
 
-          store_name: name,
+              store_name:
+                name,
 
-          email: email,
+              email:
+                email,
 
-          approved: false
+              approved:
+                false
 
-        })
+            })
 
-      }
+        }
 
-    );
+      );
+
 
     if (!response.ok) {
 
       alert(
-
         "Seller registration failed.\n\n" +
-
         await response.text()
-
       );
 
       return;
 
     }
 
+
     alert(
-
       "Seller application submitted successfully! 🎉"
-
     );
 
-    window.location.href = "seller.html";
+
+    window.location.href =
+      "seller.html";
+
 
   } catch (error) {
 
-    alert("Seller registration failed:\n\n" + error.message);
+    alert(
+      "Seller registration failed.\n\n" +
+      error.message
+    );
 
   }
 
@@ -591,83 +777,107 @@ async function sellerCentre() {
 
 async function checkOrderStatus() {
 
-  const orderId = prompt("Enter your Order ID:");
+  const orderId =
+    prompt("Enter your Order ID:");
 
-  if (!orderId || !orderId.trim()) {
+  if (
+    !orderId ||
+    !orderId.trim()
+  ) {
 
     return;
 
   }
 
+
   try {
 
-    const response = await fetch(
+    const response =
+      await fetch(
 
-      SUPABASE_URL +
+        SUPABASE_URL +
+        "/rest/v1/orders?id=eq." +
+        orderId.trim() +
+        "&select=id,total,status,delivery_address,created_at",
 
-      "/rest/v1/orders?id=eq." +
+        {
 
-      orderId.trim() +
+          headers: {
 
-      "&select=id,total,status,delivery_address,created_at",
+            "apikey":
+              SUPABASE_KEY,
 
-      {
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY
 
-        headers: {
-
-          "apikey": SUPABASE_KEY,
-
-          "Authorization": "Bearer " + SUPABASE_KEY
+          }
 
         }
 
-      }
+      );
 
-    );
 
     if (!response.ok) {
 
       alert(
-
         "Could not check your order.\n\n" +
-
         await response.text()
-
       );
 
       return;
 
     }
 
-    const orders = await response.json();
+
+    const orders =
+      await response.json();
+
 
     if (!orders.length) {
 
-      alert("Order #" + orderId + " was not found.");
+      alert(
+        "Order #" +
+        orderId +
+        " was not found."
+      );
 
       return;
 
     }
 
-    const order = orders[0];
+
+    const order =
+      orders[0];
+
 
     alert(
 
-      "📦 Order #" + order.id +
+      "📦 Order #" +
+      order.id +
 
-      "\n\nStatus: " + order.status +
+      "\n\nStatus: " +
+      order.status +
 
-      "\nTotal: R" + Number(order.total).toFixed(2) +
+      "\nTotal: R" +
+      Number(order.total)
+        .toFixed(2) +
 
       "\nDelivery: " +
-
-      (order.delivery_address || "Not provided")
+      (
+        order.delivery_address ||
+        "Not provided"
+      )
 
     );
 
+
   } catch (error) {
 
-    alert("Could not check order status:\n\n" + error.message);
+    alert(
+      "Could not check order status:\n\n" +
+      error.message
+    );
 
   }
 
