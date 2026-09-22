@@ -107,7 +107,7 @@ async function loadProducts() {
 
       cat: p.category || "Other",
 
-      seller: "Zava Seller",
+      seller: "ZAVAMARKET",
 
       image_url: p.image_url || ""
 
