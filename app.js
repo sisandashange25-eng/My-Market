@@ -521,3 +521,76 @@ async function sellerCentre() {
 }
 
 loadProducts();
+async function checkOrderStatus() {
+
+  const orderId = prompt("Enter your Order ID:");
+
+  if (!orderId || !orderId.trim()) {
+    return;
+  }
+
+  try {
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/orders?id=eq." +
+      orderId.trim() +
+      "&select=id,total,status,delivery_address,created_at",
+      {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
+
+    if (!response.ok) {
+
+      const errorText = await response.text();
+
+      alert(
+        "Could not check your order.\n\n" +
+        errorText
+      );
+
+      return;
+    }
+
+    const orders = await response.json();
+
+    if (!orders.length) {
+
+      alert(
+        "Order #" +
+        orderId +
+        " was not found."
+      );
+
+      return;
+    }
+
+    const order = orders[0];
+
+    alert(
+      "📦 Order #" + order.id +
+      "\n\n" +
+      "Status: " + order.status +
+      "\n" +
+      "Total: R" + Number(order.total).toFixed(2) +
+      "\n" +
+      "Delivery: " +
+      (order.delivery_address || "Not provided") +
+      "\n\n" +
+      "Thank you for shopping with ZavaMarket!"
+    );
+
+  } catch (error) {
+
+    console.log("Order status error:", error);
+
+    alert(
+      "Could not check order status.\n\n" +
+      "Please try again."
+    );
+  }
+}
