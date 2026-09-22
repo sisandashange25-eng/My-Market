@@ -308,361 +308,159 @@ function toggleCart() {
 async function checkout() {
 
   if (!cart.length) {
-
     alert("Your cart is empty.");
-
     return;
-
   }
 
-
-  const fullName =
-    prompt("Enter your full name:");
-
+  const fullName = prompt("Enter your full name:");
   if (!fullName || !fullName.trim()) {
-
     alert("Checkout cancelled.");
-
     return;
-
   }
 
-
-  const phone =
-    prompt("Enter your phone number:");
-
+  const phone = prompt("Enter your phone number:");
   if (!phone || !phone.trim()) {
-
     alert("Checkout cancelled.");
-
     return;
-
   }
 
-
-  const deliveryAddress =
-    prompt("Enter your delivery address:");
-
-  if (
-    !deliveryAddress ||
-    !deliveryAddress.trim()
-  ) {
-
+  const deliveryAddress = prompt("Enter your delivery address:");
+  if (!deliveryAddress || !deliveryAddress.trim()) {
     alert("Checkout cancelled.");
-
     return;
-
   }
-
 
   const counts = {};
 
-
   cart.forEach(id => {
-
-    counts[id] =
-      (counts[id] || 0) + 1;
-
+    counts[id] = (counts[id] || 0) + 1;
   });
 
-
   let total = 0;
-
   const orderItems = [];
 
+  for (const [id, quantity] of Object.entries(counts)) {
 
-  for (
-    const [id, quantity]
-    of Object.entries(counts)
-  ) {
-
-    const product =
-      products.find(
-        p => p.id == id
-      );
-
+    const product = products.find(p => p.id == id);
 
     if (!product) {
-
-      alert(
-        "One of the products in your cart could not be found."
-      );
-
+      alert("One of the products in your cart could not be found.");
       return;
-
     }
 
+    const price = Number(product.price);
 
-    const price =
-      Number(product.price);
-
-
-    total +=
-      price * quantity;
-
+    total += price * quantity;
 
     orderItems.push({
-
-      Products_id:
-        product.id,
-
-      Quantity:
-        quantity,
-
-      Price:
-        price
-
+      product_id: product.id,
+      quantity: quantity,
+      price: price
     });
-
   }
-
 
   try {
 
-    const profileResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/profiles",
-
-        {
-
-          method: "POST",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_KEY,
-
-            "Content-Type":
-              "application/json",
-
-            "Prefer":
-              "return=representation"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              full_name:
-                fullName.trim(),
-
-              phone:
-                phone.trim(),
-
-              role:
-                "customer"
-
-            })
-
-        }
-
-      );
-
+    const profileResponse = await fetch(
+      SUPABASE_URL + "/rest/v1/profiles",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify({
+          full_name: fullName.trim(),
+          phone: phone.trim(),
+          role: "customer"
+        })
+      }
+    );
 
     if (!profileResponse.ok) {
-
       alert(
         "Customer profile could not be created.\n\n" +
         await profileResponse.text()
       );
-
       return;
-
     }
 
+    const profileData = await profileResponse.json();
+    const customerId = profileData[0].id;
 
-    const profileData =
-      await profileResponse.json();
-
-
-    const customerId =
-      profileData[0].id;
-
-
-    const orderResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/orders",
-
-        {
-
-          method: "POST",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_KEY,
-
-            "Content-Type":
-              "application/json",
-
-            "Prefer":
-              "return=representation"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              customer_id:
-                customerId,
-
-              total:
-                total,
-
-              status:
-                "Pending",
-
-              delivery_address:
-                deliveryAddress.trim()
-
-            })
-
-        }
-
-      );
-
+    const orderResponse = await fetch(
+      SUPABASE_URL + "/rest/v1/orders",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify({
+          customer_id: customerId,
+          total: total,
+          status: "Pending",
+          delivery_address: deliveryAddress.trim()
+        })
+      }
+    );
 
     if (!orderResponse.ok) {
-
       alert(
         "Order could not be created.\n\n" +
         await orderResponse.text()
       );
-
       return;
-
     }
 
+    const orderData = await orderResponse.json();
+    const orderId = orderData[0].id;
 
-    const orderData =
-      await orderResponse.json();
-
-
-    const orderId =
-      orderData[0].id;
-
-
-    const itemsToInsert =
-      orderItems.map(item => ({
-
-        order_id:
-          orderId,
-
-        product_id:
-          item.Products_id,
-
-        quantity:
-          item.Quantity,
-
-        price:
-          item.Price
-
-      }));
-
-
-    const itemsResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/order_items",
-
-        {
-
-          method: "POST",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_KEY,
-
-            "Content-Type":
-              "application/json",
-
-            "Prefer":
-              "return=minimal"
-
-          },
-
-          body:
-            JSON.stringify(
-              itemsToInsert
-            )
-
-        }
-
-      );
-
+    const itemsResponse = await fetch(
+      SUPABASE_URL + "/rest/v1/order_items",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify(
+          orderItems.map(item => ({
+            order_id: orderId,
+            product_id: item.product_id,
+            quantity: item.quantity,
+            price: item.price
+          }))
+        )
+      }
+    );
 
     if (!itemsResponse.ok) {
-
       alert(
         "The order was created, but the products could not be added.\n\n" +
         await itemsResponse.text()
       );
-
       return;
-
     }
 
+    const paymentUrl =
+      "https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNDxuj63iqje/exec" +
+      "?amount=" + encodeURIComponent(total.toFixed(2)) +
+      "&item_name=" + encodeURIComponent("ZavaMarket Order #" + orderId);
 
-    cart = [];
-
-    save();
-
-    updateCart();
-
-
-    alert(
-
-      "Order placed successfully! 🎉\n\n" +
-
-      "Order ID: " +
-      orderId +
-
-      "\nTotal: R" +
-      total.toFixed(2)
-
-    );
-
-
-    const cartBox =
-      document.getElementById("cart");
-
-
-    if (cartBox) {
-
-      cartBox.classList.remove(
-        "open"
-      );
-
-    }
-
+    window.location.href = paymentUrl;
 
   } catch (error) {
 
-    alert(
-      "Checkout failed:\n\n" +
-      error.message
-    );
+    alert("Checkout failed:\n\n" + error.message);
 
   }
-
 }
 
 
