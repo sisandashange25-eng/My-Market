@@ -278,8 +278,8 @@ async function checkout() {
 
         body: JSON.stringify({
           full_name: fullName.trim(),
-          Phone: phone.trim(),
-          Role: "customer"
+          phone: phone.trim(),
+          role: "customer"
         })
       }
     );
