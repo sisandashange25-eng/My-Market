@@ -99,7 +99,23 @@ async function loadProducts() {
     }
 
     const data = await response.json();
+const sellersResponse = await fetch(
+  SUPABASE_URL + "/rest/v1/sellers?select=id,store_name",
+  {
+    headers: {
+      "apikey": SUPABASE_KEY,
+      "Authorization": "Bearer " + SUPABASE_KEY
+    }
+  }
+);
 
+const sellers = await sellersResponse.json();
+
+const sellerMap = {};
+
+sellers.forEach(seller => {
+  sellerMap[seller.id] = seller.store_name;
+});
     console.log("Products from Supabase:", data);
 
     if (Array.isArray(data) && data.length > 0) {
@@ -110,7 +126,7 @@ async function loadProducts() {
         price: Number(p.price),
         cat: p.category || "Other",
         icon: "🛍️",
-        seller:"Zava Seller",
+        seller: sellerMap[p.seller_id] || "Zava Seller",
         image_url: p.image_url || ""
       }));
 
