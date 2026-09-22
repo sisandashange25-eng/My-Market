@@ -377,14 +377,14 @@ async function checkout() {
 
     const itemsToInsert = orderItems.map(item => ({
       order_id: orderId,
-      products_id: item.Products_id,
+      product_id: item.Products_id,
       quantity: item.Quantity,
       price: item.Price
     }));
 
 
     const itemsResponse = await fetch(
-      SUPABASE_URL + "/rest/v1/orders_items",
+      SUPABASE_URL + "/rest/v1/order_items",
       {
         method: "POST",
 
