@@ -27,10 +27,16 @@ function renderProducts() {
   let q = searchBox ? searchBox.value.toLowerCase() : "";
   let s = sortBox ? sortBox.value : "popular";
 
-  let filtered = products.filter(x =>
-    (category === "All" || x.cat === category) &&
-    x.name.toLowerCase().includes(q)
-  );
+  let filtered = products.filter(x => {
+
+    const productCategory = x.category || x.cat || "All";
+
+    return (
+      (category === "All" || productCategory === category) &&
+      x.name.toLowerCase().includes(q)
+    );
+
+  });
 
   if (s === "low") {
     filtered.sort((a, b) => a.price - b.price);
@@ -42,14 +48,17 @@ function renderProducts() {
 
   productsBox.innerHTML =
     filtered.map(x => `
+
       <article class="card">
 
         <div class="pic">
+
           ${
             x.image_url
               ? `<img src="${x.image_url}" alt="${x.name}" style="width:100%;height:100%;object-fit:cover;">`
               : `<span>${x.icon || "🛍️"}</span>`
           }
+
         </div>
 
         <h3>${x.name}</h3>
@@ -67,6 +76,7 @@ function renderProducts() {
         </button>
 
       </article>
+
     `).join("") || "<p>No products found.</p>";
 }
 
