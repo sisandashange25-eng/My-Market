@@ -450,11 +450,12 @@ async function checkout() {
     }
 
     const paymentUrl =
-      "https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNDxuj63iqje/exec" +
-      "?amount=" + encodeURIComponent(total.toFixed(2)) +
-      "&item_name=" + encodeURIComponent("ZavaMarket Order #" + orderId);
+  "https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNDxuj63iqje/exec" +
+  "?amount=" + encodeURIComponent(total.toFixed(2)) +
+  "&item_name=" + encodeURIComponent("ZavaMarket Order #" + orderId) +
+  "&order_id=" + encodeURIComponent(orderId);
 
-    window.location.href = paymentUrl;
+window.location.href = paymentUrl;
 
   } catch (error) {
 
