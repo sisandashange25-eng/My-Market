@@ -86,77 +86,36 @@ async function loadProducts() {
       }
     );
 
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
+    const responseText = await response.text();
 
-    const data = await response.json();
-
-    console.log("REAL PRODUCTS:", data);
-
-
-    const sellersResponse = await fetch(
-      SUPABASE_URL + "/rest/v1/sellers?select=id,store_name",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": "Bearer " + SUPABASE_KEY
-        }
-      }
+    alert(
+      "Supabase response:\n\n" +
+      "Status: " + response.status +
+      "\n\n" +
+      responseText
     );
 
-
-    let sellers = [];
-
-    if (sellersResponse.ok) {
-      sellers = await sellersResponse.json();
+    if (!response.ok) {
+      return;
     }
 
-
-    const sellerMap = {};
-
-
-    sellers.forEach(seller => {
-
-      sellerMap[seller.id] = seller.store_name;
-
-    });
-
+    const data = JSON.parse(responseText);
 
     products = data.map(p => ({
-
       id: p.id,
-
       name: p.name,
-
       price: Number(p.price),
-
       cat: p.category || "Other",
-
-      seller: sellerMap[p.seller_id] || "Zava Seller",
-
+      seller: "Zava Seller",
       image_url: p.image_url || ""
-
     }));
 
-
-    console.log("FINAL PRODUCTS:", products);
-
-
     renderProducts();
-
     updateCart();
-
 
   } catch (error) {
 
-    console.log("Could not load Supabase products:", error);
-
-    products = [];
-
-    renderProducts();
-
-    updateCart();
+    alert("ERROR:\n\n" + error.message);
 
   }
 
