@@ -12,7 +12,7 @@ const demoProducts = [
   {id:8,name:"Bedside Lamp",price:199,cat:"Home",icon:"💡",seller:"Home World"}
 ];
 
-let products = demoProducts;
+let products = [];
 let category = "All";
 
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
