@@ -248,63 +248,112 @@ async function findOrders(){
 
 
     if(!orders.length){
+<script>
 
-      result.innerHTML =
-        "<p>No orders found for this customer.</p>";
+const SUPABASE_URL="https://gaccizzlwswwynattgda.supabase.co";
+const SUPABASE_KEY="sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
+async function findOrders(){
+
+  const phone=document.getElementById("phone").value.trim();
+  const result=document.getElementById("result");
+
+  if(!phone){
+    alert("Please enter your phone number.");
+    return;
+  }
+
+  result.innerHTML="<p>Loading your orders...</p>";
+
+  try{
+
+    const response=await fetch(
+      SUPABASE_URL+
+      "/rest/v1/profiles?phone=eq."+encodeURIComponent(phone)+
+      "&select=id",
+      {
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":"Bearer "+SUPABASE_KEY
+        }
+      }
+    );
+
+    const profiles=await response.json();
+
+    console.log("PROFILE RESULT:",profiles);
+
+    if(!profiles.length){
+      result.innerHTML="<p>No customer found with that phone number.</p>";
       return;
     }
 
+    const customerId=profiles[0].id;
 
-    /* DISPLAY ORDERS */
+    const orderResponse=await fetch(
+      SUPABASE_URL+
+      "/rest/v1/orders?customer_id=eq."+customerId+
+      "&select=id,total,status,delivery_address,created_at"+
+      "&order=id.desc",
+      {
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":"Bearer "+SUPABASE_KEY
+        }
+      }
+    );
 
-    result.innerHTML =
-      orders.map(order => `
+    const orders=await orderResponse.json();
 
-        <div class="order">
+    console.log("ORDER RESULT:",orders);
 
-          <h2>📦 Order #${order.id}</h2>
+    if(!orders.length){
+      result.innerHTML="<p>No orders found for this customer.</p>";
+      return;
+    }
 
-          <div class="status">
-            ${order.status}
-          </div>
+    result.innerHTML=orders.map(order=>`
 
-          <p>
-            💰 <strong>Total:</strong>
-            R${Number(order.total).toFixed(2)}
-          </p>
+      <div class="order">
 
-          <p>
-            🏠 <strong>Delivery:</strong>
-            ${order.delivery_address || "Not provided"}
-          </p>
+        <h2>📦 Order #${order.id}</h2>
 
-          <p>
-            🕐 <strong>Ordered:</strong>
-            ${new Date(order.created_at).toLocaleString()}
-          </p>
-
-          <button
-            class="track"
-            onclick="window.location.href='track.html?order=${order.id}'"
-          >
-            📦 Track Order
-          </button>
-
+        <div class="status">
+          ${order.status}
         </div>
 
-      `).join("");
+        <p>
+          💰 <strong>Total:</strong>
+          R${Number(order.total).toFixed(2)}
+        </p>
+
+        <p>
+          🏠 <strong>Delivery:</strong>
+          ${order.delivery_address || "Not provided"}
+        </p>
+
+        <p>
+          🕐 <strong>Ordered:</strong>
+          ${new Date(order.created_at).toLocaleString()}
+        </p>
+
+        <button
+          class="track"
+          onclick="window.location.href='track.html?order=${order.id}'"
+        >
+          📦 Track Order
+        </button>
+
+      </div>
+
+    `).join("");
 
   }catch(error){
 
     console.error(error);
 
-    result.innerHTML =
-      "<p>Could not load your orders. Please try again.</p>";
+    result.innerHTML="<p>Error loading orders.</p>";
   }
 }
 
 </script>
-
-</body>
-</html>
