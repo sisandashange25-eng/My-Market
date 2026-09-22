@@ -276,7 +276,13 @@ function createProgress(status){
   `;
 }
 
+const params = new URLSearchParams(window.location.search);
+const orderFromUrl = params.get("order");
 
+if(orderFromUrl){
+  document.getElementById("orderId").value = orderFromUrl;
+  trackOrder();
+}
 async function trackOrder(){
 
   const orderId =
