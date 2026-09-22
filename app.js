@@ -140,7 +140,9 @@ async function loadProducts() {
       cat: p.category || "Other",
 
       seller:
-        sellerMap[p.seller_id] || "Zava Seller",
+  Number(p.seller_id) === 5
+    ? "ZAVAMARKET"
+    : (sellerMap[p.seller_id] || "Zava Seller"),
 
       image_url: p.image_url || ""
 
