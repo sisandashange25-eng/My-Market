@@ -1,6 +1,6 @@
 const SUPABASE_URL = "https://gaccizzlwswwynattgda.supabase.co";
 const SUPABASE_KEY = "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
-
+alert("APP.JS IS LOADING");
 let products = [];
 let category = "All";
 
