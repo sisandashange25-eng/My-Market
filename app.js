@@ -519,3 +519,7 @@ async function sellerCentre() {
     );
   }
 }
+  }
+}
+
+loadProducts();
