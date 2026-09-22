@@ -509,7 +509,7 @@ async function sellerCentre() {
     // Open Seller Dashboard
     window.location.href = "seller.html";
 
-  } catch (error) {
+    } catch (error) {
 
     console.log("Seller registration error:", error);
 
@@ -517,8 +517,6 @@ async function sellerCentre() {
       "Seller registration failed.\n\n" +
       "Please check your internet connection and try again."
     );
-  }
-}
   }
 }
 
