@@ -762,11 +762,14 @@ window.location.href="index.html";
    START
 ========================= */
 
-loadProducts();
+checkSellerApproval().then(approved => {
 
-loadOrders();
+  if(approved){
 
-</script>
+    loadProducts();
 
-</body>
-</html>
+    loadOrders();
+
+  }
+
+});
