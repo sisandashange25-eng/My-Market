@@ -1,6 +1,6 @@
 const SUPABASE_URL = "https://gaccizzlwswwynattgda.supabase.co";
 const SUPABASE_KEY = "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
-alert("APP.JS IS LOADING");
+
 let products = [];
 let category = "All";
 
@@ -86,36 +86,40 @@ async function loadProducts() {
       }
     );
 
-    const responseText = await response.text();
-
-    alert(
-      "Supabase response:\n\n" +
-      "Status: " + response.status +
-      "\n\n" +
-      responseText
-    );
-
     if (!response.ok) {
+
+      const errorText = await response.text();
+
+      alert("Products error:\n\n" + errorText);
+
       return;
     }
 
-    const data = JSON.parse(responseText);
+    const data = await response.json();
 
     products = data.map(p => ({
+
       id: p.id,
+
       name: p.name,
+
       price: Number(p.price),
+
       cat: p.category || "Other",
+
       seller: "Zava Seller",
+
       image_url: p.image_url || ""
+
     }));
 
     renderProducts();
+
     updateCart();
 
   } catch (error) {
 
-    alert("ERROR:\n\n" + error.message);
+    alert("Could not load products:\n\n" + error.message);
 
   }
 
@@ -161,4 +165,513 @@ function updateCart() {
 
   const cartCount = document.getElementById("cartCount");
 
-  const cartItems =
+  const cartItems = document.getElementById("cartItems");
+
+  const totalBox = document.getElementById("total");
+
+  if (!cartCount || !cartItems || !totalBox) {
+    return;
+  }
+
+  cartCount.textContent = cart.length;
+
+  let counts = {};
+
+  cart.forEach(id => {
+
+    counts[id] = (counts[id] || 0) + 1;
+
+  });
+
+  let total = 0;
+
+  cartItems.innerHTML =
+
+    Object.entries(counts).map(([id, n]) => {
+
+      const x = products.find(p => p.id == id);
+
+      if (!x) return "";
+
+      total += Number(x.price) * n;
+
+      return `
+
+        <div class="cartrow">
+
+          <span>${x.name} × ${n}</span>
+
+          <b>R${(Number(x.price) * n).toFixed(2)}</b>
+
+        </div>
+
+      `;
+
+    }).join("") || "<p>Your cart is empty.</p>";
+
+  totalBox.textContent = total.toFixed(2);
+
+}
+
+
+function toggleCart() {
+
+  const cartBox = document.getElementById("cart");
+
+  if (!cartBox) return;
+
+  cartBox.classList.toggle("open");
+
+  updateCart();
+
+}
+
+
+async function checkout() {
+
+  if (!cart.length) {
+
+    alert("Your cart is empty.");
+
+    return;
+
+  }
+
+  const fullName = prompt("Enter your full name:");
+
+  if (!fullName || !fullName.trim()) {
+
+    alert("Checkout cancelled.");
+
+    return;
+
+  }
+
+  const phone = prompt("Enter your phone number:");
+
+  if (!phone || !phone.trim()) {
+
+    alert("Checkout cancelled.");
+
+    return;
+
+  }
+
+  const deliveryAddress = prompt("Enter your delivery address:");
+
+  if (!deliveryAddress || !deliveryAddress.trim()) {
+
+    alert("Checkout cancelled.");
+
+    return;
+
+  }
+
+  const counts = {};
+
+  cart.forEach(id => {
+
+    counts[id] = (counts[id] || 0) + 1;
+
+  });
+
+  let total = 0;
+
+  const orderItems = [];
+
+  for (const [id, quantity] of Object.entries(counts)) {
+
+    const product = products.find(p => p.id == id);
+
+    if (!product) {
+
+      alert("One of the products in your cart could not be found.");
+
+      return;
+
+    }
+
+    const price = Number(product.price);
+
+    total += price * quantity;
+
+    orderItems.push({
+
+      Products_id: product.id,
+
+      Quantity: quantity,
+
+      Price: price
+
+    });
+
+  }
+
+  try {
+
+    const profileResponse = await fetch(
+
+      SUPABASE_URL + "/rest/v1/profiles",
+
+      {
+
+        method: "POST",
+
+        headers: {
+
+          "apikey": SUPABASE_KEY,
+
+          "Authorization": "Bearer " + SUPABASE_KEY,
+
+          "Content-Type": "application/json",
+
+          "Prefer": "return=representation"
+
+        },
+
+        body: JSON.stringify({
+
+          full_name: fullName.trim(),
+
+          phone: phone.trim(),
+
+          role: "customer"
+
+        })
+
+      }
+
+    );
+
+    if (!profileResponse.ok) {
+
+      alert(
+
+        "Customer profile could not be created.\n\n" +
+
+        await profileResponse.text()
+
+      );
+
+      return;
+
+    }
+
+    const profileData = await profileResponse.json();
+
+    const customerId = profileData[0].id;
+
+    const orderResponse = await fetch(
+
+      SUPABASE_URL + "/rest/v1/orders",
+
+      {
+
+        method: "POST",
+
+        headers: {
+
+          "apikey": SUPABASE_KEY,
+
+          "Authorization": "Bearer " + SUPABASE_KEY,
+
+          "Content-Type": "application/json",
+
+          "Prefer": "return=representation"
+
+        },
+
+        body: JSON.stringify({
+
+          customer_id: customerId,
+
+          total: total,
+
+          status: "Pending",
+
+          delivery_address: deliveryAddress.trim()
+
+        })
+
+      }
+
+    );
+
+    if (!orderResponse.ok) {
+
+      alert(
+
+        "Order could not be created.\n\n" +
+
+        await orderResponse.text()
+
+      );
+
+      return;
+
+    }
+
+    const orderData = await orderResponse.json();
+
+    const orderId = orderData[0].id;
+
+    const itemsToInsert = orderItems.map(item => ({
+
+      order_id: orderId,
+
+      product_id: item.Products_id,
+
+      quantity: item.Quantity,
+
+      price: item.Price
+
+    }));
+
+    const itemsResponse = await fetch(
+
+      SUPABASE_URL + "/rest/v1/order_items",
+
+      {
+
+        method: "POST",
+
+        headers: {
+
+          "apikey": SUPABASE_KEY,
+
+          "Authorization": "Bearer " + SUPABASE_KEY,
+
+          "Content-Type": "application/json",
+
+          "Prefer": "return=minimal"
+
+        },
+
+        body: JSON.stringify(itemsToInsert)
+
+      }
+
+    );
+
+    if (!itemsResponse.ok) {
+
+      alert(
+
+        "The order was created, but the products could not be added.\n\n" +
+
+        await itemsResponse.text()
+
+      );
+
+      return;
+
+    }
+
+    cart = [];
+
+    save();
+
+    updateCart();
+
+    alert(
+
+      "Order placed successfully! 🎉\n\n" +
+
+      "Order ID: " + orderId + "\n" +
+
+      "Total: R" + total.toFixed(2)
+
+    );
+
+    const cartBox = document.getElementById("cart");
+
+    if (cartBox) {
+
+      cartBox.classList.remove("open");
+
+    }
+
+  } catch (error) {
+
+    alert("Checkout failed:\n\n" + error.message);
+
+  }
+
+}
+
+
+async function sellerCentre() {
+
+  const name = prompt("Enter your store name:");
+
+  if (!name) {
+
+    alert("Seller registration cancelled.");
+
+    return;
+
+  }
+
+  const email = prompt("Enter your email address:");
+
+  if (!email) {
+
+    alert("Seller registration cancelled.");
+
+    return;
+
+  }
+
+  try {
+
+    const response = await fetch(
+
+      SUPABASE_URL + "/rest/v1/sellers",
+
+      {
+
+        method: "POST",
+
+        headers: {
+
+          "apikey": SUPABASE_KEY,
+
+          "Authorization": "Bearer " + SUPABASE_KEY,
+
+          "Content-Type": "application/json",
+
+          "Prefer": "return=minimal"
+
+        },
+
+        body: JSON.stringify({
+
+          store_name: name,
+
+          email: email,
+
+          approved: false
+
+        })
+
+      }
+
+    );
+
+    if (!response.ok) {
+
+      alert(
+
+        "Seller registration failed.\n\n" +
+
+        await response.text()
+
+      );
+
+      return;
+
+    }
+
+    alert(
+
+      "Seller application submitted successfully! 🎉"
+
+    );
+
+    window.location.href = "seller.html";
+
+  } catch (error) {
+
+    alert("Seller registration failed:\n\n" + error.message);
+
+  }
+
+}
+
+
+async function checkOrderStatus() {
+
+  const orderId = prompt("Enter your Order ID:");
+
+  if (!orderId || !orderId.trim()) {
+
+    return;
+
+  }
+
+  try {
+
+    const response = await fetch(
+
+      SUPABASE_URL +
+
+      "/rest/v1/orders?id=eq." +
+
+      orderId.trim() +
+
+      "&select=id,total,status,delivery_address,created_at",
+
+      {
+
+        headers: {
+
+          "apikey": SUPABASE_KEY,
+
+          "Authorization": "Bearer " + SUPABASE_KEY
+
+        }
+
+      }
+
+    );
+
+    if (!response.ok) {
+
+      alert(
+
+        "Could not check your order.\n\n" +
+
+        await response.text()
+
+      );
+
+      return;
+
+    }
+
+    const orders = await response.json();
+
+    if (!orders.length) {
+
+      alert("Order #" + orderId + " was not found.");
+
+      return;
+
+    }
+
+    const order = orders[0];
+
+    alert(
+
+      "📦 Order #" + order.id +
+
+      "\n\nStatus: " + order.status +
+
+      "\nTotal: R" + Number(order.total).toFixed(2) +
+
+      "\nDelivery: " +
+
+      (order.delivery_address || "Not provided")
+
+    );
+
+  } catch (error) {
+
+    alert("Could not check order status:\n\n" + error.message);
+
+  }
+
+}
+
+
+loadProducts();
