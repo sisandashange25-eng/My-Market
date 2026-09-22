@@ -233,7 +233,13 @@ footer{
 
 </footer>
 
+setInterval(() => {
+  const orderId = document.getElementById("orderId").value.trim();
 
+  if (orderId) {
+    trackOrder();
+  }
+}, 10000);
 <script>
 
 const SUPABASE_URL =
