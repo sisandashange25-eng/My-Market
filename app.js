@@ -376,10 +376,10 @@ async function checkout() {
 
 
     const itemsToInsert = orderItems.map(item => ({
-      Order_id: orderId,
-      Products_id: item.Products_id,
-      Quantity: item.Quantity,
-      Price: item.Price
+      order_id: orderId,
+      products_id: item.Products_id,
+      quantity: item.Quantity,
+      price: item.Price
     }));
 
 
