@@ -85,7 +85,7 @@ async function loadProducts() {
   try {
 
     const response = await fetch(
-      SUPABASE_URL + "/rest/v1/products?select=*&order=id.desc",
+      SUPABASE_URL + "/rest/v1/products?select=*,sellers(store_name)&order=id.desc",
       {
         headers: {
           "apikey": SUPABASE_KEY,
@@ -110,7 +110,7 @@ async function loadProducts() {
         price: Number(p.price),
         cat: p.category || "Other",
         icon: "🛍️",
-        seller:"Zava Seller",
+        seller:p.sellers?.store_name || "Zava Seller",
         image_url: p.image_url || ""
       }));
 
