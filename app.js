@@ -320,7 +320,7 @@ async function checkout() {
 
 
     const orderResponse = await fetch(
-      SUPABASE_URL + "/rest/v1/Orders",
+      SUPABASE_URL + "/rest/v1/orders",
       {
         method: "POST",
 
@@ -332,10 +332,10 @@ async function checkout() {
         },
 
         body: JSON.stringify({
-          Customer_id: customerId,
-          Total: total,
-          Status: "Pending",
-          Delivery_address: deliveryAddress.trim()
+          customer_id: customerId,
+          total: total,
+          status: "Pending",
+          delivery_address: deliveryAddress.trim()
         })
       }
     );
@@ -384,7 +384,7 @@ async function checkout() {
 
 
     const itemsResponse = await fetch(
-      SUPABASE_URL + "/rest/v1/Orders_items",
+      SUPABASE_URL + "/rest/v1/orders_items",
       {
         method: "POST",
 
