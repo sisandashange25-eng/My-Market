@@ -766,9 +766,15 @@ checkSellerApproval().then(approved => {
 
   if(approved){
 
-    loadProducts();
+    loadProducts().catch(error => {
+      document.getElementById("products").innerHTML =
+        "<p>Could not load products: " + error.message + "</p>";
+    });
 
-    loadOrders();
+    loadOrders().catch(error => {
+      document.getElementById("orders").innerHTML =
+        "<p>Could not load orders: " + error.message + "</p>";
+    });
 
   }
 
