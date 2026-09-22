@@ -101,6 +101,27 @@ color:#991b1b;
 .back{
 background:#6b7280;
 }
+
+.order{
+border:1px solid #ddd;
+border-radius:10px;
+padding:15px;
+margin-top:15px;
+}
+
+.order strong{
+display:block;
+margin-bottom:8px;
+}
+
+.order p{
+margin:6px 0;
+}
+
+.status{
+font-weight:bold;
+color:#b45309;
+}
 </style>
 </head>
 
@@ -108,7 +129,7 @@ background:#6b7280;
 
 <header>
 <h1>🛍️ ZavaMarket Seller Dashboard</h1>
-<p>Add and manage your products</p>
+<p>Add products and manage orders</p>
 </header>
 
 <main>
@@ -148,6 +169,18 @@ Add Product
 
 </div>
 
+
+<div class="card">
+
+<h2>📦 Customer Orders</h2>
+
+<div id="orders">
+Loading orders...
+</div>
+
+</div>
+
+
 <div class="card">
 
 <h2>Seller information</h2>
@@ -171,6 +204,7 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
 "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
 
 async function addProduct(){
 
@@ -253,6 +287,7 @@ false
 
 }
 
+
 function showMessage(text,success){
 
 const box=document.getElementById("message");
@@ -265,11 +300,93 @@ box.className=
 box.style.display="block";
 }
 
-function goBack(){
 
-window.location.href="Index.html";
+async function loadOrders(){
+
+const ordersBox=document.getElementById("orders");
+
+try{
+
+const response=await fetch(
+SUPABASE_URL+"/rest/v1/orders?select=*&order=id.desc",
+{
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY
+}
+}
+);
+
+if(!response.ok){
+
+throw new Error(
+await response.text()
+);
 
 }
+
+const orders=await response.json();
+
+if(!Array.isArray(orders) || !orders.length){
+
+ordersBox.innerHTML=
+"<p>No orders yet.</p>";
+
+return;
+}
+
+ordersBox.innerHTML=orders.map(order=>`
+
+<div class="order">
+
+<strong>Order #${order.id}</strong>
+
+<p>
+💰 Total:
+<strong>R${Number(order.total).toFixed(2)}</strong>
+</p>
+
+<p>
+📦 Status:
+<span class="status">${order.status || "Pending"}</span>
+</p>
+
+<p>
+🏠 Delivery:
+${order.delivery_address || "Not provided"}
+</p>
+
+<p>
+🕐 Date:
+${order.created_at
+? new Date(order.created_at).toLocaleString()
+: "Unknown"}
+</p>
+
+</div>
+
+`).join("");
+
+}catch(error){
+
+console.log("Orders error:",error);
+
+ordersBox.innerHTML=
+"<p>Could not load orders.</p>";
+
+}
+
+}
+
+
+function goBack(){
+
+window.location.href="index.html";
+
+}
+
+
+loadOrders();
 
 </script>
 
