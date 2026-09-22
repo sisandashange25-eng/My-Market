@@ -1,14 +1,9 @@
 <!doctype html>
 <html lang="en">
-
 <head>
 
 <meta charset="utf-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1"
->
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>ZavaMarket — Track Order</title>
 
@@ -21,182 +16,159 @@
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#f5f6f8;
-  color:#222;
+  background:#f6f7f9;
+  color:#111;
 }
 
 header{
-  background:#111827;
+  background:#111;
   color:white;
   padding:20px;
   text-align:center;
 }
 
-header h1{
-  margin:0;
-  font-size:24px;
+.logo{
+  font-size:25px;
+  font-weight:bold;
 }
 
-header p{
-  margin:7px 0 0;
-  opacity:.8;
+.logo span{
+  color:#ff7a00;
 }
 
 main{
   max-width:600px;
   margin:30px auto;
-  padding:15px;
+  padding:20px;
 }
 
 .card{
   background:white;
-  border-radius:16px;
-  padding:22px;
-  box-shadow:0 3px 15px rgba(0,0,0,.08);
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+h1{
+  margin-top:0;
 }
 
 input{
   width:100%;
-  padding:14px;
-  margin-top:8px;
+  padding:15px;
   border:1px solid #ddd;
-  border-radius:9px;
+  border-radius:10px;
   font-size:16px;
+  margin:10px 0;
 }
 
 button{
-  width:100%;
-  padding:14px;
-  margin-top:15px;
   border:0;
-  border-radius:9px;
-  background:#111827;
-  color:white;
+  border-radius:10px;
+  padding:14px 18px;
   font-size:16px;
+  cursor:pointer;
+}
+
+.trackBtn{
+  width:100%;
+  background:#ff7a00;
+  color:white;
   font-weight:bold;
 }
 
 .back{
-  background:#6b7280;
+  margin-top:20px;
+  background:#eee;
 }
 
 #result{
-  margin-top:20px;
+  margin-top:25px;
 }
 
 .order{
-  border:1px solid #ddd;
-  border-radius:12px;
-  padding:18px;
-}
-
-.order h2{
-  margin-top:0;
+  background:#f8f8f8;
+  border-radius:14px;
+  padding:20px;
 }
 
 .status{
   display:inline-block;
-  padding:8px 12px;
+  padding:8px 14px;
   border-radius:20px;
-  background:#fef3c7;
-  color:#92400e;
+  background:#fff0df;
+  color:#e66b00;
   font-weight:bold;
 }
 
-.row{
-  padding:10px 0;
-  border-bottom:1px solid #eee;
-}
-
-.row:last-child{
-  border-bottom:0;
-}
-
-.label{
-  font-weight:bold;
-}
-
-.error{
-  padding:14px;
-  border-radius:10px;
-  background:#fee2e2;
-  color:#991b1b;
-}
-
-/* ORDER PROGRESS */
+/* PROGRESS */
 
 .progress{
-  margin:25px 0;
+  display:flex;
+  justify-content:space-between;
+  position:relative;
+  margin:35px 5px;
 }
 
-.progress-title{
-  font-weight:bold;
-  margin-bottom:18px;
+.progress:before{
+  content:"";
+  position:absolute;
+  top:16px;
+  left:10%;
+  right:10%;
+  height:4px;
+  background:#ddd;
+  z-index:0;
 }
 
 .step{
-  display:flex;
-  align-items:center;
-  margin-bottom:18px;
+  position:relative;
+  z-index:1;
+  text-align:center;
+  width:25%;
+  font-size:12px;
+  color:#999;
 }
 
 .circle{
-  width:38px;
-  height:38px;
+  width:34px;
+  height:34px;
   border-radius:50%;
-  background:#e5e7eb;
-  color:#6b7280;
+  background:#ddd;
+  margin:0 auto 8px;
   display:flex;
   align-items:center;
   justify-content:center;
   font-weight:bold;
-  flex-shrink:0;
+}
+
+.step.active{
+  color:#ff7a00;
+  font-weight:bold;
 }
 
 .step.active .circle{
-  background:#111827;
+  background:#ff7a00;
   color:white;
 }
 
-.step-text{
-  margin-left:12px;
-}
-
-.step-text strong{
-  display:block;
-}
-
-.step-text span{
-  font-size:13px;
-  color:#777;
-}
-
-.line{
-  width:3px;
-  height:18px;
-  background:#e5e7eb;
-  margin-left:18px;
-  margin-top:-18px;
-  margin-bottom:0;
-}
-
-.line.active{
-  background:#111827;
+.details{
+  margin-top:20px;
+  line-height:1.8;
 }
 
 .cancelled{
-  padding:12px;
+  background:#ffe5e5;
+  color:#c00;
+  padding:15px;
   border-radius:10px;
-  background:#fee2e2;
-  color:#991b1b;
   font-weight:bold;
-  margin:15px 0;
 }
 
 footer{
   text-align:center;
-  padding:30px 15px;
-  color:#666;
+  padding:30px;
+  color:#777;
 }
 
 </style>
@@ -207,54 +179,57 @@ footer{
 
 <header>
 
-<h1>📦 ZavaMarket</h1>
+  <div class="logo">
+    Zava<span>Market</span>
+  </div>
 
-<p>Track your order</p>
+  <div>Track your order</div>
 
 </header>
 
 
 <main>
 
-<div class="card">
+  <div class="card">
 
-<h2>Track Order</h2>
+    <h1>📦 Track Order</h1>
 
-<p>
-Enter your ZavaMarket order number below.
-</p>
+    <p>
+      Enter your ZavaMarket order number below.
+    </p>
 
-<input
-  id="orderId"
-  type="number"
-  placeholder="Example: 8"
->
+    <input
+      id="orderId"
+      type="number"
+      placeholder="Order number"
+    >
 
-<button onclick="trackOrder()">
-  Track Order
-</button>
+    <button
+      class="trackBtn"
+      onclick="trackOrder()"
+    >
+      Track Order
+    </button>
 
-<div id="result"></div>
+    <div id="result"></div>
 
-<button
-  class="back"
-  onclick="window.location.href='index.html'"
->
-  ← Back to ZavaMarket
-</button>
+    <button
+      class="back"
+      onclick="window.location.href='index.html'"
+    >
+      ← Back to ZavaMarket
+    </button>
 
-</div>
+  </div>
 
 </main>
 
 
 <footer>
 
-<strong>ZavaMarket</strong>
+  <strong>ZavaMarket</strong><br>
 
-<br>
-
-Shop smart. Shop local. Shop Zava.
+  Shop smart. Shop local. Shop Zava.
 
 </footer>
 
@@ -277,88 +252,30 @@ function createProgress(status){
     "Delivered"
   ];
 
-  if(status === "Cancelled"){
-
-    return `
-      <div class="cancelled">
-        ❌ This order has been cancelled.
-      </div>
-    `;
-
-  }
-
-  const currentIndex =
+  const current =
     steps.indexOf(status);
 
   return `
-
     <div class="progress">
 
-      <div class="progress-title">
-        Delivery Progress
-      </div>
+      ${steps.map((step,index)=>`
 
+        <div class="step ${
+          index <= current ? "active" : ""
+        }">
 
-      <div class="step ${currentIndex >= 0 ? "active" : ""}">
+          <div class="circle">
+            ${index <= current ? "✓" : ""}
+          </div>
 
-        <div class="circle">✓</div>
+          ${step}
 
-        <div class="step-text">
-          <strong>Order Placed</strong>
-          <span>Your order has been received.</span>
         </div>
 
-      </div>
-
-
-      <div class="line ${currentIndex >= 1 ? "active" : ""}"></div>
-
-
-      <div class="step ${currentIndex >= 1 ? "active" : ""}">
-
-        <div class="circle">✓</div>
-
-        <div class="step-text">
-          <strong>Processing</strong>
-          <span>Your order is being prepared.</span>
-        </div>
-
-      </div>
-
-
-      <div class="line ${currentIndex >= 2 ? "active" : ""}"></div>
-
-
-      <div class="step ${currentIndex >= 2 ? "active" : ""}">
-
-        <div class="circle">✓</div>
-
-        <div class="step-text">
-          <strong>Shipped</strong>
-          <span>Your order is on the way.</span>
-        </div>
-
-      </div>
-
-
-      <div class="line ${currentIndex >= 3 ? "active" : ""}"></div>
-
-
-      <div class="step ${currentIndex >= 3 ? "active" : ""}">
-
-        <div class="circle">✓</div>
-
-        <div class="step-text">
-          <strong>Delivered</strong>
-          <span>Your order has arrived.</span>
-        </div>
-
-      </div>
+      `).join("")}
 
     </div>
-
   `;
-
 }
 
 
@@ -367,21 +284,19 @@ async function trackOrder(){
   const orderId =
     document.getElementById("orderId").value.trim();
 
-  const result =
-    document.getElementById("result");
-
-
   if(!orderId){
 
-    result.innerHTML =
-      '<div class="error">Please enter your Order ID.</div>';
+    alert("Please enter your order number.");
 
     return;
   }
 
 
+  const result =
+    document.getElementById("result");
+
   result.innerHTML =
-    "<p>Checking your order...</p>";
+    "<p>Loading order...</p>";
 
 
   try{
@@ -396,7 +311,8 @@ async function trackOrder(){
       {
         headers:{
           "apikey":SUPABASE_KEY,
-          "Authorization":"Bearer "+SUPABASE_KEY
+          "Authorization":
+            "Bearer " + SUPABASE_KEY
         }
       }
 
@@ -405,16 +321,10 @@ async function trackOrder(){
 
     if(!response.ok){
 
-      const errorText =
-        await response.text();
+      throw new Error(
+        await response.text()
+      );
 
-      result.innerHTML =
-        '<div class="error">' +
-        "Could not check order.<br><br>" +
-        errorText +
-        "</div>";
-
-      return;
     }
 
 
@@ -425,11 +335,9 @@ async function trackOrder(){
     if(!orders.length){
 
       result.innerHTML =
-        '<div class="error">' +
-        "Order #" +
+        "<p>Order #" +
         orderId +
-        " was not found." +
-        "</div>";
+        " was not found.</p>";
 
       return;
     }
@@ -438,43 +346,53 @@ async function trackOrder(){
     const order = orders[0];
 
 
-    const date =
-      order.created_at
-      ? new Date(order.created_at).toLocaleString()
-      : "Unknown";
+    if(order.status === "Cancelled"){
+
+      result.innerHTML = `
+
+        <div class="order">
+
+          <h2>📦 Order #${order.id}</h2>
+
+          <div class="cancelled">
+            ❌ This order has been cancelled.
+          </div>
+
+        </div>
+
+      `;
+
+      return;
+    }
 
 
     result.innerHTML = `
 
       <div class="order">
 
-        <h2>
-          📦 Order #${order.id}
-        </h2>
+        <h2>📦 Order #${order.id}</h2>
 
-        <p>
-          <span class="status">
-            ${order.status}
-          </span>
-        </p>
-
+        <div class="status">
+          ${order.status}
+        </div>
 
         ${createProgress(order.status)}
 
+        <div class="details">
 
-        <div class="row">
-          <span class="label">💰 Total:</span>
+          💰 <strong>Total:</strong>
           R${Number(order.total).toFixed(2)}
-        </div>
 
-        <div class="row">
-          <span class="label">🏠 Delivery:</span>
+          <br>
+
+          🏠 <strong>Delivery:</strong>
           ${order.delivery_address || "Not provided"}
-        </div>
 
-        <div class="row">
-          <span class="label">🕐 Ordered:</span>
-          ${date}
+          <br>
+
+          🕐 <strong>Ordered:</strong>
+          ${new Date(order.created_at).toLocaleString()}
+
         </div>
 
       </div>
@@ -484,15 +402,10 @@ async function trackOrder(){
 
   }catch(error){
 
-    console.log(
-      "Track order error:",
-      error
-    );
+    console.log(error);
 
     result.innerHTML =
-      '<div class="error">' +
-      "Something went wrong. Please try again." +
-      "</div>";
+      "<p>Could not load your order. Please try again.</p>";
 
   }
 
@@ -501,5 +414,4 @@ async function trackOrder(){
 </script>
 
 </body>
-
 </html>
