@@ -464,7 +464,6 @@ async function sellerCentre() {
     return;
   }
 
-
   try {
 
     const response = await fetch(
@@ -487,7 +486,6 @@ async function sellerCentre() {
       }
     );
 
-
     if (!response.ok) {
 
       const errorText = await response.text();
@@ -502,14 +500,14 @@ async function sellerCentre() {
       return;
     }
 
-
     alert(
       "Seller application submitted successfully! 🎉\n\n" +
       "Store: " + name + "\n" +
-      "Email: " + email + "\n\n" +
-      "Your application is waiting for approval."
+      "Email: " + email
     );
 
+    // Open Seller Dashboard
+    window.location.href = "seller.html";
 
   } catch (error) {
 
@@ -521,8 +519,3 @@ async function sellerCentre() {
     );
   }
 }
-
-
-renderProducts();
-updateCart();
-loadProducts();
