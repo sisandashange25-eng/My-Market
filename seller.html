@@ -140,6 +140,20 @@ margin-bottom:8px;
 .order p{
 margin:6px 0;
 }
+
+.loading{
+padding:10px 0;
+color:#555;
+}
+
+.load-error{
+background:#fee2e2;
+color:#991b1b;
+padding:12px;
+border-radius:8px;
+margin-top:10px;
+word-break:break-word;
+}
 </style>
 </head>
 
@@ -192,7 +206,7 @@ Add Product
 
 <h2>🛍️ My Products</h2>
 
-<div id="products">
+<div id="products" class="loading">
 Loading products...
 </div>
 
@@ -203,7 +217,7 @@ Loading products...
 
 <h2>📦 Customer Orders</h2>
 
-<div id="orders">
+<div id="orders" class="loading">
 Loading orders...
 </div>
 
@@ -240,182 +254,219 @@ const SUPABASE_KEY =
 
 const SELLER_ID = 5;
 
+
+/* =========================
+   CHECK SELLER APPROVAL
+========================= */
+
 async function checkSellerApproval(){
 
-  const response = await fetch(
-    SUPABASE_URL +
-    "/rest/v1/sellers?id=eq." +
-    SELLER_ID +
-    "&select=approved",
-    {
-      headers:{
-        "apikey":SUPABASE_KEY,
-        "Authorization":"Bearer " + SUPABASE_KEY
+  try{
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/sellers?id=eq." +
+      SELLER_ID +
+      "&select=approved",
+      {
+        method:"GET",
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":"Bearer " + SUPABASE_KEY
+        },
+        cache:"no-store"
       }
+    );
+
+    if(!response.ok){
+
+      const errorText =
+        await response.text();
+
+      alert(
+        "Could not check seller approval.\n\n" +
+        errorText
+      );
+
+      return false;
     }
-  );
 
-  if(!response.ok){
-    alert("Could not check seller approval.");
+    const sellers =
+      await response.json();
+
+    if(
+      !sellers.length ||
+      sellers[0].approved !== true
+    ){
+
+      document.body.innerHTML = `
+        <div style="
+          padding:40px 20px;
+          text-align:center;
+          font-family:Arial,sans-serif;
+        ">
+
+          <h1>⏳ Seller Application Pending</h1>
+
+          <p>
+            Your seller account has not been approved yet.
+          </p>
+
+          <p>
+            Please wait for ZavaMarket approval before adding products.
+          </p>
+
+          <button
+            onclick="window.location.href='index.html'"
+            style="
+              padding:12px 20px;
+              border:0;
+              border-radius:8px;
+              background:#111827;
+              color:white;
+              font-size:16px;
+            "
+          >
+            Back to ZavaMarket
+          </button>
+
+        </div>
+      `;
+
+      return false;
+    }
+
+    return true;
+
+  }catch(error){
+
+    alert(
+      "Seller approval check failed.\n\n" +
+      error.message
+    );
+
     return false;
   }
 
-  const sellers = await response.json();
-
-  if(!sellers.length || sellers[0].approved !== true){
-
-    document.body.innerHTML = `
-      <div style="
-        padding:40px 20px;
-        text-align:center;
-        font-family:Arial,sans-serif;
-      ">
-        <h1>⏳ Seller Application Pending</h1>
-        <p>
-          Your seller account has not been approved yet.
-        </p>
-        <p>
-          Please wait for ZavaMarket approval before adding products.
-        </p>
-        <button
-          onclick="window.location.href='index.html'"
-          style="
-            padding:12px 20px;
-            border:0;
-            border-radius:8px;
-            background:#111827;
-            color:white;
-            font-size:16px;
-          "
-        >
-          Back to ZavaMarket
-        </button>
-      </div>
-    `;
-
-    return false;
-  }
-
-  return true;
 }
+
+
 /* =========================
    ADD PRODUCT
 ========================= */
 
 async function addProduct(){
 
-const name =
-document.getElementById("name").value.trim();
+  const name =
+    document.getElementById("name").value.trim();
 
-const description =
-document.getElementById("description").value.trim();
+  const description =
+    document.getElementById("description").value.trim();
 
-const price =
-document.getElementById("price").value;
+  const price =
+    document.getElementById("price").value;
 
-const stock =
-document.getElementById("stock").value;
+  const stock =
+    document.getElementById("stock").value;
 
-const category =
-document.getElementById("category").value;
+  const category =
+    document.getElementById("category").value;
 
-const image_url =
-document.getElementById("image_url").value.trim();
-
-
-if(!name || !price || !stock){
-
-showMessage(
-"Please enter the product name, price and stock.",
-false
-);
-
-return;
-
-}
+  const image_url =
+    document.getElementById("image_url").value.trim();
 
 
-try{
+  if(!name || !price || !stock){
 
-const response =
-await fetch(
-SUPABASE_URL+"/rest/v1/products",
-{
-method:"POST",
+    showMessage(
+      "Please enter the product name, price and stock.",
+      false
+    );
 
-headers:{
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY,
-"Content-Type":"application/json",
-"Prefer":"return=minimal"
-},
-
-body:JSON.stringify({
-
-seller_id:SELLER_ID,
-
-name:name,
-
-description:description,
-
-price:Number(price),
-
-stock:Number(stock),
-
-category:category,
-
-image_url:image_url,
-
-active:true
-
-})
-
-}
-);
+    return;
+  }
 
 
-if(!response.ok){
+  try{
 
-const errorText =
-await response.text();
+    const response =
+      await fetch(
+        SUPABASE_URL + "/rest/v1/products",
+        {
+          method:"POST",
 
-showMessage(
-"Product could not be added: "+
-errorText,
-false
-);
+          headers:{
+            "apikey":SUPABASE_KEY,
+            "Authorization":"Bearer " + SUPABASE_KEY,
+            "Content-Type":"application/json",
+            "Prefer":"return=minimal"
+          },
 
-return;
+          body:JSON.stringify({
 
-}
+            seller_id:SELLER_ID,
+
+            name:name,
+
+            description:description,
+
+            price:Number(price),
+
+            stock:Number(stock),
+
+            category:category,
+
+            image_url:image_url,
+
+            active:true
+
+          })
+
+        }
+      );
 
 
-showMessage(
-"Product added successfully! 🎉",
-true
-);
+    if(!response.ok){
+
+      const errorText =
+        await response.text();
+
+      showMessage(
+        "Product could not be added: " +
+        errorText,
+        false
+      );
+
+      return;
+    }
 
 
-document.getElementById("name").value="";
-document.getElementById("description").value="";
-document.getElementById("price").value="";
-document.getElementById("stock").value="";
-document.getElementById("image_url").value="";
+    showMessage(
+      "Product added successfully! 🎉",
+      true
+    );
 
 
-loadProducts();
+    document.getElementById("name").value="";
+    document.getElementById("description").value="";
+    document.getElementById("price").value="";
+    document.getElementById("stock").value="";
+    document.getElementById("image_url").value="";
 
 
-}catch(error){
+    loadProducts();
 
-console.log(error);
 
-showMessage(
-"Something went wrong. Please try again.",
-false
-);
+  }catch(error){
 
-}
+    console.log(error);
+
+    showMessage(
+      "Something went wrong. Please try again.",
+      false
+    );
+
+  }
 
 }
 
@@ -426,15 +477,16 @@ false
 
 function showMessage(text,success){
 
-const box =
-document.getElementById("message");
+  const box =
+    document.getElementById("message");
 
-box.textContent=text;
+  box.textContent=text;
 
-box.className =
-"message "+(success?"success":"error");
+  box.className =
+    "message " +
+    (success ? "success" : "error");
 
-box.style.display="block";
+  box.style.display="block";
 
 }
 
@@ -445,97 +497,167 @@ box.style.display="block";
 
 async function loadProducts(){
 
-const productsBox =
-document.getElementById("products");
+  const productsBox =
+    document.getElementById("products");
 
 
-try{
-
-const response =
-await fetch(
-SUPABASE_URL+
-"/rest/v1/products?seller_id=eq."+SELLER_ID+
-"&select=*&order=id.desc",
-{
-headers:{
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY
-}
-}
-);
+  productsBox.innerHTML =
+    '<div class="loading">Loading products...</div>';
 
 
-if(!response.ok){
+  try{
 
-throw new Error(
-await response.text()
-);
+    const controller =
+      new AbortController();
 
-}
-
-
-const products =
-await response.json();
-
-
-if(!Array.isArray(products) ||
-products.length===0){
-
-productsBox.innerHTML =
-"<p>No products yet.</p>";
-
-return;
-
-}
+    const timeout =
+      setTimeout(
+        () => controller.abort(),
+        10000
+      );
 
 
-productsBox.innerHTML =
-products.map(product=>`
+    const response =
+      await fetch(
+        SUPABASE_URL +
+        "/rest/v1/products?seller_id=eq." +
+        SELLER_ID +
+        "&select=id,name,description,price,stock,category,image_url,active&order=id.desc",
+        {
+          method:"GET",
 
-<div class="product">
+          headers:{
+            "apikey":SUPABASE_KEY,
+            "Authorization":"Bearer " + SUPABASE_KEY,
+            "Accept":"application/json"
+          },
 
-${
-product.image_url
-?
-`<img src="${product.image_url}">`
-:
-""
-}
+          cache:"no-store",
 
-<h3>
-${product.name}
-</h3>
-
-<p>
-💰 Price:
-<strong>
-R${Number(product.price).toFixed(2)}
-</strong>
-</p>
-
-<p>
-📦 Stock:
-${product.stock}
-</p>
-
-<p>
-🏷️ Category:
-${product.category || "Other"}
-</p>
-
-</div>
-
-`).join("");
+          signal:controller.signal
+        }
+      );
 
 
-}catch(error){
+    clearTimeout(timeout);
 
-console.log("Products error:",error);
 
-productsBox.innerHTML =
-"<p>Could not load products.</p>";
+    const responseText =
+      await response.text();
 
-}
+
+    if(!response.ok){
+
+      productsBox.innerHTML =
+        '<div class="load-error">' +
+        "<strong>Could not load products.</strong><br><br>" +
+        responseText +
+        "</div>";
+
+      return;
+    }
+
+
+    let products;
+
+    try{
+
+      products =
+        JSON.parse(responseText);
+
+    }catch(error){
+
+      productsBox.innerHTML =
+        '<div class="load-error">' +
+        "<strong>Invalid response from Supabase.</strong><br><br>" +
+        responseText +
+        "</div>";
+
+      return;
+    }
+
+
+    if(
+      !Array.isArray(products) ||
+      products.length === 0
+    ){
+
+      productsBox.innerHTML =
+        "<p>No products yet.</p>";
+
+      return;
+    }
+
+
+    productsBox.innerHTML =
+      products.map(product => `
+
+        <div class="product">
+
+          ${
+            product.image_url
+            ?
+            `<img
+              src="${product.image_url}"
+              onerror="this.style.display='none'"
+            >`
+            :
+            ""
+          }
+
+          <h3>
+            ${product.name}
+          </h3>
+
+          <p>
+            💰 Price:
+            <strong>
+              R${Number(product.price).toFixed(2)}
+            </strong>
+          </p>
+
+          <p>
+            📦 Stock:
+            ${product.stock}
+          </p>
+
+          <p>
+            🏷️ Category:
+            ${product.category || "Other"}
+          </p>
+
+        </div>
+
+      `).join("");
+
+
+  }catch(error){
+
+    console.log(
+      "Products error:",
+      error
+    );
+
+
+    if(error.name === "AbortError"){
+
+      productsBox.innerHTML =
+        '<div class="load-error">' +
+        "<strong>Product loading timed out.</strong><br><br>" +
+        "Supabase did not respond within 10 seconds." +
+        "</div>";
+
+    }else{
+
+      productsBox.innerHTML =
+        '<div class="load-error">' +
+        "<strong>Product loading error:</strong><br><br>" +
+        error.message +
+        "</div>";
+
+    }
+
+  }
 
 }
 
@@ -546,132 +668,212 @@ productsBox.innerHTML =
 
 async function loadOrders(){
 
-const ordersBox =
-document.getElementById("orders");
+  const ordersBox =
+    document.getElementById("orders");
 
 
-try{
-
-const response =
-await fetch(
-SUPABASE_URL+
-"/rest/v1/orders?select=*&order=id.desc",
-{
-headers:{
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY
-}
-}
-);
+  ordersBox.innerHTML =
+    '<div class="loading">Loading orders...</div>';
 
 
-if(!response.ok){
+  try{
 
-throw new Error(
-await response.text()
-);
+    const controller =
+      new AbortController();
 
-}
-
-
-const orders =
-await response.json();
-
-
-if(!Array.isArray(orders) ||
-!orders.length){
-
-ordersBox.innerHTML =
-"<p>No orders yet.</p>";
-
-return;
-
-}
+    const timeout =
+      setTimeout(
+        () => controller.abort(),
+        10000
+      );
 
 
-ordersBox.innerHTML =
-orders.map(order=>`
+    const response =
+      await fetch(
+        SUPABASE_URL +
+        "/rest/v1/orders?select=*&order=id.desc",
+        {
+          method:"GET",
 
-<div class="order">
+          headers:{
+            "apikey":SUPABASE_KEY,
+            "Authorization":"Bearer " + SUPABASE_KEY,
+            "Accept":"application/json"
+          },
 
-<strong>
-Order #${order.id}
-</strong>
+          cache:"no-store",
 
-<p>
-💰 Total:
-<strong>
-R${Number(order.total).toFixed(2)}
-</strong>
-</p>
-
-<p>
-🏠 Delivery:
-${order.delivery_address || "Not provided"}
-</p>
-
-<p>
-🕐 Date:
-${
-order.created_at
-?
-new Date(order.created_at).toLocaleString()
-:
-"Unknown"
-}
-</p>
-
-<label>
-📦 Order Status
-</label>
-
-<select
-onchange="updateOrderStatus(
-${order.id},
-this.value
-)"
->
-
-<option value="Pending"
-${order.status==="Pending"?"selected":""}>
-Pending
-</option>
-
-<option value="Processing"
-${order.status==="Processing"?"selected":""}>
-Processing
-</option>
-
-<option value="Shipped"
-${order.status==="Shipped"?"selected":""}>
-Shipped
-</option>
-
-<option value="Delivered"
-${order.status==="Delivered"?"selected":""}>
-Delivered
-</option>
-
-<option value="Cancelled"
-${order.status==="Cancelled"?"selected":""}>
-Cancelled
-</option>
-
-</select>
-
-</div>
-
-`).join("");
+          signal:controller.signal
+        }
+      );
 
 
-}catch(error){
+    clearTimeout(timeout);
 
-console.log("Orders error:",error);
 
-ordersBox.innerHTML =
-"<p>Could not load orders.</p>";
+    const responseText =
+      await response.text();
 
-}
+
+    if(!response.ok){
+
+      ordersBox.innerHTML =
+        '<div class="load-error">' +
+        "<strong>Could not load orders.</strong><br><br>" +
+        responseText +
+        "</div>";
+
+      return;
+    }
+
+
+    let orders;
+
+    try{
+
+      orders =
+        JSON.parse(responseText);
+
+    }catch(error){
+
+      ordersBox.innerHTML =
+        '<div class="load-error">' +
+        "<strong>Invalid response from Supabase.</strong><br><br>" +
+        responseText +
+        "</div>";
+
+      return;
+    }
+
+
+    if(
+      !Array.isArray(orders) ||
+      orders.length === 0
+    ){
+
+      ordersBox.innerHTML =
+        "<p>No orders yet.</p>";
+
+      return;
+    }
+
+
+    ordersBox.innerHTML =
+      orders.map(order => `
+
+        <div class="order">
+
+          <strong>
+            Order #${order.id}
+          </strong>
+
+          <p>
+            💰 Total:
+            <strong>
+              R${Number(order.total).toFixed(2)}
+            </strong>
+          </p>
+
+          <p>
+            🏠 Delivery:
+            ${order.delivery_address || "Not provided"}
+          </p>
+
+          <p>
+            🕐 Date:
+            ${
+              order.created_at
+              ?
+              new Date(
+                order.created_at
+              ).toLocaleString()
+              :
+              "Unknown"
+            }
+          </p>
+
+          <label>
+            📦 Order Status
+          </label>
+
+          <select
+            onchange="
+              updateOrderStatus(
+                ${order.id},
+                this.value
+              )
+            "
+          >
+
+            <option
+              value="Pending"
+              ${order.status==="Pending"?"selected":""}
+            >
+              Pending
+            </option>
+
+            <option
+              value="Processing"
+              ${order.status==="Processing"?"selected":""}
+            >
+              Processing
+            </option>
+
+            <option
+              value="Shipped"
+              ${order.status==="Shipped"?"selected":""}
+            >
+              Shipped
+            </option>
+
+            <option
+              value="Delivered"
+              ${order.status==="Delivered"?"selected":""}
+            >
+              Delivered
+            </option>
+
+            <option
+              value="Cancelled"
+              ${order.status==="Cancelled"?"selected":""}
+            >
+              Cancelled
+            </option>
+
+          </select>
+
+        </div>
+
+      `).join("");
+
+
+  }catch(error){
+
+    console.log(
+      "Orders error:",
+      error
+    );
+
+
+    if(error.name === "AbortError"){
+
+      ordersBox.innerHTML =
+        '<div class="load-error">' +
+        "<strong>Order loading timed out.</strong><br><br>" +
+        "Supabase did not respond within 10 seconds." +
+        "</div>";
+
+    }else{
+
+      ordersBox.innerHTML =
+        '<div class="load-error">' +
+        "<strong>Order loading error:</strong><br><br>" +
+        error.message +
+        "</div>";
+
+    }
+
+  }
 
 }
 
@@ -681,68 +883,68 @@ ordersBox.innerHTML =
 ========================= */
 
 async function updateOrderStatus(
-orderId,
-newStatus
+  orderId,
+  newStatus
 ){
 
-try{
+  try{
 
-const response =
-await fetch(
-SUPABASE_URL+
-"/rest/v1/orders?id=eq."+orderId,
-{
-method:"PATCH",
+    const response =
+      await fetch(
+        SUPABASE_URL +
+        "/rest/v1/orders?id=eq." +
+        orderId,
+        {
+          method:"PATCH",
 
-headers:{
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY,
-"Content-Type":"application/json",
-"Prefer":"return=minimal"
-},
+          headers:{
+            "apikey":SUPABASE_KEY,
+            "Authorization":"Bearer " + SUPABASE_KEY,
+            "Content-Type":"application/json",
+            "Prefer":"return=minimal"
+          },
 
-body:JSON.stringify({
-status:newStatus
-})
+          body:JSON.stringify({
+            status:newStatus
+          })
 
-}
-);
-
-
-if(!response.ok){
-
-const errorText =
-await response.text();
-
-alert(
-"Could not update order status.\n\n"+
-errorText
-);
-
-return;
-
-}
+        }
+      );
 
 
-alert(
-"Order #"+
-orderId+
-" updated to "+
-newStatus+
-" ✅"
-);
+    if(!response.ok){
+
+      const errorText =
+        await response.text();
+
+      alert(
+        "Could not update order status.\n\n" +
+        errorText
+      );
+
+      return;
+    }
 
 
-loadOrders();
+    alert(
+      "Order #" +
+      orderId +
+      " updated to " +
+      newStatus +
+      " ✅"
+    );
 
 
-}catch(error){
+    loadOrders();
 
-alert(
-"Something went wrong while updating the order."
-);
 
-}
+  }catch(error){
+
+    alert(
+      "Something went wrong while updating the order."
+    );
+
+  }
 
 }
 
@@ -753,7 +955,8 @@ alert(
 
 function goBack(){
 
-window.location.href="index.html";
+  window.location.href =
+    "index.html";
 
 }
 
@@ -762,20 +965,21 @@ window.location.href="index.html";
    START
 ========================= */
 
-checkSellerApproval().then(approved => {
+checkSellerApproval().then(
+  approved => {
 
-  if(approved){
+    if(approved){
 
-    loadProducts().catch(error => {
-      document.getElementById("products").innerHTML =
-        "<p>Could not load products: " + error.message + "</p>";
-    });
+      loadProducts();
 
-    loadOrders().catch(error => {
-      document.getElementById("orders").innerHTML =
-        "<p>Could not load orders: " + error.message + "</p>";
-    });
+      loadOrders();
+
+    }
 
   }
+);
 
-});
+</script>
+
+</body>
+</html>
