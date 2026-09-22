@@ -1,1 +1,337 @@
+<!doctype html>
+<html lang="en">
 
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>ZavaMarket — Track Order</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f5f6f8;
+  color:#222;
+}
+
+header{
+  background:#111827;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+
+header h1{
+  margin:0;
+  font-size:24px;
+}
+
+header p{
+  margin:7px 0 0;
+  opacity:.8;
+}
+
+main{
+  max-width:600px;
+  margin:30px auto;
+  padding:15px;
+}
+
+.card{
+  background:white;
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 3px 15px rgba(0,0,0,.08);
+}
+
+input{
+  width:100%;
+  padding:14px;
+  margin-top:8px;
+  border:1px solid #ddd;
+  border-radius:9px;
+  font-size:16px;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  margin-top:15px;
+  border:0;
+  border-radius:9px;
+  background:#111827;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.back{
+  background:#6b7280;
+}
+
+#result{
+  margin-top:20px;
+}
+
+.order{
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:18px;
+}
+
+.order h2{
+  margin-top:0;
+}
+
+.status{
+  display:inline-block;
+  padding:8px 12px;
+  border-radius:20px;
+  background:#fef3c7;
+  color:#92400e;
+  font-weight:bold;
+}
+
+.row{
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+}
+
+.row:last-child{
+  border-bottom:0;
+}
+
+.label{
+  font-weight:bold;
+}
+
+.error{
+  padding:14px;
+  border-radius:10px;
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+footer{
+  text-align:center;
+  padding:30px 15px;
+  color:#666;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>📦 ZavaMarket</h1>
+
+<p>Track your order</p>
+
+</header>
+
+
+<main>
+
+<div class="card">
+
+<h2>Track Order</h2>
+
+<p>
+Enter your ZavaMarket order number below.
+</p>
+
+<input
+  id="orderId"
+  type="number"
+  placeholder="Example: 8"
+>
+
+<button onclick="trackOrder()">
+  Track Order
+</button>
+
+<div id="result"></div>
+
+<button
+  class="back"
+  onclick="window.location.href='index.html'"
+>
+  ← Back to ZavaMarket
+</button>
+
+</div>
+
+</main>
+
+
+<footer>
+
+<strong>ZavaMarket</strong>
+
+<br>
+
+Shop smart. Shop local. Shop Zava.
+
+</footer>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://gaccizzlwswwynattgda.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
+
+async function trackOrder(){
+
+  const orderId =
+    document.getElementById("orderId").value.trim();
+
+  const result =
+    document.getElementById("result");
+
+
+  if(!orderId){
+
+    result.innerHTML =
+      '<div class="error">Please enter your Order ID.</div>';
+
+    return;
+  }
+
+
+  result.innerHTML =
+    "<p>Checking your order...</p>";
+
+
+  try{
+
+    const response = await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/orders?id=eq." +
+      orderId +
+      "&select=id,total,status,delivery_address,created_at",
+
+      {
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":"Bearer "+SUPABASE_KEY
+        }
+      }
+
+    );
+
+
+    if(!response.ok){
+
+      const errorText =
+        await response.text();
+
+      result.innerHTML =
+        '<div class="error">' +
+        "Could not check order.<br><br>" +
+        errorText +
+        "</div>";
+
+      return;
+    }
+
+
+    const orders =
+      await response.json();
+
+
+    if(!orders.length){
+
+      result.innerHTML =
+        '<div class="error">' +
+        "Order #" +
+        orderId +
+        " was not found." +
+        "</div>";
+
+      return;
+    }
+
+
+    const order = orders[0];
+
+
+    const date =
+      order.created_at
+      ? new Date(order.created_at).toLocaleString()
+      : "Unknown";
+
+
+    result.innerHTML = `
+
+      <div class="order">
+
+        <h2>
+          📦 Order #${order.id}
+        </h2>
+
+        <p>
+          <span class="status">
+            ${order.status}
+          </span>
+        </p>
+
+        <div class="row">
+          <span class="label">💰 Total:</span>
+          R${Number(order.total).toFixed(2)}
+        </div>
+
+        <div class="row">
+          <span class="label">🏠 Delivery:</span>
+          ${order.delivery_address || "Not provided"}
+        </div>
+
+        <div class="row">
+          <span class="label">🕐 Ordered:</span>
+          ${date}
+        </div>
+
+      </div>
+
+    `;
+
+
+  }catch(error){
+
+    console.log(
+      "Track order error:",
+      error
+    );
+
+    result.innerHTML =
+      '<div class="error">' +
+      "Something went wrong. Please try again." +
+      "</div>";
+
+  }
+
+}
+
+</script>
+
+</body>
+
+</html>
