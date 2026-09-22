@@ -471,77 +471,44 @@ async function sellerCentre() {
     prompt("Enter your store name:");
 
   if (!name) {
-
-    alert(
-      "Seller registration cancelled."
-    );
-
+    alert("Seller registration cancelled.");
     return;
-
   }
-
 
   const email =
     prompt("Enter your email address:");
 
   if (!email) {
-
-    alert(
-      "Seller registration cancelled."
-    );
-
+    alert("Seller registration cancelled.");
     return;
-
   }
-
 
   try {
 
     const response =
       await fetch(
-
         SUPABASE_URL +
         "/rest/v1/sellers",
-
         {
-
           method: "POST",
 
           headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
+            "apikey": SUPABASE_KEY,
             "Authorization":
-              "Bearer " +
-              SUPABASE_KEY,
-
+              "Bearer " + SUPABASE_KEY,
             "Content-Type":
               "application/json",
-
             "Prefer":
               "return=minimal"
-
           },
 
-          body:
-            JSON.stringify({
-
-              store_name:
-                name,
-
-              email:
-                email,
-
-              approved:
-                false
-
-            })
-
+          body: JSON.stringify({
+            store_name: name.trim(),
+            email: email.trim(),
+            approved: false
+          })
         }
-
       );
-
 
     if (!response.ok) {
 
@@ -551,18 +518,15 @@ async function sellerCentre() {
       );
 
       return;
-
     }
 
-
     alert(
-      "Seller application submitted successfully! 🎉"
+      "Seller application submitted successfully! 🎉\n\n" +
+      "Your store is now waiting for approval."
     );
-
 
     window.location.href =
       "seller.html";
-
 
   } catch (error) {
 
@@ -573,7 +537,7 @@ async function sellerCentre() {
 
   }
 
-}
+} 
 
 
 async function checkOrderStatus() {
