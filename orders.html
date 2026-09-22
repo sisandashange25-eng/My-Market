@@ -67,16 +67,43 @@ main{
   font-weight:bold;
 }
 
+input{
+  width:100%;
+  padding:15px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  font-size:16px;
+  margin:10px 0;
+}
+
+.find{
+  width:100%;
+  background:#ff7a00;
+  color:white;
+  border:0;
+  border-radius:10px;
+  padding:14px;
+  font-size:16px;
+  font-weight:bold;
+}
+
 .track{
   width:100%;
   margin-top:15px;
   background:#ff7a00;
   color:white;
+  border:0;
+  border-radius:10px;
+  padding:14px;
+  font-size:16px;
   font-weight:bold;
 }
 
 .back{
   background:#eee;
+  border:0;
+  border-radius:10px;
+  padding:14px 18px;
   margin-top:10px;
 }
 
@@ -118,28 +145,11 @@ main{
       id="phone"
       type="tel"
       placeholder="Phone number"
-      style="
-        width:100%;
-        padding:15px;
-        border:1px solid #ddd;
-        border-radius:10px;
-        font-size:16px;
-        margin:10px 0;
-      "
     >
 
     <button
+      class="find"
       onclick="loadOrders()"
-      style="
-        width:100%;
-        background:#ff7a00;
-        color:white;
-        border:0;
-        border-radius:10px;
-        padding:14px;
-        font-size:16px;
-        font-weight:bold;
-      "
     >
       Find My Orders
     </button>
@@ -192,6 +202,8 @@ async function loadOrders(){
 
   try{
 
+    /* FIND CUSTOMER */
+
     const profileResponse =
       await fetch(
 
@@ -201,6 +213,8 @@ async function loadOrders(){
         "&select=id,full_name,phone",
 
         {
+          method:"GET",
+
           headers:{
             "apikey":SUPABASE_KEY,
             "Authorization":
@@ -211,23 +225,33 @@ async function loadOrders(){
       );
 
 
+    const profileText =
+      await profileResponse.text();
+
+
+    console.log(
+      "Profile response:",
+      profileText
+    );
+
+
     if(!profileResponse.ok){
 
-      throw new Error(
-        await profileResponse.text()
-      );
+      throw new Error(profileText);
 
     }
 
 
     const profiles =
-      await profileResponse.json();
+      JSON.parse(profileText);
 
 
     if(!profiles.length){
 
       box.innerHTML =
-        "<div class='card empty'>No customer found with that phone number.</div>";
+        "<div class='card empty'>" +
+        "No customer found with that phone number." +
+        "</div>";
 
       return;
     }
@@ -237,15 +261,26 @@ async function loadOrders(){
       profiles[0].id;
 
 
+    console.log(
+      "Customer ID:",
+      customerId
+    );
+
+
+    /* FIND ORDERS */
+
     const ordersResponse =
       await fetch(
 
         SUPABASE_URL +
         "/rest/v1/orders?customer_id=eq." +
-        customerId +
-        "&select=id,total,status,delivery_address,created_at&order=id.desc",
+        encodeURIComponent(customerId) +
+        "&select=id,total,status,delivery_address,created_at" +
+        "&order=id.desc",
 
         {
+          method:"GET",
+
           headers:{
             "apikey":SUPABASE_KEY,
             "Authorization":
@@ -256,23 +291,33 @@ async function loadOrders(){
       );
 
 
+    const ordersText =
+      await ordersResponse.text();
+
+
+    console.log(
+      "Orders response:",
+      ordersText
+    );
+
+
     if(!ordersResponse.ok){
 
-      throw new Error(
-        await ordersResponse.text()
-      );
+      throw new Error(ordersText);
 
     }
 
 
     const orders =
-      await ordersResponse.json();
+      JSON.parse(ordersText);
 
 
     if(!orders.length){
 
       box.innerHTML =
-        "<div class='card empty'>You have no orders yet.</div>";
+        "<div class='card empty'>" +
+        "No orders found for this customer." +
+        "</div>";
 
       return;
     }
@@ -283,7 +328,9 @@ async function loadOrders(){
 
         <div class="card order">
 
-          <h2>📦 Order #${order.id}</h2>
+          <h2>
+            📦 Order #${order.id}
+          </h2>
 
           <div class="status">
             ${order.status}
@@ -297,12 +344,15 @@ async function loadOrders(){
           </p>
 
           <p>
-            🏠 ${order.delivery_address || "Not provided"}
+            🏠
+            ${order.delivery_address || "Not provided"}
           </p>
 
           <p>
             🕐
-            ${new Date(order.created_at).toLocaleString()}
+            ${new Date(
+              order.created_at
+            ).toLocaleString()}
           </p>
 
           <button
@@ -319,10 +369,16 @@ async function loadOrders(){
 
   }catch(error){
 
-    console.log(error);
+    console.log(
+      "My Orders error:",
+      error
+    );
 
     box.innerHTML =
-      "<div class='card empty'>Could not load your orders. Please try again.</div>";
+      "<div class='card empty'>" +
+      "Could not load your orders.<br><br>" +
+      error.message +
+      "</div>";
 
   }
 
