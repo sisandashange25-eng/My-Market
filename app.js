@@ -546,6 +546,10 @@ async function checkout() {
 
   try {
 
+    /* =========================
+       CREATE CUSTOMER PROFILE
+    ========================= */
+
     const profileResponse =
       await fetch(
         SUPABASE_URL +
@@ -600,40 +604,53 @@ async function checkout() {
       profileData[0].id;
 
 
+    /* =========================
+       CREATE ORDER SECURELY
+    ========================= */
+
     const orderResponse =
       await fetch(
+
         SUPABASE_URL +
-        "/rest/v1/orders",
+        "/rest/v1/rpc/create_customer_order",
+
         {
+
           method: "POST",
 
           headers: {
-            "apikey": SUPABASE_KEY,
+
+            "apikey":
+              SUPABASE_KEY,
+
             "Authorization":
-              "Bearer " + SUPABASE_KEY,
+              "Bearer " +
+              SUPABASE_KEY,
+
             "Content-Type":
-              "application/json",
-            "Prefer":
-              "return=representation"
+              "application/json"
+
           },
 
-          body: JSON.stringify({
+          body:
+            JSON.stringify({
 
-            customer_id:
-              customerId,
+              p_customer_id:
+                customerId,
 
-            total:
-              total,
+              p_total:
+                total,
 
-            status:
-              "Pending",
+              p_status:
+                "Pending",
 
-            delivery_address:
-              deliveryAddress.trim()
+              p_delivery_address:
+                deliveryAddress.trim()
 
-          })
+            })
 
         }
+
       );
 
 
@@ -649,33 +666,44 @@ async function checkout() {
     }
 
 
-    const orderData =
+    const orderId =
       await orderResponse.json();
 
 
-    const orderId =
-      orderData[0].id;
-
+    /* =========================
+       CREATE ORDER ITEMS
+    ========================= */
 
     const itemsResponse =
       await fetch(
+
         SUPABASE_URL +
         "/rest/v1/order_items",
+
         {
+
           method: "POST",
 
           headers: {
-            "apikey": SUPABASE_KEY,
+
+            "apikey":
+              SUPABASE_KEY,
+
             "Authorization":
-              "Bearer " + SUPABASE_KEY,
+              "Bearer " +
+              SUPABASE_KEY,
+
             "Content-Type":
               "application/json",
+
             "Prefer":
               "return=minimal"
+
           },
 
           body:
             JSON.stringify(
+
               orderItems.map(item => ({
 
                 order_id:
@@ -691,9 +719,11 @@ async function checkout() {
                   item.price
 
               }))
+
             )
 
         }
+
       );
 
 
@@ -708,6 +738,10 @@ async function checkout() {
 
     }
 
+
+    /* =========================
+       PAYFAST SANDBOX
+    ========================= */
 
     const paymentUrl =
 
@@ -799,6 +833,7 @@ async function sellerCentre() {
         "/auth/v1/token?grant_type=password",
 
         {
+
           method: "POST",
 
           headers: {
@@ -860,6 +895,7 @@ async function sellerCentre() {
         "&select=id,store_name,approved",
 
         {
+
           headers: {
 
             "apikey":
@@ -1028,10 +1064,9 @@ async function checkOrderStatus() {
 
             })
 
-        }
+          }
 
-      );
-
+        );
 
     if (!response.ok) {
 
