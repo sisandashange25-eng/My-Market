@@ -802,6 +802,526 @@ async function checkout() {
 
 async function sellerCentre() {
 
+  const choice =
+    prompt(
+      "ZYRE SELLER CENTRE\n\n" +
+      "1 = Create a new store\n" +
+      "2 = Seller login\n\n" +
+      "Enter 1 or 2:"
+    );
+
+
+  if (choice === "1") {
+
+    await registerSeller();
+
+    return;
+
+  }
+
+
+  if (choice !== "2") {
+
+    alert(
+      "Please enter 1 or 2."
+    );
+
+    return;
+
+  }
+
+
+  await sellerLogin();
+
+}
+
+
+/* =========================
+   REGISTER SELLER
+========================= */
+
+async function registerSeller() {
+
+  const storeName =
+    prompt(
+      "Enter your store name:"
+    );
+
+
+  if (
+    !storeName ||
+    !storeName.trim()
+  ) {
+
+    alert(
+      "Store registration cancelled."
+    );
+
+    return;
+
+  }
+
+
+  const email =
+    prompt(
+      "Enter your seller email:"
+    );
+
+
+  if (
+    !email ||
+    !email.trim()
+  ) {
+
+    alert(
+      "Store registration cancelled."
+    );
+
+    return;
+
+  }
+
+
+  const password =
+    prompt(
+      "Create a password:\n\n" +
+      "Use at least 6 characters."
+    );
+
+
+  if (
+    !password ||
+    password.length < 6
+  ) {
+
+    alert(
+      "Password must contain at least 6 characters."
+    );
+
+    return;
+
+  }
+
+
+  const description =
+    prompt(
+      "Enter a short description of your store:"
+    ) || "";
+
+
+  try {
+
+    /* =========================
+       CREATE AUTH ACCOUNT
+    ========================= */
+
+    const signupResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/auth/v1/signup",
+
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              email:
+                email.trim(),
+
+              password:
+                password
+
+            })
+
+        }
+
+      );
+
+
+    if (!signupResponse.ok) {
+
+      const signupError =
+        await signupResponse.text();
+
+      alert(
+        "Seller account could not be created.\n\n" +
+        signupError
+      );
+
+      return;
+
+    }
+
+
+    const signupData =
+      await signupResponse.json();
+
+
+    const userId =
+      signupData.user
+        ? signupData.user.id
+        : signupData.id;
+
+
+    if (!userId) {
+
+      alert(
+        "Seller account was created, but the user ID could not be found."
+      );
+
+      return;
+
+    }
+
+
+    /* =========================
+       CREATE SELLER
+    ========================= */
+
+    const sellerResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/sellers",
+
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY,
+
+            "Content-Type":
+              "application/json",
+
+            "Prefer":
+              "return=representation"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              user_id:
+                userId,
+
+              store_name:
+                storeName.trim(),
+
+              description:
+                description.trim(),
+
+              approved:
+                false,
+
+              email:
+                email.trim()
+
+            })
+
+          }
+
+        );
+
+
+    if (!sellerResponse.ok) {
+
+      alert(
+        "Seller store could not be created.\n\n" +
+        await sellerResponse.text()
+      );
+
+      return;
+
+    }
+
+
+    const sellerData =
+      await sellerResponse.json();
+
+
+    const sellerId =
+      sellerData[0].id;
+
+
+    /* =========================
+       FIND R100 RENTAL PLAN
+    ========================= */
+
+    const planResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/rental_plans?name=eq.ZYRE%20Store&active=eq.true&select=id,monthly_price",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY
+
+          }
+
+        }
+
+      );
+
+
+    if (!planResponse.ok) {
+
+      alert(
+        "Store created, but the R100 rental plan could not be found.\n\n" +
+        await planResponse.text()
+      );
+
+      return;
+
+    }
+
+
+    const plans =
+      await planResponse.json();
+
+
+    if (!plans.length) {
+
+      alert(
+        "Store created, but the ZYRE Store rental plan was not found."
+      );
+
+      return;
+
+    }
+
+
+    const rentalPlan =
+      plans[0];
+
+
+    /* =========================
+       CREATE SUBSCRIPTION
+    ========================= */
+
+    const subscriptionResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/store_subscriptions",
+
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY,
+
+            "Content-Type":
+              "application/json",
+
+            "Prefer":
+              "return=representation"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              seller_id:
+                sellerId,
+
+              rental_plan_id:
+                rentalPlan.id,
+
+              status:
+                "pending"
+
+            })
+
+          }
+
+        );
+
+
+    if (!subscriptionResponse.ok) {
+
+      alert(
+        "Store created, but the rental subscription could not be created.\n\n" +
+        await subscriptionResponse.text()
+      );
+
+      return;
+
+    }
+
+
+    const subscriptionData =
+      await subscriptionResponse.json();
+
+
+    const subscriptionId =
+      subscriptionData[0].id;
+
+
+    /* =========================
+       CREATE RENTAL PAYMENT
+       ========================= */
+
+    const paymentResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/rental_payments",
+
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY,
+
+            "Content-Type":
+              "application/json",
+
+            "Prefer":
+              "return=representation"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              seller_id:
+                sellerId,
+
+              subscription_id:
+                subscriptionId,
+
+              amount:
+                Number(
+                  rentalPlan.monthly_price
+                ),
+
+              status:
+                "pending",
+
+              payment_method:
+                "pending"
+
+            })
+
+          }
+
+        );
+
+
+    if (!paymentResponse.ok) {
+
+      alert(
+        "Store and subscription were created, but the rental payment record could not be created.\n\n" +
+        await paymentResponse.text()
+      );
+
+      return;
+
+    }
+
+
+    /* =========================
+       SAVE SELLER INFORMATION
+    ========================= */
+
+    localStorage.setItem(
+      "zava_seller_id",
+      sellerId
+    );
+
+    localStorage.setItem(
+      "zava_user_id",
+      userId
+    );
+
+    localStorage.setItem(
+      "zava_seller_email",
+      email.trim()
+    );
+
+
+    alert(
+
+      "🎉 Store application created!\n\n" +
+
+      "Store: " +
+      storeName.trim() +
+
+      "\n\n" +
+
+      "ZYRE Store rental: R" +
+      Number(
+        rentalPlan.monthly_price
+      ).toFixed(2) +
+      " per month\n\n" +
+
+      "Your application is now waiting for approval.\n\n" +
+
+      "We will connect the R100 payment step next."
+
+    );
+
+
+  } catch (error) {
+
+    alert(
+      "Store registration failed:\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================
+   SELLER LOGIN
+========================= */
+
+async function sellerLogin() {
+
   const email =
     prompt(
       "Enter your ZavaMarket seller email:"
