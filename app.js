@@ -54,25 +54,20 @@ function renderProducts() {
 
 
   if (s === "low") {
-
     filtered.sort(
       (a, b) => a.price - b.price
     );
-
   }
 
 
   if (s === "high") {
-
     filtered.sort(
       (a, b) => b.price - a.price
     );
-
   }
 
 
   productsBox.innerHTML =
-
     filtered.map(x => `
 
       <article class="card">
@@ -81,9 +76,7 @@ function renderProducts() {
 
           ${
             x.image_url
-
               ?
-
             `<img
               src="${x.image_url}"
               alt="${x.name}"
@@ -93,9 +86,7 @@ function renderProducts() {
                 object-fit:cover;
               "
             >`
-
               :
-
             `<span>🛍️</span>`
           }
 
@@ -121,7 +112,6 @@ function renderProducts() {
       </article>
 
     `).join("") ||
-
     "<p>No products found.</p>";
 
 }
@@ -182,10 +172,8 @@ async function loadProducts() {
 
 
     if (sellersResponse.ok) {
-
       sellers =
         await sellersResponse.json();
-
     }
 
 
@@ -260,10 +248,8 @@ function setCategory(c) {
     document.getElementById("heading");
 
   if (heading) {
-
     heading.textContent =
       c + " products";
-
   }
 
   renderProducts();
@@ -323,9 +309,7 @@ function updateCart() {
     !cartItems ||
     !totalBox
   ) {
-
     return;
-
   }
 
 
@@ -348,7 +332,6 @@ function updateCart() {
 
 
   cartItems.innerHTML =
-
     Object.entries(counts)
       .map(([id, n]) => {
 
@@ -385,7 +368,6 @@ function updateCart() {
 
       })
       .join("") ||
-
       "<p>Your cart is empty.</p>";
 
 
@@ -546,9 +528,7 @@ async function checkout() {
 
   try {
 
-    /* =========================
-       CREATE CUSTOMER PROFILE
-    ========================= */
+    /* CREATE CUSTOMER PROFILE */
 
     const profileResponse =
       await fetch(
@@ -604,9 +584,7 @@ async function checkout() {
       profileData[0].id;
 
 
-    /* =========================
-       CREATE ORDER SECURELY
-    ========================= */
+    /* CREATE ORDER USING SECURE FUNCTION */
 
     const orderResponse =
       await fetch(
@@ -670,9 +648,7 @@ async function checkout() {
       await orderResponse.json();
 
 
-    /* =========================
-       CREATE ORDER ITEMS
-    ========================= */
+    /* CREATE ORDER ITEMS */
 
     const itemsResponse =
       await fetch(
@@ -739,9 +715,7 @@ async function checkout() {
     }
 
 
-    /* =========================
-       PAYFAST SANDBOX
-    ========================= */
+    /* PAYFAST SANDBOX */
 
     const paymentUrl =
 
@@ -782,7 +756,6 @@ async function checkout() {
 
 /* =========================
    SELLER CENTRE
-   NEW AUTHENTICATION
 ========================= */
 
 async function sellerCentre() {
@@ -993,7 +966,6 @@ async function sellerCentre() {
 
 /* =========================
    CHECK ORDER STATUS
-   SECURE PHONE LOOKUP
 ========================= */
 
 async function checkOrderStatus() {
@@ -1008,9 +980,7 @@ async function checkOrderStatus() {
     !orderId ||
     !orderId.trim()
   ) {
-
     return;
-
   }
 
 
@@ -1024,9 +994,7 @@ async function checkOrderStatus() {
     !phone ||
     !phone.trim()
   ) {
-
     return;
-
   }
 
 
@@ -1064,9 +1032,10 @@ async function checkOrderStatus() {
 
             })
 
-          }
+        }
 
-        );
+      );
+
 
     if (!response.ok) {
 
