@@ -349,6 +349,23 @@ function save() {
 
 
 /* =========================
+   CLEAR CART
+========================= */
+
+function clearCart() {
+
+  cart = [];
+
+  save();
+
+  updateCart();
+
+  alert("Cart cleared successfully.");
+
+}
+
+
+/* =========================
    UPDATE CART
 ========================= */
 
@@ -1177,7 +1194,7 @@ async function registerSeller() {
 
     /* =========================
        CREATE SELLER
-    ========================= */
+========================= */
 
     if (!sellerId) {
 
