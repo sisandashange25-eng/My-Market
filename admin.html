@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZavaMarket Admin Dashboard</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .seller {
+      border-top: 1px solid #ddd;
+      padding: 15px 0;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-top: 8px;
+    }
+
+    .approve {
+      background: #111;
+      color: white;
+    }
+
+    .reject {
+      background: #ddd;
+      color: #111;
+    }
+
+    .message {
+      text-align: center;
+      padding: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>🛡️ ZavaMarket Admin Dashboard</h1>
+
+  <div class="card">
+    <h2>Seller Applications</h2>
+
+    <div id="sellerList">
+      Loading seller applications...
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL = "https://gaccizzlwswwynattgda.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
+async function loadSellers() {
+
+  const sellerList = document.getElementById("sellerList");
+
+  sellerList.innerHTML = "Loading seller applications...";
+
+  try {
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/sellers?select=*&order=id.desc",
+      {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      sellerList.innerHTML =
+        "<p>Could not load sellers.</p><pre>" +
+        JSON.stringify(data, null, 2) +
+        "</pre>";
+      return;
+    }
+
+    if (!data.length) {
+      sellerList.innerHTML =
+        "<p>No seller applications found.</p>";
+      return;
+    }
+
+    sellerList.innerHTML = "";
+
+    data.forEach(seller => {
+
+      const div =
