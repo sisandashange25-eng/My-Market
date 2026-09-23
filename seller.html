@@ -299,23 +299,24 @@ async function checkSellerApproval(){
 
   try{
 
-    const response = await fetch(
-      SUPABASE_URL +
-      "/rest/v1/sellers?id=eq." +
-      SELLER_ID +
-      "&select=approved",
-      {
-        method:"GET",
+    const response =
+      await fetch(
+        SUPABASE_URL +
+        "/rest/v1/sellers?id=eq." +
+        SELLER_ID +
+        "&select=approved",
+        {
+          method:"GET",
 
-        headers:{
-          "apikey":SUPABASE_KEY,
-          "Authorization":
-            "Bearer " + ACCESS_TOKEN
-        },
+          headers:{
+            "apikey":SUPABASE_KEY,
+            "Authorization":
+              "Bearer " + ACCESS_TOKEN
+          },
 
-        cache:"no-store"
-      }
-    );
+          cache:"no-store"
+        }
+      );
 
 
     if(!response.ok){
@@ -919,23 +920,16 @@ async function loadOrders(){
           </label>
 
           <select
-            onchange="
-              updateOrderStatus(
-                ${order.id},
-                this.value
-              )
-            "
+            id="status-${order.id}"
+            onchange="updateOrderStatus(${order.id}, this.value)"
           >
 
             <option
               value="Pending"
               ${
-                order.status ===
-                "Pending"
-                ?
-                "selected"
-                :
-                ""
+                order.status === "Pending"
+                ? "selected"
+                : ""
               }
             >
               Pending
@@ -944,12 +938,9 @@ async function loadOrders(){
             <option
               value="Processing"
               ${
-                order.status ===
-                "Processing"
-                ?
-                "selected"
-                :
-                ""
+                order.status === "Processing"
+                ? "selected"
+                : ""
               }
             >
               Processing
@@ -958,12 +949,9 @@ async function loadOrders(){
             <option
               value="Shipped"
               ${
-                order.status ===
-                "Shipped"
-                ?
-                "selected"
-                :
-                ""
+                order.status === "Shipped"
+                ? "selected"
+                : ""
               }
             >
               Shipped
@@ -972,12 +960,9 @@ async function loadOrders(){
             <option
               value="Delivered"
               ${
-                order.status ===
-                "Delivered"
-                ?
-                "selected"
-                :
-                ""
+                order.status === "Delivered"
+                ? "selected"
+                : ""
               }
             >
               Delivered
@@ -986,12 +971,9 @@ async function loadOrders(){
             <option
               value="Cancelled"
               ${
-                order.status ===
-                "Cancelled"
-                ?
-                "selected"
-                :
-                ""
+                order.status === "Cancelled"
+                ? "selected"
+                : ""
               }
             >
               Cancelled
@@ -1048,7 +1030,26 @@ async function updateOrderStatus(
   newStatus
 ){
 
+  const statusSelect =
+    document.getElementById(
+      "status-" + orderId
+    );
+
+
   try{
+
+    /* Immediately show the selected status */
+
+    if(statusSelect){
+
+      statusSelect.value =
+        newStatus;
+
+      statusSelect.disabled =
+        true;
+
+    }
+
 
     const response =
       await fetch(
@@ -1074,7 +1075,7 @@ async function updateOrderStatus(
               "application/json",
 
             "Prefer":
-              "return=minimal"
+              "return=representation"
 
           },
 
@@ -1096,6 +1097,15 @@ async function updateOrderStatus(
       const errorText =
         await response.text();
 
+
+      if(statusSelect){
+
+        statusSelect.disabled =
+          false;
+
+      }
+
+
       alert(
         "Could not update order status.\n\n" +
         errorText
@@ -1115,13 +1125,24 @@ async function updateOrderStatus(
     );
 
 
-    loadOrders();
+    /* Reload orders from Supabase */
+
+    await loadOrders();
 
 
   }catch(error){
 
+    if(statusSelect){
+
+      statusSelect.disabled =
+        false;
+
+    }
+
+
     alert(
-      "Something went wrong while updating the order."
+      "Something went wrong while updating the order.\n\n" +
+      error.message
     );
 
   }
