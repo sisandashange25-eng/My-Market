@@ -102,12 +102,32 @@ function renderProducts() {
           R${Number(x.price).toFixed(2)}
         </div>
 
-        <button
-          class="add"
-          onclick="add(${x.id})"
-        >
-          Add to cart
-        </button>
+        ${
+          Number(x.stock) > 0
+            ?
+            `<div style="font-size:13px;color:#777;margin:6px 0;">
+              ${x.stock} in stock
+            </div>
+
+            <button
+              class="add"
+              onclick="add(${x.id})"
+            >
+              Add to cart
+            </button>`
+            :
+            `<div style="font-size:13px;color:#d00;margin:6px 0;font-weight:bold;">
+              Out of stock
+            </div>
+
+            <button
+              class="add"
+              disabled
+              style="opacity:.5;cursor:not-allowed;"
+            >
+              Out of stock
+            </button>`
+        }
 
       </article>
 
@@ -200,6 +220,9 @@ async function loadProducts() {
 
         price: Number(p.price),
 
+        stock:
+          Number(p.stock ?? 0),
+
         cat:
           p.category ||
           "Other",
@@ -262,6 +285,43 @@ function setCategory(c) {
 ========================= */
 
 function add(id) {
+
+  const product =
+    products.find(
+      p => p.id == id
+    );
+
+
+  if (!product) {
+
+    alert(
+      "Product could not be found."
+    );
+
+    return;
+
+  }
+
+
+  const currentQuantity =
+    cart.filter(
+      cartId => cartId == id
+    ).length;
+
+
+  if (
+    Number(product.stock) <=
+    currentQuantity
+  ) {
+
+    alert(
+      "Sorry, there is not enough stock available."
+    );
+
+    return;
+
+  }
+
 
   cart.push(id);
 
@@ -528,7 +588,38 @@ async function checkout() {
 
   try {
 
-    /* CREATE CUSTOMER PROFILE */
+    /* =========================
+       CHECK STOCK BEFORE CHECKOUT
+    ========================= */
+
+    for (const item of orderItems) {
+
+      const product =
+        products.find(
+          p => p.id == item.product_id
+        );
+
+
+      if (
+        !product ||
+        Number(product.stock) <
+        Number(item.quantity)
+      ) {
+
+        alert(
+          "Sorry, there is not enough stock available for one of the products in your cart."
+        );
+
+        return;
+
+      }
+
+    }
+
+
+    /* =========================
+       CREATE CUSTOMER PROFILE
+    ========================= */
 
     const profileResponse =
       await fetch(
@@ -584,13 +675,17 @@ async function checkout() {
       profileData[0].id;
 
 
-    /* CREATE ORDER USING SECURE FUNCTION */
+    /* =========================
+       CREATE ORDER + ITEMS
+       + REDUCE STOCK
+       SECURELY
+    ========================= */
 
     const orderResponse =
       await fetch(
 
         SUPABASE_URL +
-        "/rest/v1/rpc/create_customer_order",
+        "/rest/v1/rpc/create_customer_order_with_items",
 
         {
 
@@ -623,7 +718,10 @@ async function checkout() {
                 "Pending",
 
               p_delivery_address:
-                deliveryAddress.trim()
+                deliveryAddress.trim(),
+
+              p_items:
+                orderItems
 
             })
 
@@ -648,74 +746,9 @@ async function checkout() {
       await orderResponse.json();
 
 
-    /* CREATE ORDER ITEMS */
-
-    const itemsResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/order_items",
-
-        {
-
-          method: "POST",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_KEY,
-
-            "Content-Type":
-              "application/json",
-
-            "Prefer":
-              "return=minimal"
-
-          },
-
-          body:
-            JSON.stringify(
-
-              orderItems.map(item => ({
-
-                order_id:
-                  orderId,
-
-                product_id:
-                  item.product_id,
-
-                quantity:
-                  item.quantity,
-
-                price:
-                  item.price
-
-              }))
-
-            )
-
-        }
-
-      );
-
-
-    if (!itemsResponse.ok) {
-
-      alert(
-        "The order was created, but the products could not be added.\n\n" +
-        await itemsResponse.text()
-      );
-
-      return;
-
-    }
-
-
-    /* PAYFAST SANDBOX */
+    /* =========================
+       PAYFAST SANDBOX
+    ========================= */
 
     const paymentUrl =
 
@@ -736,6 +769,15 @@ async function checkout() {
       encodeURIComponent(
         orderId
       );
+
+
+    /* =========================
+       CLEAR CART
+    ========================= */
+
+    cart = [];
+
+    save();
 
 
     window.location.href =
@@ -1032,10 +1074,9 @@ async function checkOrderStatus() {
 
             })
 
-        }
+          }
 
-      );
-
+        );
 
     if (!response.ok) {
 
