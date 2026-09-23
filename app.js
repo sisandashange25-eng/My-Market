@@ -792,8 +792,6 @@ async function sellerCentre() {
 
   try {
 
-    /* SIGN IN TO SUPABASE */
-
     const loginResponse =
       await fetch(
 
@@ -852,8 +850,6 @@ async function sellerCentre() {
     const userId =
       loginData.user.id;
 
-
-    /* FIND SELLER ACCOUNT */
 
     const sellerResponse =
       await fetch(
@@ -922,8 +918,6 @@ async function sellerCentre() {
     }
 
 
-    /* SAVE LOGIN FOR SELLER DASHBOARD */
-
     localStorage.setItem(
       "zava_access_token",
       accessToken
@@ -963,6 +957,7 @@ async function sellerCentre() {
 
 /* =========================
    CHECK ORDER STATUS
+   SECURE PHONE LOOKUP
 ========================= */
 
 async function checkOrderStatus() {
@@ -983,17 +978,33 @@ async function checkOrderStatus() {
   }
 
 
+  const phone =
+    prompt(
+      "Enter the phone number used for this order:"
+    );
+
+
+  if (
+    !phone ||
+    !phone.trim()
+  ) {
+
+    return;
+
+  }
+
+
   try {
 
     const response =
       await fetch(
 
         SUPABASE_URL +
-        "/rest/v1/orders?id=eq." +
-        orderId.trim() +
-        "&select=id,total,status,delivery_address,created_at",
+        "/rest/v1/rpc/get_orders_by_phone",
 
         {
+
+          method: "POST",
 
           headers: {
 
@@ -1002,9 +1013,20 @@ async function checkOrderStatus() {
 
             "Authorization":
               "Bearer " +
-              SUPABASE_KEY
+              SUPABASE_KEY,
 
-          }
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              user_phone:
+                phone.trim()
+
+            })
 
         }
 
@@ -1027,12 +1049,13 @@ async function checkOrderStatus() {
       await response.json();
 
 
-    if (!orders.length) {
+    if (
+      !Array.isArray(orders) ||
+      !orders.length
+    ) {
 
       alert(
-        "Order #" +
-        orderId +
-        " was not found."
+        "No orders were found for that phone number."
       );
 
       return;
@@ -1040,27 +1063,76 @@ async function checkOrderStatus() {
     }
 
 
+    const wantedId =
+      Number(orderId.trim());
+
+
     const order =
-      orders[0];
+      orders.find(o => {
+
+        const possibleId =
+          o.id ??
+          o.order_id ??
+          o.orderid;
+
+        return (
+          Number(possibleId) === wantedId
+        );
+
+      });
+
+
+    if (!order) {
+
+      alert(
+        "Order #" +
+        orderId +
+        " was not found for that phone number."
+      );
+
+      return;
+
+    }
+
+
+    const displayId =
+      order.id ??
+      order.order_id ??
+      order.orderid;
+
+
+    const displayTotal =
+      order.total ??
+      order.order_total ??
+      order.amount ??
+      0;
+
+
+    const displayStatus =
+      order.status ??
+      "Pending";
+
+
+    const displayAddress =
+      order.delivery_address ??
+      order.deliveryaddress ??
+      "Not provided";
 
 
     alert(
 
       "📦 Order #" +
-      order.id +
+      displayId +
 
       "\n\nStatus: " +
-      order.status +
+      displayStatus +
 
       "\nTotal: R" +
-      Number(order.total)
+      Number(displayTotal)
         .toFixed(2) +
 
       "\nDelivery: " +
-      (
-        order.delivery_address ||
-        "Not provided"
-      )
+      displayAddress
 
     );
 
