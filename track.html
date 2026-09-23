@@ -1,213 +1,194 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
 
-<title>ZavaMarket — Track Order</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-<style>
+  <title>ZavaMarket - Track Order</title>
 
-*{
-  box-sizing:border-box;
-}
+  <style>
 
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f6f7f9;
-  color:#111;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-header{
-  background:#111;
-  color:white;
-  padding:20px;
-  text-align:center;
-}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      color: #222;
+    }
 
-.logo{
-  font-size:25px;
-  font-weight:bold;
-}
+    header {
+      background: #111;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
 
-.logo span{
-  color:#ff7a00;
-}
+    header h1 {
+      margin: 0;
+      font-size: 25px;
+    }
 
-main{
-  max-width:600px;
-  margin:30px auto;
-  padding:20px;
-}
+    main {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+    }
 
-.card{
-  background:white;
-  border-radius:18px;
-  padding:25px;
-  box-shadow:0 5px 20px rgba(0,0,0,.08);
-}
+    .box {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+    }
 
-h1{
-  margin-top:0;
-}
+    h2 {
+      margin-top: 0;
+    }
 
-input{
-  width:100%;
-  padding:15px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  font-size:16px;
-  margin:10px 0;
-}
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
 
-.trackBtn{
-  width:100%;
-  background:#ff7a00;
-  color:white;
-  font-weight:bold;
-}
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      border: 0;
+      border-radius: 8px;
+      background: #111;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-.back{
-  margin-top:20px;
-  background:#eee;
-}
+    button:hover {
+      opacity: 0.9;
+    }
 
-#result{
-  margin-top:25px;
-}
+    #result {
+      margin-top: 25px;
+    }
 
-.order{
-  background:#f8f8f8;
-  border-radius:14px;
-  padding:20px;
-}
+    .order {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 18px;
+      background: #fafafa;
+    }
 
-.status{
-  display:inline-block;
-  padding:8px 14px;
-  border-radius:20px;
-  background:#fff0df;
-  color:#e66b00;
-  font-weight:bold;
-}
+    .order h3 {
+      margin-top: 0;
+    }
 
-.progress{
-  display:flex;
-  justify-content:space-between;
-  position:relative;
-  margin:35px 5px;
-}
+    .status {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 20px;
+      background: #111;
+      color: white;
+      font-weight: bold;
+      margin: 8px 0 15px;
+    }
 
-.progress:before{
-  content:"";
-  position:absolute;
-  top:16px;
-  left:10%;
-  right:10%;
-  height:4px;
-  background:#ddd;
-  z-index:0;
-}
+    .status.paid {
+      background: #198754;
+    }
 
-.step{
-  position:relative;
-  z-index:1;
-  text-align:center;
-  width:25%;
-  font-size:12px;
-  color:#999;
-}
+    .status.pending {
+      background: #d99a00;
+    }
 
-.circle{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  background:#ddd;
-  margin:0 auto 8px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:bold;
-}
+    .status.processing {
+      background: #0069d9;
+    }
 
-.step.active{
-  color:#ff7a00;
-  font-weight:bold;
-}
+    .status.shipped {
+      background: #6f42c1;
+    }
 
-.step.active .circle{
-  background:#ff7a00;
-  color:white;
-}
+    .status.delivered {
+      background: #198754;
+    }
 
-.details{
-  margin-top:20px;
-  line-height:1.8;
-}
+    .details {
+      line-height: 1.7;
+    }
 
-.cancelled{
-  background:#ffe5e5;
-  color:#c00;
-  padding:15px;
-  border-radius:10px;
-  font-weight:bold;
-}
+    .back {
+      margin-top: 20px;
+      background: #555;
+    }
 
-footer{
-  text-align:center;
-  padding:30px;
-  color:#777;
-}
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #777;
+      font-size: 14px;
+    }
 
-</style>
+  </style>
 
 </head>
 
+
 <body>
+
 
 <header>
 
-  <div class="logo">
-    Zava<span>Market</span>
-  </div>
+  <h1>ZavaMarket</h1>
 
-  <div>Track your order</div>
+  <p>Track your order</p>
 
 </header>
 
 
 <main>
 
-  <div class="card">
+  <div class="box">
 
-    <h1>📦 Track Order</h1>
+    <h2>📦 Track Order</h2>
 
     <p>
       Enter your order number and phone number below.
     </p>
 
+
     <input
-      id="orderId"
       type="number"
+      id="orderNumber"
       placeholder="Order number"
     >
 
+
     <input
-      id="phone"
       type="tel"
+      id="phone"
       placeholder="Phone number"
     >
 
-    <button
-      class="trackBtn"
-      onclick="trackOrder()"
-    >
+
+    <button onclick="trackOrder()">
       Track Order
     </button>
 
+
     <div id="result"></div>
+
 
     <button
       class="back"
@@ -223,144 +204,107 @@ footer{
 
 <footer>
 
-  <strong>ZavaMarket</strong><br>
+  ZavaMarket<br>
 
   Shop smart. Shop local. Shop Zava.
 
 </footer>
 
 
+
 <script>
 
+
 const SUPABASE_URL =
-"https://gaccizzlwswwynattgda.supabase.co";
+  "https://gaccizzlwswwynattgda.supabase.co";
+
 
 const SUPABASE_KEY =
-"sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+  "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
 
-function createProgress(status){
 
-  const steps = [
-    "Pending",
-    "Processing",
-    "Shipped",
-    "Delivered"
-  ];
-
-  const current =
-    steps.indexOf(status);
-
-  return `
-    <div class="progress">
-
-      ${steps.map((step,index)=>`
-
-        <div class="step ${
-          index <= current ? "active" : ""
-        }">
-
-          <div class="circle">
-            ${index <= current ? "✓" : ""}
-          </div>
-
-          ${step}
-
-        </div>
-
-      `).join("")}
-
-    </div>
-  `;
-}
+async function trackOrder() {
 
 
-const params =
-new URLSearchParams(window.location.search);
+  const orderNumber =
+    document.getElementById(
+      "orderNumber"
+    ).value.trim();
 
-const orderFromUrl =
-params.get("order");
-
-if(orderFromUrl){
-
-  document.getElementById("orderId").value =
-    orderFromUrl;
-
-}
-
-
-async function trackOrder(){
-
-  const orderId =
-    document.getElementById("orderId").value.trim();
 
   const phone =
-    document.getElementById("phone").value.trim();
-
-
-  if(!orderId){
-
-    alert("Please enter your order number.");
-
-    return;
-  }
-
-
-  if(!phone){
-
-    alert("Please enter your phone number.");
-
-    return;
-  }
+    document.getElementById(
+      "phone"
+    ).value.trim();
 
 
   const result =
-    document.getElementById("result");
-
-
-  result.innerHTML =
-    "<p>Loading your order...</p>";
-
-
-  try{
-
-    const response = await fetch(
-
-      SUPABASE_URL +
-      "/rest/v1/rpc/get_orders_by_phone",
-
-      {
-
-        method:"POST",
-
-        headers:{
-
-          "apikey":SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " + SUPABASE_KEY,
-
-          "Content-Type":
-            "application/json"
-
-        },
-
-        body:JSON.stringify({
-
-          user_phone:phone
-
-        })
-
-      }
-
+    document.getElementById(
+      "result"
     );
 
 
-    if(!response.ok){
+  if (!orderNumber || !phone) {
 
-      throw new Error(
-        await response.text()
+    result.innerHTML =
+      "<p>Please enter your order number and phone number.</p>";
+
+    return;
+
+  }
+
+
+  result.innerHTML =
+    "<p>Checking your order...</p>";
+
+
+  try {
+
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/rpc/get_orders_by_phone",
+
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY,
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              user_phone:
+                phone
+
+            })
+
+        }
+
       );
+
+
+    if (!response.ok) {
+
+      result.innerHTML =
+        "<p>Could not check your order.</p>";
+
+      return;
 
     }
 
@@ -369,79 +313,131 @@ async function trackOrder(){
       await response.json();
 
 
-    const order =
-      orders.find(o =>
+    if (
+      !Array.isArray(orders) ||
+      !orders.length
+    ) {
 
-        String(
+      result.innerHTML =
+        "<p>No orders were found for that phone number.</p>";
+
+      return;
+
+    }
+
+
+    const wantedId =
+      Number(orderNumber);
+
+
+    const order =
+      orders.find(o => {
+
+        const id =
           o.id ??
           o.order_id ??
-          o.orderid
-        ) === String(orderId)
+          o.orderid;
 
-      );
+        return Number(id) === wantedId;
+
+      });
 
 
-    if(!order){
+    if (!order) {
 
       result.innerHTML =
         "<p>Order #" +
-        orderId +
-        " was not found for this phone number.</p>";
+        orderNumber +
+        " was not found for that phone number.</p>";
 
       return;
+
     }
 
 
-    if(order.status === "Cancelled"){
+    const displayId =
+      order.id ??
+      order.order_id ??
+      order.orderid;
 
-      result.innerHTML = `
 
-        <div class="order">
+    const displayTotal =
+      order.total ??
+      order.order_total ??
+      order.amount ??
+      0;
 
-          <h2>📦 Order #${order.id}</h2>
 
-          <div class="cancelled">
-            ❌ This order has been cancelled.
-          </div>
+    const displayStatus =
+      order.status ??
+      "Pending";
 
-        </div>
 
-      `;
+    const displayAddress =
+      order.delivery_address ??
+      order.deliveryaddress ??
+      "Not provided";
 
-      return;
+
+    const createdAt =
+      order.created_at ??
+      order.createdat ??
+      "";
+
+
+    let formattedDate =
+      "Not available";
+
+
+    if (createdAt) {
+
+      const date =
+        new Date(createdAt);
+
+      if (!isNaN(date.getTime())) {
+
+        formattedDate =
+          date.toLocaleString(
+            "en-ZA"
+          );
+
+      }
+
     }
+
+
+    const statusClass =
+      String(displayStatus)
+        .toLowerCase()
+        .replace(/\s+/g, "-");
 
 
     result.innerHTML = `
 
       <div class="order">
 
-        <h2>📦 Order #${order.id}</h2>
+        <h3>
+          📦 Order #${displayId}
+        </h3>
 
-        <div class="status">
-          ${order.status}
+        <div class="status ${statusClass}">
+          ${displayStatus}
         </div>
-
-        ${createProgress(order.status)}
 
         <div class="details">
 
-          💰 <strong>Total:</strong>
-          R${Number(order.total).toFixed(2)}
+          <strong>💰 Total:</strong>
+          R${Number(displayTotal).toFixed(2)}
 
           <br>
 
-          🏠 <strong>Delivery:</strong>
-          ${order.delivery_address || "Not provided"}
+          <strong>🏠 Delivery:</strong>
+          ${displayAddress}
 
           <br>
 
-          🕐 <strong>Ordered:</strong>
-          ${
-            order.created_at
-            ? new Date(order.created_at).toLocaleString()
-            : "Not available"
-          }
+          <strong>🕐 Ordered:</strong>
+          ${formattedDate}
 
         </div>
 
@@ -450,12 +446,10 @@ async function trackOrder(){
     `;
 
 
-  }catch(error){
-
-    console.log(error);
+  } catch (error) {
 
     result.innerHTML =
-      "<p>Could not load your order. Please try again.</p>";
+      "<p>Something went wrong while checking your order.</p>";
 
   }
 
@@ -464,5 +458,7 @@ async function trackOrder(){
 
 </script>
 
+
 </body>
+
 </html>
