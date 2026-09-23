@@ -1,123 +1,624 @@
 <!doctype html>
 <html lang="en">
+
 <head>
+
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ZavaMarket — Shop Online</title>
-<link rel="stylesheet" href="style.css">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>ZYRE Marketing — Your Business. Your Store.</title>
+
+<meta
+  name="description"
+  content="ZYRE Marketing is a South African online marketplace where businesses can create and rent their own online stores."
+>
+
+<link
+  rel="stylesheet"
+  href="style.css"
+>
+
 </head>
+
 
 <body>
 
-<header>
-  <div class="brand">Zava<span>Market</span></div>
 
-  <input
-    id="search"
-    placeholder="Search products..."
-    oninput="renderProducts()"
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="zyre-header">
+
+  <div class="brand">
+
+    <span class="brand-main">
+      ZYRE
+    </span>
+
+    <span class="brand-sub">
+      MARKETING
+    </span>
+
+  </div>
+
+
+  <div class="header-search">
+
+    <input
+      id="search"
+      type="search"
+      placeholder="Search products or stores..."
+      oninput="renderProducts()"
+    >
+
+  </div>
+
+
+  <button
+    class="cart-button"
+    onclick="toggleCart()"
   >
 
-  <button onclick="toggleCart()">
-    🛒 Cart <b id="cartCount">0</b>
+    🛒
+
+    Cart
+
+    <b id="cartCount">
+      0
+    </b>
+
   </button>
+
 </header>
 
-<nav>
-  <button onclick="setCategory('All')">All</button>
-  <button onclick="setCategory('Electronics')">Electronics</button>
-  <button onclick="setCategory('Fashion')">Fashion</button>
-  <button onclick="setCategory('Home')">Home</button>
-  <button onclick="setCategory('Beauty')">Beauty</button>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav class="zyre-nav">
+
+  <button onclick="setCategory('All')">
+    All
+  </button>
+
+  <button onclick="setCategory('Electronics')">
+    Electronics
+  </button>
+
+  <button onclick="setCategory('Fashion')">
+    Fashion
+  </button>
+
+  <button onclick="setCategory('Home')">
+    Home
+  </button>
+
+  <button onclick="setCategory('Beauty')">
+    Beauty
+  </button>
+
 </nav>
+
+
 
 <main>
 
+
+<!-- =========================
+     HERO
+========================= -->
+
 <section class="hero">
-  <div>
-    <p class="eyebrow">WELCOME TO ZAVAMARKET</p>
 
-    <h1>
-      Everything you need.<br>
-      <span>All in one place.</span>
-    </h1>
+  <div class="hero-content">
 
-    <p>
-      Shop great products from independent sellers,
-      right from your phone.
+    <p class="eyebrow">
+      WELCOME TO ZYRE MARKETING
     </p>
 
-    <button
-      class="shop"
-      onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})"
-    >
-      Shop now →
-    </button>
+
+    <h1>
+
+      Your business.
+      <br>
+
+      <span>
+        Your store.
+      </span>
+
+    </h1>
+
+
+    <p class="hero-text">
+
+      Discover products from independent
+      businesses and shop from stores
+      all in one marketplace.
+
+    </p>
+
+
+    <div class="hero-buttons">
+
+      <button
+        class="primary-button"
+        onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})"
+      >
+
+        Shop Marketplace →
+
+      </button>
+
+
+      <button
+        class="secondary-button"
+        onclick="sellerCentre()"
+      >
+
+        🏪 Seller Centre
+
+      </button>
+
+    </div>
+
   </div>
 
-  <div class="heroicon">🛍️</div>
+
+  <div class="hero-mark">
+
+    <div class="hero-z">
+      Z
+    </div>
+
+    <div>
+      ZYRE
+    </div>
+
+  </div>
+
 </section>
 
-<div class="toolbar">
-  <h2 id="heading">All products</h2>
 
-  <select id="sort" onchange="renderProducts()">
-    <option value="popular">Popular</option>
-    <option value="low">Price: low to high</option>
-    <option value="high">Price: high to low</option>
-  </select>
-</div>
 
-<section id="products" class="grid"></section>
+<!-- =========================
+     SELLER BANNER
+========================= -->
+
+<section class="seller-banner">
+
+  <div>
+
+    <p class="eyebrow">
+      FOR BUSINESS OWNERS
+    </p>
+
+    <h2>
+      Open your own store on ZYRE.
+    </h2>
+
+    <p>
+      Rent your online store for
+      <strong>R100 per month</strong>
+      and start selling online.
+    </p>
+
+  </div>
+
+
+  <button
+    onclick="sellerCentre()"
+  >
+
+    Open Your Store →
+
+  </button>
+
+</section>
+
+
+
+<!-- =========================
+     CATEGORIES
+========================= -->
+
+<section class="categories">
+
+  <div class="section-title">
+
+    <p class="eyebrow">
+      EXPLORE
+    </p>
+
+    <h2>
+      Shop by category
+    </h2>
+
+  </div>
+
+
+  <div class="category-grid">
+
+    <button
+      onclick="setCategory('Electronics')"
+      class="category-card"
+    >
+
+      <span>📱</span>
+
+      <strong>
+        Electronics
+      </strong>
+
+      <small>
+        Technology & gadgets
+      </small>
+
+    </button>
+
+
+    <button
+      onclick="setCategory('Fashion')"
+      class="category-card"
+    >
+
+      <span>👕</span>
+
+      <strong>
+        Fashion
+      </strong>
+
+      <small>
+        Clothing & style
+      </small>
+
+    </button>
+
+
+    <button
+      onclick="setCategory('Home')"
+      class="category-card"
+    >
+
+      <span>🏠</span>
+
+      <strong>
+        Home
+      </strong>
+
+      <small>
+        Home & living
+      </small>
+
+    </button>
+
+
+    <button
+      onclick="setCategory('Beauty')"
+      class="category-card"
+    >
+
+      <span>✨</span>
+
+      <strong>
+        Beauty
+      </strong>
+
+      <small>
+        Beauty & skincare
+      </small>
+
+    </button>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     PRODUCTS
+========================= -->
+
+<section class="marketplace">
+
+  <div class="toolbar">
+
+    <div>
+
+      <p class="eyebrow">
+        ZYRE MARKETPLACE
+      </p>
+
+      <h2 id="heading">
+        All products
+      </h2>
+
+    </div>
+
+
+    <select
+      id="sort"
+      onchange="renderProducts()"
+    >
+
+      <option value="popular">
+        Popular
+      </option>
+
+      <option value="low">
+        Price: low to high
+      </option>
+
+      <option value="high">
+        Price: high to low
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <section
+    id="products"
+    class="grid"
+  ></section>
+
+</section>
+
+
+
+<!-- =========================
+     HOW IT WORKS
+========================= -->
+
+<section class="how-it-works">
+
+  <div class="section-title">
+
+    <p class="eyebrow">
+      FOR SELLERS
+    </p>
+
+    <h2>
+      Start selling in three steps
+    </h2>
+
+  </div>
+
+
+  <div class="steps">
+
+
+    <div class="step">
+
+      <span>
+        01
+      </span>
+
+      <h3>
+        Create your store
+      </h3>
+
+      <p>
+        Register your business
+        and create your store
+        inside ZYRE Marketing.
+      </p>
+
+    </div>
+
+
+    <div class="step">
+
+      <span>
+        02
+      </span>
+
+      <h3>
+        Rent your store
+      </h3>
+
+      <p>
+        Choose the ZYRE Store
+        plan for R100 per month.
+      </p>
+
+    </div>
+
+
+    <div class="step">
+
+      <span>
+        03
+      </span>
+
+      <h3>
+        Start selling
+      </h3>
+
+      <p>
+        Add your products,
+        receive orders and
+        manage your business.
+      </p>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     CUSTOMER SERVICES
+========================= -->
+
+<section class="services">
+
+  <button
+    onclick="checkOrderStatus()"
+  >
+
+    📦 Track an Order
+
+  </button>
+
+
+  <button
+    onclick="window.location.href='orders.html'"
+  >
+
+    📋 My Orders
+
+  </button>
+
+</section>
+
 
 </main>
 
-<aside id="cart" class="drawer">
 
-  <button class="close" onclick="toggleCart()">✕</button>
 
-  <h2>Your Cart</h2>
+<!-- =========================
+     CART
+========================= -->
 
-  <div id="cartItems"></div>
+<aside
+  id="cart"
+  class="drawer"
+>
 
-  <div class="total">
-    Total: R<span id="total">0.00</span>
+  <button
+    class="close"
+    onclick="toggleCart()"
+  >
+
+    ✕
+
+  </button>
+
+
+  <h2>
+    Your Cart
+  </h2>
+
+
+  <div id="cartItems">
   </div>
 
-  <button class="checkout" onclick="checkout()">
+
+  <div class="total">
+
+    Total:
+
+    R<span id="total">
+      0.00
+    </span>
+
+  </div>
+
+
+  <button
+    class="checkout"
+    onclick="checkout()"
+  >
+
     Continue to checkout
+
   </button>
 
 </aside>
 
-<footer>
 
-  <strong>ZavaMarket</strong><br>
 
-  <span>
-    Shop smart. Shop local. Shop Zava.
-  </span><br>
+<!-- =========================
+     FOOTER
+========================= -->
 
-  <small>
-    © 2026 ZavaMarket •
-    <button onclick="sellerCentre()">Seller Centre</button>
+<footer class="zyre-footer">
 
-    <button onclick="window.location.href='track.html?v=2'">
-      📦 Track Order
+
+  <div class="footer-brand">
+
+    <strong>
+      ZYRE
+    </strong>
+
+    <span>
+      MARKETING
+    </span>
+
+    <p>
+      Your business. Your store.
+      One marketplace.
+    </p>
+
+  </div>
+
+
+  <div class="footer-links">
+
+    <button
+      onclick="sellerCentre()"
+    >
+      Seller Centre
     </button>
 
-    <button onclick="window.location.href='orders.html'">
-      📋 My Orders
+
+    <button
+      onclick="checkOrderStatus()"
+    >
+      Track Order
     </button>
 
-    • Customer Support
-  </small>
+
+    <button
+      onclick="window.location.href='orders.html'"
+    >
+      My Orders
+    </button>
+
+  </div>
+
+
+  <div class="footer-bottom">
+
+    © 2026 ZYRE Marketing
+
+    <br>
+
+    Durban, South Africa
+
+  </div>
+
 
 </footer>
 
+
+
+<!-- =========================
+     SUPABASE
+========================= -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="app.js?v=1000"></script>
+
+<!-- =========================
+     CURRENT MARKETPLACE LOGIC
+========================= -->
+
+<script src="app.js?v=2000"></script>
+
 
 </body>
+
 </html>
