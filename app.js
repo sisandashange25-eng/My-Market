@@ -588,10 +588,6 @@ async function checkout() {
 
   try {
 
-    /* =========================
-       CHECK STOCK BEFORE CHECKOUT
-    ========================= */
-
     for (const item of orderItems) {
 
       const product =
@@ -616,10 +612,6 @@ async function checkout() {
 
     }
 
-
-    /* =========================
-       CREATE CUSTOMER PROFILE
-    ========================= */
 
     const profileResponse =
       await fetch(
@@ -674,12 +666,6 @@ async function checkout() {
     const customerId =
       profileData[0].id;
 
-
-    /* =========================
-       CREATE ORDER + ITEMS
-       + REDUCE STOCK
-       SECURELY
-    ========================= */
 
     const orderResponse =
       await fetch(
@@ -746,10 +732,6 @@ async function checkout() {
       await orderResponse.json();
 
 
-    /* =========================
-       PAYFAST SANDBOX
-    ========================= */
-
     const paymentUrl =
 
       "https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNDxuj63iqje/exec" +
@@ -770,10 +752,6 @@ async function checkout() {
         orderId
       );
 
-
-    /* =========================
-       CLEAR CART
-    ========================= */
 
     cart = [];
 
@@ -912,8 +890,14 @@ async function registerSeller() {
   try {
 
     /* =========================
-       CREATE AUTH ACCOUNT
+       CREATE OR RECOVER AUTH ACCOUNT
     ========================= */
+
+    let userId = null;
+
+    let accessToken =
+      SUPABASE_KEY;
+
 
     const signupResponse =
       await fetch(
@@ -951,29 +935,119 @@ async function registerSeller() {
       );
 
 
-    if (!signupResponse.ok) {
+    if (signupResponse.ok) {
+
+      const signupData =
+        await signupResponse.json();
+
+
+      if (signupData.user) {
+
+        userId =
+          signupData.user.id;
+
+      }
+
+
+      if (signupData.access_token) {
+
+        accessToken =
+          signupData.access_token;
+
+      }
+
+    } else {
 
       const signupError =
         await signupResponse.text();
 
-      alert(
-        "Seller account could not be created.\n\n" +
-        signupError
-      );
 
-      return;
+      /*
+         The previous failed attempt may already
+         have created this Auth account.
+
+         Try logging into that account so we can
+         finish creating the missing profile/seller.
+      */
+
+      if (
+        signupError
+          .toLowerCase()
+          .includes("already registered")
+      ) {
+
+        const loginResponse =
+          await fetch(
+
+            SUPABASE_URL +
+            "/auth/v1/token?grant_type=password",
+
+            {
+
+              method: "POST",
+
+              headers: {
+
+                "apikey":
+                  SUPABASE_KEY,
+
+                "Content-Type":
+                  "application/json"
+
+              },
+
+              body:
+                JSON.stringify({
+
+                  email:
+                    email.trim(),
+
+                  password:
+                    password
+
+                })
+
+            }
+
+          );
+
+
+        if (!loginResponse.ok) {
+
+          alert(
+            "This seller email already exists, but we could not log into it.\n\n" +
+            "If this was the account you just created, make sure you use the same password you entered earlier.\n\n" +
+            await loginResponse.text()
+          );
+
+          return;
+
+        }
+
+
+        const loginData =
+          await loginResponse.json();
+
+
+        userId =
+          loginData.user.id;
+
+
+        accessToken =
+          loginData.access_token;
+
+      } else {
+
+        alert(
+          "Seller account could not be created.\n\n" +
+          signupError
+        );
+
+        return;
+
+      }
 
     }
-
-
-    const signupData =
-      await signupResponse.json();
-
-
-    const userId =
-      signupData.user
-        ? signupData.user.id
-        : signupData.id;
 
 
     if (!userId) {
@@ -988,14 +1062,14 @@ async function registerSeller() {
 
 
     /* =========================
-       CREATE SELLER
+       CREATE PROFILE
     ========================= */
 
-    const sellerResponse =
+    const profileResponse =
       await fetch(
 
         SUPABASE_URL +
-        "/rest/v1/sellers",
+        "/rest/v1/profiles",
 
         {
 
@@ -1008,33 +1082,30 @@ async function registerSeller() {
 
             "Authorization":
               "Bearer " +
-              SUPABASE_KEY,
+              accessToken,
 
             "Content-Type":
               "application/json",
 
             "Prefer":
-              "return=representation"
+              "resolution=merge-duplicates,return=representation"
 
           },
 
           body:
             JSON.stringify({
 
-              user_id:
+              id:
                 userId,
 
-              store_name:
+              full_name:
                 storeName.trim(),
 
-              description:
-                description.trim(),
+              phone:
+                "",
 
-              approved:
-                false,
-
-              email:
-                email.trim()
+              role:
+                "seller"
 
             })
 
@@ -1043,11 +1114,11 @@ async function registerSeller() {
         );
 
 
-    if (!sellerResponse.ok) {
+    if (!profileResponse.ok) {
 
       alert(
-        "Seller store could not be created.\n\n" +
-        await sellerResponse.text()
+        "Seller account exists, but the seller profile could not be created.\n\n" +
+        await profileResponse.text()
       );
 
       return;
@@ -1055,12 +1126,133 @@ async function registerSeller() {
     }
 
 
-    const sellerData =
-      await sellerResponse.json();
+    /* =========================
+       CHECK FOR EXISTING SELLER
+    ========================= */
+
+    const existingSellerResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/sellers?user_id=eq." +
+        userId +
+        "&select=id,store_name,approved",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
 
 
-    const sellerId =
-      sellerData[0].id;
+    let sellerId = null;
+
+
+    if (existingSellerResponse.ok) {
+
+      const existingSellers =
+        await existingSellerResponse.json();
+
+
+      if (existingSellers.length) {
+
+        sellerId =
+          existingSellers[0].id;
+
+      }
+
+    }
+
+
+    /* =========================
+       CREATE SELLER
+    ========================= */
+
+    if (!sellerId) {
+
+      const sellerResponse =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/sellers",
+
+          {
+
+            method: "POST",
+
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                accessToken,
+
+              "Content-Type":
+                "application/json",
+
+              "Prefer":
+                "return=representation"
+
+            },
+
+            body:
+              JSON.stringify({
+
+                user_id:
+                  userId,
+
+                store_name:
+                  storeName.trim(),
+
+                description:
+                  description.trim(),
+
+                approved:
+                  false,
+
+                email:
+                  email.trim()
+
+              })
+
+            }
+
+          );
+
+
+      if (!sellerResponse.ok) {
+
+        alert(
+          "Seller store could not be created.\n\n" +
+          await sellerResponse.text()
+        );
+
+        return;
+
+      }
+
+
+      const sellerData =
+        await sellerResponse.json();
+
+
+      sellerId =
+        sellerData[0].id;
+
+    }
 
 
     /* =========================
@@ -1082,7 +1274,7 @@ async function registerSeller() {
 
             "Authorization":
               "Bearer " +
-              SUPABASE_KEY
+              accessToken
 
           }
 
@@ -1094,7 +1286,7 @@ async function registerSeller() {
     if (!planResponse.ok) {
 
       alert(
-        "Store created, but the R100 rental plan could not be found.\n\n" +
+        "Seller store was created, but the R100 rental plan could not be found.\n\n" +
         await planResponse.text()
       );
 
@@ -1110,7 +1302,7 @@ async function registerSeller() {
     if (!plans.length) {
 
       alert(
-        "Store created, but the ZYRE Store rental plan was not found."
+        "Seller store was created, but the ZYRE Store rental plan was not found."
       );
 
       return;
@@ -1123,18 +1315,18 @@ async function registerSeller() {
 
 
     /* =========================
-       CREATE SUBSCRIPTION
+       CHECK EXISTING SUBSCRIPTION
     ========================= */
 
-    const subscriptionResponse =
+    const existingSubscriptionResponse =
       await fetch(
 
         SUPABASE_URL +
-        "/rest/v1/store_subscriptions",
+        "/rest/v1/store_subscriptions?seller_id=eq." +
+        sellerId +
+        "&select=id,rental_plan_id,status",
 
         {
-
-          method: "POST",
 
           headers: {
 
@@ -1143,68 +1335,121 @@ async function registerSeller() {
 
             "Authorization":
               "Bearer " +
-              SUPABASE_KEY,
-
-            "Content-Type":
-              "application/json",
-
-            "Prefer":
-              "return=representation"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              seller_id:
-                sellerId,
-
-              rental_plan_id:
-                rentalPlan.id,
-
-              status:
-                "pending"
-
-            })
+              accessToken
 
           }
 
-        );
+        }
 
-
-    if (!subscriptionResponse.ok) {
-
-      alert(
-        "Store created, but the rental subscription could not be created.\n\n" +
-        await subscriptionResponse.text()
       );
 
-      return;
+
+    let subscriptionId = null;
+
+
+    if (existingSubscriptionResponse.ok) {
+
+      const subscriptions =
+        await existingSubscriptionResponse.json();
+
+
+      if (subscriptions.length) {
+
+        subscriptionId =
+          subscriptions[0].id;
+
+      }
 
     }
 
 
-    const subscriptionData =
-      await subscriptionResponse.json();
+    /* =========================
+       CREATE SUBSCRIPTION
+    ========================= */
+
+    if (!subscriptionId) {
+
+      const subscriptionResponse =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/store_subscriptions",
+
+          {
+
+            method: "POST",
+
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                accessToken,
+
+              "Content-Type":
+                "application/json",
+
+              "Prefer":
+                "return=representation"
+
+            },
+
+            body:
+              JSON.stringify({
+
+                seller_id:
+                  sellerId,
+
+                rental_plan_id:
+                  rentalPlan.id,
+
+                status:
+                  "pending"
+
+              })
+
+            }
+
+          );
 
 
-    const subscriptionId =
-      subscriptionData[0].id;
+      if (!subscriptionResponse.ok) {
+
+        alert(
+          "Store was created, but the rental subscription could not be created.\n\n" +
+          await subscriptionResponse.text()
+        );
+
+        return;
+
+      }
+
+
+      const subscriptionData =
+        await subscriptionResponse.json();
+
+
+      subscriptionId =
+        subscriptionData[0].id;
+
+    }
 
 
     /* =========================
        CREATE RENTAL PAYMENT
-       ========================= */
+    ========================= */
 
-    const paymentResponse =
+    const existingPaymentResponse =
       await fetch(
 
         SUPABASE_URL +
-        "/rest/v1/rental_payments",
+        "/rest/v1/rental_payments?subscription_id=eq." +
+        subscriptionId +
+        "&select=id",
 
         {
-
-          method: "POST",
 
           headers: {
 
@@ -1213,51 +1458,95 @@ async function registerSeller() {
 
             "Authorization":
               "Bearer " +
-              SUPABASE_KEY,
-
-            "Content-Type":
-              "application/json",
-
-            "Prefer":
-              "return=representation"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              seller_id:
-                sellerId,
-
-              subscription_id:
-                subscriptionId,
-
-              amount:
-                Number(
-                  rentalPlan.monthly_price
-                ),
-
-              status:
-                "pending",
-
-              payment_method:
-                "pending"
-
-            })
+              accessToken
 
           }
 
-        );
+        }
 
-
-    if (!paymentResponse.ok) {
-
-      alert(
-        "Store and subscription were created, but the rental payment record could not be created.\n\n" +
-        await paymentResponse.text()
       );
 
-      return;
+
+    let paymentExists = false;
+
+
+    if (existingPaymentResponse.ok) {
+
+      const payments =
+        await existingPaymentResponse.json();
+
+      paymentExists =
+        payments.length > 0;
+
+    }
+
+
+    if (!paymentExists) {
+
+      const paymentResponse =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/rental_payments",
+
+          {
+
+            method: "POST",
+
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                accessToken,
+
+              "Content-Type":
+                "application/json",
+
+              "Prefer":
+                "return=representation"
+
+            },
+
+            body:
+              JSON.stringify({
+
+                seller_id:
+                  sellerId,
+
+                subscription_id:
+                  subscriptionId,
+
+                amount:
+                  Number(
+                    rentalPlan.monthly_price
+                  ),
+
+                status:
+                  "pending",
+
+                payment_method:
+                  "pending"
+
+              })
+
+            }
+
+          );
+
+
+      if (!paymentResponse.ok) {
+
+        alert(
+          "Store and subscription were created, but the rental payment record could not be created.\n\n" +
+          await paymentResponse.text()
+        );
+
+        return;
+
+      }
 
     }
 
@@ -1281,6 +1570,11 @@ async function registerSeller() {
       email.trim()
     );
 
+    localStorage.setItem(
+      "zava_access_token",
+      accessToken
+    );
+
 
     alert(
 
@@ -1297,9 +1591,9 @@ async function registerSeller() {
       ).toFixed(2) +
       " per month\n\n" +
 
-      "Your application is now waiting for approval.\n\n" +
+      "Your application is waiting for approval.\n\n" +
 
-      "We will connect the R100 payment step next."
+      "The R100 payment step will be connected next."
 
     );
 
