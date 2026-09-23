@@ -148,7 +148,7 @@ async function loadProducts() {
     const productsResponse =
       await fetch(
         SUPABASE_URL +
-        "/rest/v1/products?select=*&order=id.desc",
+        "/rest/v1/products?select=*&active=eq.true&order=id.desc",
         {
           headers: {
             "apikey": SUPABASE_KEY,
@@ -1077,6 +1077,7 @@ async function checkOrderStatus() {
           }
 
         );
+
 
     if (!response.ok) {
 
