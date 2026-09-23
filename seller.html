@@ -141,6 +141,18 @@ margin-bottom:8px;
 margin:6px 0;
 }
 
+.order-item{
+background:#f9fafb;
+border-radius:8px;
+padding:12px;
+margin-top:10px;
+border-left:4px solid #111827;
+}
+
+.order-item p{
+margin:5px 0;
+}
+
 .loading{
 padding:10px 0;
 color:#555;
@@ -777,18 +789,12 @@ async function loadOrders(){
 
   try{
 
-    const controller =
-      new AbortController();
+    /* =========================
+       STEP 1
+       LOAD ORDERS
+    ========================= */
 
-
-    const timeout =
-      setTimeout(
-        () => controller.abort(),
-        10000
-      );
-
-
-    const response =
+    const ordersResponse =
       await fetch(
 
         SUPABASE_URL +
@@ -811,29 +817,23 @@ async function loadOrders(){
 
           },
 
-          cache:"no-store",
-
-          signal:
-            controller.signal
+          cache:"no-store"
 
         }
 
       );
 
 
-    clearTimeout(timeout);
+    const ordersText =
+      await ordersResponse.text();
 
 
-    const responseText =
-      await response.text();
-
-
-    if(!response.ok){
+    if(!ordersResponse.ok){
 
       ordersBox.innerHTML =
         '<div class="load-error">' +
         "<strong>Could not load orders.</strong><br><br>" +
-        responseText +
+        ordersText +
         "</div>";
 
       return;
@@ -848,15 +848,15 @@ async function loadOrders(){
 
       orders =
         JSON.parse(
-          responseText
+          ordersText
         );
 
     }catch(error){
 
       ordersBox.innerHTML =
         '<div class="load-error">' +
-        "<strong>Invalid response from Supabase.</strong><br><br>" +
-        responseText +
+        "<strong>Invalid orders response.</strong><br><br>" +
+        ordersText +
         "</div>";
 
       return;
@@ -877,113 +877,398 @@ async function loadOrders(){
     }
 
 
+    /* =========================
+       STEP 2
+       LOAD THIS SELLER'S PRODUCTS
+    ========================= */
+
+    const productsResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/products?seller_id=eq." +
+        SELLER_ID +
+        "&select=id,name",
+
+        {
+          method:"GET",
+
+          headers:{
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              ACCESS_TOKEN,
+
+            "Accept":
+              "application/json"
+
+          },
+
+          cache:"no-store"
+
+        }
+
+      );
+
+
+    const productsText =
+      await productsResponse.text();
+
+
+    if(!productsResponse.ok){
+
+      ordersBox.innerHTML =
+        '<div class="load-error">' +
+        "<strong>Could not load seller products for orders.</strong><br><br>" +
+        productsText +
+        "</div>";
+
+      return;
+
+    }
+
+
+    const sellerProducts =
+      JSON.parse(productsText);
+
+
+    /* =========================
+       STEP 3
+       MAKE PRODUCT NAME MAP
+    ========================= */
+
+    const productNames = {};
+
+
+    sellerProducts.forEach(
+      product => {
+
+        productNames[
+          String(product.id)
+        ] =
+          product.name;
+
+      }
+    );
+
+
+    /* =========================
+       STEP 4
+       GET ORDER IDs
+    ========================= */
+
+    const orderIds =
+      orders.map(
+        order => order.id
+      );
+
+
+    /* =========================
+       STEP 5
+       LOAD ORDER ITEMS
+    ========================= */
+
+    let orderItems = [];
+
+
+    if(orderIds.length > 0){
+
+      const idList =
+        orderIds.join(",");
+
+
+      const itemsResponse =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/order_items?order_id=in.(" +
+          idList +
+          ")&select=id,order_id,product_id,quantity,price",
+
+          {
+            method:"GET",
+
+            headers:{
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                ACCESS_TOKEN,
+
+              "Accept":
+                "application/json"
+
+            },
+
+            cache:"no-store"
+
+          }
+
+        );
+
+
+      const itemsText =
+        await itemsResponse.text();
+
+
+      if(!itemsResponse.ok){
+
+        ordersBox.innerHTML =
+          '<div class="load-error">' +
+          "<strong>Could not load order items.</strong><br><br>" +
+          itemsText +
+          "</div>";
+
+        return;
+
+      }
+
+
+      try{
+
+        orderItems =
+          JSON.parse(
+            itemsText
+          );
+
+      }catch(error){
+
+        ordersBox.innerHTML =
+          '<div class="load-error">' +
+          "<strong>Invalid order items response.</strong><br><br>" +
+          itemsText +
+          "</div>";
+
+        return;
+
+      }
+
+    }
+
+
+    /* =========================
+       STEP 6
+       GROUP ITEMS BY ORDER
+    ========================= */
+
+    const itemsByOrder = {};
+
+
+    orderItems.forEach(
+      item => {
+
+        const orderId =
+          String(item.order_id);
+
+
+        if(!itemsByOrder[orderId]){
+
+          itemsByOrder[orderId] = [];
+
+        }
+
+
+        /*
+          Only show products belonging
+          to this seller.
+        */
+
+        if(
+          productNames[
+            String(item.product_id)
+          ]
+        ){
+
+          itemsByOrder[orderId].push(
+            item
+          );
+
+        }
+
+      }
+    );
+
+
+    /* =========================
+       STEP 7
+       DISPLAY ORDERS
+    ========================= */
+
     ordersBox.innerHTML =
       orders.map(
-        order => `
+        order => {
 
-        <div class="order">
+          const items =
+            itemsByOrder[
+              String(order.id)
+            ] || [];
 
-          <strong>
-            Order #${order.id}
-          </strong>
 
-          <p>
-            💰 Total:
-            <strong>
-              R${Number(order.total).toFixed(2)}
-            </strong>
-          </p>
+          const itemsHTML =
+            items.length > 0
 
-          <p>
-            🏠 Delivery:
-            ${
-              order.delivery_address ||
-              "Not provided"
-            }
-          </p>
+            ?
 
-          <p>
-            🕐 Date:
-            ${
-              order.created_at
-              ?
-              new Date(
-                order.created_at
-              ).toLocaleString()
-              :
-              "Unknown"
-            }
-          </p>
+            items.map(
+              item => `
 
-          <label>
-            📦 Order Status
-          </label>
+                <div class="order-item">
 
-          <select
-            id="status-${order.id}"
-            onchange="updateOrderStatus(${order.id}, this.value)"
-          >
+                  <p>
+                    🛍️ Product:
+                    <strong>
+                      ${
+                        productNames[
+                          String(item.product_id)
+                        ]
+                      }
+                    </strong>
+                  </p>
 
-            <option
-              value="Pending"
-              ${
-                order.status === "Pending"
-                ? "selected"
-                : ""
-              }
-            >
-              Pending
-            </option>
+                  <p>
+                    🔢 Quantity:
+                    ${item.quantity}
+                  </p>
 
-            <option
-              value="Processing"
-              ${
-                order.status === "Processing"
-                ? "selected"
-                : ""
-              }
-            >
-              Processing
-            </option>
+                  <p>
+                    💰 Price:
+                    R${Number(item.price).toFixed(2)}
+                  </p>
 
-            <option
-              value="Shipped"
-              ${
-                order.status === "Shipped"
-                ? "selected"
-                : ""
-              }
-            >
-              Shipped
-            </option>
+                </div>
 
-            <option
-              value="Delivered"
-              ${
-                order.status === "Delivered"
-                ? "selected"
-                : ""
-              }
-            >
-              Delivered
-            </option>
+              `
+            ).join("")
 
-            <option
-              value="Cancelled"
-              ${
-                order.status === "Cancelled"
-                ? "selected"
-                : ""
-              }
-            >
-              Cancelled
-            </option>
+            :
 
-          </select>
+            `
 
-        </div>
+              <div class="order-item">
 
-      `
+                <p>
+                  🛍️ Product details unavailable.
+                </p>
+
+              </div>
+
+            `;
+
+
+          return `
+
+            <div class="order">
+
+              <strong>
+                Order #${order.id}
+              </strong>
+
+              ${itemsHTML}
+
+              <p>
+                💰 Total:
+                <strong>
+                  R${Number(order.total).toFixed(2)}
+                </strong>
+              </p>
+
+              <p>
+                🏠 Delivery:
+                ${
+                  order.delivery_address ||
+                  "Not provided"
+                }
+              </p>
+
+              <p>
+                🕐 Date:
+                ${
+                  order.created_at
+                  ?
+                  new Date(
+                    order.created_at
+                  ).toLocaleString()
+                  :
+                  "Unknown"
+                }
+              </p>
+
+              <label>
+                📦 Order Status
+              </label>
+
+              <select
+                id="status-${order.id}"
+                onchange="updateOrderStatus(${order.id}, this.value)"
+              >
+
+                <option
+                  value="Pending"
+                  ${
+                    order.status === "Pending"
+                    ? "selected"
+                    : ""
+                  }
+                >
+                  Pending
+                </option>
+
+                <option
+                  value="Processing"
+                  ${
+                    order.status === "Processing"
+                    ? "selected"
+                    : ""
+                  }
+                >
+                  Processing
+                </option>
+
+                <option
+                  value="Shipped"
+                  ${
+                    order.status === "Shipped"
+                    ? "selected"
+                    : ""
+                  }
+                >
+                  Shipped
+                </option>
+
+                <option
+                  value="Delivered"
+                  ${
+                    order.status === "Delivered"
+                    ? "selected"
+                    : ""
+                  }
+                >
+                  Delivered
+                </option>
+
+                <option
+                  value="Cancelled"
+                  ${
+                    order.status === "Cancelled"
+                    ? "selected"
+                    : ""
+                  }
+                >
+                  Cancelled
+                </option>
+
+              </select>
+
+            </div>
+
+          `;
+
+        }
       ).join("");
 
 
@@ -995,26 +1280,11 @@ async function loadOrders(){
     );
 
 
-    if(
-      error.name ===
-      "AbortError"
-    ){
-
-      ordersBox.innerHTML =
-        '<div class="load-error">' +
-        "<strong>Order loading timed out.</strong><br><br>" +
-        "Supabase did not respond within 10 seconds." +
-        "</div>";
-
-    }else{
-
-      ordersBox.innerHTML =
-        '<div class="load-error">' +
-        "<strong>Order loading error:</strong><br><br>" +
-        error.message +
-        "</div>";
-
-    }
+    ordersBox.innerHTML =
+      '<div class="load-error">' +
+      "<strong>Order loading error:</strong><br><br>" +
+      error.message +
+      "</div>";
 
   }
 
@@ -1037,8 +1307,6 @@ async function updateOrderStatus(
 
 
   try{
-
-    /* Immediately show the selected status */
 
     if(statusSelect){
 
@@ -1124,8 +1392,6 @@ async function updateOrderStatus(
       " ✅"
     );
 
-
-    /* Reload orders from Supabase */
 
     await loadOrders();
 
