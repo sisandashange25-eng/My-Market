@@ -166,6 +166,21 @@ border-radius:8px;
 margin-top:10px;
 word-break:break-word;
 }
+
+.subscription-box{
+background:#ecfdf5;
+border:1px solid #a7f3d0;
+color:#065f46;
+padding:14px;
+border-radius:10px;
+margin-top:15px;
+}
+
+.subscription-box strong{
+display:block;
+margin-bottom:6px;
+}
+
 </style>
 </head>
 
@@ -248,6 +263,8 @@ Loading orders...
 Seller ID:
 <span id="sellerIdDisplay">Loading...</span>
 </p>
+
+<div id="subscriptionInfo"></div>
 
 <button type="button" class="back" onclick="goBack()">
 ← Back to ZavaMarket
@@ -401,6 +418,194 @@ async function checkSellerApproval(){
 
     alert(
       "Seller approval check failed.\n\n" +
+      error.message
+    );
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================
+   CHECK ACTIVE RENTAL
+========================= */
+
+async function checkSellerSubscription(){
+
+  try{
+
+    const now =
+      new Date().toISOString();
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/store_subscriptions" +
+        "?seller_id=eq." +
+        SELLER_ID +
+        "&status=eq.active" +
+        "&expires_at=gt." +
+        encodeURIComponent(now) +
+        "&select=id,rental_plan_id,status,started_at,expires_at" +
+        "&order=expires_at.desc" +
+        "&limit=1",
+
+        {
+
+          method:"GET",
+
+          headers:{
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              ACCESS_TOKEN,
+
+            "Accept":
+              "application/json"
+
+          },
+
+          cache:"no-store"
+
+        }
+
+      );
+
+
+    if(!response.ok){
+
+      const errorText =
+        await response.text();
+
+      alert(
+        "Could not check your store subscription.\n\n" +
+        errorText
+      );
+
+      return false;
+
+    }
+
+
+    const subscriptions =
+      await response.json();
+
+
+    if(
+      !Array.isArray(subscriptions) ||
+      subscriptions.length === 0
+    ){
+
+      document.body.innerHTML = `
+
+        <div style="
+          padding:40px 20px;
+          text-align:center;
+          font-family:Arial,sans-serif;
+          background:#f5f6f8;
+          min-height:100vh;
+        ">
+
+          <div style="
+            max-width:500px;
+            margin:auto;
+            background:white;
+            padding:30px 20px;
+            border-radius:15px;
+            box-shadow:0 3px 15px rgba(0,0,0,.08);
+          ">
+
+            <h1>💳 Store Rental Required</h1>
+
+            <p>
+              Your ZYRE Store rental subscription is not currently active.
+            </p>
+
+            <p>
+              An active <strong>R100/month</strong> store subscription
+              is required to access the seller dashboard.
+            </p>
+
+            <button
+              onclick="window.location.href='index.html'"
+              style="
+                width:100%;
+                padding:13px;
+                margin-top:18px;
+                border:0;
+                border-radius:8px;
+                background:#111827;
+                color:white;
+                font-size:16px;
+                font-weight:bold;
+              "
+            >
+              Back to ZavaMarket
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+      return false;
+
+    }
+
+
+    const subscription =
+      subscriptions[0];
+
+
+    const info =
+      document.getElementById(
+        "subscriptionInfo"
+      );
+
+
+    if(info){
+
+      const expires =
+        new Date(
+          subscription.expires_at
+        ).toLocaleDateString();
+
+      info.innerHTML = `
+
+        <div class="subscription-box">
+
+          <strong>
+            ✅ ZYRE Store Subscription Active
+          </strong>
+
+          <div>
+            Store access active until:
+            <strong>
+              ${expires}
+            </strong>
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    return true;
+
+
+  }catch(error){
+
+    alert(
+      "Subscription check failed.\n\n" +
       error.message
     );
 
@@ -789,11 +994,6 @@ async function loadOrders(){
 
   try{
 
-    /* =========================
-       STEP 1
-       LOAD ORDERS
-    ========================= */
-
     const ordersResponse =
       await fetch(
 
@@ -877,11 +1077,6 @@ async function loadOrders(){
     }
 
 
-    /* =========================
-       STEP 2
-       LOAD THIS SELLER'S PRODUCTS
-    ========================= */
-
     const productsResponse =
       await fetch(
 
@@ -935,11 +1130,6 @@ async function loadOrders(){
       JSON.parse(productsText);
 
 
-    /* =========================
-       STEP 3
-       MAKE PRODUCT NAME MAP
-    ========================= */
-
     const productNames = {};
 
 
@@ -955,21 +1145,11 @@ async function loadOrders(){
     );
 
 
-    /* =========================
-       STEP 4
-       GET ORDER IDs
-    ========================= */
-
     const orderIds =
       orders.map(
         order => order.id
       );
 
-
-    /* =========================
-       STEP 5
-       LOAD ORDER ITEMS
-    ========================= */
 
     let orderItems = [];
 
@@ -1051,11 +1231,6 @@ async function loadOrders(){
     }
 
 
-    /* =========================
-       STEP 6
-       GROUP ITEMS BY ORDER
-    ========================= */
-
     const itemsByOrder = {};
 
 
@@ -1073,11 +1248,6 @@ async function loadOrders(){
         }
 
 
-        /*
-          Only show products belonging
-          to this seller.
-        */
-
         if(
           productNames[
             String(item.product_id)
@@ -1093,11 +1263,6 @@ async function loadOrders(){
       }
     );
 
-
-    /* =========================
-       STEP 7
-       DISPLAY ORDERS
-    ========================= */
 
     ordersBox.innerHTML =
       orders.map(
@@ -1435,13 +1600,29 @@ function goBack(){
 checkSellerApproval().then(
   approved => {
 
-    if(approved){
+    if(!approved){
 
-      loadProducts();
-
-      loadOrders();
+      return;
 
     }
+
+
+    checkSellerSubscription().then(
+      subscribed => {
+
+        if(!subscribed){
+
+          return;
+
+        }
+
+
+        loadProducts();
+
+        loadOrders();
+
+      }
+    );
 
   }
 );
