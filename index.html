@@ -657,6 +657,43 @@
 
 
   <!-- =========================
+       ZYRE MARKETING NOTIFICATION SERVICE WORKER
+  ========================= -->
+
+  <script>
+
+    if ("serviceWorker" in navigator) {
+
+      window.addEventListener("load", function () {
+
+        navigator.serviceWorker.register("/My-Market/sw.js")
+
+          .then(function (registration) {
+
+            console.log(
+              "ZYRE Marketing service worker registered",
+              registration.scope
+            );
+
+          })
+
+          .catch(function (error) {
+
+            console.error(
+              "Service worker registration failed:",
+              error
+            );
+
+          });
+
+      });
+
+    }
+
+  </script>
+
+
+  <!-- =========================
        STORE DIRECTORY
   ========================= -->
 
