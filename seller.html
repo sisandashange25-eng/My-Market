@@ -1,8 +1,11 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>ZavaMarket Seller Dashboard</title>  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZavaMarket Seller Dashboard</title>
 
+  <style>
     * {
       box-sizing: border-box;
     }
@@ -93,6 +96,15 @@
       color: white;
     }
 
+    .notification-button {
+      background: #198754;
+      color: white;
+      width: 100%;
+      font-size: 16px;
+      padding: 14px;
+      margin: 0;
+    }
+
     .product {
       border: 1px solid #ddd;
       border-radius: 10px;
@@ -181,7 +193,6 @@
     }
 
     @media (max-width: 700px) {
-
       .summary-grid {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -189,199 +200,268 @@
       .container {
         padding: 12px;
       }
-
     }
+  </style>
+</head>
 
-  </style></head><body><header>
+<body>
+
+<header>
   <h1>🛍️ ZavaMarket Seller Dashboard</h1>
   <p>Add products and manage orders</p>
-</header><div class="container">  <div class="card"><h2>➕ Add a Product</h2>
+</header>
 
-<label>Product name</label>
+<div class="container">
 
-<input
-  type="text"
-  id="productName"
-  placeholder="Example: Wireless Headphones"
->
+  <!-- NOTIFICATIONS -->
+  <div class="card">
 
-<label>Description</label>
+    <h2>🔔 Notifications</h2>
 
-<textarea
-  id="productDescription"
-  placeholder="Describe your product"
-></textarea>
+    <p>
+      Turn on notifications to receive new order alerts,
+      including when your phone is locked.
+    </p>
 
-<label>Price (R)</label>
+    <button
+      class="notification-button"
+      onclick="enableSellerNotifications()"
+    >
+      🔔 Enable Notifications
+    </button>
 
-<input
-  type="number"
-  id="productPrice"
-  placeholder="299.00"
-  step="0.01"
->
+    <p
+      id="notificationStatus"
+      style="margin-top:10px;color:#666;"
+    >
+      Checking notification status...
+    </p>
 
-<label>Stock</label>
-
-<input
-  type="number"
-  id="productStock"
-  placeholder="10"
->
-
-<label>Category</label>
-
-<select id="productCategory">
-  <option value="Electronics">Electronics</option>
-  <option value="Fashion">Fashion</option>
-  <option value="Home">Home</option>
-  <option value="Beauty">Beauty</option>
-</select>
-
-<label>Product image URL</label>
-
-<input
-  type="text"
-  id="productImage"
-  placeholder="https://..."
->
-
-<button class="primary" onclick="addProduct()">
-  Add Product
-</button>
-
-  </div>  <div class="card"><h2>📊 Order Summary</h2>
-
-<div class="summary-grid">
-
-  <div class="summary-box">
-    <div class="summary-label">🟡 Pending</div>
-    <div class="summary-number" id="pendingCount">0</div>
   </div>
 
-  <div class="summary-box">
-    <div class="summary-label">🔵 Processing</div>
-    <div class="summary-number" id="processingCount">0</div>
+
+  <!-- ADD PRODUCT -->
+  <div class="card">
+
+    <h2>➕ Add a Product</h2>
+
+    <label>Product name</label>
+
+    <input
+      type="text"
+      id="productName"
+      placeholder="Example: Wireless Headphones"
+    >
+
+    <label>Description</label>
+
+    <textarea
+      id="productDescription"
+      placeholder="Describe your product"
+    ></textarea>
+
+    <label>Price (R)</label>
+
+    <input
+      type="number"
+      id="productPrice"
+      placeholder="299.00"
+      step="0.01"
+    >
+
+    <label>Stock</label>
+
+    <input
+      type="number"
+      id="productStock"
+      placeholder="10"
+    >
+
+    <label>Category</label>
+
+    <select id="productCategory">
+      <option value="Electronics">Electronics</option>
+      <option value="Fashion">Fashion</option>
+      <option value="Home">Home</option>
+      <option value="Beauty">Beauty</option>
+    </select>
+
+    <label>Product image URL</label>
+
+    <input
+      type="text"
+      id="productImage"
+      placeholder="https://..."
+    >
+
+    <button class="primary" onclick="addProduct()">
+      Add Product
+    </button>
+
   </div>
 
-  <div class="summary-box">
-    <div class="summary-label">🚚 Shipped</div>
-    <div class="summary-number" id="shippedCount">0</div>
+
+  <!-- ORDER SUMMARY -->
+  <div class="card">
+
+    <h2>📊 Order Summary</h2>
+
+    <div class="summary-grid">
+
+      <div class="summary-box">
+        <div class="summary-label">🟡 Pending</div>
+        <div class="summary-number" id="pendingCount">0</div>
+      </div>
+
+      <div class="summary-box">
+        <div class="summary-label">🔵 Processing</div>
+        <div class="summary-number" id="processingCount">0</div>
+      </div>
+
+      <div class="summary-box">
+        <div class="summary-label">🚚 Shipped</div>
+        <div class="summary-number" id="shippedCount">0</div>
+      </div>
+
+      <div class="summary-box">
+        <div class="summary-label">🟢 Delivered</div>
+        <div class="summary-number" id="deliveredCount">0</div>
+      </div>
+
+    </div>
+
   </div>
 
-  <div class="summary-box">
-    <div class="summary-label">🟢 Delivered</div>
-    <div class="summary-number" id="deliveredCount">0</div>
+
+  <!-- PRODUCTS -->
+  <div class="card">
+
+    <h2>🛍️ My Products</h2>
+
+    <div id="productsList">
+      Loading products...
+    </div>
+
   </div>
 
-</div>
 
-  </div>  <div class="card"><h2>🛍️ My Products</h2>
+  <!-- ORDERS -->
+  <div class="card">
 
-<div id="productsList">
-  Loading products...
-</div>
+    <h2>📦 Customer Orders</h2>
 
-  </div>  <div class="card"><h2>📦 Customer Orders</h2>
+    <div
+      id="newOrderNotification"
+      style="
+        display:none;
+        background:#fff3cd;
+        border:1px solid #ffe69c;
+        color:#664d03;
+        padding:15px;
+        border-radius:10px;
+        margin-bottom:15px;
+      "
+    >
 
-<div
-  id="newOrderNotification"
-  style="
-    display:none;
-    background:#fff3cd;
-    border:1px solid #ffe69c;
-    color:#664d03;
-    padding:15px;
-    border-radius:10px;
-    margin-bottom:15px;
-  "
->
+      🔔 <strong>New Order Received!</strong>
 
-  🔔 <strong>New Order Received!</strong>
+      <div id="newOrderMessage"></div>
 
-  <div id="newOrderMessage"></div>
-
-</div>
+    </div>
 
 
-<div class="filter-buttons">
+    <div class="filter-buttons">
 
-  <button
-    class="filter-btn active"
-    id="filterAll"
-    onclick="filterOrders('All')"
-  >
-    All
-  </button>
+      <button
+        class="filter-btn active"
+        id="filterAll"
+        onclick="filterOrders('All')"
+      >
+        All
+      </button>
 
-  <button
-    class="filter-btn"
-    id="filterPending"
-    onclick="filterOrders('Pending')"
-  >
-    🟡 Pending
-  </button>
+      <button
+        class="filter-btn"
+        id="filterPending"
+        onclick="filterOrders('Pending')"
+      >
+        🟡 Pending
+      </button>
 
-  <button
-    class="filter-btn"
-    id="filterProcessing"
-    onclick="filterOrders('Processing')"
-  >
-    🔵 Processing
-  </button>
+      <button
+        class="filter-btn"
+        id="filterProcessing"
+        onclick="filterOrders('Processing')"
+      >
+        🔵 Processing
+      </button>
 
-  <button
-    class="filter-btn"
-    id="filterShipped"
-    onclick="filterOrders('Shipped')"
-  >
-    🚚 Shipped
-  </button>
+      <button
+        class="filter-btn"
+        id="filterShipped"
+        onclick="filterOrders('Shipped')"
+      >
+        🚚 Shipped
+      </button>
 
-  <button
-    class="filter-btn"
-    id="filterDelivered"
-    onclick="filterOrders('Delivered')"
-  >
-    🟢 Delivered
-  </button>
+      <button
+        class="filter-btn"
+        id="filterDelivered"
+        onclick="filterOrders('Delivered')"
+      >
+        🟢 Delivered
+      </button>
 
-</div>
+    </div>
 
 
-<div id="ordersList">
-  Loading orders...
-</div>
+    <div id="ordersList">
+      Loading orders...
+    </div>
 
-  </div>  <div class="card"><h2>🏪 Seller Information</h2>
+  </div>
 
-<div class="seller-info">
 
-  <p>
-    <strong>Seller ID:</strong>
-    <span id="sellerIdDisplay">Loading...</span>
-  </p>
+  <!-- SELLER INFORMATION -->
+  <div class="card">
 
-  <p>
-    <strong>Store:</strong>
-    <span id="storeNameDisplay">Loading...</span>
-  </p>
+    <h2>🏪 Seller Information</h2>
 
-  <p>
-    <strong>Subscription:</strong>
-    Active
-  </p>
+    <div class="seller-info">
 
-  <p>
-    <strong>Expires:</strong>
-    24/10/2026
-  </p>
+      <p>
+        <strong>Seller ID:</strong>
+        <span id="sellerIdDisplay">Loading...</span>
+      </p>
 
-</div>
+      <p>
+        <strong>Store:</strong>
+        <span id="storeNameDisplay">Loading...</span>
+      </p>
 
-  </div>  <button class="secondary" onclick="goBack()">
+      <p>
+        <strong>Subscription:</strong>
+        Active
+      </p>
+
+      <p>
+        <strong>Expires:</strong>
+        24/10/2026
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <button class="secondary" onclick="goBack()">
     ← Back to Store
-  </button></div><script>
+  </button>
+
+</div>
+
+
+<script>
 
 const SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
@@ -422,6 +502,10 @@ let currentOrderFilter = "All";
 let sellerOrdersCache = [];
 
 
+/* ==============================
+   HEADERS
+============================== */
+
 function getHeaders() {
 
   const accessToken =
@@ -442,6 +526,10 @@ function getHeaders() {
 }
 
 
+/* ==============================
+   ESCAPE HTML
+============================== */
+
 function escapeHtml(value) {
 
   if (value === null || value === undefined) {
@@ -454,6 +542,140 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+
+}
+
+
+/* ==============================
+   ENABLE SELLER NOTIFICATIONS
+============================== */
+
+async function enableSellerNotifications() {
+
+  const status =
+    document.getElementById(
+      "notificationStatus"
+    );
+
+  const button =
+    document.querySelector(
+      ".notification-button"
+    );
+
+
+  status.textContent =
+    "Connecting to notifications...";
+
+
+  try {
+
+    if (
+      typeof enableZYRENotifications !==
+      "function"
+    ) {
+
+      status.textContent =
+        "Notification system is still loading.";
+
+      alert(
+        "Notification system is not connected yet. Please refresh the page and try again."
+      );
+
+      return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "🔄 Enabling...";
+
+
+    await enableZYRENotifications();
+
+
+    button.textContent =
+      "✅ Notifications Enabled";
+
+    status.textContent =
+      "Notifications are enabled for this device.";
+
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Notification error:",
+      error
+    );
+
+
+    button.disabled = false;
+
+    button.textContent =
+      "🔔 Enable Notifications";
+
+
+    status.textContent =
+      "Could not enable notifications.";
+
+
+    alert(
+      "Could not enable notifications.\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* ==============================
+   CHECK NOTIFICATION STATUS
+============================== */
+
+function checkNotificationStatus() {
+
+  const status =
+    document.getElementById(
+      "notificationStatus"
+    );
+
+  if (!("Notification" in window)) {
+
+    status.textContent =
+      "Notifications are not supported on this browser.";
+
+    return;
+
+  }
+
+
+  if (Notification.permission === "granted") {
+
+    status.textContent =
+      "✅ Notification permission is already allowed. Tap the button to connect this device.";
+
+  }
+
+  else if (
+    Notification.permission ===
+    "denied"
+  ) {
+
+    status.textContent =
+      "⚠️ Notifications are blocked in Chrome settings.";
+
+  }
+
+  else {
+
+    status.textContent =
+      "Tap the button above to enable notifications.";
+
+  }
 
 }
 
@@ -1630,6 +1852,13 @@ loadOrders();
 
 
 /* ==============================
+   NOTIFICATION STATUS
+============================== */
+
+checkNotificationStatus();
+
+
+/* ==============================
    AUTOMATIC ORDER CHECK
    EVERY 10 SECONDS
 ============================== */
@@ -1640,5 +1869,14 @@ setInterval(function() {
 
 }, 10000);
 
-</script></body>
+</script>
+
+<!--
+  app.js contains the actual notification subscription system.
+  This script loads it after the dashboard code so the button
+  can use enableZYRENotifications().
+-->
+<script src="app.js"></script>
+
+</body>
 </html>
