@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZavaMarket Seller Dashboard</title>
-
-  <style>
+  <title>ZavaMarket Seller Dashboard</title>  <style>
     * {
       box-sizing: border-box;
     }
@@ -105,6 +102,11 @@
       margin: 0;
     }
 
+    .notification-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .product {
       border: 1px solid #ddd;
       border-radius: 10px;
@@ -201,272 +203,231 @@
         padding: 12px;
       }
     }
-  </style>
-</head>
-
-<body>
-
-<header>
+  </style></head><body><header>
   <h1>🛍️ ZavaMarket Seller Dashboard</h1>
   <p>Add products and manage orders</p>
-</header>
+</header><div class="container">  <!-- NOTIFICATIONS -->  <div class="card"><h2>🔔 Notifications</h2>
 
-<div class="container">
+<p>
+  Turn on notifications to receive new order alerts,
+  including when your phone is locked.
+</p>
 
-  <!-- NOTIFICATIONS -->
-  <div class="card">
+<button
+  class="notification-button"
+  onclick="enableSellerNotifications()"
+>
+  🔔 Enable Notifications
+</button>
 
-    <h2>🔔 Notifications</h2>
+<p
+  id="notificationStatus"
+  style="margin-top:10px;color:#666;"
+>
+  Checking notification status...
+</p>
 
-    <p>
-      Turn on notifications to receive new order alerts,
-      including when your phone is locked.
-    </p>
+  </div>  <!-- ADD PRODUCT -->  <div class="card"><h2>➕ Add a Product</h2>
 
-    <button
-      class="notification-button"
-      onclick="enableSellerNotifications()"
-    >
-      🔔 Enable Notifications
-    </button>
+<label>Product name</label>
 
-    <p
-      id="notificationStatus"
-      style="margin-top:10px;color:#666;"
-    >
-      Checking notification status...
-    </p>
+<input
+  type="text"
+  id="productName"
+  placeholder="Example: Wireless Headphones"
+>
 
+<label>Description</label>
+
+<textarea
+  id="productDescription"
+  placeholder="Describe your product"
+></textarea>
+
+<label>Price (R)</label>
+
+<input
+  type="number"
+  id="productPrice"
+  placeholder="299.00"
+  step="0.01"
+>
+
+<label>Stock</label>
+
+<input
+  type="number"
+  id="productStock"
+  placeholder="10"
+>
+
+<label>Category</label>
+
+<select id="productCategory">
+  <option value="Electronics">Electronics</option>
+  <option value="Fashion">Fashion</option>
+  <option value="Home">Home</option>
+  <option value="Beauty">Beauty</option>
+</select>
+
+<label>Product image URL</label>
+
+<input
+  type="text"
+  id="productImage"
+  placeholder="https://..."
+>
+
+<button class="primary" onclick="addProduct()">
+  Add Product
+</button>
+
+  </div>  <!-- ORDER SUMMARY -->  <div class="card"><h2>📊 Order Summary</h2>
+
+<div class="summary-grid">
+
+  <div class="summary-box">
+    <div class="summary-label">🟡 Pending</div>
+    <div class="summary-number" id="pendingCount">0</div>
   </div>
 
-
-  <!-- ADD PRODUCT -->
-  <div class="card">
-
-    <h2>➕ Add a Product</h2>
-
-    <label>Product name</label>
-
-    <input
-      type="text"
-      id="productName"
-      placeholder="Example: Wireless Headphones"
-    >
-
-    <label>Description</label>
-
-    <textarea
-      id="productDescription"
-      placeholder="Describe your product"
-    ></textarea>
-
-    <label>Price (R)</label>
-
-    <input
-      type="number"
-      id="productPrice"
-      placeholder="299.00"
-      step="0.01"
-    >
-
-    <label>Stock</label>
-
-    <input
-      type="number"
-      id="productStock"
-      placeholder="10"
-    >
-
-    <label>Category</label>
-
-    <select id="productCategory">
-      <option value="Electronics">Electronics</option>
-      <option value="Fashion">Fashion</option>
-      <option value="Home">Home</option>
-      <option value="Beauty">Beauty</option>
-    </select>
-
-    <label>Product image URL</label>
-
-    <input
-      type="text"
-      id="productImage"
-      placeholder="https://..."
-    >
-
-    <button class="primary" onclick="addProduct()">
-      Add Product
-    </button>
-
+  <div class="summary-box">
+    <div class="summary-label">🔵 Processing</div>
+    <div class="summary-number" id="processingCount">0</div>
   </div>
 
-
-  <!-- ORDER SUMMARY -->
-  <div class="card">
-
-    <h2>📊 Order Summary</h2>
-
-    <div class="summary-grid">
-
-      <div class="summary-box">
-        <div class="summary-label">🟡 Pending</div>
-        <div class="summary-number" id="pendingCount">0</div>
-      </div>
-
-      <div class="summary-box">
-        <div class="summary-label">🔵 Processing</div>
-        <div class="summary-number" id="processingCount">0</div>
-      </div>
-
-      <div class="summary-box">
-        <div class="summary-label">🚚 Shipped</div>
-        <div class="summary-number" id="shippedCount">0</div>
-      </div>
-
-      <div class="summary-box">
-        <div class="summary-label">🟢 Delivered</div>
-        <div class="summary-number" id="deliveredCount">0</div>
-      </div>
-
-    </div>
-
+  <div class="summary-box">
+    <div class="summary-label">🚚 Shipped</div>
+    <div class="summary-number" id="shippedCount">0</div>
   </div>
 
-
-  <!-- PRODUCTS -->
-  <div class="card">
-
-    <h2>🛍️ My Products</h2>
-
-    <div id="productsList">
-      Loading products...
-    </div>
-
+  <div class="summary-box">
+    <div class="summary-label">🟢 Delivered</div>
+    <div class="summary-number" id="deliveredCount">0</div>
   </div>
 
+</div>
 
-  <!-- ORDERS -->
-  <div class="card">
+  </div>  <!-- PRODUCTS -->  <div class="card"><h2>🛍️ My Products</h2>
 
-    <h2>📦 Customer Orders</h2>
+<div id="productsList">
+  Loading products...
+</div>
 
-    <div
-      id="newOrderNotification"
-      style="
-        display:none;
-        background:#fff3cd;
-        border:1px solid #ffe69c;
-        color:#664d03;
-        padding:15px;
-        border-radius:10px;
-        margin-bottom:15px;
-      "
-    >
+  </div>  <!-- ORDERS -->  <div class="card"><h2>📦 Customer Orders</h2>
 
-      🔔 <strong>New Order Received!</strong>
+<div
+  id="newOrderNotification"
+  style="
+    display:none;
+    background:#fff3cd;
+    border:1px solid #ffe69c;
+    color:#664d03;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:15px;
+  "
+>
 
-      <div id="newOrderMessage"></div>
+  🔔 <strong>New Order Received!</strong>
 
-    </div>
+  <div id="newOrderMessage"></div>
 
-
-    <div class="filter-buttons">
-
-      <button
-        class="filter-btn active"
-        id="filterAll"
-        onclick="filterOrders('All')"
-      >
-        All
-      </button>
-
-      <button
-        class="filter-btn"
-        id="filterPending"
-        onclick="filterOrders('Pending')"
-      >
-        🟡 Pending
-      </button>
-
-      <button
-        class="filter-btn"
-        id="filterProcessing"
-        onclick="filterOrders('Processing')"
-      >
-        🔵 Processing
-      </button>
-
-      <button
-        class="filter-btn"
-        id="filterShipped"
-        onclick="filterOrders('Shipped')"
-      >
-        🚚 Shipped
-      </button>
-
-      <button
-        class="filter-btn"
-        id="filterDelivered"
-        onclick="filterOrders('Delivered')"
-      >
-        🟢 Delivered
-      </button>
-
-    </div>
+</div>
 
 
-    <div id="ordersList">
-      Loading orders...
-    </div>
+<div class="filter-buttons">
 
-  </div>
+  <button
+    class="filter-btn active"
+    id="filterAll"
+    onclick="filterOrders('All')"
+  >
+    All
+  </button>
 
+  <button
+    class="filter-btn"
+    id="filterPending"
+    onclick="filterOrders('Pending')"
+  >
+    🟡 Pending
+  </button>
 
-  <!-- SELLER INFORMATION -->
-  <div class="card">
+  <button
+    class="filter-btn"
+    id="filterProcessing"
+    onclick="filterOrders('Processing')"
+  >
+    🔵 Processing
+  </button>
 
-    <h2>🏪 Seller Information</h2>
+  <button
+    class="filter-btn"
+    id="filterShipped"
+    onclick="filterOrders('Shipped')"
+  >
+    🚚 Shipped
+  </button>
 
-    <div class="seller-info">
-
-      <p>
-        <strong>Seller ID:</strong>
-        <span id="sellerIdDisplay">Loading...</span>
-      </p>
-
-      <p>
-        <strong>Store:</strong>
-        <span id="storeNameDisplay">Loading...</span>
-      </p>
-
-      <p>
-        <strong>Subscription:</strong>
-        Active
-      </p>
-
-      <p>
-        <strong>Expires:</strong>
-        24/10/2026
-      </p>
-
-    </div>
-
-  </div>
-
-
-  <button class="secondary" onclick="goBack()">
-    ← Back to Store
+  <button
+    class="filter-btn"
+    id="filterDelivered"
+    onclick="filterOrders('Delivered')"
+  >
+    🟢 Delivered
   </button>
 
 </div>
 
 
-<script>
+<div id="ordersList">
+  Loading orders...
+</div>
 
-const SUPABASE_URL =
+  </div>  <!-- SELLER INFORMATION -->  <div class="card"><h2>🏪 Seller Information</h2>
+
+<div class="seller-info">
+
+  <p>
+    <strong>Seller ID:</strong>
+    <span id="sellerIdDisplay">Loading...</span>
+  </p>
+
+  <p>
+    <strong>Store:</strong>
+    <span id="storeNameDisplay">Loading...</span>
+  </p>
+
+  <p>
+    <strong>Subscription:</strong>
+    Active
+  </p>
+
+  <p>
+    <strong>Expires:</strong>
+    24/10/2026
+  </p>
+
+</div>
+
+  </div>  <button class="secondary" onclick="goBack()">
+    ← Back to Store
+  </button></div><!--
+  IMPORTANT:
+  app.js is loaded BEFORE the seller dashboard JavaScript.
+  This allows the notification functions to be available.
+--><script src="./app.js"></script><script>
+
+/* ==============================
+   SELLER SUPABASE CONNECTION
+   Different variable names from app.js
+============================== */
+
+const SELLER_SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
 
-const SUPABASE_KEY =
+const SELLER_SUPABASE_KEY =
   "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
 
@@ -513,10 +474,10 @@ function getHeaders() {
 
   return {
 
-    "apikey": SUPABASE_KEY,
+    "apikey": SELLER_SUPABASE_KEY,
 
     "Authorization":
-      "Bearer " + (accessToken || SUPABASE_KEY),
+      "Bearer " + (accessToken || SELLER_SUPABASE_KEY),
 
     "Content-Type":
       "application/json"
@@ -570,7 +531,7 @@ async function enableSellerNotifications() {
   try {
 
     if (
-      typeof enableZYRENotifications !==
+      typeof window.enableZYRENotifications !==
       "function"
     ) {
 
@@ -578,7 +539,7 @@ async function enableSellerNotifications() {
         "Notification system is still loading.";
 
       alert(
-        "Notification system is not connected yet. Please refresh the page and try again."
+        "Notification system could not be loaded.\n\nPlease check that app.js is in the same GitHub folder as seller.html."
       );
 
       return;
@@ -592,7 +553,7 @@ async function enableSellerNotifications() {
       "🔄 Enabling...";
 
 
-    await enableZYRENotifications();
+    await window.enableZYRENotifications();
 
 
     button.textContent =
@@ -624,7 +585,7 @@ async function enableSellerNotifications() {
 
     alert(
       "Could not enable notifications.\n\n" +
-      error.message
+      (error.message || error)
     );
 
   }
@@ -656,7 +617,7 @@ function checkNotificationStatus() {
   if (Notification.permission === "granted") {
 
     status.textContent =
-      "✅ Notification permission is already allowed. Tap the button to connect this device.";
+      "✅ Notification permission is allowed. Tap the button to connect this device.";
 
   }
 
@@ -666,7 +627,7 @@ function checkNotificationStatus() {
   ) {
 
     status.textContent =
-      "⚠️ Notifications are blocked in Chrome settings.";
+      "⚠️ Browser permission is blocked. Check Chrome site permissions.";
 
   }
 
@@ -691,7 +652,7 @@ async function loadSellerInformation() {
     const response =
       await fetch(
 
-        SUPABASE_URL +
+        SELLER_SUPABASE_URL +
         "/rest/v1/sellers?id=eq." +
         SELLER_ID +
         "&select=id,store_name",
@@ -814,7 +775,7 @@ async function addProduct() {
 
     const response =
       await fetch(
-        SUPABASE_URL + "/rest/v1/products",
+        SELLER_SUPABASE_URL + "/rest/v1/products",
         {
 
           method: "POST",
@@ -891,6 +852,8 @@ async function loadProducts() {
   const container =
     document.getElementById("productsList");
 
+  if (!container) return;
+
   container.innerHTML =
     "Loading products...";
 
@@ -900,7 +863,7 @@ async function loadProducts() {
     const response =
       await fetch(
 
-        SUPABASE_URL +
+        SELLER_SUPABASE_URL +
         "/rest/v1/products?seller_id=eq." +
         SELLER_ID +
         "&select=id,name,description,price,stock,category,image_url,active&order=id.desc",
@@ -1097,7 +1060,7 @@ async function saveProduct(
     const response =
       await fetch(
 
-        SUPABASE_URL +
+        SELLER_SUPABASE_URL +
         "/rest/v1/products?id=eq." +
         productId +
         "&seller_id=eq." +
@@ -1181,7 +1144,7 @@ async function deleteProduct(productId) {
     const response =
       await fetch(
 
-        SUPABASE_URL +
+        SELLER_SUPABASE_URL +
         "/rest/v1/products?id=eq." +
         productId +
         "&seller_id=eq." +
@@ -1240,6 +1203,8 @@ async function loadOrders() {
   const container =
     document.getElementById("ordersList");
 
+  if (!container) return;
+
   container.innerHTML =
     "Loading orders...";
 
@@ -1249,7 +1214,7 @@ async function loadOrders() {
     const ordersResponse =
       await fetch(
 
-        SUPABASE_URL +
+        SELLER_SUPABASE_URL +
         "/rest/v1/orders?select=*&order=id.desc",
 
         {
@@ -1281,7 +1246,7 @@ async function loadOrders() {
     const productsResponse =
       await fetch(
 
-        SUPABASE_URL +
+        SELLER_SUPABASE_URL +
         "/rest/v1/products?seller_id=eq." +
         SELLER_ID +
         "&select=id",
@@ -1316,7 +1281,7 @@ async function loadOrders() {
     const itemsResponse =
       await fetch(
 
-        SUPABASE_URL +
+        SELLER_SUPABASE_URL +
         "/rest/v1/order_items?select=*",
 
         {
@@ -1761,7 +1726,7 @@ async function updateOrderStatus(
     const response =
       await fetch(
 
-        SUPABASE_URL +
+        SELLER_SUPABASE_URL +
         "/rest/v1/orders?id=eq." +
         orderId,
 
@@ -1869,14 +1834,5 @@ setInterval(function() {
 
 }, 10000);
 
-</script>
-
-<!--
-  app.js contains the actual notification subscription system.
-  This script loads it after the dashboard code so the button
-  can use enableZYRENotifications().
--->
-<script src="app.js"></script>
-
-</body>
+</script></body>
 </html>
