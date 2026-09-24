@@ -249,6 +249,16 @@ products =
             "Zava Seller"
           ),
 
+    /*
+    IMPORTANT:
+    Keep the seller ID on every product.
+    This is used after checkout to determine
+    which seller must receive the notification.
+    */
+
+    seller_id:
+      Number(p.seller_id),
+
     image_url:
       p.image_url ||
       ""
@@ -811,6 +821,112 @@ if (!orderResponse.ok) {
 
 const orderId =
   await orderResponse.json();
+
+
+/* =========================================================
+SEND NEW ORDER NOTIFICATION TO SELLER
+========================================================= */
+
+try {
+
+  const sellerIds = [
+    ...new Set(
+      orderItems
+        .map(item => {
+
+          const product =
+            products.find(
+              p =>
+                String(p.id) ===
+                String(item.product_id)
+            );
+
+          return product
+            ? Number(product.seller_id)
+            : null;
+
+        })
+        .filter(
+          sellerId =>
+            Number.isFinite(sellerId) &&
+            sellerId > 0
+        )
+    )
+  ];
+
+
+  for (const sellerId of sellerIds) {
+
+    const notificationResponse =
+      await fetch(
+        SUPABASE_URL +
+        "/functions/v1/send-order-notification",
+        {
+          method: "POST",
+
+          headers: {
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY,
+
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              seller_id:
+                sellerId,
+
+              title:
+                "🛍️ New ZavaMarket Order",
+
+              message:
+                "Order #" +
+                orderId +
+                " received — Total: R" +
+                Number(total).toFixed(2)
+
+            })
+        }
+      );
+
+
+    if (!notificationResponse.ok) {
+
+      console.warn(
+        "Seller notification request failed:",
+        await notificationResponse.text()
+      );
+
+    } else {
+
+      console.log(
+        "ZYRE Marketing seller notification sent for Order #" +
+        orderId
+      );
+
+    }
+
+  }
+
+} catch (notificationError) {
+
+  /*
+  Notification failure must NOT stop checkout.
+  The order has already been created successfully.
+  */
+
+  console.warn(
+    "Order notification could not be sent:",
+    notificationError
+  );
+
+}
 
 
 const paymentUrl =
