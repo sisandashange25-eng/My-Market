@@ -1,634 +1,613 @@
 <!doctype html>
-<html lang="en">
 
-<head>
+<html lang="en"><head><meta charset="utf-8"><meta
+name="viewport"
+content="width=device-width,initial-scale=1"
 
-<meta charset="utf-8">
+«»
 
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1"
->
+<title>ZYRE Marketing — Your Business. Your Store.</title><meta
+name="description"
+content="ZYRE Marketing is a South African online marketplace where businesses can create and rent their own online stores."
 
-<title>ZYRE Marketing — Your Business. Your Store.</title>
-
-<meta
-  name="description"
-  content="ZYRE Marketing is a South African online marketplace where businesses can create and rent their own online stores."
->
+«»
 
 <link
   rel="stylesheet"
   href="style.css"
+></head><body><!-- =========================
+     HEADER
+========================= --><header class="zyre-header">  <div class="brand"><span class="brand-main">
+  ZYRE
+</span>
+
+<span class="brand-sub">
+  MARKETING
+</span>
+
+  </div>  <div class="header-search"><input
+  id="search"
+  type="search"
+  placeholder="Search products or stores..."
+  oninput="renderProducts()"
 >
 
-</head>
+  </div><button
+class="cart-button"
+onclick="toggleCart()"
+
+«»
+
+🛒
+
+Cart
+
+<b id="cartCount">
+  0
+</b>
+
+  </button></header><!-- =========================
+     NAVIGATION
+========================= --><nav class="zyre-nav">  <button onclick="setCategory('All')">
+    All
+  </button>  <button onclick="setCategory('Electronics')">
+    Electronics
+  </button>  <button onclick="setCategory('Fashion')">
+    Fashion
+  </button>  <button onclick="setCategory('Home')">
+    Home
+  </button>  <button onclick="setCategory('Beauty')">
+    Beauty
+  </button></nav><main><!-- =========================
+     HERO
+========================= --><section class="hero">  <div class="hero-content"><p class="eyebrow">
+  WELCOME TO ZYRE MARKETING
+</p>
 
 
-<body>
+<h1>
+
+  Your business.
+  <br>
+
+  <span>
+    Your store.
+  </span>
+
+</h1>
 
 
-<!-- =========================
-     HEADER
-========================= -->
+<p class="hero-text">
 
-<header class="zyre-header">
+  Discover products from independent
+  businesses and shop from stores
+  all in one marketplace.
 
-  <div class="brand">
-
-    <span class="brand-main">
-      ZYRE
-    </span>
-
-    <span class="brand-sub">
-      MARKETING
-    </span>
-
-  </div>
+</p>
 
 
-  <div class="header-search">
-
-    <input
-      id="search"
-      type="search"
-      placeholder="Search products or stores..."
-      oninput="renderProducts()"
-    >
-
-  </div>
-
+<div class="hero-buttons">
 
   <button
-    class="cart-button"
-    onclick="toggleCart()"
+    class="primary-button"
+    onclick="document.getElementById('stores').scrollIntoView({behavior:'smooth'})"
   >
 
-    🛒
-
-    Cart
-
-    <b id="cartCount">
-      0
-    </b>
+    Explore Stores →
 
   </button>
-
-</header>
-
-
-
-<!-- =========================
-     NAVIGATION
-========================= -->
-
-<nav class="zyre-nav">
-
-  <button onclick="setCategory('All')">
-    All
-  </button>
-
-  <button onclick="setCategory('Electronics')">
-    Electronics
-  </button>
-
-  <button onclick="setCategory('Fashion')">
-    Fashion
-  </button>
-
-  <button onclick="setCategory('Home')">
-    Home
-  </button>
-
-  <button onclick="setCategory('Beauty')">
-    Beauty
-  </button>
-
-</nav>
-
-
-
-<main>
-
-
-<!-- =========================
-     HERO
-========================= -->
-
-<section class="hero">
-
-  <div class="hero-content">
-
-    <p class="eyebrow">
-      WELCOME TO ZYRE MARKETING
-    </p>
-
-
-    <h1>
-
-      Your business.
-      <br>
-
-      <span>
-        Your store.
-      </span>
-
-    </h1>
-
-
-    <p class="hero-text">
-
-      Discover products from independent
-      businesses and shop from stores
-      all in one marketplace.
-
-    </p>
-
-
-    <div class="hero-buttons">
-
-      <button
-        class="primary-button"
-        onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})"
-      >
-
-        Shop Marketplace →
-
-      </button>
-
-
-      <button
-        class="secondary-button"
-        onclick="sellerCentre()"
-      >
-
-        🏪 Seller Centre
-
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div class="hero-mark">
-
-    <div class="hero-z">
-      Z
-    </div>
-
-    <div>
-      ZYRE
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<!-- =========================
-     SELLER BANNER
-========================= -->
-
-<section class="seller-banner">
-
-  <div>
-
-    <p class="eyebrow">
-      FOR BUSINESS OWNERS
-    </p>
-
-    <h2>
-      Open your own store on ZYRE.
-    </h2>
-
-    <p>
-      Rent your online store for
-      <strong>R100 per month</strong>
-      and start selling online.
-    </p>
-
-  </div>
 
 
   <button
+    class="secondary-button"
     onclick="sellerCentre()"
   >
 
-    Open Your Store →
+    🏪 Seller Centre
 
   </button>
 
-</section>
-
-
-
-<!-- =========================
-     CATEGORIES
-========================= -->
-
-<section class="categories">
-
-  <div class="section-title">
-
-    <p class="eyebrow">
-      EXPLORE
-    </p>
-
-    <h2>
-      Shop by category
-    </h2>
-
-  </div>
-
-
-  <div class="category-grid">
-
-    <button
-      onclick="setCategory('Electronics')"
-      class="category-card"
-    >
-
-      <span>📱</span>
-
-      <strong>
-        Electronics
-      </strong>
-
-      <small>
-        Technology & gadgets
-      </small>
-
-    </button>
-
-
-    <button
-      onclick="setCategory('Fashion')"
-      class="category-card"
-    >
-
-      <span>👕</span>
-
-      <strong>
-        Fashion
-      </strong>
-
-      <small>
-        Clothing & style
-      </small>
-
-    </button>
-
-
-    <button
-      onclick="setCategory('Home')"
-      class="category-card"
-    >
-
-      <span>🏠</span>
-
-      <strong>
-        Home
-      </strong>
-
-      <small>
-        Home & living
-      </small>
-
-    </button>
-
-
-    <button
-      onclick="setCategory('Beauty')"
-      class="category-card"
-    >
-
-      <span>✨</span>
-
-      <strong>
-        Beauty
-      </strong>
-
-      <small>
-        Beauty & skincare
-      </small>
-
-    </button>
-
-  </div>
-
-</section>
-
-
-
-<!-- =========================
-     PRODUCTS
-========================= -->
-
-<section class="marketplace">
-
-  <div class="toolbar">
-
-    <div>
-
-      <p class="eyebrow">
-        ZYRE MARKETPLACE
-      </p>
-
-      <h2 id="heading">
-        All products
-      </h2>
-
-    </div>
-
-
-    <select
-      id="sort"
-      onchange="renderProducts()"
-    >
-
-      <option value="popular">
-        Popular
-      </option>
-
-      <option value="low">
-        Price: low to high
-      </option>
-
-      <option value="high">
-        Price: high to low
-      </option>
-
-    </select>
-
-  </div>
-
-
-  <section
-    id="products"
-    class="grid"
-  ></section>
-
-</section>
-
-
-
-<!-- =========================
-     HOW IT WORKS
-========================= -->
-
-<section class="how-it-works">
-
-  <div class="section-title">
-
-    <p class="eyebrow">
-      FOR SELLERS
-    </p>
-
-    <h2>
-      Start selling in three steps
-    </h2>
-
-  </div>
-
-
-  <div class="steps">
-
-
-    <div class="step">
-
-      <span>
-        01
-      </span>
-
-      <h3>
-        Create your store
-      </h3>
-
-      <p>
-        Register your business
-        and create your store
-        inside ZYRE Marketing.
-      </p>
-
-    </div>
-
-
-    <div class="step">
-
-      <span>
-        02
-      </span>
-
-      <h3>
-        Rent your store
-      </h3>
-
-      <p>
-        Choose the ZYRE Store
-        plan for R100 per month.
-      </p>
-
-    </div>
-
-
-    <div class="step">
-
-      <span>
-        03
-      </span>
-
-      <h3>
-        Start selling
-      </h3>
-
-      <p>
-        Add your products,
-        receive orders and
-        manage your business.
-      </p>
-
-    </div>
-
-
-  </div>
-
-</section>
-
-
-
-<!-- =========================
-     CUSTOMER SERVICES
-========================= -->
-
-<section class="services">
-
-  <button
-    onclick="checkOrderStatus()"
-  >
-
-    📦 Track an Order
-
-  </button>
-
-
-  <button
-    onclick="window.location.href='orders.html'"
-  >
-
-    📋 My Orders
-
-  </button>
-
-</section>
-
-
-</main>
-
-
-
-<!-- =========================
-     CART
-========================= -->
-
-<aside
-  id="cart"
-  class="drawer"
->
-
-  <button
-    class="close"
-    onclick="toggleCart()"
-  >
-
-    ✕
-
-  </button>
-
+</div>
+
+  </div>  <div class="hero-mark"><div class="hero-z">
+  Z
+</div>
+
+<div>
+  ZYRE
+</div>
+
+  </div></section><!-- =========================
+     SELLER BANNER
+========================= --><section class="seller-banner">  <div><p class="eyebrow">
+  FOR BUSINESS OWNERS
+</p>
+
+<h2>
+  Open your own store on ZYRE.
+</h2>
+
+<p>
+  Rent your online store for
+  <strong>R100 per month</strong>
+  and start selling online.
+</p>
+
+  </div><button
+onclick="sellerCentre()"
+
+«»
+
+Open Your Store →
+
+  </button></section><!-- =========================
+     OUR STORES
+========================= --><section
+  id="stores"
+  class="marketplace"
+>  <div class="toolbar"><div>
+
+  <p class="eyebrow">
+    ZYRE MARKETPLACE
+  </p>
 
   <h2>
-    Your Cart
+    Our Stores
   </h2>
 
+  <p>
+    Discover independent businesses
+    and enter their stores to see
+    everything they sell.
+  </p>
 
-  <div id="cartItems">
-  </div>
+</div>
+
+  </div>  <section
+    id="storesGrid"
+    class="grid"
+  ><p>
+  Loading stores...
+</p>
+
+  </section></section><!-- =========================
+     CATEGORIES
+========================= --><section class="categories">  <div class="section-title"><p class="eyebrow">
+  EXPLORE
+</p>
+
+<h2>
+  Shop by category
+</h2>
+
+  </div>  <div class="category-grid"><button
+  onclick="setCategory('Electronics')"
+  class="category-card"
+>
+
+  <span>📱</span>
+
+  <strong>
+    Electronics
+  </strong>
+
+  <small>
+    Technology & gadgets
+  </small>
+
+</button>
 
 
-  <div class="total">
+<button
+  onclick="setCategory('Fashion')"
+  class="category-card"
+>
 
-    Total:
+  <span>👕</span>
 
-    R<span id="total">
-      0.00
-    </span>
+  <strong>
+    Fashion
+  </strong>
 
-  </div>
+  <small>
+    Clothing & style
+  </small>
 
-
-  <button
-    class="clear-cart"
-    onclick="clearCart()"
-  >
-
-    🗑️ Clear Cart
-
-  </button>
+</button>
 
 
-  <button
-    class="checkout"
-    onclick="checkout()"
-  >
+<button
+  onclick="setCategory('Home')"
+  class="category-card"
+>
 
-    Continue to checkout
+  <span>🏠</span>
 
-  </button>
+  <strong>
+    Home
+  </strong>
 
-</aside>
+  <small>
+    Home & living
+  </small>
+
+</button>
 
 
+<button
+  onclick="setCategory('Beauty')"
+  class="category-card"
+>
 
-<!-- =========================
+  <span>✨</span>
+
+  <strong>
+    Beauty
+  </strong>
+
+  <small>
+    Beauty & skincare
+  </small>
+
+</button>
+
+  </div></section><!-- =========================
+     PRODUCTS
+========================= --><section class="marketplace">  <div class="toolbar"><div>
+
+  <p class="eyebrow">
+    ZYRE MARKETPLACE
+  </p>
+
+  <h2 id="heading">
+    All products
+  </h2>
+
+</div>
+
+
+<select
+  id="sort"
+  onchange="renderProducts()"
+>
+
+  <option value="popular">
+    Popular
+  </option>
+
+  <option value="low">
+    Price: low to high
+  </option>
+
+  <option value="high">
+    Price: high to low
+  </option>
+
+</select>
+
+  </div>  <section
+    id="products"
+    class="grid"
+  ></section></section><!-- =========================
+     HOW IT WORKS
+========================= --><section class="how-it-works">  <div class="section-title"><p class="eyebrow">
+  FOR SELLERS
+</p>
+
+<h2>
+  Start selling in three steps
+</h2>
+
+  </div>  <div class="steps"><div class="step">
+
+  <span>
+    01
+  </span>
+
+  <h3>
+    Create your store
+  </h3>
+
+  <p>
+    Register your business
+    and create your store
+    inside ZYRE Marketing.
+  </p>
+
+</div>
+
+
+<div class="step">
+
+  <span>
+    02
+  </span>
+
+  <h3>
+    Rent your store
+  </h3>
+
+  <p>
+    Choose the ZYRE Store
+    plan for R100 per month.
+  </p>
+
+</div>
+
+
+<div class="step">
+
+  <span>
+    03
+  </span>
+
+  <h3>
+    Start selling
+  </h3>
+
+  <p>
+    Add your products,
+    receive orders and
+    manage your business.
+  </p>
+
+</div>
+
+  </div></section><!-- =========================
+     CUSTOMER SERVICES
+========================= --><section class="services"><button
+onclick="checkOrderStatus()"
+
+«»
+
+📦 Track an Order
+
+  </button><button
+onclick="window.location.href='orders.html'"
+
+«»
+
+📋 My Orders
+
+  </button></section></main><!-- =========================
+     CART
+========================= --><aside
+  id="cart"
+  class="drawer"
+><button
+class="close"
+onclick="toggleCart()"
+
+«»
+
+✕
+
+  </button>  <h2>
+    Your Cart
+  </h2>  <div id="cartItems">
+  </div>  <div class="total">Total:
+
+R<span id="total">
+  0.00
+</span>
+
+  </div><button
+class="clear-cart"
+onclick="clearCart()"
+
+«»
+
+🗑️ Clear Cart
+
+  </button><button
+class="checkout"
+onclick="checkout()"
+
+«»
+
+Continue to checkout
+
+  </button></aside><!-- =========================
      FOOTER
-========================= -->
+========================= --><footer class="zyre-footer">  <div class="footer-brand"><strong>
+  ZYRE
+</strong>
 
-<footer class="zyre-footer">
+<span>
+  MARKETING
+</span>
 
+<p>
+  Your business. Your store.
+  One marketplace.
+</p>
 
-  <div class="footer-brand">
-
-    <strong>
-      ZYRE
-    </strong>
-
-    <span>
-      MARKETING
-    </span>
-
-    <p>
-      Your business. Your store.
-      One marketplace.
-    </p>
-
-  </div>
+  </div>  <div class="footer-links"><button
+  onclick="sellerCentre()"
+>
+  Seller Centre
+</button>
 
 
-  <div class="footer-links">
-
-    <button
-      onclick="sellerCentre()"
-    >
-      Seller Centre
-    </button>
+<button
+  onclick="checkOrderStatus()"
+>
+  Track Order
+</button>
 
 
-    <button
-      onclick="checkOrderStatus()"
-    >
-      Track Order
-    </button>
+<button
+  onclick="window.location.href='orders.html'"
+>
+  My Orders
+</button>
 
+  </div>  <div class="footer-bottom">© 2026 ZYRE Marketing
 
-    <button
-      onclick="window.location.href='orders.html'"
-    >
-      My Orders
-    </button>
+<br>
 
-  </div>
+Durban, South Africa
 
-
-  <div class="footer-bottom">
-
-    © 2026 ZYRE Marketing
-
-    <br>
-
-    Durban, South Africa
-
-  </div>
-
-
-</footer>
-
-
-
-<!-- =========================
+  </div></footer><!-- =========================
      SUPABASE
-========================= -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-<!-- =========================
+========================= --><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><!-- =========================
      CURRENT MARKETPLACE LOGIC
-========================= -->
+========================= --><script src="app.js?v=5002"></script><!-- =========================
+     STORE DIRECTORY
+========================= --><script>
 
-<script src="app.js?v=5002"></script>
+const ZYRE_SUPABASE_URL =
+  "https://gaccizzlwswwynattgda.supabase.co";
+
+const ZYRE_SUPABASE_KEY =
+  "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
 
-</body>
+async function loadStores() {
 
-</html>
+  const container =
+    document.getElementById("storesGrid");
+
+  if (!container) return;
+
+
+  try {
+
+    const response = await fetch(
+      ZYRE_SUPABASE_URL +
+      "/rest/v1/sellers?approved=eq.true&select=id,store_name,description&order=id.desc",
+      {
+        headers: {
+          "apikey": ZYRE_SUPABASE_KEY,
+          "Authorization":
+            "Bearer " + ZYRE_SUPABASE_KEY
+        }
+      }
+    );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Could not load stores"
+      );
+
+    }
+
+
+    const stores =
+      await response.json();
+
+
+    if (!stores.length) {
+
+      container.innerHTML = `
+        <p>
+          No stores are available yet.
+        </p>
+      `;
+
+      return;
+
+    }
+
+
+    container.innerHTML =
+      stores.map(function(store) {
+
+        const storeName =
+          store.store_name ||
+          "ZYRE Store";
+
+
+        const description =
+          store.description ||
+          "Discover products from this store.";
+
+
+        return `
+
+          <article
+            class="step"
+            style="text-align:left;"
+          >
+
+            <div
+              style="
+                font-size:42px;
+                margin-bottom:10px;
+              "
+            >
+              🏪
+            </div>
+
+
+            <h3>
+              ${escapeStoreText(storeName)}
+            </h3>
+
+
+            <p>
+              ${escapeStoreText(description)}
+            </p>
+
+
+            <button
+              class="primary-button"
+              type="button"
+              onclick="openSellerStore(${store.id})"
+            >
+              Visit Store →
+            </button>
+
+          </article>
+
+        `;
+
+      }).join("");
+
+
+  } catch (error) {
+
+    console.error(
+      "Store loading error:",
+      error
+    );
+
+
+    container.innerHTML = `
+      <p>
+        Stores could not be loaded.
+        Please try again.
+      </p>
+    `;
+
+  }
+
+}
+
+
+function escapeStoreText(value) {
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+function openSellerStore(sellerId) {
+
+  window.location.href =
+    "store.html?seller_id=" +
+    encodeURIComponent(sellerId);
+
+}
+
+
+loadStores();
+
+</script></body></html>
