@@ -300,7 +300,7 @@ function add(id) {
 
   const product =
     products.find(
-      p => p.id == id
+      p => String(p.id) === String(id)
     );
 
 
@@ -317,7 +317,8 @@ function add(id) {
 
   const currentQuantity =
     cart.filter(
-      cartId => cartId == id
+      cartId =>
+        String(cartId) === String(id)
     ).length;
 
 
@@ -335,7 +336,7 @@ function add(id) {
   }
 
 
-  cart.push(id);
+  cart.push(product.id);
 
   save();
 
@@ -406,6 +407,38 @@ function updateCart() {
   }
 
 
+  /*
+    IMPORTANT:
+
+    Always reload the latest cart from
+    localStorage.
+
+    This allows products added from
+    store.html to immediately appear
+    here.
+  */
+
+  try {
+
+    cart =
+      JSON.parse(
+        localStorage.getItem("cart") || "[]"
+      );
+
+  } catch (error) {
+
+    cart = [];
+
+  }
+
+
+  if (!Array.isArray(cart)) {
+
+    cart = [];
+
+  }
+
+
   cartCount.textContent =
     cart.length;
 
@@ -415,8 +448,11 @@ function updateCart() {
 
   cart.forEach(id => {
 
-    counts[id] =
-      (counts[id] || 0) + 1;
+    const key =
+      String(id);
+
+    counts[key] =
+      (counts[key] || 0) + 1;
 
   });
 
@@ -424,17 +460,44 @@ function updateCart() {
   let total = 0;
 
 
-  cartItems.innerHTML =
+  const rows =
     Object.entries(counts)
       .map(([id, n]) => {
 
         const x =
           products.find(
-            p => p.id == id
+            p =>
+              String(p.id) ===
+              String(id)
           );
 
 
-        if (!x) return "";
+        /*
+          If the product is not currently
+          available in the loaded product
+          list, don't make the whole cart
+          appear empty.
+        */
+
+        if (!x) {
+
+          return `
+
+            <div class="cartrow">
+
+              <span>
+                Product #${id} × ${n}
+              </span>
+
+              <b>
+                Unavailable
+              </b>
+
+            </div>
+
+          `;
+
+        }
 
 
         total +=
@@ -460,8 +523,12 @@ function updateCart() {
         `;
 
       })
-      .join("") ||
-      "<p>Your cart is empty.</p>";
+      .join("");
+
+
+  cartItems.innerHTML =
+    rows ||
+    "<p>Your cart is empty.</p>";
 
 
   totalBox.textContent =
@@ -570,8 +637,11 @@ async function checkout() {
 
   cart.forEach(id => {
 
-    counts[id] =
-      (counts[id] || 0) + 1;
+    const key =
+      String(id);
+
+    counts[key] =
+      (counts[key] || 0) + 1;
 
   });
 
@@ -588,7 +658,9 @@ async function checkout() {
 
     const product =
       products.find(
-        p => p.id == id
+        p =>
+          String(p.id) ===
+          String(id)
       );
 
 
@@ -633,7 +705,9 @@ async function checkout() {
 
       const product =
         products.find(
-          p => p.id == item.product_id
+          p =>
+            String(p.id) ===
+            String(item.product_id)
         );
 
 
@@ -940,10 +1014,6 @@ async function registerSeller() {
 
   try {
 
-    /* =========================
-       CREATE OR RECOVER AUTH ACCOUNT
-    ========================= */
-
     let userId = null;
 
     let accessToken =
@@ -1012,14 +1082,6 @@ async function registerSeller() {
       const signupError =
         await signupResponse.text();
 
-
-      /*
-         The previous failed attempt may already
-         have created this Auth account.
-
-         Try logging into that account so we can
-         finish creating the missing profile/seller.
-      */
 
       if (
         signupError
@@ -1112,10 +1174,6 @@ async function registerSeller() {
     }
 
 
-    /* =========================
-       CREATE PROFILE
-    ========================= */
-
     const profileResponse =
       await fetch(
 
@@ -1177,10 +1235,6 @@ async function registerSeller() {
     }
 
 
-    /* =========================
-       CHECK FOR EXISTING SELLER
-    ========================= */
-
     const existingSellerResponse =
       await fetch(
 
@@ -1225,10 +1279,6 @@ async function registerSeller() {
 
     }
 
-
-    /* =========================
-       CREATE SELLER
-    ========================= */
 
     if (!sellerId) {
 
@@ -1306,10 +1356,6 @@ async function registerSeller() {
     }
 
 
-    /* =========================
-       FIND R100 RENTAL PLAN
-    ========================= */
-
     const planResponse =
       await fetch(
 
@@ -1365,10 +1411,6 @@ async function registerSeller() {
       plans[0];
 
 
-    /* =========================
-       CHECK EXISTING SUBSCRIPTION
-    ========================= */
-
     const existingSubscriptionResponse =
       await fetch(
 
@@ -1413,10 +1455,6 @@ async function registerSeller() {
 
     }
 
-
-    /* =========================
-       CREATE SUBSCRIPTION
-    ========================= */
 
     if (!subscriptionId) {
 
@@ -1487,10 +1525,6 @@ async function registerSeller() {
 
     }
 
-
-    /* =========================
-       CREATE RENTAL PAYMENT
-    ========================= */
 
     const existingPaymentResponse =
       await fetch(
@@ -1602,10 +1636,6 @@ async function registerSeller() {
     }
 
 
-    /* =========================
-       SAVE SELLER INFORMATION
-    ========================= */
-
     localStorage.setItem(
       "zava_seller_id",
       sellerId
@@ -1626,10 +1656,6 @@ async function registerSeller() {
       accessToken
     );
 
-
-    /* =========================
-       SEND SELLER TO R100 PAYMENT
-    ========================= */
 
     const rentalPaymentUrl =
 
