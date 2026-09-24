@@ -7,20 +7,38 @@
   <title>ZavaMarket Seller Dashboard</title>
 
   <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 20px;
+      font-family: Arial, sans-serif;
       background: #f5f5f5;
+      color: #222;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+    }
+
+    header p {
+      margin: 0;
+      color: #ccc;
     }
 
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: auto;
-    }
-
-    h1 {
-      text-align: center;
+      padding: 20px;
     }
 
     .card {
@@ -31,131 +49,103 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
+    h2 {
+      margin-top: 0;
+    }
+
     input,
     textarea,
     select {
       width: 100%;
       padding: 12px;
-      margin: 8px 0 15px;
-      box-sizing: border-box;
+      margin: 8px 0 12px;
       border: 1px solid #ccc;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
     }
 
     button {
-      padding: 12px 18px;
       border: none;
+      padding: 11px 16px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 15px;
-      margin-top: 5px;
+      font-size: 14px;
+      margin: 4px;
     }
 
-    .add-button {
+    .primary {
       background: #111;
       color: white;
-      width: 100%;
     }
 
-    .edit-button {
-      background: #e6e6e6;
-      color: #111;
-      margin-right: 8px;
-    }
-
-    .save-button {
-      background: #111;
-      color: white;
-      margin-right: 8px;
-    }
-
-    .cancel-button {
+    .secondary {
       background: #ddd;
       color: #111;
     }
 
-    .delete-button {
-      background: #c62828;
+    .danger {
+      background: #d32f2f;
+      color: white;
+    }
+
+    .success {
+      background: #198754;
       color: white;
     }
 
     .product {
-      border-top: 1px solid #ddd;
-      padding: 20px 0;
-    }
-
-    .product:first-child {
-      border-top: none;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
     }
 
     .product img {
-      max-width: 180px;
-      max-height: 180px;
+      max-width: 160px;
+      max-height: 160px;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: 8px;
       display: block;
-      margin-bottom: 12px;
-    }
-
-    .edit-form {
-      display: none;
-      margin-top: 15px;
-      padding: 15px;
-      background: #f7f7f7;
-      border-radius: 10px;
+      margin-bottom: 10px;
     }
 
     .order {
-      border-top: 1px solid #ddd;
-      padding: 20px 0;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
     }
 
-    .order:first-child {
-      border-top: none;
-    }
-
-    .status-select {
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    .success {
-      color: green;
-      font-weight: bold;
-    }
-
-    .error {
-      color: red;
-      font-weight: bold;
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 20px;
+      background: #eee;
+      margin-bottom: 10px;
+      font-size: 13px;
     }
 
     .seller-info {
       line-height: 1.7;
     }
 
-    .back-button {
-      background: #111;
-      color: white;
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    /* ORDER SUMMARY */
-
     .summary-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
-      margin-top: 15px;
     }
 
     .summary-box {
-      padding: 18px;
-      border-radius: 10px;
-      background: #f5f5f5;
-      text-align: center;
+      background: #f7f7f7;
       border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
     }
 
     .summary-number {
@@ -165,35 +155,67 @@
     }
 
     .summary-label {
-      font-size: 15px;
+      font-size: 14px;
     }
 
-    @media (min-width: 600px) {
-      .summary-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 15px;
     }
+
+    .filter-btn {
+      background: #eee;
+      color: #111;
+      border: 1px solid #ccc;
+    }
+
+    .filter-btn.active {
+      background: #111;
+      color: white;
+      border-color: #111;
+    }
+
+    .empty {
+      padding: 20px;
+      text-align: center;
+      color: #777;
+      border: 1px dashed #ccc;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 700px) {
+
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .container {
+        padding: 12px;
+      }
+
+    }
+
   </style>
 </head>
 
 <body>
 
+<header>
+  <h1>🛍️ ZavaMarket Seller Dashboard</h1>
+  <p>Add products and manage orders</p>
+</header>
+
 <div class="container">
 
-  <h1>🛍️ ZavaMarket Seller Dashboard</h1>
-
-  <p style="text-align:center;">
-    Add products and manage orders
-  </p>
-
-
   <!-- ADD PRODUCT -->
+
   <div class="card">
 
     <h2>➕ Add a Product</h2>
 
     <label>Product name</label>
-
     <input
       type="text"
       id="productName"
@@ -201,14 +223,12 @@
     >
 
     <label>Description</label>
-
     <textarea
       id="productDescription"
       placeholder="Describe your product"
     ></textarea>
 
     <label>Price (R)</label>
-
     <input
       type="number"
       id="productPrice"
@@ -217,7 +237,6 @@
     >
 
     <label>Stock</label>
-
     <input
       type="number"
       id="productStock"
@@ -227,23 +246,10 @@
     <label>Category</label>
 
     <select id="productCategory">
-
-      <option value="Electronics">
-        Electronics
-      </option>
-
-      <option value="Fashion">
-        Fashion
-      </option>
-
-      <option value="Home">
-        Home
-      </option>
-
-      <option value="Beauty">
-        Beauty
-      </option>
-
+      <option value="Electronics">Electronics</option>
+      <option value="Fashion">Fashion</option>
+      <option value="Home">Home</option>
+      <option value="Beauty">Beauty</option>
     </select>
 
     <label>Product image URL</label>
@@ -254,10 +260,7 @@
       placeholder="https://..."
     >
 
-    <button
-      class="add-button"
-      onclick="addProduct()"
-    >
+    <button class="primary" onclick="addProduct()">
       Add Product
     </button>
 
@@ -265,6 +268,7 @@
 
 
   <!-- ORDER SUMMARY -->
+
   <div class="card">
 
     <h2>📊 Order Summary</h2>
@@ -272,66 +276,23 @@
     <div class="summary-grid">
 
       <div class="summary-box">
-
-        <div class="summary-label">
-          🟡 Pending
-        </div>
-
-        <div
-          class="summary-number"
-          id="pendingCount"
-        >
-          0
-        </div>
-
+        <div class="summary-label">🟡 Pending</div>
+        <div class="summary-number" id="pendingCount">0</div>
       </div>
 
-
       <div class="summary-box">
-
-        <div class="summary-label">
-          🔵 Processing
-        </div>
-
-        <div
-          class="summary-number"
-          id="processingCount"
-        >
-          0
-        </div>
-
+        <div class="summary-label">🔵 Processing</div>
+        <div class="summary-number" id="processingCount">0</div>
       </div>
 
-
       <div class="summary-box">
-
-        <div class="summary-label">
-          🚚 Shipped
-        </div>
-
-        <div
-          class="summary-number"
-          id="shippedCount"
-        >
-          0
-        </div>
-
+        <div class="summary-label">🚚 Shipped</div>
+        <div class="summary-number" id="shippedCount">0</div>
       </div>
 
-
       <div class="summary-box">
-
-        <div class="summary-label">
-          🟢 Delivered
-        </div>
-
-        <div
-          class="summary-number"
-          id="deliveredCount"
-        >
-          0
-        </div>
-
+        <div class="summary-label">🟢 Delivered</div>
+        <div class="summary-number" id="deliveredCount">0</div>
       </div>
 
     </div>
@@ -340,11 +301,12 @@
 
 
   <!-- MY PRODUCTS -->
+
   <div class="card">
 
     <h2>🛍️ My Products</h2>
 
-    <div id="productsContainer">
+    <div id="productsList">
       Loading products...
     </div>
 
@@ -352,54 +314,99 @@
 
 
   <!-- CUSTOMER ORDERS -->
+
   <div class="card">
 
     <h2>📦 Customer Orders</h2>
 
-    <div id="ordersContainer">
+    <!-- ORDER FILTERS -->
+
+    <div class="filter-buttons">
+
+      <button
+        class="filter-btn active"
+        id="filterAll"
+        onclick="filterOrders('All')"
+      >
+        All
+      </button>
+
+      <button
+        class="filter-btn"
+        id="filterPending"
+        onclick="filterOrders('Pending')"
+      >
+        🟡 Pending
+      </button>
+
+      <button
+        class="filter-btn"
+        id="filterProcessing"
+        onclick="filterOrders('Processing')"
+      >
+        🔵 Processing
+      </button>
+
+      <button
+        class="filter-btn"
+        id="filterShipped"
+        onclick="filterOrders('Shipped')"
+      >
+        🚚 Shipped
+      </button>
+
+      <button
+        class="filter-btn"
+        id="filterDelivered"
+        onclick="filterOrders('Delivered')"
+      >
+        🟢 Delivered
+      </button>
+
+    </div>
+
+    <div id="ordersList">
       Loading orders...
     </div>
 
   </div>
 
 
-  <!-- SELLER INFORMATION -->
+  <!-- SELLER INFO -->
+
   <div class="card">
 
-    <h2>Seller information</h2>
+    <h2>🏪 Seller Information</h2>
 
     <div class="seller-info">
 
-      <strong>ZAVAMARKET</strong>
+      <p>
+        <strong>Seller ID:</strong>
+        <span id="sellerIdDisplay">10</span>
+      </p>
 
-      <br><br>
+      <p>
+        <strong>Store:</strong>
+        ZYRE Store
+      </p>
 
-      Seller ID: 10
+      <p>
+        <strong>Subscription:</strong>
+        Active
+      </p>
 
-      <br><br>
-
-      <span class="success">
-        ✅ ZYRE Store Subscription Active
-      </span>
-
-      <br>
-
-      Store access active until:
-
-      <br>
-
-      24/10/2026
+      <p>
+        <strong>Expires:</strong>
+        24/10/2026
+      </p>
 
     </div>
 
   </div>
 
 
-  <button
-    class="back-button"
-    onclick="goBack()"
-  >
-    ← Back to ZavaMarket
+  <button class="secondary" onclick="goBack()">
+    ← Back to Store
   </button>
 
 </div>
@@ -416,9 +423,18 @@ const SUPABASE_KEY =
 const SELLER_ID = 10;
 
 
-/* =========================
-   AUTH HEADERS
-========================= */
+/* ==============================
+   ORDER FILTER VARIABLES
+============================== */
+
+let currentOrderFilter = "All";
+
+let sellerOrdersCache = [];
+
+
+/* ==============================
+   HEADERS
+============================== */
 
 function getHeaders() {
 
@@ -426,26 +442,27 @@ function getHeaders() {
     localStorage.getItem("zava_access_token");
 
   return {
+
     "apikey": SUPABASE_KEY,
-    "Authorization": "Bearer " + (
-      accessToken || SUPABASE_KEY
-    ),
-    "Content-Type": "application/json"
+
+    "Authorization":
+      "Bearer " + (accessToken || SUPABASE_KEY),
+
+    "Content-Type":
+      "application/json"
+
   };
 
 }
 
 
-/* =========================
+/* ==============================
    ESCAPE HTML
-========================= */
+============================== */
 
 function escapeHtml(value) {
 
-  if (
-    value === null ||
-    value === undefined
-  ) {
+  if (value === null || value === undefined) {
     return "";
   }
 
@@ -459,76 +476,38 @@ function escapeHtml(value) {
 }
 
 
-/* =========================
+/* ==============================
    ADD PRODUCT
-========================= */
+============================== */
 
 async function addProduct() {
 
   const name =
-    document.getElementById(
-      "productName"
-    ).value.trim();
+    document.getElementById("productName").value.trim();
 
   const description =
-    document.getElementById(
-      "productDescription"
-    ).value.trim();
+    document.getElementById("productDescription").value.trim();
 
   const price =
-    document.getElementById(
-      "productPrice"
-    ).value;
+    parseFloat(
+      document.getElementById("productPrice").value
+    );
 
   const stock =
-    document.getElementById(
-      "productStock"
-    ).value;
+    parseInt(
+      document.getElementById("productStock").value
+    );
 
   const category =
-    document.getElementById(
-      "productCategory"
-    ).value;
+    document.getElementById("productCategory").value;
 
-  const image =
-    document.getElementById(
-      "productImage"
-    ).value.trim();
+  const image_url =
+    document.getElementById("productImage").value.trim();
 
 
-  if (!name) {
+  if (!name || !price || stock < 0) {
 
-    alert(
-      "Please enter a product name."
-    );
-
-    return;
-
-  }
-
-
-  if (
-    price === "" ||
-    Number(price) < 0
-  ) {
-
-    alert(
-      "Please enter a valid price."
-    );
-
-    return;
-
-  }
-
-
-  if (
-    stock === "" ||
-    Number(stock) < 0
-  ) {
-
-    alert(
-      "Please enter valid stock."
-    );
+    alert("Please enter the product name, price and stock.");
 
     return;
 
@@ -539,45 +518,30 @@ async function addProduct() {
 
     const response =
       await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/products",
-
+        SUPABASE_URL + "/rest/v1/products",
         {
 
           method: "POST",
 
           headers: {
-
             ...getHeaders(),
-
-            "Prefer":
-              "return=representation"
-
+            "Prefer": "return=representation"
           },
 
           body: JSON.stringify({
 
             seller_id: SELLER_ID,
-
             name: name,
-
             description: description,
-
-            price: Number(price),
-
-            stock: Number(stock),
-
+            price: price,
+            stock: stock,
             category: category,
-
-            image_url: image,
-
+            image_url: image_url,
             active: true
 
           })
 
         }
-
       );
 
 
@@ -586,10 +550,8 @@ async function addProduct() {
       const error =
         await response.text();
 
-      console.error(error);
-
       alert(
-        "Product could not be added.\n\n" +
+        "Could not add product:\n" +
         error
       );
 
@@ -598,30 +560,14 @@ async function addProduct() {
     }
 
 
-    alert(
-      "Product added successfully! 🎉"
-    );
+    alert("Product added successfully!");
 
 
-    document.getElementById(
-      "productName"
-    ).value = "";
-
-    document.getElementById(
-      "productDescription"
-    ).value = "";
-
-    document.getElementById(
-      "productPrice"
-    ).value = "";
-
-    document.getElementById(
-      "productStock"
-    ).value = "";
-
-    document.getElementById(
-      "productImage"
-    ).value = "";
+    document.getElementById("productName").value = "";
+    document.getElementById("productDescription").value = "";
+    document.getElementById("productPrice").value = "";
+    document.getElementById("productStock").value = "";
+    document.getElementById("productImage").value = "";
 
 
     loadProducts();
@@ -630,10 +576,9 @@ async function addProduct() {
 
   catch (error) {
 
-    console.error(error);
-
     alert(
-      "Something went wrong while adding the product."
+      "Error adding product:\n" +
+      error.message
     );
 
   }
@@ -641,17 +586,14 @@ async function addProduct() {
 }
 
 
-/* =========================
+/* ==============================
    LOAD PRODUCTS
-========================= */
+============================== */
 
 async function loadProducts() {
 
   const container =
-    document.getElementById(
-      "productsContainer"
-    );
-
+    document.getElementById("productsList");
 
   container.innerHTML =
     "Loading products...";
@@ -668,9 +610,7 @@ async function loadProducts() {
         "&select=id,name,description,price,stock,category,image_url,active&order=id.desc",
 
         {
-
           headers: getHeaders()
-
         }
 
       );
@@ -681,10 +621,10 @@ async function loadProducts() {
       const error =
         await response.text();
 
-      console.error(error);
-
       container.innerHTML =
-        "<p class='error'>Unable to load products.</p>";
+        "<p>Could not load products.</p>";
+
+      console.error(error);
 
       return;
 
@@ -698,372 +638,163 @@ async function loadProducts() {
     if (!products.length) {
 
       container.innerHTML =
-        "<p>No products yet.</p>";
+        '<div class="empty">No products found.</div>';
 
       return;
 
     }
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+      products.map(product => `
 
-
-    products.forEach(
-      product => {
-
-        const productDiv =
-          document.createElement(
-            "div"
-          );
-
-
-        productDiv.className =
-          "product";
-
-
-        productDiv.innerHTML = `
+        <div class="product">
 
           ${
             product.image_url
-              ? `
-                <img
-                  src="${escapeHtml(product.image_url)}"
-                  alt="${escapeHtml(product.name)}"
-                >
-              `
+              ? `<img src="${escapeHtml(product.image_url)}" alt="${escapeHtml(product.name)}">`
               : ""
           }
-
 
           <h3>
             ${escapeHtml(product.name)}
           </h3>
 
+          <p>
+            ${escapeHtml(product.description || "")}
+          </p>
 
           <p>
             💰 Price:
             R${Number(product.price).toFixed(2)}
           </p>
 
-
           <p>
             📦 Stock:
             ${product.stock}
           </p>
 
-
           <p>
             🏷️ Category:
-            ${escapeHtml(product.category)}
+            ${escapeHtml(product.category || "")}
           </p>
 
-
           <button
-            class="edit-button"
-            onclick="editProduct(${product.id})"
+            class="primary"
+            onclick="editProduct(
+              ${product.id},
+              '${escapeHtml(product.name).replace(/'/g, "\\'")}',
+              '${escapeHtml(product.description || "").replace(/'/g, "\\'")}',
+              ${product.price},
+              ${product.stock},
+              '${escapeHtml(product.category || "").replace(/'/g, "\\'")}',
+              '${escapeHtml(product.image_url || "").replace(/'/g, "\\'")}'
+            )"
           >
             ✏️ Edit Product
           </button>
 
-
           <button
-            class="delete-button"
-            onclick="deleteProduct(
-              ${product.id},
-              '${escapeHtml(product.name)}'
-            )"
+            class="danger"
+            onclick="deleteProduct(${product.id})"
           >
             🗑️ Delete Product
           </button>
 
+        </div>
 
-          <div
-            id="edit-${product.id}"
-            class="edit-form"
-          >
-
-            <label>
-              Product name
-            </label>
-
-            <input
-              type="text"
-              id="edit-name-${product.id}"
-              value="${escapeHtml(product.name)}"
-            >
-
-
-            <label>
-              Description
-            </label>
-
-            <textarea
-              id="edit-description-${product.id}"
-            >${escapeHtml(product.description || "")}</textarea>
-
-
-            <label>
-              Price (R)
-            </label>
-
-            <input
-              type="number"
-              step="0.01"
-              id="edit-price-${product.id}"
-              value="${product.price}"
-            >
-
-
-            <label>
-              Stock
-            </label>
-
-            <input
-              type="number"
-              id="edit-stock-${product.id}"
-              value="${product.stock}"
-            >
-
-
-            <label>
-              Category
-            </label>
-
-            <select
-              id="edit-category-${product.id}"
-            >
-
-              <option
-                value="Electronics"
-                ${
-                  product.category === "Electronics"
-                    ? "selected"
-                    : ""
-                }
-              >
-                Electronics
-              </option>
-
-
-              <option
-                value="Fashion"
-                ${
-                  product.category === "Fashion"
-                    ? "selected"
-                    : ""
-                }
-              >
-                Fashion
-              </option>
-
-
-              <option
-                value="Home"
-                ${
-                  product.category === "Home"
-                    ? "selected"
-                    : ""
-                }
-              >
-                Home
-              </option>
-
-
-              <option
-                value="Beauty"
-                ${
-                  product.category === "Beauty"
-                    ? "selected"
-                    : ""
-                }
-              >
-                Beauty
-              </option>
-
-            </select>
-
-
-            <label>
-              Product image URL
-            </label>
-
-            <input
-              type="text"
-              id="edit-image-${product.id}"
-              value="${escapeHtml(product.image_url || "")}"
-            >
-
-
-            <br>
-
-
-            <button
-              class="save-button"
-              onclick="saveProduct(${product.id})"
-            >
-              💾 Save Changes
-            </button>
-
-
-            <button
-              class="cancel-button"
-              onclick="cancelEdit(${product.id})"
-            >
-              Cancel
-            </button>
-
-          </div>
-
-        `;
-
-
-        container.appendChild(
-          productDiv
-        );
-
-      }
-    );
+      `).join("");
 
   }
 
   catch (error) {
 
+    container.innerHTML =
+      "<p>Error loading products.</p>";
+
     console.error(error);
 
-    container.innerHTML =
-      "<p class='error'>Unable to load products.</p>";
-
   }
 
 }
 
 
-/* =========================
+/* ==============================
    EDIT PRODUCT
-========================= */
+============================== */
 
-function editProduct(productId) {
-
-  const form =
-    document.getElementById(
-      "edit-" + productId
-    );
-
-
-  if (form) {
-
-    form.style.display =
-      "block";
-
-  }
-
-}
-
-
-/* =========================
-   CANCEL EDIT
-========================= */
-
-function cancelEdit(productId) {
-
-  const form =
-    document.getElementById(
-      "edit-" + productId
-    );
-
-
-  if (form) {
-
-    form.style.display =
-      "none";
-
-  }
-
-}
-
-
-/* =========================
-   SAVE PRODUCT
-========================= */
-
-async function saveProduct(
-  productId
+function editProduct(
+  id,
+  name,
+  description,
+  price,
+  stock,
+  category,
+  image
 ) {
 
-  const name =
-    document.getElementById(
-      "edit-name-" + productId
-    ).value.trim();
+  const newName =
+    prompt("Product name:", name);
+
+  if (newName === null) return;
 
 
-  const description =
-    document.getElementById(
-      "edit-description-" + productId
-    ).value.trim();
+  const newDescription =
+    prompt("Description:", description);
+
+  if (newDescription === null) return;
 
 
-  const price =
-    document.getElementById(
-      "edit-price-" + productId
-    ).value;
+  const newPrice =
+    prompt("Price:", price);
+
+  if (newPrice === null) return;
 
 
-  const stock =
-    document.getElementById(
-      "edit-stock-" + productId
-    ).value;
+  const newStock =
+    prompt("Stock:", stock);
+
+  if (newStock === null) return;
 
 
-  const category =
-    document.getElementById(
-      "edit-category-" + productId
-    ).value;
+  const newCategory =
+    prompt("Category:", category);
+
+  if (newCategory === null) return;
 
 
-  const image =
-    document.getElementById(
-      "edit-image-" + productId
-    ).value.trim();
+  const newImage =
+    prompt("Image URL:", image);
+
+  if (newImage === null) return;
 
 
-  if (!name) {
+  saveProduct(
+    id,
+    newName,
+    newDescription,
+    parseFloat(newPrice),
+    parseInt(newStock),
+    newCategory,
+    newImage
+  );
 
-    alert(
-      "Product name is required."
-    );
-
-    return;
-
-  }
-
-
-  if (
-    price === "" ||
-    Number(price) < 0
-  ) {
-
-    alert(
-      "Please enter a valid price."
-    );
-
-    return;
-
-  }
+}
 
 
-  if (
-    stock === "" ||
-    Number(stock) < 0
-  ) {
+/* ==============================
+   SAVE PRODUCT
+============================== */
 
-    alert(
-      "Please enter valid stock."
-    );
-
-    return;
-
-  }
-
+async function saveProduct(
+  productId,
+  name,
+  description,
+  price,
+  stock,
+  category,
+  image_url
+) {
 
   try {
 
@@ -1081,27 +812,18 @@ async function saveProduct(
           method: "PATCH",
 
           headers: {
-
             ...getHeaders(),
-
-            "Prefer":
-              "return=representation"
-
+            "Prefer": "return=representation"
           },
 
           body: JSON.stringify({
 
-            name: name,
-
-            description: description,
-
-            price: Number(price),
-
-            stock: Number(stock),
-
-            category: category,
-
-            image_url: image
+            name,
+            description,
+            price,
+            stock,
+            category,
+            image_url
 
           })
 
@@ -1115,10 +837,8 @@ async function saveProduct(
       const error =
         await response.text();
 
-      console.error(error);
-
       alert(
-        "Product could not be updated.\n\n" +
+        "Could not update product:\n" +
         error
       );
 
@@ -1127,10 +847,7 @@ async function saveProduct(
     }
 
 
-    alert(
-      "Product updated successfully! 🎉"
-    );
-
+    alert("Product updated successfully!");
 
     loadProducts();
 
@@ -1138,10 +855,9 @@ async function saveProduct(
 
   catch (error) {
 
-    console.error(error);
-
     alert(
-      "Something went wrong while updating the product."
+      "Error updating product:\n" +
+      error.message
     );
 
   }
@@ -1149,27 +865,18 @@ async function saveProduct(
 }
 
 
-/* =========================
+/* ==============================
    DELETE PRODUCT
-========================= */
+============================== */
 
-async function deleteProduct(
-  productId,
-  productName
-) {
+async function deleteProduct(productId) {
 
-  const confirmed =
-    confirm(
-      "Are you sure you want to delete \"" +
-      productName +
-      "\"?\n\nThis cannot be undone."
-    );
-
-
-  if (!confirmed) {
-
+  if (
+    !confirm(
+      "Are you sure you want to delete this product?"
+    )
+  ) {
     return;
-
   }
 
 
@@ -1188,14 +895,7 @@ async function deleteProduct(
 
           method: "DELETE",
 
-          headers: {
-
-            ...getHeaders(),
-
-            "Prefer":
-              "return=representation"
-
-          }
+          headers: getHeaders()
 
         }
 
@@ -1207,10 +907,8 @@ async function deleteProduct(
       const error =
         await response.text();
 
-      console.error(error);
-
       alert(
-        "Product could not be deleted.\n\n" +
+        "Could not delete product:\n" +
         error
       );
 
@@ -1219,10 +917,7 @@ async function deleteProduct(
     }
 
 
-    alert(
-      "Product deleted successfully! 🗑️"
-    );
-
+    alert("Product deleted successfully!");
 
     loadProducts();
 
@@ -1230,10 +925,9 @@ async function deleteProduct(
 
   catch (error) {
 
-    console.error(error);
-
     alert(
-      "Something went wrong while deleting the product."
+      "Error deleting product:\n" +
+      error.message
     );
 
   }
@@ -1241,17 +935,14 @@ async function deleteProduct(
 }
 
 
-/* =========================
+/* ==============================
    LOAD ORDERS
-========================= */
+============================== */
 
 async function loadOrders() {
 
   const container =
-    document.getElementById(
-      "ordersContainer"
-    );
-
+    document.getElementById("ordersList");
 
   container.innerHTML =
     "Loading orders...";
@@ -1266,9 +957,7 @@ async function loadOrders() {
         "/rest/v1/orders?select=*&order=id.desc",
 
         {
-
           headers: getHeaders()
-
         }
 
       );
@@ -1279,10 +968,10 @@ async function loadOrders() {
       const error =
         await ordersResponse.text();
 
-      console.error(error);
-
       container.innerHTML =
-        "<p class='error'>Unable to load orders.</p>";
+        "<p>Could not load orders.</p>";
+
+      console.error(error);
 
       return;
 
@@ -1299,12 +988,10 @@ async function loadOrders() {
         SUPABASE_URL +
         "/rest/v1/products?seller_id=eq." +
         SELLER_ID +
-        "&select=id,name",
+        "&select=id",
 
         {
-
           headers: getHeaders()
-
         }
 
       );
@@ -1312,13 +999,8 @@ async function loadOrders() {
 
     if (!productsResponse.ok) {
 
-      const error =
-        await productsResponse.text();
-
-      console.error(error);
-
       container.innerHTML =
-        "<p class='error'>Unable to load seller products.</p>";
+        "<p>Could not load seller products.</p>";
 
       return;
 
@@ -1331,34 +1013,27 @@ async function loadOrders() {
 
     const sellerProductIds =
       sellerProducts.map(
-        product => Number(product.id)
+        product => product.id
       );
 
 
-    const orderItemsResponse =
+    const itemsResponse =
       await fetch(
 
         SUPABASE_URL +
         "/rest/v1/order_items?select=*",
 
         {
-
           headers: getHeaders()
-
         }
 
       );
 
 
-    if (!orderItemsResponse.ok) {
-
-      const error =
-        await orderItemsResponse.text();
-
-      console.error(error);
+    if (!itemsResponse.ok) {
 
       container.innerHTML =
-        "<p class='error'>Unable to load order items.</p>";
+        "<p>Could not load order items.</p>";
 
       return;
 
@@ -1366,317 +1041,287 @@ async function loadOrders() {
 
 
     const orderItems =
-      await orderItemsResponse.json();
+      await itemsResponse.json();
 
 
-    const sellerOrders =
+    sellerOrdersCache =
       orders.filter(order => {
 
-        return orderItems.some(item => {
+        return orderItems.some(item =>
 
-          return (
-            Number(item.order_id) ===
-              Number(order.id)
+          item.order_id === order.id &&
 
-            &&
+          sellerProductIds.includes(
+            item.product_id
+          )
 
-            sellerProductIds.includes(
-              Number(item.product_id)
-            )
-          );
-
-        });
+        );
 
       });
 
 
-    /* =========================
-       UPDATE ORDER SUMMARY
-    ========================= */
+    updateOrderSummary();
 
-    let pending = 0;
-    let processing = 0;
-    let shipped = 0;
-    let delivered = 0;
-
-
-    sellerOrders.forEach(order => {
-
-      const status =
-        String(order.status || "")
-          .toLowerCase();
-
-
-      if (status === "pending") {
-
-        pending++;
-
-      }
-
-      else if (
-        status === "processing"
-      ) {
-
-        processing++;
-
-      }
-
-      else if (
-        status === "shipped"
-      ) {
-
-        shipped++;
-
-      }
-
-      else if (
-        status === "delivered"
-      ) {
-
-        delivered++;
-
-      }
-
-    });
-
-
-    document.getElementById(
-      "pendingCount"
-    ).textContent = pending;
-
-
-    document.getElementById(
-      "processingCount"
-    ).textContent = processing;
-
-
-    document.getElementById(
-      "shippedCount"
-    ).textContent = shipped;
-
-
-    document.getElementById(
-      "deliveredCount"
-    ).textContent = delivered;
-
-
-    if (!sellerOrders.length) {
-
-      container.innerHTML =
-        "<p>No customer orders for your products yet.</p>";
-
-      return;
-
-    }
-
-
-    container.innerHTML = "";
-
-
-    sellerOrders.forEach(
-      order => {
-
-        const items =
-          orderItems.filter(
-
-            item =>
-
-              Number(item.order_id) ===
-              Number(order.id)
-
-              &&
-
-              sellerProductIds.includes(
-                Number(item.product_id)
-              )
-
-          );
-
-
-        const orderDiv =
-          document.createElement(
-            "div"
-          );
-
-
-        orderDiv.className =
-          "order";
-
-
-        let productHTML = "";
-
-
-        items.forEach(
-          item => {
-
-            const product =
-              sellerProducts.find(
-
-                p =>
-                  Number(p.id) ===
-                  Number(item.product_id)
-
-              );
-
-
-            productHTML += `
-
-              <p>
-                🛍️ Product:
-                <strong>
-                  ${
-                    product
-                      ? escapeHtml(product.name)
-                      : "Unknown product"
-                  }
-                </strong>
-              </p>
-
-
-              <p>
-                🔢 Quantity:
-                ${item.quantity}
-              </p>
-
-
-              <p>
-                💰 Price:
-                R${Number(item.price).toFixed(2)}
-              </p>
-
-            `;
-
-          }
-        );
-
-
-        orderDiv.innerHTML = `
-
-          <h3>
-            Order #${order.id}
-          </h3>
-
-
-          ${productHTML}
-
-
-          <p>
-            💰 Total:
-            <strong>
-              R${Number(order.total).toFixed(2)}
-            </strong>
-          </p>
-
-
-          <p>
-            🏠 Delivery:
-            ${escapeHtml(
-              order.delivery_address || ""
-            )}
-          </p>
-
-
-          <p>
-            🕐 Date:
-            ${
-              order.created_at
-                ? new Date(
-                    order.created_at
-                  ).toLocaleString()
-                : ""
-            }
-          </p>
-
-
-          <label>
-            📦 Order Status
-          </label>
-
-
-          <select
-            class="status-select"
-            onchange="updateOrderStatus(
-              ${order.id},
-              this.value
-            )"
-          >
-
-            <option
-              value="Pending"
-              ${
-                order.status === "Pending"
-                  ? "selected"
-                  : ""
-              }
-            >
-              Pending
-            </option>
-
-
-            <option
-              value="Processing"
-              ${
-                order.status === "Processing"
-                  ? "selected"
-                  : ""
-              }
-            >
-              Processing
-            </option>
-
-
-            <option
-              value="Shipped"
-              ${
-                order.status === "Shipped"
-                  ? "selected"
-                  : ""
-              }
-            >
-              Shipped
-            </option>
-
-
-            <option
-              value="Delivered"
-              ${
-                order.status === "Delivered"
-                  ? "selected"
-                  : ""
-              }
-            >
-              Delivered
-            </option>
-
-          </select>
-
-        `;
-
-
-        container.appendChild(
-          orderDiv
-        );
-
-      }
-    );
+    renderOrders();
 
   }
 
   catch (error) {
 
-    console.error(error);
-
     container.innerHTML =
-      "<p class='error'>Unable to load orders.</p>";
+      "<p>Error loading orders.</p>";
+
+    console.error(error);
 
   }
 
 }
 
 
-/* =========================
+/* ==============================
+   ORDER SUMMARY
+============================== */
+
+function updateOrderSummary() {
+
+  const pending =
+    sellerOrdersCache.filter(
+      order =>
+        String(order.status).toLowerCase() ===
+        "pending"
+    ).length;
+
+
+  const processing =
+    sellerOrdersCache.filter(
+      order =>
+        String(order.status).toLowerCase() ===
+        "processing"
+    ).length;
+
+
+  const shipped =
+    sellerOrdersCache.filter(
+      order =>
+        String(order.status).toLowerCase() ===
+        "shipped"
+    ).length;
+
+
+  const delivered =
+    sellerOrdersCache.filter(
+      order =>
+        String(order.status).toLowerCase() ===
+        "delivered"
+    ).length;
+
+
+  document.getElementById(
+    "pendingCount"
+  ).textContent = pending;
+
+
+  document.getElementById(
+    "processingCount"
+  ).textContent = processing;
+
+
+  document.getElementById(
+    "shippedCount"
+  ).textContent = shipped;
+
+
+  document.getElementById(
+    "deliveredCount"
+  ).textContent = delivered;
+
+}
+
+
+/* ==============================
+   FILTER ORDERS
+============================== */
+
+function filterOrders(status) {
+
+  currentOrderFilter = status;
+
+
+  document
+    .querySelectorAll(".filter-btn")
+    .forEach(button => {
+
+      button.classList.remove("active");
+
+    });
+
+
+  const buttonMap = {
+
+    "All": "filterAll",
+
+    "Pending": "filterPending",
+
+    "Processing": "filterProcessing",
+
+    "Shipped": "filterShipped",
+
+    "Delivered": "filterDelivered"
+
+  };
+
+
+  const activeButton =
+    document.getElementById(
+      buttonMap[status]
+    );
+
+
+  if (activeButton) {
+
+    activeButton.classList.add("active");
+
+  }
+
+
+  renderOrders();
+
+}
+
+
+/* ==============================
+   RENDER FILTERED ORDERS
+============================== */
+
+function renderOrders() {
+
+  const container =
+    document.getElementById("ordersList");
+
+
+  let filteredOrders =
+    sellerOrdersCache;
+
+
+  if (currentOrderFilter !== "All") {
+
+    filteredOrders =
+      sellerOrdersCache.filter(order =>
+
+        String(order.status).toLowerCase() ===
+        currentOrderFilter.toLowerCase()
+
+      );
+
+  }
+
+
+  if (!filteredOrders.length) {
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        No ${currentOrderFilter === "All"
+          ? ""
+          : currentOrderFilter.toLowerCase() + " "
+        }orders found.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    filteredOrders.map(order => `
+
+      <div class="order">
+
+        <div class="status">
+
+          ${escapeHtml(order.status || "Pending")}
+
+        </div>
+
+        <h3>
+          📦 Order #${order.id}
+        </h3>
+
+        <p>
+          💰 Total:
+          R${Number(order.total || 0).toFixed(2)}
+        </p>
+
+        <p>
+          🏠 Delivery:
+          ${escapeHtml(order.delivery_address || "Not provided")}
+        </p>
+
+        <p>
+          🕐 Ordered:
+          ${
+            order.created_at
+              ? new Date(order.created_at).toLocaleString()
+              : "Unknown"
+          }
+        </p>
+
+
+        <label>
+          Order Status
+        </label>
+
+        <select
+          onchange="updateOrderStatus(
+            ${order.id},
+            this.value
+          )"
+        >
+
+          <option
+            value="Pending"
+            ${order.status === "Pending" ? "selected" : ""}
+          >
+            Pending
+          </option>
+
+          <option
+            value="Processing"
+            ${order.status === "Processing" ? "selected" : ""}
+          >
+            Processing
+          </option>
+
+          <option
+            value="Shipped"
+            ${order.status === "Shipped" ? "selected" : ""}
+          >
+            Shipped
+          </option>
+
+          <option
+            value="Delivered"
+            ${order.status === "Delivered" ? "selected" : ""}
+          >
+            Delivered
+          </option>
+
+        </select>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+/* ==============================
    UPDATE ORDER STATUS
-========================= */
+============================== */
 
 async function updateOrderStatus(
   orderId,
@@ -1697,12 +1342,8 @@ async function updateOrderStatus(
           method: "PATCH",
 
           headers: {
-
             ...getHeaders(),
-
-            "Prefer":
-              "return=representation"
-
+            "Prefer": "return=representation"
           },
 
           body: JSON.stringify({
@@ -1721,10 +1362,8 @@ async function updateOrderStatus(
       const error =
         await response.text();
 
-      console.error(error);
-
       alert(
-        "Order status could not be updated.\n\n" +
+        "Could not update order:\n" +
         error
       );
 
@@ -1734,20 +1373,20 @@ async function updateOrderStatus(
 
 
     alert(
-      "Order status updated successfully! ✅"
+      "Order status updated to " +
+      newStatus
     );
 
 
-    loadOrders();
+    await loadOrders();
 
   }
 
   catch (error) {
 
-    console.error(error);
-
     alert(
-      "Something went wrong while updating the order."
+      "Error updating order:\n" +
+      error.message
     );
 
   }
@@ -1755,9 +1394,9 @@ async function updateOrderStatus(
 }
 
 
-/* =========================
-   BACK TO STORE
-========================= */
+/* ==============================
+   GO BACK
+============================== */
 
 function goBack() {
 
@@ -1767,9 +1406,9 @@ function goBack() {
 }
 
 
-/* =========================
-   START
-========================= */
+/* ==============================
+   START DASHBOARD
+============================== */
 
 loadProducts();
 
