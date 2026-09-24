@@ -1,160 +1,843 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZYRE Marketing Admin</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 20px;
-    }
+<meta charset="UTF-8">
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-    }
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-    h1 {
-      text-align: center;
-    }
+<title>ZYRE Marketing — Owner Dashboard</title>
 
-    .card {
-      background: white;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+<style>
 
-    .seller {
-      border-bottom: 1px solid #ddd;
-      padding: 18px 0;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    .seller:last-child {
-      border-bottom: none;
-    }
+body {
 
-    button {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 10px;
-      margin-right: 8px;
-    }
+  margin: 0;
 
-    .approve {
-      background: black;
-      color: white;
-    }
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-    .reject {
-      background: #ddd;
-      color: black;
-    }
+  background: #080808;
 
-    .logout {
-      background: #b00020;
-      color: white;
-    }
+  color: #ffffff;
+}
 
-    .status {
-      font-weight: bold;
-    }
 
-    #sellerList {
-      min-height: 50px;
-    }
+/* =========================
+   HEADER
+========================= */
 
-    #loginBox {
-      text-align: center;
-    }
+.header {
 
-    input {
-      width: 100%;
-      max-width: 400px;
-      padding: 12px;
-      margin: 8px 0;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
+  background:
+    linear-gradient(
+      135deg,
+      #111111,
+      #000000
+    );
 
-    .loginButton {
-      background: black;
-      color: white;
-    }
+  border-bottom:
+    1px solid #2b2b2b;
 
-    .hidden {
-      display: none;
-    }
+  padding: 22px 18px;
 
-    .error {
-      color: #b00020;
-      font-weight: bold;
-    }
-  </style>
+  text-align: center;
+
+}
+
+.header h1 {
+
+  margin: 0;
+
+  color: #d4af37;
+
+  font-size: 26px;
+
+}
+
+.header p {
+
+  margin: 8px 0 0;
+
+  color: #aaa;
+
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+
+  width: 100%;
+
+  max-width: 1100px;
+
+  margin: auto;
+
+  padding: 15px;
+
+}
+
+
+/* =========================
+   OWNER BAR
+========================= */
+
+.owner-bar {
+
+  background: #111;
+
+  border:
+    1px solid #292929;
+
+  border-radius: 14px;
+
+  padding: 15px;
+
+  margin-bottom: 15px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+
+}
+
+.owner-title {
+
+  color: #d4af37;
+
+  font-weight: bold;
+
+}
+
+.owner-email {
+
+  color: #999;
+
+  font-size: 13px;
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-box {
+
+  max-width: 450px;
+
+  margin: 50px auto;
+
+  background: #111;
+
+  border:
+    1px solid #292929;
+
+  border-radius: 16px;
+
+  padding: 25px;
+
+  text-align: center;
+
+}
+
+.login-box h2 {
+
+  color: #d4af37;
+
+}
+
+input,
+select {
+
+  width: 100%;
+
+  padding: 13px;
+
+  margin:
+    7px 0;
+
+  border:
+    1px solid #333;
+
+  border-radius: 8px;
+
+  background: #080808;
+
+  color: white;
+
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+button {
+
+  border: none;
+
+  border-radius: 8px;
+
+  padding: 11px 16px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+  margin-top: 8px;
+
+}
+
+.login-button {
+
+  width: 100%;
+
+  background: #d4af37;
+
+  color: #000;
+
+}
+
+.gold-button {
+
+  background: #d4af37;
+
+  color: #000;
+
+}
+
+.dark-button {
+
+  background: #222;
+
+  color: white;
+
+  border:
+    1px solid #444;
+
+}
+
+.approve {
+
+  background: #d4af37;
+
+  color: #000;
+
+}
+
+.reject {
+
+  background: #333;
+
+  color: white;
+
+}
+
+.logout {
+
+  background: #b00020;
+
+  color: white;
+
+}
+
+
+/* =========================
+   DASHBOARD NAV
+========================= */
+
+.nav {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(120px, 1fr)
+    );
+
+  gap: 8px;
+
+  margin-bottom: 15px;
+
+}
+
+.nav button {
+
+  background: #111;
+
+  color: white;
+
+  border:
+    1px solid #292929;
+
+  margin: 0;
+
+}
+
+.nav button:hover {
+
+  border-color: #d4af37;
+
+  color: #d4af37;
+
+}
+
+
+/* =========================
+   SECTIONS
+========================= */
+
+.section {
+
+  display: none;
+
+}
+
+.section.active {
+
+  display: block;
+
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+
+  background: #111;
+
+  border:
+    1px solid #292929;
+
+  border-radius: 14px;
+
+  padding: 18px;
+
+  margin-bottom: 15px;
+
+}
+
+.card h2 {
+
+  margin-top: 0;
+
+  color: #d4af37;
+
+}
+
+.card h3 {
+
+  color: #fff;
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+.stats {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(150px, 1fr)
+    );
+
+  gap: 12px;
+
+  margin-bottom: 15px;
+
+}
+
+.stat {
+
+  background: #111;
+
+  border:
+    1px solid #292929;
+
+  border-radius: 14px;
+
+  padding: 18px;
+
+}
+
+.stat-title {
+
+  color: #999;
+
+  font-size: 13px;
+
+}
+
+.stat-number {
+
+  color: #d4af37;
+
+  font-size: 28px;
+
+  font-weight: bold;
+
+  margin-top: 8px;
+
+}
+
+
+/* =========================
+   LIST ITEMS
+========================= */
+
+.item {
+
+  border-bottom:
+    1px solid #292929;
+
+  padding: 16px 0;
+
+}
+
+.item:last-child {
+
+  border-bottom: none;
+
+}
+
+.item p {
+
+  color: #bbb;
+
+  margin: 7px 0;
+
+}
+
+.status {
+
+  font-weight: bold;
+
+}
+
+.pending {
+
+  color: #f0b429;
+
+}
+
+.approved {
+
+  color: #55d187;
+
+}
+
+.paid {
+
+  color: #55d187;
+
+}
+
+.processing {
+
+  color: #58a6ff;
+
+}
+
+.shipped {
+
+  color: #9b7cff;
+
+}
+
+.delivered {
+
+  color: #55d187;
+
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrap {
+
+  overflow-x: auto;
+
+}
+
+table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 650px;
+
+}
+
+th,
+td {
+
+  padding: 12px;
+
+  border-bottom:
+    1px solid #292929;
+
+  text-align: left;
+
+}
+
+th {
+
+  color: #d4af37;
+
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.error {
+
+  color: #ff5c5c;
+
+  font-weight: bold;
+
+}
+
+.success {
+
+  color: #55d187;
+
+  font-weight: bold;
+
+}
+
+.loading {
+
+  color: #999;
+
+  padding: 15px 0;
+
+}
+
+
+/* =========================
+   HIDDEN
+========================= */
+
+.hidden {
+
+  display: none !important;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media
+(max-width: 600px) {
+
+  .header h1 {
+
+    font-size: 22px;
+
+  }
+
+  .container {
+
+    padding: 10px;
+
+  }
+
+  .card {
+
+    padding: 15px;
+
+  }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
+
+<!-- =========================
+     LOGIN
+========================= -->
+
+<div id="loginBox" class="login-box">
+
+  <h1>🛡️ ZYRE Marketing</h1>
+
+  <h2>Owner Login</h2>
+
+  <p>
+    Sign in to your ZYRE Marketing
+    control centre.
+  </p>
+
+  <input
+    type="email"
+    id="email"
+    placeholder="Admin email"
+  >
+
+  <input
+    type="password"
+    id="password"
+    placeholder="Password"
+  >
+
+  <button
+    class="login-button"
+    onclick="loginAdmin()"
+  >
+    🔐 Login
+  </button>
+
+  <p id="loginMessage"></p>
+
+</div>
+
+
+
+<!-- =========================
+     DASHBOARD
+========================= -->
+
+<div
+  id="adminPanel"
+  class="hidden"
+>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+  <h1>
+    🛡️ ZYRE Marketing
+  </h1>
+
+  <p>
+    Owner Control Centre
+  </p>
+
+</div>
+
+
 <div class="container">
 
-  <h1>🛡️ ZYRE Marketing Admin</h1>
 
-  <div id="loginBox" class="card">
+<!-- OWNER BAR -->
 
-    <h2>Admin Login</h2>
+<div class="owner-bar">
 
-    <p>Sign in with your ZYRE Marketing admin account.</p>
+  <div>
 
-    <input
-      type="email"
-      id="email"
-      placeholder="Admin email"
+    <div class="owner-title">
+      👑 ZYRE Marketing Owner
+    </div>
+
+    <div
+      class="owner-email"
+      id="ownerEmail"
     >
+      Admin
+    </div>
 
-    <input
-      type="password"
-      id="password"
-      placeholder="Password"
-    >
+  </div>
 
-    <br>
+  <button
+    class="logout"
+    onclick="logoutAdmin()"
+  >
+    Logout
+  </button>
 
-    <button
-      class="loginButton"
-      onclick="loginAdmin()"
-    >
-      🔐 Login
-    </button>
+</div>
 
-    <p id="loginMessage"></p>
+
+<!-- NAVIGATION -->
+
+<div class="nav">
+
+  <button
+    onclick="showSection('overview')"
+  >
+    📊 Overview
+  </button>
+
+  <button
+    onclick="showSection('sellers')"
+  >
+    👥 Sellers
+  </button>
+
+  <button
+    onclick="showSection('products')"
+  >
+    🛍️ Products
+  </button>
+
+  <button
+    onclick="showSection('orders')"
+  >
+    📦 Orders
+  </button>
+
+  <button
+    onclick="showSection('payments')"
+  >
+    💳 Payments
+  </button>
+
+</div>
+
+
+
+<!-- =========================
+     OVERVIEW
+========================= -->
+
+<div
+  id="overview"
+  class="section active"
+>
+
+  <div class="stats">
+
+    <div class="stat">
+
+      <div class="stat-title">
+        Sellers
+      </div>
+
+      <div
+        class="stat-number"
+        id="statSellers"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-title">
+        Products
+      </div>
+
+      <div
+        class="stat-number"
+        id="statProducts"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-title">
+        Orders
+      </div>
+
+      <div
+        class="stat-number"
+        id="statOrders"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-title">
+        Rental Payments
+      </div>
+
+      <div
+        class="stat-number"
+        id="statPayments"
+      >
+        0
+      </div>
+
+    </div>
 
   </div>
 
 
-  <div id="adminPanel" class="hidden">
+  <div class="card">
 
-    <div class="card">
+    <h2>
+      🏢 ZYRE Marketing
+    </h2>
 
-      <h2>Seller Applications</h2>
+    <p>
+      Welcome to your central marketplace
+      control centre.
+    </p>
 
-      <button
-        class="logout"
-        onclick="logoutAdmin()"
-      >
-        Logout
-      </button>
+    <p>
+      From here you can manage sellers,
+      products, orders and seller
+      subscriptions.
+    </p>
 
-      <div id="sellerList">
-        Loading seller applications...
-      </div>
+    <p class="success">
+      ✅ Marketplace systems connected
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>
+      🔔 Marketplace Activity
+    </h2>
+
+    <div id="recentActivity">
+
+      Loading...
 
     </div>
 
@@ -163,7 +846,195 @@
 </div>
 
 
+
+<!-- =========================
+     SELLERS
+========================= -->
+
+<div
+  id="sellers"
+  class="section"
+>
+
+  <div class="card">
+
+    <h2>
+      👥 Seller Applications
+    </h2>
+
+    <button
+      class="gold-button"
+      onclick="loadSellers()"
+    >
+      🔄 Refresh Sellers
+    </button>
+
+    <div id="sellerList">
+
+      Loading seller applications...
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================
+     PRODUCTS
+========================= -->
+
+<div
+  id="products"
+  class="section"
+>
+
+  <div class="card">
+
+    <h2>
+      🛍️ Marketplace Products
+    </h2>
+
+    <button
+      class="gold-button"
+      onclick="loadProducts()"
+    >
+      🔄 Refresh Products
+    </button>
+
+    <div
+      id="productList"
+      class="loading"
+    >
+      Loading products...
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================
+     ORDERS
+========================= -->
+
+<div
+  id="orders"
+  class="section"
+>
+
+  <div class="card">
+
+    <h2>
+      📦 Marketplace Orders
+    </h2>
+
+    <button
+      class="gold-button"
+      onclick="loadOrders()"
+    >
+      🔄 Refresh Orders
+    </button>
+
+    <div
+      id="orderList"
+      class="loading"
+    >
+      Loading orders...
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================
+     PAYMENTS
+========================= -->
+
+<div
+  id="payments"
+  class="section"
+>
+
+  <div class="card">
+
+    <h2>
+      💳 ZYRE Marketing Payments
+    </h2>
+
+    <p>
+      Seller store subscriptions and
+      rental payments.
+    </p>
+
+    <button
+      class="gold-button"
+      onclick="loadPayments()"
+    >
+      🔄 Refresh Payments
+    </button>
+
+    <div
+      id="paymentList"
+      class="loading"
+    >
+      Loading payments...
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>
+      💰 Payment Structure
+    </h2>
+
+    <p>
+      🏪 Seller Store Rental:
+      <strong>R100/month</strong>
+    </p>
+
+    <p>
+      💳 Customer marketplace payments:
+      <strong>Processed through ZYRE
+      Marketing's payment system</strong>
+    </p>
+
+    <p>
+      PayFast will operate as the payment
+      processor behind the marketplace.
+    </p>
+
+    <p class="pending">
+      ⏳ Live PayFast activation will be
+      completed after account verification.
+    </p>
+
+  </div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
 <script>
+
+
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
 "https://gaccizzlwswwynattgda.supabase.co";
@@ -174,6 +1045,8 @@ const SUPABASE_KEY =
 
 let accessToken = null;
 
+let adminUserId = null;
+
 
 /* =========================
    LOGIN
@@ -182,92 +1055,152 @@ let accessToken = null;
 async function loginAdmin() {
 
   const email =
-    document.getElementById("email").value.trim();
+    document
+      .getElementById("email")
+      .value
+      .trim();
 
   const password =
-    document.getElementById("password").value;
+    document
+      .getElementById("password")
+      .value;
 
   const message =
-    document.getElementById("loginMessage");
+    document
+      .getElementById("loginMessage");
+
 
   if (!email || !password) {
 
     message.innerHTML =
-      '<span class="error">Enter your email and password.</span>';
+      '<span class="error">' +
+      'Enter your email and password.' +
+      '</span>';
 
     return;
+
   }
 
-  message.textContent = "Signing in...";
+
+  message.textContent =
+    "Signing in...";
+
 
   try {
 
-    const response = await fetch(
-      SUPABASE_URL +
-      "/auth/v1/token?grant_type=password",
-      {
-        method: "POST",
+    const response =
+      await fetch(
 
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Content-Type": "application/json"
-        },
+        SUPABASE_URL +
+        "/auth/v1/token?grant_type=password",
 
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
-      }
-    );
+        {
 
-    const data = await response.json();
+          method: "POST",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              email:
+                email,
+
+              password:
+                password
+
+            })
+
+        }
+
+      );
+
+
+    const data =
+      await response.json();
+
 
     if (!response.ok) {
 
       message.innerHTML =
         '<span class="error">' +
-        (data.error_description ||
-         data.message ||
-         "Login failed.") +
-        "</span>";
+        (
+          data.error_description ||
+          data.message ||
+          "Login failed."
+        ) +
+        '</span>';
 
       return;
+
     }
 
-    accessToken = data.access_token;
 
-    const userId = data.user.id;
+    accessToken =
+      data.access_token;
 
-    /* Check profile role */
 
-    const profileResponse = await fetch(
-      SUPABASE_URL +
-      "/rest/v1/profiles?id=eq." +
-      encodeURIComponent(userId) +
-      "&select=role",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization":
-            "Bearer " + accessToken
+    adminUserId =
+      data.user.id;
+
+
+    /* Check admin role */
+
+    const profileResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/profiles?id=eq." +
+        encodeURIComponent(
+          adminUserId
+        ) +
+        "&select=role",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
         }
-      }
-    );
+
+      );
+
 
     const profiles =
       await profileResponse.json();
 
-    if (!profileResponse.ok) {
+
+    if (
+      !profileResponse.ok
+    ) {
 
       message.innerHTML =
         '<span class="error">' +
-        "Could not check admin role." +
-        "</span>";
+        'Could not check admin role.' +
+        '</span>';
 
       accessToken = null;
 
       return;
+
     }
+
 
     if (
       !profiles.length ||
@@ -276,157 +1209,301 @@ async function loginAdmin() {
 
       message.innerHTML =
         '<span class="error">' +
-        "Access denied. This account is not an admin." +
-        "</span>";
+        'Access denied. This account is not an admin.' +
+        '</span>';
 
       accessToken = null;
 
       return;
+
     }
 
-    /* Admin confirmed */
 
-    document.getElementById("loginBox")
-      .classList.add("hidden");
+    /* Login successful */
 
-    document.getElementById("adminPanel")
-      .classList.remove("hidden");
+    document
+      .getElementById("loginBox")
+      .classList
+      .add("hidden");
 
-    loadSellers();
+
+    document
+      .getElementById("adminPanel")
+      .classList
+      .remove("hidden");
+
+
+    document
+      .getElementById("ownerEmail")
+      .textContent =
+        email;
+
+
+    loadDashboard();
+
 
   } catch (error) {
 
     message.innerHTML =
       '<span class="error">' +
       error.message +
-      "</span>";
+      '</span>';
 
   }
+
 }
 
 
 /* =========================
-   LOAD SELLERS
+   DASHBOARD
+========================= */
+
+async function loadDashboard() {
+
+  await Promise.all([
+
+    loadSellers(),
+
+    loadProducts(),
+
+    loadOrders(),
+
+    loadPayments()
+
+  ]);
+
+
+  loadRecentActivity();
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showSection(
+  sectionId
+) {
+
+  document
+    .querySelectorAll(".section")
+    .forEach(function(section) {
+
+      section.classList.remove(
+        "active"
+      );
+
+    });
+
+
+  const selected =
+    document.getElementById(
+      sectionId
+    );
+
+
+  if (selected) {
+
+    selected.classList.add(
+      "active"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   SELLERS
 ========================= */
 
 async function loadSellers() {
 
   const sellerList =
-    document.getElementById("sellerList");
+    document.getElementById(
+      "sellerList"
+    );
+
 
   sellerList.innerHTML =
-    "Loading seller applications...";
+    '<div class="loading">' +
+    'Loading seller applications...' +
+    '</div>';
+
 
   try {
 
-    const response = await fetch(
+    const response =
+      await fetch(
 
-      SUPABASE_URL +
-      "/rest/v1/sellers?select=*&order=id.desc",
+        SUPABASE_URL +
+        "/rest/v1/sellers?select=*&order=id.desc",
 
-      {
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization":
-            "Bearer " + accessToken
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
         }
-      }
 
-    );
+      );
+
 
     const text =
       await response.text();
 
+
     if (!response.ok) {
 
       sellerList.innerHTML =
-        "<p>Supabase error:</p>" +
-        "<pre>" +
+        '<p class="error">' +
         text +
-        "</pre>";
+        '</p>';
 
       return;
+
     }
+
 
     const sellers =
       JSON.parse(text);
 
+
+    document
+      .getElementById(
+        "statSellers"
+      )
+      .textContent =
+        sellers.length;
+
+
     if (!sellers.length) {
 
       sellerList.innerHTML =
-        "<p>No seller applications found.</p>";
+        "<p>No sellers found.</p>";
 
       return;
+
     }
+
 
     sellerList.innerHTML = "";
 
-    sellers.forEach(function(seller) {
 
-      const div =
-        document.createElement("div");
+    sellers.forEach(
+      function(seller) {
 
-      div.className = "seller";
+        const div =
+          document.createElement(
+            "div"
+          );
 
-      div.innerHTML = `
 
-        <h3>
-          🏪 ${seller.store_name || "Unnamed Store"}
-        </h3>
+        div.className =
+          "item";
 
-        <p>
-          <strong>Email:</strong>
-          ${seller.email || "No email"}
-        </p>
 
-        <p>
-          <strong>Description:</strong>
-          ${seller.description || "No description"}
-        </p>
+        div.innerHTML = `
 
-        <p class="status">
-          <strong>Status:</strong>
+          <h3>
+            🏪 ${
+              seller.store_name ||
+              "Unnamed Store"
+            }
+          </h3>
+
+          <p>
+            <strong>Seller ID:</strong>
+            ${seller.id}
+          </p>
+
+          <p>
+            <strong>Email:</strong>
+            ${
+              seller.email ||
+              "No email"
+            }
+          </p>
+
+          <p>
+            <strong>Description:</strong>
+            ${
+              seller.description ||
+              "No description"
+            }
+          </p>
+
+          <p class="status">
+
+            <strong>Status:</strong>
+
+            ${
+              seller.approved
+
+              ? '<span class="approved">' +
+                '✅ Approved' +
+                '</span>'
+
+              : '<span class="pending">' +
+                '⏳ Pending Approval' +
+                '</span>'
+            }
+
+          </p>
+
           ${
             seller.approved
-            ? "✅ Approved"
-            : "⏳ Pending"
+
+            ? ""
+
+            : `
+
+              <button
+                class="approve"
+                onclick="approveSeller(${seller.id})"
+              >
+                ✅ Approve Seller
+              </button>
+
+              <button
+                class="reject"
+                onclick="rejectSeller(${seller.id})"
+              >
+                ❌ Reject
+              </button>
+
+            `
           }
-        </p>
 
-        ${
-          seller.approved
-          ? ""
-          : `
-            <button
-              class="approve"
-              onclick="approveSeller(${seller.id})"
-            >
-              ✅ Approve Seller
-            </button>
+        `;
 
-            <button
-              class="reject"
-              onclick="rejectSeller(${seller.id})"
-            >
-              ❌ Reject
-            </button>
-          `
-        }
 
-      `;
+        sellerList.appendChild(
+          div
+        );
 
-      sellerList.appendChild(div);
+      }
+    );
 
-    });
 
   } catch (error) {
 
     sellerList.innerHTML =
-      "<p>Error:</p><pre>" +
+      '<p class="error">' +
       error.message +
-      "</pre>";
+      '</p>';
 
   }
+
 }
 
 
@@ -436,39 +1513,62 @@ async function loadSellers() {
 
 async function approveSeller(id) {
 
-  if (!confirm("Approve this seller?")) {
+  if (
+    !confirm(
+      "Approve this seller?"
+    )
+  ) {
+
     return;
+
   }
+
 
   try {
 
-    const response = await fetch(
+    const response =
+      await fetch(
 
-      SUPABASE_URL +
-      "/rest/v1/sellers?id=eq." + id,
+        SUPABASE_URL +
+        "/rest/v1/sellers?id=eq." +
+        id,
 
-      {
-        method: "PATCH",
+        {
 
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization":
-            "Bearer " + accessToken,
-          "Content-Type":
-            "application/json",
-          "Prefer":
-            "return=minimal"
-        },
+          method: "PATCH",
 
-        body: JSON.stringify({
-          approved: true
-        })
-      }
+          headers: {
 
-    );
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken,
+
+            "Content-Type":
+              "application/json",
+
+            "Prefer":
+              "return=minimal"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              approved: true
+
+            })
+
+        }
+
+      );
+
 
     const text =
       await response.text();
+
 
     if (!response.ok) {
 
@@ -478,13 +1578,17 @@ async function approveSeller(id) {
       );
 
       return;
+
     }
+
 
     alert(
       "Seller approved successfully! 🎉"
     );
 
+
     loadSellers();
+
 
   } catch (error) {
 
@@ -494,6 +1598,7 @@ async function approveSeller(id) {
     );
 
   }
+
 }
 
 
@@ -503,39 +1608,62 @@ async function approveSeller(id) {
 
 async function rejectSeller(id) {
 
-  if (!confirm("Reject this seller application?")) {
+  if (
+    !confirm(
+      "Reject this seller application?"
+    )
+  ) {
+
     return;
+
   }
+
 
   try {
 
-    const response = await fetch(
+    const response =
+      await fetch(
 
-      SUPABASE_URL +
-      "/rest/v1/sellers?id=eq." + id,
+        SUPABASE_URL +
+        "/rest/v1/sellers?id=eq." +
+        id,
 
-      {
-        method: "PATCH",
+        {
 
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization":
-            "Bearer " + accessToken,
-          "Content-Type":
-            "application/json",
-          "Prefer":
-            "return=minimal"
-        },
+          method: "PATCH",
 
-        body: JSON.stringify({
-          approved: false
-        })
-      }
+          headers: {
 
-    );
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken,
+
+            "Content-Type":
+              "application/json",
+
+            "Prefer":
+              "return=minimal"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              approved: false
+
+            })
+
+        }
+
+      );
+
 
     const text =
       await response.text();
+
 
     if (!response.ok) {
 
@@ -545,13 +1673,17 @@ async function rejectSeller(id) {
       );
 
       return;
+
     }
+
 
     alert(
       "Seller application rejected."
     );
 
+
     loadSellers();
+
 
   } catch (error) {
 
@@ -561,6 +1693,634 @@ async function rejectSeller(id) {
     );
 
   }
+
+}
+
+
+/* =========================
+   PRODUCTS
+========================= */
+
+async function loadProducts() {
+
+  const productList =
+    document.getElementById(
+      "productList"
+    );
+
+
+  productList.innerHTML =
+    '<div class="loading">' +
+    'Loading products...' +
+    '</div>';
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/products?select=*&order=id.desc",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
+
+
+    const text =
+      await response.text();
+
+
+    if (!response.ok) {
+
+      productList.innerHTML =
+        '<p class="error">' +
+        text +
+        '</p>';
+
+      return;
+
+    }
+
+
+    const products =
+      JSON.parse(text);
+
+
+    document
+      .getElementById(
+        "statProducts"
+      )
+      .textContent =
+        products.length;
+
+
+    if (!products.length) {
+
+      productList.innerHTML =
+        "<p>No products found.</p>";
+
+      return;
+
+    }
+
+
+    productList.innerHTML =
+      '<div class="table-wrap">' +
+
+      '<table>' +
+
+      '<thead>' +
+
+      '<tr>' +
+
+      '<th>ID</th>' +
+
+      '<th>Product</th>' +
+
+      '<th>Price</th>' +
+
+      '<th>Stock</th>' +
+
+      '<th>Category</th>' +
+
+      '<th>Seller</th>' +
+
+      '</tr>' +
+
+      '</thead>' +
+
+      '<tbody>' +
+
+      products.map(
+        function(product) {
+
+          return `
+
+            <tr>
+
+              <td>
+                ${product.id}
+              </td>
+
+              <td>
+                ${
+                  product.name ||
+                  "Unnamed"
+                }
+              </td>
+
+              <td>
+                R${
+                  Number(
+                    product.price || 0
+                  ).toFixed(2)
+                }
+              </td>
+
+              <td>
+                ${
+                  product.stock ??
+                  0
+                }
+              </td>
+
+              <td>
+                ${
+                  product.category ||
+                  "-"
+                }
+              </td>
+
+              <td>
+                ${
+                  product.seller_id ||
+                  "-"
+                }
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      ).join("") +
+
+      '</tbody>' +
+
+      '</table>' +
+
+      '</div>';
+
+
+  } catch (error) {
+
+    productList.innerHTML =
+      '<p class="error">' +
+      error.message +
+      '</p>';
+
+  }
+
+}
+
+
+/* =========================
+   ORDERS
+========================= */
+
+async function loadOrders() {
+
+  const orderList =
+    document.getElementById(
+      "orderList"
+    );
+
+
+  orderList.innerHTML =
+    '<div class="loading">' +
+    'Loading orders...' +
+    '</div>';
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/orders?select=*&order=id.desc",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
+
+
+    const text =
+      await response.text();
+
+
+    if (!response.ok) {
+
+      orderList.innerHTML =
+        '<p class="error">' +
+        text +
+        '</p>';
+
+      return;
+
+    }
+
+
+    const orders =
+      JSON.parse(text);
+
+
+    document
+      .getElementById(
+        "statOrders"
+      )
+      .textContent =
+        orders.length;
+
+
+    if (!orders.length) {
+
+      orderList.innerHTML =
+        "<p>No orders found.</p>";
+
+      return;
+
+    }
+
+
+    orderList.innerHTML =
+      "";
+
+
+    orders.forEach(
+      function(order) {
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+
+        div.className =
+          "item";
+
+
+        const status =
+          String(
+            order.status ||
+            "pending"
+          ).toLowerCase();
+
+
+        let statusClass =
+          "pending";
+
+
+        if (
+          status === "processing"
+        ) {
+
+          statusClass =
+            "processing";
+
+        }
+
+
+        if (
+          status === "shipped"
+        ) {
+
+          statusClass =
+            "shipped";
+
+        }
+
+
+        if (
+          status === "delivered"
+        ) {
+
+          statusClass =
+            "delivered";
+
+        }
+
+
+        if (
+          status === "paid"
+        ) {
+
+          statusClass =
+            "paid";
+
+        }
+
+
+        div.innerHTML = `
+
+          <h3>
+            📦 Order #${order.id}
+          </h3>
+
+          <p>
+            <strong>Total:</strong>
+            R${
+              Number(
+                order.total || 0
+              ).toFixed(2)
+            }
+          </p>
+
+          <p>
+            <strong>Status:</strong>
+
+            <span
+              class="status ${statusClass}"
+            >
+              ${status}
+            </span>
+
+          </p>
+
+          <p>
+            <strong>Delivery:</strong>
+            ${
+              order.delivery_address ||
+              "-"
+            }
+          </p>
+
+          <p>
+            <strong>Customer ID:</strong>
+            ${
+              order.customer_id ||
+              order.Customer_id ||
+              "-"
+            }
+          </p>
+
+          <p>
+            <strong>Created:</strong>
+            ${
+              order.created_at ||
+              "-"
+            }
+          </p>
+
+        `;
+
+
+        orderList.appendChild(
+          div
+        );
+
+      }
+    );
+
+
+  } catch (error) {
+
+    orderList.innerHTML =
+      '<p class="error">' +
+      error.message +
+      '</p>';
+
+  }
+
+}
+
+
+/* =========================
+   RENTAL PAYMENTS
+========================= */
+
+async function loadPayments() {
+
+  const paymentList =
+    document.getElementById(
+      "paymentList"
+    );
+
+
+  paymentList.innerHTML =
+    '<div class="loading">' +
+    'Loading payments...' +
+    '</div>';
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/rental_payments?select=*&order=id.desc",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
+
+
+    const text =
+      await response.text();
+
+
+    if (!response.ok) {
+
+      paymentList.innerHTML =
+        '<p class="error">' +
+        text +
+        '</p>';
+
+      return;
+
+    }
+
+
+    const payments =
+      JSON.parse(text);
+
+
+    document
+      .getElementById(
+        "statPayments"
+      )
+      .textContent =
+        payments.length;
+
+
+    if (!payments.length) {
+
+      paymentList.innerHTML =
+        "<p>No rental payments found.</p>";
+
+      return;
+
+    }
+
+
+    paymentList.innerHTML =
+      '<div class="table-wrap">' +
+
+      '<table>' +
+
+      '<thead>' +
+
+      '<tr>' +
+
+      '<th>ID</th>' +
+
+      '<th>Seller</th>' +
+
+      '<th>Amount</th>' +
+
+      '<th>Status</th>' +
+
+      '<th>Method</th>' +
+
+      '<th>Reference</th>' +
+
+      '</tr>' +
+
+      '</thead>' +
+
+      '<tbody>' +
+
+      payments.map(
+        function(payment) {
+
+          return `
+
+            <tr>
+
+              <td>
+                ${payment.id}
+              </td>
+
+              <td>
+                ${
+                  payment.seller_id ||
+                  "-"
+                }
+              </td>
+
+              <td>
+                R${
+                  Number(
+                    payment.amount || 0
+                  ).toFixed(2)
+                }
+              </td>
+
+              <td>
+                ${
+                  payment.status ||
+                  "-"
+                }
+              </td>
+
+              <td>
+                ${
+                  payment.payment_method ||
+                  "-"
+                }
+              </td>
+
+              <td>
+                ${
+                  payment.payment_reference ||
+                  "-"
+                }
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      ).join("") +
+
+      '</tbody>' +
+
+      '</table>' +
+
+      '</div>';
+
+
+  } catch (error) {
+
+    paymentList.innerHTML =
+      '<p class="error">' +
+      error.message +
+      '</p>';
+
+  }
+
+}
+
+
+/* =========================
+   RECENT ACTIVITY
+========================= */
+
+function loadRecentActivity() {
+
+  const activity =
+    document.getElementById(
+      "recentActivity"
+    );
+
+
+  activity.innerHTML = `
+
+    <p>
+      👥 Seller applications:
+      Check the Sellers section.
+    </p>
+
+    <p>
+      🛍️ Marketplace products:
+      Check the Products section.
+    </p>
+
+    <p>
+      📦 Customer orders:
+      Check the Orders section.
+    </p>
+
+    <p>
+      💳 Seller subscriptions:
+      Check the Payments section.
+    </p>
+
+  `;
+
 }
 
 
@@ -572,20 +2332,39 @@ function logoutAdmin() {
 
   accessToken = null;
 
-  document.getElementById("adminPanel")
-    .classList.add("hidden");
+  adminUserId = null;
 
-  document.getElementById("loginBox")
-    .classList.remove("hidden");
 
-  document.getElementById("email").value = "";
-  document.getElementById("password").value = "";
+  document
+    .getElementById("adminPanel")
+    .classList
+    .add("hidden");
 
-  document.getElementById("loginMessage")
+
+  document
+    .getElementById("loginBox")
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById("email")
+    .value = "";
+
+
+  document
+    .getElementById("password")
+    .value = "";
+
+
+  document
+    .getElementById("loginMessage")
     .textContent = "";
+
 }
 
 </script>
 
 </body>
+
 </html>
