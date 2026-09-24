@@ -6,60 +6,84 @@
 <title>ZavaMarket — My Orders</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+box-sizing:border-box;
+}
 
 body{
 margin:0;
 font-family:Arial,sans-serif;
-background:#f6f7f9;
-color:#111;
+background:#090909;
+color:#fff;
 }
 
 header{
-background:#111;
+background:#090909;
 color:white;
-padding:20px;
+padding:24px 20px;
 text-align:center;
+border-bottom:1px solid #252525;
 }
 
 .logo{
-font-size:25px;
-font-weight:bold;
+font-size:28px;
+font-weight:800;
+letter-spacing:2px;
 }
 
 .logo span{
-color:#ff7a00;
+color:#d4af37;
+}
+
+header div:last-child{
+margin-top:6px;
+color:#aaa;
+font-size:14px;
 }
 
 main{
-max-width:600px;
+max-width:650px;
 margin:30px auto;
 padding:20px;
 }
 
 .card{
-background:white;
-border-radius:18px;
+background:#111;
+border:1px solid #252525;
+border-radius:22px;
 padding:25px;
-box-shadow:0 5px 20px rgba(0,0,0,.08);
+box-shadow:0 10px 35px rgba(0,0,0,.35);
 }
 
 h1{
 margin-top:0;
+font-size:26px;
+}
+
+.intro{
+color:#aaa;
+line-height:1.5;
 }
 
 input{
 width:100%;
 padding:15px;
-border:1px solid #ddd;
-border-radius:10px;
+border:1px solid #333;
+background:#191919;
+color:#fff;
+border-radius:12px;
 font-size:16px;
 margin:10px 0;
+outline:none;
+}
+
+input:focus{
+border-color:#d4af37;
 }
 
 button{
 border:0;
-border-radius:10px;
+border-radius:12px;
 padding:14px 18px;
 font-size:16px;
 cursor:pointer;
@@ -67,43 +91,188 @@ cursor:pointer;
 
 .find{
 width:100%;
-background:#ff7a00;
-color:white;
+background:#d4af37;
+color:#111;
 font-weight:bold;
 }
 
+.find:hover{
+background:#e3c45c;
+}
+
 .order{
-background:#f8f8f8;
-border-radius:14px;
+background:#151515;
+border:1px solid #292929;
+border-radius:18px;
 padding:20px;
 margin-top:20px;
+}
+
+.order h2{
+margin:0 0 12px;
+font-size:21px;
 }
 
 .status{
 display:inline-block;
 padding:8px 14px;
 border-radius:20px;
-background:#fff0df;
-color:#e66b00;
+background:#29220d;
+color:#d4af37;
+font-weight:bold;
+text-transform:capitalize;
+}
+
+.order p{
+color:#ccc;
+line-height:1.5;
+}
+
+.order strong{
+color:#fff;
+}
+
+/* TRACKING */
+
+.tracking{
+margin:25px 0 10px;
+padding:18px 10px 8px;
+background:#0d0d0d;
+border-radius:15px;
+border:1px solid #242424;
+}
+
+.tracking-title{
+font-size:13px;
+font-weight:bold;
+color:#d4af37;
+margin-bottom:22px;
+text-align:center;
+letter-spacing:.5px;
+}
+
+.progress{
+display:flex;
+align-items:flex-start;
+justify-content:space-between;
+position:relative;
+}
+
+.progress-line{
+position:absolute;
+top:12px;
+left:9%;
+right:9%;
+height:3px;
+background:#333;
+z-index:0;
+}
+
+.progress-fill{
+position:absolute;
+top:12px;
+left:9%;
+height:3px;
+background:#d4af37;
+z-index:1;
+transition:width .3s ease;
+}
+
+.step{
+position:relative;
+z-index:2;
+width:25%;
+text-align:center;
+}
+
+.dot{
+width:26px;
+height:26px;
+margin:0 auto 8px;
+border-radius:50%;
+background:#292929;
+border:2px solid #444;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+}
+
+.step.active .dot{
+background:#d4af37;
+border-color:#d4af37;
+color:#111;
+}
+
+.step-label{
+font-size:10px;
+color:#777;
+line-height:1.2;
+}
+
+.step.active .step-label{
+color:#fff;
 font-weight:bold;
 }
 
 .track{
 width:100%;
 margin-top:15px;
-background:#111;
-color:white;
+background:#d4af37;
+color:#111;
+font-weight:bold;
+}
+
+.track:hover{
+background:#e3c45c;
 }
 
 .back{
+width:100%;
 margin-top:20px;
-background:#eee;
+background:#222;
+color:#fff;
+border:1px solid #333;
+}
+
+.back:hover{
+background:#2c2c2c;
 }
 
 footer{
 text-align:center;
 padding:30px;
 color:#777;
+font-size:14px;
+}
+
+footer strong{
+color:#d4af37;
+}
+
+@media(max-width:480px){
+
+main{
+margin:15px auto;
+padding:12px;
+}
+
+.card{
+padding:20px 15px;
+}
+
+h1{
+font-size:23px;
+}
+
+.step-label{
+font-size:9px;
+}
+
+.order{
+padding:16px;
+}
+
 }
 </style>
 </head>
@@ -113,7 +282,7 @@ color:#777;
 <header>
 
 <div class="logo">
-Zava<span>Market</span>
+ZYRE<span>MARKETING</span>
 </div>
 
 <div>My Orders</div>
@@ -126,7 +295,7 @@ Zava<span>Market</span>
 
 <h1>📦 My Orders</h1>
 
-<p>
+<p class="intro">
 Enter the phone number you used when placing your order.
 </p>
 
@@ -172,6 +341,103 @@ const SUPABASE_URL=
 
 const SUPABASE_KEY=
 "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
+
+function getTrackingStatus(status){
+
+const value=
+String(status || "")
+.toLowerCase()
+.trim();
+
+if(value==="pending" || value==="paid"){
+return 0;
+}
+
+if(value==="processing"){
+return 1;
+}
+
+if(value==="shipped"){
+return 2;
+}
+
+if(value==="delivered"){
+return 3;
+}
+
+return 0;
+
+}
+
+
+function createTracking(order){
+
+const current=
+getTrackingStatus(order.status);
+
+const steps=[
+{
+icon:"🛒",
+label:"Order Placed"
+},
+{
+icon:"⚙️",
+label:"Processing"
+},
+{
+icon:"🚚",
+label:"Shipped"
+},
+{
+icon:"🏠",
+label:"Delivered"
+}
+];
+
+const fillWidth=
+(current / 3) * 82;
+
+return `
+
+<div class="tracking">
+
+<div class="tracking-title">
+ORDER TRACKING
+</div>
+
+<div class="progress">
+
+<div class="progress-line"></div>
+
+<div
+class="progress-fill"
+style="width:${fillWidth}%"
+></div>
+
+${steps.map((step,index)=>`
+
+<div class="step ${index<=current ? "active" : ""}">
+
+<div class="dot">
+${step.icon}
+</div>
+
+<div class="step-label">
+${step.label}
+</div>
+
+</div>
+
+`).join("")}
+
+</div>
+
+</div>
+
+`;
+
+}
 
 
 async function findOrders(){
@@ -269,6 +535,8 @@ orders.map(order=>`
 <div class="status">
 ${order.status}
 </div>
+
+${createTracking(order)}
 
 <p>
 💰 <strong>Total:</strong>
