@@ -140,6 +140,39 @@
       width: 100%;
       margin-top: 10px;
     }
+
+    /* ORDER SUMMARY */
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .summary-box {
+      padding: 18px;
+      border-radius: 10px;
+      background: #f5f5f5;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    .summary-number {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    .summary-label {
+      font-size: 15px;
+    }
+
+    @media (min-width: 600px) {
+      .summary-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
   </style>
 </head>
 
@@ -167,14 +200,12 @@
       placeholder="Example: Wireless Headphones"
     >
 
-
     <label>Description</label>
 
     <textarea
       id="productDescription"
       placeholder="Describe your product"
     ></textarea>
-
 
     <label>Price (R)</label>
 
@@ -185,7 +216,6 @@
       step="0.01"
     >
 
-
     <label>Stock</label>
 
     <input
@@ -193,7 +223,6 @@
       id="productStock"
       placeholder="10"
     >
-
 
     <label>Category</label>
 
@@ -217,7 +246,6 @@
 
     </select>
 
-
     <label>Product image URL</label>
 
     <input
@@ -226,13 +254,87 @@
       placeholder="https://..."
     >
 
-
     <button
       class="add-button"
       onclick="addProduct()"
     >
       Add Product
     </button>
+
+  </div>
+
+
+  <!-- ORDER SUMMARY -->
+  <div class="card">
+
+    <h2>📊 Order Summary</h2>
+
+    <div class="summary-grid">
+
+      <div class="summary-box">
+
+        <div class="summary-label">
+          🟡 Pending
+        </div>
+
+        <div
+          class="summary-number"
+          id="pendingCount"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="summary-box">
+
+        <div class="summary-label">
+          🔵 Processing
+        </div>
+
+        <div
+          class="summary-number"
+          id="processingCount"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="summary-box">
+
+        <div class="summary-label">
+          🚚 Shipped
+        </div>
+
+        <div
+          class="summary-number"
+          id="shippedCount"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="summary-box">
+
+        <div class="summary-label">
+          🟢 Delivered
+        </div>
+
+        <div
+          class="summary-number"
+          id="deliveredCount"
+        >
+          0
+        </div>
+
+      </div>
+
+    </div>
 
   </div>
 
@@ -893,25 +995,30 @@ async function saveProduct(
       "edit-name-" + productId
     ).value.trim();
 
+
   const description =
     document.getElementById(
       "edit-description-" + productId
     ).value.trim();
+
 
   const price =
     document.getElementById(
       "edit-price-" + productId
     ).value;
 
+
   const stock =
     document.getElementById(
       "edit-stock-" + productId
     ).value;
 
+
   const category =
     document.getElementById(
       "edit-category-" + productId
     ).value;
+
 
   const image =
     document.getElementById(
@@ -1262,13 +1369,6 @@ async function loadOrders() {
       await orderItemsResponse.json();
 
 
-    /*
-      IMPORTANT:
-      Only keep orders that contain
-      at least one product belonging
-      to this seller.
-    */
-
     const sellerOrders =
       orders.filter(order => {
 
@@ -1288,6 +1388,76 @@ async function loadOrders() {
         });
 
       });
+
+
+    /* =========================
+       UPDATE ORDER SUMMARY
+    ========================= */
+
+    let pending = 0;
+    let processing = 0;
+    let shipped = 0;
+    let delivered = 0;
+
+
+    sellerOrders.forEach(order => {
+
+      const status =
+        String(order.status || "")
+          .toLowerCase();
+
+
+      if (status === "pending") {
+
+        pending++;
+
+      }
+
+      else if (
+        status === "processing"
+      ) {
+
+        processing++;
+
+      }
+
+      else if (
+        status === "shipped"
+      ) {
+
+        shipped++;
+
+      }
+
+      else if (
+        status === "delivered"
+      ) {
+
+        delivered++;
+
+      }
+
+    });
+
+
+    document.getElementById(
+      "pendingCount"
+    ).textContent = pending;
+
+
+    document.getElementById(
+      "processingCount"
+    ).textContent = processing;
+
+
+    document.getElementById(
+      "shippedCount"
+    ).textContent = shipped;
+
+
+    document.getElementById(
+      "deliveredCount"
+    ).textContent = delivered;
 
 
     if (!sellerOrders.length) {
