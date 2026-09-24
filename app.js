@@ -2133,3 +2133,106 @@ async function checkOrderStatus() {
 ========================= */
 
 loadProducts();
+
+
+/* =========================
+   ZYRE MARKETING NOTIFICATIONS
+========================= */
+
+async function enableZYRENotifications() {
+
+  if (!("Notification" in window)) {
+
+    alert(
+      "Your browser does not support notifications."
+    );
+
+    return;
+
+  }
+
+
+  if (!("serviceWorker" in navigator)) {
+
+    alert(
+      "Your browser does not support service workers."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    const permission =
+      await Notification.requestPermission();
+
+
+    if (permission === "granted") {
+
+      const registration =
+        await navigator.serviceWorker.ready;
+
+
+      console.log(
+        "ZYRE Marketing notifications enabled.",
+        registration
+      );
+
+
+      alert(
+        "🔔 ZYRE Marketing notifications are enabled!"
+      );
+
+    } else {
+
+      alert(
+        "Notifications were not enabled. You can allow them in your browser settings."
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Notification setup failed:",
+      error
+    );
+
+    alert(
+      "Notification setup failed:\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================
+   ASK FOR NOTIFICATIONS
+========================= */
+
+window.addEventListener(
+  "load",
+  function () {
+
+    setTimeout(
+      function () {
+
+        if (
+          "Notification" in window &&
+          Notification.permission === "default"
+        ) {
+
+          enableZYRENotifications();
+
+        }
+
+      },
+      2000
+    );
+
+  }
+);
