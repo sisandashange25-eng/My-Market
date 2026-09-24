@@ -368,30 +368,25 @@ async function addProduct() {
       "productName"
     ).value.trim();
 
-
   const description =
     document.getElementById(
       "productDescription"
     ).value.trim();
-
 
   const price =
     document.getElementById(
       "productPrice"
     ).value;
 
-
   const stock =
     document.getElementById(
       "productStock"
     ).value;
 
-
   const category =
     document.getElementById(
       "productCategory"
     ).value;
-
 
   const image =
     document.getElementById(
@@ -898,30 +893,25 @@ async function saveProduct(
       "edit-name-" + productId
     ).value.trim();
 
-
   const description =
     document.getElementById(
       "edit-description-" + productId
     ).value.trim();
-
 
   const price =
     document.getElementById(
       "edit-price-" + productId
     ).value;
 
-
   const stock =
     document.getElementById(
       "edit-stock-" + productId
     ).value;
 
-
   const category =
     document.getElementById(
       "edit-category-" + productId
     ).value;
-
 
   const image =
     document.getElementById(
@@ -1272,10 +1262,38 @@ async function loadOrders() {
       await orderItemsResponse.json();
 
 
-    if (!orders.length) {
+    /*
+      IMPORTANT:
+      Only keep orders that contain
+      at least one product belonging
+      to this seller.
+    */
+
+    const sellerOrders =
+      orders.filter(order => {
+
+        return orderItems.some(item => {
+
+          return (
+            Number(item.order_id) ===
+              Number(order.id)
+
+            &&
+
+            sellerProductIds.includes(
+              Number(item.product_id)
+            )
+          );
+
+        });
+
+      });
+
+
+    if (!sellerOrders.length) {
 
       container.innerHTML =
-        "<p>No customer orders yet.</p>";
+        "<p>No customer orders for your products yet.</p>";
 
       return;
 
@@ -1285,7 +1303,7 @@ async function loadOrders() {
     container.innerHTML = "";
 
 
-    orders.forEach(
+    sellerOrders.forEach(
       order => {
 
         const items =
@@ -1318,58 +1336,48 @@ async function loadOrders() {
         let productHTML = "";
 
 
-        if (items.length) {
+        items.forEach(
+          item => {
 
-          items.forEach(
-            item => {
+            const product =
+              sellerProducts.find(
 
-              const product =
-                sellerProducts.find(
+                p =>
+                  Number(p.id) ===
+                  Number(item.product_id)
 
-                  p =>
-                    Number(p.id) ===
-                    Number(item.product_id)
-
-                );
+              );
 
 
-              productHTML += `
+            productHTML += `
 
-                <p>
-                  🛍️ Product:
-                  <strong>
-                    ${
-                      product
-                        ? escapeHtml(product.name)
-                        : "Unknown product"
-                    }
-                  </strong>
-                </p>
-
-
-                <p>
-                  🔢 Quantity:
-                  ${item.quantity}
-                </p>
+              <p>
+                🛍️ Product:
+                <strong>
+                  ${
+                    product
+                      ? escapeHtml(product.name)
+                      : "Unknown product"
+                  }
+                </strong>
+              </p>
 
 
-                <p>
-                  💰 Price:
-                  R${Number(item.price).toFixed(2)}
-                </p>
+              <p>
+                🔢 Quantity:
+                ${item.quantity}
+              </p>
 
-              `;
 
-            }
-          );
+              <p>
+                💰 Price:
+                R${Number(item.price).toFixed(2)}
+              </p>
 
-        }
-        else {
+            `;
 
-          productHTML =
-            "<p>Product details unavailable.</p>";
-
-        }
+          }
+        );
 
 
         orderDiv.innerHTML = `
