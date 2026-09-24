@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
+
+  <title>Store — ZYRE Marketing</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="zyre-header">
+
+    <div class="brand">
+      <span class="brand-main">ZYRE</span>
+      <span class="brand-sub">MARKETING</span>
+    </div>
+
+    <button
+      class="cart-button"
+      onclick="goHome()"
+      type="button"
+    >
+      ← Back to Marketplace
+    </button>
+
+  </header>
+
+
+  <!-- STORE -->
+  <main>
+
+    <section class="marketplace">
+
+      <div id="storeInfo">
+        <p>Loading store...</p>
+      </div>
+
+      <div
+        id="storeProducts"
+        class="grid"
+        style="margin-top:35px;"
+      >
+        <p>Loading products...</p>
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="zyre-footer">
+
+    <div class="footer-brand">
+
+      <strong>ZYRE</strong>
+
+      <span>MARKETING</span>
+
+      <p>
+        Your business. Your store. One marketplace.
+      </p>
+
+    </div>
+
+    <div class="footer-bottom">
+
+      © 2026 ZYRE Marketing
+      <br>
+      Durban, South Africa
+
+    </div>
+
+  </footer>
+
+
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://gaccizzlwswwynattgda.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
+
+    const params =
+      new URLSearchParams(window.location.search);
+
+    const sellerId =
+      params.get("seller_id");
+
+
+    function goHome() {
+
+      window.location.href =
+        "index.html";
+
+    }
+
+
+    function escapeText(value) {
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    async function loadStore() {
+
+      const info =
+        document.getElementById("storeInfo");
+
+      const products =
+        document.getElementById("storeProducts");
+
+
+      if (!sellerId) {
+
+        info.innerHTML = `
+          <p>Store not found.</p>
+        `;
+
+        products.innerHTML = "";
+
+        return;
+
+      }
+
+
+      try {
+
+        /* LOAD SELLER */
+
+        const sellerResponse =
+          await fetch(
+            SUPABASE_URL +
+            "/rest/v1/sellers?id=eq." +
+            encodeURIComponent(sellerId) +
+            "&select=id,store_name,description",
+            {
+              headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization":
+                  "Bearer " + SUPABASE_KEY
+              }
+            }
+          );
+
+
+        if (!sellerResponse.ok) {
+
+          throw new Error(
+            "Could not load store"
+          );
+
+        }
+
+
+        const sellers =
+          await sellerResponse.json();
+
+
+        if (!sellers.length) {
+
+          info.innerHTML = `
+            <p>Store not found.</p>
+          `;
+
+          products.innerHTML = "";
+
+          return;
+
+        }
+
+
+        const seller =
+          sellers[0];
+
+
+        const storeName =
+          seller.store_name ||
+          "ZYRE Store";
+
+
+        const description =
+          seller.description ||
+          "Discover products from this store.";
+
+
+        info.innerHTML = `
+
+          <p class="eyebrow">
+            ZYRE MARKETPLACE
+          </p>
+
+          <h1
+            style="
+              margin-top:8px;
+              font-family:Georgia,serif;
+              font-size:clamp(38px,7vw,64px);
+              font-weight:500;
+            "
+          >
+            ${escapeText(storeName)}
+          </h1>
+
+          <p
+            style="
+              margin-top:10px;
+              color:#888;
+              max-width:650px;
+            "
+          >
+            ${escapeText(description)}
+          </p>
+
+        `;
+
+
+        /* LOAD PRODUCTS */
+
+        const productResponse =
+          await fetch(
+            SUPABASE_URL +
+            "/rest/v1/products?seller_id=eq." +
+            encodeURIComponent(sellerId) +
+            "&active=eq.true&select=*",
+            {
+              headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization":
+                  "Bearer " + SUPABASE_KEY
+              }
+            }
+          );
+
+
+        if (!productResponse.ok) {
+
+          throw new Error(
+            "Could not load products"
+          );
+
+        }
+
+
+        const productList =
+          await productResponse.json();
+
+
+        if (!productList.length) {
+
+          products.innerHTML = `
+            <p>
+              This store has no products yet.
+            </p>
+          `;
+
+          return;
+
+        }
+
+
+        products.innerHTML =
+          productList.map(function(product) {
+
+            const image =
+              product.image_url || "";
+
+
+            return `
+
+              <article>
+
+                ${
+                  image
+                    ? `
+                      <div class="pic">
+                        <img
+                          src="${escapeText(image)}"
+                          alt="${escapeText(product.name || "Product")}"
+                        >
+                      </div>
+                    `
+                    : `
+                      <div
+                        class="pic"
+                        style="
+                          display:flex;
+                          align-items:center;
+                          justify-content:center;
+                          font-size:45px;
+                        "
+                      >
+                        🛍️
+                      </div>
+                    `
+                }
+
+
+                <h3>
+                  ${escapeText(
+                    product.name ||
+                    "Product"
+                  )}
+                </h3>
+
+
+                <p
+                  style="
+                    margin-top:5px;
+                  "
+                >
+                  ${
+                    escapeText(
+                      product.description ||
+                      ""
+                    )
+                  }
+                </p>
+
+
+                <p
+                  style="
+                    margin-top:12px;
+                  "
+                >
+                  <strong>
+                    R${Number(
+                      product.price || 0
+                    ).toFixed(2)}
+                  </strong>
+                </p>
+
+
+                <p
+                  style="
+                    margin-top:5px;
+                  "
+                >
+                  ${
+                    Number(
+                      product.stock || 0
+                    )
+                  }
+                  in stock
+                </p>
+
+              </article>
+
+            `;
+
+          }).join("");
+
+
+      } catch (error) {
+
+        console.error(
+          "Store error:",
+          error
+        );
+
+
+        info.innerHTML = `
+
+          <p>
+            Store could not be loaded.
+            Please try again.
+          </p>
+
+        `;
+
+
+        products.innerHTML = "";
+
+      }
+
+    }
+
+
+    loadStore();
+
+  </script>
+
+</body>
+
+</html>
