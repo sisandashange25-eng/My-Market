@@ -209,8 +209,6 @@
 
 <div class="container">
 
-  <!-- ADD PRODUCT -->
-
   <div class="card">
 
     <h2>➕ Add a Product</h2>
@@ -271,8 +269,6 @@
   </div>
 
 
-  <!-- ORDER SUMMARY -->
-
   <div class="card">
 
     <h2>📊 Order Summary</h2>
@@ -304,8 +300,6 @@
   </div>
 
 
-  <!-- MY PRODUCTS -->
-
   <div class="card">
 
     <h2>🛍️ My Products</h2>
@@ -317,13 +311,9 @@
   </div>
 
 
-  <!-- CUSTOMER ORDERS -->
-
   <div class="card">
 
     <h2>📦 Customer Orders</h2>
-
-    <!-- NEW ORDER NOTIFICATION -->
 
     <div
       id="newOrderNotification"
@@ -344,8 +334,6 @@
 
     </div>
 
-
-    <!-- ORDER FILTERS -->
 
     <div class="filter-buttons">
 
@@ -399,8 +387,6 @@
   </div>
 
 
-  <!-- SELLER INFORMATION -->
-
   <div class="card">
 
     <h2>🏪 Seller Information</h2>
@@ -450,18 +436,10 @@ const SUPABASE_KEY =
 const SELLER_ID = 10;
 
 
-/* ==============================
-   ORDER FILTER VARIABLES
-============================== */
-
 let currentOrderFilter = "All";
 
 let sellerOrdersCache = [];
 
-
-/* ==============================
-   HEADERS
-============================== */
 
 function getHeaders() {
 
@@ -482,10 +460,6 @@ function getHeaders() {
 
 }
 
-
-/* ==============================
-   ESCAPE HTML
-============================== */
 
 function escapeHtml(value) {
 
@@ -1117,9 +1091,17 @@ function updateOrderSummary() {
 
   const pending =
     sellerOrdersCache.filter(
-      order =>
-        String(order.status).toLowerCase() ===
-        "pending"
+      order => {
+
+        const status =
+          String(order.status).toLowerCase();
+
+        return (
+          status === "pending" ||
+          status === "paid"
+        );
+
+      }
     ).length;
 
 
@@ -1187,12 +1169,17 @@ function checkForNewOrders() {
 
 
   const pendingOrders =
-    sellerOrdersCache.filter(order =>
+    sellerOrdersCache.filter(order => {
 
-      String(order.status).toLowerCase() ===
-      "pending"
+      const status =
+        String(order.status).toLowerCase();
 
-    );
+      return (
+        status === "pending" ||
+        status === "paid"
+      );
+
+    });
 
 
   if (!pendingOrders.length) {
@@ -1297,12 +1284,29 @@ function renderOrders() {
   if (currentOrderFilter !== "All") {
 
     filteredOrders =
-      sellerOrdersCache.filter(order =>
+      sellerOrdersCache.filter(order => {
 
-        String(order.status).toLowerCase() ===
-        currentOrderFilter.toLowerCase()
+        const orderStatus =
+          String(order.status).toLowerCase();
 
-      );
+        if (
+          currentOrderFilter.toLowerCase() ===
+          "pending"
+        ) {
+
+          return (
+            orderStatus === "pending" ||
+            orderStatus === "paid"
+          );
+
+        }
+
+        return (
+          orderStatus ===
+          currentOrderFilter.toLowerCase()
+        );
+
+      });
 
   }
 
@@ -1329,7 +1333,23 @@ function renderOrders() {
 
 
   container.innerHTML =
-    filteredOrders.map(order => `
+    filteredOrders.map(order => {
+
+      const orderStatus =
+        String(order.status || "Pending");
+
+      const statusLower =
+        orderStatus.toLowerCase();
+
+      const selectStatus =
+        (
+          statusLower === "paid"
+          ? "Pending"
+          : orderStatus
+        );
+
+
+      return `
 
       <div class="order">
 
@@ -1382,7 +1402,7 @@ function renderOrders() {
           <option
             value="Pending"
             ${
-              order.status === "Pending"
+              selectStatus === "Pending"
                 ? "selected"
                 : ""
             }
@@ -1393,7 +1413,7 @@ function renderOrders() {
           <option
             value="Processing"
             ${
-              order.status === "Processing"
+              selectStatus === "Processing"
                 ? "selected"
                 : ""
             }
@@ -1404,7 +1424,7 @@ function renderOrders() {
           <option
             value="Shipped"
             ${
-              order.status === "Shipped"
+              selectStatus === "Shipped"
                 ? "selected"
                 : ""
             }
@@ -1415,7 +1435,7 @@ function renderOrders() {
           <option
             value="Delivered"
             ${
-              order.status === "Delivered"
+              selectStatus === "Delivered"
                 ? "selected"
                 : ""
             }
@@ -1427,7 +1447,9 @@ function renderOrders() {
 
       </div>
 
-    `).join("");
+      `;
+
+    }).join("");
 
 }
 
