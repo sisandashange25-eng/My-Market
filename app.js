@@ -54,16 +54,20 @@ function renderProducts() {
 
 
   if (s === "low") {
+
     filtered.sort(
       (a, b) => a.price - b.price
     );
+
   }
 
 
   if (s === "high") {
+
     filtered.sort(
       (a, b) => b.price - a.price
     );
+
   }
 
 
@@ -167,6 +171,7 @@ async function loadProducts() {
       );
 
       return;
+
     }
 
 
@@ -192,8 +197,10 @@ async function loadProducts() {
 
 
     if (sellersResponse.ok) {
+
       sellers =
         await sellersResponse.json();
+
     }
 
 
@@ -214,11 +221,14 @@ async function loadProducts() {
     products =
       productData.map(p => ({
 
-        id: p.id,
+        id:
+          p.id,
 
-        name: p.name,
+        name:
+          p.name,
 
-        price: Number(p.price),
+        price:
+          Number(p.price),
 
         stock:
           Number(p.stock ?? 0),
@@ -271,8 +281,10 @@ function setCategory(c) {
     document.getElementById("heading");
 
   if (heading) {
+
     heading.textContent =
       c + " products";
+
   }
 
   renderProducts();
@@ -360,7 +372,9 @@ function clearCart() {
 
   updateCart();
 
-  alert("Cart cleared successfully.");
+  alert(
+    "Cart cleared successfully."
+  );
 
 }
 
@@ -386,7 +400,9 @@ function updateCart() {
     !cartItems ||
     !totalBox
   ) {
+
     return;
+
   }
 
 
@@ -473,14 +489,16 @@ function toggleCart() {
 
 
 /* =========================
-   CHECKOUT
+   CUSTOMER CHECKOUT
 ========================= */
 
 async function checkout() {
 
   if (!cart.length) {
 
-    alert("Your cart is empty.");
+    alert(
+      "Your cart is empty."
+    );
 
     return;
 
@@ -498,7 +516,9 @@ async function checkout() {
     !fullName.trim()
   ) {
 
-    alert("Checkout cancelled.");
+    alert(
+      "Checkout cancelled."
+    );
 
     return;
 
@@ -516,7 +536,9 @@ async function checkout() {
     !phone.trim()
   ) {
 
-    alert("Checkout cancelled.");
+    alert(
+      "Checkout cancelled."
+    );
 
     return;
 
@@ -534,7 +556,9 @@ async function checkout() {
     !deliveryAddress.trim()
   ) {
 
-    alert("Checkout cancelled.");
+    alert(
+      "Checkout cancelled."
+    );
 
     return;
 
@@ -638,13 +662,19 @@ async function checkout() {
           method: "POST",
 
           headers: {
-            "apikey": SUPABASE_KEY,
+            "apikey":
+              SUPABASE_KEY,
+
             "Authorization":
-              "Bearer " + SUPABASE_KEY,
+              "Bearer " +
+              SUPABASE_KEY,
+
             "Content-Type":
               "application/json",
+
             "Prefer":
               "return=representation"
+
           },
 
           body: JSON.stringify({
@@ -748,6 +778,10 @@ async function checkout() {
     const orderId =
       await orderResponse.json();
 
+
+    /* =========================
+       CUSTOMER PAYFAST PAYMENT
+    ========================= */
 
     const paymentUrl =
 
@@ -1194,7 +1228,7 @@ async function registerSeller() {
 
     /* =========================
        CREATE SELLER
-========================= */
+    ========================= */
 
     if (!sellerId) {
 
@@ -1464,7 +1498,7 @@ async function registerSeller() {
         SUPABASE_URL +
         "/rest/v1/rental_payments?subscription_id=eq." +
         subscriptionId +
-        "&select=id",
+        "&select=id,status",
 
         {
 
@@ -1593,6 +1627,40 @@ async function registerSeller() {
     );
 
 
+    /* =========================
+       SEND SELLER TO R100 PAYMENT
+    ========================= */
+
+    const rentalPaymentUrl =
+
+      "https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNDxuj63iqje/exec" +
+
+      "?amount=" +
+      encodeURIComponent(
+        Number(
+          rentalPlan.monthly_price
+        ).toFixed(2)
+      ) +
+
+      "&item_name=" +
+      encodeURIComponent(
+        "ZYRE Store Rental - " +
+        storeName.trim()
+      ) +
+
+      "&rental_subscription_id=" +
+      encodeURIComponent(
+        subscriptionId
+      ) +
+
+      "&seller_id=" +
+      encodeURIComponent(
+        sellerId
+      ) +
+
+      "&payment_type=rental";
+
+
     alert(
 
       "🎉 Store application created!\n\n" +
@@ -1608,11 +1676,13 @@ async function registerSeller() {
       ).toFixed(2) +
       " per month\n\n" +
 
-      "Your application is waiting for approval.\n\n" +
-
-      "The R100 payment step will be connected next."
+      "Next: You will be taken to PayFast Sandbox to complete the R100 rental payment."
 
     );
+
+
+    window.location.href =
+      rentalPaymentUrl;
 
 
   } catch (error) {
@@ -1853,7 +1923,9 @@ async function checkOrderStatus() {
     !orderId ||
     !orderId.trim()
   ) {
+
     return;
+
   }
 
 
@@ -1867,7 +1939,9 @@ async function checkOrderStatus() {
     !phone ||
     !phone.trim()
   ) {
+
     return;
+
   }
 
 
@@ -1941,7 +2015,9 @@ async function checkOrderStatus() {
 
 
     const wantedId =
-      Number(orderId.trim());
+      Number(
+        orderId.trim()
+      );
 
 
     const order =
