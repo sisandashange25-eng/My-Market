@@ -216,6 +216,7 @@
     <h2>➕ Add a Product</h2>
 
     <label>Product name</label>
+
     <input
       type="text"
       id="productName"
@@ -223,12 +224,14 @@
     >
 
     <label>Description</label>
+
     <textarea
       id="productDescription"
       placeholder="Describe your product"
     ></textarea>
 
     <label>Price (R)</label>
+
     <input
       type="number"
       id="productPrice"
@@ -237,6 +240,7 @@
     >
 
     <label>Stock</label>
+
     <input
       type="number"
       id="productStock"
@@ -319,6 +323,29 @@
 
     <h2>📦 Customer Orders</h2>
 
+
+    <!-- NEW ORDER NOTIFICATION -->
+
+    <div
+      id="newOrderNotification"
+      style="
+        display:none;
+        background:#fff3cd;
+        border:1px solid #ffe69c;
+        color:#664d03;
+        padding:15px;
+        border-radius:10px;
+        margin-bottom:15px;
+      "
+    >
+
+      🔔 <strong>New Order Received!</strong>
+
+      <div id="newOrderMessage"></div>
+
+    </div>
+
+
     <!-- ORDER FILTERS -->
 
     <div class="filter-buttons">
@@ -365,6 +392,7 @@
 
     </div>
 
+
     <div id="ordersList">
       Loading orders...
     </div>
@@ -372,7 +400,7 @@
   </div>
 
 
-  <!-- SELLER INFO -->
+  <!-- SELLER INFORMATION -->
 
   <div class="card">
 
@@ -507,7 +535,9 @@ async function addProduct() {
 
   if (!name || !price || stock < 0) {
 
-    alert("Please enter the product name, price and stock.");
+    alert(
+      "Please enter the product name, price and stock."
+    );
 
     return;
 
@@ -1062,6 +1092,8 @@ async function loadOrders() {
 
     updateOrderSummary();
 
+    checkForNewOrders();
+
     renderOrders();
 
   }
@@ -1139,6 +1171,66 @@ function updateOrderSummary() {
 
 
 /* ==============================
+   NEW ORDER NOTIFICATION
+============================== */
+
+function checkForNewOrders() {
+
+  const notification =
+    document.getElementById(
+      "newOrderNotification"
+    );
+
+  const message =
+    document.getElementById(
+      "newOrderMessage"
+    );
+
+
+  const pendingOrders =
+    sellerOrdersCache.filter(order =>
+
+      String(order.status).toLowerCase() ===
+      "pending"
+
+    );
+
+
+  if (!pendingOrders.length) {
+
+    notification.style.display = "none";
+
+    message.innerHTML = "";
+
+    return;
+
+  }
+
+
+  const newestOrder =
+    pendingOrders[0];
+
+
+  notification.style.display = "block";
+
+
+  message.innerHTML = `
+
+    Order #${escapeHtml(newestOrder.id)}
+
+    is waiting for processing.
+
+    <br>
+
+    💰 Total:
+    R${Number(newestOrder.total || 0).toFixed(2)}
+
+  `;
+
+}
+
+
+/* ==============================
    FILTER ORDERS
 ============================== */
 
@@ -1190,7 +1282,7 @@ function filterOrders(status) {
 
 
 /* ==============================
-   RENDER FILTERED ORDERS
+   RENDER ORDERS
 ============================== */
 
 function renderOrders() {
@@ -1222,9 +1314,10 @@ function renderOrders() {
 
       <div class="empty">
 
-        No ${currentOrderFilter === "All"
-          ? ""
-          : currentOrderFilter.toLowerCase() + " "
+        No ${
+          currentOrderFilter === "All"
+            ? ""
+            : currentOrderFilter.toLowerCase() + " "
         }orders found.
 
       </div>
@@ -1258,14 +1351,19 @@ function renderOrders() {
 
         <p>
           🏠 Delivery:
-          ${escapeHtml(order.delivery_address || "Not provided")}
+          ${escapeHtml(
+            order.delivery_address ||
+            "Not provided"
+          )}
         </p>
 
         <p>
           🕐 Ordered:
           ${
             order.created_at
-              ? new Date(order.created_at).toLocaleString()
+              ? new Date(
+                  order.created_at
+                ).toLocaleString()
               : "Unknown"
           }
         </p>
@@ -1284,28 +1382,44 @@ function renderOrders() {
 
           <option
             value="Pending"
-            ${order.status === "Pending" ? "selected" : ""}
+            ${
+              order.status === "Pending"
+                ? "selected"
+                : ""
+            }
           >
             Pending
           </option>
 
           <option
             value="Processing"
-            ${order.status === "Processing" ? "selected" : ""}
+            ${
+              order.status === "Processing"
+                ? "selected"
+                : ""
+            }
           >
             Processing
           </option>
 
           <option
             value="Shipped"
-            ${order.status === "Shipped" ? "selected" : ""}
+            ${
+              order.status === "Shipped"
+                ? "selected"
+                : ""
+            }
           >
             Shipped
           </option>
 
           <option
             value="Delivered"
-            ${order.status === "Delivered" ? "selected" : ""}
+            ${
+              order.status === "Delivered"
+                ? "selected"
+                : ""
+            }
           >
             Delivered
           </option>
