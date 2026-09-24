@@ -17,6 +17,7 @@ let category = "All";
 let cart =
 JSON.parse(localStorage.getItem("cart") || "[]");
 
+
 /* =========================
 RENDER PRODUCTS
 ========================= */
@@ -142,6 +143,7 @@ filtered.map(x => `
 "<p>No products found.</p>";
 
 }
+
 
 /* =========================
 LOAD PRODUCTS
@@ -269,6 +271,7 @@ alert(
 
 }
 
+
 /* =========================
 CATEGORY
 ========================= */
@@ -290,6 +293,7 @@ heading.textContent =
 renderProducts();
 
 }
+
 
 /* =========================
 ADD TO CART
@@ -341,6 +345,7 @@ alert("Added to cart");
 
 }
 
+
 /* =========================
 SAVE CART
 ========================= */
@@ -353,6 +358,7 @@ JSON.stringify(cart)
 );
 
 }
+
 
 /* =========================
 CLEAR CART
@@ -371,6 +377,7 @@ alert(
 );
 
 }
+
 
 /* =========================
 UPDATE CART
@@ -500,6 +507,7 @@ total.toFixed(2);
 
 }
 
+
 /* =========================
 TOGGLE CART
 ========================= */
@@ -516,6 +524,7 @@ cartBox.classList.toggle("open");
 updateCart();
 
 }
+
 
 /* =========================
 CUSTOMER CHECKOUT
@@ -844,6 +853,7 @@ alert(
 
 }
 
+
 /* =========================
 SELLER CENTRE
 ========================= */
@@ -879,6 +889,7 @@ return;
 await sellerLogin();
 
 }
+
 
 /* =========================
 REGISTER SELLER
@@ -1655,6 +1666,7 @@ alert(
 
 }
 
+
 /* =========================
 SELLER LOGIN
 ========================= */
@@ -1859,6 +1871,7 @@ alert(
 
 }
 
+
 /* =========================
 CHECK ORDER STATUS
 ========================= */
@@ -1949,8 +1962,8 @@ const orders =
 
 
 if (
-  !Array.isArray(orders) ||
-  !orders.length
+!Array.isArray(orders) ||
+!orders.length
 ) {
 
   alert(
@@ -2048,10 +2061,11 @@ alert(
 
 }
 
-/* =========================
+
+/* =========================================================
 ZYRE MARKETING
 PUSH NOTIFICATION HELPERS
-========================= */
+========================================================= */
 
 function urlBase64ToUint8Array(base64String) {
 
@@ -2091,6 +2105,7 @@ return outputArray;
 
 }
 
+
 /* =========================
 GET SERVICE WORKER
 ========================= */
@@ -2119,9 +2134,103 @@ return registration;
 
 }
 
-/* =========================
+
+/* =========================================================
+FIND NOTIFICATION BUTTON
+========================================================= */
+
+function getZYRENotificationButton() {
+
+const buttons =
+Array.from(
+document.querySelectorAll("button")
+);
+
+return buttons.find(button => {
+
+const text =
+(button.textContent || "")
+.toLowerCase()
+.trim();
+
+return (
+text.includes("enable notifications") ||
+text.includes("notifications enabled") ||
+text.includes("enable notification")
+);
+
+}) || null;
+
+}
+
+
+/* =========================================================
+UPDATE NOTIFICATION BUTTON
+========================================================= */
+
+function updateZYRENotificationButton(
+enabled
+) {
+
+const button =
+getZYRENotificationButton();
+
+if (!button) {
+
+console.log(
+"ZYRE notification button was not found yet."
+);
+
+return;
+
+}
+
+if (enabled) {
+
+button.textContent =
+"✅ Notifications Enabled";
+
+button.disabled =
+true;
+
+button.style.opacity =
+"0.7";
+
+button.style.cursor =
+"default";
+
+button.setAttribute(
+"aria-label",
+"ZYRE Marketing notifications are enabled"
+);
+
+} else {
+
+button.textContent =
+"🔔 Enable Notifications";
+
+button.disabled =
+false;
+
+button.style.opacity =
+"1";
+
+button.style.cursor =
+"pointer";
+
+button.setAttribute(
+"aria-label",
+"Enable ZYRE Marketing notifications"
+);
+
+}
+
+}
+
+
+/* =========================================================
 SAVE PUSH SUBSCRIPTION
-========================= */
+========================================================= */
 
 async function saveZYREPushSubscription(
 subscription
@@ -2267,9 +2376,10 @@ console.log(
 
 }
 
-/* =========================
+
+/* =========================================================
 CREATE PUSH SUBSCRIPTION
-========================= */
+========================================================= */
 
 async function subscribeToZYREPush() {
 
@@ -2319,15 +2429,122 @@ return subscription;
 
 }
 
-/* =========================
-ENABLE ZYRE NOTIFICATIONS
-========================= */
+
+/* =========================================================
+CHECK EXISTING NOTIFICATION SUBSCRIPTION
+========================================================= */
+
+async function checkZYRENotificationStatus() {
+
+try {
+
+if (!("Notification" in window)) {
+
+  updateZYRENotificationButton(false);
+
+  return false;
+
+}
+
+if (
+!navigator.serviceWorker ||
+!window.PushManager
+) {
+
+  updateZYRENotificationButton(false);
+
+  return false;
+
+}
+
+const permission =
+Notification.permission;
+
 
 /*
-IMPORTANT:
-Attach this function directly to
-window so seller.html can call it.
+If Chrome has not granted permission,
+the notification button must remain available.
 */
+
+if (permission !== "granted") {
+
+  updateZYRENotificationButton(false);
+
+  return false;
+
+}
+
+
+/*
+Permission is already granted.
+Now check whether this browser/phone
+already has a real push subscription.
+*/
+
+const registration =
+await getZYREServiceWorkerRegistration();
+
+const subscription =
+await registration.pushManager.getSubscription();
+
+
+if (!subscription) {
+
+  console.log(
+    "ZYRE notification permission is granted, but no push subscription exists yet."
+  );
+
+  updateZYRENotificationButton(false);
+
+  return false;
+
+}
+
+
+/*
+The subscription already exists.
+Do NOT ask the user for permission again.
+*/
+
+console.log(
+"Existing ZYRE push subscription found."
+);
+
+
+/*
+Make sure the subscription is also stored
+in Supabase. If it already exists, the function
+will simply return.
+*/
+
+await saveZYREPushSubscription(
+subscription
+);
+
+
+updateZYRENotificationButton(true);
+
+return true;
+
+} catch (error) {
+
+console.error(
+"Could not check ZYRE notification status:",
+error
+);
+
+updateZYRENotificationButton(false);
+
+return false;
+
+}
+
+}
+
+
+/* =========================================================
+ENABLE ZYRE NOTIFICATIONS
+========================================================= */
 
 window.enableZYRENotifications =
 async function() {
@@ -2355,7 +2572,7 @@ if (!("serviceWorker" in navigator)) {
 
 
 if (
-  !("PushManager" in window)
+!window.PushManager
 ) {
 
   alert(
@@ -2373,6 +2590,11 @@ try {
     Notification.permission;
 
 
+  /*
+  If notifications are already granted,
+  do NOT request permission again.
+  */
+
   if (permission !== "granted") {
 
     permission =
@@ -2388,10 +2610,16 @@ try {
       "Please allow notifications for ZYRE Marketing in your browser settings."
     );
 
+    updateZYRENotificationButton(false);
+
     return false;
 
   }
 
+
+  /*
+  Get or create the push subscription.
+  */
 
   const subscription =
     await subscribeToZYREPush();
@@ -2404,6 +2632,13 @@ try {
     );
 
   }
+
+
+  /*
+  Mark the dashboard button as enabled.
+  */
+
+  updateZYRENotificationButton(true);
 
 
   console.log(
@@ -2429,6 +2664,9 @@ try {
   );
 
 
+  updateZYRENotificationButton(false);
+
+
   alert(
     "Notification setup failed:\n\n" +
     error.message
@@ -2441,9 +2679,10 @@ try {
 
 };
 
-/* =========================
+
+/* =========================================================
 REFRESH PUSH SUBSCRIPTION
-========================= */
+========================================================= */
 
 window.refreshZYREPushSubscription =
 async function() {
@@ -2455,7 +2694,9 @@ try {
     Notification.permission !== "granted"
   ) {
 
-    return;
+    updateZYRENotificationButton(false);
+
+    return false;
 
   }
 
@@ -2465,7 +2706,9 @@ try {
     !("PushManager" in window)
   ) {
 
-    return;
+    updateZYRENotificationButton(false);
+
+    return false;
 
   }
 
@@ -2477,6 +2720,11 @@ try {
   let subscription =
     await registration.pushManager.getSubscription();
 
+
+  /*
+  If Chrome has permission but the subscription
+  disappeared, create a new one.
+  */
 
   if (!subscription) {
 
@@ -2501,9 +2749,15 @@ try {
   );
 
 
+  updateZYRENotificationButton(true);
+
+
   console.log(
-    "ZYRE push subscription checked."
+    "ZYRE push subscription checked and restored."
   );
+
+
+  return true;
 
 
 } catch (error) {
@@ -2513,46 +2767,71 @@ try {
     error
   );
 
+  updateZYRENotificationButton(false);
+
+  return false;
+
 }
 
 };
 
-/* =========================
+
+/* =========================================================
 START
-========================= */
+========================================================= */
 
 loadProducts();
 
-/* =========================
-ASK FOR NOTIFICATIONS
-========================= */
+
+/* =========================================================
+NOTIFICATION STARTUP
+========================================================= */
 
 window.addEventListener(
 "load",
 function () {
 
 setTimeout(
-  function () {
+  async function () {
+
+    /*
+    First check the existing notification state.
+    This prevents the dashboard from asking again
+    after a normal page refresh.
+    */
+
+    const alreadyEnabled =
+      await checkZYRENotificationStatus();
+
+
+    /*
+    Only automatically request permission when
+    the browser has never been asked before.
+
+    If permission is "granted", we DO NOT ask again.
+    If permission is "denied", we leave it alone.
+    */
 
     if (
+      !alreadyEnabled &&
       "Notification" in window &&
       Notification.permission === "default"
     ) {
 
-      window.enableZYRENotifications();
+      /*
+      We intentionally do not automatically pop
+      the permission request here.
 
-    } else if (
-      "Notification" in window &&
-      Notification.permission === "granted"
-    ) {
+      The user can press:
+      🔔 Enable Notifications
+      */
 
-      window.refreshZYREPushSubscription();
+      updateZYRENotificationButton(false);
 
     }
 
   },
-  2000
+  1500
 );
 
-}
-);
+});
