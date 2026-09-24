@@ -4,6 +4,15 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
+
+/* =========================
+   ZYRE MARKETING PUSH
+========================= */
+
+const ZYRE_VAPID_PUBLIC_KEY =
+  "BOjLvTNv19TAOcTncMSkJkOkJ874DsdpzJx1Nh0l9TOYi_CSFeqALQ0ldhpB0v7rPHQ4VyIzcMCxJORjWtdLO2Q";
+
+
 let products = [];
 let category = "All";
 
@@ -2129,14 +2138,347 @@ async function checkOrderStatus() {
 
 
 /* =========================
-   START
+   ZYRE MARKETING
+   PUSH NOTIFICATION HELPERS
 ========================= */
 
-loadProducts();
+/*
+  Convert the VAPID public key from
+  Base64URL format into the Uint8Array
+  required by PushManager.subscribe().
+*/
+
+function urlBase64ToUint8Array(base64String) {
+
+  const padding =
+    "=".repeat(
+      (4 - base64String.length % 4) % 4
+    );
+
+  const base64 =
+    (
+      base64String +
+      padding
+    )
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+
+  const rawData =
+    window.atob(base64);
+
+  const outputArray =
+    new Uint8Array(
+      rawData.length
+    );
+
+  for (
+    let i = 0;
+    i < rawData.length;
+    ++i
+  ) {
+
+    outputArray[i] =
+      rawData.charCodeAt(i);
+
+  }
+
+  return outputArray;
+
+}
 
 
 /* =========================
-   ZYRE MARKETING NOTIFICATIONS
+   GET SERVICE WORKER
+========================= */
+
+async function getZYREServiceWorkerRegistration() {
+
+  if (!("serviceWorker" in navigator)) {
+
+    throw new Error(
+      "Service workers are not supported by this browser."
+    );
+
+  }
+
+
+  /*
+    Register the ZYRE Marketing service
+    worker from the root of the GitHub
+    Pages project.
+  */
+
+  const registration =
+    await navigator.serviceWorker.register(
+      "./sw.js",
+      {
+        scope: "./"
+      }
+    );
+
+
+  await navigator.serviceWorker.ready;
+
+
+  return registration;
+
+}
+
+
+/* =========================
+   SAVE PUSH SUBSCRIPTION
+========================= */
+
+async function saveZYREPushSubscription(
+  subscription
+) {
+
+  const endpoint =
+    subscription.endpoint;
+
+
+  /*
+    Check whether this browser/device
+    has already been saved.
+  */
+
+  const existingResponse =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/push_subscriptions?endpoint=eq." +
+      encodeURIComponent(endpoint) +
+      "&select=id",
+
+      {
+
+        method: "GET",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            SUPABASE_KEY
+
+        }
+
+      }
+
+    );
+
+
+  if (!existingResponse.ok) {
+
+    throw new Error(
+      "Could not check the existing push subscription:\n\n" +
+      await existingResponse.text()
+    );
+
+  }
+
+
+  const existing =
+    await existingResponse.json();
+
+
+  /*
+    If the device is already registered,
+    don't create another duplicate row.
+  */
+
+  if (
+    Array.isArray(existing) &&
+    existing.length > 0
+  ) {
+
+    console.log(
+      "ZYRE push subscription already exists."
+    );
+
+    return;
+
+  }
+
+
+  /*
+    Get seller/user information when
+    available.
+
+    These values are saved only if they
+    already exist in localStorage.
+  */
+
+  const userId =
+    localStorage.getItem(
+      "zava_user_id"
+    );
+
+  const sellerId =
+    localStorage.getItem(
+      "zava_seller_id"
+    );
+
+
+  const subscriptionData = {
+
+    endpoint:
+      endpoint,
+
+    subscription:
+      subscription.toJSON()
+
+  };
+
+
+  /*
+    Only include user_id when we actually
+    have one.
+  */
+
+  if (userId) {
+
+    subscriptionData.user_id =
+      userId;
+
+  }
+
+
+  /*
+    Only include seller_id when we
+    actually have one.
+  */
+
+  if (sellerId) {
+
+    subscriptionData.seller_id =
+      Number(sellerId);
+
+  }
+
+
+  const saveResponse =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/push_subscriptions",
+
+      {
+
+        method: "POST",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            SUPABASE_KEY,
+
+          "Content-Type":
+            "application/json",
+
+          "Prefer":
+            "return=minimal"
+
+        },
+
+        body:
+          JSON.stringify(
+            subscriptionData
+          )
+
+      }
+
+    );
+
+
+  if (!saveResponse.ok) {
+
+    throw new Error(
+      "Push subscription could not be saved:\n\n" +
+      await saveResponse.text()
+    );
+
+  }
+
+
+  console.log(
+    "ZYRE push subscription saved successfully."
+  );
+
+}
+
+
+/* =========================
+   CREATE PUSH SUBSCRIPTION
+========================= */
+
+async function subscribeToZYREPush() {
+
+  const registration =
+    await getZYREServiceWorkerRegistration();
+
+
+  if (
+    !registration.pushManager
+  ) {
+
+    throw new Error(
+      "Push notifications are not supported by this browser."
+    );
+
+  }
+
+
+  let subscription =
+    await registration.pushManager.getSubscription();
+
+
+  /*
+    If this phone/browser already has a
+    push subscription, reuse it.
+  */
+
+  if (!subscription) {
+
+    subscription =
+      await registration.pushManager.subscribe({
+
+        userVisibleOnly:
+          true,
+
+        applicationServerKey:
+          urlBase64ToUint8Array(
+            ZYRE_VAPID_PUBLIC_KEY
+          )
+
+      });
+
+  }
+
+
+  console.log(
+    "ZYRE push subscription:",
+    subscription
+  );
+
+
+  await saveZYREPushSubscription(
+    subscription
+  );
+
+
+  return subscription;
+
+}
+
+
+/* =========================
+   ENABLE ZYRE NOTIFICATIONS
 ========================= */
 
 async function enableZYRENotifications() {
@@ -2147,7 +2489,7 @@ async function enableZYRENotifications() {
       "Your browser does not support notifications."
     );
 
-    return;
+    return false;
 
   }
 
@@ -2158,40 +2500,87 @@ async function enableZYRENotifications() {
       "Your browser does not support service workers."
     );
 
-    return;
+    return false;
+
+  }
+
+
+  if (
+    !("PushManager" in window)
+  ) {
+
+    alert(
+      "Your browser does not support push notifications."
+    );
+
+    return false;
 
   }
 
 
   try {
 
-    const permission =
-      await Notification.requestPermission();
+    /*
+      Ask the phone/browser for notification
+      permission.
+    */
+
+    let permission =
+      Notification.permission;
 
 
-    if (permission === "granted") {
+    if (permission !== "granted") {
 
-      const registration =
-        await navigator.serviceWorker.ready;
+      permission =
+        await Notification.requestPermission();
 
-
-      console.log(
-        "ZYRE Marketing notifications enabled.",
-        registration
-      );
+    }
 
 
-      alert(
-        "🔔 ZYRE Marketing notifications are enabled!"
-      );
-
-    } else {
+    if (permission !== "granted") {
 
       alert(
-        "Notifications were not enabled. You can allow them in your browser settings."
+        "Notifications were not enabled.\n\n" +
+        "Please allow notifications for ZYRE Marketing in your browser settings."
+      );
+
+      return false;
+
+    }
+
+
+    /*
+      Create the push subscription and
+      save it into Supabase.
+    */
+
+    const subscription =
+      await subscribeToZYREPush();
+
+
+    if (!subscription) {
+
+      throw new Error(
+        "The push subscription was not created."
       );
 
     }
+
+
+    console.log(
+      "ZYRE Marketing notifications enabled.",
+      subscription
+    );
+
+
+    alert(
+      "🔔 ZYRE Marketing notifications are enabled!\n\n" +
+      "This phone is now registered for push notifications."
+    );
+
+
+    return true;
+
 
   } catch (error) {
 
@@ -2200,14 +2589,105 @@ async function enableZYRENotifications() {
       error
     );
 
+
     alert(
       "Notification setup failed:\n\n" +
       error.message
     );
 
+
+    return false;
+
   }
 
 }
+
+
+/* =========================
+   REFRESH PUSH SUBSCRIPTION
+========================= */
+
+async function refreshZYREPushSubscription() {
+
+  try {
+
+    if (
+      !("Notification" in window) ||
+      Notification.permission !== "granted"
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      !("serviceWorker" in navigator) ||
+      !("PushManager" in window)
+    ) {
+
+      return;
+
+    }
+
+
+    const registration =
+      await getZYREServiceWorkerRegistration();
+
+
+    let subscription =
+      await registration.pushManager.getSubscription();
+
+
+    if (!subscription) {
+
+      subscription =
+        await registration.pushManager.subscribe({
+
+          userVisibleOnly:
+            true,
+
+          applicationServerKey:
+            urlBase64ToUint8Array(
+              ZYRE_VAPID_PUBLIC_KEY
+            )
+
+        });
+
+    }
+
+
+    /*
+      Save only when needed.
+    */
+
+    await saveZYREPushSubscription(
+      subscription
+    );
+
+
+    console.log(
+      "ZYRE push subscription checked."
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Could not refresh ZYRE push subscription:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadProducts();
 
 
 /* =========================
@@ -2227,6 +2707,19 @@ window.addEventListener(
         ) {
 
           enableZYRENotifications();
+
+        } else if (
+          "Notification" in window &&
+          Notification.permission === "granted"
+        ) {
+
+          /*
+            Permission is already granted,
+            so silently make sure the push
+            subscription is saved.
+          */
+
+          refreshZYREPushSubscription();
 
         }
 
