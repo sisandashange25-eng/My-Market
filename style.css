@@ -1443,3 +1443,112 @@ section {
   color: #050505;
   background: #d4af37;
 }
+
+/* =========================
+   ZYRE MOBILE SIDE MENU
+========================= */
+
+.menu-button {
+  background: #000;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 10px 13px;
+  font-size: 22px;
+  cursor: pointer;
+  min-width: 48px;
+}
+
+
+/* SIDE MENU */
+
+.zyre-menu {
+  position: fixed !important;
+  top: 0;
+  right: 0;
+  width: 280px;
+  max-width: 85%;
+  height: 100vh;
+  background: #000;
+  color: #fff;
+  z-index: 99999;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.45);
+  overflow-y: auto;
+}
+
+
+/* MENU HEADER */
+
+.zyre-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #333;
+}
+
+.zyre-menu-header strong {
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+.zyre-menu-header button {
+  background: transparent;
+  color: #fff;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+
+/* MENU ITEMS */
+
+.zyre-menu > button {
+  display: block;
+  width: 100%;
+  padding: 16px 12px;
+  margin: 6px 0;
+  background: transparent;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+/* HOVER / TOUCH EFFECT */
+
+.zyre-menu > button:hover {
+  background: #222;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+  .menu-button {
+    display: block;
+  }
+
+  .zyre-menu {
+    width: 280px;
+  }
+
+}
+
+
+/* DESKTOP */
+
+@media (min-width: 701px) {
+
+  .menu-button {
+    display: block;
+  }
+
+}
