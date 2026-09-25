@@ -85,6 +85,20 @@
     </div>
 
 
+    <!-- =========================
+         MENU
+    ========================= -->
+
+    <button
+      class="menu-button"
+      onclick="toggleZyreMenu()"
+      type="button"
+      aria-label="Open menu"
+    >
+      ☰
+    </button>
+
+
     <button
       class="cart-button"
       onclick="toggleCart()"
@@ -100,6 +114,74 @@
     </button>
 
   </header>
+
+
+  <!-- =========================
+       ZYRE MENU
+  ========================= -->
+
+  <div
+    id="zyreMenu"
+    class="zyre-menu"
+    style="display:none;"
+  >
+
+    <div class="zyre-menu-header">
+
+      <strong>
+        ZYRE MENU
+      </strong>
+
+      <button
+        onclick="toggleZyreMenu()"
+        type="button"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <button
+      onclick="window.location.href='index.html'"
+      type="button"
+    >
+      🏠 Home
+    </button>
+
+
+    <button
+      onclick="document.getElementById('stores').scrollIntoView({behavior:'smooth'}); toggleZyreMenu();"
+      type="button"
+    >
+      🛍️ Marketplace
+    </button>
+
+
+    <button
+      onclick="sellerCentre(); toggleZyreMenu();"
+      type="button"
+    >
+      🏪 Seller Dashboard
+    </button>
+
+
+    <button
+      onclick="window.location.href='admin.html'"
+      type="button"
+    >
+      👑 Owner Dashboard
+    </button>
+
+
+    <button
+      onclick="toggleCart(); toggleZyreMenu();"
+      type="button"
+    >
+      🛒 Cart
+    </button>
+
+  </div>
 
 
   <!-- =========================
@@ -701,6 +783,34 @@
   ========================= -->
 
   <script src="app.js?v=5003"></script>
+
+
+  <!-- =========================
+       ZYRE MENU LOGIC
+  ========================= -->
+
+  <script>
+
+    function toggleZyreMenu() {
+
+      const menu =
+        document.getElementById("zyreMenu");
+
+      if (!menu) return;
+
+      if (menu.style.display === "none" || menu.style.display === "") {
+
+        menu.style.display = "block";
+
+      } else {
+
+        menu.style.display = "none";
+
+      }
+
+    }
+
+  </script>
 
 
   <!-- =========================
