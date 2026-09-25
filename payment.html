@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
@@ -10,12 +9,7 @@
   content="width=device-width, initial-scale=1.0"
 >
 
-<meta
-  name="robots"
-  content="noindex,nofollow"
->
-
-<title>ZYRE Marketing - Payment</title>
+<title>ZYRE Marketing - Pay Now</title>
 
 <style>
 
@@ -25,362 +19,297 @@
 
 body {
   margin: 0;
-  padding: 20px;
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   background: #f5f5f5;
   color: #111;
+}
+
+.header {
+  background: #000;
+  color: #d4af37;
+  padding: 22px 18px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: 4px;
+}
+
+.subtitle {
+  margin-top: 6px;
+  color: #fff;
+  font-size: 13px;
 }
 
 .container {
   width: 100%;
   max-width: 520px;
-  margin: 0 auto;
-}
-
-.logo {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.logo h1 {
-  margin: 0;
-  font-size: 30px;
-  letter-spacing: 4px;
-  font-weight: 800;
-}
-
-.logo p {
-  margin: 6px 0 0;
-  color: #777;
-  font-size: 13px;
+  margin: 25px auto;
+  padding: 0 15px;
 }
 
 .card {
   background: #fff;
-  border-radius: 16px;
+  border-radius: 14px;
   padding: 22px;
-  box-shadow:
-    0 4px 20px rgba(0,0,0,0.08);
-}
-
-.title {
-  text-align: center;
-  margin-bottom: 22px;
-}
-
-.title h2 {
-  margin: 0 0 6px;
-  font-size: 22px;
-}
-
-.title p {
-  margin: 0;
-  color: #777;
-  font-size: 14px;
-}
-
-.order-box {
-  background: #f8f8f8;
-  border-radius: 12px;
-  padding: 16px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.08);
   margin-bottom: 18px;
 }
 
-.row {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 9px 0;
-  border-bottom: 1px solid #e5e5e5;
+.title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 18px;
 }
 
-.row:last-child {
-  border-bottom: none;
-}
-
-.label {
-  color: #777;
+.order-number {
+  color: #666;
   font-size: 14px;
+  margin-bottom: 20px;
 }
 
-.value {
-  font-weight: 600;
-  text-align: right;
-  word-break: break-word;
+.product {
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.product-name {
+  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.product-info {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .total-box {
+  border-top: 1px solid #ddd;
   margin-top: 18px;
-  padding: 18px;
-  border-radius: 12px;
-  background: #111;
-  color: #fff;
+  padding-top: 18px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .total-label {
-  font-size: 14px;
+  font-size: 17px;
+  font-weight: bold;
 }
 
-.total-amount {
+.total {
   font-size: 25px;
-  font-weight: 800;
-}
-
-.status {
-  margin: 18px 0;
-  padding: 14px;
-  border-radius: 10px;
-  text-align: center;
-  background: #fff7df;
-  color: #7a5b00;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: bold;
+  color: #000;
 }
 
 .pay-button {
   width: 100%;
   border: none;
-  border-radius: 12px;
-  padding: 16px;
-  background: #111;
-  color: #fff;
+  border-radius: 10px;
+  padding: 17px;
+  background: #000;
+  color: #d4af37;
   font-size: 17px;
-  font-weight: 700;
+  font-weight: bold;
   cursor: pointer;
 }
 
 .pay-button:hover {
-  opacity: 0.9;
+  opacity: .9;
 }
 
 .pay-button:disabled {
-  opacity: 0.5;
+  opacity: .5;
   cursor: not-allowed;
-}
-
-.back-button {
-  width: 100%;
-  margin-top: 10px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 14px;
-  background: #fff;
-  color: #111;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
 }
 
 .secure {
   text-align: center;
-  margin-top: 18px;
-  color: #777;
-  font-size: 12px;
+  color: #666;
+  font-size: 13px;
+  margin-top: 14px;
   line-height: 1.5;
 }
 
-.error {
-  background: #ffe9e9;
-  color: #a40000;
-  padding: 15px;
+.notice {
+  background: #fff8df;
+  border: 1px solid #ead27b;
+  color: #5f4c00;
   border-radius: 10px;
-  text-align: center;
-  display: none;
-  margin-bottom: 15px;
+  padding: 13px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 15px;
 }
 
-.loading {
+.back {
+  display: block;
+  text-align: center;
+  margin-top: 18px;
+  color: #000;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.footer {
   text-align: center;
   color: #777;
+  font-size: 12px;
   padding: 20px;
+}
+
+.error {
+  color: #b00020;
+  background: #ffe8ed;
+  border-radius: 10px;
+  padding: 15px;
+  display: none;
 }
 
 </style>
 
 </head>
 
-
 <body>
 
-
-<div class="container">
-
+<header class="header">
 
   <div class="logo">
+    ZYRE
+  </div>
 
-    <h1>ZYRE</h1>
+  <div class="subtitle">
+    ZYRE Marketing
+  </div>
 
-    <p>MARKETING</p>
+</header>
+
+
+<main class="container">
+
+  <div class="card">
+
+    <div class="title">
+      💳 Pay Now
+    </div>
+
+    <div
+      id="orderNumber"
+      class="order-number"
+    >
+      Order: Loading...
+    </div>
+
+
+    <div
+      id="errorBox"
+      class="error"
+    >
+      Payment information could not be loaded.
+    </div>
+
+
+    <div
+      id="productBox"
+      class="product"
+    >
+
+      <div
+        id="productName"
+        class="product-name"
+      >
+        Loading product...
+      </div>
+
+      <div
+        id="productInfo"
+        class="product-info"
+      >
+        Please wait...
+      </div>
+
+    </div>
+
+
+    <div class="total-box">
+
+      <div class="total-label">
+        Total
+      </div>
+
+      <div
+        id="totalAmount"
+        class="total"
+      >
+        R0.00
+      </div>
+
+    </div>
 
   </div>
 
 
   <div class="card">
 
-
-    <div class="title">
-
-      <h2>Secure Payment</h2>
-
-      <p>
-        Complete your order payment
-      </p>
-
-    </div>
-
-
-    <div
-      id="loading"
-      class="loading"
+    <button
+      id="payButton"
+      class="pay-button"
+      onclick="payNow()"
     >
-      Loading order information...
+      💳 Pay Now
+    </button>
+
+
+    <div class="secure">
+
+      🔒 Your order information is securely linked
+      to your ZYRE Marketing order.
+
     </div>
 
 
-    <div
-      id="error"
-      class="error"
-    ></div>
+    <div class="notice">
+
+      <strong>Payment status</strong><br>
+
+      Your ZYRE payment page is ready.
+      PayFast payment processing will be connected
+      once your PayFast merchant approval is complete.
+
+    </div>
 
 
-    <div
-      id="paymentContent"
-      style="display:none;"
+    <a
+      href="./index.html"
+      class="back"
     >
-
-
-      <div class="order-box">
-
-
-        <div class="row">
-
-          <span class="label">
-            Order
-          </span>
-
-          <span
-            id="orderId"
-            class="value"
-          >
-            —
-          </span>
-
-        </div>
-
-
-        <div class="row">
-
-          <span class="label">
-            Item
-          </span>
-
-          <span
-            id="itemName"
-            class="value"
-          >
-            —
-          </span>
-
-        </div>
-
-
-        <div class="row">
-
-          <span class="label">
-            Payment
-          </span>
-
-          <span
-            id="paymentType"
-            class="value"
-          >
-            Customer Order
-          </span>
-
-        </div>
-
-
-      </div>
-
-
-      <div class="total-box">
-
-        <span class="total-label">
-          Amount to Pay
-        </span>
-
-        <span
-          id="totalAmount"
-          class="total-amount"
-        >
-          R0.00
-        </span>
-
-      </div>
-
-
-      <div
-        id="statusBox"
-        class="status"
-      >
-        ⏳ Payment is waiting to be completed.
-      </div>
-
-
-      <button
-        id="payButton"
-        class="pay-button"
-        type="button"
-        onclick="startPayment()"
-      >
-        💳 Pay Now
-      </button>
-
-
-      <button
-        class="back-button"
-        type="button"
-        onclick="goBack()"
-      >
-        ← Back to ZYRE Marketing
-      </button>
-
-
-      <div class="secure">
-
-        🔒 Your payment will be processed through
-        a secure payment provider.
-
-        <br>
-
-        ZYRE Marketing will only mark the order
-        as paid after payment confirmation.
-
-      </div>
-
-
-    </div>
-
+      ← Back to ZYRE Marketing
+    </a>
 
   </div>
 
+</main>
 
-</div>
+
+<footer class="footer">
+
+  © 2026 ZYRE Marketing
+
+</footer>
 
 
 <script>
 
-
-/* =========================
+/* =========================================
    READ PAYMENT INFORMATION
-========================= */
-
+========================================= */
 
 const params =
   new URLSearchParams(
@@ -393,7 +322,9 @@ const orderId =
 
 
 const amount =
-  params.get("amount") || "";
+  Number(
+    params.get("amount") || 0
+  );
 
 
 const itemName =
@@ -401,233 +332,179 @@ const itemName =
   "ZYRE Marketing Order";
 
 
-const paymentType =
-  params.get("payment_type") ||
-  "customer";
+const customerId =
+  params.get("customer_id") || "";
 
 
-/* =========================
-   ELEMENTS
-========================= */
+/* =========================================
+   DISPLAY ORDER
+========================================= */
 
+function displayPaymentInformation() {
 
-const loading =
-  document.getElementById(
-    "loading"
-  );
+  const orderNumber =
+    document.getElementById(
+      "orderNumber"
+    );
 
+  const productName =
+    document.getElementById(
+      "productName"
+    );
 
-const errorBox =
-  document.getElementById(
-    "error"
-  );
+  const productInfo =
+    document.getElementById(
+      "productInfo"
+    );
 
+  const totalAmount =
+    document.getElementById(
+      "totalAmount"
+    );
 
-const paymentContent =
-  document.getElementById(
-    "paymentContent"
-  );
+  const errorBox =
+    document.getElementById(
+      "errorBox"
+    );
 
-
-const orderIdBox =
-  document.getElementById(
-    "orderId"
-  );
-
-
-const itemNameBox =
-  document.getElementById(
-    "itemName"
-  );
-
-
-const paymentTypeBox =
-  document.getElementById(
-    "paymentType"
-  );
-
-
-const totalAmountBox =
-  document.getElementById(
-    "totalAmount"
-  );
-
-
-/* =========================
-   SHOW ERROR
-========================= */
-
-
-function showError(message) {
-
-  loading.style.display =
-    "none";
-
-  paymentContent.style.display =
-    "none";
-
-  errorBox.textContent =
-    message;
-
-  errorBox.style.display =
-    "block";
-
-}
-
-
-/* =========================
-   FORMAT AMOUNT
-========================= */
-
-
-function formatAmount(value) {
-
-  const number =
-    Number(value);
 
   if (
-    !Number.isFinite(number) ||
-    number <= 0
+    !orderId ||
+    !Number.isFinite(amount) ||
+    amount <= 0
   ) {
 
-    return null;
+    errorBox.style.display =
+      "block";
 
-  }
+    errorBox.innerHTML =
+      "The payment information is missing or invalid.";
 
-  return (
-    "R" +
-    number.toFixed(2)
-  );
-
-}
-
-
-/* =========================
-   LOAD PAYMENT PAGE
-========================= */
-
-
-function loadPaymentPage() {
-
-  if (!orderId) {
-
-    showError(
-      "No order number was provided."
-    );
+    document.getElementById(
+      "payButton"
+    ).disabled = true;
 
     return;
 
   }
 
 
-  const formattedAmount =
-    formatAmount(amount);
+  orderNumber.textContent =
+    "Order #" +
+    orderId;
 
 
-  if (!formattedAmount) {
-
-    showError(
-      "The payment amount is missing or invalid."
-    );
-
-    return;
-
-  }
-
-
-  orderIdBox.textContent =
-    "#" + orderId;
-
-
-  itemNameBox.textContent =
+  productName.textContent =
     itemName;
 
 
-  if (
-    paymentType ===
-    "rental"
-  ) {
-
-    paymentTypeBox.textContent =
-      "ZYRE Store Rental";
-
-  } else {
-
-    paymentTypeBox.textContent =
-      "Customer Order";
-
-  }
+  productInfo.innerHTML =
+    "Order #" +
+    escapeHtml(orderId) +
+    "<br>" +
+    "Amount due: R" +
+    amount.toFixed(2);
 
 
-  totalAmountBox.textContent =
-    formattedAmount;
-
-
-  loading.style.display =
-    "none";
-
-
-  paymentContent.style.display =
-    "block";
+  totalAmount.textContent =
+    "R" +
+    amount.toFixed(2);
 
 }
 
 
-/* =========================
-   PAYMENT BUTTON
-========================= */
+/* =========================================
+   BASIC HTML ESCAPE
+========================================= */
+
+function escapeHtml(value) {
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
 
 
-function startPayment() {
+/* =========================================
+   PAY NOW
+========================================= */
+
+function payNow() {
+
+  if (
+    !orderId ||
+    !amount ||
+    amount <= 0
+  ) {
+
+    alert(
+      "The payment information is invalid."
+    );
+
+    return;
+
+  }
+
 
   /*
-  Payfast will be connected here
-  after your merchant account is approved.
-
-  IMPORTANT:
-  We do NOT mark the order as paid
-  from this browser page.
+    PAYFAST CONNECTION WILL BE ADDED HERE
+    AFTER PAYFAST MERCHANT APPROVAL.
   */
+
 
   alert(
 
-    "Payment gateway connection is being prepared.\n\n" +
+    "ZYRE Marketing Payment\n\n" +
 
-    "Your order #" +
+    "Order #" +
     orderId +
-    " is ready for payment.\n\n" +
 
-    "Payfast will be connected here after your merchant account is approved."
+    "\n\n" +
+
+    "Amount: R" +
+    amount.toFixed(2) +
+
+    "\n\n" +
+
+    "PayFast payment processing is being prepared. " +
+    "Your PayFast merchant approval is still pending."
 
   );
 
 }
 
 
-/* =========================
-   BACK BUTTON
-========================= */
-
-
-function goBack() {
-
-  window.location.href =
-    "./";
-
-}
-
-
-/* =========================
+/* =========================================
    START
-========================= */
+========================================= */
 
-
-loadPaymentPage();
-
+displayPaymentInformation();
 
 </script>
 
-
 </body>
-
 </html>
