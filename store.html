@@ -1,18 +1,130 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-ZA">
 
 <head>
 
 <meta charset="utf-8">
 
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
 
-<title>ZYRE Marketing — Store</title>
+<!-- =========================
+     ZYRE STORE SEO
+========================= -->
+
+<title>
+  ZYRE Marketing | Online Store
+</title>
 
 <meta
+  id="metaDescription"
   name="description"
-  content="Shop this store on ZYRE Marketing."
+  content="Shop products from an independent store on ZYRE Marketing, a South African online marketplace."
 >
+
+<meta
+  name="robots"
+  content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+>
+
+<meta
+  name="googlebot"
+  content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+>
+
+<meta
+  name="author"
+  content="ZYRE Marketing"
+>
+
+<meta
+  name="geo.region"
+  content="ZA"
+>
+
+<meta
+  name="geo.placename"
+  content="Durban, South Africa"
+>
+
+<link
+  id="canonicalLink"
+  rel="canonical"
+  href="https://sisandashange25-eng.github.io/My-Market/store.html"
+>
+
+
+<!-- =========================
+     SOCIAL SHARING
+========================= -->
+
+<meta
+  id="ogTitle"
+  property="og:title"
+  content="ZYRE Marketing | Online Store"
+>
+
+<meta
+  id="ogDescription"
+  property="og:description"
+  content="Shop products from an independent store on ZYRE Marketing."
+>
+
+<meta
+  property="og:type"
+  content="website"
+>
+
+<meta
+  id="ogUrl"
+  property="og:url"
+  content="https://sisandashange25-eng.github.io/My-Market/store.html"
+>
+
+<meta
+  property="og:site_name"
+  content="ZYRE Marketing"
+>
+
+<meta
+  property="og:locale"
+  content="en_ZA"
+>
+
+<meta
+  property="og:image"
+  content="https://sisandashange25-eng.github.io/My-Market/zyre-logo.png"
+>
+
+<meta
+  property="og:image:alt"
+  content="ZYRE Marketing logo"
+>
+
+<meta
+  name="twitter:card"
+  content="summary"
+>
+
+<meta
+  id="twitterTitle"
+  name="twitter:title"
+  content="ZYRE Marketing | Online Store"
+>
+
+<meta
+  id="twitterDescription"
+  name="twitter:description"
+  content="Shop products from an independent store on ZYRE Marketing."
+>
+
+<meta
+  name="twitter:image"
+  content="https://sisandashange25-eng.github.io/My-Market/zyre-logo.png"
+>
+
 
 <style>
 
@@ -419,7 +531,10 @@ footer {
   ← Back to Marketplace
 </a>
 
-<section class="store-hero">
+<section
+  class="store-hero"
+  aria-labelledby="storeName"
+>
 
   <div class="store-label">
     ZYRE MARKETPLACE
@@ -465,11 +580,13 @@ footer {
       type="search"
       placeholder="🔎 Search products in this store..."
       autocomplete="off"
+      aria-label="Search products in this store"
     >
 
     <select
       id="categoryFilter"
       class="category-filter"
+      aria-label="Filter products by category"
     >
 
       <option value="">
@@ -528,6 +645,223 @@ const sellerId =
 window.storeProducts = [];
 
 
+/* =========================
+   SEO HELPERS
+========================= */
+
+function updateStoreSEO(
+  storeName,
+  storeDescription
+) {
+
+  const safeStoreName =
+    String(
+      storeName ||
+      "ZYRE Store"
+    ).trim();
+
+  const safeDescription =
+    String(
+      storeDescription ||
+      "Shop products from this store on ZYRE Marketing."
+    )
+    .trim();
+
+  const shortDescription =
+    safeDescription.length > 155
+      ? safeDescription.substring(0, 152) + "..."
+      : safeDescription;
+
+  const pageTitle =
+    safeStoreName +
+    " | ZYRE Marketing";
+
+  document.title =
+    pageTitle;
+
+  const metaDescription =
+    document.getElementById(
+      "metaDescription"
+    );
+
+  if (metaDescription) {
+
+    metaDescription.setAttribute(
+      "content",
+      shortDescription
+    );
+
+  }
+
+  const canonicalUrl =
+    "https://sisandashange25-eng.github.io/My-Market/store.html?seller_id=" +
+    encodeURIComponent(sellerId);
+
+  const canonicalLink =
+    document.getElementById(
+      "canonicalLink"
+    );
+
+  if (canonicalLink) {
+
+    canonicalLink.setAttribute(
+      "href",
+      canonicalUrl
+    );
+
+  }
+
+  const ogTitle =
+    document.getElementById(
+      "ogTitle"
+    );
+
+  if (ogTitle) {
+
+    ogTitle.setAttribute(
+      "content",
+      pageTitle
+    );
+
+  }
+
+  const ogDescription =
+    document.getElementById(
+      "ogDescription"
+    );
+
+  if (ogDescription) {
+
+    ogDescription.setAttribute(
+      "content",
+      shortDescription
+    );
+
+  }
+
+  const ogUrl =
+    document.getElementById(
+      "ogUrl"
+    );
+
+  if (ogUrl) {
+
+    ogUrl.setAttribute(
+      "content",
+      canonicalUrl
+    );
+
+  }
+
+  const twitterTitle =
+    document.getElementById(
+      "twitterTitle"
+    );
+
+  if (twitterTitle) {
+
+    twitterTitle.setAttribute(
+      "content",
+      pageTitle
+    );
+
+  }
+
+  const twitterDescription =
+    document.getElementById(
+      "twitterDescription"
+    );
+
+  if (twitterDescription) {
+
+    twitterDescription.setAttribute(
+      "content",
+      shortDescription
+    );
+
+  }
+
+  /*
+    Add dynamic structured data
+    for the individual store.
+  */
+
+  const existingSchema =
+    document.getElementById(
+      "zyreStoreSchema"
+    );
+
+  if (existingSchema) {
+
+    existingSchema.remove();
+
+  }
+
+  const schema =
+    document.createElement(
+      "script"
+    );
+
+  schema.id =
+    "zyreStoreSchema";
+
+  schema.type =
+    "application/ld+json";
+
+  schema.textContent =
+    JSON.stringify({
+
+      "@context":
+        "https://schema.org",
+
+      "@type":
+        "OnlineStore",
+
+      "name":
+        safeStoreName,
+
+      "description":
+        safeDescription,
+
+      "url":
+        canonicalUrl,
+
+      "isPartOf": {
+
+        "@type":
+          "WebSite",
+
+        "name":
+          "ZYRE Marketing",
+
+        "url":
+          "https://sisandashange25-eng.github.io/My-Market/"
+
+      },
+
+      "areaServed": {
+
+        "@type":
+          "Country",
+
+        "name":
+          "South Africa"
+
+      }
+
+    });
+
+  document.head.appendChild(
+    schema
+  );
+
+}
+
+
+/* =========================
+   TEXT ESCAPING
+========================= */
+
 function escapeText(value) {
 
   return String(value ?? "")
@@ -539,6 +873,10 @@ function escapeText(value) {
 
 }
 
+
+/* =========================
+   CART
+========================= */
 
 function updateCartCount() {
 
@@ -567,6 +905,10 @@ function openCart() {
 
 }
 
+
+/* =========================
+   ADD TO CART
+========================= */
 
 function addStoreProduct(productId) {
 
@@ -629,6 +971,10 @@ function addStoreProduct(productId) {
 }
 
 
+/* =========================
+   CATEGORIES
+========================= */
+
 function setupCategories() {
 
   const categoryFilter =
@@ -675,6 +1021,10 @@ function setupCategories() {
 
 }
 
+
+/* =========================
+   PRODUCT RENDERING
+========================= */
 
 function renderProducts() {
 
@@ -886,6 +1236,10 @@ function renderProducts() {
 }
 
 
+/* =========================
+   LOAD STORE
+========================= */
+
 async function loadStore() {
 
   const nameBox =
@@ -969,13 +1323,30 @@ async function loadStore() {
     const seller =
       sellers[0];
 
-    nameBox.textContent =
+    const storeName =
       seller.store_name ||
       "ZYRE Store";
 
-    descriptionBox.textContent =
+    const storeDescription =
       seller.description ||
       "Quality products from this store.";
+
+    nameBox.textContent =
+      storeName;
+
+    descriptionBox.textContent =
+      storeDescription;
+
+
+    /* =========================
+       UPDATE STORE SEO
+    ========================= */
+
+    updateStoreSEO(
+      storeName,
+      storeDescription
+    );
+
 
     const productsResponse =
       await fetch(
@@ -1060,7 +1431,9 @@ async function loadStore() {
 }
 
 
-/* SEARCH */
+/* =========================
+   SEARCH
+========================= */
 
 document
   .getElementById("storeSearch")
@@ -1070,7 +1443,9 @@ document
   );
 
 
-/* CATEGORY FILTER */
+/* =========================
+   CATEGORY FILTER
+========================= */
 
 document
   .getElementById("categoryFilter")
@@ -1079,6 +1454,10 @@ document
     renderProducts
   );
 
+
+/* =========================
+   START
+========================= */
 
 updateCartCount();
 
