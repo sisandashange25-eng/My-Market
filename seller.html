@@ -209,6 +209,28 @@
       margin: 6px 0;
     }
 
+    .delivery-box {
+      background: #f1f7ff;
+      border: 1px solid #c9def5;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 15px;
+    }
+
+    .delivery-box h4 {
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    .delivery-status {
+      display: inline-block;
+      background: #e7f3ff;
+      border-radius: 20px;
+      padding: 6px 10px;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
     @media (max-width: 700px) {
       .summary-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -478,14 +500,9 @@
 </div>
 
 
-<!-- app.js -->
 <script src="./app.js"></script>
 
 <script>
-
-/* ==============================
-   SELLER SUPABASE CONNECTION
-============================== */
 
 const SELLER_SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
@@ -493,10 +510,6 @@ const SELLER_SUPABASE_URL =
 const SELLER_SUPABASE_KEY =
   "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
-
-/* ==============================
-   GET CURRENT SELLER ID
-============================== */
 
 const storedSellerId =
   localStorage.getItem("zava_seller_id");
@@ -525,12 +538,9 @@ let currentOrderFilter = "All";
 
 let sellerOrdersCache = [];
 
-
-/*
-  Customer profiles belonging to the
-  orders currently displayed.
-*/
 let customerProfilesCache = {};
+
+let deliveriesCache = {};
 
 
 /* ==============================
@@ -584,7 +594,7 @@ function escapeHtml(value) {
 
 
 /* ==============================
-   ENABLE SELLER NOTIFICATIONS
+   NOTIFICATIONS
 ============================== */
 
 async function enableSellerNotifications() {
@@ -599,10 +609,8 @@ async function enableSellerNotifications() {
       ".notification-button"
     );
 
-
   status.textContent =
     "Connecting to notifications...";
-
 
   try {
 
@@ -622,22 +630,18 @@ async function enableSellerNotifications() {
 
     }
 
-
     button.disabled = true;
 
     button.textContent =
       "🔄 Enabling...";
 
-
     await window.enableZYRENotifications();
-
 
     button.textContent =
       "✅ Notifications Enabled";
 
     status.textContent =
       "Notifications are enabled for this device.";
-
 
   }
 
@@ -648,16 +652,13 @@ async function enableSellerNotifications() {
       error
     );
 
-
     button.disabled = false;
 
     button.textContent =
       "🔔 Enable Notifications";
 
-
     status.textContent =
       "Could not enable notifications.";
-
 
     alert(
       "Could not enable notifications.\n\n" +
@@ -668,10 +669,6 @@ async function enableSellerNotifications() {
 
 }
 
-
-/* ==============================
-   CHECK NOTIFICATION STATUS
-============================== */
 
 function checkNotificationStatus() {
 
@@ -688,7 +685,6 @@ function checkNotificationStatus() {
     return;
 
   }
-
 
   if (Notification.permission === "granted") {
 
@@ -718,7 +714,7 @@ function checkNotificationStatus() {
 
 
 /* ==============================
-   LOAD SELLER INFORMATION
+   SELLER INFORMATION
 ============================== */
 
 async function loadSellerInformation() {
@@ -739,7 +735,6 @@ async function loadSellerInformation() {
 
       );
 
-
     if (!response.ok) {
 
       console.error(
@@ -750,48 +745,24 @@ async function loadSellerInformation() {
 
     }
 
-
     const sellers =
       await response.json();
 
-
-    if (!sellers.length) {
-
-      return;
-
-    }
-
+    if (!sellers.length) return;
 
     const seller =
       sellers[0];
 
+    document.getElementById(
+      "sellerIdDisplay"
+    ).textContent =
+      seller.id;
 
-    const sellerIdDisplay =
-      document.getElementById(
-        "sellerIdDisplay"
-      );
-
-    const storeNameDisplay =
-      document.getElementById(
-        "storeNameDisplay"
-      );
-
-
-    if (sellerIdDisplay) {
-
-      sellerIdDisplay.textContent =
-        seller.id;
-
-    }
-
-
-    if (storeNameDisplay) {
-
-      storeNameDisplay.textContent =
-        seller.store_name ||
-        "Zava Seller";
-
-    }
+    document.getElementById(
+      "storeNameDisplay"
+    ).textContent =
+      seller.store_name ||
+      "Zava Seller";
 
   }
 
@@ -920,12 +891,9 @@ async function addProduct() {
 
     if (!response.ok) {
 
-      const error =
-        await response.text();
-
       alert(
         "Could not add product:\n" +
-        error
+        await response.text()
       );
 
       return;
@@ -988,7 +956,6 @@ async function loadProducts() {
 
   if (!container) return;
 
-
   container.innerHTML =
     "Loading products...";
 
@@ -1012,13 +979,12 @@ async function loadProducts() {
 
     if (!response.ok) {
 
-      const error =
-        await response.text();
-
       container.innerHTML =
         "<p>Could not load products.</p>";
 
-      console.error(error);
+      console.error(
+        await response.text()
+      );
 
       return;
 
@@ -1139,7 +1105,6 @@ function editProduct(
 
   if (newName === null) return;
 
-
   const newDescription =
     prompt(
       "Description:",
@@ -1147,7 +1112,6 @@ function editProduct(
     );
 
   if (newDescription === null) return;
-
 
   const newPrice =
     prompt(
@@ -1157,7 +1121,6 @@ function editProduct(
 
   if (newPrice === null) return;
 
-
   const newStock =
     prompt(
       "Stock:",
@@ -1166,7 +1129,6 @@ function editProduct(
 
   if (newStock === null) return;
 
-
   const newCategory =
     prompt(
       "Category:",
@@ -1174,7 +1136,6 @@ function editProduct(
     );
 
   if (newCategory === null) return;
-
 
   const newImage =
     prompt(
@@ -1255,12 +1216,9 @@ async function saveProduct(
 
     if (!response.ok) {
 
-      const error =
-        await response.text();
-
       alert(
         "Could not update product:\n" +
-        error
+        await response.text()
       );
 
       return;
@@ -1332,12 +1290,9 @@ async function deleteProduct(
 
     if (!response.ok) {
 
-      const error =
-        await response.text();
-
       alert(
         "Could not delete product:\n" +
-        error
+        await response.text()
       );
 
       return;
@@ -1398,18 +1353,10 @@ async function loadCustomerProfiles(
     ];
 
 
-  if (!customerIds.length) {
-
-    return;
-
-  }
+  if (!customerIds.length) return;
 
 
   try {
-
-    const idFilter =
-      customerIds.join(",");
-
 
     const response =
       await fetch(
@@ -1417,7 +1364,7 @@ async function loadCustomerProfiles(
         SELLER_SUPABASE_URL +
         "/rest/v1/profiles?id=in.(" +
         encodeURIComponent(
-          idFilter
+          customerIds.join(",")
         ) +
         ")" +
         "&select=id,full_name,phone",
@@ -1470,6 +1417,287 @@ async function loadCustomerProfiles(
 
 
 /* ==============================
+   LOAD DELIVERIES
+============================== */
+
+async function loadDeliveries(
+  orders
+) {
+
+  deliveriesCache = {};
+
+
+  if (!orders.length) return;
+
+
+  const orderIds =
+    orders
+      .map(order => order.id)
+      .filter(
+        id =>
+          id !== null &&
+          id !== undefined
+      );
+
+
+  if (!orderIds.length) return;
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        SELLER_SUPABASE_URL +
+        "/rest/v1/deliveries?order_id=in.(" +
+        encodeURIComponent(
+          orderIds.join(",")
+        ) +
+        ")" +
+        "&select=*",
+
+        {
+          headers: getHeaders()
+        }
+
+      );
+
+
+    if (!response.ok) {
+
+      console.error(
+        "Could not load deliveries:",
+        await response.text()
+      );
+
+      return;
+
+    }
+
+
+    const deliveries =
+      await response.json();
+
+
+    deliveries.forEach(
+      delivery => {
+
+        deliveriesCache[
+          String(delivery.order_id)
+        ] = delivery;
+
+      }
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Delivery loading error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ==============================
+   SAVE DELIVERY
+============================== */
+
+async function saveDelivery(
+  orderId
+) {
+
+  const name =
+    document.getElementById(
+      "deliveryName_" + orderId
+    ).value.trim();
+
+  const phone =
+    document.getElementById(
+      "deliveryPhone_" + orderId
+    ).value.trim();
+
+  const tracking =
+    document.getElementById(
+      "trackingNumber_" + orderId
+    ).value.trim();
+
+  const estimated =
+    document.getElementById(
+      "estimatedDelivery_" + orderId
+    ).value;
+
+  const status =
+    document.getElementById(
+      "deliveryStatus_" + orderId
+    ).value;
+
+
+  if (!name || !phone) {
+
+    alert(
+      "Please enter the delivery person's name and phone number."
+    );
+
+    return;
+
+  }
+
+
+  const existing =
+    deliveriesCache[
+      String(orderId)
+    ];
+
+
+  const deliveryData = {
+
+    order_id:
+      Number(orderId),
+
+    delivery_person_name:
+      name,
+
+    delivery_person_phone:
+      phone,
+
+    tracking_number:
+      tracking || null,
+
+    estimated_delivery:
+      estimated || null,
+
+    status:
+      status || "Assigned"
+
+  };
+
+
+  try {
+
+    let response;
+
+
+    if (existing && existing.id) {
+
+      response =
+        await fetch(
+
+          SELLER_SUPABASE_URL +
+          "/rest/v1/deliveries?id=eq." +
+          existing.id,
+
+          {
+
+            method: "PATCH",
+
+            headers: {
+
+              ...getHeaders(),
+
+              "Prefer":
+                "return=representation"
+
+            },
+
+            body:
+              JSON.stringify(
+                deliveryData
+              )
+
+          }
+
+        );
+
+    }
+
+    else {
+
+      response =
+        await fetch(
+
+          SELLER_SUPABASE_URL +
+          "/rest/v1/deliveries",
+
+          {
+
+            method: "POST",
+
+            headers: {
+
+              ...getHeaders(),
+
+              "Prefer":
+                "return=representation"
+
+            },
+
+            body:
+              JSON.stringify(
+                deliveryData
+              )
+
+          }
+
+        );
+
+    }
+
+
+    if (!response.ok) {
+
+      alert(
+        "Could not save delivery details:\n\n" +
+        await response.text()
+      );
+
+      return;
+
+    }
+
+
+    const saved =
+      await response.json();
+
+
+    if (
+      Array.isArray(saved) &&
+      saved.length
+    ) {
+
+      deliveriesCache[
+        String(orderId)
+      ] = saved[0];
+
+    }
+
+
+    alert(
+      "Delivery details saved successfully!"
+    );
+
+
+    await loadOrders();
+
+  }
+
+  catch (error) {
+
+    alert(
+      "Error saving delivery details:\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* ==============================
    LOAD ORDERS
 ============================== */
 
@@ -1504,13 +1732,12 @@ async function loadOrders() {
 
     if (!ordersResponse.ok) {
 
-      const error =
-        await ordersResponse.text();
-
       container.innerHTML =
         "<p>Could not load orders.</p>";
 
-      console.error(error);
+      console.error(
+        await ordersResponse.text()
+      );
 
       return;
 
@@ -1604,11 +1831,12 @@ async function loadOrders() {
       );
 
 
-    /*
-      Load the customers belonging only
-      to the seller's visible orders.
-    */
     await loadCustomerProfiles(
+      sellerOrdersCache
+    );
+
+
+    await loadDeliveries(
       sellerOrdersCache
     );
 
@@ -1692,18 +1920,15 @@ function updateOrderSummary() {
   ).textContent =
     pending;
 
-
   document.getElementById(
     "processingCount"
   ).textContent =
     processing;
 
-
   document.getElementById(
     "shippedCount"
   ).textContent =
     shipped;
-
 
   document.getElementById(
     "deliveredCount"
@@ -1985,6 +2210,12 @@ function renderOrders() {
               : "Not available";
 
 
+          const delivery =
+            deliveriesCache[
+              String(order.id)
+            ] || null;
+
+
           return `
 
             <div class="order">
@@ -2082,7 +2313,6 @@ function renderOrders() {
                   Pending
                 </option>
 
-
                 <option
                   value="Processing"
                   ${
@@ -2095,7 +2325,6 @@ function renderOrders() {
                   Processing
                 </option>
 
-
                 <option
                   value="Shipped"
                   ${
@@ -2107,7 +2336,6 @@ function renderOrders() {
                 >
                   Shipped
                 </option>
-
 
                 <option
                   value="Delivered"
@@ -2122,6 +2350,195 @@ function renderOrders() {
                 </option>
 
               </select>
+
+
+              <!-- DELIVERY ASSIGNMENT -->
+
+              <div class="delivery-box">
+
+                <h4>
+                  🚚 Delivery Assignment
+                </h4>
+
+
+                ${
+                  delivery
+                    ? `
+                      <div class="delivery-status">
+                        🚚 Delivery:
+                        ${escapeHtml(
+                          delivery.status ||
+                          "Assigned"
+                        )}
+                      </div>
+                    `
+                    : `
+                      <div class="delivery-status">
+                        🚚 Not assigned yet
+                      </div>
+                    `
+                }
+
+
+                <label>
+                  Delivery Person Name
+                </label>
+
+                <input
+                  type="text"
+                  id="deliveryName_${order.id}"
+                  placeholder="Example: Thabo M."
+                  value="${
+                    escapeHtml(
+                      delivery &&
+                      delivery.delivery_person_name
+                        ? delivery.delivery_person_name
+                        : ""
+                    )
+                  }"
+                >
+
+
+                <label>
+                  Delivery Person Phone
+                </label>
+
+                <input
+                  type="tel"
+                  id="deliveryPhone_${order.id}"
+                  placeholder="Example: 0812345678"
+                  value="${
+                    escapeHtml(
+                      delivery &&
+                      delivery.delivery_person_phone
+                        ? delivery.delivery_person_phone
+                        : ""
+                    )
+                  }"
+                >
+
+
+                <label>
+                  Tracking Number
+                </label>
+
+                <input
+                  type="text"
+                  id="trackingNumber_${order.id}"
+                  placeholder="Example: ZAVA-00025"
+                  value="${
+                    escapeHtml(
+                      delivery &&
+                      delivery.tracking_number
+                        ? delivery.tracking_number
+                        : ""
+                    )
+                  }"
+                >
+
+
+                <label>
+                  Estimated Delivery
+                </label>
+
+                <input
+                  type="date"
+                  id="estimatedDelivery_${order.id}"
+                  value="${
+                    escapeHtml(
+                      delivery &&
+                      delivery.estimated_delivery
+                        ? delivery.estimated_delivery
+                        : ""
+                    )
+                  }"
+                >
+
+
+                <label>
+                  Delivery Status
+                </label>
+
+                <select
+                  id="deliveryStatus_${order.id}"
+                >
+
+                  <option
+                    value="Assigned"
+                    ${
+                      !delivery ||
+                      delivery.status ===
+                      "Assigned"
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    Assigned
+                  </option>
+
+                  <option
+                    value="Picked Up"
+                    ${
+                      delivery &&
+                      delivery.status ===
+                      "Picked Up"
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    Picked Up
+                  </option>
+
+                  <option
+                    value="In Transit"
+                    ${
+                      delivery &&
+                      delivery.status ===
+                      "In Transit"
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    In Transit
+                  </option>
+
+                  <option
+                    value="Out for Delivery"
+                    ${
+                      delivery &&
+                      delivery.status ===
+                      "Out for Delivery"
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    Out for Delivery
+                  </option>
+
+                  <option
+                    value="Delivered"
+                    ${
+                      delivery &&
+                      delivery.status ===
+                      "Delivered"
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    Delivered
+                  </option>
+
+                </select>
+
+
+                <button
+                  class="success"
+                  onclick="saveDelivery(${order.id})"
+                >
+                  💾 Save Delivery Details
+                </button>
+
+              </div>
 
             </div>
 
@@ -2180,12 +2597,9 @@ async function updateOrderStatus(
 
     if (!response.ok) {
 
-      const error =
-        await response.text();
-
       alert(
         "Could not update order:\n" +
-        error
+        await response.text()
       );
 
       return;
@@ -2243,17 +2657,11 @@ loadProducts();
 
 loadOrders();
 
-
-/* ==============================
-   NOTIFICATION STATUS
-============================== */
-
 checkNotificationStatus();
 
 
 /* ==============================
    AUTOMATIC ORDER CHECK
-   EVERY 10 SECONDS
 ============================== */
 
 setInterval(
