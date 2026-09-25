@@ -435,6 +435,60 @@ button {
 
 
 /* =========================
+   PAYMENT STATS
+========================= */
+
+.payment-stats {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(150px, 1fr)
+    );
+
+  gap: 12px;
+
+  margin-bottom: 15px;
+
+}
+
+.payment-stat {
+
+  background: #0d0d0d;
+
+  border:
+    1px solid #292929;
+
+  border-radius: 12px;
+
+  padding: 16px;
+
+}
+
+.payment-stat-title {
+
+  color: #999;
+
+  font-size: 13px;
+
+}
+
+.payment-stat-value {
+
+  color: #d4af37;
+
+  font-size: 22px;
+
+  font-weight: bold;
+
+  margin-top: 8px;
+
+}
+
+
+/* =========================
    LIST ITEMS
 ========================= */
 
@@ -668,8 +722,6 @@ th {
 >
 
 
-<!-- HEADER -->
-
 <div class="header">
 
   <h1>
@@ -685,8 +737,6 @@ th {
 
 <div class="container">
 
-
-<!-- OWNER BAR -->
 
 <div class="owner-bar">
 
@@ -715,37 +765,29 @@ th {
 </div>
 
 
-<!-- NAVIGATION -->
+<!-- =========================
+     NAVIGATION
+========================= -->
 
 <div class="nav">
 
-  <button
-    onclick="showSection('overview')"
-  >
+  <button onclick="showSection('overview')">
     📊 Overview
   </button>
 
-  <button
-    onclick="showSection('sellers')"
-  >
+  <button onclick="showSection('sellers')">
     👥 Sellers
   </button>
 
-  <button
-    onclick="showSection('products')"
-  >
+  <button onclick="showSection('products')">
     🛍️ Products
   </button>
 
-  <button
-    onclick="showSection('orders')"
-  >
+  <button onclick="showSection('orders')">
     📦 Orders
   </button>
 
-  <button
-    onclick="showSection('payments')"
-  >
+  <button onclick="showSection('payments')">
     💳 Payments
   </button>
 
@@ -861,9 +903,7 @@ th {
     </h2>
 
     <div id="recentActivity">
-
       Loading...
-
     </div>
 
   </div>
@@ -895,9 +935,7 @@ th {
     </button>
 
     <div id="sellerList">
-
       Loading seller applications...
-
     </div>
 
   </div>
@@ -933,7 +971,6 @@ th {
       class="loading"
     >
       Loading products...
-
     </div>
 
   </div>
@@ -969,7 +1006,6 @@ th {
       class="loading"
     >
       Loading orders...
-
     </div>
 
   </div>
@@ -987,10 +1023,203 @@ th {
   class="section"
 >
 
+
+  <!-- MARKETPLACE PAYMENT OVERVIEW -->
+
   <div class="card">
 
     <h2>
-      💳 ZYRE Marketing Payments
+      💳 Seller Payment & Payout Centre
+    </h2>
+
+    <p>
+      Manage customer marketplace payments,
+      seller earnings, ZYRE commissions and
+      seller payouts.
+    </p>
+
+
+    <div class="payment-stats">
+
+      <div class="payment-stat">
+
+        <div class="payment-stat-title">
+          Customer Payments
+        </div>
+
+        <div
+          class="payment-stat-value"
+          id="marketplacePaymentTotal"
+        >
+          R0.00
+        </div>
+
+      </div>
+
+
+      <div class="payment-stat">
+
+        <div class="payment-stat-title">
+          ZYRE Commission
+        </div>
+
+        <div
+          class="payment-stat-value"
+          id="zyreCommissionTotal"
+        >
+          R0.00
+        </div>
+
+      </div>
+
+
+      <div class="payment-stat">
+
+        <div class="payment-stat-title">
+          Seller Earnings
+        </div>
+
+        <div
+          class="payment-stat-value"
+          id="sellerEarningsTotal"
+        >
+          R0.00
+        </div>
+
+      </div>
+
+
+      <div class="payment-stat">
+
+        <div class="payment-stat-title">
+          Pending Payouts
+        </div>
+
+        <div
+          class="payment-stat-value"
+          id="pendingPayoutTotal"
+        >
+          R0.00
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <button
+      class="gold-button"
+      onclick="loadSellerPayments()"
+    >
+      🔄 Refresh Seller Payments
+    </button>
+
+
+    <div
+      id="sellerPaymentMessage"
+      class="loading"
+    >
+      No marketplace payments yet.
+    </div>
+
+  </div>
+
+
+
+  <!-- SELLER PAYMENTS -->
+
+  <div class="card">
+
+    <h2>
+      💰 Customer Payments
+    </h2>
+
+    <div
+      id="sellerPaymentList"
+      class="loading"
+    >
+      Loading marketplace payments...
+    </div>
+
+  </div>
+
+
+
+  <!-- SELLER BALANCES -->
+
+  <div class="card">
+
+    <h2>
+      🏦 Seller Balances
+    </h2>
+
+    <div
+      id="sellerBalanceList"
+      class="loading"
+    >
+      Loading seller balances...
+    </div>
+
+  </div>
+
+
+
+  <!-- PAYOUTS -->
+
+  <div class="card">
+
+    <h2>
+      💸 Seller Payouts
+    </h2>
+
+    <p>
+      Payouts will be connected to the
+      payment provider after seller payment
+      accounts are configured.
+    </p>
+
+    <div
+      id="payoutList"
+      class="loading"
+    >
+      Loading payouts...
+    </div>
+
+  </div>
+
+
+
+  <!-- SELLER PAYMENT ACCOUNTS -->
+
+  <div class="card">
+
+    <h2>
+      🏦 Seller Payment Accounts
+    </h2>
+
+    <p>
+      Seller bank/payment-provider accounts
+      will appear here when sellers are
+      connected to the ZYRE payout system.
+    </p>
+
+    <div
+      id="sellerAccountList"
+      class="loading"
+    >
+      Loading seller payment accounts...
+    </div>
+
+  </div>
+
+
+
+  <!-- RENTAL PAYMENTS -->
+
+  <div class="card">
+
+    <h2>
+      🏪 Seller Store Rental Payments
     </h2>
 
     <p>
@@ -1000,26 +1229,28 @@ th {
 
     <button
       class="gold-button"
-      onclick="loadPayments()"
+      onclick="loadRentalPayments()"
     >
-      🔄 Refresh Payments
+      🔄 Refresh Rental Payments
     </button>
 
     <div
-      id="paymentList"
+      id="rentalPaymentList"
       class="loading"
     >
-      Loading payments...
-
+      Loading rental payments...
     </div>
 
   </div>
 
 
+
+  <!-- PAYMENT STRUCTURE -->
+
   <div class="card">
 
     <h2>
-      💰 Payment Structure
+      💰 ZYRE Payment Structure
     </h2>
 
     <p>
@@ -1029,18 +1260,29 @@ th {
 
     <p>
       💳 Customer marketplace payments:
-      <strong>Processed through ZYRE
-      Marketing's payment system</strong>
+      <strong>
+        Processed through the ZYRE payment system
+      </strong>
     </p>
 
     <p>
-      PayFast will operate as the payment
-      processor behind the marketplace.
+      💰 Seller earnings:
+      <strong>
+        Customer payment minus ZYRE marketplace commission
+      </strong>
+    </p>
+
+    <p>
+      💸 Seller payouts:
+      <strong>
+        Paid to the seller's registered payout account
+      </strong>
     </p>
 
     <p class="pending">
-      ⏳ Live PayFast activation will be
-      completed after account verification.
+      ⏳ Live payment-provider activation will
+      be connected after the seller payout
+      system is completed.
     </p>
 
   </div>
@@ -1293,7 +1535,15 @@ async function loadDashboard() {
 
     loadOrders(),
 
-    loadPayments()
+    loadRentalPayments(),
+
+    loadSellerPayments(),
+
+    loadSellerBalances(),
+
+    loadPayouts(),
+
+    loadSellerPaymentAccounts()
 
   ]);
 
@@ -2132,17 +2382,17 @@ async function loadOrders() {
    RENTAL PAYMENTS
 ========================= */
 
-async function loadPayments() {
+async function loadRentalPayments() {
 
   const paymentList =
     document.getElementById(
-      "paymentList"
+      "rentalPaymentList"
     );
 
 
   paymentList.innerHTML =
     '<div class="loading">' +
-    'Loading payments...' +
+    'Loading rental payments...' +
     '</div>';
 
 
@@ -2311,6 +2561,923 @@ async function loadPayments() {
 
 
 /* =========================
+   MARKETPLACE PAYMENTS
+========================= */
+
+async function loadSellerPayments() {
+
+  const list =
+    document.getElementById(
+      "sellerPaymentList"
+    );
+
+  const message =
+    document.getElementById(
+      "sellerPaymentMessage"
+    );
+
+
+  list.innerHTML =
+    '<div class="loading">' +
+    'Loading marketplace payments...' +
+    '</div>';
+
+
+  message.textContent =
+    "Loading payment totals...";
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/payments?select=*&order=id.desc",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
+
+
+    const text =
+      await response.text();
+
+
+    if (!response.ok) {
+
+      list.innerHTML =
+        '<p class="error">' +
+        text +
+        '</p>';
+
+      message.innerHTML =
+        '<span class="error">' +
+        'Could not load marketplace payments.' +
+        '</span>';
+
+      return;
+
+    }
+
+
+    const payments =
+      JSON.parse(text);
+
+
+    let total =
+      0;
+
+    let commission =
+      0;
+
+    let sellerTotal =
+      0;
+
+
+    payments.forEach(
+      function(payment) {
+
+        total +=
+          Number(
+            payment.amount || 0
+          );
+
+        commission +=
+          Number(
+            payment.zyre_commission || 0
+          );
+
+        sellerTotal +=
+          Number(
+            payment.seller_amount || 0
+          );
+
+      }
+    );
+
+
+    document
+      .getElementById(
+        "marketplacePaymentTotal"
+      )
+      .textContent =
+        "R" +
+        total.toFixed(2);
+
+
+    document
+      .getElementById(
+        "zyreCommissionTotal"
+      )
+      .textContent =
+        "R" +
+        commission.toFixed(2);
+
+
+    document
+      .getElementById(
+        "sellerEarningsTotal"
+      )
+      .textContent =
+        "R" +
+        sellerTotal.toFixed(2);
+
+
+    if (!payments.length) {
+
+      message.textContent =
+        "No marketplace payments yet.";
+
+      list.innerHTML =
+        "<p>No customer marketplace payments found.</p>";
+
+      return;
+
+    }
+
+
+    message.innerHTML =
+      '<span class="success">' +
+      payments.length +
+      ' marketplace payment record(s) found.' +
+      '</span>';
+
+
+    list.innerHTML =
+      '<div class="table-wrap">' +
+
+      '<table>' +
+
+      '<thead>' +
+
+      '<tr>' +
+
+      '<th>ID</th>' +
+
+      '<th>Order</th>' +
+
+      '<th>Seller</th>' +
+
+      '<th>Total</th>' +
+
+      '<th>ZYRE Commission</th>' +
+
+      '<th>Seller Amount</th>' +
+
+      '<th>Status</th>' +
+
+      '<th>Reference</th>' +
+
+      '</tr>' +
+
+      '</thead>' +
+
+      '<tbody>' +
+
+      payments.map(
+        function(payment) {
+
+          return `
+
+            <tr>
+
+              <td>
+                ${payment.id}
+              </td>
+
+              <td>
+                ${payment.order_id || "-"}
+              </td>
+
+              <td>
+                ${payment.seller_id || "-"}
+              </td>
+
+              <td>
+                R${
+                  Number(
+                    payment.amount || 0
+                  ).toFixed(2)
+                }
+              </td>
+
+              <td>
+                R${
+                  Number(
+                    payment.zyre_commission || 0
+                  ).toFixed(2)
+                }
+              </td>
+
+              <td>
+                R${
+                  Number(
+                    payment.seller_amount || 0
+                  ).toFixed(2)
+                }
+              </td>
+
+              <td>
+                ${
+                  payment.status ||
+                  "pending"
+                }
+              </td>
+
+              <td>
+                ${
+                  payment.provider_reference ||
+                  "-"
+                }
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      ).join("") +
+
+      '</tbody>' +
+
+      '</table>' +
+
+      '</div>';
+
+
+  } catch (error) {
+
+    list.innerHTML =
+      '<p class="error">' +
+      error.message +
+      '</p>';
+
+    message.innerHTML =
+      '<span class="error">' +
+      error.message +
+      '</span>';
+
+  }
+
+
+  loadPayoutTotals();
+
+}
+
+
+/* =========================
+   SELLER BALANCES
+========================= */
+
+async function loadSellerBalances() {
+
+  const list =
+    document.getElementById(
+      "sellerBalanceList"
+    );
+
+
+  list.innerHTML =
+    '<div class="loading">' +
+    'Loading seller balances...' +
+    '</div>';
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/seller_balances?select=*&order=seller_id.asc",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
+
+
+    const text =
+      await response.text();
+
+
+    if (!response.ok) {
+
+      list.innerHTML =
+        '<p class="error">' +
+        text +
+        '</p>';
+
+      return;
+
+    }
+
+
+    const balances =
+      JSON.parse(text);
+
+
+    if (!balances.length) {
+
+      list.innerHTML =
+        "<p>No seller balances yet.</p>";
+
+      return;
+
+    }
+
+
+    list.innerHTML =
+      '<div class="table-wrap">' +
+
+      '<table>' +
+
+      '<thead>' +
+
+      '<tr>' +
+
+      '<th>Seller</th>' +
+
+      '<th>Pending</th>' +
+
+      '<th>Available</th>' +
+
+      '<th>Total Sales</th>' +
+
+      '<th>ZYRE Commission</th>' +
+
+      '<th>Paid Out</th>' +
+
+      '</tr>' +
+
+      '</thead>' +
+
+      '<tbody>' +
+
+      balances.map(
+        function(balance) {
+
+          return `
+
+            <tr>
+
+              <td>
+                ${balance.seller_id}
+              </td>
+
+              <td>
+                R${
+                  Number(
+                    balance.pending_amount || 0
+                  ).toFixed(2)
+                }
+              </td>
+
+              <td>
+                R${
+                  Number(
+                    balance.available_amount || 0
+                  ).toFixed(2)
+                }
+              </td>
+
+              <td>
+                R${
+                  Number(
+                    balance.total_sales || 0
+                  ).toFixed(2)
+                }
+              </td>
+
+              <td>
+                R${
+                  Number(
+                    balance.total_commission || 0
+                  ).toFixed(2)
+                }
+              </td>
+
+              <td>
+                R${
+                  Number(
+                    balance.total_paid_out || 0
+                  ).toFixed(2)
+                }
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      ).join("") +
+
+      '</tbody>' +
+
+      '</table>' +
+
+      '</div>';
+
+
+  } catch (error) {
+
+    list.innerHTML =
+      '<p class="error">' +
+      error.message +
+      '</p>';
+
+  }
+
+}
+
+
+/* =========================
+   PAYOUTS
+========================= */
+
+async function loadPayouts() {
+
+  const list =
+    document.getElementById(
+      "payoutList"
+    );
+
+
+  list.innerHTML =
+    '<div class="loading">' +
+    'Loading payouts...' +
+    '</div>';
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/payouts?select=*&order=id.desc",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
+
+
+    const text =
+      await response.text();
+
+
+    if (!response.ok) {
+
+      list.innerHTML =
+        '<p class="error">' +
+        text +
+        '</p>';
+
+      return;
+
+    }
+
+
+    const payouts =
+      JSON.parse(text);
+
+
+    if (!payouts.length) {
+
+      document
+        .getElementById(
+          "pendingPayoutTotal"
+        )
+        .textContent =
+        "R0.00";
+
+      list.innerHTML =
+        "<p>No seller payouts yet.</p>";
+
+      return;
+
+    }
+
+
+    list.innerHTML =
+      '<div class="table-wrap">' +
+
+      '<table>' +
+
+      '<thead>' +
+
+      '<tr>' +
+
+      '<th>ID</th>' +
+
+      '<th>Seller</th>' +
+
+      '<th>Amount</th>' +
+
+      '<th>Provider</th>' +
+
+      '<th>Reference</th>' +
+
+      '<th>Status</th>' +
+
+      '<th>Requested</th>' +
+
+      '</tr>' +
+
+      '</thead>' +
+
+      '<tbody>' +
+
+      payouts.map(
+        function(payout) {
+
+          return `
+
+            <tr>
+
+              <td>
+                ${payout.id}
+              </td>
+
+              <td>
+                ${payout.seller_id}
+              </td>
+
+              <td>
+                R${
+                  Number(
+                    payout.amount || 0
+                  ).toFixed(2)
+                }
+              </td>
+
+              <td>
+                ${
+                  payout.provider ||
+                  "-"
+                }
+              </td>
+
+              <td>
+                ${
+                  payout.provider_reference ||
+                  "-"
+                }
+              </td>
+
+              <td>
+                ${
+                  payout.status ||
+                  "pending"
+                }
+              </td>
+
+              <td>
+                ${
+                  payout.requested_at ||
+                  "-"
+                }
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      ).join("") +
+
+      '</tbody>' +
+
+      '</table>' +
+
+      '</div>';
+
+
+  } catch (error) {
+
+    list.innerHTML =
+      '<p class="error">' +
+      error.message +
+      '</p>';
+
+  }
+
+}
+
+
+/* =========================
+   PAYOUT TOTAL
+========================= */
+
+async function loadPayoutTotals() {
+
+  try {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/payouts?select=amount,status",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
+
+
+    if (!response.ok) {
+
+      return;
+
+    }
+
+
+    const payouts =
+      await response.json();
+
+
+    let pending =
+      0;
+
+
+    payouts.forEach(
+      function(payout) {
+
+        const status =
+          String(
+            payout.status ||
+            ""
+          ).toLowerCase();
+
+
+        if (
+          status === "pending" ||
+          status === "processing"
+        ) {
+
+          pending +=
+            Number(
+              payout.amount || 0
+            );
+
+        }
+
+      }
+    );
+
+
+    document
+      .getElementById(
+        "pendingPayoutTotal"
+      )
+      .textContent =
+      "R" +
+      pending.toFixed(2);
+
+
+  } catch (error) {
+
+    console.error(
+      "Payout total error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================
+   SELLER PAYMENT ACCOUNTS
+========================= */
+
+async function loadSellerPaymentAccounts() {
+
+  const list =
+    document.getElementById(
+      "sellerAccountList"
+    );
+
+
+  list.innerHTML =
+    '<div class="loading">' +
+    'Loading seller payment accounts...' +
+    '</div>';
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/seller_payment_accounts?select=*&order=id.desc",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
+
+
+    const text =
+      await response.text();
+
+
+    if (!response.ok) {
+
+      list.innerHTML =
+        '<p class="error">' +
+        text +
+        '</p>';
+
+      return;
+
+    }
+
+
+    const accounts =
+      JSON.parse(text);
+
+
+    if (!accounts.length) {
+
+      list.innerHTML =
+        "<p>No seller payment accounts connected yet.</p>";
+
+      return;
+
+    }
+
+
+    list.innerHTML =
+      '<div class="table-wrap">' +
+
+      '<table>' +
+
+      '<thead>' +
+
+      '<tr>' +
+
+      '<th>ID</th>' +
+
+      '<th>Seller</th>' +
+
+      '<th>Provider</th>' +
+
+      '<th>Account</th>' +
+
+      '<th>Bank</th>' +
+
+      '<th>Last 4</th>' +
+
+      '<th>Status</th>' +
+
+      '</tr>' +
+
+      '</thead>' +
+
+      '<tbody>' +
+
+      accounts.map(
+        function(account) {
+
+          return `
+
+            <tr>
+
+              <td>
+                ${account.id}
+              </td>
+
+              <td>
+                ${account.seller_id}
+              </td>
+
+              <td>
+                ${
+                  account.provider ||
+                  "-"
+                }
+              </td>
+
+              <td>
+                ${
+                  account.account_name ||
+                  "-"
+                }
+              </td>
+
+              <td>
+                ${
+                  account.bank_name ||
+                  "-"
+                }
+              </td>
+
+              <td>
+                ${
+                  account.account_number_last4 ||
+                  "-"
+                }
+              </td>
+
+              <td>
+                ${
+                  account.status ||
+                  "pending"
+                }
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      ).join("") +
+
+      '</tbody>' +
+
+      '</table>' +
+
+      '</div>';
+
+
+  } catch (error) {
+
+    list.innerHTML =
+      '<p class="error">' +
+      error.message +
+      '</p>';
+
+  }
+
+}
+
+
+/* =========================
    RECENT ACTIVITY
 ========================= */
 
@@ -2340,7 +3507,17 @@ function loadRecentActivity() {
     </p>
 
     <p>
-      💳 Seller subscriptions:
+      💳 Customer marketplace payments:
+      Check the Payments section.
+    </p>
+
+    <p>
+      💸 Seller payouts:
+      Check the Payments section.
+    </p>
+
+    <p>
+      🏪 Seller subscriptions:
       Check the Payments section.
     </p>
 
