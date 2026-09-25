@@ -126,7 +126,7 @@ body {
 }
 
 .pay-button:disabled {
-  opacity: .5;
+  opacity: .55;
   cursor: not-allowed;
 }
 
@@ -147,6 +147,11 @@ body {
   font-size: 13px;
   line-height: 1.5;
   margin-top: 15px;
+}
+
+.notice strong {
+  display: inline-block;
+  margin-bottom: 4px;
 }
 
 .back {
@@ -262,8 +267,9 @@ body {
       id="payButton"
       class="pay-button"
       onclick="payNow()"
+      disabled
     >
-      💳 Pay Now
+      ⏳ PayFast Approval Pending
     </button>
 
 
@@ -279,9 +285,14 @@ body {
 
       <strong>Payment status</strong><br>
 
-      Your ZYRE payment page is ready.
-      PayFast payment processing will be connected
-      once your PayFast merchant approval is complete.
+      Your order has been created successfully,
+      but payment has not been completed.
+
+      <br><br>
+
+      PayFast payment processing will be activated
+      after your ZYRE Marketing PayFast merchant
+      approval and integration are complete.
 
     </div>
 
@@ -367,6 +378,11 @@ function displayPaymentInformation() {
       "errorBox"
     );
 
+  const payButton =
+    document.getElementById(
+      "payButton"
+    );
+
 
   if (
     !orderId ||
@@ -380,9 +396,7 @@ function displayPaymentInformation() {
     errorBox.innerHTML =
       "The payment information is missing or invalid.";
 
-    document.getElementById(
-      "payButton"
-    ).disabled = true;
+    payButton.disabled = true;
 
     return;
 
@@ -409,6 +423,9 @@ function displayPaymentInformation() {
   totalAmount.textContent =
     "R" +
     amount.toFixed(2);
+
+
+  payButton.disabled = true;
 
 }
 
@@ -455,30 +472,9 @@ function escapeHtml(value) {
 
 function payNow() {
 
-  if (
-    !orderId ||
-    !amount ||
-    amount <= 0
-  ) {
-
-    alert(
-      "The payment information is invalid."
-    );
-
-    return;
-
-  }
-
-
-  /*
-    PAYFAST CONNECTION WILL BE ADDED HERE
-    AFTER PAYFAST MERCHANT APPROVAL.
-  */
-
-
   alert(
 
-    "ZYRE Marketing Payment\n\n" +
+    "PayFast payment is not active yet.\n\n" +
 
     "Order #" +
     orderId +
@@ -490,8 +486,8 @@ function payNow() {
 
     "\n\n" +
 
-    "PayFast payment processing is being prepared. " +
-    "Your PayFast merchant approval is still pending."
+    "Your order has been recorded, but no payment " +
+    "has been made."
 
   );
 
