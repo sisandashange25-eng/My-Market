@@ -1,11 +1,13 @@
-const CACHE_NAME = "zyre-marketing-v2";
+const CACHE_NAME = "zyre-marketing-v3";
 
 const FILES_TO_CACHE = [
   "/My-Market/",
   "/My-Market/index.html",
   "/My-Market/style.css",
   "/My-Market/app.js",
-  "/My-Market/manifest.json"
+  "/My-Market/manifest.json",
+  "/My-Market/icon-192.png",
+  "/My-Market/icon-512.png"
 ];
 
 
@@ -21,16 +23,25 @@ self.addEventListener("install", event => {
 
   event.waitUntil(
 
-    caches.open(CACHE_NAME).then(cache => {
+    caches.open(CACHE_NAME).then(async cache => {
 
-      return cache.addAll(FILES_TO_CACHE);
+      for (const file of FILES_TO_CACHE) {
 
-    }).catch(error => {
+        try {
 
-      console.error(
-        "ZYRE cache setup failed:",
-        error
-      );
+          await cache.add(file);
+
+        } catch (error) {
+
+          console.warn(
+            "Could not cache:",
+            file,
+            error
+          );
+
+        }
+
+      }
 
     })
 
@@ -61,6 +72,8 @@ self.addEventListener("activate", event => {
 
           }
 
+          return null;
+
         })
 
       );
@@ -83,8 +96,11 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
 
   if (event.request.method !== "GET") {
+
     return;
+
   }
+
 
   event.respondWith(
 
@@ -92,17 +108,26 @@ self.addEventListener("fetch", event => {
 
       .then(response => {
 
-        const responseClone =
-          response.clone();
+        if (
+          response &&
+          response.status === 200
+        ) {
 
-        caches.open(CACHE_NAME).then(cache => {
+          const responseClone =
+            response.clone();
 
-          cache.put(
-            event.request,
-            responseClone
-          );
 
-        });
+          caches.open(CACHE_NAME).then(cache => {
+
+            cache.put(
+              event.request,
+              responseClone
+            );
+
+          });
+
+        }
+
 
         return response;
 
@@ -126,6 +151,7 @@ self.addEventListener("fetch", event => {
 self.addEventListener("push", event => {
 
   let data = {};
+
 
   try {
 
@@ -244,9 +270,7 @@ self.addEventListener(
 
         if (clients.openWindow) {
 
-          return clients.openWindow(
-            url
-          );
+          return clients.openWindow(url);
 
         }
 
