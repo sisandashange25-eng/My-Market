@@ -1,6 +1,6 @@
 /* =========================================================
    ZYRE MARKETING
-   Premium Black + Gold Marketplace
+   Clean Black + White Marketplace
    ========================================================= */
 
 * {
@@ -19,16 +19,12 @@ body {
     Arial,
     sans-serif;
 
-  background:
-    radial-gradient(
-      circle at 50% -10%,
-      #292929 0%,
-      #111111 35%,
-      #050505 75%
-    );
+  background: #ffffff;
 
-  color: #f5f5f5;
+  color: #000000;
+
   min-height: 100vh;
+
   line-height: 1.6;
 }
 
@@ -51,10 +47,13 @@ section {
 }
 
 .eyebrow {
-  color: #d4af37;
+  color: #000000;
+
   font-size: 11px;
   font-weight: 700;
+
   letter-spacing: 3px;
+
   text-transform: uppercase;
 }
 
@@ -65,34 +64,45 @@ section {
 .zyre-header {
   position: sticky;
   top: 0;
+
   z-index: 1000;
 
   min-height: 78px;
+
   padding: 14px 5%;
 
   display: flex;
+
   align-items: center;
+
   gap: 30px;
 
-  background: rgba(5, 5, 5, 0.94);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+  background: #ffffff;
+
+  color: #000000;
+
+  border-bottom: 1px solid #dddddd;
 
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 }
 
-/* BRAND */
+/* =========================================================
+   BRAND
+   ========================================================= */
 
 .brand {
   min-width: 145px;
 
   display: flex;
+
   flex-direction: column;
+
   justify-content: center;
 }
 
 .brand-main {
-  color: #ffffff;
+  color: #000000;
 
   font-family:
     Georgia,
@@ -100,38 +110,49 @@ section {
     serif;
 
   font-size: 30px;
+
   font-weight: 700;
+
   letter-spacing: 7px;
+
   line-height: 1;
 }
 
 .brand-sub {
   margin-top: 4px;
 
-  color: #d4af37;
+  color: #000000;
 
   font-size: 8px;
+
   font-weight: 700;
+
   letter-spacing: 5px;
 }
 
-/* SEARCH */
+/* =========================================================
+   SEARCH
+   ========================================================= */
 
 .header-search {
   flex: 1;
+
   max-width: 650px;
 }
 
 .header-search input {
   width: 100%;
+
   height: 45px;
 
   padding: 0 18px;
 
-  color: #ffffff;
-  background: #111111;
+  color: #000000;
 
-  border: 1px solid #333333;
+  background: #ffffff;
+
+  border: 1px solid #000000;
+
   border-radius: 5px;
 
   outline: none;
@@ -142,47 +163,50 @@ section {
 }
 
 .header-search input::placeholder {
-  color: #888888;
+  color: #777777;
 }
 
 .header-search input:focus {
-  border-color: #d4af37;
+  border-color: #000000;
 
   box-shadow:
-    0 0 0 3px rgba(212, 175, 55, 0.08);
+    0 0 0 3px rgba(0, 0, 0, 0.08);
 }
 
-/* CART */
+/* =========================================================
+   CART BUTTON
+   ========================================================= */
 
 .cart-button {
   min-width: 105px;
+
   height: 44px;
 
   padding: 0 15px;
 
-  color: #050505;
-  background: linear-gradient(
-    135deg,
-    #f1d477,
-    #d4af37,
-    #a67c00
-  );
+  color: #ffffff;
 
-  border: none;
+  background: #000000;
+
+  border: 1px solid #000000;
+
   border-radius: 4px;
 
   font-weight: 700;
 
   transition:
     transform 0.2s,
-    box-shadow 0.2s;
+    box-shadow 0.2s,
+    background 0.2s;
 }
 
 .cart-button:hover {
   transform: translateY(-2px);
 
+  background: #222222;
+
   box-shadow:
-    0 8px 25px rgba(212, 175, 55, 0.2);
+    0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .cart-button b {
@@ -197,27 +221,33 @@ section {
   min-height: 48px;
 
   display: flex;
+
   justify-content: center;
+
   align-items: center;
+
   gap: 8px;
 
   padding: 7px 15px;
 
-  background: #080808;
+  background: #ffffff;
 
-  border-bottom: 1px solid #1f1f1f;
+  border-bottom: 1px solid #dddddd;
 }
 
 .zyre-nav button {
   padding: 8px 20px;
 
-  color: #bcbcbc;
+  color: #333333;
+
   background: transparent;
 
   border: 1px solid transparent;
+
   border-radius: 3px;
 
   font-size: 13px;
+
   font-weight: 600;
 
   transition:
@@ -227,9 +257,11 @@ section {
 }
 
 .zyre-nav button:hover {
-  color: #d4af37;
-  border-color: rgba(212, 175, 55, 0.35);
-  background: rgba(212, 175, 55, 0.05);
+  color: #000000;
+
+  border-color: #000000;
+
+  background: #f5f5f5;
 }
 
 /* =========================================================
@@ -238,25 +270,24 @@ section {
 
 .hero {
   position: relative;
+
   overflow: hidden;
 
   min-height: 590px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
   padding: 80px 8%;
 
-  background:
-    linear-gradient(
-      100deg,
-      #050505 0%,
-      #0b0b0b 48%,
-      #151515 100%
-    );
+  background: #ffffff;
 
-  border-bottom: 1px solid #292929;
+  color: #000000;
+
+  border-bottom: 1px solid #dddddd;
 }
 
 .hero::before {
@@ -265,9 +296,11 @@ section {
   position: absolute;
 
   width: 500px;
+
   height: 500px;
 
   right: -180px;
+
   top: -170px;
 
   border-radius: 50%;
@@ -275,7 +308,7 @@ section {
   background:
     radial-gradient(
       circle,
-      rgba(212, 175, 55, 0.17),
+      rgba(0, 0, 0, 0.05),
       transparent 68%
     );
 }
@@ -286,16 +319,19 @@ section {
   position: absolute;
 
   left: 8%;
+
   bottom: 0;
 
   width: 180px;
+
   height: 1px;
 
-  background: #d4af37;
+  background: #000000;
 }
 
 .hero-content {
   position: relative;
+
   z-index: 2;
 
   max-width: 650px;
@@ -304,12 +340,15 @@ section {
 .hero h1 {
   margin-top: 18px;
 
+  color: #000000;
+
   font-family:
     Georgia,
     "Times New Roman",
     serif;
 
   font-size: clamp(48px, 7vw, 82px);
+
   font-weight: 500;
 
   line-height: 0.98;
@@ -318,7 +357,7 @@ section {
 }
 
 .hero h1 span {
-  color: #d4af37;
+  color: #000000;
 }
 
 .hero-text {
@@ -326,21 +365,26 @@ section {
 
   margin-top: 25px;
 
-  color: #a8a8a8;
+  color: #555555;
 
   font-size: 16px;
+
   line-height: 1.8;
 }
 
 .hero-buttons {
   display: flex;
+
   flex-wrap: wrap;
+
   gap: 12px;
 
   margin-top: 35px;
 }
 
-/* HERO BUTTONS */
+/* =========================================================
+   HERO BUTTONS
+   ========================================================= */
 
 .primary-button,
 .secondary-button {
@@ -359,25 +403,19 @@ section {
 }
 
 .primary-button {
-  color: #050505;
+  color: #ffffff;
 
-  background:
-    linear-gradient(
-      135deg,
-      #f3d77b,
-      #d4af37,
-      #a67c00
-    );
+  background: #000000;
 
-  border: none;
+  border: 1px solid #000000;
 }
 
 .secondary-button {
-  color: #d4af37;
+  color: #000000;
 
-  background: transparent;
+  background: #ffffff;
 
-  border: 1px solid #806817;
+  border: 1px solid #000000;
 }
 
 .primary-button:hover,
@@ -386,31 +424,41 @@ section {
 }
 
 .primary-button:hover {
+  background: #222222;
+
   box-shadow:
-    0 10px 30px rgba(212, 175, 55, 0.2);
+    0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .secondary-button:hover {
-  background: rgba(212, 175, 55, 0.07);
+  background: #f2f2f2;
 }
 
-/* HERO MARK */
+/* =========================================================
+   HERO MARK
+   ========================================================= */
 
 .hero-mark {
   position: relative;
+
   z-index: 2;
 
   width: 330px;
+
   height: 330px;
 
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   justify-content: center;
 
-  color: #d4af37;
+  color: #000000;
 
-  border: 1px solid rgba(212, 175, 55, 0.28);
+  border: 1px solid #000000;
+
   border-radius: 50%;
 
   font-family:
@@ -419,16 +467,18 @@ section {
     serif;
 
   font-size: 20px;
+
   letter-spacing: 7px;
 
   box-shadow:
-    0 0 80px rgba(212, 175, 55, 0.05);
+    0 0 80px rgba(0, 0, 0, 0.05);
 }
 
 .hero-z {
-  color: #ffffff;
+  color: #000000;
 
   font-size: 150px;
+
   line-height: 0.8;
 
   letter-spacing: 0;
@@ -444,22 +494,24 @@ section {
   padding: 45px 8%;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 30px;
 
-  background:
-    linear-gradient(
-      100deg,
-      #151515,
-      #0b0b0b
-    );
+  background: #f7f7f7;
 
-  border-bottom: 1px solid #292929;
+  color: #000000;
+
+  border-bottom: 1px solid #dddddd;
 }
 
 .seller-banner h2 {
   margin: 7px 0;
+
+  color: #000000;
 
   font-family:
     Georgia,
@@ -467,15 +519,16 @@ section {
     serif;
 
   font-size: 32px;
+
   font-weight: 500;
 }
 
 .seller-banner p:not(.eyebrow) {
-  color: #999999;
+  color: #555555;
 }
 
 .seller-banner strong {
-  color: #d4af37;
+  color: #000000;
 }
 
 .seller-banner > button {
@@ -485,11 +538,12 @@ section {
 
   padding: 0 25px;
 
-  color: #050505;
+  color: #ffffff;
 
-  background: #d4af37;
+  background: #000000;
 
   border: none;
+
   border-radius: 3px;
 
   font-weight: 700;
@@ -498,7 +552,7 @@ section {
 }
 
 .seller-banner > button:hover {
-  background: #f0d36c;
+  background: #222222;
 
   transform: translateY(-2px);
 }
@@ -509,12 +563,19 @@ section {
 
 .marketplace {
   padding: 80px 6%;
+
+  background: #ffffff;
+
+  color: #000000;
 }
 
 .toolbar {
   display: flex;
+
   align-items: flex-end;
+
   justify-content: space-between;
+
   gap: 30px;
 
   margin-bottom: 35px;
@@ -524,42 +585,46 @@ section {
 .section-title h2 {
   margin-top: 5px;
 
+  color: #000000;
+
   font-family:
     Georgia,
     "Times New Roman",
     serif;
 
   font-size: 38px;
-  font-weight: 500;
 
-  color: #ffffff;
+  font-weight: 500;
 }
 
 .toolbar p:not(.eyebrow) {
   margin-top: 8px;
 
-  color: #777777;
+  color: #666666;
 
   font-size: 14px;
 }
 
 .toolbar select {
   min-width: 180px;
+
   height: 42px;
 
   padding: 0 12px;
 
-  color: #dddddd;
-  background: #111111;
+  color: #000000;
 
-  border: 1px solid #333333;
+  background: #ffffff;
+
+  border: 1px solid #000000;
+
   border-radius: 3px;
 
   outline: none;
 }
 
 .toolbar select:focus {
-  border-color: #d4af37;
+  border-color: #000000;
 }
 
 /* =========================================================
@@ -590,14 +655,10 @@ section {
 
   padding: 24px;
 
-  background:
-    linear-gradient(
-      145deg,
-      #171717,
-      #0d0d0d
-    );
+  background: #ffffff;
 
-  border: 1px solid #272727;
+  border: 1px solid #dddddd;
+
   border-radius: 6px;
 
   transition:
@@ -610,11 +671,10 @@ section {
 .grid > .step:hover {
   transform: translateY(-5px);
 
-  border-color:
-    rgba(212, 175, 55, 0.5);
+  border-color: #000000;
 
   box-shadow:
-    0 18px 45px rgba(0, 0, 0, 0.35);
+    0 18px 45px rgba(0, 0, 0, 0.12);
 }
 
 .grid > article::before,
@@ -624,18 +684,14 @@ section {
   position: absolute;
 
   top: 0;
+
   left: 0;
 
   width: 100%;
+
   height: 2px;
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #d4af37,
-      transparent
-    );
+  background: #000000;
 
   opacity: 0;
 
@@ -648,7 +704,7 @@ section {
 }
 
 .grid h3 {
-  color: #ffffff;
+  color: #000000;
 
   font-family:
     Georgia,
@@ -656,52 +712,63 @@ section {
     serif;
 
   font-size: 21px;
+
   font-weight: 500;
 }
 
 .grid p {
-  color: #858585;
+  color: #666666;
 
   font-size: 14px;
 }
 
-/* Product store name */
+/* =========================================================
+   PRODUCT STORE NAME
+   ========================================================= */
 
 .grid article > div {
-  color: #d4af37;
+  color: #000000;
 }
 
-/* Price */
+/* =========================================================
+   PRICE
+   ========================================================= */
 
 .grid strong {
-  color: #d4af37;
+  color: #000000;
 
   font-size: 18px;
 }
 
-/* Stock */
+/* =========================================================
+   STOCK
+   ========================================================= */
 
 .grid small {
   color: #777777;
 }
 
-/* Product image support */
+/* =========================================================
+   PRODUCT IMAGE
+   ========================================================= */
 
 .pic {
   width: 100%;
+
   height: 220px;
 
   overflow: hidden;
 
   margin-bottom: 20px;
 
-  background: #090909;
+  background: #f5f5f5;
 
   border-radius: 4px;
 }
 
 .pic img {
   width: 100%;
+
   height: 100%;
 
   display: block;
@@ -722,15 +789,13 @@ section {
 .categories {
   padding: 80px 6%;
 
-  background:
-    linear-gradient(
-      180deg,
-      #0a0a0a,
-      #111111
-    );
+  background: #f7f7f7;
 
-  border-top: 1px solid #202020;
-  border-bottom: 1px solid #202020;
+  color: #000000;
+
+  border-top: 1px solid #dddddd;
+
+  border-bottom: 1px solid #dddddd;
 }
 
 .section-title {
@@ -753,24 +818,23 @@ section {
   min-height: 190px;
 
   display: flex;
+
   flex-direction: column;
+
   align-items: flex-start;
+
   justify-content: flex-end;
 
   padding: 25px;
 
   text-align: left;
 
-  color: #ffffff;
+  color: #000000;
 
-  background:
-    linear-gradient(
-      145deg,
-      #181818,
-      #0d0d0d
-    );
+  background: #ffffff;
 
-  border: 1px solid #292929;
+  border: 1px solid #dddddd;
+
   border-radius: 5px;
 
   transition:
@@ -783,11 +847,12 @@ section {
   margin-bottom: auto;
 
   font-size: 34px;
+
   filter: grayscale(100%);
 }
 
 .category-card strong {
-  color: #ffffff;
+  color: #000000;
 
   font-family:
     Georgia,
@@ -795,6 +860,7 @@ section {
     serif;
 
   font-size: 22px;
+
   font-weight: 500;
 }
 
@@ -807,18 +873,13 @@ section {
 .category-card:hover {
   transform: translateY(-5px);
 
-  border-color: #d4af37;
+  border-color: #000000;
 
-  background:
-    linear-gradient(
-      145deg,
-      #201d14,
-      #0d0d0d
-    );
+  background: #f5f5f5;
 }
 
 .category-card:hover strong {
-  color: #d4af37;
+  color: #000000;
 }
 
 /* =========================================================
@@ -828,7 +889,9 @@ section {
 .how-it-works {
   padding: 90px 6%;
 
-  background: #080808;
+  background: #ffffff;
+
+  color: #000000;
 }
 
 .steps {
@@ -848,9 +911,10 @@ section {
 
   padding: 30px;
 
-  background: #111111;
+  background: #ffffff;
 
-  border: 1px solid #242424;
+  border: 1px solid #dddddd;
+
   border-radius: 5px;
 }
 
@@ -859,7 +923,7 @@ section {
 
   margin-bottom: 20px;
 
-  color: #d4af37;
+  color: #000000;
 
   font-family:
     Georgia,
@@ -870,7 +934,7 @@ section {
 }
 
 .step h3 {
-  color: #ffffff;
+  color: #000000;
 
   font-family:
     Georgia,
@@ -878,13 +942,14 @@ section {
     serif;
 
   font-size: 22px;
+
   font-weight: 500;
 }
 
 .step p {
   margin-top: 10px;
 
-  color: #777777;
+  color: #666666;
 
   font-size: 14px;
 }
@@ -897,12 +962,14 @@ section {
   padding: 40px 6%;
 
   display: flex;
+
   justify-content: center;
+
   gap: 12px;
 
-  background: #0b0b0b;
+  background: #f7f7f7;
 
-  border-top: 1px solid #222222;
+  border-top: 1px solid #dddddd;
 }
 
 .services button {
@@ -910,22 +977,23 @@ section {
 
   padding: 0 22px;
 
-  color: #cccccc;
+  color: #000000;
 
-  background: transparent;
+  background: #ffffff;
 
-  border: 1px solid #333333;
+  border: 1px solid #000000;
+
   border-radius: 3px;
 
   transition: 0.2s;
 }
 
 .services button:hover {
-  color: #d4af37;
+  color: #ffffff;
 
-  border-color: #d4af37;
+  border-color: #000000;
 
-  background: rgba(212, 175, 55, 0.05);
+  background: #000000;
 }
 
 /* =========================================================
@@ -938,26 +1006,25 @@ section {
   z-index: 2000;
 
   top: 0;
+
   right: 0;
 
   width: min(420px, 92vw);
+
   height: 100vh;
 
   padding: 30px;
 
   overflow-y: auto;
 
-  background:
-    linear-gradient(
-      180deg,
-      #151515,
-      #080808
-    );
+  background: #ffffff;
 
-  border-left: 1px solid #3b3219;
+  color: #000000;
+
+  border-left: 1px solid #000000;
 
   box-shadow:
-    -20px 0 60px rgba(0, 0, 0, 0.55);
+    -20px 0 60px rgba(0, 0, 0, 0.18);
 
   transform: translateX(100%);
 
@@ -973,29 +1040,36 @@ section {
   position: absolute;
 
   top: 18px;
+
   right: 20px;
 
   width: 35px;
+
   height: 35px;
 
-  color: #aaaaaa;
-  background: transparent;
+  color: #000000;
 
-  border: 1px solid #333333;
+  background: #ffffff;
+
+  border: 1px solid #000000;
+
   border-radius: 3px;
 }
 
 .drawer .close:hover {
-  color: #d4af37;
+  color: #ffffff;
 
-  border-color: #d4af37;
+  background: #000000;
+
+  border-color: #000000;
 }
 
 .drawer h2 {
   margin-top: 30px;
+
   margin-bottom: 25px;
 
-  color: #ffffff;
+  color: #000000;
 
   font-family:
     Georgia,
@@ -1003,32 +1077,35 @@ section {
     serif;
 
   font-size: 30px;
+
   font-weight: 500;
 }
 
 #cartItems {
-  color: #bbbbbb;
+  color: #333333;
 }
 
 #cartItems > div {
   padding: 15px 0;
 
-  border-bottom: 1px solid #252525;
+  border-bottom: 1px solid #dddddd;
 }
 
 .total {
   margin-top: 25px;
+
   padding: 20px 0;
 
-  color: #888888;
+  color: #666666;
 
-  border-top: 1px solid #292929;
+  border-top: 1px solid #dddddd;
 }
 
 #total {
-  color: #d4af37;
+  color: #000000;
 
   font-size: 22px;
+
   font-weight: 700;
 }
 
@@ -1046,35 +1123,34 @@ section {
 }
 
 .clear-cart {
-  color: #cccccc;
+  color: #000000;
 
-  background: transparent;
+  background: #ffffff;
 
-  border: 1px solid #333333;
+  border: 1px solid #000000;
 }
 
 .clear-cart:hover {
   color: #ffffff;
-  border-color: #666666;
+
+  background: #000000;
+
+  border-color: #000000;
 }
 
 .checkout {
-  color: #050505;
+  color: #ffffff;
 
-  background:
-    linear-gradient(
-      135deg,
-      #f0d477,
-      #d4af37,
-      #a67c00
-    );
+  background: #000000;
 
-  border: none;
+  border: 1px solid #000000;
 }
 
 .checkout:hover {
+  background: #222222;
+
   box-shadow:
-    0 8px 25px rgba(212, 175, 55, 0.2);
+    0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 /* =========================================================
@@ -1084,9 +1160,11 @@ section {
 .zyre-footer {
   padding: 60px 6% 25px;
 
-  background: #030303;
+  background: #000000;
 
-  border-top: 1px solid #272727;
+  color: #ffffff;
+
+  border-top: 1px solid #000000;
 }
 
 .footer-brand strong {
@@ -1105,9 +1183,10 @@ section {
 }
 
 .footer-brand span {
-  color: #d4af37;
+  color: #ffffff;
 
   font-size: 8px;
+
   font-weight: 700;
 
   letter-spacing: 5px;
@@ -1116,13 +1195,14 @@ section {
 .footer-brand p {
   margin-top: 15px;
 
-  color: #666666;
+  color: #aaaaaa;
 
   font-size: 13px;
 }
 
 .footer-links {
   display: flex;
+
   flex-wrap: wrap;
 
   gap: 10px;
@@ -1133,7 +1213,7 @@ section {
 .footer-links button {
   padding: 8px 14px;
 
-  color: #888888;
+  color: #aaaaaa;
 
   background: transparent;
 
@@ -1143,16 +1223,17 @@ section {
 }
 
 .footer-links button:hover {
-  color: #d4af37;
+  color: #ffffff;
 }
 
 .footer-bottom {
   margin-top: 35px;
+
   padding-top: 20px;
 
-  color: #555555;
+  color: #777777;
 
-  border-top: 1px solid #181818;
+  border-top: 1px solid #333333;
 
   font-size: 12px;
 }
@@ -1169,6 +1250,7 @@ section {
 
   .hero-mark {
     width: 250px;
+
     height: 250px;
   }
 
@@ -1216,11 +1298,13 @@ section {
 
   .brand-main {
     font-size: 24px;
+
     letter-spacing: 5px;
   }
 
   .brand-sub {
     font-size: 7px;
+
     letter-spacing: 4px;
   }
 
@@ -1228,6 +1312,7 @@ section {
     grid-column: 1 / -1;
 
     max-width: none;
+
     width: 100%;
   }
 
@@ -1277,6 +1362,7 @@ section {
 
   .hero-mark {
     width: 190px;
+
     height: 190px;
 
     margin: 55px auto 0;
@@ -1440,95 +1526,227 @@ section {
    ========================================================= */
 
 ::selection {
-  color: #050505;
-  background: #d4af37;
+  color: #ffffff;
+
+  background: #000000;
 }
 
-/* =========================
+/* =========================================================
    ZYRE MOBILE SIDE MENU
-========================= */
+   ========================================================= */
 
 .menu-button {
-  background: #000;
-  color: #fff;
-  border: 1px solid #333;
+  background: #000000;
+
+  color: #ffffff;
+
+  border: 1px solid #000000;
+
   border-radius: 8px;
+
   padding: 10px 13px;
+
   font-size: 22px;
+
   cursor: pointer;
+
   min-width: 48px;
 }
 
-
-/* SIDE MENU */
+/* =========================================================
+   SIDE MENU
+   ========================================================= */
 
 .zyre-menu {
   position: fixed !important;
+
   top: 0;
+
   right: 0;
-  width: 280px;
-  max-width: 85%;
+
+  width: 290px;
+
+  max-width: 86%;
+
   height: 100vh;
-  background: #000;
-  color: #fff;
+
+  background: #000000;
+
+  color: #ffffff;
+
   z-index: 99999;
-  padding: 20px;
+
+  padding: 0;
+
   box-sizing: border-box;
-  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.45);
+
+  box-shadow:
+    -10px 0 35px rgba(0, 0, 0, 0.35);
+
   overflow-y: auto;
 }
 
-
-/* MENU HEADER */
+/* =========================================================
+   MENU HEADER
+   ========================================================= */
 
 .zyre-menu-header {
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
-  padding-bottom: 20px;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #333;
+
+  min-height: 150px;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  border-bottom: 1px solid #333333;
+}
+
+.zyre-menu-brand {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex: 1;
+}
+
+.zyre-menu-logo {
+  display: block;
+
+  width: 175px;
+
+  max-width: 78%;
+
+  height: auto;
+
+  object-fit: contain;
 }
 
 .zyre-menu-header strong {
   font-size: 18px;
+
   letter-spacing: 2px;
 }
 
 .zyre-menu-header button {
+  flex-shrink: 0;
+
   background: transparent;
-  color: #fff;
+
+  color: #ffffff;
+
   border: none;
-  font-size: 24px;
+
+  font-size: 25px;
+
   cursor: pointer;
+
+  padding: 5px;
 }
 
+/* =========================================================
+   MENU ITEMS
+   ========================================================= */
 
-/* MENU ITEMS */
+.zyre-menu-items {
+  padding: 15px 14px;
+}
 
-.zyre-menu > button {
-  display: block;
+.zyre-menu-items button {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
   width: 100%;
-  padding: 16px 12px;
-  margin: 6px 0;
+
+  padding: 16px 14px;
+
+  margin: 5px 0;
+
   background: transparent;
-  color: #fff;
+
+  color: #ffffff;
+
   border: none;
+
   border-radius: 8px;
+
   text-align: left;
+
   font-size: 16px;
+
   cursor: pointer;
+
+  box-sizing: border-box;
 }
 
+.zyre-menu-items button span:first-child {
+  width: 28px;
 
-/* HOVER / TOUCH EFFECT */
+  min-width: 28px;
 
-.zyre-menu > button:hover {
-  background: #222;
+  text-align: center;
+
+  font-size: 20px;
 }
 
+.zyre-menu-items button:hover {
+  background: #222222;
+}
 
-/* MOBILE */
+.zyre-menu-items button:active {
+  background: #333333;
+}
+
+/* =========================================================
+   MENU FOOTER
+   ========================================================= */
+
+.zyre-menu-footer {
+  margin: 15px 20px 30px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #333333;
+
+  text-align: center;
+}
+
+.zyre-menu-footer span {
+  display: block;
+
+  font-size: 12px;
+
+  letter-spacing: 2px;
+
+  font-weight: bold;
+}
+
+.zyre-menu-footer small {
+  display: block;
+
+  margin-top: 7px;
+
+  color: #aaaaaa;
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   MENU BUTTON
+   ========================================================= */
+
+.menu-button:hover {
+  background: #222222;
+}
 
 @media (max-width: 700px) {
 
@@ -1537,18 +1755,17 @@ section {
   }
 
   .zyre-menu {
-    width: 280px;
+    width: 290px;
   }
 
+  .zyre-menu-logo {
+    width: 165px;
+  }
 }
-
-
-/* DESKTOP */
 
 @media (min-width: 701px) {
 
   .menu-button {
     display: block;
   }
-
 }
