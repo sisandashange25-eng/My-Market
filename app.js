@@ -2024,6 +2024,10 @@ return;
 
 try {
 
+/* =========================================================
+FIND CUSTOMER ORDERS
+========================================================= */
+
 const response =
   await fetch(
 
@@ -2091,6 +2095,10 @@ if (
 }
 
 
+/* =========================================================
+FIND REQUESTED ORDER
+========================================================= */
+
 const wantedId =
   Number(
     orderId.trim()
@@ -2125,6 +2133,10 @@ if (!order) {
 }
 
 
+/* =========================================================
+ORDER INFORMATION
+========================================================= */
+
 const displayId =
   order.id ??
   order.order_id ??
@@ -2149,6 +2161,192 @@ const displayAddress =
   "Not provided";
 
 
+/* =========================================================
+GET DELIVERY INFORMATION
+========================================================= */
+
+let delivery = null;
+
+try {
+
+  const deliveryResponse =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/deliveries?order_id=eq." +
+      encodeURIComponent(
+        displayId
+      ) +
+      "&select=*",
+
+      {
+
+        method: "GET",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            SUPABASE_KEY
+
+        }
+
+      }
+
+    );
+
+
+  if (deliveryResponse.ok) {
+
+    const deliveryData =
+      await deliveryResponse.json();
+
+
+    if (
+      Array.isArray(deliveryData) &&
+      deliveryData.length
+    ) {
+
+      /*
+      Use the most recently returned
+      delivery record for this order.
+      */
+
+      delivery =
+        deliveryData[
+          deliveryData.length - 1
+        ];
+
+    }
+
+  } else {
+
+    console.warn(
+      "Delivery information could not be loaded:",
+      await deliveryResponse.text()
+    );
+
+  }
+
+} catch (deliveryError) {
+
+  /*
+  Delivery information must never
+  prevent the customer from seeing
+  their normal order status.
+  */
+
+  console.warn(
+    "Could not load delivery information:",
+    deliveryError
+  );
+
+}
+
+
+/* =========================================================
+DELIVERY DISPLAY
+========================================================= */
+
+let deliveryText =
+"🚚 Delivery: Not assigned yet";
+
+
+if (delivery) {
+
+  const deliveryStatus =
+    delivery.status ||
+    "Assigned";
+
+
+  const deliveryPerson =
+    delivery.delivery_person_name ||
+    "Not assigned";
+
+
+  const deliveryPhone =
+    delivery.delivery_person_phone ||
+    "Not provided";
+
+
+  const trackingNumber =
+    delivery.tracking_number ||
+    "Not provided";
+
+
+  let estimatedDelivery =
+    "Not provided";
+
+
+  if (
+    delivery.estimated_delivery
+  ) {
+
+    const date =
+      new Date(
+        delivery.estimated_delivery +
+        "T00:00:00"
+      );
+
+
+    if (
+      !Number.isNaN(
+        date.getTime()
+      )
+    ) {
+
+      estimatedDelivery =
+        date.toLocaleDateString(
+          "en-ZA",
+          {
+            day:
+              "2-digit",
+
+            month:
+              "2-digit",
+
+            year:
+              "numeric"
+          }
+        );
+
+    } else {
+
+      estimatedDelivery =
+        delivery.estimated_delivery;
+
+    }
+
+  }
+
+
+  deliveryText =
+
+    "🚚 Delivery Status: " +
+    deliveryStatus +
+
+    "\n👤 Delivery Person: " +
+    deliveryPerson +
+
+    "\n📞 Delivery Phone: " +
+    deliveryPhone +
+
+    "\n🔢 Tracking Number: " +
+    trackingNumber +
+
+    "\n📅 Estimated Delivery: " +
+    estimatedDelivery;
+
+}
+
+
+/* =========================================================
+SHOW ORDER + DELIVERY INFORMATION
+========================================================= */
+
 alert(
 
   "📦 Order #" +
@@ -2161,7 +2359,11 @@ alert(
   Number(displayTotal)
     .toFixed(2) +
 
-  "\nDelivery: " +
+  "\n\n" +
+
+  deliveryText +
+
+  "\n\n🏠 Delivery Address: " +
   displayAddress
 
 );
