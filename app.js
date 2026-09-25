@@ -917,9 +917,9 @@ try {
 }
 
 
-/* =========================================
-ZYRE MARKETING PAYMENT PAGE
-========================================= */
+/* =========================================================
+BUILD PAYMENT PAGE PRODUCT INFORMATION
+========================================================= */
 
 const cartProducts =
   orderItems.map(item => {
@@ -965,8 +965,12 @@ const productSummary =
     .join(" | ");
 
 
+/* =========================================================
+GO DIRECTLY TO ZYRE PAYMENT PAGE
+========================================================= */
+
 const paymentUrl =
-  "./payment.html" +
+  "https://sisandashange25-eng.github.io/My-Market/payment.html" +
 
   "?amount=" +
   encodeURIComponent(
