@@ -1,16 +1,18 @@
 <!doctype html>
+<html lang="en">
 
-<html lang="en"><head><meta charset="utf-8"><meta
-name="viewport"
-content="width=device-width,initial-scale=1"
+<head>
 
-«»
+<meta charset="utf-8">
 
-<title>ZYRE Marketing — Store</title><meta
-name="description"
-content="Shop this store on ZYRE Marketing."
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-«»
+<title>ZYRE Marketing — Store</title>
+
+<meta
+  name="description"
+  content="Shop this store on ZYRE Marketing."
+>
 
 <style>
 
@@ -25,9 +27,7 @@ body {
   color: #fff;
 }
 
-/* =========================
-   HEADER
-========================= */
+/* HEADER */
 
 .store-header {
   background: #050505;
@@ -57,9 +57,7 @@ body {
   margin-top: 6px;
 }
 
-/* =========================
-   CART BUTTON
-========================= */
+/* CART */
 
 .cart-button {
   display: inline-flex;
@@ -94,9 +92,7 @@ body {
   font-size: 12px;
 }
 
-/* =========================
-   BACK BUTTON
-========================= */
+/* BACK BUTTON */
 
 .back-button {
   display: inline-block;
@@ -115,9 +111,7 @@ body {
   color: #000;
 }
 
-/* =========================
-   STORE HERO
-========================= */
+/* STORE HERO */
 
 .store-hero {
   max-width: 1100px;
@@ -156,9 +150,7 @@ body {
   line-height: 1.6;
 }
 
-/* =========================
-   PRODUCTS
-========================= */
+/* PRODUCTS */
 
 .products-section {
   max-width: 1100px;
@@ -190,9 +182,7 @@ body {
   gap: 20px;
 }
 
-/* =========================
-   PRODUCT CARD
-========================= */
+/* PRODUCT CARD */
 
 .product-card {
   overflow: hidden;
@@ -257,9 +247,7 @@ body {
   font-size: 13px;
 }
 
-/* =========================
-   ADD TO CART
-========================= */
+/* ADD TO CART */
 
 .add-cart-button {
   width: 100%;
@@ -283,9 +271,7 @@ body {
   cursor: not-allowed;
 }
 
-/* =========================
-   EMPTY / ERROR
-========================= */
+/* MESSAGE */
 
 .message {
   padding: 30px;
@@ -296,9 +282,7 @@ body {
   border-radius: 10px;
 }
 
-/* =========================
-   FOOTER
-========================= */
+/* FOOTER */
 
 footer {
   padding: 35px 20px;
@@ -320,6 +304,8 @@ footer {
   font-size: 13px;
   letter-spacing: 1px;
 }
+
+/* MOBILE */
 
 @media (max-width: 600px) {
 
@@ -343,84 +329,121 @@ footer {
 
 }
 
-</style></head><body><header class="store-header">  <div class="brand"><span class="brand-main">
-  ZYRE
-</span>
+</style>
 
-<span class="brand-sub">
-  MARKETING
-</span>
+</head>
 
-  </div><button
-class="cart-button"
-type="button"
-onclick="openCart()"
+<body>
 
-«»
+<header class="store-header">
 
-🛒 View Cart
+  <div class="brand">
 
-<span
-  id="cartCount"
-  class="cart-count"
+    <span class="brand-main">
+      ZYRE
+    </span>
+
+    <span class="brand-sub">
+      MARKETING
+    </span>
+
+  </div>
+
+  <button
+    class="cart-button"
+    type="button"
+    onclick="openCart()"
+  >
+    🛒 View Cart
+
+    <span
+      id="cartCount"
+      class="cart-count"
+    >0</span>
+
+  </button>
+
+</header>
+
+<a
+  href="index.html"
+  class="back-button"
 >
-  0
-</span>
-
-  </button></header><a
-href="index.html"
-class="back-button"
-
-«»
-
-← Back to Marketplace
+  ← Back to Marketplace
 </a>
 
-<section class="store-hero">  <div class="store-label">
+<section class="store-hero">
+
+  <div class="store-label">
     ZYRE MARKETPLACE
-  </div>  <h1
+  </div>
+
+  <h1
     id="storeName"
     class="store-name"
   >
     Loading store...
-  </h1>  <p
+  </h1>
+
+  <p
     id="storeDescription"
     class="store-description"
   >
     Please wait...
-  </p></section><section class="products-section">  <div class="section-title"><p>
-  SHOP THIS STORE
-</p>
+  </p>
 
-<h2>
-  Products
-</h2>
+</section>
 
-  </div>  <div
+<section class="products-section">
+
+  <div class="section-title">
+
+    <p>
+      SHOP THIS STORE
+    </p>
+
+    <h2>
+      Products
+    </h2>
+
+  </div>
+
+  <div
     id="productsGrid"
     class="products-grid"
-  ><div class="message">
-  Loading products...
-</div>
+  >
 
-  </div></section><footer>  <div class="footer-brand">
+    <div class="message">
+      Loading products...
+    </div>
+
+  </div>
+
+</section>
+
+<footer>
+
+  <div class="footer-brand">
     ZYRE MARKETING
-  </div>  <div class="footer-text">
+  </div>
+
+  <div class="footer-text">
     Your business. Your store. One marketplace.
-  </div>  <div class="footer-text">
+  </div>
+
+  <div class="footer-text">
     © 2026 ZYRE Marketing · Durban, South Africa
-  </div></footer><script>
+  </div>
+
+</footer>
+
+<script>
 
 const SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
 
 const SUPABASE_KEY =
   "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
-
-
-/* =========================
-   GET SELLER ID
-========================= */
 
 const params =
   new URLSearchParams(
@@ -430,10 +453,6 @@ const params =
 const sellerId =
   params.get("seller_id");
 
-
-/* =========================
-   ESCAPE TEXT
-========================= */
 
 function escapeText(value) {
 
@@ -446,10 +465,6 @@ function escapeText(value) {
 
 }
 
-
-/* =========================
-   UPDATE CART COUNT
-========================= */
 
 function updateCartCount() {
 
@@ -471,10 +486,6 @@ function updateCartCount() {
 }
 
 
-/* =========================
-   OPEN CART
-========================= */
-
 function openCart() {
 
   window.location.href =
@@ -483,10 +494,6 @@ function openCart() {
 }
 
 
-/* =========================
-   ADD TO CART
-========================= */
-
 function addStoreProduct(productId) {
 
   let cart =
@@ -494,14 +501,12 @@ function addStoreProduct(productId) {
       localStorage.getItem("cart") || "[]"
     );
 
-
   const product =
     window.storeProducts.find(
       product =>
         String(product.id) ===
         String(productId)
     );
-
 
   if (!product) {
 
@@ -513,14 +518,12 @@ function addStoreProduct(productId) {
 
   }
 
-
   const currentQuantity =
     cart.filter(
       id =>
         String(id) ===
         String(product.id)
     ).length;
-
 
   if (
     Number(product.stock) <=
@@ -535,18 +538,14 @@ function addStoreProduct(productId) {
 
   }
 
-
   cart.push(product.id);
-
 
   localStorage.setItem(
     "cart",
     JSON.stringify(cart)
   );
 
-
   updateCartCount();
-
 
   alert(
     product.name +
@@ -555,10 +554,6 @@ function addStoreProduct(productId) {
 
 }
 
-
-/* =========================
-   LOAD STORE
-========================= */
 
 async function loadStore() {
 
@@ -576,7 +571,6 @@ async function loadStore() {
     document.getElementById(
       "productsGrid"
     );
-
 
   if (!sellerId) {
 
@@ -598,12 +592,7 @@ async function loadStore() {
 
   }
 
-
   try {
-
-    /* =========================
-       GET SELLER
-    ========================= */
 
     const sellerResponse =
       await fetch(
@@ -615,22 +604,17 @@ async function loadStore() {
         "&select=id,store_name,description",
 
         {
-
           headers: {
-
             "apikey":
               SUPABASE_KEY,
 
             "Authorization":
               "Bearer " +
               SUPABASE_KEY
-
           }
-
         }
 
       );
-
 
     if (!sellerResponse.ok) {
 
@@ -640,10 +624,8 @@ async function loadStore() {
 
     }
 
-
     const sellers =
       await sellerResponse.json();
-
 
     if (!sellers.length) {
 
@@ -653,24 +635,16 @@ async function loadStore() {
 
     }
 
-
     const seller =
       sellers[0];
-
 
     nameBox.textContent =
       seller.store_name ||
       "ZYRE Store";
 
-
     descriptionBox.textContent =
       seller.description ||
       "Quality products from this store.";
-
-
-    /* =========================
-       GET PRODUCTS
-    ========================= */
 
     const productsResponse =
       await fetch(
@@ -684,22 +658,17 @@ async function loadStore() {
         "&order=id.desc",
 
         {
-
           headers: {
-
             "apikey":
               SUPABASE_KEY,
 
             "Authorization":
               "Bearer " +
               SUPABASE_KEY
-
           }
-
         }
 
       );
-
 
     if (!productsResponse.ok) {
 
@@ -709,14 +678,11 @@ async function loadStore() {
 
     }
 
-
     const loadedProducts =
       await productsResponse.json();
 
-
     window.storeProducts =
       loadedProducts;
-
 
     if (!loadedProducts.length) {
 
@@ -731,11 +697,6 @@ async function loadStore() {
 
     }
 
-
-    /* =========================
-       DISPLAY PRODUCTS
-    ========================= */
-
     productsBox.innerHTML =
       loadedProducts
         .map(function(product) {
@@ -745,11 +706,9 @@ async function loadStore() {
               product.stock || 0
             );
 
-
           const image =
             product.image_url ||
             "";
-
 
           return `
 
@@ -780,13 +739,11 @@ async function loadStore() {
 
               </div>
 
-
               <div class="product-info">
 
                 <h3 class="product-name">
                   ${escapeText(product.name)}
                 </h3>
-
 
                 <p class="product-description">
                   ${
@@ -797,32 +754,21 @@ async function loadStore() {
                   }
                 </p>
 
-
                 <div class="product-price">
                   R${Number(
                     product.price || 0
                   ).toFixed(2)}
                 </div>
 
-
                 <div class="product-stock">
 
                   ${
                     stock > 0
-
-                    ?
-
-                    stock +
-                    " in stock"
-
-                    :
-
-                    "Out of stock"
-
+                    ? stock + " in stock"
+                    : "Out of stock"
                   }
 
                 </div>
-
 
                 <button
                   class="add-cart-button"
@@ -850,16 +796,10 @@ async function loadStore() {
         })
         .join("");
 
-
-    /* =========================
-       BUTTON EVENTS
-    ========================= */
-
     const buttons =
       productsBox.querySelectorAll(
         ".add-cart-button"
       );
-
 
     buttons.forEach(function(button) {
 
@@ -867,11 +807,8 @@ async function loadStore() {
         "click",
         function() {
 
-          const productId =
-            button.dataset.productId;
-
           addStoreProduct(
-            productId
+            button.dataset.productId
           );
 
         }
@@ -879,19 +816,15 @@ async function loadStore() {
 
     });
 
-
   } catch (error) {
 
     console.error(error);
 
-
     nameBox.textContent =
       "Store";
 
-
     descriptionBox.textContent =
       "Unable to load this store.";
-
 
     productsBox.innerHTML =
       `
@@ -911,12 +844,12 @@ async function loadStore() {
 }
 
 
-/* =========================
-   START
-========================= */
-
 updateCartCount();
 
 loadStore();
 
-</script></body></html>
+</script>
+
+</body>
+
+</html>
