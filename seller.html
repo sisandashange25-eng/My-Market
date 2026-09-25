@@ -1,8 +1,11 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZavaMarket Seller Dashboard</title>  <style>
+  <title>ZavaMarket Seller Dashboard</title>
+
+  <style>
     * {
       box-sizing: border-box;
     }
@@ -194,6 +197,18 @@
       border-radius: 10px;
     }
 
+    .customer-box {
+      background: #f7f7f7;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px;
+      margin: 12px 0;
+    }
+
+    .customer-box p {
+      margin: 6px 0;
+    }
+
     @media (max-width: 700px) {
       .summary-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -203,225 +218,273 @@
         padding: 12px;
       }
     }
-  </style></head><body><header>
+  </style>
+</head>
+
+<body>
+
+<header>
   <h1>🛍️ ZavaMarket Seller Dashboard</h1>
   <p>Add products and manage orders</p>
-</header><div class="container">  <!-- NOTIFICATIONS -->  <div class="card"><h2>🔔 Notifications</h2>
+</header>
 
-<p>
-  Turn on notifications to receive new order alerts,
-  including when your phone is locked.
-</p>
+<div class="container">
 
-<button
-  class="notification-button"
-  onclick="enableSellerNotifications()"
->
-  🔔 Enable Notifications
-</button>
+  <!-- NOTIFICATIONS -->
+  <div class="card">
 
-<p
-  id="notificationStatus"
-  style="margin-top:10px;color:#666;"
->
-  Checking notification status...
-</p>
+    <h2>🔔 Notifications</h2>
 
-  </div>  <!-- ADD PRODUCT -->  <div class="card"><h2>➕ Add a Product</h2>
+    <p>
+      Turn on notifications to receive new order alerts,
+      including when your phone is locked.
+    </p>
 
-<label>Product name</label>
+    <button
+      class="notification-button"
+      onclick="enableSellerNotifications()"
+    >
+      🔔 Enable Notifications
+    </button>
 
-<input
-  type="text"
-  id="productName"
-  placeholder="Example: Wireless Headphones"
->
+    <p
+      id="notificationStatus"
+      style="margin-top:10px;color:#666;"
+    >
+      Checking notification status...
+    </p>
 
-<label>Description</label>
-
-<textarea
-  id="productDescription"
-  placeholder="Describe your product"
-></textarea>
-
-<label>Price (R)</label>
-
-<input
-  type="number"
-  id="productPrice"
-  placeholder="299.00"
-  step="0.01"
->
-
-<label>Stock</label>
-
-<input
-  type="number"
-  id="productStock"
-  placeholder="10"
->
-
-<label>Category</label>
-
-<select id="productCategory">
-  <option value="Electronics">Electronics</option>
-  <option value="Fashion">Fashion</option>
-  <option value="Home">Home</option>
-  <option value="Beauty">Beauty</option>
-</select>
-
-<label>Product image URL</label>
-
-<input
-  type="text"
-  id="productImage"
-  placeholder="https://..."
->
-
-<button class="primary" onclick="addProduct()">
-  Add Product
-</button>
-
-  </div>  <!-- ORDER SUMMARY -->  <div class="card"><h2>📊 Order Summary</h2>
-
-<div class="summary-grid">
-
-  <div class="summary-box">
-    <div class="summary-label">🟡 Pending</div>
-    <div class="summary-number" id="pendingCount">0</div>
   </div>
 
-  <div class="summary-box">
-    <div class="summary-label">🔵 Processing</div>
-    <div class="summary-number" id="processingCount">0</div>
+
+  <!-- ADD PRODUCT -->
+  <div class="card">
+
+    <h2>➕ Add a Product</h2>
+
+    <label>Product name</label>
+
+    <input
+      type="text"
+      id="productName"
+      placeholder="Example: Wireless Headphones"
+    >
+
+    <label>Description</label>
+
+    <textarea
+      id="productDescription"
+      placeholder="Describe your product"
+    ></textarea>
+
+    <label>Price (R)</label>
+
+    <input
+      type="number"
+      id="productPrice"
+      placeholder="299.00"
+      step="0.01"
+    >
+
+    <label>Stock</label>
+
+    <input
+      type="number"
+      id="productStock"
+      placeholder="10"
+    >
+
+    <label>Category</label>
+
+    <select id="productCategory">
+      <option value="Electronics">Electronics</option>
+      <option value="Fashion">Fashion</option>
+      <option value="Home">Home</option>
+      <option value="Beauty">Beauty</option>
+    </select>
+
+    <label>Product image URL</label>
+
+    <input
+      type="text"
+      id="productImage"
+      placeholder="https://..."
+    >
+
+    <button class="primary" onclick="addProduct()">
+      Add Product
+    </button>
+
   </div>
 
-  <div class="summary-box">
-    <div class="summary-label">🚚 Shipped</div>
-    <div class="summary-number" id="shippedCount">0</div>
+
+  <!-- ORDER SUMMARY -->
+  <div class="card">
+
+    <h2>📊 Order Summary</h2>
+
+    <div class="summary-grid">
+
+      <div class="summary-box">
+        <div class="summary-label">🟡 Pending</div>
+        <div class="summary-number" id="pendingCount">0</div>
+      </div>
+
+      <div class="summary-box">
+        <div class="summary-label">🔵 Processing</div>
+        <div class="summary-number" id="processingCount">0</div>
+      </div>
+
+      <div class="summary-box">
+        <div class="summary-label">🚚 Shipped</div>
+        <div class="summary-number" id="shippedCount">0</div>
+      </div>
+
+      <div class="summary-box">
+        <div class="summary-label">🟢 Delivered</div>
+        <div class="summary-number" id="deliveredCount">0</div>
+      </div>
+
+    </div>
+
   </div>
 
-  <div class="summary-box">
-    <div class="summary-label">🟢 Delivered</div>
-    <div class="summary-number" id="deliveredCount">0</div>
+
+  <!-- PRODUCTS -->
+  <div class="card">
+
+    <h2>🛍️ My Products</h2>
+
+    <div id="productsList">
+      Loading products...
+    </div>
+
   </div>
 
-</div>
 
-  </div>  <!-- PRODUCTS -->  <div class="card"><h2>🛍️ My Products</h2>
+  <!-- ORDERS -->
+  <div class="card">
 
-<div id="productsList">
-  Loading products...
-</div>
+    <h2>📦 Customer Orders</h2>
 
-  </div>  <!-- ORDERS -->  <div class="card"><h2>📦 Customer Orders</h2>
+    <div
+      id="newOrderNotification"
+      style="
+        display:none;
+        background:#fff3cd;
+        border:1px solid #ffe69c;
+        color:#664d03;
+        padding:15px;
+        border-radius:10px;
+        margin-bottom:15px;
+      "
+    >
 
-<div
-  id="newOrderNotification"
-  style="
-    display:none;
-    background:#fff3cd;
-    border:1px solid #ffe69c;
-    color:#664d03;
-    padding:15px;
-    border-radius:10px;
-    margin-bottom:15px;
-  "
->
+      🔔 <strong>New Order Received!</strong>
 
-  🔔 <strong>New Order Received!</strong>
+      <div id="newOrderMessage"></div>
 
-  <div id="newOrderMessage"></div>
-
-</div>
+    </div>
 
 
-<div class="filter-buttons">
+    <div class="filter-buttons">
 
-  <button
-    class="filter-btn active"
-    id="filterAll"
-    onclick="filterOrders('All')"
-  >
-    All
-  </button>
+      <button
+        class="filter-btn active"
+        id="filterAll"
+        onclick="filterOrders('All')"
+      >
+        All
+      </button>
 
-  <button
-    class="filter-btn"
-    id="filterPending"
-    onclick="filterOrders('Pending')"
-  >
-    🟡 Pending
-  </button>
+      <button
+        class="filter-btn"
+        id="filterPending"
+        onclick="filterOrders('Pending')"
+      >
+        🟡 Pending
+      </button>
 
-  <button
-    class="filter-btn"
-    id="filterProcessing"
-    onclick="filterOrders('Processing')"
-  >
-    🔵 Processing
-  </button>
+      <button
+        class="filter-btn"
+        id="filterProcessing"
+        onclick="filterOrders('Processing')"
+      >
+        🔵 Processing
+      </button>
 
-  <button
-    class="filter-btn"
-    id="filterShipped"
-    onclick="filterOrders('Shipped')"
-  >
-    🚚 Shipped
-  </button>
+      <button
+        class="filter-btn"
+        id="filterShipped"
+        onclick="filterOrders('Shipped')"
+      >
+        🚚 Shipped
+      </button>
 
-  <button
-    class="filter-btn"
-    id="filterDelivered"
-    onclick="filterOrders('Delivered')"
-  >
-    🟢 Delivered
-  </button>
+      <button
+        class="filter-btn"
+        id="filterDelivered"
+        onclick="filterOrders('Delivered')"
+      >
+        🟢 Delivered
+      </button>
 
-</div>
+    </div>
 
 
-<div id="ordersList">
-  Loading orders...
-</div>
+    <div id="ordersList">
+      Loading orders...
+    </div>
 
-  </div>  <!-- SELLER INFORMATION -->  <div class="card"><h2>🏪 Seller Information</h2>
+  </div>
 
-<div class="seller-info">
 
-  <p>
-    <strong>Seller ID:</strong>
-    <span id="sellerIdDisplay">Loading...</span>
-  </p>
+  <!-- SELLER INFORMATION -->
+  <div class="card">
 
-  <p>
-    <strong>Store:</strong>
-    <span id="storeNameDisplay">Loading...</span>
-  </p>
+    <h2>🏪 Seller Information</h2>
 
-  <p>
-    <strong>Subscription:</strong>
-    Active
-  </p>
+    <div class="seller-info">
 
-  <p>
-    <strong>Expires:</strong>
-    24/10/2026
-  </p>
+      <p>
+        <strong>Seller ID:</strong>
+        <span id="sellerIdDisplay">Loading...</span>
+      </p>
 
-</div>
+      <p>
+        <strong>Store:</strong>
+        <span id="storeNameDisplay">Loading...</span>
+      </p>
 
-  </div>  <button class="secondary" onclick="goBack()">
+      <p>
+        <strong>Subscription:</strong>
+        Active
+      </p>
+
+      <p>
+        <strong>Expires:</strong>
+        24/10/2026
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <button class="secondary" onclick="goBack()">
     ← Back to Store
-  </button></div><!--
-  IMPORTANT:
-  app.js is loaded BEFORE the seller dashboard JavaScript.
-  This allows the notification functions to be available.
---><script src="./app.js"></script><script>
+  </button>
+
+</div>
+
+
+<!-- app.js -->
+<script src="./app.js"></script>
+
+<script>
 
 /* ==============================
    SELLER SUPABASE CONNECTION
-   Different variable names from app.js
 ============================== */
 
 const SELLER_SUPABASE_URL =
@@ -463,6 +526,13 @@ let currentOrderFilter = "All";
 let sellerOrdersCache = [];
 
 
+/*
+  Customer profiles belonging to the
+  orders currently displayed.
+*/
+let customerProfilesCache = {};
+
+
 /* ==============================
    HEADERS
 ============================== */
@@ -477,7 +547,8 @@ function getHeaders() {
     "apikey": SELLER_SUPABASE_KEY,
 
     "Authorization":
-      "Bearer " + (accessToken || SELLER_SUPABASE_KEY),
+      "Bearer " +
+      (accessToken || SELLER_SUPABASE_KEY),
 
     "Content-Type":
       "application/json"
@@ -493,8 +564,13 @@ function getHeaders() {
 
 function escapeHtml(value) {
 
-  if (value === null || value === undefined) {
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
     return "";
+
   }
 
   return String(value)
@@ -738,29 +814,45 @@ async function loadSellerInformation() {
 async function addProduct() {
 
   const name =
-    document.getElementById("productName").value.trim();
+    document.getElementById(
+      "productName"
+    ).value.trim();
 
   const description =
-    document.getElementById("productDescription").value.trim();
+    document.getElementById(
+      "productDescription"
+    ).value.trim();
 
   const price =
     parseFloat(
-      document.getElementById("productPrice").value
+      document.getElementById(
+        "productPrice"
+      ).value
     );
 
   const stock =
     parseInt(
-      document.getElementById("productStock").value
+      document.getElementById(
+        "productStock"
+      ).value
     );
 
   const category =
-    document.getElementById("productCategory").value;
+    document.getElementById(
+      "productCategory"
+    ).value;
 
   const image_url =
-    document.getElementById("productImage").value.trim();
+    document.getElementById(
+      "productImage"
+    ).value.trim();
 
 
-  if (!name || !price || stock < 0) {
+  if (
+    !name ||
+    !price ||
+    stock < 0
+  ) {
 
     alert(
       "Please enter the product name, price and stock."
@@ -775,30 +867,54 @@ async function addProduct() {
 
     const response =
       await fetch(
-        SELLER_SUPABASE_URL + "/rest/v1/products",
+
+        SELLER_SUPABASE_URL +
+        "/rest/v1/products",
+
         {
 
           method: "POST",
 
           headers: {
+
             ...getHeaders(),
-            "Prefer": "return=representation"
+
+            "Prefer":
+              "return=representation"
+
           },
 
-          body: JSON.stringify({
+          body:
+            JSON.stringify({
 
-            seller_id: SELLER_ID,
-            name: name,
-            description: description,
-            price: price,
-            stock: stock,
-            category: category,
-            image_url: image_url,
-            active: true
+              seller_id:
+                SELLER_ID,
 
-          })
+              name:
+                name,
+
+              description:
+                description,
+
+              price:
+                price,
+
+              stock:
+                stock,
+
+              category:
+                category,
+
+              image_url:
+                image_url,
+
+              active:
+                true
+
+            })
 
         }
+
       );
 
 
@@ -817,14 +933,30 @@ async function addProduct() {
     }
 
 
-    alert("Product added successfully!");
+    alert(
+      "Product added successfully!"
+    );
 
 
-    document.getElementById("productName").value = "";
-    document.getElementById("productDescription").value = "";
-    document.getElementById("productPrice").value = "";
-    document.getElementById("productStock").value = "";
-    document.getElementById("productImage").value = "";
+    document.getElementById(
+      "productName"
+    ).value = "";
+
+    document.getElementById(
+      "productDescription"
+    ).value = "";
+
+    document.getElementById(
+      "productPrice"
+    ).value = "";
+
+    document.getElementById(
+      "productStock"
+    ).value = "";
+
+    document.getElementById(
+      "productImage"
+    ).value = "";
 
 
     loadProducts();
@@ -850,9 +982,12 @@ async function addProduct() {
 async function loadProducts() {
 
   const container =
-    document.getElementById("productsList");
+    document.getElementById(
+      "productsList"
+    );
 
   if (!container) return;
+
 
   container.innerHTML =
     "Loading products...";
@@ -920,7 +1055,9 @@ async function loadProducts() {
           </h3>
 
           <p>
-            ${escapeHtml(product.description || "")}
+            ${escapeHtml(
+              product.description || ""
+            )}
           </p>
 
           <p>
@@ -935,7 +1072,9 @@ async function loadProducts() {
 
           <p>
             🏷️ Category:
-            ${escapeHtml(product.category || "")}
+            ${escapeHtml(
+              product.category || ""
+            )}
           </p>
 
           <button
@@ -993,37 +1132,55 @@ function editProduct(
 ) {
 
   const newName =
-    prompt("Product name:", name);
+    prompt(
+      "Product name:",
+      name
+    );
 
   if (newName === null) return;
 
 
   const newDescription =
-    prompt("Description:", description);
+    prompt(
+      "Description:",
+      description
+    );
 
   if (newDescription === null) return;
 
 
   const newPrice =
-    prompt("Price:", price);
+    prompt(
+      "Price:",
+      price
+    );
 
   if (newPrice === null) return;
 
 
   const newStock =
-    prompt("Stock:", stock);
+    prompt(
+      "Stock:",
+      stock
+    );
 
   if (newStock === null) return;
 
 
   const newCategory =
-    prompt("Category:", category);
+    prompt(
+      "Category:",
+      category
+    );
 
   if (newCategory === null) return;
 
 
   const newImage =
-    prompt("Image URL:", image);
+    prompt(
+      "Image URL:",
+      image
+    );
 
   if (newImage === null) return;
 
@@ -1071,20 +1228,25 @@ async function saveProduct(
           method: "PATCH",
 
           headers: {
+
             ...getHeaders(),
-            "Prefer": "return=representation"
+
+            "Prefer":
+              "return=representation"
+
           },
 
-          body: JSON.stringify({
+          body:
+            JSON.stringify({
 
-            name,
-            description,
-            price,
-            stock,
-            category,
-            image_url
+              name,
+              description,
+              price,
+              stock,
+              category,
+              image_url
 
-          })
+            })
 
         }
 
@@ -1106,7 +1268,9 @@ async function saveProduct(
     }
 
 
-    alert("Product updated successfully!");
+    alert(
+      "Product updated successfully!"
+    );
 
     loadProducts();
 
@@ -1128,14 +1292,18 @@ async function saveProduct(
    DELETE PRODUCT
 ============================== */
 
-async function deleteProduct(productId) {
+async function deleteProduct(
+  productId
+) {
 
   if (
     !confirm(
       "Are you sure you want to delete this product?"
     )
   ) {
+
     return;
+
   }
 
 
@@ -1154,7 +1322,8 @@ async function deleteProduct(productId) {
 
           method: "DELETE",
 
-          headers: getHeaders()
+          headers:
+            getHeaders()
 
         }
 
@@ -1176,7 +1345,9 @@ async function deleteProduct(productId) {
     }
 
 
-    alert("Product deleted successfully!");
+    alert(
+      "Product deleted successfully!"
+    );
 
     loadProducts();
 
@@ -1195,15 +1366,122 @@ async function deleteProduct(productId) {
 
 
 /* ==============================
+   LOAD CUSTOMER PROFILES
+============================== */
+
+async function loadCustomerProfiles(
+  orders
+) {
+
+  customerProfilesCache = {};
+
+
+  const customerIds =
+    [
+      ...new Set(
+        orders
+          .map(
+            order =>
+              order.customer_id
+          )
+          .filter(
+            id =>
+              id !== null &&
+              id !== undefined &&
+              String(id).trim() !== ""
+          )
+          .map(
+            id =>
+              String(id)
+          )
+      )
+    ];
+
+
+  if (!customerIds.length) {
+
+    return;
+
+  }
+
+
+  try {
+
+    const idFilter =
+      customerIds.join(",");
+
+
+    const response =
+      await fetch(
+
+        SELLER_SUPABASE_URL +
+        "/rest/v1/profiles?id=in.(" +
+        encodeURIComponent(
+          idFilter
+        ) +
+        ")" +
+        "&select=id,full_name,phone",
+
+        {
+          headers: getHeaders()
+        }
+
+      );
+
+
+    if (!response.ok) {
+
+      console.error(
+        "Could not load customer profiles:",
+        await response.text()
+      );
+
+      return;
+
+    }
+
+
+    const profiles =
+      await response.json();
+
+
+    profiles.forEach(
+      profile => {
+
+        customerProfilesCache[
+          String(profile.id)
+        ] = profile;
+
+      }
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Customer profile loading error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ==============================
    LOAD ORDERS
 ============================== */
 
 async function loadOrders() {
 
   const container =
-    document.getElementById("ordersList");
+    document.getElementById(
+      "ordersList"
+    );
 
   if (!container) return;
+
 
   container.innerHTML =
     "Loading orders...";
@@ -1274,7 +1552,8 @@ async function loadOrders() {
 
     const sellerProductIds =
       sellerProducts.map(
-        product => product.id
+        product =>
+          product.id
       );
 
 
@@ -1306,19 +1585,32 @@ async function loadOrders() {
 
 
     sellerOrdersCache =
-      orders.filter(order => {
+      orders.filter(
+        order => {
 
-        return orderItems.some(item =>
+          return orderItems.some(
+            item =>
 
-          item.order_id === order.id &&
+              item.order_id ===
+              order.id &&
 
-          sellerProductIds.includes(
-            item.product_id
-          )
+              sellerProductIds.includes(
+                item.product_id
+              )
 
-        );
+          );
 
-      });
+        }
+      );
+
+
+    /*
+      Load the customers belonging only
+      to the seller's visible orders.
+    */
+    await loadCustomerProfiles(
+      sellerOrdersCache
+    );
 
 
     updateOrderSummary();
@@ -1352,7 +1644,9 @@ function updateOrderSummary() {
       order => {
 
         const status =
-          String(order.status).toLowerCase();
+          String(
+            order.status
+          ).toLowerCase();
 
         return (
           status === "pending" ||
@@ -1366,7 +1660,9 @@ function updateOrderSummary() {
   const processing =
     sellerOrdersCache.filter(
       order =>
-        String(order.status).toLowerCase() ===
+        String(
+          order.status
+        ).toLowerCase() ===
         "processing"
     ).length;
 
@@ -1374,7 +1670,9 @@ function updateOrderSummary() {
   const shipped =
     sellerOrdersCache.filter(
       order =>
-        String(order.status).toLowerCase() ===
+        String(
+          order.status
+        ).toLowerCase() ===
         "shipped"
     ).length;
 
@@ -1382,29 +1680,35 @@ function updateOrderSummary() {
   const delivered =
     sellerOrdersCache.filter(
       order =>
-        String(order.status).toLowerCase() ===
+        String(
+          order.status
+        ).toLowerCase() ===
         "delivered"
     ).length;
 
 
   document.getElementById(
     "pendingCount"
-  ).textContent = pending;
+  ).textContent =
+    pending;
 
 
   document.getElementById(
     "processingCount"
-  ).textContent = processing;
+  ).textContent =
+    processing;
 
 
   document.getElementById(
     "shippedCount"
-  ).textContent = shipped;
+  ).textContent =
+    shipped;
 
 
   document.getElementById(
     "deliveredCount"
-  ).textContent = delivered;
+  ).textContent =
+    delivered;
 
 }
 
@@ -1427,24 +1731,30 @@ function checkForNewOrders() {
 
 
   const pendingOrders =
-    sellerOrdersCache.filter(order => {
+    sellerOrdersCache.filter(
+      order => {
 
-      const status =
-        String(order.status).toLowerCase();
+        const status =
+          String(
+            order.status
+          ).toLowerCase();
 
-      return (
-        status === "pending" ||
-        status === "paid"
-      );
+        return (
+          status === "pending" ||
+          status === "paid"
+        );
 
-    });
+      }
+    );
 
 
   if (!pendingOrders.length) {
 
-    notification.style.display = "none";
+    notification.style.display =
+      "none";
 
-    message.innerHTML = "";
+    message.innerHTML =
+      "";
 
     return;
 
@@ -1455,19 +1765,24 @@ function checkForNewOrders() {
     pendingOrders[0];
 
 
-  notification.style.display = "block";
+  notification.style.display =
+    "block";
 
 
   message.innerHTML = `
 
-    Order #${escapeHtml(newestOrder.id)}
+    Order #${escapeHtml(
+      newestOrder.id
+    )}
 
     is waiting for processing.
 
     <br>
 
     💰 Total:
-    R${Number(newestOrder.total || 0).toFixed(2)}
+    R${Number(
+      newestOrder.total || 0
+    ).toFixed(2)}
 
   `;
 
@@ -1478,31 +1793,45 @@ function checkForNewOrders() {
    FILTER ORDERS
 ============================== */
 
-function filterOrders(status) {
+function filterOrders(
+  status
+) {
 
-  currentOrderFilter = status;
+  currentOrderFilter =
+    status;
 
 
   document
-    .querySelectorAll(".filter-btn")
-    .forEach(button => {
+    .querySelectorAll(
+      ".filter-btn"
+    )
+    .forEach(
+      button => {
 
-      button.classList.remove("active");
+        button.classList.remove(
+          "active"
+        );
 
-    });
+      }
+    );
 
 
   const buttonMap = {
 
-    "All": "filterAll",
+    "All":
+      "filterAll",
 
-    "Pending": "filterPending",
+    "Pending":
+      "filterPending",
 
-    "Processing": "filterProcessing",
+    "Processing":
+      "filterProcessing",
 
-    "Shipped": "filterShipped",
+    "Shipped":
+      "filterShipped",
 
-    "Delivered": "filterDelivered"
+    "Delivered":
+      "filterDelivered"
 
   };
 
@@ -1515,7 +1844,9 @@ function filterOrders(status) {
 
   if (activeButton) {
 
-    activeButton.classList.add("active");
+    activeButton.classList.add(
+      "active"
+    );
 
   }
 
@@ -1532,39 +1863,52 @@ function filterOrders(status) {
 function renderOrders() {
 
   const container =
-    document.getElementById("ordersList");
+    document.getElementById(
+      "ordersList"
+    );
 
 
   let filteredOrders =
     sellerOrdersCache;
 
 
-  if (currentOrderFilter !== "All") {
+  if (
+    currentOrderFilter !==
+    "All"
+  ) {
 
     filteredOrders =
-      sellerOrdersCache.filter(order => {
+      sellerOrdersCache.filter(
+        order => {
 
-        const orderStatus =
-          String(order.status).toLowerCase();
+          const orderStatus =
+            String(
+              order.status
+            ).toLowerCase();
 
-        if (
-          currentOrderFilter.toLowerCase() ===
-          "pending"
-        ) {
+
+          if (
+            currentOrderFilter.toLowerCase() ===
+            "pending"
+          ) {
+
+            return (
+              orderStatus ===
+                "pending" ||
+              orderStatus ===
+                "paid"
+            );
+
+          }
+
 
           return (
-            orderStatus === "pending" ||
-            orderStatus === "paid"
+            orderStatus ===
+            currentOrderFilter.toLowerCase()
           );
 
         }
-
-        return (
-          orderStatus ===
-          currentOrderFilter.toLowerCase()
-        );
-
-      });
+      );
 
   }
 
@@ -1576,9 +1920,13 @@ function renderOrders() {
       <div class="empty">
 
         No ${
-          currentOrderFilter === "All"
+          currentOrderFilter ===
+          "All"
             ? ""
-            : currentOrderFilter.toLowerCase() + " "
+            :
+            currentOrderFilter
+              .toLowerCase() +
+            " "
         }orders found.
 
       </div>
@@ -1591,123 +1939,197 @@ function renderOrders() {
 
 
   container.innerHTML =
-    filteredOrders.map(order => {
+    filteredOrders
+      .map(
+        order => {
 
-      const orderStatus =
-        String(order.status || "Pending");
-
-      const statusLower =
-        orderStatus.toLowerCase();
-
-      const selectStatus =
-        (
-          statusLower === "paid"
-          ? "Pending"
-          : orderStatus
-        );
+          const orderStatus =
+            String(
+              order.status ||
+              "Pending"
+            );
 
 
-      return `
+          const statusLower =
+            orderStatus.toLowerCase();
 
-      <div class="order">
 
-        <div class="status">
+          const selectStatus =
+            (
+              statusLower ===
+              "paid"
+                ? "Pending"
+                : orderStatus
+            );
 
-          ${escapeHtml(order.status || "Pending")}
 
-        </div>
+          const customer =
+            customerProfilesCache[
+              String(
+                order.customer_id
+              )
+            ] || null;
 
-        <h3>
-          📦 Order #${order.id}
-        </h3>
 
-        <p>
-          💰 Total:
-          R${Number(order.total || 0).toFixed(2)}
-        </p>
+          const customerName =
+            customer &&
+            customer.full_name
+              ? customer.full_name
+              : "Not available";
 
-        <p>
-          🏠 Delivery:
-          ${escapeHtml(
-            order.delivery_address ||
-            "Not provided"
-          )}
-        </p>
 
-        <p>
-          🕐 Ordered:
-          ${
-            order.created_at
-              ? new Date(
+          const customerPhone =
+            customer &&
+            customer.phone
+              ? customer.phone
+              : "Not available";
+
+
+          return `
+
+            <div class="order">
+
+              <div class="status">
+
+                ${escapeHtml(
+                  order.status ||
+                  "Pending"
+                )}
+
+              </div>
+
+
+              <h3>
+                📦 Order #${escapeHtml(
+                  order.id
+                )}
+              </h3>
+
+
+              <div class="customer-box">
+
+                <strong>
+                  👤 Customer Information
+                </strong>
+
+                <p>
+                  👤 Name:
+                  ${escapeHtml(
+                    customerName
+                  )}
+                </p>
+
+                <p>
+                  📞 Phone:
+                  ${escapeHtml(
+                    customerPhone
+                  )}
+                </p>
+
+              </div>
+
+
+              <p>
+                💰 Total:
+                R${Number(
+                  order.total || 0
+                ).toFixed(2)}
+              </p>
+
+
+              <p>
+                🏠 Delivery:
+                ${escapeHtml(
+                  order.delivery_address ||
+                  "Not provided"
+                )}
+              </p>
+
+
+              <p>
+                🕐 Ordered:
+                ${
                   order.created_at
-                ).toLocaleString()
-              : "Unknown"
-          }
-        </p>
+                    ? new Date(
+                        order.created_at
+                      ).toLocaleString()
+                    : "Unknown"
+                }
+              </p>
 
 
-        <label>
-          Order Status
-        </label>
+              <label>
+                Order Status
+              </label>
 
-        <select
-          onchange="updateOrderStatus(
-            ${order.id},
-            this.value
-          )"
-        >
 
-          <option
-            value="Pending"
-            ${
-              selectStatus === "Pending"
-                ? "selected"
-                : ""
-            }
-          >
-            Pending
-          </option>
+              <select
+                onchange="updateOrderStatus(
+                  ${order.id},
+                  this.value
+                )"
+              >
 
-          <option
-            value="Processing"
-            ${
-              selectStatus === "Processing"
-                ? "selected"
-                : ""
-            }
-          >
-            Processing
-          </option>
+                <option
+                  value="Pending"
+                  ${
+                    selectStatus ===
+                    "Pending"
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  Pending
+                </option>
 
-          <option
-            value="Shipped"
-            ${
-              selectStatus === "Shipped"
-                ? "selected"
-                : ""
-            }
-          >
-            Shipped
-          </option>
 
-          <option
-            value="Delivered"
-            ${
-              selectStatus === "Delivered"
-                ? "selected"
-                : ""
-            }
-          >
-            Delivered
-          </option>
+                <option
+                  value="Processing"
+                  ${
+                    selectStatus ===
+                    "Processing"
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  Processing
+                </option>
 
-        </select>
 
-      </div>
+                <option
+                  value="Shipped"
+                  ${
+                    selectStatus ===
+                    "Shipped"
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  Shipped
+                </option>
 
-      `;
 
-    }).join("");
+                <option
+                  value="Delivered"
+                  ${
+                    selectStatus ===
+                    "Delivered"
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  Delivered
+                </option>
+
+              </select>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
 
 }
 
@@ -1735,15 +2157,21 @@ async function updateOrderStatus(
           method: "PATCH",
 
           headers: {
+
             ...getHeaders(),
-            "Prefer": "return=representation"
+
+            "Prefer":
+              "return=representation"
+
           },
 
-          body: JSON.stringify({
+          body:
+            JSON.stringify({
 
-            status: newStatus
+              status:
+                newStatus
 
-          })
+            })
 
         }
 
@@ -1828,11 +2256,16 @@ checkNotificationStatus();
    EVERY 10 SECONDS
 ============================== */
 
-setInterval(function() {
+setInterval(
+  function() {
 
-  loadOrders();
+    loadOrders();
 
-}, 10000);
+  },
+  10000
+);
 
-</script></body>
+</script>
+
+</body>
 </html>
