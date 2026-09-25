@@ -249,13 +249,6 @@ products =
             "Zava Seller"
           ),
 
-    /*
-    IMPORTANT:
-    Keep the seller ID on every product.
-    This is used after checkout to determine
-    which seller must receive the notification.
-    */
-
     seller_id:
       Number(p.seller_id),
 
@@ -312,9 +305,9 @@ ADD TO CART
 function add(id) {
 
 const product =
-  products.find(
-    p => String(p.id) === String(id)
-  );
+products.find(
+p => String(p.id) === String(id)
+);
 
 if (!product) {
 
@@ -916,11 +909,6 @@ try {
 
 } catch (notificationError) {
 
-  /*
-  Notification failure must NOT stop checkout.
-  The order has already been created successfully.
-  */
-
   console.warn(
     "Order notification could not be sent:",
     notificationError
@@ -929,24 +917,55 @@ try {
 }
 
 
-/* =========================================================
-ZYRE PAYMENT PAGE
-========================================================= */
+/* =========================================
+ZYRE MARKETING PAYMENT PAGE
+========================================= */
 
-/*
-  The old Google Apps Script payment page has been
-  replaced with the new ZYRE payment page.
+const cartProducts =
+  orderItems.map(item => {
 
-  Payfast will be connected to the Pay Now button
-  after merchant approval.
+    const product =
+      products.find(
+        p =>
+          String(p.id) ===
+          String(item.product_id)
+      );
 
-  IMPORTANT:
-  This page does NOT mark the order as paid.
-  Payment confirmation will later come from Payfast.
-*/
+    return {
+
+      name:
+        product
+          ? product.name
+          : "Product #" +
+            item.product_id,
+
+      quantity:
+        Number(item.quantity),
+
+      price:
+        Number(item.price)
+
+    };
+
+  });
+
+
+const productSummary =
+  cartProducts
+    .map(item =>
+      item.name +
+      " × " +
+      item.quantity +
+      " — R" +
+      (
+        item.price *
+        item.quantity
+      ).toFixed(2)
+    )
+    .join(" | ");
+
 
 const paymentUrl =
-
   "./payment.html" +
 
   "?amount=" +
@@ -956,8 +975,7 @@ const paymentUrl =
 
   "&item_name=" +
   encodeURIComponent(
-    "ZYRE Marketing Order #" +
-    orderId
+    productSummary
   ) +
 
   "&order_id=" +
@@ -965,7 +983,10 @@ const paymentUrl =
     orderId
   ) +
 
-  "&payment_type=customer";
+  "&customer_id=" +
+  encodeURIComponent(
+    customerId
+  );
 
 
 cart = [];
@@ -1299,7 +1320,7 @@ const profileResponse =
 
       }
 
-  );
+    );
 
 
 if (!profileResponse.ok) {
@@ -2042,10 +2063,6 @@ return;
 
 try {
 
-/* =========================================================
-FIND CUSTOMER ORDERS
-========================================================= */
-
 const response =
   await fetch(
 
@@ -2113,10 +2130,6 @@ if (
 }
 
 
-/* =========================================================
-FIND REQUESTED ORDER
-========================================================= */
-
 const wantedId =
   Number(
     orderId.trim()
@@ -2151,10 +2164,6 @@ if (!order) {
 }
 
 
-/* =========================================================
-ORDER INFORMATION
-========================================================= */
-
 const displayId =
   order.id ??
   order.order_id ??
@@ -2178,10 +2187,6 @@ const displayAddress =
   order.deliveryaddress ??
   "Not provided";
 
-
-/* =========================================================
-GET DELIVERY INFORMATION
-========================================================= */
 
 let delivery = null;
 
@@ -2228,11 +2233,6 @@ try {
       deliveryData.length
     ) {
 
-      /*
-      Use the most recently returned
-      delivery record for this order.
-      */
-
       delivery =
         deliveryData[
           deliveryData.length - 1
@@ -2251,12 +2251,6 @@ try {
 
 } catch (deliveryError) {
 
-  /*
-  Delivery information must never
-  prevent the customer from seeing
-  their normal order status.
-  */
-
   console.warn(
     "Could not load delivery information:",
     deliveryError
@@ -2264,10 +2258,6 @@ try {
 
 }
 
-
-/* =========================================================
-DELIVERY DISPLAY
-========================================================= */
 
 let deliveryText =
 "🚚 Delivery: Not assigned yet";
@@ -2360,10 +2350,6 @@ if (delivery) {
 
 }
 
-
-/* =========================================================
-SHOW ORDER + DELIVERY INFORMATION
-========================================================= */
 
 alert(
 
@@ -2797,11 +2783,6 @@ const permission =
 Notification.permission;
 
 
-/*
-If Chrome has not granted permission,
-the notification button must remain available.
-*/
-
 if (permission !== "granted") {
 
   updateZYRENotificationButton(false);
@@ -2810,12 +2791,6 @@ if (permission !== "granted") {
 
 }
 
-
-/*
-Permission is already granted.
-Now check whether this browser/phone
-already has a real push subscription.
-*/
 
 const registration =
 await getZYREServiceWorkerRegistration();
@@ -2837,21 +2812,10 @@ if (!subscription) {
 }
 
 
-/*
-The subscription already exists.
-Do NOT ask the user for permission again.
-*/
-
 console.log(
 "Existing ZYRE push subscription found."
 );
 
-
-/*
-Make sure the subscription is also stored
-in Supabase. If it already exists, the function
-will simply return.
-*/
 
 await saveZYREPushSubscription(
 subscription
@@ -2926,11 +2890,6 @@ try {
     Notification.permission;
 
 
-  /*
-  If notifications are already granted,
-  do NOT request permission again.
-  */
-
   if (permission !== "granted") {
 
     permission =
@@ -2953,10 +2912,6 @@ try {
   }
 
 
-  /*
-  Get or create the push subscription.
-  */
-
   const subscription =
     await subscribeToZYREPush();
 
@@ -2969,10 +2924,6 @@ try {
 
   }
 
-
-  /*
-  Mark the dashboard button as enabled.
-  */
 
   updateZYRENotificationButton(true);
 
@@ -3057,11 +3008,6 @@ try {
     await registration.pushManager.getSubscription();
 
 
-  /*
-  If Chrome has permission but the subscription
-  disappeared, create a new one.
-  */
-
   if (!subscription) {
 
     subscription =
@@ -3130,37 +3076,15 @@ function () {
 setTimeout(
   async function () {
 
-    /*
-    First check the existing notification state.
-    This prevents the dashboard from asking again
-    after a normal page refresh.
-    */
-
     const alreadyEnabled =
       await checkZYRENotificationStatus();
 
-
-    /*
-    Only automatically request permission when
-    the browser has never been asked before.
-
-    If permission is "granted", we DO NOT ask again.
-    If permission is "denied", we leave it alone.
-    */
 
     if (
       !alreadyEnabled &&
       "Notification" in window &&
       Notification.permission === "default"
     ) {
-
-      /*
-      We intentionally do not automatically pop
-      the permission request here.
-
-      The user can press:
-      🔔 Enable Notifications
-      */
 
       updateZYRENotificationButton(false);
 
