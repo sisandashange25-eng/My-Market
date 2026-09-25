@@ -286,6 +286,30 @@ button {
 
 }
 
+.process-payout {
+
+  background: #55d187;
+
+  color: #000;
+
+  margin-top: 0;
+
+}
+
+.process-payout:hover {
+
+  opacity: 0.9;
+
+}
+
+button:disabled {
+
+  opacity: 0.5;
+
+  cursor: not-allowed;
+
+}
+
 
 /* =========================
    DASHBOARD NAV
@@ -557,6 +581,54 @@ button {
 
 }
 
+.processed {
+
+  color: #55d187;
+
+}
+
+.failed {
+
+  color: #ff5c5c;
+
+}
+
+
+/* =========================
+   PAYOUT ACTION BOX
+========================= */
+
+.payout-action {
+
+  margin-top: 10px;
+
+  padding: 12px;
+
+  background: #0b0b0b;
+
+  border:
+    1px solid #292929;
+
+  border-radius: 10px;
+
+}
+
+.payout-action p {
+
+  margin-top: 0;
+
+}
+
+.payout-action small {
+
+  color: #888;
+
+  display: block;
+
+  margin-top: 6px;
+
+}
+
 
 /* =========================
    TABLE
@@ -659,6 +731,12 @@ th {
   .card {
 
     padding: 15px;
+
+  }
+
+  .payout-action button {
+
+    width: 100%;
 
   }
 
@@ -1038,6 +1116,11 @@ th {
       seller payouts.
     </p>
 
+    <p class="success">
+      🔐 Payout processing is restricted to
+      ZYRE administrator accounts.
+    </p>
+
 
     <div class="payment-stats">
 
@@ -1109,9 +1192,9 @@ th {
 
     <button
       class="gold-button"
-      onclick="loadSellerPayments()"
+      onclick="refreshPaymentCentre()"
     >
-      🔄 Refresh Seller Payments
+      🔄 Refresh Payment Centre
     </button>
 
 
@@ -1126,7 +1209,7 @@ th {
 
 
 
-  <!-- SELLER PAYMENTS -->
+  <!-- CUSTOMER PAYMENTS -->
 
   <div class="card">
 
@@ -1169,13 +1252,20 @@ th {
   <div class="card">
 
     <h2>
-      💸 Seller Payouts
+      💸 Seller Payout Management
     </h2>
 
     <p>
-      Payouts will be connected to the
-      payment provider after seller payment
-      accounts are configured.
+      Review seller payout requests and
+      process approved payouts from the
+      ZYRE owner dashboard.
+    </p>
+
+    <p class="pending">
+      ⚠️ Processing a payout here records the
+      payout as completed in the ZYRE ledger.
+      A real bank/provider transfer is not yet
+      connected.
     </p>
 
     <div
@@ -1199,8 +1289,12 @@ th {
 
     <p>
       Seller bank/payment-provider accounts
-      will appear here when sellers are
       connected to the ZYRE payout system.
+    </p>
+
+    <p class="pending">
+      🔐 For security, only the last four
+      account digits are displayed.
     </p>
 
     <div
@@ -1266,6 +1360,13 @@ th {
     </p>
 
     <p>
+      📊 ZYRE marketplace commission:
+      <strong>
+        10%
+      </strong>
+    </p>
+
+    <p>
       💰 Seller earnings:
       <strong>
         Customer payment minus ZYRE marketplace commission
@@ -1280,9 +1381,8 @@ th {
     </p>
 
     <p class="pending">
-      ⏳ Live payment-provider activation will
-      be connected after the seller payout
-      system is completed.
+      ⏳ Live payment-provider/bank transfer
+      integration still needs to be connected.
     </p>
 
   </div>
@@ -1313,6 +1413,16 @@ const SUPABASE_KEY =
 let accessToken = null;
 
 let adminUserId = null;
+
+
+/*
+   Seller name lookup.
+   This lets the owner see the store name
+   instead of only the seller ID.
+*/
+
+let sellerMap = {};
+
 
 
 /* =========================
@@ -1521,15 +1631,18 @@ async function loginAdmin() {
 }
 
 
+
 /* =========================
    DASHBOARD
 ========================= */
 
 async function loadDashboard() {
 
-  await Promise.all([
+  await loadSellers();
 
-    loadSellers(),
+  await loadSellerMap();
+
+  await Promise.all([
 
     loadProducts(),
 
@@ -1551,6 +1664,7 @@ async function loadDashboard() {
   loadRecentActivity();
 
 }
+
 
 
 /* =========================
@@ -1587,6 +1701,101 @@ function showSection(
   }
 
 }
+
+
+
+/* =========================
+   SELLER MAP
+========================= */
+
+async function loadSellerMap() {
+
+  try {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/sellers?select=id,store_name",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
+
+
+    if (!response.ok) {
+
+      return;
+
+    }
+
+
+    const sellers =
+      await response.json();
+
+
+    sellerMap = {};
+
+
+    sellers.forEach(
+      function(seller) {
+
+        sellerMap[
+          String(seller.id)
+        ] =
+          seller.store_name ||
+          "Unnamed Store";
+
+      }
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Seller map error:",
+      error
+    );
+
+  }
+
+}
+
+
+
+function sellerName(id) {
+
+  if (
+    id === null ||
+    id === undefined ||
+    id === ""
+  ) {
+
+    return "-";
+
+  }
+
+
+  return (
+    sellerMap[String(id)] ||
+    "Seller #" + id
+  );
+
+}
+
 
 
 /* =========================
@@ -1659,6 +1868,22 @@ async function loadSellers() {
       )
       .textContent =
         sellers.length;
+
+
+    sellerMap = {};
+
+
+    sellers.forEach(
+      function(seller) {
+
+        sellerMap[
+          String(seller.id)
+        ] =
+          seller.store_name ||
+          "Unnamed Store";
+
+      }
+    );
 
 
     if (!sellers.length) {
@@ -1782,6 +2007,7 @@ async function loadSellers() {
 }
 
 
+
 /* =========================
    APPROVE SELLER
 ========================= */
@@ -1877,6 +2103,7 @@ async function approveSeller(id) {
 }
 
 
+
 /* =========================
    REJECT SELLER
 ========================= */
@@ -1970,6 +2197,7 @@ async function rejectSeller(id) {
   }
 
 }
+
 
 
 /* =========================
@@ -2123,8 +2351,9 @@ async function loadProducts() {
 
               <td>
                 ${
-                  product.seller_id ||
-                  "-"
+                  sellerName(
+                    product.seller_id
+                  )
                 }
               </td>
 
@@ -2152,6 +2381,7 @@ async function loadProducts() {
   }
 
 }
+
 
 
 /* =========================
@@ -2378,6 +2608,7 @@ async function loadOrders() {
 }
 
 
+
 /* =========================
    RENTAL PAYMENTS
 ========================= */
@@ -2500,8 +2731,9 @@ async function loadRentalPayments() {
 
               <td>
                 ${
-                  payment.seller_id ||
-                  "-"
+                  sellerName(
+                    payment.seller_id
+                  )
                 }
               </td>
 
@@ -2558,6 +2790,7 @@ async function loadRentalPayments() {
   }
 
 }
+
 
 
 /* =========================
@@ -2648,8 +2881,34 @@ async function loadSellerPayments() {
       0;
 
 
+    /*
+      Only successful marketplace payments
+      are included in financial totals.
+    */
+
     payments.forEach(
       function(payment) {
+
+        const status =
+          String(
+            payment.status ||
+            ""
+          ).toLowerCase();
+
+
+        const successful =
+          status === "paid" ||
+          status === "completed" ||
+          status === "successful" ||
+          status === "success";
+
+
+        if (!successful) {
+
+          return;
+
+        }
+
 
         total +=
           Number(
@@ -2740,6 +2999,8 @@ async function loadSellerPayments() {
 
       '<th>Status</th>' +
 
+      '<th>Provider</th>' +
+
       '<th>Reference</th>' +
 
       '</tr>' +
@@ -2764,7 +3025,11 @@ async function loadSellerPayments() {
               </td>
 
               <td>
-                ${payment.seller_id || "-"}
+                ${
+                  sellerName(
+                    payment.seller_id
+                  )
+                }
               </td>
 
               <td>
@@ -2795,6 +3060,13 @@ async function loadSellerPayments() {
                 ${
                   payment.status ||
                   "pending"
+                }
+              </td>
+
+              <td>
+                ${
+                  payment.provider ||
+                  "-"
                 }
               </td>
 
@@ -2837,6 +3109,31 @@ async function loadSellerPayments() {
   loadPayoutTotals();
 
 }
+
+
+
+/* =========================
+   REFRESH PAYMENT CENTRE
+========================= */
+
+async function refreshPaymentCentre() {
+
+  await loadSellerMap();
+
+  await Promise.all([
+
+    loadSellerPayments(),
+
+    loadSellerBalances(),
+
+    loadPayouts(),
+
+    loadSellerPaymentAccounts()
+
+  ]);
+
+}
+
 
 
 /* =========================
@@ -2948,7 +3245,22 @@ async function loadSellerBalances() {
             <tr>
 
               <td>
-                ${balance.seller_id}
+
+                <strong>
+                  ${
+                    sellerName(
+                      balance.seller_id
+                    )
+                  }
+                </strong>
+
+                <br>
+
+                <small>
+                  Seller ID:
+                  ${balance.seller_id}
+                </small>
+
               </td>
 
               <td>
@@ -3015,6 +3327,7 @@ async function loadSellerBalances() {
   }
 
 }
+
 
 
 /* =========================
@@ -3121,6 +3434,10 @@ async function loadPayouts() {
 
       '<th>Requested</th>' +
 
+      '<th>Processed</th>' +
+
+      '<th>Action</th>' +
+
       '</tr>' +
 
       '</thead>' +
@@ -3129,6 +3446,94 @@ async function loadPayouts() {
 
       payouts.map(
         function(payout) {
+
+          const status =
+            String(
+              payout.status ||
+              "pending"
+            ).toLowerCase();
+
+
+          let statusClass =
+            "pending";
+
+
+          if (
+            status === "processing"
+          ) {
+
+            statusClass =
+              "processing";
+
+          }
+
+
+          if (
+            status === "processed"
+          ) {
+
+            statusClass =
+              "processed";
+
+          }
+
+
+          if (
+            status === "paid"
+          ) {
+
+            statusClass =
+              "paid";
+
+          }
+
+
+          if (
+            status === "failed"
+          ) {
+
+            statusClass =
+              "failed";
+
+          }
+
+
+          let action =
+            "";
+
+
+          if (
+            status === "pending"
+          ) {
+
+            action = `
+
+              <div class="payout-action">
+
+                <button
+                  class="process-payout"
+                  onclick="processPayout(${payout.id})"
+                >
+                  💸 Process Payout
+                </button>
+
+                <small>
+                  Owner action required
+                </small>
+
+              </div>
+
+            `;
+
+          } else {
+
+            action =
+              '<span class="success">' +
+              '✓ No action' +
+              '</span>';
+
+          }
+
 
           return `
 
@@ -3139,15 +3544,32 @@ async function loadPayouts() {
               </td>
 
               <td>
-                ${payout.seller_id}
+
+                <strong>
+                  ${
+                    sellerName(
+                      payout.seller_id
+                    )
+                  }
+                </strong>
+
+                <br>
+
+                <small>
+                  ID:
+                  ${payout.seller_id}
+                </small>
+
               </td>
 
               <td>
-                R${
-                  Number(
-                    payout.amount || 0
-                  ).toFixed(2)
-                }
+                <strong>
+                  R${
+                    Number(
+                      payout.amount || 0
+                    ).toFixed(2)
+                  }
+                </strong>
               </td>
 
               <td>
@@ -3165,10 +3587,16 @@ async function loadPayouts() {
               </td>
 
               <td>
-                ${
-                  payout.status ||
-                  "pending"
-                }
+
+                <span
+                  class="status ${statusClass}"
+                >
+                  ${
+                    payout.status ||
+                    "pending"
+                  }
+                </span>
+
               </td>
 
               <td>
@@ -3176,6 +3604,17 @@ async function loadPayouts() {
                   payout.requested_at ||
                   "-"
                 }
+              </td>
+
+              <td>
+                ${
+                  payout.processed_at ||
+                  "-"
+                }
+              </td>
+
+              <td>
+                ${action}
               </td>
 
             </tr>
@@ -3201,7 +3640,233 @@ async function loadPayouts() {
 
   }
 
+
+  loadPayoutTotals();
+
 }
+
+
+
+/* =========================
+   PROCESS PAYOUT
+========================= */
+
+async function processPayout(
+  payoutId
+) {
+
+  if (!accessToken) {
+
+    alert(
+      "Your admin session has expired. Please log in again."
+    );
+
+    return;
+
+  }
+
+
+  const confirmProcess =
+    confirm(
+
+      "Process payout #" +
+      payoutId +
+      "?\n\n" +
+
+      "This will move the payout out of the " +
+      "pending seller balance and mark it as processed.\n\n" +
+
+      "The actual bank/provider transfer is not " +
+      "connected yet."
+
+    );
+
+
+  if (!confirmProcess) {
+
+    return;
+
+  }
+
+
+  let provider =
+    prompt(
+      "Enter the payment provider.\n\n" +
+      "Example: Manual, Bank, PayFast, etc."
+    );
+
+
+  if (
+    provider === null
+  ) {
+
+    return;
+
+  }
+
+
+  provider =
+    provider.trim();
+
+
+  if (!provider) {
+
+    alert(
+      "Payment provider is required."
+    );
+
+    return;
+
+  }
+
+
+  let reference =
+    prompt(
+      "Enter the provider/reference number.\n\n" +
+      "Example: ZYRE-PAYOUT-001"
+    );
+
+
+  if (
+    reference === null
+  ) {
+
+    return;
+
+  }
+
+
+  reference =
+    reference.trim();
+
+
+  if (!reference) {
+
+    alert(
+      "Provider reference is required."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/rpc/process_seller_payout",
+
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken,
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              p_payout_id:
+                Number(payoutId),
+
+              p_provider:
+                provider,
+
+              p_provider_reference:
+                reference
+
+            })
+
+        }
+
+      );
+
+
+    const text =
+      await response.text();
+
+
+    if (!response.ok) {
+
+      alert(
+        "Payout could not be processed:\n\n" +
+        text
+      );
+
+      return;
+
+    }
+
+
+    let result;
+
+
+    try {
+
+      result =
+        JSON.parse(text);
+
+    } catch {
+
+      result =
+        null;
+
+    }
+
+
+    alert(
+
+      "Payout processed successfully! ✅\n\n" +
+
+      "Payout ID: #" +
+      payoutId +
+
+      "\nProvider: " +
+      provider +
+
+      "\nReference: " +
+      reference
+
+    );
+
+
+    /*
+      Refresh the financial information
+      after successful processing.
+    */
+
+    await loadPayouts();
+
+    await loadSellerBalances();
+
+    await loadPayoutTotals();
+
+
+  } catch (error) {
+
+    alert(
+      "Error processing payout:\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
 
 
 /* =========================
@@ -3271,7 +3936,7 @@ async function loadPayoutTotals() {
               payout.amount || 0
             );
 
-        }
+          }
 
       }
     );
@@ -3296,6 +3961,7 @@ async function loadPayoutTotals() {
   }
 
 }
+
 
 
 /* =========================
@@ -3413,7 +4079,22 @@ async function loadSellerPaymentAccounts() {
               </td>
 
               <td>
-                ${account.seller_id}
+
+                <strong>
+                  ${
+                    sellerName(
+                      account.seller_id
+                    )
+                  }
+                </strong>
+
+                <br>
+
+                <small>
+                  ID:
+                  ${account.seller_id}
+                </small>
+
               </td>
 
               <td>
@@ -3439,8 +4120,10 @@ async function loadSellerPaymentAccounts() {
 
               <td>
                 ${
-                  account.account_number_last4 ||
-                  "-"
+                  account.account_number_last4
+                    ? "•••• " +
+                      account.account_number_last4
+                    : "-"
                 }
               </td>
 
@@ -3475,6 +4158,7 @@ async function loadSellerPaymentAccounts() {
   }
 
 }
+
 
 
 /* =========================
@@ -3526,6 +4210,7 @@ function loadRecentActivity() {
 }
 
 
+
 /* =========================
    LOGOUT
 ========================= */
@@ -3535,6 +4220,8 @@ function logoutAdmin() {
   accessToken = null;
 
   adminUserId = null;
+
+  sellerMap = {};
 
 
   document
@@ -3564,6 +4251,7 @@ function logoutAdmin() {
     .textContent = "";
 
 }
+
 
 </script>
 
