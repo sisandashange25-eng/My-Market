@@ -1,12 +1,19 @@
 {
   "name": "ZYRE Marketing",
   "short_name": "ZYRE",
-  "description": "Your business. Your store. One marketplace.",
+  "description": "ZYRE Marketing is a South African online marketplace where businesses can create online stores and customers can discover and shop products.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "orientation": "portrait",
+  "lang": "en-ZA",
+  "dir": "ltr",
+  "categories": [
+    "shopping",
+    "business"
+  ],
   "icons": [
     {
       "src": "./icon-192.png",
