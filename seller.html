@@ -252,7 +252,6 @@
 
 <div class="container">
 
-  <!-- NOTIFICATIONS -->
   <div class="card">
 
     <h2>🔔 Notifications</h2>
@@ -279,7 +278,6 @@
   </div>
 
 
-  <!-- ADD PRODUCT -->
   <div class="card">
 
     <h2>➕ Add a Product</h2>
@@ -340,7 +338,6 @@
   </div>
 
 
-  <!-- ORDER SUMMARY -->
   <div class="card">
 
     <h2>📊 Order Summary</h2>
@@ -372,7 +369,6 @@
   </div>
 
 
-  <!-- PRODUCTS -->
   <div class="card">
 
     <h2>🛍️ My Products</h2>
@@ -384,7 +380,6 @@
   </div>
 
 
-  <!-- ORDERS -->
   <div class="card">
 
     <h2>📦 Customer Orders</h2>
@@ -461,7 +456,6 @@
   </div>
 
 
-  <!-- SELLER INFORMATION -->
   <div class="card">
 
     <h2>🏪 Seller Information</h2>
@@ -541,6 +535,8 @@ let sellerOrdersCache = [];
 let customerProfilesCache = {};
 
 let deliveriesCache = {};
+
+let lastOrdersSignature = "";
 
 
 /* ==============================
@@ -1681,7 +1677,7 @@ async function saveDelivery(
     );
 
 
-    await loadOrders();
+    await loadOrders(true);
 
   }
 
@@ -1698,10 +1694,68 @@ async function saveDelivery(
 
 
 /* ==============================
+   CREATE ORDER SIGNATURE
+============================== */
+
+function createOrdersSignature() {
+
+  const ordersPart =
+    sellerOrdersCache.map(
+      order => ({
+
+        id:
+          order.id,
+
+        status:
+          order.status,
+
+        total:
+          order.total,
+
+        delivery_address:
+          order.delivery_address,
+
+        customer_id:
+          order.customer_id,
+
+        created_at:
+          order.created_at
+
+      })
+    );
+
+
+  const profilesPart =
+    customerProfilesCache;
+
+
+  const deliveriesPart =
+    deliveriesCache;
+
+
+  return JSON.stringify({
+
+    orders:
+      ordersPart,
+
+    profiles:
+      profilesPart,
+
+    deliveries:
+      deliveriesPart
+
+  });
+
+}
+
+
+/* ==============================
    LOAD ORDERS
 ============================== */
 
-async function loadOrders() {
+async function loadOrders(
+  forceRender = false
+) {
 
   const container =
     document.getElementById(
@@ -1711,8 +1765,24 @@ async function loadOrders() {
   if (!container) return;
 
 
-  container.innerHTML =
-    "Loading orders...";
+  /*
+    Only show "Loading orders..." on the
+    first load or when we explicitly force
+    a refresh.
+
+    Automatic 10-second checks will now
+    happen silently.
+  */
+
+  if (
+    forceRender ||
+    !lastOrdersSignature
+  ) {
+
+    container.innerHTML =
+      "Loading orders...";
+
+  }
 
 
   try {
@@ -1732,8 +1802,15 @@ async function loadOrders() {
 
     if (!ordersResponse.ok) {
 
-      container.innerHTML =
-        "<p>Could not load orders.</p>";
+      if (
+        forceRender ||
+        !lastOrdersSignature
+      ) {
+
+        container.innerHTML =
+          "<p>Could not load orders.</p>";
+
+      }
 
       console.error(
         await ordersResponse.text()
@@ -1765,8 +1842,15 @@ async function loadOrders() {
 
     if (!productsResponse.ok) {
 
-      container.innerHTML =
-        "<p>Could not load seller products.</p>";
+      if (
+        forceRender ||
+        !lastOrdersSignature
+      ) {
+
+        container.innerHTML =
+          "<p>Could not load seller products.</p>";
+
+      }
 
       return;
 
@@ -1799,8 +1883,15 @@ async function loadOrders() {
 
     if (!itemsResponse.ok) {
 
-      container.innerHTML =
-        "<p>Could not load order items.</p>";
+      if (
+        forceRender ||
+        !lastOrdersSignature
+      ) {
+
+        container.innerHTML =
+          "<p>Could not load order items.</p>";
+
+      }
 
       return;
 
@@ -1841,6 +1932,35 @@ async function loadOrders() {
     );
 
 
+    const newSignature =
+      createOrdersSignature();
+
+
+    /*
+      If nothing changed, keep the current
+      Customer Orders screen exactly as it is.
+    */
+
+    if (
+      !forceRender &&
+      lastOrdersSignature &&
+      newSignature ===
+        lastOrdersSignature
+    ) {
+
+      updateOrderSummary();
+
+      checkForNewOrders();
+
+      return;
+
+    }
+
+
+    lastOrdersSignature =
+      newSignature;
+
+
     updateOrderSummary();
 
     checkForNewOrders();
@@ -1851,8 +1971,15 @@ async function loadOrders() {
 
   catch (error) {
 
-    container.innerHTML =
-      "<p>Error loading orders.</p>";
+    if (
+      forceRender ||
+      !lastOrdersSignature
+    ) {
+
+      container.innerHTML =
+        "<p>Error loading orders.</p>";
+
+    }
 
     console.error(error);
 
@@ -2352,8 +2479,6 @@ function renderOrders() {
               </select>
 
 
-              <!-- DELIVERY ASSIGNMENT -->
-
               <div class="delivery-box">
 
                 <h4>
@@ -2613,7 +2738,7 @@ async function updateOrderStatus(
     );
 
 
-    await loadOrders();
+    await loadOrders(true);
 
   }
 
@@ -2655,7 +2780,7 @@ loadSellerInformation();
 
 loadProducts();
 
-loadOrders();
+loadOrders(true);
 
 checkNotificationStatus();
 
@@ -2667,7 +2792,15 @@ checkNotificationStatus();
 setInterval(
   function() {
 
-    loadOrders();
+    /*
+      Check silently every 10 seconds.
+
+      The dashboard will only redraw the
+      Customer Orders section if something
+      actually changed.
+    */
+
+    loadOrders(false);
 
   },
   10000
