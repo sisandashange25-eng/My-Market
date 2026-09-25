@@ -215,6 +215,48 @@ color:#fff;
 font-weight:bold;
 }
 
+/* DELIVERY */
+
+.delivery-box{
+margin-top:18px;
+padding:16px;
+background:#0d0d0d;
+border:1px solid #292929;
+border-radius:15px;
+}
+
+.delivery-title{
+color:#d4af37;
+font-weight:bold;
+font-size:15px;
+margin-bottom:12px;
+}
+
+.delivery-row{
+padding:7px 0;
+color:#ccc;
+font-size:14px;
+line-height:1.4;
+}
+
+.delivery-row strong{
+color:#fff;
+}
+
+.delivery-status{
+display:inline-block;
+padding:6px 10px;
+border-radius:10px;
+background:#29220d;
+color:#d4af37;
+font-weight:bold;
+}
+
+.delivery-loading{
+color:#777;
+font-size:14px;
+}
+
 .track{
 width:100%;
 margin-top:15px;
@@ -440,6 +482,169 @@ ${step.label}
 }
 
 
+/* DELIVERY INFORMATION */
+
+async function getDelivery(orderId){
+
+try{
+
+const response=await fetch(
+
+SUPABASE_URL+
+"/rest/v1/deliveries?order_id=eq."+
+encodeURIComponent(orderId)+
+"&select=*",
+
+{
+
+method:"GET",
+
+headers:{
+
+"apikey":SUPABASE_KEY,
+
+"Authorization":
+"Bearer "+SUPABASE_KEY
+
+}
+
+}
+
+);
+
+if(!response.ok){
+
+console.error(
+"Delivery lookup failed:",
+await response.text()
+);
+
+return null;
+
+}
+
+const deliveries=
+await response.json();
+
+if(!deliveries.length){
+
+return null;
+
+}
+
+return deliveries[0];
+
+}catch(error){
+
+console.error(
+"Delivery lookup error:",
+error
+);
+
+return null;
+
+}
+
+}
+
+
+/* DELIVERY DISPLAY */
+
+function createDeliveryBox(delivery){
+
+if(!delivery){
+
+return `
+
+<div class="delivery-box">
+
+<div class="delivery-title">
+🚚 Delivery Information
+</div>
+
+<div class="delivery-loading">
+Delivery has not been assigned yet.
+</div>
+
+</div>
+
+`;
+
+}
+
+return `
+
+<div class="delivery-box">
+
+<div class="delivery-title">
+🚚 Delivery Information
+</div>
+
+<div class="delivery-row">
+
+<strong>Status:</strong>
+
+<span class="delivery-status">
+${delivery.status || "Assigned"}
+</span>
+
+</div>
+
+<div class="delivery-row">
+
+<strong>👤 Delivery Person:</strong>
+
+${delivery.delivery_person_name || "Not assigned"}
+
+</div>
+
+<div class="delivery-row">
+
+<strong>📞 Phone:</strong>
+
+${delivery.delivery_person_phone || "Not provided"}
+
+</div>
+
+<div class="delivery-row">
+
+<strong>🔢 Tracking Number:</strong>
+
+${delivery.tracking_number || "Not provided"}
+
+</div>
+
+<div class="delivery-row">
+
+<strong>📅 Estimated Delivery:</strong>
+
+${delivery.estimated_delivery
+? new Date(
+delivery.estimated_delivery+"T00:00:00"
+).toLocaleDateString()
+: "Not provided"}
+
+</div>
+
+${delivery.notes ? `
+
+<div class="delivery-row">
+
+<strong>📝 Notes:</strong>
+
+${delivery.notes}
+
+</div>
+
+` : ""}
+
+</div>
+
+`;
+
+}
+
+
 async function findOrders(){
 
 const phone=
@@ -523,8 +728,33 @@ return;
 }
 
 
+/*
+Load delivery information for every order.
+*/
+
+const ordersWithDelivery=
+await Promise.all(
+
+orders.map(async order=>{
+
+const delivery=
+await getDelivery(order.id);
+
+return{
+
+...order,
+
+delivery
+
+};
+
+})
+
+);
+
+
 result.innerHTML=
-orders.map(order=>`
+ordersWithDelivery.map(order=>`
 
 <div class="order">
 
@@ -552,6 +782,8 @@ ${order.delivery_address || "Not provided"}
 🕐 <strong>Ordered:</strong>
 ${new Date(order.created_at).toLocaleString()}
 </p>
+
+${createDeliveryBox(order.delivery)}
 
 <button
 class="track"
