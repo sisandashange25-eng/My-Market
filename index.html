@@ -673,6 +673,33 @@
 
 
   <!-- =========================
+       OPEN CART FROM STORE PAGE
+  ========================= -->
+
+  <script>
+
+    if (window.location.hash === "#cart") {
+
+      window.addEventListener("load", function () {
+
+        setTimeout(function () {
+
+          if (typeof toggleCart === "function") {
+
+            toggleCart();
+
+          }
+
+        }, 300);
+
+      });
+
+    }
+
+  </script>
+
+
+  <!-- =========================
        ZYRE MARKETING NOTIFICATION SERVICE WORKER
   ========================= -->
 
