@@ -21,7 +21,7 @@
 <meta
   id="metaDescription"
   name="description"
-  content="Shop products from an independent store on ZYRE Marketing, a South African online marketplace."
+  content="Shop products from businesses on ZYRE Marketing, a South African online marketplace where customers can discover and shop products online."
 >
 
 <meta
@@ -69,7 +69,7 @@
 <meta
   id="ogDescription"
   property="og:description"
-  content="Shop products from an independent store on ZYRE Marketing."
+  content="Shop products from businesses on ZYRE Marketing, a South African online marketplace."
 >
 
 <meta
@@ -95,7 +95,7 @@
 
 <meta
   property="og:image"
-  content="https://sisandashange25-eng.github.io/My-Market/zyre-logo.png"
+  content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
 >
 
 <meta
@@ -117,12 +117,12 @@
 <meta
   id="twitterDescription"
   name="twitter:description"
-  content="Shop products from an independent store on ZYRE Marketing."
+  content="Shop products from businesses on ZYRE Marketing."
 >
 
 <meta
   name="twitter:image"
-  content="https://sisandashange25-eng.github.io/My-Market/zyre-logo.png"
+  content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
 >
 
 
@@ -260,6 +260,22 @@ body {
   margin: auto;
   color: #aaa;
   line-height: 1.6;
+}
+
+/* SEO INTRO */
+
+.store-seo-intro {
+  max-width: 850px;
+  margin: -10px auto 35px;
+  padding: 0 20px;
+  text-align: center;
+  color: #999;
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+.store-seo-intro strong {
+  color: #d4af37;
 }
 
 /* PRODUCTS */
@@ -473,6 +489,10 @@ footer {
     padding: 35px 18px;
   }
 
+  .store-seo-intro {
+    padding: 0 18px;
+  }
+
   .products-section {
     padding-left: 15px;
     padding-right: 15px;
@@ -544,17 +564,43 @@ footer {
     id="storeName"
     class="store-name"
   >
-    Loading store...
+    ZYRE Marketing Online Store
   </h1>
 
   <p
     id="storeDescription"
     class="store-description"
   >
-    Please wait...
+    Discover products from businesses and independent sellers on ZYRE Marketing, a South African online marketplace.
   </p>
 
 </section>
+
+
+<!-- =========================
+     STATIC SEO CONTENT
+========================= -->
+
+<section
+  class="store-seo-intro"
+  aria-label="About the ZYRE Marketing online store"
+>
+
+  <p>
+    Welcome to the <strong>ZYRE Marketing online store</strong>.
+    Browse products from businesses and independent sellers,
+    discover different categories, and shop online through the
+    ZYRE Marketing marketplace.
+  </p>
+
+  <p>
+    ZYRE Marketing connects customers with online stores in
+    <strong>South Africa</strong>, making it easier to discover
+    products, compare available items, and add products to your cart.
+  </p>
+
+</section>
+
 
 <section class="products-section">
 
@@ -1259,17 +1305,32 @@ async function loadStore() {
 
   if (!sellerId) {
 
+    /*
+      Keep the base store.html page
+      useful for search engines and
+      visitors while still allowing
+      specific stores to load through
+      ?seller_id=...
+    */
+
     nameBox.textContent =
-      "Store not found";
+      "ZYRE Marketing Online Store";
 
     descriptionBox.textContent =
-      "No store was selected.";
+      "Discover products from businesses and independent sellers on ZYRE Marketing, a South African online marketplace.";
 
     productsBox.innerHTML =
       `
         <div class="message">
-          Please return to the marketplace
-          and select a store.
+
+          Browse the ZYRE Marketing marketplace
+          to discover stores and products.
+
+          <br><br>
+
+          Select a store from the marketplace
+          to view its available products.
+
         </div>
       `;
 
