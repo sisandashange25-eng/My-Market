@@ -312,9 +312,9 @@ ADD TO CART
 function add(id) {
 
 const product =
-products.find(
-p => String(p.id) === String(id)
-);
+  products.find(
+    p => String(p.id) === String(id)
+  );
 
 if (!product) {
 
@@ -929,9 +929,25 @@ try {
 }
 
 
+/* =========================================================
+ZYRE PAYMENT PAGE
+========================================================= */
+
+/*
+  The old Google Apps Script payment page has been
+  replaced with the new ZYRE payment page.
+
+  Payfast will be connected to the Pay Now button
+  after merchant approval.
+
+  IMPORTANT:
+  This page does NOT mark the order as paid.
+  Payment confirmation will later come from Payfast.
+*/
+
 const paymentUrl =
 
-  "https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNDxuj63iqje/exec" +
+  "./payment.html" +
 
   "?amount=" +
   encodeURIComponent(
@@ -940,14 +956,16 @@ const paymentUrl =
 
   "&item_name=" +
   encodeURIComponent(
-    "ZavaMarket Order #" +
+    "ZYRE Marketing Order #" +
     orderId
   ) +
 
   "&order_id=" +
   encodeURIComponent(
     orderId
-  );
+  ) +
+
+  "&payment_type=customer";
 
 
 cart = [];
@@ -1281,7 +1299,7 @@ const profileResponse =
 
       }
 
-    );
+  );
 
 
 if (!profileResponse.ok) {
