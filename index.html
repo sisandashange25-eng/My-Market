@@ -86,7 +86,7 @@
 
 
     <!-- =========================
-         MENU
+         MENU BUTTON
     ========================= -->
 
     <button
@@ -117,7 +117,7 @@
 
 
   <!-- =========================
-       ZYRE MENU
+       ZYRE SIDE MENU
   ========================= -->
 
   <div
@@ -126,15 +126,26 @@
     style="display:none;"
   >
 
+    <!-- MENU HEADER -->
+
     <div class="zyre-menu-header">
 
-      <strong>
-        ZYRE MENU
-      </strong>
+      <div class="zyre-menu-brand">
+
+        <img
+          src="zyre-logo.png"
+          alt="ZYRE Marketing"
+          class="zyre-menu-logo"
+        >
+
+      </div>
+
 
       <button
         onclick="toggleZyreMenu()"
         type="button"
+        aria-label="Close menu"
+        class="zyre-menu-close"
       >
         ✕
       </button>
@@ -142,44 +153,70 @@
     </div>
 
 
-    <button
-      onclick="window.location.href='index.html'"
-      type="button"
-    >
-      🏠 Home
-    </button>
+    <!-- MENU ITEMS -->
+
+    <div class="zyre-menu-items">
+
+      <button
+        onclick="window.location.href='index.html'"
+        type="button"
+      >
+        <span>🏠</span>
+        <span>Home</span>
+      </button>
 
 
-    <button
-      onclick="document.getElementById('stores').scrollIntoView({behavior:'smooth'}); toggleZyreMenu();"
-      type="button"
-    >
-      🛍️ Marketplace
-    </button>
+      <button
+        onclick="document.getElementById('stores').scrollIntoView({behavior:'smooth'}); toggleZyreMenu();"
+        type="button"
+      >
+        <span>🛍️</span>
+        <span>Marketplace</span>
+      </button>
 
 
-    <button
-      onclick="sellerCentre(); toggleZyreMenu();"
-      type="button"
-    >
-      🏪 Seller Dashboard
-    </button>
+      <button
+        onclick="sellerCentre(); toggleZyreMenu();"
+        type="button"
+      >
+        <span>🏪</span>
+        <span>Seller Dashboard</span>
+      </button>
 
 
-    <button
-      onclick="window.location.href='admin.html'"
-      type="button"
-    >
-      👑 Owner Dashboard
-    </button>
+      <button
+        onclick="window.location.href='admin.html'"
+        type="button"
+      >
+        <span>👑</span>
+        <span>Owner Dashboard</span>
+      </button>
 
 
-    <button
-      onclick="toggleCart(); toggleZyreMenu();"
-      type="button"
-    >
-      🛒 Cart
-    </button>
+      <button
+        onclick="toggleCart(); toggleZyreMenu();"
+        type="button"
+      >
+        <span>🛒</span>
+        <span>Cart</span>
+      </button>
+
+    </div>
+
+
+    <!-- MENU FOOTER -->
+
+    <div class="zyre-menu-footer">
+
+      <span>
+        ZYRE MARKETING
+      </span>
+
+      <small>
+        Your business. Your store.
+      </small>
+
+    </div>
 
   </div>
 
@@ -798,7 +835,10 @@
 
       if (!menu) return;
 
-      if (menu.style.display === "none" || menu.style.display === "") {
+      if (
+        menu.style.display === "none" ||
+        menu.style.display === ""
+      ) {
 
         menu.style.display = "block";
 
@@ -1038,6 +1078,177 @@
     loadStores();
 
   </script>
+
+
+  <!-- =========================
+       ZYRE MENU VISUAL STYLING
+       ========================= -->
+
+  <style>
+
+    /* SIDE MENU */
+
+    .zyre-menu {
+      position: fixed !important;
+      top: 0;
+      right: 0;
+      width: 290px;
+      max-width: 86%;
+      height: 100vh;
+      background: #000;
+      color: #fff;
+      z-index: 99999;
+      padding: 0;
+      box-sizing: border-box;
+      box-shadow: -10px 0 35px rgba(0, 0, 0, 0.55);
+      overflow-y: auto;
+    }
+
+
+    /* MENU HEADER */
+
+    .zyre-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 150px;
+      padding: 20px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #333;
+    }
+
+
+    .zyre-menu-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+    }
+
+
+    .zyre-menu-logo {
+      display: block;
+      width: 175px;
+      max-width: 78%;
+      height: auto;
+      object-fit: contain;
+    }
+
+
+    .zyre-menu-close {
+      flex-shrink: 0;
+      background: transparent;
+      color: #fff;
+      border: none;
+      font-size: 25px;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+
+    /* MENU ITEMS */
+
+    .zyre-menu-items {
+      padding: 15px 14px;
+    }
+
+
+    .zyre-menu-items button {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 16px 14px;
+      margin: 5px 0;
+      background: transparent;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 16px;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+
+
+    .zyre-menu-items button span:first-child {
+      width: 28px;
+      min-width: 28px;
+      text-align: center;
+      font-size: 20px;
+    }
+
+
+    .zyre-menu-items button:hover {
+      background: #222;
+    }
+
+
+    .zyre-menu-items button:active {
+      background: #333;
+    }
+
+
+    /* MENU FOOTER */
+
+    .zyre-menu-footer {
+      margin: 15px 20px 30px;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+      text-align: center;
+    }
+
+
+    .zyre-menu-footer span {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 2px;
+      font-weight: bold;
+    }
+
+
+    .zyre-menu-footer small {
+      display: block;
+      margin-top: 7px;
+      color: #aaa;
+      font-size: 11px;
+    }
+
+
+    /* MENU BUTTON */
+
+    .menu-button {
+      background: #000;
+      color: #fff;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 10px 13px;
+      font-size: 22px;
+      cursor: pointer;
+      min-width: 48px;
+    }
+
+
+    .menu-button:hover {
+      background: #222;
+    }
+
+
+    /* MOBILE */
+
+    @media (max-width: 700px) {
+
+      .zyre-menu {
+        width: 290px;
+      }
+
+      .zyre-menu-logo {
+        width: 165px;
+      }
+
+    }
+
+  </style>
 
 </body>
 
