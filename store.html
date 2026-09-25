@@ -1,21 +1,16 @@
 <!doctype html>
-<html lang="en">
 
-<head>
+<html lang="en"><head><meta charset="utf-8"><meta
+name="viewport"
+content="width=device-width,initial-scale=1"
 
-<meta charset="utf-8">
+«»
 
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1"
->
+<title>ZYRE Marketing — Store</title><meta
+name="description"
+content="Shop this store on ZYRE Marketing."
 
-<title>ZYRE Marketing — Store</title>
-
-<meta
-  name="description"
-  content="Shop this store on ZYRE Marketing."
->
+«»
 
 <style>
 
@@ -39,6 +34,7 @@ body {
   border-bottom: 1px solid #2b2b2b;
   padding: 22px 18px;
   text-align: center;
+  position: relative;
 }
 
 .brand {
@@ -60,6 +56,43 @@ body {
   letter-spacing: 5px;
   color: #aaa;
   margin-top: 6px;
+}
+
+/* =========================
+   CART BUTTON
+========================= */
+
+.cart-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 11px 18px;
+  border: 1px solid #d4af37;
+  border-radius: 6px;
+  background: #d4af37;
+  color: #000;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cart-button:hover {
+  background: #f0cf62;
+}
+
+.cart-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 50%;
+  background: #000;
+  color: #d4af37;
+  font-size: 12px;
 }
 
 /* =========================
@@ -311,109 +344,72 @@ footer {
 
 }
 
-</style>
+</style></head><body><header class="store-header">  <div class="brand"><span class="brand-main">
+  ZYRE
+</span>
 
-</head>
+<span class="brand-sub">
+  MARKETING
+</span>
 
+  </div><button
+class="cart-button"
+type="button"
+onclick="openCart()"
 
-<body>
+«»
 
-
-<header class="store-header">
-
-  <div class="brand">
-
-    <span class="brand-main">
-      ZYRE
-    </span>
-
-    <span class="brand-sub">
-      MARKETING
-    </span>
-
-  </div>
-
-</header>
-
-
-<a
-  href="index.html"
-  class="back-button"
+🛒 View Cart
+<span
+  id="cartCount"
+  class="cart-count"
 >
-  ← Back to Marketplace
+  0
+</span>
+
+  </button></header><a
+href="index.html"
+class="back-button"
+
+«»
+
+← Back to Marketplace
 </a>
 
-
-<section class="store-hero">
-
-  <div class="store-label">
+<section class="store-hero">  <div class="store-label">
     ZYRE MARKETPLACE
-  </div>
-
-  <h1
+  </div>  <h1
     id="storeName"
     class="store-name"
   >
     Loading store...
-  </h1>
-
-  <p
+  </h1>  <p
     id="storeDescription"
     class="store-description"
   >
     Please wait...
-  </p>
+  </p></section><section class="products-section">  <div class="section-title"><p>
+  SHOP THIS STORE
+</p>
 
-</section>
+<h2>
+  Products
+</h2>
 
-
-<section class="products-section">
-
-  <div class="section-title">
-
-    <p>
-      SHOP THIS STORE
-    </p>
-
-    <h2>
-      Products
-    </h2>
-
-  </div>
-
-
-  <div
+  </div>  <div
     id="productsGrid"
     class="products-grid"
-  >
+  ><div class="message">
+  Loading products...
+</div>
 
-    <div class="message">
-      Loading products...
-    </div>
-
-  </div>
-
-</section>
-
-
-<footer>
-
-  <div class="footer-brand">
+  </div></section><footer>  <div class="footer-brand">
     ZYRE MARKETING
-  </div>
-
-  <div class="footer-text">
+  </div>  <div class="footer-text">
     Your business. Your store. One marketplace.
-  </div>
-
-  <div class="footer-text">
+  </div>  <div class="footer-text">
     © 2026 ZYRE Marketing · Durban, South Africa
-  </div>
-
-</footer>
-
-
-<script>
+  </div></footer><script>
 
 const SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
@@ -452,21 +448,46 @@ function escapeText(value) {
 
 
 /* =========================
+   UPDATE CART COUNT
+========================= */
+
+function updateCartCount() {
+
+  const cart =
+    JSON.parse(
+      localStorage.getItem("cart") || "[]"
+    );
+
+  const cartCount =
+    document.getElementById("cartCount");
+
+  if (cartCount) {
+
+    cartCount.textContent =
+      cart.length;
+
+  }
+
+}
+
+
+/* =========================
+   OPEN CART
+========================= */
+
+function openCart() {
+
+  window.location.href =
+    "index.html#cart";
+
+}
+
+
+/* =========================
    ADD TO CART
 ========================= */
 
 function addStoreProduct(productId) {
-
-  /*
-    IMPORTANT:
-
-    The main ZavaMarket app.js stores
-    cart items like this:
-
-    [1, 1, 4, 7]
-
-    So we use exactly the same format.
-  */
 
   let cart =
     JSON.parse(
@@ -522,6 +543,9 @@ function addStoreProduct(productId) {
     "cart",
     JSON.stringify(cart)
   );
+
+
+  updateCartCount();
 
 
   alert(
@@ -891,11 +915,8 @@ async function loadStore() {
    START
 ========================= */
 
+updateCartCount();
+
 loadStore();
 
-</script>
-
-
-</body>
-
-</html>
+</script></body></html>
