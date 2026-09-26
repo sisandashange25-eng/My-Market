@@ -870,17 +870,6 @@
 
     /*
       SELLER LOGIN VALIDATION
-
-      IMPORTANT:
-      We identify the seller using BOTH:
-
-      1. authenticated Supabase user ID
-      2. authenticated email address
-
-      This prevents a valid seller from being
-      incorrectly treated as a customer when
-      the seller record is not returned by the
-      user_id lookup.
     */
 
     async function getSellerAccount(
@@ -935,9 +924,6 @@
         SECOND:
         If no seller was found by user_id,
         check the seller email.
-
-        The email must match the authenticated
-        Supabase account email.
       */
 
       if (
@@ -990,11 +976,6 @@
 
       if (seller) {
 
-        /*
-          Get profile only after seller
-          record has been confirmed.
-        */
-
         const {
           data: profile,
           error: profileError
@@ -1021,11 +1002,6 @@
         }
 
 
-        /*
-          Owner/admin accounts must not use
-          Seller Login.
-        */
-
         if (
           profile &&
           (
@@ -1051,8 +1027,6 @@
 
       /*
         NO SELLER RECORD FOUND.
-
-        Now check the profile.
       */
 
       const {
@@ -1672,6 +1646,14 @@
 
             /*
               APPROVED SELLER
+
+              IMPORTANT:
+              Approved sellers now go directly
+              to the main marketplace.
+
+              They can still access Seller
+              Dashboard from the marketplace
+              after logging in.
             */
 
             const approved =
@@ -1709,7 +1691,7 @@
 
 
               showMessage(
-                "Seller account approved. Opening Seller Centre...",
+                "Seller account approved. Opening ZYRE Marketing marketplace...",
                 "success"
               );
 
@@ -1717,8 +1699,13 @@
               setTimeout(
                 function() {
 
+                  /*
+                    APPROVED SELLER
+                    → MARKETPLACE
+                  */
+
                   window.location.replace(
-                    "seller.html"
+                    "index.html"
                   );
 
                 },
