@@ -1,1556 +1,1327 @@
-<!doctype html>
-
-<html lang="en-ZA"><head><meta charset="utf-8"><meta
-name="viewport"
-content="width=device-width,initial-scale=1"
-
-«»
-
-<title>ZYRE Marketing | Online Store</title><meta
-id="metaDescription"
-name="description"
-content="Shop products from businesses on ZYRE Marketing, a South African online marketplace."
-
-«»
-
-<meta
-name="robots"
-content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
-
-«»
-
-<meta
-name="author"
-content="ZYRE Marketing"
-
-«»
-
-<meta
-name="geo.region"
-content="ZA"
-
-«»
-
-<meta
-name="geo.placename"
-content="Durban, South Africa"
-
-«»
-
-<link
-  id="canonicalLink"
-  rel="canonical"
-  href="https://sisandashange25-eng.github.io/My-Market/store.html"
-><meta
-id="ogTitle"
-property="og:title"
-content="ZYRE Marketing | Online Store"
-
-«»
-
-<meta
-id="ogDescription"
-property="og:description"
-content="Shop products from businesses on ZYRE Marketing, a South African online marketplace."
-
-«»
-
-<meta
-property="og:type"
-content="website"
-
-«»
-
-<meta
-id="ogUrl"
-property="og:url"
-content="https://sisandashange25-eng.github.io/My-Market/store.html"
-
-«»
-
-<meta
-property="og:site_name"
-content="ZYRE Marketing"
-
-«»
-
-<meta
-property="og:locale"
-content="en_ZA"
-
-«»
-
-<meta
-property="og:image"
-content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
-
-«»
-
-<meta
-property="og:image:alt"
-content="ZYRE Marketing logo"
-
-«»
-
-<meta
-name="twitter:card"
-content="summary"
-
-«»
-
-<meta
-id="twitterTitle"
-name="twitter:title"
-content="ZYRE Marketing | Online Store"
-
-«»
-
-<meta
-id="twitterDescription"
-name="twitter:description"
-content="Shop products from businesses on ZYRE Marketing."
-
-«»
-
-<meta
-name="twitter:image"
-content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
-
-«»
-
-<style>
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #050505;
-  color: #fff;
-}
-
-/* HEADER */
-
-.store-header {
-  background: #050505;
-  border-bottom: 1px solid #2b2b2b;
-  padding: 22px 18px;
-  text-align: center;
-}
-
-.brand {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1;
-}
-
-.brand-main {
-  font-size: 32px;
-  font-weight: 900;
-  letter-spacing: 8px;
-  color: #d4af37;
-}
-
-.brand-sub {
-  font-size: 10px;
-  letter-spacing: 5px;
-  color: #aaa;
-  margin-top: 6px;
-}
-
-/* CART */
-
-.cart-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 18px;
-  padding: 11px 18px;
-  border: 1px solid #d4af37;
-  border-radius: 6px;
-  background: #d4af37;
-  color: #000;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.cart-button:hover {
-  background: #f0cf62;
-}
-
-.cart-count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 22px;
-  height: 22px;
-  padding: 0 6px;
-  border-radius: 50%;
-  background: #000;
-  color: #d4af37;
-  font-size: 12px;
-}
-
-/* BACK BUTTON */
-
-.back-button {
-  display: inline-block;
-  margin: 20px;
-  padding: 11px 18px;
-  border: 1px solid #d4af37;
-  border-radius: 6px;
-  color: #d4af37;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.back-button:hover {
-  background: #d4af37;
-  color: #000;
-}
-
-/* STORE HERO */
-
-.store-hero {
-  max-width: 1100px;
-  margin: 20px auto 35px;
-  padding: 45px 25px;
-  text-align: center;
-  background:
-    radial-gradient(
-      circle at center,
-      #25200f 0%,
-      #0d0d0d 45%,
-      #050505 100%
-    );
-  border: 1px solid #292929;
-  border-radius: 14px;
-}
-
-/* STORE LOGO */
-
-.store-logo-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-.store-logo {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #d4af37;
-  background: #111;
-  display: block;
-  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
-}
-
-.store-logo-placeholder {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  border: 3px solid #d4af37;
-  background: #111;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #d4af37;
-  font-size: 38px;
-  font-weight: bold;
-  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
-}
-
-.store-label {
-  color: #d4af37;
-  font-size: 12px;
-  font-weight: bold;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-}
-
-.store-name {
-  margin: 12px 0;
-  font-size: 42px;
-  letter-spacing: 2px;
-}
-
-.store-description {
-  max-width: 650px;
-  margin: auto;
-  color: #aaa;
-  line-height: 1.6;
-}
-
-/* SEO INTRO */
-
-.store-seo-intro {
-  max-width: 850px;
-  margin: -10px auto 35px;
-  padding: 0 20px;
-  text-align: center;
-  color: #999;
-  line-height: 1.7;
-  font-size: 15px;
-}
-
-.store-seo-intro strong {
-  color: #d4af37;
-}
-
-/* PRODUCTS */
-
-.products-section {
-  max-width: 1100px;
-  margin: auto;
-  padding: 0 20px 50px;
-}
-
-.section-title {
-  margin-bottom: 22px;
-}
-
-.section-title p {
-  margin: 0 0 5px;
-  color: #d4af37;
-  font-size: 11px;
-  font-weight: bold;
-  letter-spacing: 3px;
-}
-
-.section-title h2 {
-  margin: 0;
-  font-size: 28px;
-}
-
-/* SEARCH */
-
-.store-tools {
-  display: grid;
-  grid-template-columns: 1fr 220px;
-  gap: 12px;
-  margin-bottom: 25px;
-}
-
-.store-search,
-.category-filter {
-  width: 100%;
-  padding: 14px 15px;
-  border: 1px solid #333;
-  border-radius: 7px;
-  background: #101010;
-  color: #fff;
-  font-size: 14px;
-  outline: none;
-}
-
-.store-search:focus,
-.category-filter:focus {
-  border-color: #d4af37;
-}
-
-.category-filter option {
-  background: #101010;
-  color: #fff;
-}
-
-/* PRODUCTS GRID */
-
-.products-grid {
-  display: grid;
-  grid-template-columns:
-    repeat(auto-fit, minmax(230px, 1fr));
-  gap: 20px;
-}
-
-/* PRODUCT CARD */
-
-.product-card {
-  overflow: hidden;
-  background: #101010;
-  border: 1px solid #292929;
-  border-radius: 12px;
-  transition: .2s ease;
-}
-
-.product-card:hover {
-  transform: translateY(-3px);
-  border-color: #d4af37;
-}
-
-.product-image {
-  width: 100%;
-  height: 230px;
-  background: #181818;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.product-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.product-placeholder {
-  font-size: 55px;
-}
-
-.product-info {
-  padding: 18px;
-}
-
-.product-name {
-  margin: 0 0 8px;
-  font-size: 19px;
-}
-
-.product-description {
-  min-height: 40px;
-  margin: 0 0 12px;
-  color: #999;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.product-price {
-  margin-bottom: 7px;
-  color: #d4af37;
-  font-size: 21px;
-  font-weight: bold;
-}
-
-.product-stock {
-  margin-bottom: 15px;
-  color: #aaa;
-  font-size: 13px;
-}
-
-/* ADD TO CART */
-
-.add-cart-button {
-  width: 100%;
-  padding: 13px;
-  border: 0;
-  border-radius: 6px;
-  background: #d4af37;
-  color: #000;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.add-cart-button:hover {
-  background: #f0cf62;
-}
-
-.add-cart-button:disabled {
-  background: #444;
-  color: #999;
-  cursor: not-allowed;
-}
-
-/* MESSAGE */
-
-.message {
-  padding: 30px;
-  text-align: center;
-  color: #aaa;
-  background: #101010;
-  border: 1px solid #292929;
-  border-radius: 10px;
-}
-
-.no-results {
-  grid-column: 1 / -1;
-  padding: 35px;
-  text-align: center;
-  color: #aaa;
-  background: #101010;
-  border: 1px solid #292929;
-  border-radius: 10px;
-}
-
-/* FOOTER */
-
-footer {
-  padding: 35px 20px;
-  border-top: 1px solid #292929;
-  text-align: center;
-  color: #888;
-}
-
-.footer-brand {
-  color: #d4af37;
-  font-size: 20px;
-  font-weight: bold;
-  letter-spacing: 3px;
-}
-
-.footer-text {
-  margin-top: 8px;
-  color: #777;
-  font-size: 13px;
-  letter-spacing: 1px;
-}
-
-/* MOBILE */
-
-@media (max-width: 600px) {
-
-  .store-name {
-    font-size: 31px;
-  }
-
-  .store-hero {
-    margin: 10px;
-    padding: 35px 18px;
-  }
-
-  .store-seo-intro {
-    padding: 0 18px;
-  }
-
-  .products-section {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  .product-image {
-    height: 210px;
-  }
-
-  .store-tools {
-    grid-template-columns: 1fr;
-  }
-
-  .store-logo,
-  .store-logo-placeholder {
-    width: 95px;
-    height: 95px;
-  }
-
-}
-
-</style></head><body><header class="store-header">  <div class="brand"><span class="brand-main">
-  ZYRE
-</span>
-
-<span class="brand-sub">
-  MARKETING
-</span>
-
-  </div><button
-class="cart-button"
-type="button"
-onclick="openCart()"
-
-«»
-
-🛒 View Cart
-
-<span
-  id="cartCount"
-  class="cart-count"
->0</span>
-
-  </button></header><a
-href="index.html"
-class="back-button"
-
-«»
-
-← Back to Marketplace
-</a>
-
-<section
-  class="store-hero"
-  aria-labelledby="storeName"
->  <!-- STORE LOGO -->  <div
-    id="storeLogoWrap"
-    class="store-logo-wrap"
-  ><div class="store-logo-placeholder">
-  🏪
-</div>
-
-  </div>  <div class="store-label">
-    ZYRE MARKETPLACE
-  </div>  <h1
-    id="storeName"
-    class="store-name"
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
   >
-    ZYRE Marketing Online Store
-  </h1>  <p
-    id="storeDescription"
-    class="store-description"
+
+  <title>ZYRE Marketing | Online Store</title>
+
+  <meta
+    name="description"
+    content="Shop products from this ZYRE Marketing marketplace store."
   >
-    Discover products from businesses and independent sellers on ZYRE Marketing, a South African online marketplace.
-  </p></section><section
-  class="store-seo-intro"
-  aria-label="About the ZYRE Marketing online store"
->  <p>
-    Welcome to the <strong>ZYRE Marketing online store</strong>.
-    Browse products from businesses and independent sellers,
-    discover different categories, and shop online through the
-    ZYRE Marketing marketplace.
-  </p>  <p>
-    ZYRE Marketing connects customers with online stores in
-    <strong>South Africa</strong>, making it easier to discover
-    products, compare available items, and add products to your cart.
-  </p></section><section class="products-section">  <div class="section-title"><p>
-  SHOP THIS STORE
-</p>
-
-<h2>
-  Products
-</h2>
-
-  </div>  <div class="store-tools"><input
-  id="storeSearch"
-  class="store-search"
-  type="search"
-  placeholder="🔎 Search products in this store..."
-  autocomplete="off"
-  aria-label="Search products in this store"
->
-
-<select
-  id="categoryFilter"
-  class="category-filter"
-  aria-label="Filter products by category"
->
-
-  <option value="">
-    All Categories
-  </option>
-
-</select>
-
-  </div>  <div
-    id="productsGrid"
-    class="products-grid"
-  ><div class="message">
-  Loading products...
-</div>
-
-  </div></section><footer>  <div class="footer-brand">
-    ZYRE MARKETING
-  </div>  <div class="footer-text">
-    Your business. Your store. One marketplace.
-  </div>  <div class="footer-text">
-    © 2026 ZYRE Marketing · Durban, South Africa
-  </div></footer><script>
-
-const SUPABASE_URL =
-  "https://gaccizzlwswwynattgda.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
-
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
-
-const sellerId =
-  params.get("seller_id");
-
-window.storeProducts = [];
-
-
-/* =========================
-   SEO HELPERS
-========================= */
-
-function updateStoreSEO(
-  storeName,
-  storeDescription
-) {
-
-  const safeStoreName =
-    String(
-      storeName ||
-      "ZYRE Store"
-    ).trim();
-
-  const safeDescription =
-    String(
-      storeDescription ||
-      "Shop products from this store on ZYRE Marketing."
-    )
-    .trim();
-
-  const shortDescription =
-    safeDescription.length > 155
-      ? safeDescription.substring(0, 152) + "..."
-      : safeDescription;
-
-  const pageTitle =
-    safeStoreName +
-    " | ZYRE Marketing";
 
-  document.title =
-    pageTitle;
-
-  const metaDescription =
-    document.getElementById(
-      "metaDescription"
-    );
-
-  if (metaDescription) {
-
-    metaDescription.setAttribute(
-      "content",
-      shortDescription
-    );
-
-  }
-
-  const canonicalUrl =
-    "https://sisandashange25-eng.github.io/My-Market/store.html?seller_id=" +
-    encodeURIComponent(sellerId);
-
-  const canonicalLink =
-    document.getElementById(
-      "canonicalLink"
-    );
-
-  if (canonicalLink) {
-
-    canonicalLink.setAttribute(
-      "href",
-      canonicalUrl
-    );
-
-  }
-
-  const ogTitle =
-    document.getElementById(
-      "ogTitle"
-    );
-
-  if (ogTitle) {
-
-    ogTitle.setAttribute(
-      "content",
-      pageTitle
-    );
-
-  }
-
-  const ogDescription =
-    document.getElementById(
-      "ogDescription"
-    );
-
-  if (ogDescription) {
-
-    ogDescription.setAttribute(
-      "content",
-      shortDescription
-    );
-
-  }
-
-  const ogUrl =
-    document.getElementById(
-      "ogUrl"
-    );
-
-  if (ogUrl) {
-
-    ogUrl.setAttribute(
-      "content",
-      canonicalUrl
-    );
-
-  }
-
-  const twitterTitle =
-    document.getElementById(
-      "twitterTitle"
-    );
-
-  if (twitterTitle) {
-
-    twitterTitle.setAttribute(
-      "content",
-      pageTitle
-    );
-
-  }
-
-  const twitterDescription =
-    document.getElementById(
-      "twitterDescription"
-    );
-
-  if (twitterDescription) {
-
-    twitterDescription.setAttribute(
-      "content",
-      shortDescription
-    );
-
-  }
-
-  const existingSchema =
-    document.getElementById(
-      "zyreStoreSchema"
-    );
-
-  if (existingSchema) {
-
-    existingSchema.remove();
-
-  }
-
-  const schema =
-    document.createElement(
-      "script"
-    );
-
-  schema.id =
-    "zyreStoreSchema";
-
-  schema.type =
-    "application/ld+json";
-
-  schema.textContent =
-    JSON.stringify({
-
-      "@context":
-        "https://schema.org",
-
-      "@type":
-        "OnlineStore",
-
-      "name":
-        safeStoreName,
-
-      "description":
-        safeDescription,
-
-      "url":
-        canonicalUrl,
-
-      "isPartOf": {
-
-        "@type":
-          "WebSite",
-
-        "name":
-          "ZYRE Marketing",
-
-        "url":
-          "https://sisandashange25-eng.github.io/My-Market/"
-
-      },
-
-      "areaServed": {
-
-        "@type":
-          "Country",
-
-        "name":
-          "South Africa"
-
+  <meta name="robots" content="index, follow">
+
+  <meta name="author" content="ZYRE Marketing">
+
+  <meta name="geo.region" content="ZA">
+  <meta name="geo.country" content="South Africa">
+
+  <link
+    rel="canonical"
+    href="https://sisandashange25-eng.github.io/My-Market/store.html"
+  >
+
+  <meta
+    property="og:title"
+    content="ZYRE Marketing | Online Store"
+  >
+
+  <meta
+    property="og:description"
+    content="Shop products from this ZYRE Marketing marketplace store."
+  >
+
+  <meta
+    property="og:type"
+    content="website"
+  >
+
+  <meta
+    property="og:url"
+    content="https://sisandashange25-eng.github.io/My-Market/store.html"
+  >
+
+  <meta
+    property="og:image"
+    content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
+  >
+
+  <meta
+    name="twitter:card"
+    content="summary_large_image"
+  >
+
+  <meta
+    name="twitter:title"
+    content="ZYRE Marketing | Online Store"
+  >
+
+  <meta
+    name="twitter:description"
+    content="Shop products from this ZYRE Marketing marketplace store."
+  >
+
+  <meta
+    name="twitter:image"
+    content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #050505;
+      color: #ffffff;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .store-header {
+      width: 100%;
+      background: #050505;
+      border-bottom: 1px solid #2a2a2a;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .brand-main {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #d4af37;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: #aaa;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+
+    .cart-button {
+      border: 1px solid #d4af37;
+      background: transparent;
+      color: #d4af37;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .cart-button:hover {
+      background: #d4af37;
+      color: #000;
+    }
+
+    .cart-count {
+      display: inline-flex;
+      min-width: 22px;
+      height: 22px;
+      align-items: center;
+      justify-content: center;
+      margin-left: 5px;
+      border-radius: 50%;
+      background: #d4af37;
+      color: #000;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .back-area {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 20px 0;
+    }
+
+    .back-button {
+      display: inline-block;
+      color: #d4af37;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .back-button:hover {
+      text-decoration: underline;
+    }
+
+    .store-hero {
+      width: calc(100% - 40px);
+      max-width: 1200px;
+      margin: 25px auto 0;
+      padding: 35px 20px;
+      text-align: center;
+      background: linear-gradient(
+        145deg,
+        #121212,
+        #080808
+      );
+      border: 1px solid #2c2c2c;
+      border-radius: 18px;
+    }
+
+    .store-logo-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .store-logo {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #d4af37;
+      background: #111111;
+      display: block;
+      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
+    }
+
+    .store-logo-placeholder {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 3px solid #d4af37;
+      background: #111111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d4af37;
+      font-size: 38px;
+      font-weight: bold;
+      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
+    }
+
+    .store-label {
+      color: #d4af37;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .store-name {
+      margin: 0;
+      font-size: clamp(28px, 6vw, 46px);
+      font-weight: 900;
+      letter-spacing: 1px;
+      word-break: break-word;
+    }
+
+    .store-description {
+      max-width: 750px;
+      margin: 15px auto 0;
+      color: #c9c9c9;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .seo-intro {
+      width: calc(100% - 40px);
+      max-width: 1100px;
+      margin: 25px auto 0;
+      color: #999;
+      text-align: center;
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    .products-section {
+      width: calc(100% - 40px);
+      max-width: 1200px;
+      margin: 35px auto;
+    }
+
+    .section-title {
+      margin: 0 0 18px;
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .search-box,
+    .category-select {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #333;
+      border-radius: 9px;
+      background: #101010;
+      color: #ffffff;
+      outline: none;
+    }
+
+    .search-box:focus,
+    .category-select:focus {
+      border-color: #d4af37;
+    }
+
+    .category-select option {
+      background: #111;
+      color: #fff;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .product-card {
+      background: #101010;
+      border: 1px solid #292929;
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      border-color: #d4af37;
+    }
+
+    .product-image-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #181818;
+      overflow: hidden;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .product-content {
+      padding: 15px;
+    }
+
+    .product-name {
+      margin: 0 0 8px;
+      font-size: 17px;
+      font-weight: bold;
+      line-height: 1.3;
+    }
+
+    .product-description {
+      margin: 0 0 12px;
+      color: #999;
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 39px;
+    }
+
+    .product-price {
+      color: #d4af37;
+      font-size: 19px;
+      font-weight: 900;
+      margin-bottom: 7px;
+    }
+
+    .product-stock {
+      color: #aaa;
+      font-size: 12px;
+      margin-bottom: 13px;
+    }
+
+    .add-cart-button {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #d4af37;
+      border-radius: 8px;
+      background: #d4af37;
+      color: #000;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s ease;
+    }
+
+    .add-cart-button:hover {
+      background: #ffffff;
+      border-color: #ffffff;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 50px 20px;
+      border: 1px dashed #333;
+      border-radius: 12px;
+      color: #999;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 45px 20px;
+      color: #aaa;
+    }
+
+    .error-message {
+      text-align: center;
+      padding: 30px 20px;
+      border: 1px solid #4a2424;
+      background: #180b0b;
+      border-radius: 12px;
+      color: #ff9b9b;
+    }
+
+    .store-footer {
+      margin-top: 50px;
+      padding: 30px 20px;
+      text-align: center;
+      border-top: 1px solid #222;
+      color: #777;
+      font-size: 13px;
+    }
+
+    .store-footer strong {
+      color: #d4af37;
+    }
+
+    @media (max-width: 900px) {
+      .products-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .store-header {
+        padding: 14px;
       }
 
-    });
-
-  document.head.appendChild(
-    schema
-  );
-
-}
-
-
-/* =========================
-   TEXT ESCAPING
-========================= */
-
-function escapeText(value) {
-
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-}
-
-
-/* =========================
-   CART
-========================= */
-
-function updateCartCount() {
-
-  const cart =
-    JSON.parse(
-      localStorage.getItem("cart") || "[]"
-    );
-
-  const cartCount =
-    document.getElementById("cartCount");
-
-  if (cartCount) {
-
-    cartCount.textContent =
-      cart.length;
-
-  }
-
-}
-
-
-function openCart() {
-
-  window.location.href =
-    "index.html#cart";
-
-}
-
-
-/* =========================
-   ADD TO CART
-========================= */
-
-function addStoreProduct(productId) {
-
-  let cart =
-    JSON.parse(
-      localStorage.getItem("cart") || "[]"
-    );
-
-  const product =
-    window.storeProducts.find(
-      product =>
-        String(product.id) ===
-        String(productId)
-    );
-
-  if (!product) {
-
-    alert(
-      "Product could not be found."
-    );
-
-    return;
-
-  }
-
-  const currentQuantity =
-    cart.filter(
-      id =>
-        String(id) ===
-        String(product.id)
-    ).length;
-
-  if (
-    Number(product.stock) <=
-    currentQuantity
-  ) {
-
-    alert(
-      "Sorry, there is not enough stock available."
-    );
-
-    return;
-
-  }
-
-  cart.push(product.id);
-
-  localStorage.setItem(
-    "cart",
-    JSON.stringify(cart)
-  );
-
-  updateCartCount();
-
-  alert(
-    product.name +
-    " added to your cart."
-  );
-
-}
-
-
-/* =========================
-   CATEGORIES
-========================= */
-
-function setupCategories() {
-
-  const categoryFilter =
-    document.getElementById(
-      "categoryFilter"
-    );
-
-  if (!categoryFilter) {
-    return;
-  }
-
-  const categories =
-    [
-      ...new Set(
-        window.storeProducts
-          .map(product =>
-            String(
-              product.category || ""
-            ).trim()
-          )
-          .filter(Boolean)
-      )
-    ]
-    .sort();
-
-  categoryFilter.innerHTML =
-    `
-      <option value="">
-        All Categories
-      </option>
-    `;
-
-  categories.forEach(function(category) {
-
-    const option =
-      document.createElement("option");
-
-    option.value = category;
-    option.textContent = category;
-
-    categoryFilter.appendChild(option);
-
-  });
-
-}
-
-
-/* =========================
-   PRODUCT RENDERING
-========================= */
-
-function renderProducts() {
-
-  const productsBox =
-    document.getElementById(
-      "productsGrid"
-    );
-
-  const searchBox =
-    document.getElementById(
-      "storeSearch"
-    );
-
-  const categoryFilter =
-    document.getElementById(
-      "categoryFilter"
-    );
-
-  if (!productsBox) {
-    return;
-  }
-
-  const search =
-    String(
-      searchBox?.value || ""
-    )
-    .trim()
-    .toLowerCase();
-
-  const category =
-    String(
-      categoryFilter?.value || ""
-    );
-
-  const filteredProducts =
-    window.storeProducts.filter(
-      function(product) {
-
-        const name =
-          String(
-            product.name || ""
-          ).toLowerCase();
-
-        const description =
-          String(
-            product.description || ""
-          ).toLowerCase();
-
-        const productCategory =
-          String(
-            product.category || ""
-          );
-
-        const matchesSearch =
-          !search ||
-          name.includes(search) ||
-          description.includes(search);
-
-        const matchesCategory =
-          !category ||
-          productCategory === category;
-
-        return (
-          matchesSearch &&
-          matchesCategory
+      .brand-main {
+        font-size: 18px;
+      }
+
+      .brand-sub {
+        font-size: 9px;
+      }
+
+      .cart-button {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      .back-area {
+        padding: 16px 15px 0;
+      }
+
+      .store-hero {
+        width: calc(100% - 30px);
+        padding: 28px 15px;
+        margin-top: 18px;
+      }
+
+      .store-logo,
+      .store-logo-placeholder {
+        width: 95px;
+        height: 95px;
+      }
+
+      .store-logo-placeholder {
+        font-size: 32px;
+      }
+
+      .seo-intro,
+      .products-section {
+        width: calc(100% - 30px);
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .product-content {
+        padding: 11px;
+      }
+
+      .product-name {
+        font-size: 15px;
+      }
+
+      .product-price {
+        font-size: 17px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .store-name {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="store-header">
+    <a href="index.html" class="brand">
+      <span class="brand-main">ZYRE</span>
+      <span class="brand-sub">MARKETING</span>
+    </a>
+
+    <button
+      class="cart-button"
+      type="button"
+      onclick="openCart()"
+    >
+      🛒 View Cart
+      <span
+        id="cartCount"
+        class="cart-count"
+      >0</span>
+    </button>
+  </header>
+
+  <div class="back-area">
+    <a
+      href="index.html"
+      class="back-button"
+    >
+      ← Back to Marketplace
+    </a>
+  </div>
+
+  <main>
+
+    <section class="store-hero">
+
+      <div
+        id="storeLogoWrap"
+        class="store-logo-wrap"
+      >
+        <div class="store-logo-placeholder">
+          🏪
+        </div>
+      </div>
+
+      <div class="store-label">
+        ZYRE MARKETPLACE
+      </div>
+
+      <h1
+        id="storeName"
+        class="store-name"
+      >
+        ZYRE Marketing Online Store
+      </h1>
+
+      <p
+        id="storeDescription"
+        class="store-description"
+      >
+        Discover products from this ZYRE Marketing seller.
+      </p>
+
+    </section>
+
+    <p class="seo-intro">
+      Shop products from this seller on ZYRE Marketing.
+      Browse available products, search by name and filter by category.
+    </p>
+
+    <section class="products-section">
+
+      <h2 class="section-title">
+        Products
+      </h2>
+
+      <div class="controls">
+
+        <input
+          id="productSearch"
+          class="search-box"
+          type="search"
+          placeholder="🔎 Search products in this store..."
+          autocomplete="off"
+        >
+
+        <select
+          id="categoryFilter"
+          class="category-select"
+        >
+          <option value="">
+            All Categories
+          </option>
+        </select>
+
+      </div>
+
+      <div
+        id="productsGrid"
+        class="products-grid"
+      >
+        <div class="loading">
+          Loading products...
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="store-footer">
+    <strong>ZYRE MARKETING</strong>
+    <br>
+    Your business. Your store. One marketplace.
+    <br><br>
+    © 2026 ZYRE Marketing. All rights reserved.
+  </footer>
+
+  <script>
+    const SUPABASE_URL =
+      "https://gaccizzlwswwynattgda.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
+    const params =
+      new URLSearchParams(window.location.search);
+
+    const sellerId =
+      params.get("seller_id");
+
+    window.storeProducts = [];
+
+    function escapeText(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function updateStoreSEO(
+      storeName,
+      storeDescription
+    ) {
+      const safeName =
+        storeName ||
+        "ZYRE Marketing Online Store";
+
+      const safeDescription =
+        storeDescription ||
+        "Shop products from this ZYRE Marketing marketplace store.";
+
+      document.title =
+        `${safeName} | ZYRE Marketing`;
+
+      const descriptionMeta =
+        document.querySelector(
+          'meta[name="description"]'
         );
 
+      if (descriptionMeta) {
+        descriptionMeta.setAttribute(
+          "content",
+          safeDescription
+        );
       }
-    );
 
-  if (!filteredProducts.length) {
+      const canonical =
+        document.querySelector(
+          'link[rel="canonical"]'
+        );
 
-    productsBox.innerHTML =
-      `
-        <div class="no-results">
+      if (canonical) {
+        canonical.setAttribute(
+          "href",
+          window.location.href
+        );
+      }
 
-          🔎 No products found.
+      const ogTitle =
+        document.querySelector(
+          'meta[property="og:title"]'
+        );
 
-          <br><br>
+      if (ogTitle) {
+        ogTitle.setAttribute(
+          "content",
+          `${safeName} | ZYRE Marketing`
+        );
+      }
 
-          Try another search or category.
+      const ogDescription =
+        document.querySelector(
+          'meta[property="og:description"]'
+        );
 
-        </div>
-      `;
+      if (ogDescription) {
+        ogDescription.setAttribute(
+          "content",
+          safeDescription
+        );
+      }
 
-    return;
+      const twitterTitle =
+        document.querySelector(
+          'meta[name="twitter:title"]'
+        );
 
-  }
+      if (twitterTitle) {
+        twitterTitle.setAttribute(
+          "content",
+          `${safeName} | ZYRE Marketing`
+        );
+      }
 
-  productsBox.innerHTML =
-    filteredProducts
-      .map(function(product) {
+      const twitterDescription =
+        document.querySelector(
+          'meta[name="twitter:description"]'
+        );
 
-        const stock =
-          Number(
-            product.stock || 0
+      if (twitterDescription) {
+        twitterDescription.setAttribute(
+          "content",
+          safeDescription
+        );
+      }
+
+      const existingSchema =
+        document.getElementById(
+          "storeSchema"
+        );
+
+      if (existingSchema) {
+        existingSchema.remove();
+      }
+
+      const schema =
+        document.createElement("script");
+
+      schema.id = "storeSchema";
+      schema.type = "application/ld+json";
+
+      schema.textContent =
+        JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "OnlineStore",
+          "name": safeName,
+          "description": safeDescription,
+          "url": window.location.href
+        });
+
+      document.head.appendChild(schema);
+    }
+
+    function updateCartCount() {
+      try {
+        const cart =
+          JSON.parse(
+            localStorage.getItem("cart") || "[]"
           );
 
-        const image =
-          product.image_url ||
-          "";
+        const count =
+          document.getElementById("cartCount");
 
-        return `
+        if (count) {
+          count.textContent =
+            Array.isArray(cart)
+              ? cart.length
+              : 0;
+        }
+      } catch (error) {
+        console.error(
+          "Cart count error:",
+          error
+        );
+      }
+    }
 
-          <article class="product-card">
+    function openCart() {
+      window.location.href =
+        "index.html#cart";
+    }
 
-            <div class="product-image">
+    function addStoreProduct(productId) {
+      const product =
+        window.storeProducts.find(
+          item =>
+            String(item.id) ===
+            String(productId)
+        );
 
-              ${
-                image
-                ?
-                `
-                  <img
-                    src="${escapeText(image)}"
-                    alt="${escapeText(product.name)}"
-                  >
-                `
-                :
-                `
-                  <div class="product-placeholder">
-                    🛍️
-                  </div>
-                `
-              }
+      if (!product) {
+        alert("Product could not be found.");
+        return;
+      }
 
-            </div>
+      const stock =
+        Number(product.stock || 0);
 
-            <div class="product-info">
+      if (stock <= 0) {
+        alert("This product is out of stock.");
+        return;
+      }
 
-              <h3 class="product-name">
-                ${escapeText(product.name)}
-              </h3>
+      let cart = [];
 
-              <p class="product-description">
-                ${
-                  escapeText(
-                    product.description ||
-                    "Quality product from this store."
-                  )
-                }
-              </p>
+      try {
+        cart =
+          JSON.parse(
+            localStorage.getItem("cart") || "[]"
+          );
 
-              <div class="product-price">
-                R${Number(
-                  product.price || 0
-                ).toFixed(2)}
-              </div>
+        if (!Array.isArray(cart)) {
+          cart = [];
+        }
+      } catch (error) {
+        cart = [];
+      }
 
-              <div class="product-stock">
+      const existingIndex =
+        cart.findIndex(
+          item =>
+            String(
+              typeof item === "object"
+                ? item.id
+                : item
+            ) === String(product.id)
+        );
 
-                ${
-                  stock > 0
-                  ? stock + " in stock"
-                  : "Out of stock"
-                }
+      if (existingIndex >= 0) {
+        const existing =
+          cart[existingIndex];
 
-              </div>
+        if (typeof existing === "object") {
+          const currentQty =
+            Number(existing.quantity || 1);
 
-              <button
-                class="add-cart-button"
-                type="button"
-                data-product-id="${escapeText(product.id)}"
-                ${
-                  stock <= 0
-                    ? "disabled"
-                    : ""
-                }
-              >
-                ${
-                  stock > 0
-                    ? "Add to Cart"
-                    : "Out of Stock"
-                }
-              </button>
+          if (currentQty >= stock) {
+            alert(
+              "You cannot add more than the available stock."
+            );
+            return;
+          }
 
-            </div>
+          existing.quantity =
+            currentQty + 1;
+        } else {
+          cart[existingIndex] = {
+            id: product.id,
+            quantity: 2
+          };
+        }
+      } else {
+        cart.push({
+          id: product.id,
+          quantity: 1
+        });
+      }
 
-          </article>
+      localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+      );
 
+      updateCartCount();
+
+      alert(
+        `${product.name || "Product"} added to cart.`
+      );
+    }
+
+    function displayStoreLogo(storeImageUrl) {
+      const wrap =
+        document.getElementById(
+          "storeLogoWrap"
+        );
+
+      if (!wrap) {
+        return;
+      }
+
+      if (
+        !storeImageUrl ||
+        !String(storeImageUrl).trim()
+      ) {
+        wrap.innerHTML = `
+          <div class="store-logo-placeholder">
+            🏪
+          </div>
         `;
 
-      })
-      .join("");
-
-  const buttons =
-    productsBox.querySelectorAll(
-      ".add-cart-button"
-    );
-
-  buttons.forEach(function(button) {
-
-    button.addEventListener(
-      "click",
-      function() {
-
-        addStoreProduct(
-          button.dataset.productId
-        );
-
+        return;
       }
-    );
 
-  });
+      const imageUrl =
+        String(storeImageUrl).trim();
 
-}
+      wrap.innerHTML = `
+        <img
+          class="store-logo"
+          src="${escapeText(imageUrl)}"
+          alt="Store logo"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        >
 
-
-/* =========================
-   STORE LOGO
-========================= */
-
-function displayStoreLogo(storeImageUrl) {
-
-  const logoWrap =
-    document.getElementById(
-      "storeLogoWrap"
-    );
-
-  if (!logoWrap) {
-    return;
-  }
-
-  const imageUrl =
-    String(
-      storeImageUrl || ""
-    ).trim();
-
-  if (!imageUrl) {
-
-    logoWrap.innerHTML =
-      `
         <div
           class="store-logo-placeholder"
-          aria-label="Store logo placeholder"
+          style="display:none;"
         >
           🏪
         </div>
       `;
-
-    return;
-
-  }
-
-  const safeUrl =
-    escapeText(imageUrl);
-
-  logoWrap.innerHTML =
-    `
-      <img
-        class="store-logo"
-        src="${safeUrl}"
-        alt="Store logo"
-        loading="eager"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-      >
-
-      <div
-        class="store-logo-placeholder"
-        style="display:none;"
-        aria-label="Store logo placeholder"
-      >
-        🏪
-      </div>
-    `;
-
-}
-
-
-/* =========================
-   LOAD STORE
-========================= */
-
-async function loadStore() {
-
-  const nameBox =
-    document.getElementById(
-      "storeName"
-    );
-
-  const descriptionBox =
-    document.getElementById(
-      "storeDescription"
-    );
-
-  const productsBox =
-    document.getElementById(
-      "productsGrid"
-    );
-
-  if (!sellerId) {
-
-    nameBox.textContent =
-      "ZYRE Marketing Online Store";
-
-    descriptionBox.textContent =
-      "Discover products from businesses and independent sellers on ZYRE Marketing, a South African online marketplace.";
-
-    productsBox.innerHTML =
-      `
-        <div class="message">
-
-          Browse the ZYRE Marketing marketplace
-          to discover stores and products.
-
-          <br><br>
-
-          Select a store from the marketplace
-          to view its available products.
-
-        </div>
-      `;
-
-    return;
-
-  }
-
-  try {
-
-    const sellerResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/sellers" +
-        "?id=eq." +
-        encodeURIComponent(sellerId) +
-        "&select=id,store_name,description,store_image_url",
-
-        {
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_KEY
-
-          }
-        }
-
-      );
-
-    if (!sellerResponse.ok) {
-
-      throw new Error(
-        await sellerResponse.text()
-      );
-
     }
 
-    const sellers =
-      await sellerResponse.json();
+    function setupCategories() {
+      const filter =
+        document.getElementById(
+          "categoryFilter"
+        );
 
-    if (!sellers.length) {
+      if (!filter) {
+        return;
+      }
 
-      throw new Error(
-        "Store could not be found."
-      );
+      const categories =
+        [
+          ...new Set(
+            window.storeProducts
+              .map(product =>
+                String(
+                  product.category || ""
+                ).trim()
+              )
+              .filter(Boolean)
+          )
+        ].sort();
 
+      filter.innerHTML =
+        `<option value="">All Categories</option>`;
+
+      categories.forEach(category => {
+        const option =
+          document.createElement("option");
+
+        option.value = category;
+        option.textContent = category;
+
+        filter.appendChild(option);
+      });
     }
 
-    const seller =
-      sellers[0];
+    function renderProducts() {
+      const grid =
+        document.getElementById(
+          "productsGrid"
+        );
 
-    const storeName =
-      seller.store_name ||
-      "ZYRE Store";
+      if (!grid) {
+        return;
+      }
 
-    const storeDescription =
-      seller.description ||
-      "Quality products from this store.";
+      const search =
+        (
+          document.getElementById(
+            "productSearch"
+          )?.value || ""
+        )
+          .trim()
+          .toLowerCase();
 
-    nameBox.textContent =
-      storeName;
+      const category =
+        document.getElementById(
+          "categoryFilter"
+        )?.value || "";
 
-    descriptionBox.textContent =
-      storeDescription;
+      const filtered =
+        window.storeProducts.filter(product => {
+          const name =
+            String(
+              product.name || ""
+            ).toLowerCase();
 
+          const description =
+            String(
+              product.description || ""
+            ).toLowerCase();
 
-    /* DISPLAY SELLER LOGO */
+          const productCategory =
+            String(
+              product.category || ""
+            );
 
-    displayStoreLogo(
-      seller.store_image_url
-    );
+          const matchesSearch =
+            !search ||
+            name.includes(search) ||
+            description.includes(search);
 
+          const matchesCategory =
+            !category ||
+            productCategory === category;
 
-    /* UPDATE STORE SEO */
+          return (
+            matchesSearch &&
+            matchesCategory
+          );
+        });
 
-    updateStoreSEO(
-      storeName,
-      storeDescription
-    );
-
-
-    const productsResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/products" +
-        "?seller_id=eq." +
-        encodeURIComponent(sellerId) +
-        "&active=eq.true" +
-        "&select=*" +
-        "&order=id.desc",
-
-        {
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_KEY
-
-          }
-        }
-
-      );
-
-    if (!productsResponse.ok) {
-
-      throw new Error(
-        await productsResponse.text()
-      );
-
-    }
-
-    const loadedProducts =
-      await productsResponse.json();
-
-    window.storeProducts =
-      loadedProducts;
-
-    setupCategories();
-
-    if (!loadedProducts.length) {
-
-      productsBox.innerHTML =
-        `
-          <div class="message">
-            This store has no products yet.
+      if (!filtered.length) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <h3>No products found</h3>
+            <p>
+              There are currently no products matching your search.
+            </p>
           </div>
         `;
 
-      return;
+        return;
+      }
 
+      grid.innerHTML =
+        filtered
+          .map(product => {
+            const id =
+              escapeText(product.id);
+
+            const name =
+              escapeText(
+                product.name ||
+                "Product"
+              );
+
+            const description =
+              escapeText(
+                product.description ||
+                "Quality product from this store."
+              );
+
+            const category =
+              escapeText(
+                product.category ||
+                "General"
+              );
+
+            const price =
+              Number(
+                product.price || 0
+              ).toLocaleString(
+                "en-ZA",
+                {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                }
+              );
+
+            const stock =
+              Number(
+                product.stock || 0
+              );
+
+            const image =
+              product.image_url
+                ? escapeText(
+                    product.image_url
+                  )
+                : "";
+
+            const imageHTML =
+              image
+                ? `
+                  <img
+                    class="product-image"
+                    src="${image}"
+                    alt="${name}"
+                    loading="lazy"
+                    onerror="this.style.display='none';"
+                  >
+                `
+                : `
+                  <div
+                    style="
+                      width:100%;
+                      height:100%;
+                      display:flex;
+                      align-items:center;
+                      justify-content:center;
+                      color:#777;
+                      font-size:40px;
+                    "
+                  >
+                    🛍️
+                  </div>
+                `;
+
+            const disabled =
+              stock <= 0
+                ? "disabled"
+                : "";
+
+            const buttonText =
+              stock <= 0
+                ? "Out of Stock"
+                : "Add to Cart";
+
+            return `
+              <article class="product-card">
+
+                <div class="product-image-wrap">
+                  ${imageHTML}
+                </div>
+
+                <div class="product-content">
+
+                  <h3 class="product-name">
+                    ${name}
+                  </h3>
+
+                  <p class="product-description">
+                    ${description}
+                  </p>
+
+                  <div class="product-price">
+                    R${price}
+                  </div>
+
+                  <div class="product-stock">
+                    ${stock} in stock
+                    ${category ? ` • ${category}` : ""}
+                  </div>
+
+                  <button
+                    class="add-cart-button"
+                    type="button"
+                    ${disabled}
+                    onclick="addStoreProduct('${id}')"
+                  >
+                    ${buttonText}
+                  </button>
+
+                </div>
+
+              </article>
+            `;
+          })
+          .join("");
     }
 
-    renderProducts();
+    async function loadStore() {
+      const nameElement =
+        document.getElementById(
+          "storeName"
+        );
 
-  } catch (error) {
+      const descriptionElement =
+        document.getElementById(
+          "storeDescription"
+        );
 
-    console.error(error);
+      const grid =
+        document.getElementById(
+          "productsGrid"
+        );
 
-    nameBox.textContent =
-      "Store";
+      if (!sellerId) {
+        nameElement.textContent =
+          "ZYRE Marketing Marketplace";
 
-    descriptionBox.textContent =
-      "Unable to load this store.";
+        descriptionElement.textContent =
+          "Browse stores and products on ZYRE Marketing.";
 
-    productsBox.innerHTML =
-      `
-        <div class="message">
+        displayStoreLogo(null);
 
-          Store could not be loaded.
+        grid.innerHTML = `
+          <div class="error-message">
+            <strong>Store not found.</strong>
+            <p>
+              Please return to the marketplace and select a store.
+            </p>
+          </div>
+        `;
 
-          <br><br>
+        return;
+      }
 
-          ${escapeText(error.message)}
+      try {
+        const sellerResponse =
+          await fetch(
+            `${SUPABASE_URL}/rest/v1/sellers?id=eq.${encodeURIComponent(
+              sellerId
+            )}&select=id,store_name,description,store_image_url`,
+            {
+              method: "GET",
+              headers: {
+                apikey: SUPABASE_KEY,
+                Authorization:
+                  `Bearer ${SUPABASE_KEY}`
+              }
+            }
+          );
 
-        </div>
-      `;
+        if (!sellerResponse.ok) {
+          throw new Error(
+            "Could not load seller information."
+          );
+        }
 
-  }
+        const sellers =
+          await sellerResponse.json();
 
-}
+        if (
+          !Array.isArray(sellers) ||
+          sellers.length === 0
+        ) {
+          throw new Error(
+            "Store could not be found."
+          );
+        }
 
+        const seller =
+          sellers[0];
 
-/* =========================
-   SEARCH
-========================= */
+        const storeName =
+          seller.store_name ||
+          "ZYRE Marketing Store";
 
-document
-  .getElementById("storeSearch")
-  ?.addEventListener(
-    "input",
-    renderProducts
-  );
+        const storeDescription =
+          seller.description ||
+          "Quality products from this ZYRE Marketing seller.";
 
+        nameElement.textContent =
+          storeName;
 
-/* =========================
-   CATEGORY FILTER
-========================= */
+        descriptionElement.textContent =
+          storeDescription;
 
-document
-  .getElementById("categoryFilter")
-  ?.addEventListener(
-    "change",
-    renderProducts
-  );
+        displayStoreLogo(
+          seller.store_image_url
+        );
 
+        updateStoreSEO(
+          storeName,
+          storeDescription
+        );
 
-/* =========================
-   START
-========================= */
+        const productsResponse =
+          await fetch(
+            `${SUPABASE_URL}/rest/v1/products?seller_id=eq.${encodeURIComponent(
+              sellerId
+            )}&active=eq.true&select=*&order=id.desc`,
+            {
+              method: "GET",
+              headers: {
+                apikey: SUPABASE_KEY,
+                Authorization:
+                  `Bearer ${SUPABASE_KEY}`
+              }
+            }
+          );
 
-updateCartCount();
+        if (!productsResponse.ok) {
+          throw new Error(
+            "Could not load store products."
+          );
+        }
 
-loadStore();
+        const products =
+          await productsResponse.json();
 
-</script></body></html>
+        window.storeProducts =
+          Array.isArray(products)
+            ? products
+            : [];
+
+        setupCategories();
+        renderProducts();
+
+      } catch (error) {
+        console.error(
+          "Store loading error:",
+          error
+        );
+
+        grid.innerHTML = `
+          <div class="error-message">
+            <strong>
+              Store could not be loaded.
+            </strong>
+
+            <p>
+              ${escapeText(
+                error.message ||
+                "Please try again."
+              )}
+            </p>
+          </div>
+        `;
+      }
+    }
+
+    document
+      .getElementById("productSearch")
+      .addEventListener(
+        "input",
+        renderProducts
+      );
+
+    document
+      .getElementById("categoryFilter")
+      .addEventListener(
+        "change",
+        renderProducts
+      );
+
+    updateCartCount();
+    loadStore();
+  </script>
+
+</body>
+</html>
