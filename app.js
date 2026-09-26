@@ -61,8 +61,18 @@ function readCartStorage() {
 
 
   /*
-    Convert any old product objects
-    into simple product IDs.
+    Keep every product ID exactly as
+    it appears in the cart.
+
+    Duplicate IDs are intentional.
+    Example:
+
+    [12,12,15]
+
+    means:
+
+    Product 12 × 2
+    Product 15 × 1
   */
 
   const cleanedCart =
@@ -98,11 +108,6 @@ function readCartStorage() {
       });
 
 
-  /*
-    Always keep the cart in the
-    clean ID-only format.
-  */
-
   try {
 
     localStorage.setItem(
@@ -137,11 +142,6 @@ function loadCart() {
   return cart;
 
 }
-
-
-/*
-  Load cart immediately.
-*/
 
 loadCart();
 
@@ -189,12 +189,8 @@ function syncCartCount() {
   }
 
 
-  const storedCart =
-    readCartStorage();
-
-
   cartCount.textContent =
-    storedCart.length;
+    cart.length;
 
 }
 
@@ -740,6 +736,11 @@ function add(id) {
   }
 
 
+  /*
+    Count how many of THIS product
+    are already in the cart.
+  */
+
   const currentQuantity =
     cart.filter(
       cartId =>
@@ -748,9 +749,14 @@ function add(id) {
     ).length;
 
 
+  /*
+    Allow multiple copies of the
+    same product until stock is reached.
+  */
+
   if (
-    Number(product.stock) <=
-    currentQuantity
+    currentQuantity >=
+    Number(product.stock)
   ) {
 
     alert(
@@ -763,7 +769,18 @@ function add(id) {
 
 
   /*
-    Save ONLY the product ID.
+    Add another copy.
+
+    Example:
+
+    First tap:
+    [12]
+
+    Second tap:
+    [12,12]
+
+    Third tap:
+    [12,12,12]
   */
 
   cart.push(
@@ -773,16 +790,148 @@ function add(id) {
 
   save();
 
+  syncCartCount();
+
+  updateCart();
+
+
+  alert(
+    product.name +
+    " added to cart."
+  );
+
+}
+
+
+/* =========================================================
+REMOVE ONE QUANTITY
+========================================================= */
+
+function decreaseCartQuantity(id) {
+
   loadCart();
+
+
+  const index =
+    cart.findIndex(
+      cartId =>
+        String(cartId) ===
+        String(id)
+    );
+
+
+  if (index === -1) {
+
+    return;
+
+  }
+
+
+  /*
+    Remove only ONE copy.
+  */
+
+  cart.splice(
+    index,
+    1
+  );
+
+
+  save();
 
   updateCart();
 
   syncCartCount();
 
+}
 
-  alert(
-    "Added to cart"
+
+/* =========================================================
+ADD ONE QUANTITY FROM CART
+========================================================= */
+
+function increaseCartQuantity(id) {
+
+  loadCart();
+
+
+  const product =
+    products.find(
+      p =>
+        String(p.id) ===
+        String(id)
+    );
+
+
+  if (!product) {
+
+    alert(
+      "Product could not be found."
+    );
+
+    return;
+
+  }
+
+
+  const currentQuantity =
+    cart.filter(
+      cartId =>
+        String(cartId) ===
+        String(id)
+    ).length;
+
+
+  if (
+    currentQuantity >=
+    Number(product.stock)
+  ) {
+
+    alert(
+      "You have reached the available stock for this product."
+    );
+
+    return;
+
+  }
+
+
+  cart.push(
+    product.id
   );
+
+
+  save();
+
+  updateCart();
+
+  syncCartCount();
+
+}
+
+
+/* =========================================================
+REMOVE PRODUCT COMPLETELY
+========================================================= */
+
+function removeCartProduct(id) {
+
+  loadCart();
+
+
+  cart =
+    cart.filter(
+      cartId =>
+        String(cartId) !==
+        String(id)
+    );
+
+
+  save();
+
+  updateCart();
+
+  syncCartCount();
 
 }
 
@@ -796,8 +945,6 @@ function clearCart() {
   cart = [];
 
   save();
-
-  loadCart();
 
   updateCart();
 
@@ -816,10 +963,6 @@ UPDATE CART
 ========================================================= */
 
 function updateCart() {
-
-  /*
-    Always reload from localStorage.
-  */
 
   loadCart();
 
@@ -841,8 +984,15 @@ function updateCart() {
 
 
   /*
-    Update cart number even when
-    drawer elements are not ready.
+    Cart number represents TOTAL
+    ITEMS, including quantities.
+
+    Example:
+
+    T-shirt × 2
+    Shoes × 1
+
+    Cart number = 3
   */
 
   if (cartCount) {
@@ -852,11 +1002,6 @@ function updateCart() {
 
   }
 
-
-  /*
-    The drawer may not exist yet
-    while the page is loading.
-  */
 
   if (
     !cartItems ||
@@ -868,7 +1013,11 @@ function updateCart() {
   }
 
 
-  let counts = {};
+  /*
+    Group identical products.
+  */
+
+  const counts = {};
 
 
   cart.forEach(id => {
@@ -908,9 +1057,12 @@ function updateCart() {
                 Product #${id} × ${quantity}
               </span>
 
-              <b>
-                Unavailable
-              </b>
+              <button
+                type="button"
+                onclick="removeCartProduct('${id}')"
+              >
+                Remove
+              </button>
 
             </div>
 
@@ -919,25 +1071,140 @@ function updateCart() {
         }
 
 
+        const price =
+          Number(product.price);
+
+
         total +=
-          Number(product.price) *
-          quantity;
+          price * quantity;
 
 
         return `
 
-          <div class="cartrow">
+          <div
+            class="cartrow"
+            style="
+              display:flex;
+              align-items:center;
+              justify-content:space-between;
+              gap:10px;
+              margin-bottom:14px;
+              padding-bottom:12px;
+              border-bottom:1px solid #eee;
+            "
+          >
 
-            <span>
-              ${product.name} × ${quantity}
-            </span>
+            <div
+              style="
+                flex:1;
+                min-width:0;
+              "
+            >
 
-            <b>
+              <div
+                style="
+                  font-weight:600;
+                  margin-bottom:6px;
+                "
+              >
+                ${product.name}
+              </div>
+
+              <div
+                style="
+                  font-size:13px;
+                  color:#777;
+                "
+              >
+                R${price.toFixed(2)} each
+              </div>
+
+            </div>
+
+
+            <div
+              style="
+                display:flex;
+                align-items:center;
+                gap:7px;
+                white-space:nowrap;
+              "
+            >
+
+              <button
+                type="button"
+                onclick="decreaseCartQuantity('${id}')"
+                style="
+                  width:32px;
+                  height:32px;
+                  border:1px solid #ccc;
+                  background:#fff;
+                  border-radius:6px;
+                  font-size:18px;
+                  cursor:pointer;
+                "
+              >
+                −
+              </button>
+
+
+              <strong
+                style="
+                  min-width:24px;
+                  text-align:center;
+                "
+              >
+                ${quantity}
+              </strong>
+
+
+              <button
+                type="button"
+                onclick="increaseCartQuantity('${id}')"
+                style="
+                  width:32px;
+                  height:32px;
+                  border:1px solid #111;
+                  background:#111;
+                  color:#fff;
+                  border-radius:6px;
+                  font-size:18px;
+                  cursor:pointer;
+                "
+              >
+                +
+              </button>
+
+            </div>
+
+
+            <div
+              style="
+                min-width:80px;
+                text-align:right;
+                font-weight:bold;
+              "
+            >
               R${(
-                Number(product.price) *
+                price *
                 quantity
               ).toFixed(2)}
-            </b>
+            </div>
+
+
+            <button
+              type="button"
+              onclick="removeCartProduct('${id}')"
+              style="
+                border:0;
+                background:none;
+                color:#c00;
+                cursor:pointer;
+                font-size:12px;
+              "
+            >
+              Remove
+            </button>
 
           </div>
 
@@ -1133,11 +1400,6 @@ function handleCartHash() {
         }
 
 
-        /*
-          Stop after approximately
-          10 seconds.
-        */
-
         if (
           attempts >= 50
         ) {
@@ -1259,6 +1521,17 @@ async function checkout() {
   }
 
 
+  /*
+    Convert the cart:
+
+    [12,12,15]
+
+    into:
+
+    T-shirt × 2
+    Shoes × 1
+  */
+
   const counts = {};
 
 
@@ -1328,6 +1601,10 @@ async function checkout() {
 
 
   try {
+
+    /*
+      Verify stock for every product.
+    */
 
     for (
       const item
@@ -1495,6 +1772,11 @@ async function checkout() {
     const orderId =
       await orderResponse.json();
 
+
+    /*
+      Notify each seller involved
+      in the order.
+    */
 
     try {
 
@@ -1691,8 +1973,8 @@ async function checkout() {
 
 
     /*
-      Clear cart after the order
-      has been successfully created.
+      Clear cart only after the
+      order has been created.
     */
 
     cart = [];
@@ -2746,10 +3028,9 @@ async function sellerLogin() {
 
             })
 
-        }
+          }
 
-      );
-
+        );
 
     if (!loginResponse.ok) {
 
@@ -2957,9 +3238,9 @@ async function checkOrderStatus() {
 
             })
 
-        }
+          }
 
-      );
+        );
 
 
     if (!response.ok) {
@@ -3191,6 +3472,7 @@ async function checkOrderStatus() {
                   "numeric"
 
               }
+
             );
 
         } else {
@@ -4077,22 +4359,12 @@ window.addEventListener(
   "load",
   function() {
 
-    /*
-      Refresh cart when the marketplace
-      has completely loaded.
-    */
-
     loadCart();
 
     syncCartCount();
 
     updateCart();
 
-
-    /*
-      Give the cart hash another chance
-      after all page scripts have loaded.
-    */
 
     if (
       window.location.hash ===
