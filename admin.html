@@ -205,7 +205,6 @@ min-height:20px;
 margin-top:10px
 }
 
-/* Seller image */
 .seller-image{
 width:46px;
 height:46px;
@@ -229,7 +228,6 @@ font-weight:800;
 font-size:16px
 }
 
-/* Modal */
 .modal{
 position:fixed;
 inset:0;
@@ -346,7 +344,6 @@ padding:16px
 
 <body>
 
-<!-- OWNER LOGIN -->
 <div id="loginBox" class="login-wrap">
 
 <div class="login-box">
@@ -388,7 +385,6 @@ class="msg"
 </div>
 
 
-<!-- OWNER PANEL -->
 <div id="adminPanel" class="hidden">
 
 <header>
@@ -449,7 +445,6 @@ onclick="showSection('payments',this)"
 </nav>
 
 
-<!-- OVERVIEW -->
 <section
 id="overview"
 class="panel active"
@@ -586,7 +581,6 @@ Loading...
 </section>
 
 
-<!-- SELLERS -->
 <section
 id="sellers"
 class="panel"
@@ -651,7 +645,6 @@ The Owner monitors the company data.
 </section>
 
 
-<!-- PRODUCTS -->
 <section
 id="products"
 class="panel"
@@ -694,7 +687,6 @@ class="panel"
 </section>
 
 
-<!-- ORDERS -->
 <section
 id="orders"
 class="panel"
@@ -746,7 +738,6 @@ Sellers manage customer orders.
 </section>
 
 
-<!-- PAYMENTS -->
 <section
 id="payments"
 class="panel"
@@ -901,7 +892,6 @@ R0.00
 </div>
 
 
-<!-- SELLER DETAILS MODAL -->
 <div
 id="sellerModal"
 class="modal hidden"
@@ -1346,6 +1336,190 @@ String(x.store_name||"S").charAt(0).toUpperCase()
 }
 
 
+/* SELLER STATUS SYNCHRONIZATION */
+
+async function synchronizeSellerStatuses(sellers){
+
+if(!Array.isArray(sellers)||!sellers.length){
+
+return sellers;
+
+}
+
+const updated = [];
+
+for(const seller of sellers){
+
+let desiredStatus =
+String(seller.status||"").toLowerCase();
+
+let desiredApproved =
+seller.approved===true;
+
+
+/*
+Approved is the source of truth for an
+approved seller.
+
+This fixes records such as:
+
+approved = true
+status = seller_pending
+
+into:
+
+approved = true
+status = seller_approved
+*/
+
+if(seller.approved===true){
+
+if(seller.status!=="seller_approved"){
+
+try{
+
+await api(
+"/rest/v1/sellers?id=eq."+
+encodeURIComponent(seller.id),
+{
+method:"PATCH",
+
+headers:{
+"Prefer":"return=minimal"
+},
+
+body:JSON.stringify({
+approved:true,
+status:"seller_approved"
+})
+
+}
+);
+
+seller.status="seller_approved";
+
+}catch(e){
+
+console.error(
+"Could not synchronize approved seller "+
+seller.id,
+e
+);
+
+}
+
+}
+
+desiredStatus="seller_approved";
+
+desiredApproved=true;
+
+}
+
+
+/*
+If a seller is explicitly disabled,
+keep the disabled state.
+*/
+
+else if(
+seller.status==="seller_disabled"
+){
+
+desiredStatus="seller_disabled";
+
+desiredApproved=false;
+
+}
+
+
+/*
+Otherwise an unapproved seller is pending.
+*/
+
+else{
+
+if(seller.status!=="seller_pending"){
+
+try{
+
+await api(
+"/rest/v1/sellers?id=eq."+
+encodeURIComponent(seller.id),
+{
+method:"PATCH",
+
+headers:{
+"Prefer":"return=minimal"
+},
+
+body:JSON.stringify({
+approved:false,
+status:"seller_pending"
+})
+
+}
+);
+
+seller.status="seller_pending";
+
+}catch(e){
+
+console.error(
+"Could not synchronize pending seller "+
+seller.id,
+e
+);
+
+}
+
+}
+
+desiredStatus="seller_pending";
+
+desiredApproved=false;
+
+}
+
+
+/*
+Keep the local object synchronized even
+if a PATCH failed.
+*/
+
+seller.status=desiredStatus;
+seller.approved=desiredApproved;
+
+updated.push(seller);
+
+}
+
+return updated;
+
+}
+
+
+/* STATUS DISPLAY */
+
+function sellerStatusLabel(seller){
+
+if(seller.approved===true){
+
+return '<span class="success"><strong>Approved</strong></span>';
+
+}
+
+if(seller.status==="seller_disabled"){
+
+return '<span class="error"><strong>Disabled</strong></span>';
+
+}
+
+return '<span>Pending</span>';
+
+}
+
+
 /* SELLERS */
 
 async function loadSellers(){
@@ -1359,10 +1533,19 @@ tb.innerHTML =
 
 try{
 
-const s =
+let s =
 await api(
 "/rest/v1/sellers?select=*&order=id.desc"
 );
+
+
+/*
+Synchronize old/inconsistent seller records
+before displaying them.
+*/
+
+s =
+await synchronizeSellerStatuses(s||[]);
 
 sellersData=s||[];
 
@@ -1388,7 +1571,7 @@ document
 .textContent=
 sellersData.filter(
 x =>
-x.approved===true ||
+x.approved===true &&
 x.status==="seller_approved"
 ).length;
 
@@ -1441,15 +1624,6 @@ console.error("Order count error:",e);
 
 }
 
-
-/*
-Orders table does not necessarily contain
-seller_id because one order can contain
-products from different sellers.
-
-For that reason the seller table does not
-guess seller order totals.
-*/
 
 const sellerOrderCounts={};
 
@@ -1521,7 +1695,7 @@ return;
 tb.innerHTML=sellersData.map(x=>{
 
 const ok =
-x.approved===true ||
+x.approved===true &&
 x.status==="seller_approved";
 
 const productCount =
@@ -1566,7 +1740,7 @@ ${esc(x.category||"-")}
 </td>
 
 <td>
-${esc(x.status||"-")}
+${sellerStatusLabel(x)}
 </td>
 
 <td>
@@ -1767,7 +1941,7 @@ return;
 
 
 const ok =
-seller.approved===true ||
+seller.approved===true &&
 seller.status==="seller_approved";
 
 
@@ -1780,11 +1954,6 @@ String(x.seller_id)===String(seller.id)
 
 let sellerOrderCount=0;
 
-
-/*
-Count unique orders belonging to this seller
-through order items and products.
-*/
 
 if(
 ordersData.length &&
@@ -1802,13 +1971,6 @@ String(seller.id)
 )
 .map(x=>String(x.id));
 
-
-/*
-The order count displayed in the main table
-is already calculated safely.
-The detail page therefore shows the
-available order relationship information.
-*/
 
 sellerOrderCount=
 sellerProducts.length;
@@ -1941,9 +2103,7 @@ seller.store_name||"-"
 
 <strong>Seller Status</strong>
 
-${esc(
-seller.status||"-"
-)}
+${sellerStatusLabel(seller)}
 
 </div>
 
