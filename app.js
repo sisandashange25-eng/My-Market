@@ -59,22 +59,6 @@ function readCartStorage() {
 
   }
 
-
-  /*
-    Keep every product ID exactly as
-    it appears in the cart.
-
-    Duplicate IDs are intentional.
-    Example:
-
-    [12,12,15]
-
-    means:
-
-    Product 12 × 2
-    Product 15 × 1
-  */
-
   const cleanedCart =
     raw
       .map(item => {
@@ -187,7 +171,6 @@ function syncCartCount() {
     return;
 
   }
-
 
   cartCount.textContent =
     cart.length;
@@ -736,11 +719,6 @@ function add(id) {
   }
 
 
-  /*
-    Count how many of THIS product
-    are already in the cart.
-  */
-
   const currentQuantity =
     cart.filter(
       cartId =>
@@ -748,11 +726,6 @@ function add(id) {
         String(id)
     ).length;
 
-
-  /*
-    Allow multiple copies of the
-    same product until stock is reached.
-  */
 
   if (
     currentQuantity >=
@@ -767,21 +740,6 @@ function add(id) {
 
   }
 
-
-  /*
-    Add another copy.
-
-    Example:
-
-    First tap:
-    [12]
-
-    Second tap:
-    [12,12]
-
-    Third tap:
-    [12,12,12]
-  */
 
   cart.push(
     product.id
@@ -826,10 +784,6 @@ function decreaseCartQuantity(id) {
 
   }
 
-
-  /*
-    Remove only ONE copy.
-  */
 
   cart.splice(
     index,
@@ -983,18 +937,6 @@ function updateCart() {
     );
 
 
-  /*
-    Cart number represents TOTAL
-    ITEMS, including quantities.
-
-    Example:
-
-    T-shirt × 2
-    Shoes × 1
-
-    Cart number = 3
-  */
-
   if (cartCount) {
 
     cartCount.textContent =
@@ -1012,10 +954,6 @@ function updateCart() {
 
   }
 
-
-  /*
-    Group identical products.
-  */
 
   const counts = {};
 
@@ -1418,7 +1356,99 @@ function handleCartHash() {
 
 
 /* =========================================================
-CUSTOMER CHECKOUT
+GET VALID SUPABASE ACCESS TOKEN
+========================================================= */
+
+async function getZYRESupabaseAccessToken() {
+
+  try {
+
+    const currentToken =
+      window.ZYRE_CURRENT_SESSION?.access_token;
+
+
+    if (
+      currentToken &&
+      currentToken !== SUPABASE_KEY
+    ) {
+
+      return currentToken;
+
+    }
+
+
+    if (
+      !window.ZYRE_AUTH_CLIENT &&
+      window.supabase &&
+      window.supabase.createClient
+    ) {
+
+      window.ZYRE_AUTH_CLIENT =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY
+        );
+
+    }
+
+
+    if (
+      window.ZYRE_AUTH_CLIENT
+    ) {
+
+      const {
+        data,
+        error
+      } =
+        await window.ZYRE_AUTH_CLIENT.auth.getSession();
+
+
+      if (
+        !error &&
+        data?.session?.access_token
+      ) {
+
+        return data.session.access_token;
+
+      }
+
+    }
+
+
+    const storedToken =
+      localStorage.getItem(
+        "zava_access_token"
+      );
+
+
+    if (
+      storedToken &&
+      storedToken !== SUPABASE_KEY
+    ) {
+
+      return storedToken;
+
+    }
+
+
+    return null;
+
+  } catch (error) {
+
+    console.warn(
+      "Could not get Supabase access token:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================================
+CUSTOMER CHECKOUT — PAYSTACK
 ========================================================= */
 
 async function checkout() {
@@ -1522,14 +1552,14 @@ async function checkout() {
 
 
   /*
-    Convert the cart:
+    Convert:
 
     [12,12,15]
 
     into:
 
-    T-shirt × 2
-    Shoes × 1
+    Product 12 × 2
+    Product 15 × 1
   */
 
   const counts = {};
@@ -1580,6 +1610,20 @@ async function checkout() {
       Number(product.price);
 
 
+    if (
+      !Number.isFinite(price) ||
+      price < 0
+    ) {
+
+      alert(
+        "One of the products has an invalid price."
+      );
+
+      return;
+
+    }
+
+
     total +=
       price * quantity;
 
@@ -1600,11 +1644,25 @@ async function checkout() {
   }
 
 
+  if (
+    !Number.isFinite(total) ||
+    total <= 0
+  ) {
+
+    alert(
+      "The order total is invalid."
+    );
+
+    return;
+
+  }
+
+
   try {
 
-    /*
-      Verify stock for every product.
-    */
+    /* =====================================================
+    VERIFY STOCK
+    ===================================================== */
 
     for (
       const item
@@ -1636,6 +1694,32 @@ async function checkout() {
     }
 
 
+    /* =====================================================
+    GET REAL USER ACCESS TOKEN
+    ===================================================== */
+
+    const accessToken =
+      await getZYRESupabaseAccessToken();
+
+
+    if (!accessToken) {
+
+      alert(
+        "Your customer session has expired.\n\nPlease sign in again before checkout."
+      );
+
+      window.location.href =
+        "auth.html";
+
+      return;
+
+    }
+
+
+    /* =====================================================
+    UPDATE CUSTOMER PROFILE
+    ===================================================== */
+
     const profileResponse =
       await fetch(
 
@@ -1655,10 +1739,7 @@ async function checkout() {
 
             "Authorization":
               "Bearer " +
-              (
-                window.ZYRE_CURRENT_SESSION?.access_token ||
-                SUPABASE_KEY
-              ),
+              accessToken,
 
             "Content-Type":
               "application/json",
@@ -1704,6 +1785,10 @@ async function checkout() {
     }
 
 
+    /* =====================================================
+    CREATE ORDER
+    ===================================================== */
+
     const orderResponse =
       await fetch(
 
@@ -1722,10 +1807,7 @@ async function checkout() {
 
             "Authorization":
               "Bearer " +
-              (
-                window.ZYRE_CURRENT_SESSION?.access_token ||
-                SUPABASE_KEY
-              ),
+              accessToken,
 
             "Content-Type":
               "application/json"
@@ -1774,9 +1856,54 @@ async function checkout() {
 
 
     /*
-      Notify each seller involved
-      in the order.
+      Some RPC functions return an
+      object instead of a plain ID.
+
+      Support both formats.
     */
+
+    let normalizedOrderId =
+      orderId;
+
+
+    if (
+      orderId &&
+      typeof orderId === "object"
+    ) {
+
+      normalizedOrderId =
+        orderId.id ??
+        orderId.order_id ??
+        orderId.orderid ??
+        orderId;
+
+    }
+
+
+    if (
+      normalizedOrderId === null ||
+      normalizedOrderId === undefined ||
+      normalizedOrderId === ""
+    ) {
+
+      alert(
+        "The order was created, but no Order ID was returned.\n\nPayment cannot continue."
+      );
+
+      return;
+
+    }
+
+
+    console.log(
+      "ZYRE order created:",
+      normalizedOrderId
+    );
+
+
+    /* =====================================================
+    NOTIFY SELLERS
+    ===================================================== */
 
     try {
 
@@ -1834,10 +1961,7 @@ async function checkout() {
 
                 "Authorization":
                   "Bearer " +
-                  (
-                    window.ZYRE_CURRENT_SESSION?.access_token ||
-                    SUPABASE_KEY
-                  ),
+                  accessToken,
 
                 "Content-Type":
                   "application/json"
@@ -1855,7 +1979,7 @@ async function checkout() {
 
                   message:
                     "Order #" +
-                    orderId +
+                    normalizedOrderId +
                     " received — Total: R" +
                     Number(total)
                       .toFixed(2)
@@ -1880,7 +2004,7 @@ async function checkout() {
 
           console.log(
             "ZYRE Marketing seller notification sent for Order #" +
-            orderId
+            normalizedOrderId
           );
 
         }
@@ -1899,83 +2023,152 @@ async function checkout() {
     }
 
 
-    const cartProducts =
-      orderItems.map(item => {
+    /* =====================================================
+    INITIALIZE PAYSTACK PAYMENT
+    ===================================================== */
 
-        const product =
-          products.find(
-            p =>
-              String(p.id) ===
-              String(item.product_id)
-          );
+    console.log(
+      "Starting Paystack payment initialization..."
+    );
 
 
-        return {
+    const paystackResponse =
+      await fetch(
 
-          name:
-            product
-              ? product.name
-              : "Product #" +
-                item.product_id,
+        SUPABASE_URL +
+        "/functions/v1/paystack-initialize",
 
-          quantity:
-            Number(
-              item.quantity
-            ),
+        {
 
-          price:
-            Number(
-              item.price
-            )
+          method:
+            "POST",
 
-        };
+          headers: {
 
-      });
+            "apikey":
+              SUPABASE_KEY,
 
+            "Authorization":
+              "Bearer " +
+              accessToken,
 
-    const productSummary =
-      cartProducts
-        .map(item =>
-          item.name +
-          " × " +
-          item.quantity +
-          " — R" +
-          (
-            item.price *
-            item.quantity
-          ).toFixed(2)
-        )
-        .join(" | ");
+            "Content-Type":
+              "application/json"
 
+          },
 
-    const paymentUrl =
-      "https://sisandashange25-eng.github.io/My-Market/payment.html" +
+          body:
+            JSON.stringify({
 
-      "?amount=" +
-      encodeURIComponent(
-        total.toFixed(2)
-      ) +
+              order_id:
+                normalizedOrderId
 
-      "&item_name=" +
-      encodeURIComponent(
-        productSummary
-      ) +
+            })
 
-      "&order_id=" +
-      encodeURIComponent(
-        orderId
-      ) +
+        }
 
-      "&customer_id=" +
-      encodeURIComponent(
-        user.id
       );
 
 
-    /*
-      Clear cart only after the
-      order has been created.
-    */
+    const paystackText =
+      await paystackResponse.text();
+
+
+    let paystackData = null;
+
+
+    try {
+
+      paystackData =
+        JSON.parse(
+          paystackText
+        );
+
+    } catch (jsonError) {
+
+      console.warn(
+        "Paystack response was not JSON:",
+        paystackText
+      );
+
+    }
+
+
+    if (
+      !paystackResponse.ok
+    ) {
+
+      console.error(
+        "Paystack initialization failed:",
+        paystackData ||
+        paystackText
+      );
+
+
+      alert(
+
+        "Payment could not be started.\n\n" +
+
+        (
+          paystackData?.error ||
+          "Paystack initialization failed."
+        ) +
+
+        (
+
+          paystackData?.details
+            ?
+            "\n\n" +
+            JSON.stringify(
+              paystackData.details,
+              null,
+              2
+            )
+            :
+            ""
+
+        ) +
+
+        "\n\nYour cart has NOT been cleared."
+
+      );
+
+
+      return;
+
+    }
+
+
+    if (
+      !paystackData ||
+      !paystackData.authorization_url
+    ) {
+
+      console.error(
+        "Invalid Paystack response:",
+        paystackData
+      );
+
+
+      alert(
+        "Paystack did not return a payment page.\n\nYour cart has NOT been cleared."
+      );
+
+
+      return;
+
+    }
+
+
+    console.log(
+      "Paystack payment initialized successfully.",
+      paystackData
+    );
+
+
+    /* =====================================================
+    CLEAR CART ONLY AFTER PAYMENT PAGE IS READY
+    ===================================================== */
 
     cart = [];
 
@@ -1983,16 +2176,28 @@ async function checkout() {
 
     syncCartCount();
 
+    updateCart();
+
+
+    /* =====================================================
+    REDIRECT TO PAYSTACK
+    ===================================================== */
 
     window.location.href =
-      paymentUrl;
-
+      paystackData.authorization_url;
 
   } catch (error) {
 
+    console.error(
+      "ZYRE checkout error:",
+      error
+    );
+
+
     alert(
       "Checkout failed:\n\n" +
-      error.message
+      error.message +
+      "\n\nYour cart has NOT been cleared."
     );
 
   }
@@ -3028,9 +3233,10 @@ async function sellerLogin() {
 
             })
 
-          }
+        }
 
-        );
+      );
+
 
     if (!loginResponse.ok) {
 
