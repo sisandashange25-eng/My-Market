@@ -173,6 +173,236 @@
 
 
   <!-- =========================
+       SUPABASE
+  ========================= -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+  <!-- =========================
+       AUTHENTICATION GATE
+       Customers must sign in first
+  ========================= -->
+
+  <style>
+
+    body {
+      visibility: hidden;
+    }
+
+    body.zyre-auth-ready {
+      visibility: visible;
+    }
+
+    #zyreAuthLoading {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 25px;
+    }
+
+    #zyreAuthLoading .auth-logo {
+      font-size: 34px;
+      font-weight: bold;
+      letter-spacing: 5px;
+      margin-bottom: 12px;
+    }
+
+    #zyreAuthLoading .auth-text {
+      color: #aaa;
+      font-size: 14px;
+    }
+
+  </style>
+
+
+  <script>
+
+    const ZYRE_AUTH_URL =
+      "https://gaccizzlwswwynattgda.supabase.co";
+
+    const ZYRE_AUTH_KEY =
+      "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
+
+    const zyreAuthClient =
+      window.supabase.createClient(
+        ZYRE_AUTH_URL,
+        ZYRE_AUTH_KEY
+      );
+
+
+    /*
+      Show a temporary loading screen while
+      we check whether the visitor is logged in.
+    */
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const loading =
+        document.createElement("div");
+
+      loading.id =
+        "zyreAuthLoading";
+
+      loading.innerHTML = `
+        <div class="auth-logo">ZYRE</div>
+        <div class="auth-text">
+          Checking your account...
+        </div>
+      `;
+
+      document.body.appendChild(loading);
+
+    });
+
+
+    async function zyreCheckAuthentication() {
+
+      try {
+
+        const {
+          data: {
+            session
+          },
+          error
+        } =
+          await zyreAuthClient.auth.getSession();
+
+
+        if (error) {
+
+          console.error(
+            "Authentication check failed:",
+            error
+          );
+
+          window.location.href =
+            "auth.html";
+
+          return;
+
+        }
+
+
+        /*
+          No authenticated session:
+          send visitor to account page.
+        */
+
+        if (!session) {
+
+          window.location.replace(
+            "auth.html"
+          );
+
+          return;
+
+        }
+
+
+        /*
+          Authenticated:
+          allow the marketplace to load.
+        */
+
+        window.ZYRE_CURRENT_SESSION =
+          session;
+
+
+        /*
+          Load the existing marketplace
+          JavaScript only after authentication
+          has been confirmed.
+        */
+
+        const marketplaceScript =
+          document.createElement("script");
+
+        marketplaceScript.src =
+          "app.js?v=5003";
+
+        marketplaceScript.onload =
+          function () {
+
+            document.body.classList.add(
+              "zyre-auth-ready"
+            );
+
+            const loading =
+              document.getElementById(
+                "zyreAuthLoading"
+              );
+
+            if (loading) {
+              loading.remove();
+            }
+
+          };
+
+
+        marketplaceScript.onerror =
+          function () {
+
+            document.body.classList.add(
+              "zyre-auth-ready"
+            );
+
+            const loading =
+              document.getElementById(
+                "zyreAuthLoading"
+              );
+
+            if (loading) {
+
+              loading.innerHTML = `
+                <div class="auth-logo">ZYRE</div>
+                <div class="auth-text">
+                  Marketplace could not be loaded.
+                  Please refresh the page.
+                </div>
+              `;
+
+            }
+
+          };
+
+
+        document.body.appendChild(
+          marketplaceScript
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "ZYRE authentication error:",
+          error
+        );
+
+        window.location.replace(
+          "auth.html"
+        );
+
+      }
+
+    }
+
+
+    zyreCheckAuthentication();
+
+  </script>
+
+
+  <!-- =========================
        ZYRE STRUCTURED DATA
   ========================= -->
 
@@ -271,8 +501,6 @@
 
     </div>
 
-
-    <!-- MENU BUTTON -->
 
     <button
       class="menu-button"
@@ -499,8 +727,10 @@
       </div>
 
 
-      <div class="hero-mark"
-           aria-label="ZYRE Marketing">
+      <div
+        class="hero-mark"
+        aria-label="ZYRE Marketing"
+      >
 
         <div class="hero-z">
           Z
@@ -1030,20 +1260,6 @@
     </div>
 
   </footer>
-
-
-  <!-- =========================
-       SUPABASE
-  ========================= -->
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-  <!-- =========================
-       CURRENT MARKETPLACE LOGIC
-  ========================= -->
-
-  <script src="app.js?v=5003"></script>
 
 
   <!-- =========================
