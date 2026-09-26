@@ -14,7 +14,7 @@
 
 <meta
   name="description"
-  content="Private ZYRE Marketing owner control centre for monitoring sellers, stores, products, orders, customers and marketplace payments."
+  content="Private ZYRE Marketing owner control centre for monitoring the complete company marketplace system."
 >
 
 <meta
@@ -454,6 +454,28 @@ button:disabled {
   font-weight: bold;
 
   margin-top: 8px;
+
+}
+
+
+/* =========================
+   MONEY STATS
+========================= */
+
+.money-stat {
+
+  background:
+    linear-gradient(
+      145deg,
+      #141414,
+      #0b0b0b
+    );
+
+}
+
+.money-number {
+
+  color: #55d187;
 
 }
 
@@ -988,12 +1010,43 @@ th {
   class="section active"
 >
 
+  <div class="card">
+
+    <h2>
+      🏢 ZYRE Marketing Company Overview
+    </h2>
+
+    <p>
+      This is the central monitoring screen
+      for the ZYRE Marketing company.
+    </p>
+
+    <p>
+      The Owner monitors company data,
+      marketplace activity, financial
+      information, sellers, stores, products
+      and system activity.
+    </p>
+
+    <p class="pending">
+      👁️ Sellers manage customer orders.
+      The Owner monitors the order system
+      without operating seller orders.
+    </p>
+
+  </div>
+
+
+  <!-- =========================
+       COMPANY NUMBERS
+  ========================= -->
+
   <div class="stats">
 
     <div class="stat">
 
       <div class="stat-title">
-        👥 Sellers
+        👥 Total Sellers
       </div>
 
       <div
@@ -1009,7 +1062,23 @@ th {
     <div class="stat">
 
       <div class="stat-title">
-        🛍️ Products
+        🏪 Active Stores
+      </div>
+
+      <div
+        class="stat-number"
+        id="statStores"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-title">
+        🛍️ Total Products
       </div>
 
       <div
@@ -1038,60 +1107,68 @@ th {
     </div>
 
 
-    <div class="stat">
+    <div class="stat money-stat">
 
       <div class="stat-title">
-        🏪 Rental Payments
+        💰 Marketplace Sales
       </div>
 
       <div
-        class="stat-number"
-        id="statPayments"
+        class="stat-number money-number"
+        id="statMarketplaceSales"
       >
-        0
+        R0.00
       </div>
 
     </div>
 
-  </div>
+
+    <div class="stat money-stat">
+
+      <div class="stat-title">
+        💳 ZYRE Commission
+      </div>
+
+      <div
+        class="stat-number money-number"
+        id="statCommission"
+      >
+        R0.00
+      </div>
+
+    </div>
 
 
-  <div class="card">
+    <div class="stat money-stat">
 
-    <h2>
-      🏢 ZYRE Marketing Company Monitor
-    </h2>
+      <div class="stat-title">
+        🏪 Rental Revenue
+      </div>
 
-    <p>
-      Welcome to the central ZYRE Marketing
-      company control centre.
-    </p>
+      <div
+        class="stat-number money-number"
+        id="statRentalRevenue"
+      >
+        R0.00
+      </div>
 
-    <p>
-      Your role as Owner is to monitor the
-      complete marketplace system and see
-      what is happening throughout the company.
-    </p>
+    </div>
 
-    <p>
-      👥 Sellers manage their stores and
-      customer orders.
-    </p>
 
-    <p>
-      🛍️ Sellers manage their own products
-      and stock.
-    </p>
+    <div class="stat money-stat">
 
-    <p>
-      📊 The Owner monitors the complete
-      system, company data, payments,
-      activity and marketplace performance.
-    </p>
+      <div class="stat-title">
+        💸 Seller Payouts
+      </div>
 
-    <p class="success">
-      ✅ Marketplace systems connected
-    </p>
+      <div
+        class="stat-number money-number"
+        id="statSellerPayouts"
+      >
+        R0.00
+      </div>
+
+    </div>
 
   </div>
 
@@ -1106,12 +1183,19 @@ th {
       📊 Company Monitoring
     </h2>
 
+    <p>
+      The Owner's role is to watch the
+      complete ZYRE company system and
+      collect the information needed to
+      understand marketplace activity.
+    </p>
+
     <div class="monitor-grid">
 
       <div class="monitor-card">
 
         <h3>
-          👥 Sellers
+          👥 Seller System
         </h3>
 
         <p>
@@ -1129,12 +1213,12 @@ th {
       <div class="monitor-card">
 
         <h3>
-          🏪 Stores
+          🏪 Store System
         </h3>
 
         <p>
-          Monitor the stores operating
-          inside the ZYRE marketplace.
+          Monitor stores operating inside
+          the ZYRE marketplace.
         </p>
 
         <p class="success">
@@ -1147,12 +1231,12 @@ th {
       <div class="monitor-card">
 
         <h3>
-          🛍️ Products
+          🛍️ Product System
         </h3>
 
         <p>
           Monitor marketplace products,
-          categories and stock information.
+          categories, stock and seller listings.
         </p>
 
         <p class="success">
@@ -1165,12 +1249,12 @@ th {
       <div class="monitor-card">
 
         <h3>
-          📦 Orders
+          👁️ Order Monitoring
         </h3>
 
         <p>
-          Monitor order activity across
-          the marketplace.
+          Watch order activity across the
+          entire marketplace.
         </p>
 
         <p class="pending">
@@ -1183,12 +1267,49 @@ th {
       <div class="monitor-card">
 
         <h3>
-          💳 Payments
+          💳 Payment Monitoring
         </h3>
 
         <p>
-          Monitor marketplace payments,
-          commissions and seller earnings.
+          Monitor customer payments,
+          marketplace sales, commissions
+          and seller earnings.
+        </p>
+
+        <p class="success">
+          Owner financial monitoring
+        </p>
+
+      </div>
+
+
+      <div class="monitor-card">
+
+        <h3>
+          💸 Payout Monitoring
+        </h3>
+
+        <p>
+          Monitor seller balances,
+          payout requests and payout records.
+        </p>
+
+        <p class="success">
+          Owner financial monitoring
+        </p>
+
+      </div>
+
+
+      <div class="monitor-card">
+
+        <h3>
+          🏪 Rental System
+        </h3>
+
+        <p>
+          Monitor seller store subscriptions
+          and rental payments.
         </p>
 
         <p class="success">
@@ -1201,16 +1322,16 @@ th {
       <div class="monitor-card">
 
         <h3>
-          💸 Payouts
+          🔔 System Activity
         </h3>
 
         <p>
-          Monitor seller balances,
-          payout requests and payout records.
+          Monitor important activity taking
+          place throughout the ZYRE system.
         </p>
 
         <p class="success">
-          Owner financial monitoring
+          Company monitoring
         </p>
 
       </div>
@@ -1249,6 +1370,19 @@ th {
 
         <div class="system-status-title">
           Seller System
+        </div>
+
+        <div class="system-status-value">
+          ● Connected
+        </div>
+
+      </div>
+
+
+      <div class="system-status-item">
+
+        <div class="system-status-title">
+          Store System
         </div>
 
         <div class="system-status-value">
@@ -1314,11 +1448,20 @@ th {
   </div>
 
 
+  <!-- =========================
+       LIVE ACTIVITY
+  ========================= -->
+
   <div class="card">
 
     <h2>
-      🔔 Marketplace Activity
+      🔔 Live Marketplace Activity
     </h2>
+
+    <p>
+      Company activity and monitoring
+      information from the ZYRE system.
+    </p>
 
     <div id="recentActivity">
       Loading...
@@ -1346,8 +1489,8 @@ th {
     </h2>
 
     <p>
-      Monitor seller applications and
-      control seller approval.
+      Monitor seller applications,
+      approval status and seller accounts.
     </p>
 
     <button
@@ -1423,13 +1566,19 @@ th {
     </h2>
 
     <p>
-      This section is for the Owner to
+      This section allows the Owner to
       monitor order activity across ZYRE.
     </p>
 
     <p class="pending">
-      ℹ️ Sellers are responsible for managing
-      and fulfilling their own customer orders.
+      ℹ️ Sellers are responsible for managing,
+      processing and fulfilling their own
+      customer orders.
+    </p>
+
+    <p class="success">
+      👁️ Owner role: monitor company order
+      activity and collect marketplace data.
     </p>
 
     <button
@@ -1778,8 +1927,6 @@ let adminUserId = null;
 
 /*
    Seller name lookup.
-   This lets the owner see the store name
-   instead of only the seller ID.
 */
 
 let sellerMap = {};
@@ -2229,6 +2376,32 @@ async function loadSellers() {
       )
       .textContent =
         sellers.length;
+
+
+    /*
+      Active Stores means approved sellers
+      currently operating in the marketplace.
+    */
+
+    const activeStores =
+      sellers.filter(
+        function(seller) {
+
+          return (
+            seller.approved === true ||
+            seller.status === "seller_approved"
+          );
+
+        }
+      ).length;
+
+
+    document
+      .getElementById(
+        "statStores"
+      )
+      .textContent =
+        activeStores;
 
 
     sellerMap = {};
@@ -2898,7 +3071,7 @@ async function loadOrders() {
         div.innerHTML = `
 
           <h3>
-            📦 Order #${order.id}
+            👁️ Order #${order.id}
           </h3>
 
           <p>
@@ -2944,6 +3117,11 @@ async function loadOrders() {
               order.created_at ||
               "-"
             }
+          </p>
+
+          <p class="pending">
+            👁️ Owner monitoring only —
+            seller manages this order.
           </p>
 
         `;
@@ -3034,11 +3212,64 @@ async function loadRentalPayments() {
       JSON.parse(text);
 
 
+    /*
+      Rental Revenue is based on successful
+      rental payments, not simply the number
+      of rental-payment records.
+    */
+
+    let rentalRevenue =
+      0;
+
+
+    payments.forEach(
+      function(payment) {
+
+        const status =
+          String(
+            payment.status ||
+            ""
+          ).toLowerCase();
+
+
+        const successful =
+          status === "paid" ||
+          status === "completed" ||
+          status === "successful" ||
+          status === "success";
+
+
+        if (successful) {
+
+          rentalRevenue +=
+            Number(
+              payment.amount || 0
+            );
+
+        }
+
+      }
+    );
+
+
+    document
+      .getElementById(
+        "statRentalRevenue"
+      )
+      .textContent =
+        "R" +
+        rentalRevenue.toFixed(2);
+
+
+    /*
+      Keep the old payment count available
+      in case it is useful elsewhere.
+    */
+
     document
       .getElementById(
         "statPayments"
-      )
-      .textContent =
+      )?.textContent =
         payments.length;
 
 
@@ -3317,6 +3548,28 @@ async function loadSellerPayments() {
         sellerTotal.toFixed(2);
 
 
+    /*
+      Feed the company overview.
+    */
+
+    document
+      .getElementById(
+        "statMarketplaceSales"
+      )
+      .textContent =
+        "R" +
+        total.toFixed(2);
+
+
+    document
+      .getElementById(
+        "statCommission"
+      )
+      .textContent =
+        "R" +
+        commission.toFixed(2);
+
+
     if (!payments.length) {
 
       message.textContent =
@@ -3489,7 +3742,9 @@ async function refreshPaymentCentre() {
 
     loadPayouts(),
 
-    loadSellerPaymentAccounts()
+    loadSellerPaymentAccounts(),
+
+    loadRentalPayments()
 
   ]);
 
@@ -3755,11 +4010,56 @@ async function loadPayouts() {
       JSON.parse(text);
 
 
+    /*
+      Company overview payout total.
+      Includes payouts already processed/paid.
+    */
+
+    let completedPayouts =
+      0;
+
+
+    payouts.forEach(
+      function(payout) {
+
+        const status =
+          String(
+            payout.status ||
+            ""
+          ).toLowerCase();
+
+
+        if (
+          status === "processed" ||
+          status === "paid" ||
+          status === "completed"
+        ) {
+
+          completedPayouts +=
+            Number(
+              payout.amount || 0
+            );
+
+        }
+
+      }
+    );
+
+
+    document
+      .getElementById(
+        "statSellerPayouts"
+      )
+      .textContent =
+        "R" +
+        completedPayouts.toFixed(2);
+
+
     if (!payouts.length) {
 
       document
         .getElementById(
-          "pendingPayoutTotal"
+          "statSellerPayouts"
         )
         .textContent =
         "R0.00";
@@ -4173,22 +4473,6 @@ async function processPayout(
     }
 
 
-    let result;
-
-
-    try {
-
-      result =
-        JSON.parse(text);
-
-    } catch {
-
-      result =
-        null;
-
-    }
-
-
     alert(
 
       "Payout processed successfully! ✅\n\n" +
@@ -4204,11 +4488,6 @@ async function processPayout(
 
     );
 
-
-    /*
-      Refresh the financial information
-      after successful processing.
-    */
 
     await loadPayouts();
 
@@ -4538,40 +4817,52 @@ function loadRecentActivity() {
 
     <p>
       👥 <strong>Seller system:</strong>
-      Monitor applications and approval status
-      in the Sellers section.
+      Monitor seller applications,
+      approval status and seller accounts.
     </p>
 
     <p>
       🏪 <strong>Store system:</strong>
-      Monitor stores operating inside ZYRE.
+      Monitor stores operating inside ZYRE
+      and their marketplace status.
     </p>
 
     <p>
       🛍️ <strong>Product system:</strong>
-      Monitor products, categories and stock.
+      Monitor products, categories,
+      sellers and stock information.
     </p>
 
     <p>
-      📦 <strong>Order system:</strong>
-      Sellers manage customer orders.
-      Owner monitors marketplace order activity.
+      👁️ <strong>Order monitoring:</strong>
+      Watch customer order activity across
+      ZYRE. Sellers manage and fulfil their
+      own customer orders.
     </p>
 
     <p>
-      💳 <strong>Payment system:</strong>
-      Monitor customer payments, commissions
-      and seller earnings.
+      💳 <strong>Payment monitoring:</strong>
+      Monitor customer payments, marketplace
+      sales, ZYRE commissions and seller
+      earnings.
     </p>
 
     <p>
-      💸 <strong>Payout system:</strong>
-      Monitor seller payout activity.
+      💸 <strong>Payout monitoring:</strong>
+      Monitor seller balances, payout requests
+      and payout records.
     </p>
 
     <p>
       🏪 <strong>Rental system:</strong>
-      Monitor seller store subscriptions.
+      Monitor seller store subscriptions
+      and rental revenue.
+    </p>
+
+    <p class="success">
+      🛡️ <strong>Owner control:</strong>
+      ZYRE company information is being
+      monitored from the Owner Control Centre.
     </p>
 
   `;
