@@ -1546,6 +1546,13 @@ button {
   padding: 30px;
 
   overflow-y: auto;
+
+  display: none;
+}
+
+.drawer.open {
+
+  display: block;
 }
 
 .drawer .close {
@@ -2150,8 +2157,13 @@ async function zyreCheckAuthentication() {
     const marketplaceScript =
       document.createElement("script");
 
+    /*
+      CART FIX:
+      New app.js version forces the browser
+      to load the latest cart code.
+    */
     marketplaceScript.src =
-      "app.js?v=5006";
+      "app.js?v=5007";
 
     marketplaceScript.onload =
       function () {
@@ -2169,6 +2181,59 @@ async function zyreCheckAuthentication() {
           loading.remove();
         }
 
+
+        /* =========================================
+           INITIALIZE ZYRE CART AFTER app.js LOADS
+        ========================================= */
+
+        try {
+
+          if (
+            typeof loadCart ===
+            "function"
+          ) {
+
+            loadCart();
+
+          }
+
+
+          if (
+            typeof updateCart ===
+            "function"
+          ) {
+
+            updateCart();
+
+          }
+
+
+          /*
+             Extra cart-count refresh.
+             This makes sure the number in the
+             marketplace header is immediately
+             synchronized with zyre_cart_v2.
+          */
+
+          if (
+            typeof updateCartCount ===
+            "function"
+          ) {
+
+            updateCartCount();
+
+          }
+
+        } catch (cartError) {
+
+          console.error(
+            "ZYRE cart initialization error:",
+            cartError
+          );
+
+        }
+
+
         if (
           typeof setupZYRERoleMenu ===
           "function"
@@ -2179,6 +2244,7 @@ async function zyreCheckAuthentication() {
         }
 
       };
+
 
     marketplaceScript.onerror =
       function () {
@@ -2216,6 +2282,7 @@ async function zyreCheckAuthentication() {
         }
 
       };
+
 
     document.body.appendChild(
       marketplaceScript
@@ -2315,9 +2382,11 @@ async function zyreCheckAuthentication() {
     </button>
 
 
+    <!-- CART FIX -->
+
     <button
       class="header-action"
-      onclick="toggleCart()"
+      onclick="openZYRECart()"
       type="button"
       aria-label="Shopping Cart"
     >
@@ -2544,9 +2613,11 @@ async function zyreCheckAuthentication() {
   </button>
 
 
+  <!-- CART FIX -->
+
   <button
     class="sidebar-item"
-    onclick="toggleCart(); toggleSidebar();"
+    onclick="openZYRECart(); toggleSidebar();"
     type="button"
   >
 
@@ -2635,10 +2706,6 @@ async function zyreCheckAuthentication() {
 
   </button>
 
-
-  <!-- =====================================================
-       LOGOUT
-  ====================================================== -->
 
   <div class="sidebar-divider"></div>
 
@@ -3810,6 +3877,220 @@ async function setupZYRERoleMenu() {
 
 
 <!-- =======================================================
+     CART BRIDGE
+======================================================== -->
+
+<script>
+
+/*
+   ZYRE CART BRIDGE
+
+   store.html writes to:
+
+       zyre_cart_v2
+
+   app.js reads from:
+
+       zyre_cart_v2
+
+   This function makes the marketplace
+   open the same cart instead of redirecting
+   back to the homepage.
+*/
+
+function openZYRECart() {
+
+  try {
+
+    /*
+       Make sure app.js has loaded.
+    */
+
+    if (
+      typeof loadCart ===
+      "function"
+    ) {
+
+      loadCart();
+
+    }
+
+
+    /*
+       Re-render the cart and cart number.
+    */
+
+    if (
+      typeof updateCart ===
+      "function"
+    ) {
+
+      updateCart();
+
+    }
+
+
+    if (
+      typeof updateCartCount ===
+      "function"
+    ) {
+
+      updateCartCount();
+
+    }
+
+
+    /*
+       Finally open the cart drawer.
+    */
+
+    if (
+      typeof toggleCart ===
+      "function"
+    ) {
+
+      toggleCart();
+
+      return;
+
+    }
+
+
+    console.error(
+      "ZYRE cart could not open because toggleCart() is unavailable."
+    );
+
+  } catch (error) {
+
+    console.error(
+      "ZYRE cart opening error:",
+      error
+    );
+
+  }
+
+}
+
+
+/*
+   Keep the cart number synchronized
+   when another ZYRE page changes localStorage.
+*/
+
+window.addEventListener(
+  "storage",
+  function(event) {
+
+    if (
+      event.key ===
+      "zyre_cart_v2"
+    ) {
+
+      try {
+
+        if (
+          typeof loadCart ===
+          "function"
+        ) {
+
+          loadCart();
+
+        }
+
+        if (
+          typeof updateCart ===
+          "function"
+        ) {
+
+          updateCart();
+
+        }
+
+        if (
+          typeof updateCartCount ===
+          "function"
+        ) {
+
+          updateCartCount();
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "ZYRE cart synchronization error:",
+          error
+        );
+
+      }
+
+    }
+
+  }
+);
+
+
+/*
+   Refresh cart when the marketplace
+   becomes visible again.
+*/
+
+window.addEventListener(
+  "pageshow",
+  function() {
+
+    setTimeout(
+      function() {
+
+        try {
+
+          if (
+            typeof loadCart ===
+            "function"
+          ) {
+
+            loadCart();
+
+          }
+
+          if (
+            typeof updateCart ===
+            "function"
+          ) {
+
+            updateCart();
+
+          }
+
+          if (
+            typeof updateCartCount ===
+            "function"
+          ) {
+
+            updateCartCount();
+
+          }
+
+        } catch (error) {
+
+          console.error(
+            "ZYRE cart pageshow error:",
+            error
+          );
+
+        }
+
+      },
+      100
+    );
+
+  }
+);
+
+</script>
+
+
+<!-- =======================================================
      CART HASH
 ======================================================== -->
 
@@ -3828,16 +4109,16 @@ if (
         function () {
 
           if (
-            typeof toggleCart ===
+            typeof openZYRECart ===
             "function"
           ) {
 
-            toggleCart();
+            openZYRECart();
 
           }
 
         },
-        300
+        500
       );
 
     }
