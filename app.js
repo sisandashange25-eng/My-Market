@@ -1017,35 +1017,15 @@ alert(
 SELLER CENTRE
 ========================= */
 
-async function sellerCentre() {
+/*
+  Seller Centre now opens the
+  professional seller authentication page.
+*/
 
-const choice =
-prompt(
-"ZYRE SELLER CENTRE\n\n" +
-"1 = Create a new store\n" +
-"2 = Seller login\n\n" +
-"Enter 1 or 2:"
-);
+function sellerCentre() {
 
-if (choice === "1") {
-
-await registerSeller();
-
-return;
-
-}
-
-if (choice !== "2") {
-
-alert(
-  "Please enter 1 or 2."
-);
-
-return;
-
-}
-
-await sellerLogin();
+window.location.href =
+  "seller-auth.html";
 
 }
 
