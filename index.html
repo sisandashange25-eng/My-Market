@@ -335,6 +335,21 @@
 
             }
 
+            /*
+              The marketplace is now loaded.
+              Apply the correct menu for the
+              logged-in account.
+            */
+
+            if (
+              typeof setupZYRERoleMenu ===
+              "function"
+            ) {
+
+              setupZYRERoleMenu();
+
+            }
+
           };
 
 
@@ -1365,6 +1380,283 @@
 
     }
 
+
+    /* =========================================
+       ZYRE ROLE-BASED MENU
+    ========================================= */
+
+    async function setupZYRERoleMenu() {
+
+      const sellerButton =
+        document.getElementById(
+          "zyreSellerButton"
+        );
+
+      const ownerButton =
+        document.getElementById(
+          "zyreOwnerButton"
+        );
+
+
+      /*
+        Start with both protected buttons hidden.
+        They will only become visible when the
+        account's role/status has been verified.
+      */
+
+      if (sellerButton) {
+
+        sellerButton.style.display =
+          "none";
+
+      }
+
+
+      if (ownerButton) {
+
+        ownerButton.style.display =
+          "none";
+
+      }
+
+
+      try {
+
+        const {
+          data: {
+            user
+          },
+          error: authError
+        } =
+          await zyreAuthClient.auth.getUser();
+
+
+        if (
+          authError ||
+          !user
+        ) {
+
+          return;
+
+        }
+
+
+        /*
+          Check the user's profile role.
+        */
+
+        const profileResponse =
+          await fetch(
+
+            ZYRE_AUTH_URL +
+            "/rest/v1/profiles?id=eq." +
+            encodeURIComponent(
+              user.id
+            ) +
+            "&select=id,role",
+
+            {
+              headers: {
+
+                "apikey":
+                  ZYRE_AUTH_KEY,
+
+                "Authorization":
+                  "Bearer " +
+                  ZYRE_AUTH_KEY,
+
+                "Accept":
+                  "application/json"
+
+              }
+
+            }
+
+          );
+
+
+        if (!profileResponse.ok) {
+
+          console.error(
+            "Could not load ZYRE profile role."
+          );
+
+          return;
+
+        }
+
+
+        const profiles =
+          await profileResponse.json();
+
+
+        const profile =
+          profiles &&
+          profiles.length
+            ? profiles[0]
+            : null;
+
+
+        const role =
+          String(
+            profile &&
+            profile.role
+              ? profile.role
+              : "customer"
+          )
+          .trim()
+          .toLowerCase();
+
+
+        /*
+          OWNER
+          Current Owner Centre uses the
+          "admin" profile role.
+        */
+
+        if (
+          role === "admin" ||
+          role === "owner"
+        ) {
+
+          if (ownerButton) {
+
+            ownerButton.style.display =
+              "flex";
+
+          }
+
+          /*
+            Owner does not need the seller
+            dashboard button unless the account
+            also has an approved seller record.
+          */
+
+        }
+
+
+        /*
+          SELLER / SELLER PENDING
+
+          Check the seller record belonging
+          to this authenticated user.
+        */
+
+        const sellerResponse =
+          await fetch(
+
+            ZYRE_AUTH_URL +
+            "/rest/v1/sellers?user_id=eq." +
+            encodeURIComponent(
+              user.id
+            ) +
+            "&select=id,approved,status",
+
+            {
+              headers: {
+
+                "apikey":
+                  ZYRE_AUTH_KEY,
+
+                "Authorization":
+                  "Bearer " +
+                  ZYRE_AUTH_KEY,
+
+                "Accept":
+                  "application/json"
+
+              }
+
+            }
+
+          );
+
+
+        if (!sellerResponse.ok) {
+
+          /*
+            A customer may not have a seller
+            record. That is normal.
+          */
+
+          return;
+
+        }
+
+
+        const sellers =
+          await sellerResponse.json();
+
+
+        if (
+          !sellers ||
+          !sellers.length
+        ) {
+
+          /*
+            CUSTOMER:
+            No seller application exists,
+            therefore Seller Dashboard stays hidden.
+          */
+
+          return;
+
+        }
+
+
+        const seller =
+          sellers[0];
+
+
+        const sellerApproved =
+          seller.approved === true ||
+          String(
+            seller.status || ""
+          )
+          .trim()
+          .toLowerCase() ===
+            "seller_approved";
+
+
+        /*
+          Only an APPROVED seller gets the
+          Seller Dashboard button.
+        */
+
+        if (
+          sellerApproved &&
+          sellerButton
+        ) {
+
+          sellerButton.style.display =
+            "flex";
+
+        }
+
+
+        /*
+          SELLER_PENDING:
+          Seller Dashboard remains hidden.
+        */
+
+      } catch (error) {
+
+        console.error(
+          "ZYRE role menu error:",
+          error
+        );
+
+        /*
+          Fail closed:
+          if role information cannot be
+          verified, protected dashboard
+          buttons remain hidden.
+        */
+
+      }
+
+    }
+
   </script>
 
 
@@ -1439,9 +1731,11 @@
                 );
 
               }
+
             );
 
         }
+
       );
 
     }
@@ -1893,6 +2187,16 @@
       display: inline-block !important;
       visibility: visible !important;
       opacity: 1 !important;
+    }
+
+
+    /* =========================
+       ROLE-BASED DASHBOARD BUTTONS
+    ========================= */
+
+    #zyreSellerButton,
+    #zyreOwnerButton {
+      display: none;
     }
 
 
