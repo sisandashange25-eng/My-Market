@@ -1,11 +1,17 @@
-<!DOCTYPE html><html lang="en">
-<head><meta charset="UTF-8"><meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
+<!DOCTYPE html>
+<html lang="en">
 
-«»
+<head>
+<meta charset="UTF-8">
 
-<title>ZYRE Marketing - Pay Now</title><style>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>ZYRE Marketing - Pay Now</title>
+
+<style>
 
 * {
   box-sizing: border-box;
@@ -214,165 +220,196 @@ body {
   font-size: 15px;
 }
 
-</style></head><body><header class="header">  <div class="logo">
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="logo">
     ZYRE
-  </div>  <div class="subtitle">
+  </div>
+
+  <div class="subtitle">
     ZYRE Marketing
-  </div></header><main class="container">  <div class="card"><div class="test-badge">
-  🧪 TEST PAYMENT
-</div>
-
-<div class="title">
-  💳 Pay Now
-</div>
-
-<div
-  id="orderNumber"
-  class="order-number"
->
-  Order: Loading...
-</div>
-
-<div
-  id="errorBox"
-  class="error"
->
-  Payment information could not be loaded.
-</div>
-
-<div
-  id="successBox"
-  class="success"
->
-  Payment completed successfully.
-</div>
-
-<div
-  id="productBox"
-  class="product"
->
-
-  <div
-    id="productName"
-    class="product-name"
-  >
-    Loading product...
   </div>
 
-  <div
-    id="productInfo"
-    class="product-info"
-  >
-    Please wait...
+</header>
+
+
+<main class="container">
+
+  <div class="card">
+
+    <div class="test-badge">
+      🧪 TEST PAYMENT
+    </div>
+
+    <div class="title">
+      💳 Pay Now
+    </div>
+
+    <div
+      id="orderNumber"
+      class="order-number"
+    >
+      Order: Loading...
+    </div>
+
+    <div
+      id="errorBox"
+      class="error"
+    >
+      Payment information could not be loaded.
+    </div>
+
+    <div
+      id="successBox"
+      class="success"
+    >
+      Payment completed successfully.
+    </div>
+
+    <div
+      id="productBox"
+      class="product"
+    >
+
+      <div
+        id="productName"
+        class="product-name"
+      >
+        Loading product...
+      </div>
+
+      <div
+        id="productInfo"
+        class="product-info"
+      >
+        Please wait...
+      </div>
+
+    </div>
+
+    <div class="total-box">
+
+      <div class="total-label">
+        Total
+      </div>
+
+      <div
+        id="totalAmount"
+        class="total"
+      >
+        R0.00
+      </div>
+
+    </div>
+
+    <div
+      id="breakdown"
+      class="breakdown"
+    >
+
+      <div class="breakdown-row">
+
+        <span>
+          Order amount
+        </span>
+
+        <strong id="breakdownAmount">
+          R0.00
+        </strong>
+
+      </div>
+
+      <div class="breakdown-row">
+
+        <span>
+          ZYRE Commission (10%)
+        </span>
+
+        <strong id="breakdownCommission">
+          R0.00
+        </strong>
+
+      </div>
+
+      <div class="breakdown-row">
+
+        <span>
+          Seller amount (90%)
+        </span>
+
+        <strong id="breakdownSeller">
+          R0.00
+        </strong>
+
+      </div>
+
+    </div>
+
   </div>
 
-</div>
 
-<div class="total-box">
+  <div class="card">
 
-  <div class="total-label">
-    Total
-  </div>
+    <button
+      id="payButton"
+      class="pay-button"
+      onclick="payNow()"
+      disabled
+    >
+      🧪 Complete Test Payment
+    </button>
 
-  <div
-    id="totalAmount"
-    class="total"
-  >
-    R0.00
-  </div>
+    <div class="secure">
 
-</div>
+      🔒 Your order information is securely linked
+      to your ZYRE Marketing order.
 
-<div
-  id="breakdown"
-  class="breakdown"
->
+    </div>
 
-  <div class="breakdown-row">
+    <div class="notice">
 
-    <span>
-      Order amount
-    </span>
+      <strong>TEST PAYMENT MODE</strong><br>
 
-    <strong id="breakdownAmount">
-      R0.00
-    </strong>
+      This is a temporary ZYRE Marketing test
+      payment system.
 
-  </div>
+      <br><br>
 
-  <div class="breakdown-row">
+      When the test payment is completed,
+      ZYRE automatically receives 10% commission
+      and the seller receives 90%.
 
-    <span>
-      ZYRE Commission (10%)
-    </span>
+      <br><br>
 
-    <strong id="breakdownCommission">
-      R0.00
-    </strong>
+      Real PayFast processing will be connected
+      separately when your PayFast integration is
+      ready.
 
-  </div>
+    </div>
 
-  <div class="breakdown-row">
-
-    <span>
-      Seller amount (90%)
-    </span>
-
-    <strong id="breakdownSeller">
-      R0.00
-    </strong>
+    <a
+      href="./index.html"
+      class="back"
+    >
+      ← Back to ZYRE Marketing
+    </a>
 
   </div>
 
-</div>
+</main>
 
-  </div>  <div class="card"><button
-  id="payButton"
-  class="pay-button"
-  onclick="payNow()"
-  disabled
->
-  🧪 Complete Test Payment
-</button>
 
-<div class="secure">
+<footer class="footer">
+  © 2026 ZYRE Marketing
+</footer>
 
-  🔒 Your order information is securely linked
-  to your ZYRE Marketing order.
 
-</div>
-
-<div class="notice">
-
-  <strong>TEST PAYMENT MODE</strong><br>
-
-  This is a temporary ZYRE Marketing test
-  payment system.
-
-  <br><br>
-
-  When the test payment is completed,
-  ZYRE automatically receives 10% commission
-  and the seller receives 90%.
-
-  <br><br>
-
-  Real PayFast processing will be connected
-  separately when your PayFast integration is
-  ready.
-
-</div>
-
-<a
-  href="./index.html"
-  class="back"
->
-  ← Back to ZYRE Marketing
-</a>
-
-  </div></main><footer class="footer">© 2026 ZYRE Marketing
-
-</footer><script>
+<script>
 
 /* =========================================
    SUPABASE
@@ -466,13 +503,6 @@ function escapeHtml(value) {
 ========================================= */
 
 function supabaseHeaders(extra = {}) {
-
-  /*
-    TEST PAYMENT MODE
-
-    Payment operations currently use
-    the public anon role.
-  */
 
   return {
 
@@ -624,12 +654,9 @@ async function findOrderSeller() {
       "&select=*",
 
       {
-
         method: "GET",
-
         headers:
           supabaseHeaders()
-
       }
 
     );
@@ -709,12 +736,9 @@ async function findOrderSeller() {
       ")&select=id,seller_id",
 
       {
-
         method: "GET",
-
         headers:
           supabaseHeaders()
-
       }
 
     );
@@ -806,12 +830,9 @@ async function findExistingPayment() {
       "&select=*",
 
       {
-
         method: "GET",
-
         headers:
           supabaseHeaders()
-
       }
 
     );
@@ -887,17 +908,6 @@ async function markOrderPaid() {
     );
 
 
-  /*
-    IMPORTANT:
-    Previously this error was only logged to
-    the console. That made the payment page
-    appear successful while the order stayed
-    Pending.
-
-    Now we stop the process and display the
-    exact Supabase error.
-  */
-
   if (!response.ok) {
 
     const errorText =
@@ -909,82 +919,6 @@ async function markOrderPaid() {
       " could not be marked as Paid.\n\n" +
       "Supabase order update error:\n" +
       errorText
-    );
-
-  }
-
-
-  /*
-    Verify that the PATCH actually affected
-    the intended order.
-
-    We do a fresh GET using the anon role.
-  */
-
-  const verifyResponse =
-    await fetch(
-
-      SUPABASE_URL +
-      "/rest/v1/orders?id=eq." +
-      encodeURIComponent(orderId) +
-      "&select=id,status",
-
-      {
-
-        method: "GET",
-
-        headers:
-          supabaseHeaders()
-
-      }
-
-    );
-
-
-  if (!verifyResponse.ok) {
-
-    throw new Error(
-      "Payment was recorded, but the order status could not be verified.\n\n" +
-      await verifyResponse.text()
-    );
-
-  }
-
-
-  const verifiedOrders =
-    await verifyResponse.json();
-
-
-  if (
-    !Array.isArray(verifiedOrders) ||
-    !verifiedOrders.length
-  ) {
-
-    throw new Error(
-      "Payment was recorded, but Order #" +
-      orderId +
-      " could not be found after the status update."
-    );
-
-  }
-
-
-  const verifiedStatus =
-    String(
-      verifiedOrders[0].status || ""
-    );
-
-
-  if (
-    verifiedStatus.toLowerCase() !==
-    "paid"
-  ) {
-
-    throw new Error(
-      "Payment was recorded, but Order #" +
-      orderId +
-      " is still showing status: " +
-      verifiedStatus
     );
 
   }
@@ -1020,11 +954,6 @@ async function createTestPayment() {
       existingStatus === "successful" ||
       existingStatus === "success"
     ) {
-
-      /*
-        If payment already exists, make sure
-        the order is also marked Paid.
-      */
 
       await markOrderPaid();
 
@@ -1124,10 +1053,6 @@ async function createTestPayment() {
   const payment =
     await response.json();
 
-
-  /*
-    Mark the marketplace order as paid.
-  */
 
   await markOrderPaid();
 
@@ -1365,5 +1290,7 @@ async function payNow() {
 
 displayPaymentInformation();
 
-</script></body>
+</script>
+
+</body>
 </html>
