@@ -14,21 +14,10 @@ const ZYRE_VAPID_PUBLIC_KEY =
 let products = [];
 let category = "All";
 
+
 /* =========================================================
 CART
 ========================================================= */
-
-/*
-  IMPORTANT:
-  We are now using a NEW storage key.
-
-  The old "cart" storage may contain broken product objects
-  that caused:
-
-  Product #[object Object]
-
-  The new cart uses only product IDs.
-*/
 
 const CART_STORAGE_KEY =
 "zyre_cart_v2";
@@ -37,10 +26,10 @@ let cart = [];
 
 
 /* =========================================================
-LOAD CART
+READ CART SAFELY
 ========================================================= */
 
-function loadCart() {
+function readCartStorage() {
 
   let raw = [];
 
@@ -56,7 +45,7 @@ function loadCart() {
   } catch (error) {
 
     console.warn(
-      "ZYRE cart could not be read. Starting a new cart.",
+      "ZYRE cart could not be read:",
       error
     );
 
@@ -70,14 +59,13 @@ function loadCart() {
 
   }
 
-  /*
-    Only accept simple product IDs.
 
-    If anything is an old product object,
-    extract its ID.
+  /*
+    Convert any old product objects
+    into simple product IDs.
   */
 
-  cart =
+  const cleanedCart =
     raw
       .map(item => {
 
@@ -98,21 +86,117 @@ function loadCart() {
         return item;
 
       })
-      .filter(
-        id =>
+      .filter(id => {
+
+        return (
           id !== null &&
           id !== undefined &&
           id !== "" &&
           typeof id !== "object"
-      );
+        );
 
-  save();
+      });
+
+
+  /*
+    Always keep the cart in the
+    clean ID-only format.
+  */
+
+  try {
+
+    localStorage.setItem(
+      CART_STORAGE_KEY,
+      JSON.stringify(cleanedCart)
+    );
+
+  } catch (error) {
+
+    console.warn(
+      "ZYRE cart could not be saved:",
+      error
+    );
+
+  }
+
+
+  return cleanedCart;
 
 }
 
 
-/* Load the NEW cart immediately. */
+/* =========================================================
+LOAD CART
+========================================================= */
+
+function loadCart() {
+
+  cart =
+    readCartStorage();
+
+  return cart;
+
+}
+
+
+/*
+  Load cart immediately.
+*/
+
 loadCart();
+
+
+/* =========================================================
+SAVE CART
+========================================================= */
+
+function save() {
+
+  try {
+
+    localStorage.setItem(
+      CART_STORAGE_KEY,
+      JSON.stringify(cart)
+    );
+
+  } catch (error) {
+
+    console.warn(
+      "ZYRE cart could not be saved:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+SYNC CART NUMBER
+========================================================= */
+
+function syncCartCount() {
+
+  const cartCount =
+    document.getElementById(
+      "cartCount"
+    );
+
+  if (!cartCount) {
+
+    return;
+
+  }
+
+
+  const storedCart =
+    readCartStorage();
+
+
+  cartCount.textContent =
+    storedCart.length;
+
+}
 
 
 /* =========================================================
@@ -132,6 +216,7 @@ async function getZYRECurrentUser() {
 
     }
 
+
     if (
       !window.supabase ||
       !window.supabase.createClient
@@ -140,6 +225,7 @@ async function getZYRECurrentUser() {
       return null;
 
     }
+
 
     if (!window.ZYRE_AUTH_CLIENT) {
 
@@ -151,11 +237,13 @@ async function getZYRECurrentUser() {
 
     }
 
+
     const {
       data,
       error
     } =
       await window.ZYRE_AUTH_CLIENT.auth.getUser();
+
 
     if (error) {
 
@@ -167,6 +255,7 @@ async function getZYRECurrentUser() {
       return null;
 
     }
+
 
     return data?.user || null;
 
@@ -195,11 +284,13 @@ async function getZYRECustomerProfile() {
     const user =
       await getZYRECurrentUser();
 
+
     if (!user) {
 
       return null;
 
     }
+
 
     const response =
       await fetch(
@@ -293,123 +384,149 @@ RENDER PRODUCTS
 
 function renderProducts() {
 
-const searchBox =
-document.getElementById("search");
+  const searchBox =
+    document.getElementById("search");
 
-const sortBox =
-document.getElementById("sort");
+  const sortBox =
+    document.getElementById("sort");
 
-const productsBox =
-document.getElementById("products");
+  const productsBox =
+    document.getElementById("products");
 
-if (!productsBox) return;
 
-let q =
-searchBox
-? searchBox.value.toLowerCase()
-: "";
+  if (!productsBox) return;
 
-let s =
-sortBox
-? sortBox.value
-: "popular";
 
-let filtered =
-products.filter(x => {
+  let q =
+    searchBox
+      ? searchBox.value.toLowerCase()
+      : "";
 
-  const productCategory =
-    x.cat || "Other";
 
-  return (
-    (category === "All" ||
-      productCategory === category) &&
-    x.name.toLowerCase().includes(q)
-  );
+  let s =
+    sortBox
+      ? sortBox.value
+      : "popular";
 
-});
 
-if (s === "low") {
+  let filtered =
+    products.filter(x => {
 
-filtered.sort(
-  (a, b) => a.price - b.price
-);
+      const productCategory =
+        x.cat || "Other";
 
-}
 
-if (s === "high") {
+      return (
+        (category === "All" ||
+          productCategory === category) &&
+        x.name.toLowerCase().includes(q)
+      );
 
-filtered.sort(
-  (a, b) => b.price - a.price
-);
+    });
 
-}
 
-productsBox.innerHTML =
-filtered.map(x => `
+  if (s === "low") {
 
-  <article class="card">
+    filtered.sort(
+      (a, b) =>
+        a.price - b.price
+    );
 
-    <div class="pic">
+  }
 
-      ${
-        x.image_url
-          ?
-        `<img
-          src="${x.image_url}"
-          alt="${x.name}"
-          style="
-            width:100%;
-            height:100%;
-            object-fit:cover;
-          "
-        >`
-          :
-        `<span>🛍️</span>`
-      }
 
-    </div>
+  if (s === "high") {
 
-    <h3>${x.name}</h3>
+    filtered.sort(
+      (a, b) =>
+        b.price - a.price
+    );
 
-    <div class="seller">
-      ${x.seller}
-    </div>
+  }
 
-    <div class="price">
-      R${Number(x.price).toFixed(2)}
-    </div>
 
-    ${
-      Number(x.stock) > 0
-        ?
-        `<div style="font-size:13px;color:#777;margin:6px 0;">
-          ${x.stock} in stock
+  productsBox.innerHTML =
+    filtered.map(x => `
+
+      <article class="card">
+
+        <div class="pic">
+
+          ${
+            x.image_url
+              ?
+            `<img
+              src="${x.image_url}"
+              alt="${x.name}"
+              style="
+                width:100%;
+                height:100%;
+                object-fit:cover;
+              "
+            >`
+              :
+            `<span>🛍️</span>`
+          }
+
         </div>
 
-        <button
-          class="add"
-          onclick="add(${x.id})"
-        >
-          Add to cart
-        </button>`
-        :
-        `<div style="font-size:13px;color:#d00;margin:6px 0;font-weight:bold;">
-          Out of stock
+        <h3>${x.name}</h3>
+
+        <div class="seller">
+          ${x.seller}
         </div>
 
-        <button
-          class="add"
-          disabled
-          style="opacity:.5;cursor:not-allowed;"
-        >
-          Out of stock
-        </button>`
-    }
+        <div class="price">
+          R${Number(x.price).toFixed(2)}
+        </div>
 
-  </article>
+        ${
+          Number(x.stock) > 0
+            ?
+            `<div
+              style="
+                font-size:13px;
+                color:#777;
+                margin:6px 0;
+              "
+            >
+              ${x.stock} in stock
+            </div>
 
-`).join("") ||
-"<p>No products found.</p>";
+            <button
+              class="add"
+              onclick="add(${x.id})"
+            >
+              Add to cart
+            </button>`
+            :
+            `<div
+              style="
+                font-size:13px;
+                color:#d00;
+                margin:6px 0;
+                font-weight:bold;
+              "
+            >
+              Out of stock
+            </div>
+
+            <button
+              class="add"
+              disabled
+              style="
+                opacity:.5;
+                cursor:not-allowed;
+              "
+            >
+              Out of stock
+            </button>`
+        }
+
+      </article>
+
+    `).join("") ||
+    "<p>No products found.</p>";
 
 }
 
@@ -420,128 +537,152 @@ LOAD PRODUCTS
 
 async function loadProducts() {
 
-try {
+  try {
 
-const productsResponse =
-  await fetch(
-    SUPABASE_URL +
-    "/rest/v1/products?select=*&active=eq.true&order=id.desc",
-    {
-      headers: {
-        "apikey": SUPABASE_KEY,
-        "Authorization":
-          "Bearer " + SUPABASE_KEY
-      }
+    const productsResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/products?select=*&active=eq.true&order=id.desc",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY
+
+          }
+
+        }
+
+      );
+
+
+    if (!productsResponse.ok) {
+
+      alert(
+        "Products error:\n\n" +
+        await productsResponse.text()
+      );
+
+      return;
+
     }
-  );
 
 
-if (!productsResponse.ok) {
-
-  alert(
-    "Products error:\n\n" +
-    await productsResponse.text()
-  );
-
-  return;
-
-}
+    const productData =
+      await productsResponse.json();
 
 
-const productData =
-  await productsResponse.json();
+    const sellersResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/sellers?select=id,store_name",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY
+
+          }
+
+        }
+
+      );
 
 
-const sellersResponse =
-  await fetch(
-    SUPABASE_URL +
-    "/rest/v1/sellers?select=id,store_name",
-    {
-      headers: {
-        "apikey": SUPABASE_KEY,
-        "Authorization":
-          "Bearer " + SUPABASE_KEY
-      }
+    let sellers = [];
+
+
+    if (sellersResponse.ok) {
+
+      sellers =
+        await sellersResponse.json();
+
     }
-  );
 
 
-let sellers = [];
+    const sellerMap = {};
 
 
-if (sellersResponse.ok) {
+    sellers.forEach(seller => {
 
-  sellers =
-    await sellersResponse.json();
+      sellerMap[seller.id] =
+        (
+          seller.store_name ||
+          "Zava Seller"
+        ).trim();
 
-}
-
-
-const sellerMap = {};
-
-
-sellers.forEach(seller => {
-
-  sellerMap[seller.id] =
-    (
-      seller.store_name ||
-      "Zava Seller"
-    ).trim();
-
-});
+    });
 
 
-products =
-  productData.map(p => ({
+    products =
+      productData.map(p => ({
 
-    id:
-      p.id,
+        id:
+          p.id,
 
-    name:
-      p.name,
+        name:
+          p.name,
 
-    price:
-      Number(p.price),
+        price:
+          Number(p.price),
 
-    stock:
-      Number(p.stock ?? 0),
-
-    cat:
-      p.category ||
-      "Other",
-
-    seller:
-      Number(p.seller_id) === 5
-        ? "ZAVAMARKET"
-        : (
-            sellerMap[p.seller_id] ||
-            "Zava Seller"
+        stock:
+          Number(
+            p.stock ?? 0
           ),
 
-    seller_id:
-      Number(p.seller_id),
+        cat:
+          p.category ||
+          "Other",
 
-    image_url:
-      p.image_url ||
-      ""
+        seller:
+          Number(p.seller_id) === 5
+            ? "ZAVAMARKET"
+            : (
+                sellerMap[p.seller_id] ||
+                "Zava Seller"
+              ),
 
-  }));
+        seller_id:
+          Number(p.seller_id),
+
+        image_url:
+          p.image_url ||
+          ""
+
+      }));
 
 
-loadCart();
+    loadCart();
 
-renderProducts();
+    renderProducts();
 
-updateCart();
+    updateCart();
 
-} catch (error) {
+    syncCartCount();
 
-alert(
-  "Could not load products:\n\n" +
-  error.message
-);
+  } catch (error) {
 
-}
+    alert(
+      "Could not load products:\n\n" +
+      error.message
+    );
+
+  }
 
 }
 
@@ -552,19 +693,24 @@ CATEGORY
 
 function setCategory(c) {
 
-category = c;
+  category = c;
 
-const heading =
-document.getElementById("heading");
 
-if (heading) {
+  const heading =
+    document.getElementById(
+      "heading"
+    );
 
-heading.textContent =
-  c + " products";
 
-}
+  if (heading) {
 
-renderProducts();
+    heading.textContent =
+      c + " products";
+
+  }
+
+
+  renderProducts();
 
 }
 
@@ -575,66 +721,68 @@ ADD TO CART
 
 function add(id) {
 
-const product =
-products.find(
-p => String(p.id) === String(id)
-);
-
-if (!product) {
-
-alert(
-  "Product could not be found."
-);
-
-return;
-
-}
-
-const currentQuantity =
-cart.filter(
-cartId =>
-String(cartId) === String(id)
-).length;
-
-if (
-Number(product.stock) <=
-currentQuantity
-) {
-
-alert(
-  "Sorry, there is not enough stock available."
-);
-
-return;
-
-}
-
-/*
-  IMPORTANT:
-  Save ONLY the product ID.
-*/
-
-cart.push(product.id);
-
-save();
-
-updateCart();
-
-alert("Added to cart");
-
-}
+  const product =
+    products.find(
+      p =>
+        String(p.id) ===
+        String(id)
+    );
 
 
-/* =========================================================
-SAVE CART
-========================================================= */
+  if (!product) {
 
-function save() {
+    alert(
+      "Product could not be found."
+    );
 
-localStorage.setItem(
-CART_STORAGE_KEY,
-JSON.stringify(cart)
-);
+    return;
+
+  }
+
+
+  const currentQuantity =
+    cart.filter(
+      cartId =>
+        String(cartId) ===
+        String(id)
+    ).length;
+
+
+  if (
+    Number(product.stock) <=
+    currentQuantity
+  ) {
+
+    alert(
+      "Sorry, there is not enough stock available."
+    );
+
+    return;
+
+  }
+
+
+  /*
+    Save ONLY the product ID.
+  */
+
+  cart.push(
+    product.id
+  );
+
+
+  save();
+
+  loadCart();
+
+  updateCart();
+
+  syncCartCount();
+
+
+  alert(
+    "Added to cart"
+  );
 
 }
 
@@ -645,15 +793,20 @@ CLEAR CART
 
 function clearCart() {
 
-cart = [];
+  cart = [];
 
-save();
+  save();
 
-updateCart();
+  loadCart();
 
-alert(
-"Cart cleared successfully."
-);
+  updateCart();
+
+  syncCartCount();
+
+
+  alert(
+    "Cart cleared successfully."
+  );
 
 }
 
@@ -664,114 +817,143 @@ UPDATE CART
 
 function updateCart() {
 
-const cartCount =
-document.getElementById("cartCount");
+  /*
+    Always reload from localStorage.
+  */
 
-const cartItems =
-document.getElementById("cartItems");
-
-const totalBox =
-document.getElementById("total");
-
-if (
-!cartCount ||
-!cartItems ||
-!totalBox
-) {
-
-return;
-
-}
+  loadCart();
 
 
-/*
-  Load the NEW cart.
-*/
+  const cartCount =
+    document.getElementById(
+      "cartCount"
+    );
 
-loadCart();
+  const cartItems =
+    document.getElementById(
+      "cartItems"
+    );
 
-
-cartCount.textContent =
-cart.length;
-
-let counts = {};
-
-cart.forEach(id => {
-
-const key =
-  String(id);
-
-counts[key] =
-  (counts[key] || 0) + 1;
-
-});
-
-let total = 0;
-
-const rows =
-Object.entries(counts)
-.map(([id, n]) => {
-
-    const x =
-      products.find(
-        p =>
-          String(p.id) ===
-          String(id)
-      );
+  const totalBox =
+    document.getElementById(
+      "total"
+    );
 
 
-    if (!x) {
+  /*
+    Update cart number even when
+    drawer elements are not ready.
+  */
 
-      return `
+  if (cartCount) {
 
-        <div class="cartrow">
+    cartCount.textContent =
+      cart.length;
 
-          <span>
-            Product #${id} × ${n}
-          </span>
-
-          <b>
-            Unavailable
-          </b>
-
-        </div>
-
-      `;
-
-    }
+  }
 
 
-    total +=
-      Number(x.price) * n;
+  /*
+    The drawer may not exist yet
+    while the page is loading.
+  */
+
+  if (
+    !cartItems ||
+    !totalBox
+  ) {
+
+    return;
+
+  }
 
 
-    return `
+  let counts = {};
 
-      <div class="cartrow">
 
-        <span>
-          ${x.name} × ${n}
-        </span>
+  cart.forEach(id => {
 
-        <b>
-          R${(
-            Number(x.price) * n
-          ).toFixed(2)}
-        </b>
+    const key =
+      String(id);
 
-      </div>
 
-    `;
+    counts[key] =
+      (counts[key] || 0) + 1;
 
-  })
-  .join("");
+  });
 
-cartItems.innerHTML =
-rows ||
-"<p>Your cart is empty.</p>";
 
-totalBox.textContent =
-total.toFixed(2);
+  let total = 0;
+
+
+  const rows =
+    Object.entries(counts)
+      .map(([id, quantity]) => {
+
+        const product =
+          products.find(
+            p =>
+              String(p.id) ===
+              String(id)
+          );
+
+
+        if (!product) {
+
+          return `
+
+            <div class="cartrow">
+
+              <span>
+                Product #${id} × ${quantity}
+              </span>
+
+              <b>
+                Unavailable
+              </b>
+
+            </div>
+
+          `;
+
+        }
+
+
+        total +=
+          Number(product.price) *
+          quantity;
+
+
+        return `
+
+          <div class="cartrow">
+
+            <span>
+              ${product.name} × ${quantity}
+            </span>
+
+            <b>
+              R${(
+                Number(product.price) *
+                quantity
+              ).toFixed(2)}
+            </b>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+
+
+  cartItems.innerHTML =
+    rows ||
+    "<p>Your cart is empty.</p>";
+
+
+  totalBox.textContent =
+    total.toFixed(2);
 
 }
 
@@ -782,14 +964,193 @@ TOGGLE CART
 
 function toggleCart() {
 
-const cartBox =
-document.getElementById("cart");
+  const cartBox =
+    document.getElementById(
+      "cart"
+    );
 
-if (!cartBox) return;
 
-cartBox.classList.toggle("open");
+  if (!cartBox) {
 
-updateCart();
+    console.warn(
+      "ZYRE cart drawer was not found."
+    );
+
+    return;
+
+  }
+
+
+  loadCart();
+
+  updateCart();
+
+
+  cartBox.classList.toggle(
+    "open"
+  );
+
+}
+
+
+/* =========================================================
+OPEN CART
+========================================================= */
+
+function openCartFromMarketplace() {
+
+  loadCart();
+
+  syncCartCount();
+
+
+  if (
+    typeof toggleCart ===
+    "function"
+  ) {
+
+    toggleCart();
+
+    return;
+
+  }
+
+
+  window.location.hash =
+    "cart";
+
+}
+
+
+/* =========================================================
+CART STORAGE LISTENER
+========================================================= */
+
+window.addEventListener(
+  "storage",
+  function(event) {
+
+    if (
+      event.key ===
+      CART_STORAGE_KEY
+    ) {
+
+      loadCart();
+
+      syncCartCount();
+
+      updateCart();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+PAGE RETURN LISTENER
+========================================================= */
+
+window.addEventListener(
+  "pageshow",
+  function() {
+
+    loadCart();
+
+    syncCartCount();
+
+    updateCart();
+
+  }
+);
+
+
+/* =========================================================
+CART HASH HANDLER
+========================================================= */
+
+function handleCartHash() {
+
+  if (
+    window.location.hash !==
+    "#cart"
+  ) {
+
+    return;
+
+  }
+
+
+  let attempts = 0;
+
+
+  const tryOpen =
+    setInterval(
+      function() {
+
+        attempts++;
+
+
+        if (
+          typeof toggleCart ===
+          "function"
+        ) {
+
+          clearInterval(
+            tryOpen
+          );
+
+
+          loadCart();
+
+          syncCartCount();
+
+
+          const cartBox =
+            document.getElementById(
+              "cart"
+            );
+
+
+          if (
+            cartBox &&
+            !cartBox.classList.contains(
+              "open"
+            )
+          ) {
+
+            cartBox.classList.add(
+              "open"
+            );
+
+          }
+
+
+          updateCart();
+
+          return;
+
+        }
+
+
+        /*
+          Stop after approximately
+          10 seconds.
+        */
+
+        if (
+          attempts >= 50
+        ) {
+
+          clearInterval(
+            tryOpen
+          );
+
+        }
+
+      },
+      200
+    );
 
 }
 
@@ -800,311 +1161,464 @@ CUSTOMER CHECKOUT
 
 async function checkout() {
 
-if (!cart.length) {
+  loadCart();
 
-alert(
-  "Your cart is empty."
-);
 
-return;
-
-}
-
-const user =
-  await getZYRECurrentUser();
-
-if (!user) {
-
-alert(
-  "Your customer session could not be found.\n\nPlease sign in again."
-);
-
-window.location.href =
-  "auth.html";
-
-return;
-
-}
-
-const profile =
-  await getZYRECustomerProfile();
-
-if (!profile) {
-
-alert(
-  "Your customer profile could not be found.\n\nPlease open your Customer Account and complete your profile before checkout."
-);
-
-return;
-
-}
-
-const fullName =
-String(
-  profile.full_name || ""
-).trim();
-
-const phone =
-String(
-  profile.phone || ""
-).trim();
-
-const deliveryAddress =
-String(
-  profile.address || ""
-).trim();
-
-if (!fullName) {
-
-alert(
-  "Your full name is missing from your customer account.\n\nPlease update your account before checkout."
-);
-
-return;
-
-}
-
-if (!phone) {
-
-alert(
-  "Your phone number is missing from your customer account.\n\nPlease update your account before checkout."
-);
-
-return;
-
-}
-
-if (!deliveryAddress) {
-
-alert(
-  "Your delivery address is missing from your customer account.\n\nPlease update your account before checkout."
-);
-
-return;
-
-}
-
-const counts = {};
-
-cart.forEach(id => {
-
-const key =
-  String(id);
-
-counts[key] =
-  (counts[key] || 0) + 1;
-
-});
-
-let total = 0;
-
-const orderItems = [];
-
-for (
-const [id, quantity]
-of Object.entries(counts)
-) {
-
-const product =
-  products.find(
-    p =>
-      String(p.id) ===
-      String(id)
-  );
-
-if (!product) {
-
-  alert(
-    "One of the products in your cart could not be found."
-  );
-
-  return;
-
-}
-
-const price =
-  Number(product.price);
-
-total +=
-  price * quantity;
-
-orderItems.push({
-
-  product_id:
-    product.id,
-
-  quantity:
-    quantity,
-
-  price:
-    price
-
-});
-
-}
-
-try {
-
-for (const item of orderItems) {
-
-  const product =
-    products.find(
-      p =>
-        String(p.id) ===
-        String(item.product_id)
-    );
-
-  if (
-    !product ||
-    Number(product.stock) <
-    Number(item.quantity)
-  ) {
+  if (!cart.length) {
 
     alert(
-      "Sorry, there is not enough stock available for one of the products in your cart."
+      "Your cart is empty."
     );
 
     return;
 
   }
 
-}
 
-const profileResponse =
-  await fetch(
+  const user =
+    await getZYRECurrentUser();
 
-    SUPABASE_URL +
-    "/rest/v1/profiles?id=eq." +
-    encodeURIComponent(user.id),
 
-    {
+  if (!user) {
 
-      method: "PATCH",
+    alert(
+      "Your customer session could not be found.\n\nPlease sign in again."
+    );
 
-      headers: {
+    window.location.href =
+      "auth.html";
 
-        "apikey":
-          SUPABASE_KEY,
+    return;
 
-        "Authorization":
-          "Bearer " +
-          (
-            window.ZYRE_CURRENT_SESSION?.access_token ||
-            SUPABASE_KEY
-          ),
+  }
 
-        "Content-Type":
-          "application/json",
 
-        "Prefer":
-          "return=minimal"
+  const profile =
+    await getZYRECustomerProfile();
 
-      },
 
-      body:
-        JSON.stringify({
+  if (!profile) {
 
-          full_name:
-            fullName,
+    alert(
+      "Your customer profile could not be found.\n\nPlease open your Customer Account and complete your profile before checkout."
+    );
 
-          phone:
-            phone,
+    return;
 
-          address:
-            deliveryAddress,
+  }
 
-          role:
-            "customer"
 
-        })
+  const fullName =
+    String(
+      profile.full_name || ""
+    ).trim();
+
+
+  const phone =
+    String(
+      profile.phone || ""
+    ).trim();
+
+
+  const deliveryAddress =
+    String(
+      profile.address || ""
+    ).trim();
+
+
+  if (!fullName) {
+
+    alert(
+      "Your full name is missing from your customer account.\n\nPlease update your account before checkout."
+    );
+
+    return;
+
+  }
+
+
+  if (!phone) {
+
+    alert(
+      "Your phone number is missing from your customer account.\n\nPlease update your account before checkout."
+    );
+
+    return;
+
+  }
+
+
+  if (!deliveryAddress) {
+
+    alert(
+      "Your delivery address is missing from your customer account.\n\nPlease update your account before checkout."
+    );
+
+    return;
+
+  }
+
+
+  const counts = {};
+
+
+  cart.forEach(id => {
+
+    const key =
+      String(id);
+
+
+    counts[key] =
+      (counts[key] || 0) + 1;
+
+  });
+
+
+  let total = 0;
+
+  const orderItems = [];
+
+
+  for (
+    const [id, quantity]
+    of Object.entries(counts)
+  ) {
+
+    const product =
+      products.find(
+        p =>
+          String(p.id) ===
+          String(id)
+      );
+
+
+    if (!product) {
+
+      alert(
+        "One of the products in your cart could not be found."
+      );
+
+      return;
 
     }
 
-  );
 
-if (!profileResponse.ok) {
+    const price =
+      Number(product.price);
 
-  const profileError =
-    await profileResponse.text();
 
-  console.warn(
-    "Customer profile update failed:",
-    profileError
-  );
+    total +=
+      price * quantity;
 
-}
 
-const orderResponse =
-  await fetch(
+    orderItems.push({
 
-    SUPABASE_URL +
-    "/rest/v1/rpc/create_customer_order_with_items",
+      product_id:
+        product.id,
 
-    {
+      quantity:
+        quantity,
 
-      method: "POST",
+      price:
+        price
 
-      headers: {
+    });
 
-        "apikey":
-          SUPABASE_KEY,
+  }
 
-        "Authorization":
-          "Bearer " +
-          (
-            window.ZYRE_CURRENT_SESSION?.access_token ||
-            SUPABASE_KEY
-          ),
 
-        "Content-Type":
-          "application/json"
+  try {
 
-      },
+    for (
+      const item
+      of orderItems
+    ) {
 
-      body:
-        JSON.stringify({
+      const product =
+        products.find(
+          p =>
+            String(p.id) ===
+            String(item.product_id)
+        );
 
-          p_customer_id:
-            user.id,
 
-          p_total:
-            total,
+      if (
+        !product ||
+        Number(product.stock) <
+        Number(item.quantity)
+      ) {
 
-          p_status:
-            "Pending",
+        alert(
+          "Sorry, there is not enough stock available for one of the products in your cart."
+        );
 
-          p_delivery_address:
-            deliveryAddress,
+        return;
 
-          p_items:
-            orderItems
-
-        })
+      }
 
     }
 
-  );
 
-if (!orderResponse.ok) {
+    const profileResponse =
+      await fetch(
 
-  alert(
-    "Order could not be created.\n\n" +
-    await orderResponse.text()
-  );
+        SUPABASE_URL +
+        "/rest/v1/profiles?id=eq." +
+        encodeURIComponent(user.id),
 
-  return;
+        {
 
-}
+          method:
+            "PATCH",
 
-const orderId =
-  await orderResponse.json();
+          headers: {
 
-try {
+            "apikey":
+              SUPABASE_KEY,
 
-const sellerIds = [
-  ...new Set(
-    orderItems
-      .map(item => {
+            "Authorization":
+              "Bearer " +
+              (
+                window.ZYRE_CURRENT_SESSION?.access_token ||
+                SUPABASE_KEY
+              ),
+
+            "Content-Type":
+              "application/json",
+
+            "Prefer":
+              "return=minimal"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              full_name:
+                fullName,
+
+              phone:
+                phone,
+
+              address:
+                deliveryAddress,
+
+              role:
+                "customer"
+
+            })
+
+        }
+
+      );
+
+
+    if (!profileResponse.ok) {
+
+      const profileError =
+        await profileResponse.text();
+
+
+      console.warn(
+        "Customer profile update failed:",
+        profileError
+      );
+
+    }
+
+
+    const orderResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/rpc/create_customer_order_with_items",
+
+        {
+
+          method:
+            "POST",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              (
+                window.ZYRE_CURRENT_SESSION?.access_token ||
+                SUPABASE_KEY
+              ),
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              p_customer_id:
+                user.id,
+
+              p_total:
+                total,
+
+              p_status:
+                "Pending",
+
+              p_delivery_address:
+                deliveryAddress,
+
+              p_items:
+                orderItems
+
+            })
+
+        }
+
+      );
+
+
+    if (!orderResponse.ok) {
+
+      alert(
+        "Order could not be created.\n\n" +
+        await orderResponse.text()
+      );
+
+      return;
+
+    }
+
+
+    const orderId =
+      await orderResponse.json();
+
+
+    try {
+
+      const sellerIds = [
+        ...new Set(
+          orderItems
+            .map(item => {
+
+              const product =
+                products.find(
+                  p =>
+                    String(p.id) ===
+                    String(item.product_id)
+                );
+
+
+              return product
+                ? Number(
+                    product.seller_id
+                  )
+                : null;
+
+            })
+            .filter(
+              sellerId =>
+                Number.isFinite(
+                  sellerId
+                ) &&
+                sellerId > 0
+            )
+        )
+      ];
+
+
+      for (
+        const sellerId
+        of sellerIds
+      ) {
+
+        const notificationResponse =
+          await fetch(
+
+            SUPABASE_URL +
+            "/functions/v1/send-order-notification",
+
+            {
+
+              method:
+                "POST",
+
+              headers: {
+
+                "apikey":
+                  SUPABASE_KEY,
+
+                "Authorization":
+                  "Bearer " +
+                  (
+                    window.ZYRE_CURRENT_SESSION?.access_token ||
+                    SUPABASE_KEY
+                  ),
+
+                "Content-Type":
+                  "application/json"
+
+              },
+
+              body:
+                JSON.stringify({
+
+                  seller_id:
+                    sellerId,
+
+                  title:
+                    "🛍️ New ZYRE Marketing Order",
+
+                  message:
+                    "Order #" +
+                    orderId +
+                    " received — Total: R" +
+                    Number(total)
+                      .toFixed(2)
+
+                })
+
+            }
+
+          );
+
+
+        if (
+          !notificationResponse.ok
+        ) {
+
+          console.warn(
+            "Seller notification request failed:",
+            await notificationResponse.text()
+          );
+
+        } else {
+
+          console.log(
+            "ZYRE Marketing seller notification sent for Order #" +
+            orderId
+          );
+
+        }
+
+      }
+
+    } catch (
+      notificationError
+    ) {
+
+      console.warn(
+        "Order notification could not be sent:",
+        notificationError
+      );
+
+    }
+
+
+    const cartProducts =
+      orderItems.map(item => {
 
         const product =
           products.find(
@@ -1113,169 +1627,93 @@ const sellerIds = [
               String(item.product_id)
           );
 
-        return product
-          ? Number(product.seller_id)
-          : null;
 
-      })
-      .filter(
-        sellerId =>
-          Number.isFinite(sellerId) &&
-          sellerId > 0
-      )
-  )
-];
+        return {
 
-for (const sellerId of sellerIds) {
+          name:
+            product
+              ? product.name
+              : "Product #" +
+                item.product_id,
 
-  const notificationResponse =
-    await fetch(
-      SUPABASE_URL +
-      "/functions/v1/send-order-notification",
-      {
-        method: "POST",
-
-        headers: {
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            (
-              window.ZYRE_CURRENT_SESSION?.access_token ||
-              SUPABASE_KEY
+          quantity:
+            Number(
+              item.quantity
             ),
 
-          "Content-Type":
-            "application/json"
-        },
+          price:
+            Number(
+              item.price
+            )
 
-        body:
-          JSON.stringify({
+        };
 
-            seller_id:
-              sellerId,
+      });
 
-            title:
-              "🛍️ New ZYRE Marketing Order",
 
-            message:
-              "Order #" +
-              orderId +
-              " received — Total: R" +
-              Number(total).toFixed(2)
+    const productSummary =
+      cartProducts
+        .map(item =>
+          item.name +
+          " × " +
+          item.quantity +
+          " — R" +
+          (
+            item.price *
+            item.quantity
+          ).toFixed(2)
+        )
+        .join(" | ");
 
-          })
-        }
+
+    const paymentUrl =
+      "https://sisandashange25-eng.github.io/My-Market/payment.html" +
+
+      "?amount=" +
+      encodeURIComponent(
+        total.toFixed(2)
+      ) +
+
+      "&item_name=" +
+      encodeURIComponent(
+        productSummary
+      ) +
+
+      "&order_id=" +
+      encodeURIComponent(
+        orderId
+      ) +
+
+      "&customer_id=" +
+      encodeURIComponent(
+        user.id
       );
 
-  if (!notificationResponse.ok) {
 
-    console.warn(
-      "Seller notification request failed:",
-      await notificationResponse.text()
-    );
+    /*
+      Clear cart after the order
+      has been successfully created.
+    */
 
-  } else {
+    cart = [];
 
-    console.log(
-      "ZYRE Marketing seller notification sent for Order #" +
-      orderId
+    save();
+
+    syncCartCount();
+
+
+    window.location.href =
+      paymentUrl;
+
+
+  } catch (error) {
+
+    alert(
+      "Checkout failed:\n\n" +
+      error.message
     );
 
   }
-
-}
-
-} catch (notificationError) {
-
-console.warn(
-  "Order notification could not be sent:",
-  notificationError
-);
-
-}
-
-const cartProducts =
-  orderItems.map(item => {
-
-    const product =
-      products.find(
-        p =>
-          String(p.id) ===
-          String(item.product_id)
-      );
-
-    return {
-
-      name:
-        product
-          ? product.name
-          : "Product #" +
-            item.product_id,
-
-      quantity:
-        Number(item.quantity),
-
-      price:
-        Number(item.price)
-
-    };
-
-  });
-
-const productSummary =
-  cartProducts
-    .map(item =>
-      item.name +
-      " × " +
-      item.quantity +
-      " — R" +
-      (
-        item.price *
-        item.quantity
-      ).toFixed(2)
-    )
-    .join(" | ");
-
-const paymentUrl =
-  "https://sisandashange25-eng.github.io/My-Market/payment.html" +
-
-  "?amount=" +
-  encodeURIComponent(
-    total.toFixed(2)
-  ) +
-
-  "&item_name=" +
-  encodeURIComponent(
-    productSummary
-  ) +
-
-  "&order_id=" +
-  encodeURIComponent(
-    orderId
-  ) +
-
-  "&customer_id=" +
-  encodeURIComponent(
-    user.id
-  );
-
-cart = [];
-
-save();
-
-window.location.href =
-  paymentUrl;
-
-} catch (error) {
-
-alert(
-  "Checkout failed:\n\n" +
-  error.message
-);
-
-}
 
 }
 
@@ -1291,6 +1729,7 @@ async function sellerCentre() {
     const user =
       await getZYRECurrentUser();
 
+
     if (!user) {
 
       window.location.href =
@@ -1300,9 +1739,12 @@ async function sellerCentre() {
 
     }
 
+
     const accessToken =
       window.ZYRE_CURRENT_SESSION?.access_token ||
-      localStorage.getItem("zava_access_token") ||
+      localStorage.getItem(
+        "zava_access_token"
+      ) ||
       SUPABASE_KEY;
 
 
@@ -1316,7 +1758,8 @@ async function sellerCentre() {
 
         {
 
-          method: "GET",
+          method:
+            "GET",
 
           headers: {
 
@@ -1385,6 +1828,7 @@ async function sellerCentre() {
         user.id
       );
 
+
       if (accessToken) {
 
         localStorage.setItem(
@@ -1393,6 +1837,7 @@ async function sellerCentre() {
         );
 
       }
+
 
       window.location.href =
         "seller.html";
@@ -1426,147 +1871,91 @@ REGISTER SELLER
 
 async function registerSeller() {
 
-const storeName =
-prompt(
-"Enter your store name:"
-);
+  const storeName =
+    prompt(
+      "Enter your store name:"
+    );
 
-if (
-!storeName ||
-!storeName.trim()
-) {
-
-alert(
-  "Store registration cancelled."
-);
-
-return;
-
-}
-
-const email =
-prompt(
-"Enter your seller email:"
-);
-
-if (
-!email ||
-!email.trim()
-) {
-
-alert(
-  "Store registration cancelled."
-);
-
-return;
-
-}
-
-const password =
-prompt(
-"Create a password:\n\n" +
-"Use at least 6 characters."
-);
-
-if (
-!password ||
-password.length < 6
-) {
-
-alert(
-  "Password must contain at least 6 characters."
-);
-
-return;
-
-}
-
-const description =
-prompt(
-"Enter a short description of your store:"
-) || "";
-
-try {
-
-let userId = null;
-
-let accessToken =
-  SUPABASE_KEY;
-
-const signupResponse =
-  await fetch(
-
-    SUPABASE_URL +
-    "/auth/v1/signup",
-
-    {
-
-      method: "POST",
-
-      headers: {
-
-        "apikey":
-          SUPABASE_KEY,
-
-        "Content-Type":
-          "application/json"
-
-      },
-
-      body:
-        JSON.stringify({
-
-          email:
-            email.trim(),
-
-          password:
-            password
-
-        })
-
-    }
-
-  );
-
-if (signupResponse.ok) {
-
-  const signupData =
-    await signupResponse.json();
-
-  if (signupData.user) {
-
-    userId =
-      signupData.user.id;
-
-  }
-
-  if (signupData.access_token) {
-
-    accessToken =
-      signupData.access_token;
-
-  }
-
-} else {
-
-  const signupError =
-    await signupResponse.text();
 
   if (
-    signupError
-      .toLowerCase()
-      .includes("already registered")
+    !storeName ||
+    !storeName.trim()
   ) {
 
-    const loginResponse =
+    alert(
+      "Store registration cancelled."
+    );
+
+    return;
+
+  }
+
+
+  const email =
+    prompt(
+      "Enter your seller email:"
+    );
+
+
+  if (
+    !email ||
+    !email.trim()
+  ) {
+
+    alert(
+      "Store registration cancelled."
+    );
+
+    return;
+
+  }
+
+
+  const password =
+    prompt(
+      "Create a password:\n\n" +
+      "Use at least 6 characters."
+    );
+
+
+  if (
+    !password ||
+    password.length < 6
+  ) {
+
+    alert(
+      "Password must contain at least 6 characters."
+    );
+
+    return;
+
+  }
+
+
+  const description =
+    prompt(
+      "Enter a short description of your store:"
+    ) || "";
+
+
+  try {
+
+    let userId = null;
+
+    let accessToken =
+      SUPABASE_KEY;
+
+
+    const signupResponse =
       await fetch(
 
         SUPABASE_URL +
-        "/auth/v1/token?grant_type=password",
+        "/auth/v1/signup",
 
         {
 
-          method: "POST",
+          method:
+            "POST",
 
           headers: {
 
@@ -1593,563 +1982,689 @@ if (signupResponse.ok) {
 
       );
 
-    if (!loginResponse.ok) {
+
+    if (signupResponse.ok) {
+
+      const signupData =
+        await signupResponse.json();
+
+
+      if (signupData.user) {
+
+        userId =
+          signupData.user.id;
+
+      }
+
+
+      if (
+        signupData.access_token
+      ) {
+
+        accessToken =
+          signupData.access_token;
+
+      }
+
+    } else {
+
+      const signupError =
+        await signupResponse.text();
+
+
+      if (
+        signupError
+          .toLowerCase()
+          .includes(
+            "already registered"
+          )
+      ) {
+
+        const loginResponse =
+          await fetch(
+
+            SUPABASE_URL +
+            "/auth/v1/token?grant_type=password",
+
+            {
+
+              method:
+                "POST",
+
+              headers: {
+
+                "apikey":
+                  SUPABASE_KEY,
+
+                "Content-Type":
+                  "application/json"
+
+              },
+
+              body:
+                JSON.stringify({
+
+                  email:
+                    email.trim(),
+
+                  password:
+                    password
+
+                })
+
+            }
+
+          );
+
+
+        if (!loginResponse.ok) {
+
+          alert(
+            "This seller email already exists, but we could not log into it.\n\n" +
+            "If this was the account you just created, make sure you use the same password you entered earlier.\n\n" +
+            await loginResponse.text()
+          );
+
+          return;
+
+        }
+
+
+        const loginData =
+          await loginResponse.json();
+
+
+        userId =
+          loginData.user.id;
+
+
+        accessToken =
+          loginData.access_token;
+
+      } else {
+
+        alert(
+          "Seller account could not be created.\n\n" +
+          signupError
+        );
+
+        return;
+
+      }
+
+    }
+
+
+    if (!userId) {
 
       alert(
-        "This seller email already exists, but we could not log into it.\n\n" +
-        "If this was the account you just created, make sure you use the same password you entered earlier.\n\n" +
-        await loginResponse.text()
+        "Seller account was created, but the user ID could not be found."
       );
 
       return;
 
     }
 
-    const loginData =
-      await loginResponse.json();
 
-    userId =
-      loginData.user.id;
+    const profileResponse =
+      await fetch(
 
-    accessToken =
-      loginData.access_token;
+        SUPABASE_URL +
+        "/rest/v1/profiles",
 
-  } else {
+        {
 
-    alert(
-      "Seller account could not be created.\n\n" +
-      signupError
-    );
+          method:
+            "POST",
 
-    return;
+          headers: {
 
-  }
+            "apikey":
+              SUPABASE_KEY,
 
-}
+            "Authorization":
+              "Bearer " +
+              accessToken,
 
-if (!userId) {
+            "Content-Type":
+              "application/json",
 
-  alert(
-    "Seller account was created, but the user ID could not be found."
-  );
+            "Prefer":
+              "resolution=merge-duplicates,return=representation"
 
-  return;
+          },
 
-}
+          body:
+            JSON.stringify({
 
-const profileResponse =
-  await fetch(
+              id:
+                userId,
 
-    SUPABASE_URL +
-    "/rest/v1/profiles",
+              full_name:
+                storeName.trim(),
 
-    {
+              phone:
+                "",
 
-      method: "POST",
+              role:
+                "seller"
 
-      headers: {
-
-        "apikey":
-          SUPABASE_KEY,
-
-        "Authorization":
-          "Bearer " +
-          accessToken,
-
-        "Content-Type":
-          "application/json",
-
-        "Prefer":
-          "resolution=merge-duplicates,return=representation"
-
-      },
-
-      body:
-        JSON.stringify({
-
-          id:
-            userId,
-
-          full_name:
-            storeName.trim(),
-
-          phone:
-            "",
-
-          role:
-            "seller"
-
-        })
-
-      }
-
-    );
-
-if (!profileResponse.ok) {
-
-  alert(
-    "Seller account exists, but the seller profile could not be created.\n\n" +
-    await profileResponse.text()
-  );
-
-  return;
-
-}
-
-const existingSellerResponse =
-  await fetch(
-
-    SUPABASE_URL +
-    "/rest/v1/sellers?user_id=eq." +
-    userId +
-    "&select=id,store_name,approved",
-
-    {
-
-      headers: {
-
-        "apikey":
-          SUPABASE_KEY,
-
-        "Authorization":
-          "Bearer " +
-          accessToken
-
-      }
-
-    }
-
-  );
-
-let sellerId = null;
-
-if (existingSellerResponse.ok) {
-
-  const existingSellers =
-    await existingSellerResponse.json();
-
-  if (existingSellers.length) {
-
-    sellerId =
-      existingSellers[0].id;
-
-  }
-
-}
-
-if (!sellerId) {
-
-  const sellerResponse =
-    await fetch(
-
-      SUPABASE_URL +
-      "/rest/v1/sellers",
-
-      {
-
-        method: "POST",
-
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            accessToken,
-
-          "Content-Type":
-            "application/json",
-
-          "Prefer":
-            "return=representation"
-
-        },
-
-        body:
-          JSON.stringify({
-
-            user_id:
-              userId,
-
-            store_name:
-              storeName.trim(),
-
-            description:
-              description.trim(),
-
-            approved:
-              false,
-
-            email:
-              email.trim()
-
-          })
+            })
 
         }
 
       );
 
-  if (!sellerResponse.ok) {
 
-    alert(
-      "Seller store could not be created.\n\n" +
-      await sellerResponse.text()
-    );
+    if (!profileResponse.ok) {
 
-    return;
+      alert(
+        "Seller account exists, but the seller profile could not be created.\n\n" +
+        await profileResponse.text()
+      );
 
-  }
-
-  const sellerData =
-    await sellerResponse.json();
-
-  sellerId =
-    sellerData[0].id;
-
-}
-
-const planResponse =
-  await fetch(
-
-    SUPABASE_URL +
-    "/rest/v1/rental_plans?name=eq.ZYRE%20Store&active=eq.true&select=id,monthly_price",
-
-    {
-
-      headers: {
-
-        "apikey":
-          SUPABASE_KEY,
-
-        "Authorization":
-          "Bearer " +
-          accessToken
-
-      }
+      return;
 
     }
 
-  );
 
-if (!planResponse.ok) {
+    const existingSellerResponse =
+      await fetch(
 
-  alert(
-    "Seller store was created, but the R100 rental plan could not be found.\n\n" +
-    await planResponse.text()
-  );
+        SUPABASE_URL +
+        "/rest/v1/sellers?user_id=eq." +
+        userId +
+        "&select=id,store_name,approved",
 
-  return;
+        {
 
-}
+          headers: {
 
-const plans =
-  await planResponse.json();
+            "apikey":
+              SUPABASE_KEY,
 
-if (!plans.length) {
+            "Authorization":
+              "Bearer " +
+              accessToken
 
-  alert(
-    "Seller store was created, but the ZYRE Store rental plan was not found."
-  );
-
-  return;
-
-}
-
-const rentalPlan =
-  plans[0];
-
-const existingSubscriptionResponse =
-  await fetch(
-
-    SUPABASE_URL +
-    "/rest/v1/store_subscriptions?seller_id=eq." +
-    sellerId +
-    "&select=id,rental_plan_id,status",
-
-    {
-
-      headers: {
-
-        "apikey":
-          SUPABASE_KEY,
-
-        "Authorization":
-          "Bearer " +
-          accessToken
-
-      }
-
-    }
-
-  );
-
-let subscriptionId = null;
-
-if (existingSubscriptionResponse.ok) {
-
-  const subscriptions =
-    await existingSubscriptionResponse.json();
-
-  if (subscriptions.length) {
-
-    subscriptionId =
-      subscriptions[0].id;
-
-  }
-
-}
-
-if (!subscriptionId) {
-
-  const subscriptionResponse =
-    await fetch(
-
-      SUPABASE_URL +
-      "/rest/v1/store_subscriptions",
-
-      {
-
-        method: "POST",
-
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            accessToken,
-
-          "Content-Type":
-            "application/json",
-
-          "Prefer":
-            "return=representation"
-
-        },
-
-        body:
-          JSON.stringify({
-
-            seller_id:
-              sellerId,
-
-            rental_plan_id:
-              rentalPlan.id,
-
-            status:
-              "pending"
-
-          })
+          }
 
         }
 
       );
 
-  if (!subscriptionResponse.ok) {
 
-    alert(
-      "Store was created, but the rental subscription could not be created.\n\n" +
-      await subscriptionResponse.text()
-    );
+    let sellerId = null;
 
-    return;
 
-  }
+    if (
+      existingSellerResponse.ok
+    ) {
 
-  const subscriptionData =
-    await subscriptionResponse.json();
+      const existingSellers =
+        await existingSellerResponse.json();
 
-  subscriptionId =
-    subscriptionData[0].id;
 
-}
+      if (existingSellers.length) {
 
-const existingPaymentResponse =
-  await fetch(
-
-    SUPABASE_URL +
-    "/rest/v1/rental_payments?subscription_id=eq." +
-    subscriptionId +
-    "&select=id,status",
-
-    {
-
-      headers: {
-
-        "apikey":
-          SUPABASE_KEY,
-
-        "Authorization":
-          "Bearer " +
-          accessToken
+        sellerId =
+          existingSellers[0].id;
 
       }
 
     }
 
-  );
 
-let paymentExists = false;
+    if (!sellerId) {
 
-if (existingPaymentResponse.ok) {
+      const sellerResponse =
+        await fetch(
 
-  const payments =
-    await existingPaymentResponse.json();
+          SUPABASE_URL +
+          "/rest/v1/sellers",
 
-  paymentExists =
-    payments.length > 0;
+          {
 
-}
+            method:
+              "POST",
 
-if (!paymentExists) {
+            headers: {
 
-  const paymentResponse =
-    await fetch(
+              "apikey":
+                SUPABASE_KEY,
 
-      SUPABASE_URL +
-      "/rest/v1/rental_payments",
+              "Authorization":
+                "Bearer " +
+                accessToken,
 
-      {
+              "Content-Type":
+                "application/json",
 
-        method: "POST",
+              "Prefer":
+                "return=representation"
 
-        headers: {
+            },
 
-          "apikey":
-            SUPABASE_KEY,
+            body:
+              JSON.stringify({
 
-          "Authorization":
-            "Bearer " +
-            accessToken,
+                user_id:
+                  userId,
 
-          "Content-Type":
-            "application/json",
+                store_name:
+                  storeName.trim(),
 
-          "Prefer":
-            "return=representation"
+                description:
+                  description.trim(),
 
-        },
+                approved:
+                  false,
 
-        body:
-          JSON.stringify({
+                email:
+                  email.trim()
 
-            seller_id:
-              sellerId,
+              })
 
-            subscription_id:
-              subscriptionId,
+          }
 
-            amount:
-              Number(
-                rentalPlan.monthly_price
-              ),
+        );
 
-            status:
-              "pending",
 
-            payment_method:
-              "pending"
+      if (!sellerResponse.ok) {
 
-          })
+        alert(
+          "Seller store could not be created.\n\n" +
+          await sellerResponse.text()
+        );
+
+        return;
+
+      }
+
+
+      const sellerData =
+        await sellerResponse.json();
+
+
+      sellerId =
+        sellerData[0].id;
+
+    }
+
+
+    const planResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/rental_plans?name=eq.ZYRE%20Store&active=eq.true&select=id,monthly_price",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
 
         }
 
       );
 
-  if (!paymentResponse.ok) {
 
-    alert(
-      "Store and subscription were created, but the rental payment record could not be created.\n\n" +
-      await paymentResponse.text()
+    if (!planResponse.ok) {
+
+      alert(
+        "Seller store was created, but the R100 rental plan could not be found.\n\n" +
+        await planResponse.text()
+      );
+
+      return;
+
+    }
+
+
+    const plans =
+      await planResponse.json();
+
+
+    if (!plans.length) {
+
+      alert(
+        "Seller store was created, but the ZYRE Store rental plan was not found."
+      );
+
+      return;
+
+    }
+
+
+    const rentalPlan =
+      plans[0];
+
+
+    const existingSubscriptionResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/store_subscriptions?seller_id=eq." +
+        sellerId +
+        "&select=id,rental_plan_id,status",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
+
+
+    let subscriptionId = null;
+
+
+    if (
+      existingSubscriptionResponse.ok
+    ) {
+
+      const subscriptions =
+        await existingSubscriptionResponse.json();
+
+
+      if (subscriptions.length) {
+
+        subscriptionId =
+          subscriptions[0].id;
+
+      }
+
+    }
+
+
+    if (!subscriptionId) {
+
+      const subscriptionResponse =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/store_subscriptions",
+
+          {
+
+            method:
+              "POST",
+
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                accessToken,
+
+              "Content-Type":
+                "application/json",
+
+              "Prefer":
+                "return=representation"
+
+            },
+
+            body:
+              JSON.stringify({
+
+                seller_id:
+                  sellerId,
+
+                rental_plan_id:
+                  rentalPlan.id,
+
+                status:
+                  "pending"
+
+              })
+
+          }
+
+        );
+
+
+      if (!subscriptionResponse.ok) {
+
+        alert(
+          "Store was created, but the rental subscription could not be created.\n\n" +
+          await subscriptionResponse.text()
+        );
+
+        return;
+
+      }
+
+
+      const subscriptionData =
+        await subscriptionResponse.json();
+
+
+      subscriptionId =
+        subscriptionData[0].id;
+
+    }
+
+
+    const existingPaymentResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/rental_payments?subscription_id=eq." +
+        subscriptionId +
+        "&select=id,status",
+
+        {
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
+
+
+    let paymentExists = false;
+
+
+    if (
+      existingPaymentResponse.ok
+    ) {
+
+      const payments =
+        await existingPaymentResponse.json();
+
+
+      paymentExists =
+        payments.length > 0;
+
+    }
+
+
+    if (!paymentExists) {
+
+      const paymentResponse =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/rental_payments",
+
+          {
+
+            method:
+              "POST",
+
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                accessToken,
+
+              "Content-Type":
+                "application/json",
+
+              "Prefer":
+                "return=representation"
+
+            },
+
+            body:
+              JSON.stringify({
+
+                seller_id:
+                  sellerId,
+
+                subscription_id:
+                  subscriptionId,
+
+                amount:
+                  Number(
+                    rentalPlan.monthly_price
+                  ),
+
+                status:
+                  "pending",
+
+                payment_method:
+                  "pending"
+
+              })
+
+          }
+
+        );
+
+
+      if (!paymentResponse.ok) {
+
+        alert(
+          "Store and subscription were created, but the rental payment record could not be created.\n\n" +
+          await paymentResponse.text()
+        );
+
+        return;
+
+      }
+
+    }
+
+
+    localStorage.setItem(
+      "zava_seller_id",
+      sellerId
     );
 
-    return;
+
+    localStorage.setItem(
+      "zava_user_id",
+      userId
+    );
+
+
+    localStorage.setItem(
+      "zava_seller_email",
+      email.trim()
+    );
+
+
+    localStorage.setItem(
+      "zava_access_token",
+      accessToken
+    );
+
+
+    const rentalPaymentUrl =
+
+      "https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNDxuj63iqje/exec" +
+
+      "?amount=" +
+      encodeURIComponent(
+        Number(
+          rentalPlan.monthly_price
+        ).toFixed(2)
+      ) +
+
+      "&item_name=" +
+      encodeURIComponent(
+        "ZYRE Store Rental - " +
+        storeName.trim()
+      ) +
+
+      "&rental_subscription_id=" +
+      encodeURIComponent(
+        subscriptionId
+      ) +
+
+      "&seller_id=" +
+      encodeURIComponent(
+        sellerId
+      ) +
+
+      "&payment_type=rental";
+
+
+    alert(
+
+      "🎉 Store application created!\n\n" +
+
+      "Store: " +
+      storeName.trim() +
+
+      "\n\n" +
+
+      "ZYRE Store rental: R" +
+      Number(
+        rentalPlan.monthly_price
+      ).toFixed(2) +
+      " per month\n\n" +
+
+      "Next: You will be taken to PayFast Sandbox to complete the R100 rental payment."
+
+    );
+
+
+    window.location.href =
+      rentalPaymentUrl;
+
+
+  } catch (error) {
+
+    alert(
+      "Store registration failed:\n\n" +
+      error.message
+    );
 
   }
-
-}
-
-localStorage.setItem(
-  "zava_seller_id",
-  sellerId
-);
-
-localStorage.setItem(
-  "zava_user_id",
-  userId
-);
-
-localStorage.setItem(
-  "zava_seller_email",
-  email.trim()
-);
-
-localStorage.setItem(
-  "zava_access_token",
-  accessToken
-);
-
-const rentalPaymentUrl =
-
-  "https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNDxuj63iqje/exec" +
-
-  "?amount=" +
-  encodeURIComponent(
-    Number(
-      rentalPlan.monthly_price
-    ).toFixed(2)
-  ) +
-
-  "&item_name=" +
-  encodeURIComponent(
-    "ZYRE Store Rental - " +
-    storeName.trim()
-  ) +
-
-  "&rental_subscription_id=" +
-  encodeURIComponent(
-    subscriptionId
-  ) +
-
-  "&seller_id=" +
-  encodeURIComponent(
-    sellerId
-  ) +
-
-  "&payment_type=rental";
-
-alert(
-
-  "🎉 Store application created!\n\n" +
-
-  "Store: " +
-  storeName.trim() +
-
-  "\n\n" +
-
-  "ZYRE Store rental: R" +
-  Number(
-    rentalPlan.monthly_price
-  ).toFixed(2) +
-  " per month\n\n" +
-
-  "Next: You will be taken to PayFast Sandbox to complete the R100 rental payment."
-
-);
-
-window.location.href =
-  rentalPaymentUrl;
-
-} catch (error) {
-
-alert(
-  "Store registration failed:\n\n" +
-  error.message
-);
-
-}
 
 }
 
@@ -2160,179 +2675,211 @@ SELLER LOGIN
 
 async function sellerLogin() {
 
-const email =
-prompt(
-"Enter your ZavaMarket seller email:"
-);
+  const email =
+    prompt(
+      "Enter your ZavaMarket seller email:"
+    );
 
-if (
-!email ||
-!email.trim()
-) {
 
-alert(
-  "Seller login cancelled."
-);
+  if (
+    !email ||
+    !email.trim()
+  ) {
 
-return;
+    alert(
+      "Seller login cancelled."
+    );
 
-}
+    return;
 
-const password =
-prompt(
-"Enter your ZavaMarket password:"
-);
+  }
 
-if (!password) {
 
-alert(
-  "Seller login cancelled."
-);
+  const password =
+    prompt(
+      "Enter your ZavaMarket password:"
+    );
 
-return;
 
-}
+  if (!password) {
 
-try {
+    alert(
+      "Seller login cancelled."
+    );
 
-const loginResponse =
-  await fetch(
+    return;
 
-    SUPABASE_URL +
-    "/auth/v1/token?grant_type=password",
+  }
 
-    {
 
-      method: "POST",
+  try {
 
-      headers: {
+    const loginResponse =
+      await fetch(
 
-        "apikey":
-          SUPABASE_KEY,
+        SUPABASE_URL +
+        "/auth/v1/token?grant_type=password",
 
-        "Content-Type":
-          "application/json"
+        {
 
-      },
+          method:
+            "POST",
 
-      body:
-        JSON.stringify({
+          headers: {
 
-          email:
-            email.trim(),
+            "apikey":
+              SUPABASE_KEY,
 
-          password:
-            password
+            "Content-Type":
+              "application/json"
 
-        })
+          },
 
-    }
+          body:
+            JSON.stringify({
 
-  );
+              email:
+                email.trim(),
 
-if (!loginResponse.ok) {
+              password:
+                password
 
-  alert(
-    "Seller login failed.\n\n" +
-    await loginResponse.text()
-  );
+            })
 
-  return;
+        }
 
-}
+      );
 
-const loginData =
-  await loginResponse.json();
 
-const accessToken =
-  loginData.access_token;
+    if (!loginResponse.ok) {
 
-const userId =
-  loginData.user.id;
+      alert(
+        "Seller login failed.\n\n" +
+        await loginResponse.text()
+      );
 
-const sellerResponse =
-  await fetch(
-
-    SUPABASE_URL +
-    "/rest/v1/sellers?user_id=eq." +
-    userId +
-    "&select=id,store_name,approved",
-
-    {
-
-      headers: {
-
-        "apikey":
-          SUPABASE_KEY,
-
-        "Authorization":
-          "Bearer " +
-          accessToken
-
-      }
+      return;
 
     }
 
-  );
 
-if (!sellerResponse.ok) {
+    const loginData =
+      await loginResponse.json();
 
-  alert(
-    "Could not check your seller account.\n\n" +
-    await sellerResponse.text()
-  );
 
-  return;
+    const accessToken =
+      loginData.access_token;
 
-}
 
-const sellers =
-  await sellerResponse.json();
+    const userId =
+      loginData.user.id;
 
-if (!sellers.length) {
 
-  alert(
-    "This account is not registered as a ZavaMarket seller yet."
-  );
+    const sellerResponse =
+      await fetch(
 
-  return;
+        SUPABASE_URL +
+        "/rest/v1/sellers?user_id=eq." +
+        userId +
+        "&select=id,store_name,approved",
 
-}
+        {
 
-const seller =
-  sellers[0];
+          headers: {
 
-if (seller.approved !== true) {
+            "apikey":
+              SUPABASE_KEY,
 
-  alert(
-    "Your ZavaMarket seller account is still waiting for approval."
-  );
+            "Authorization":
+              "Bearer " +
+              accessToken
 
-  return;
+          }
 
-}
+        }
 
-localStorage.setItem(
-  "zava_access_token",
-  accessToken
-);
+      );
 
-localStorage.setItem(
-  "zava_user_id",
-  userId
-);
 
-localStorage.setItem(
-  "zava_seller_id",
-  seller.id
-);
+    if (!sellerResponse.ok) {
 
-alert(
-  "Seller login successful! 🎉"
-);
+      alert(
+        "Could not check your seller account.\n\n" +
+        await sellerResponse.text()
+      );
 
-window.location.href =
-  "seller.html";
+      return;
+
+    }
+
+
+    const sellers =
+      await sellerResponse.json();
+
+
+    if (!sellers.length) {
+
+      alert(
+        "This account is not registered as a ZavaMarket seller yet."
+      );
+
+      return;
+
+    }
+
+
+    const seller =
+      sellers[0];
+
+
+    if (
+      seller.approved !== true
+    ) {
+
+      alert(
+        "Your ZavaMarket seller account is still waiting for approval."
+      );
+
+      return;
+
+    }
+
+
+    localStorage.setItem(
+      "zava_access_token",
+      accessToken
+    );
+
+
+    localStorage.setItem(
+      "zava_user_id",
+      userId
+    );
+
+
+    localStorage.setItem(
+      "zava_seller_id",
+      seller.id
+    );
+
+
+    alert(
+      "Seller login successful! 🎉"
+    );
+
+
+    window.location.href =
+      "seller.html";
+
+
+  } catch (error) {
+
+    alert(
+      "Seller login failed:\n\n" +
+      error.message
+    );
+
+  }
 
 }
 
@@ -2343,167 +2890,614 @@ CHECK ORDER STATUS
 
 async function checkOrderStatus() {
 
-const orderId =
-prompt(
-"Enter your Order ID:"
-);
+  const orderId =
+    prompt(
+      "Enter your Order ID:"
+    );
 
-if (
-!orderId ||
-!orderId.trim()
-) {
 
-return;
+  if (
+    !orderId ||
+    !orderId.trim()
+  ) {
 
-}
+    return;
 
-const phone =
-prompt(
-"Enter the phone number used for this order:"
-);
+  }
 
-if (
-!phone ||
-!phone.trim()
-) {
 
-return;
+  const phone =
+    prompt(
+      "Enter the phone number used for this order:"
+    );
 
-}
 
-try {
+  if (
+    !phone ||
+    !phone.trim()
+  ) {
 
-const response =
-  await fetch(
+    return;
 
-    SUPABASE_URL +
-    "/rest/v1/rpc/get_orders_by_phone",
+  }
 
-    {
 
-      method: "POST",
+  try {
 
-      headers: {
+    const response =
+      await fetch(
 
-        "apikey":
-          SUPABASE_KEY,
+        SUPABASE_URL +
+        "/rest/v1/rpc/get_orders_by_phone",
 
-        "Authorization":
-          "Bearer " +
-          SUPABASE_KEY,
+        {
 
-        "Content-Type":
-          "application/json"
+          method:
+            "POST",
 
-      },
+          headers: {
 
-      body:
-        JSON.stringify({
+            "apikey":
+              SUPABASE_KEY,
 
-          user_phone:
-            phone.trim()
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY,
 
-        })
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              user_phone:
+                phone.trim()
+
+            })
+
+        }
+
+      );
+
+
+    if (!response.ok) {
+
+      alert(
+        "Could not check your order.\n\n" +
+        await response.text()
+      );
+
+      return;
+
+    }
+
+
+    const orders =
+      await response.json();
+
+
+    if (
+      !Array.isArray(orders) ||
+      !orders.length
+    ) {
+
+      alert(
+        "No orders were found for that phone number."
+      );
+
+      return;
+
+    }
+
+
+    const wantedId =
+      Number(
+        orderId.trim()
+      );
+
+
+    const order =
+      orders.find(o => {
+
+        const possibleId =
+          o.id ??
+          o.order_id ??
+          o.orderid;
+
+
+        return (
+          Number(possibleId) ===
+          wantedId
+        );
+
+      });
+
+
+    if (!order) {
+
+      alert(
+        "Order #" +
+        orderId +
+        " was not found for that phone number."
+      );
+
+      return;
+
+    }
+
+
+    const displayId =
+      order.id ??
+      order.order_id ??
+      order.orderid;
+
+
+    const displayTotal =
+      order.total ??
+      order.order_total ??
+      order.amount ??
+      0;
+
+
+    const displayStatus =
+      order.status ??
+      "Pending";
+
+
+    const displayAddress =
+      order.delivery_address ??
+      order.deliveryaddress ??
+      "Not provided";
+
+
+    let delivery = null;
+
+
+    try {
+
+      const deliveryResponse =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/deliveries?order_id=eq." +
+          encodeURIComponent(
+            displayId
+          ) +
+          "&select=*",
+
+          {
+
+            method:
+              "GET",
+
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                SUPABASE_KEY
+
+            }
+
+          }
+
+        );
+
+
+      if (deliveryResponse.ok) {
+
+        const deliveryData =
+          await deliveryResponse.json();
+
+
+        if (
+          Array.isArray(
+            deliveryData
+          ) &&
+          deliveryData.length
+        ) {
+
+          delivery =
+            deliveryData[
+              deliveryData.length - 1
+            ];
+
+        }
+
+      } else {
+
+        console.warn(
+          "Delivery information could not be loaded:",
+          await deliveryResponse.text()
+        );
 
       }
 
+    } catch (
+      deliveryError
+    ) {
+
+      console.warn(
+        "Could not load delivery information:",
+        deliveryError
+      );
+
+    }
+
+
+    let deliveryText =
+      "🚚 Delivery: Not assigned yet";
+
+
+    if (delivery) {
+
+      const deliveryStatus =
+        delivery.status ||
+        "Assigned";
+
+
+      const deliveryPerson =
+        delivery.delivery_person_name ||
+        "Not assigned";
+
+
+      const deliveryPhone =
+        delivery.delivery_person_phone ||
+        "Not provided";
+
+
+      const trackingNumber =
+        delivery.tracking_number ||
+        "Not provided";
+
+
+      let estimatedDelivery =
+        "Not provided";
+
+
+      if (
+        delivery.estimated_delivery
+      ) {
+
+        const date =
+          new Date(
+            delivery.estimated_delivery +
+            "T00:00:00"
+          );
+
+
+        if (
+          !Number.isNaN(
+            date.getTime()
+          )
+        ) {
+
+          estimatedDelivery =
+            date.toLocaleDateString(
+              "en-ZA",
+              {
+
+                day:
+                  "2-digit",
+
+                month:
+                  "2-digit",
+
+                year:
+                  "numeric"
+
+              }
+            );
+
+        } else {
+
+          estimatedDelivery =
+            delivery.estimated_delivery;
+
+        }
+
+      }
+
+
+      deliveryText =
+
+        "🚚 Delivery Status: " +
+        deliveryStatus +
+
+        "\n👤 Delivery Person: " +
+        deliveryPerson +
+
+        "\n📞 Delivery Phone: " +
+        deliveryPhone +
+
+        "\n🔢 Tracking Number: " +
+        trackingNumber +
+
+        "\n📅 Estimated Delivery: " +
+        estimatedDelivery;
+
+    }
+
+
+    alert(
+
+      "📦 Order #" +
+      displayId +
+
+      "\n\nStatus: " +
+      displayStatus +
+
+      "\nTotal: R" +
+      Number(
+        displayTotal
+      ).toFixed(2) +
+
+      "\n\n" +
+
+      deliveryText +
+
+      "\n\n🏠 Delivery Address: " +
+      displayAddress
+
     );
 
-if (!response.ok) {
 
-  alert(
-    "Could not check your order.\n\n" +
-    await response.text()
-  );
+  } catch (error) {
 
-  return;
+    alert(
+      "Could not check order status:\n\n" +
+      error.message
+    );
+
+  }
 
 }
 
-const orders =
-  await response.json();
 
-if (
-!Array.isArray(orders) ||
-!orders.length
+/* =========================================================
+ZYRE MARKETING PUSH NOTIFICATION HELPERS
+========================================================= */
+
+function urlBase64ToUint8Array(
+  base64String
 ) {
 
-  alert(
-    "No orders were found for that phone number."
-  );
-
-  return;
-
-}
-
-const wantedId =
-  Number(
-    orderId.trim()
-  );
-
-const order =
-  orders.find(o => {
-
-    const possibleId =
-      o.id ??
-      o.order_id ??
-      o.orderid;
-
-    return (
-      Number(possibleId) === wantedId
+  const padding =
+    "=".repeat(
+      (
+        4 -
+        base64String.length % 4
+      ) % 4
     );
 
-  });
 
-if (!order) {
+  const base64 =
+    (
+      base64String +
+      padding
+    )
+      .replace(
+        /-/g,
+        "+"
+      )
+      .replace(
+        /_/g,
+        "/"
+      );
 
-  alert(
-    "Order #" +
-    orderId +
-    " was not found for that phone number."
-  );
 
-  return;
+  const rawData =
+    window.atob(
+      base64
+    );
+
+
+  const outputArray =
+    new Uint8Array(
+      rawData.length
+    );
+
+
+  for (
+    let i = 0;
+    i < rawData.length;
+    ++i
+  ) {
+
+    outputArray[i] =
+      rawData.charCodeAt(i);
+
+  }
+
+
+  return outputArray;
 
 }
 
-const displayId =
-  order.id ??
-  order.order_id ??
-  order.orderid;
 
-const displayTotal =
-  order.total ??
-  order.order_total ??
-  order.amount ??
-  0;
+/* =========================================================
+GET SERVICE WORKER
+========================================================= */
 
-const displayStatus =
-  order.status ??
-  "Pending";
+async function getZYREServiceWorkerRegistration() {
 
-const displayAddress =
-  order.delivery_address ??
-  order.deliveryaddress ??
-  "Not provided";
+  if (
+    !("serviceWorker" in navigator)
+  ) {
 
-let delivery = null;
+    throw new Error(
+      "Service workers are not supported by this browser."
+    );
 
-try {
+  }
 
-  const deliveryResponse =
+
+  const registration =
+    await navigator.serviceWorker.register(
+      "./sw.js",
+      {
+        scope:
+          "./"
+      }
+    );
+
+
+  await navigator.serviceWorker.ready;
+
+
+  return registration;
+
+}
+
+
+/* =========================================================
+FIND NOTIFICATION BUTTON
+========================================================= */
+
+function getZYRENotificationButton() {
+
+  const buttons =
+    Array.from(
+      document.querySelectorAll(
+        "button"
+      )
+    );
+
+
+  return buttons.find(
+    button => {
+
+      const text =
+        (
+          button.textContent ||
+          ""
+        )
+          .toLowerCase()
+          .trim();
+
+
+      return (
+        text.includes(
+          "enable notifications"
+        ) ||
+        text.includes(
+          "notifications enabled"
+        ) ||
+        text.includes(
+          "enable notification"
+        )
+      );
+
+    }
+  ) || null;
+
+}
+
+
+/* =========================================================
+UPDATE NOTIFICATION BUTTON
+========================================================= */
+
+function updateZYRENotificationButton(
+  enabled
+) {
+
+  const button =
+    getZYRENotificationButton();
+
+
+  if (!button) {
+
+    console.log(
+      "ZYRE notification button was not found yet."
+    );
+
+    return;
+
+  }
+
+
+  if (enabled) {
+
+    button.textContent =
+      "✅ Notifications Enabled";
+
+
+    button.disabled =
+      true;
+
+
+    button.style.opacity =
+      "0.7";
+
+
+    button.style.cursor =
+      "default";
+
+
+    button.setAttribute(
+      "aria-label",
+      "ZYRE Marketing notifications are enabled"
+    );
+
+  } else {
+
+    button.textContent =
+      "🔔 Enable Notifications";
+
+
+    button.disabled =
+      false;
+
+
+    button.style.opacity =
+      "1";
+
+
+    button.style.cursor =
+      "pointer";
+
+
+    button.setAttribute(
+      "aria-label",
+      "Enable ZYRE Marketing notifications"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+SAVE PUSH SUBSCRIPTION
+========================================================= */
+
+async function saveZYREPushSubscription(
+  subscription
+) {
+
+  const endpoint =
+    subscription.endpoint;
+
+
+  const existingResponse =
     await fetch(
 
       SUPABASE_URL +
-      "/rest/v1/deliveries?order_id=eq." +
+      "/rest/v1/push_subscriptions?endpoint=eq." +
       encodeURIComponent(
-        displayId
+        endpoint
       ) +
-      "&select=*",
+      "&select=id",
 
       {
 
-        method: "GET",
+        method:
+          "GET",
 
         headers: {
 
@@ -2520,470 +3514,130 @@ try {
 
     );
 
-  if (deliveryResponse.ok) {
 
-    const deliveryData =
-      await deliveryResponse.json();
+  if (!existingResponse.ok) {
 
-    if (
-      Array.isArray(deliveryData) &&
-      deliveryData.length
-    ) {
-
-      delivery =
-        deliveryData[
-          deliveryData.length - 1
-        ];
-
-    }
-
-  } else {
-
-    console.warn(
-      "Delivery information could not be loaded:",
-      await deliveryResponse.text()
+    throw new Error(
+      "Could not check the existing push subscription:\n\n" +
+      await existingResponse.text()
     );
 
   }
 
-} catch (deliveryError) {
 
-  console.warn(
-    "Could not load delivery information:",
-    deliveryError
-  );
+  const existing =
+    await existingResponse.json();
 
-}
-
-let deliveryText =
-"🚚 Delivery: Not assigned yet";
-
-if (delivery) {
-
-  const deliveryStatus =
-    delivery.status ||
-    "Assigned";
-
-  const deliveryPerson =
-    delivery.delivery_person_name ||
-    "Not assigned";
-
-  const deliveryPhone =
-    delivery.delivery_person_phone ||
-    "Not provided";
-
-  const trackingNumber =
-    delivery.tracking_number ||
-    "Not provided";
-
-  let estimatedDelivery =
-    "Not provided";
 
   if (
-    delivery.estimated_delivery
+    Array.isArray(existing) &&
+    existing.length > 0
   ) {
 
-    const date =
-      new Date(
-        delivery.estimated_delivery +
-        "T00:00:00"
+    console.log(
+      "ZYRE push subscription already exists."
+    );
+
+    return;
+
+  }
+
+
+  const userId =
+    localStorage.getItem(
+      "zava_user_id"
+    );
+
+
+  const sellerId =
+    localStorage.getItem(
+      "zava_seller_id"
+    );
+
+
+  const subscriptionData = {
+
+    endpoint:
+      endpoint,
+
+    subscription:
+      subscription.toJSON()
+
+  };
+
+
+  if (userId) {
+
+    subscriptionData.user_id =
+      userId;
+
+  }
+
+
+  if (sellerId) {
+
+    subscriptionData.seller_id =
+      Number(
+        sellerId
       );
 
-    if (
-      !Number.isNaN(
-        date.getTime()
-      )
-    ) {
+  }
 
-      estimatedDelivery =
-        date.toLocaleDateString(
-          "en-ZA",
-          {
-            day:
-              "2-digit",
 
-            month:
-              "2-digit",
+  const saveResponse =
+    await fetch(
 
-            year:
-              "numeric"
-          }
-        );
+      SUPABASE_URL +
+      "/rest/v1/push_subscriptions",
 
-    } else {
+      {
 
-      estimatedDelivery =
-        delivery.estimated_delivery;
+        method:
+          "POST",
 
-    }
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            (
+              window.ZYRE_CURRENT_SESSION?.access_token ||
+              SUPABASE_KEY
+            ),
+
+          "Content-Type":
+            "application/json",
+
+          "Prefer":
+            "return=minimal"
+
+        },
+
+        body:
+          JSON.stringify(
+            subscriptionData
+          )
+
+      }
+
+    );
+
+
+  if (!saveResponse.ok) {
+
+    throw new Error(
+      "Push subscription could not be saved:\n\n" +
+      await saveResponse.text()
+    );
 
   }
 
-  deliveryText =
 
-    "🚚 Delivery Status: " +
-    deliveryStatus +
-
-    "\n👤 Delivery Person: " +
-    deliveryPerson +
-
-    "\n📞 Delivery Phone: " +
-    deliveryPhone +
-
-    "\n🔢 Tracking Number: " +
-    trackingNumber +
-
-    "\n📅 Estimated Delivery: " +
-    estimatedDelivery;
-
-}
-
-alert(
-
-  "📦 Order #" +
-  displayId +
-
-  "\n\nStatus: " +
-  displayStatus +
-
-  "\nTotal: R" +
-  Number(displayTotal)
-    .toFixed(2) +
-
-  "\n\n" +
-
-  deliveryText +
-
-  "\n\n🏠 Delivery Address: " +
-  displayAddress
-
-);
-
-} catch (error) {
-
-alert(
-  "Could not check order status:\n\n" +
-  error.message
-);
-
-}
-
-}
-
-
-/* =========================================================
-ZYRE MARKETING PUSH NOTIFICATION HELPERS
-========================================================= */
-
-function urlBase64ToUint8Array(base64String) {
-
-const padding =
-"=".repeat(
-(4 - base64String.length % 4) % 4
-);
-
-const base64 =
-(
-base64String +
-padding
-)
-.replace(/-/g, "+")
-.replace(/_/g, "/");
-
-const rawData =
-window.atob(base64);
-
-const outputArray =
-new Uint8Array(
-rawData.length
-);
-
-for (
-let i = 0;
-i < rawData.length;
-++i
-) {
-
-outputArray[i] =
-  rawData.charCodeAt(i);
-
-}
-
-return outputArray;
-
-}
-
-
-/* =========================================================
-GET SERVICE WORKER
-========================================================= */
-
-async function getZYREServiceWorkerRegistration() {
-
-if (!("serviceWorker" in navigator)) {
-
-throw new Error(
-  "Service workers are not supported by this browser."
-);
-
-}
-
-const registration =
-await navigator.serviceWorker.register(
-"./sw.js",
-{
-scope: "./"
-}
-);
-
-await navigator.serviceWorker.ready;
-
-return registration;
-
-}
-
-
-/* =========================================================
-FIND NOTIFICATION BUTTON
-========================================================= */
-
-function getZYRENotificationButton() {
-
-const buttons =
-Array.from(
-document.querySelectorAll("button")
-);
-
-return buttons.find(button => {
-
-const text =
-(button.textContent || "")
-.toLowerCase()
-.trim();
-
-return (
-text.includes("enable notifications") ||
-text.includes("notifications enabled") ||
-text.includes("enable notification")
-);
-
-}) || null;
-
-}
-
-
-/* =========================================================
-UPDATE NOTIFICATION BUTTON
-========================================================= */
-
-function updateZYRENotificationButton(
-enabled
-) {
-
-const button =
-getZYRENotificationButton();
-
-if (!button) {
-
-console.log(
-"ZYRE notification button was not found yet."
-);
-
-return;
-
-}
-
-if (enabled) {
-
-button.textContent =
-"✅ Notifications Enabled";
-
-button.disabled =
-true;
-
-button.style.opacity =
-"0.7";
-
-button.style.cursor =
-"default";
-
-button.setAttribute(
-"aria-label",
-"ZYRE Marketing notifications are enabled"
-);
-
-} else {
-
-button.textContent =
-"🔔 Enable Notifications";
-
-button.disabled =
-false;
-
-button.style.opacity =
-"1";
-
-button.style.cursor =
-"pointer";
-
-button.setAttribute(
-"aria-label",
-"Enable ZYRE Marketing notifications"
-);
-
-}
-
-}
-
-
-/* =========================================================
-SAVE PUSH SUBSCRIPTION
-========================================================= */
-
-async function saveZYREPushSubscription(
-subscription
-) {
-
-const endpoint =
-subscription.endpoint;
-
-const existingResponse =
-await fetch(
-
-  SUPABASE_URL +
-  "/rest/v1/push_subscriptions?endpoint=eq." +
-  encodeURIComponent(endpoint) +
-  "&select=id",
-
-  {
-
-    method: "GET",
-
-    headers: {
-
-      "apikey":
-        SUPABASE_KEY,
-
-      "Authorization":
-        "Bearer " +
-        SUPABASE_KEY
-
-    }
-
-  }
-
-);
-
-if (!existingResponse.ok) {
-
-throw new Error(
-  "Could not check the existing push subscription:\n\n" +
-  await existingResponse.text()
-);
-
-}
-
-const existing =
-await existingResponse.json();
-
-if (
-Array.isArray(existing) &&
-existing.length > 0
-) {
-
-console.log(
-  "ZYRE push subscription already exists."
-);
-
-return;
-
-}
-
-const userId =
-localStorage.getItem(
-"zava_user_id"
-);
-
-const sellerId =
-localStorage.getItem(
-"zava_seller_id"
-);
-
-const subscriptionData = {
-
-endpoint:
-  endpoint,
-
-subscription:
-  subscription.toJSON()
-
-};
-
-if (userId) {
-
-subscriptionData.user_id =
-  userId;
-
-}
-
-if (sellerId) {
-
-subscriptionData.seller_id =
-  Number(sellerId);
-
-}
-
-const saveResponse =
-await fetch(
-
-  SUPABASE_URL +
-  "/rest/v1/push_subscriptions",
-
-  {
-
-    method: "POST",
-
-    headers: {
-
-      "apikey":
-        SUPABASE_KEY,
-
-      "Authorization":
-        "Bearer " +
-        (
-          window.ZYRE_CURRENT_SESSION?.access_token ||
-          SUPABASE_KEY
-        ),
-
-      "Content-Type":
-        "application/json",
-
-      "Prefer":
-        "return=minimal"
-
-    },
-
-    body:
-      JSON.stringify(
-        subscriptionData
-      )
-
-  }
-
-);
-
-if (!saveResponse.ok) {
-
-throw new Error(
-  "Push subscription could not be saved:\n\n" +
-  await saveResponse.text()
-);
-
-}
-
-console.log(
-"ZYRE push subscription saved successfully."
-);
+  console.log(
+    "ZYRE push subscription saved successfully."
+  );
 
 }
 
@@ -2994,283 +3648,24 @@ CREATE PUSH SUBSCRIPTION
 
 async function subscribeToZYREPush() {
 
-const registration =
-await getZYREServiceWorkerRegistration();
-
-if (
-!registration.pushManager
-) {
-
-throw new Error(
-  "Push notifications are not supported by this browser."
-);
-
-}
-
-let subscription =
-await registration.pushManager.getSubscription();
-
-if (!subscription) {
-
-subscription =
-  await registration.pushManager.subscribe({
-
-    userVisibleOnly:
-      true,
-
-    applicationServerKey:
-      urlBase64ToUint8Array(
-        ZYRE_VAPID_PUBLIC_KEY
-      )
-
-  });
-
-}
-
-console.log(
-"ZYRE push subscription:",
-subscription
-);
-
-await saveZYREPushSubscription(
-subscription
-);
-
-return subscription;
-
-}
-
-
-/* =========================================================
-CHECK EXISTING NOTIFICATION SUBSCRIPTION
-========================================================= */
-
-async function checkZYRENotificationStatus() {
-
-try {
-
-if (!("Notification" in window)) {
-
-  updateZYRENotificationButton(false);
-
-  return false;
-
-}
-
-if (
-!navigator.serviceWorker ||
-!window.PushManager
-) {
-
-  updateZYRENotificationButton(false);
-
-  return false;
-
-}
-
-const permission =
-Notification.permission;
-
-if (permission !== "granted") {
-
-  updateZYRENotificationButton(false);
-
-  return false;
-
-}
-
-const registration =
-await getZYREServiceWorkerRegistration();
-
-const subscription =
-await registration.pushManager.getSubscription();
-
-if (!subscription) {
-
-  console.log(
-    "ZYRE notification permission is granted, but no push subscription exists yet."
-  );
-
-  updateZYRENotificationButton(false);
-
-  return false;
-
-}
-
-console.log(
-"Existing ZYRE push subscription found."
-);
-
-await saveZYREPushSubscription(
-subscription
-);
-
-updateZYRENotificationButton(true);
-
-return true;
-
-} catch (error) {
-
-console.error(
-"Could not check ZYRE notification status:",
-error
-);
-
-updateZYRENotificationButton(false);
-
-return false;
-
-}
-
-}
-
-
-/* =========================================================
-ENABLE ZYRE NOTIFICATIONS
-========================================================= */
-
-window.enableZYRENotifications =
-async function() {
-
-if (!("Notification" in window)) {
-
-  alert(
-    "Your browser does not support notifications."
-  );
-
-  return false;
-
-}
-
-if (!("serviceWorker" in navigator)) {
-
-  alert(
-    "Your browser does not support service workers."
-  );
-
-  return false;
-
-}
-
-if (
-!window.PushManager
-) {
-
-  alert(
-    "Your browser does not support push notifications."
-  );
-
-  return false;
-
-}
-
-try {
-
-  let permission =
-    Notification.permission;
-
-  if (permission !== "granted") {
-
-    permission =
-      await Notification.requestPermission();
-
-  }
-
-  if (permission !== "granted") {
-
-    alert(
-      "Notifications were not enabled.\n\n" +
-      "Please allow notifications for ZYRE Marketing in your browser settings."
-    );
-
-    updateZYRENotificationButton(false);
-
-    return false;
-
-  }
-
-  const subscription =
-    await subscribeToZYREPush();
-
-  if (!subscription) {
-
-    throw new Error(
-      "The push subscription was not created."
-    );
-
-  }
-
-  updateZYRENotificationButton(true);
-
-  console.log(
-    "ZYRE Marketing notifications enabled.",
-    subscription
-  );
-
-  alert(
-    "🔔 ZYRE Marketing notifications are enabled!\n\n" +
-    "This phone is now registered for push notifications."
-  );
-
-  return true;
-
-} catch (error) {
-
-  console.error(
-    "Notification setup failed:",
-    error
-  );
-
-  updateZYRENotificationButton(false);
-
-  alert(
-    "Notification setup failed:\n\n" +
-    error.message
-  );
-
-  return false;
-
-}
-
-};
-
-
-/* =========================================================
-REFRESH PUSH SUBSCRIPTION
-========================================================= */
-
-window.refreshZYREPushSubscription =
-async function() {
-
-try {
-
-  if (
-    !("Notification" in window) ||
-    Notification.permission !== "granted"
-  ) {
-
-    updateZYRENotificationButton(false);
-
-    return false;
-
-  }
-
-  if (
-    !("serviceWorker" in navigator) ||
-    !("PushManager" in window)
-  ) {
-
-    updateZYRENotificationButton(false);
-
-    return false;
-
-  }
-
   const registration =
     await getZYREServiceWorkerRegistration();
 
+
+  if (
+    !registration.pushManager
+  ) {
+
+    throw new Error(
+      "Push notifications are not supported by this browser."
+    );
+
+  }
+
+
   let subscription =
     await registration.pushManager.getSubscription();
+
 
   if (!subscription) {
 
@@ -3289,30 +3684,374 @@ try {
 
   }
 
+
+  console.log(
+    "ZYRE push subscription:",
+    subscription
+  );
+
+
   await saveZYREPushSubscription(
     subscription
   );
 
-  updateZYRENotificationButton(true);
 
-  console.log(
-    "ZYRE push subscription checked and restored."
-  );
-
-  return true;
-
-} catch (error) {
-
-  console.error(
-    "Could not refresh ZYRE push subscription:",
-    error
-  );
-
-  updateZYRENotificationButton(false);
-
-  return false;
+  return subscription;
 
 }
+
+
+/* =========================================================
+CHECK EXISTING NOTIFICATION SUBSCRIPTION
+========================================================= */
+
+async function checkZYRENotificationStatus() {
+
+  try {
+
+    if (
+      !("Notification" in window)
+    ) {
+
+      updateZYRENotificationButton(
+        false
+      );
+
+      return false;
+
+    }
+
+
+    if (
+      !navigator.serviceWorker ||
+      !window.PushManager
+    ) {
+
+      updateZYRENotificationButton(
+        false
+      );
+
+      return false;
+
+    }
+
+
+    const permission =
+      Notification.permission;
+
+
+    if (
+      permission !== "granted"
+    ) {
+
+      updateZYRENotificationButton(
+        false
+      );
+
+      return false;
+
+    }
+
+
+    const registration =
+      await getZYREServiceWorkerRegistration();
+
+
+    const subscription =
+      await registration.pushManager.getSubscription();
+
+
+    if (!subscription) {
+
+      console.log(
+        "ZYRE notification permission is granted, but no push subscription exists yet."
+      );
+
+
+      updateZYRENotificationButton(
+        false
+      );
+
+
+      return false;
+
+    }
+
+
+    console.log(
+      "Existing ZYRE push subscription found."
+    );
+
+
+    await saveZYREPushSubscription(
+      subscription
+    );
+
+
+    updateZYRENotificationButton(
+      true
+    );
+
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "Could not check ZYRE notification status:",
+      error
+    );
+
+
+    updateZYRENotificationButton(
+      false
+    );
+
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+ENABLE ZYRE NOTIFICATIONS
+========================================================= */
+
+window.enableZYRENotifications =
+async function() {
+
+  if (
+    !("Notification" in window)
+  ) {
+
+    alert(
+      "Your browser does not support notifications."
+    );
+
+    return false;
+
+  }
+
+
+  if (
+    !("serviceWorker" in navigator)
+  ) {
+
+    alert(
+      "Your browser does not support service workers."
+    );
+
+    return false;
+
+  }
+
+
+  if (
+    !window.PushManager
+  ) {
+
+    alert(
+      "Your browser does not support push notifications."
+    );
+
+    return false;
+
+  }
+
+
+  try {
+
+    let permission =
+      Notification.permission;
+
+
+    if (
+      permission !== "granted"
+    ) {
+
+      permission =
+        await Notification.requestPermission();
+
+    }
+
+
+    if (
+      permission !== "granted"
+    ) {
+
+      alert(
+        "Notifications were not enabled.\n\n" +
+        "Please allow notifications for ZYRE Marketing in your browser settings."
+      );
+
+
+      updateZYRENotificationButton(
+        false
+      );
+
+
+      return false;
+
+    }
+
+
+    const subscription =
+      await subscribeToZYREPush();
+
+
+    if (!subscription) {
+
+      throw new Error(
+        "The push subscription was not created."
+      );
+
+    }
+
+
+    updateZYRENotificationButton(
+      true
+    );
+
+
+    console.log(
+      "ZYRE Marketing notifications enabled.",
+      subscription
+    );
+
+
+    alert(
+      "🔔 ZYRE Marketing notifications are enabled!\n\n" +
+      "This phone is now registered for push notifications."
+    );
+
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "Notification setup failed:",
+      error
+    );
+
+
+    updateZYRENotificationButton(
+      false
+    );
+
+
+    alert(
+      "Notification setup failed:\n\n" +
+      error.message
+    );
+
+
+    return false;
+
+  }
+
+};
+
+
+/* =========================================================
+REFRESH PUSH SUBSCRIPTION
+========================================================= */
+
+window.refreshZYREPushSubscription =
+async function() {
+
+  try {
+
+    if (
+      !("Notification" in window) ||
+      Notification.permission !==
+        "granted"
+    ) {
+
+      updateZYRENotificationButton(
+        false
+      );
+
+      return false;
+
+    }
+
+
+    if (
+      !("serviceWorker" in navigator) ||
+      !("PushManager" in window)
+    ) {
+
+      updateZYRENotificationButton(
+        false
+      );
+
+      return false;
+
+    }
+
+
+    const registration =
+      await getZYREServiceWorkerRegistration();
+
+
+    let subscription =
+      await registration.pushManager.getSubscription();
+
+
+    if (!subscription) {
+
+      subscription =
+        await registration.pushManager.subscribe({
+
+          userVisibleOnly:
+            true,
+
+          applicationServerKey:
+            urlBase64ToUint8Array(
+              ZYRE_VAPID_PUBLIC_KEY
+            )
+
+        });
+
+    }
+
+
+    await saveZYREPushSubscription(
+      subscription
+    );
+
+
+    updateZYRENotificationButton(
+      true
+    );
+
+
+    console.log(
+      "ZYRE push subscription checked and restored."
+    );
+
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "Could not refresh ZYRE push subscription:",
+      error
+    );
+
+
+    updateZYRENotificationButton(
+      false
+    );
+
+
+    return false;
+
+  }
 
 };
 
@@ -3320,6 +4059,12 @@ try {
 /* =========================================================
 START
 ========================================================= */
+
+loadCart();
+
+syncCartCount();
+
+handleCartHash();
 
 loadProducts();
 
@@ -3329,27 +4074,59 @@ NOTIFICATION STARTUP
 ========================================================= */
 
 window.addEventListener(
-"load",
-function () {
+  "load",
+  function() {
 
-setTimeout(
-  async function () {
+    /*
+      Refresh cart when the marketplace
+      has completely loaded.
+    */
 
-    const alreadyEnabled =
-      await checkZYRENotificationStatus();
+    loadCart();
+
+    syncCartCount();
+
+    updateCart();
+
+
+    /*
+      Give the cart hash another chance
+      after all page scripts have loaded.
+    */
 
     if (
-      !alreadyEnabled &&
-      "Notification" in window &&
-      Notification.permission === "default"
+      window.location.hash ===
+      "#cart"
     ) {
 
-      updateZYRENotificationButton(false);
+      handleCartHash();
 
     }
 
-  },
-  1500
-);
 
-});
+    setTimeout(
+      async function() {
+
+        const alreadyEnabled =
+          await checkZYRENotificationStatus();
+
+
+        if (
+          !alreadyEnabled &&
+          "Notification" in window &&
+          Notification.permission ===
+            "default"
+        ) {
+
+          updateZYRENotificationButton(
+            false
+          );
+
+        }
+
+      },
+      1500
+    );
+
+  }
+);
