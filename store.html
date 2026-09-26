@@ -112,7 +112,6 @@
       background: #050505;
       color: #ffffff;
       border-bottom: 1px solid #222222;
-
       padding: 10px 18px;
 
       display: grid;
@@ -1292,11 +1291,6 @@
     const SUPABASE_KEY =
       "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
-    /*
-      IMPORTANT:
-      The main marketplace app.js now uses
-      this cart key.
-    */
 
     const CART_STORAGE_KEY =
       "zyre_cart_v2";
@@ -1318,7 +1312,6 @@
     function escapeText(value) {
 
       return String(value ?? "")
-
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -1871,18 +1864,20 @@
 
 
     /* =========================
-       OPEN CART
+       CART NAVIGATION
+       
+       The store page does NOT
+       open the cart itself.
+
+       It only returns to the
+       marketplace. The marketplace
+       controls the cart drawer.
     ========================= */
 
     function openCart() {
 
-      /*
-        Go to the marketplace page,
-        where app.js controls the actual cart.
-      */
-
       window.location.href =
-        "index.html#cart";
+        "index.html";
 
     }
 
@@ -2698,19 +2693,10 @@
     }
 
 
-    /*
-      Start
-    */
-
     updateCartCount();
 
     loadStore();
 
-
-    /*
-      Keep the cart number updated
-      if the page becomes visible again.
-    */
 
     window.addEventListener(
       "pageshow",
@@ -2718,6 +2704,7 @@
         updateCartCount();
       }
     );
+
 
     window.addEventListener(
       "storage",
