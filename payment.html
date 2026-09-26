@@ -8,11 +8,11 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>ZYRE Marketing - Pay Now</title>
+  <title>ZYRE Marketing - Payment</title>
 
   <meta
     name="description"
-    content="ZYRE Marketing secure checkout and test payment page."
+    content="ZYRE Marketing secure payment confirmation."
   >
 
   <style>
@@ -22,7 +22,7 @@
 
     body{
       margin:0;
-      font-family:Arial, sans-serif;
+      font-family:Arial,sans-serif;
       background:#f5f5f5;
       color:#111;
     }
@@ -59,7 +59,7 @@
       box-shadow:0 4px 18px rgba(0,0,0,.08);
     }
 
-    .test-badge{
+    .badge{
       display:inline-block;
       background:#111;
       color:#fff;
@@ -122,41 +122,13 @@
       font-size:16px;
     }
 
-    button{
-      width:100%;
-      border:none;
-      border-radius:10px;
-      padding:15px;
-      background:#111;
-      color:#fff;
-      font-size:16px;
-      font-weight:bold;
-      cursor:pointer;
-      margin-top:20px;
-    }
-
-    button:disabled{
-      opacity:.6;
-      cursor:not-allowed;
-    }
-
-    .notice{
-      margin-top:15px;
-      padding:12px;
-      background:#fff8df;
-      border:1px solid #ead27b;
-      border-radius:8px;
-      font-size:13px;
-      line-height:1.5;
-    }
-
     .success{
       margin-top:20px;
       padding:18px;
       background:#e9f8ed;
       border:1px solid #9bd3a6;
       border-radius:10px;
-      display:none;
+      line-height:1.6;
     }
 
     .error{
@@ -165,7 +137,6 @@
       background:#fff0f0;
       border:1px solid #e2a0a0;
       border-radius:10px;
-      display:none;
       white-space:pre-wrap;
       line-height:1.5;
     }
@@ -196,26 +167,32 @@
 
 <header>
   <h1>ZYRE Marketing</h1>
-  <p>Pay Now</p>
+  <p>Payment Confirmation</p>
 </header>
-
 
 <div class="container">
 
   <div class="card">
 
-    <div class="test-badge">
-      🧪 TEST PAYMENT
+    <div class="badge">
+      PAYMENT RESULT
     </div>
 
-    <h2>Complete Your Payment</h2>
+    <h2>
+      Payment Confirmation
+    </h2>
 
-    <div id="loading" class="loading">
-      Loading order...
+    <div
+      id="loading"
+      class="loading"
+    >
+      Verifying your payment...
     </div>
 
-
-    <div id="paymentContent" style="display:none;">
+    <div
+      id="paymentContent"
+      style="display:none;"
+    >
 
       <div class="order-box">
 
@@ -232,21 +209,6 @@
           </span>
         </div>
 
-
-        <div class="row">
-          <span class="label">
-            Product
-          </span>
-
-          <span
-            class="value"
-            id="productName"
-          >
-            -
-          </span>
-        </div>
-
-
         <div class="row">
           <span class="label">
             Amount
@@ -260,7 +222,6 @@
           </span>
         </div>
 
-
         <div class="total">
           Total:
           <span id="totalAmount">
@@ -269,7 +230,6 @@
         </div>
 
       </div>
-
 
       <div class="breakdown">
 
@@ -292,7 +252,6 @@
 
         </div>
 
-
         <div class="row">
 
           <span class="label">
@@ -310,39 +269,16 @@
 
       </div>
 
-
-      <button
-        id="payButton"
-        onclick="payNow()"
-      >
-        🧪 Complete Test Payment
-      </button>
-
-
-      <div class="notice">
-
-        <strong>Test Mode</strong><br>
-
-        This is a test payment.
-        No real money will be charged.
-
-        The test system records the payment,
-        calculates the 10% ZYRE commission,
-        gives the seller 90%,
-        and marks the order as Paid.
-
-      </div>
-
-
       <div
         id="successBox"
         class="success"
+        style="display:none;"
       ></div>
-
 
       <div
         id="errorBox"
         class="error"
+        style="display:none;"
       ></div>
 
     </div>
@@ -351,13 +287,11 @@
 
 </div>
 
-
 <footer>
   ZYRE Marketing &copy; 2026
   <br>
   Durban, South Africa
 </footer>
-
 
 <script>
 
@@ -368,13 +302,12 @@
   const SUPABASE_URL =
     "https://gaccizzlwswwynattgda.supabase.co";
 
-
   const SUPABASE_KEY =
     "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
 
   /* =========================================
-     GET ORDER ID
+     URL PARAMETERS
   ========================================= */
 
   const params =
@@ -389,35 +322,16 @@
     params.get("id");
 
 
-  let orderData = null;
+  const reference =
+    params.get("reference") ||
+    params.get("trxref");
 
 
   /* =========================================
-     SUPABASE HEADERS
+     MONEY
   ========================================= */
 
-  function supabaseHeaders(extra = {}) {
-
-    return {
-
-      "apikey":
-        SUPABASE_KEY,
-
-      "Authorization":
-        "Bearer " + SUPABASE_KEY,
-
-      ...extra
-
-    };
-
-  }
-
-
-  /* =========================================
-     FORMAT MONEY
-  ========================================= */
-
-  function money(value) {
+  function money(value){
 
     const number =
       Number(value || 0);
@@ -434,53 +348,36 @@
      ESCAPE HTML
   ========================================= */
 
-  function esc(value) {
+  function esc(value){
 
     return String(
       value ?? ""
     )
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
 
   }
 
 
   /* =========================================
-     GET CURRENT CUSTOMER
+     SUPABASE HEADERS
   ========================================= */
 
-  function getCustomerId() {
+  function supabaseHeaders(){
 
-    const possibleKeys = [
+    return {
 
-      "customer_id",
-      "customerId",
-      "user_id",
-      "userId"
+      "apikey":
+        SUPABASE_KEY,
 
-    ];
+      "Authorization":
+        "Bearer " +
+        SUPABASE_KEY
 
-
-    for (
-      const key of possibleKeys
-    ) {
-
-      const value =
-        localStorage.getItem(key);
-
-      if (value) {
-
-        return value;
-
-      }
-
-    }
-
-
-    return null;
+    };
 
   }
 
@@ -489,9 +386,9 @@
      LOAD ORDER
   ========================================= */
 
-  async function loadOrder() {
+  async function loadOrder(){
 
-    if (!orderId) {
+    if(!orderId){
 
       throw new Error(
         "No order number was supplied."
@@ -513,19 +410,20 @@
 
           headers:
             supabaseHeaders()
+
         }
 
       );
 
 
-    if (!response.ok) {
+    if(!response.ok){
 
-      const errorText =
+      const text =
         await response.text();
 
       throw new Error(
-        "Could not load order.\n\n" +
-        errorText
+        "Could not load the order.\n\n" +
+        text
       );
 
     }
@@ -535,10 +433,10 @@
       await response.json();
 
 
-    if (
+    if(
       !Array.isArray(orders) ||
       !orders.length
-    ) {
+    ){
 
       throw new Error(
         "Order #" +
@@ -549,11 +447,7 @@
     }
 
 
-    orderData =
-      orders[0];
-
-
-    displayOrder();
+    return orders[0];
 
   }
 
@@ -562,34 +456,34 @@
      DISPLAY ORDER
   ========================================= */
 
-  function displayOrder() {
+  function displayOrder(order){
 
     const amount =
       Number(
-        orderData.total ||
-        orderData.Total ||
+        order.total ||
+        order.Total ||
         0
       );
 
 
     const commission =
-      amount * 0.10;
+      Number(
+        (amount * 0.10)
+          .toFixed(2)
+      );
 
 
     const sellerAmount =
-      amount - commission;
+      Number(
+        (amount - commission)
+          .toFixed(2)
+      );
 
 
     document.getElementById(
       "orderNumber"
     ).textContent =
       "#" + orderId;
-
-
-    document.getElementById(
-      "productName"
-    ).textContent =
-      "Marketplace Order";
 
 
     document.getElementById(
@@ -627,272 +521,158 @@
     ).style.display =
       "block";
 
-  }
 
-
-  /* =========================================
-     FIND SELLER
-  ========================================= */
-
-  async function findOrderSeller() {
-
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/order_items?order_id=eq." +
-        encodeURIComponent(orderId) +
-        "&select=*",
-
-        {
-          method:"GET",
-
-          headers:
-            supabaseHeaders()
-        }
-
-      );
-
-
-    if (!response.ok) {
-
-      const errorText =
-        await response.text();
-
-      throw new Error(
-        "Could not load order items.\n\n" +
-        errorText
-      );
-
-    }
-
-
-    const items =
-      await response.json();
-
-
-    if (
-      !Array.isArray(items) ||
-      !items.length
-    ) {
-
-      throw new Error(
-        "No products were found for Order #" +
-        orderId +
-        "."
-      );
-
-    }
-
-
-    const productIds =
-      items
-        .map(item =>
-          item.products_id ??
-          item.product_id ??
-          item.Products_id ??
-          item.Product_id
-        )
-        .filter(
-          id =>
-            id !== null &&
-            id !== undefined
-        );
-
-
-    if (!productIds.length) {
-
-      throw new Error(
-        "The order items do not contain product IDs."
-      );
-
-    }
-
-
-    const uniqueProductIds =
-      [
-        ...new Set(productIds)
-      ];
-
-
-    const idList =
-      uniqueProductIds
-        .join(",");
-
-
-    const productResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/products?id=in.(" +
-        encodeURIComponent(idList) +
-        ")&select=id,seller_id",
-
-        {
-          method:"GET",
-
-          headers:
-            supabaseHeaders()
-        }
-
-      );
-
-
-    if (!productResponse.ok) {
-
-      const errorText =
-        await productResponse.text();
-
-      throw new Error(
-        "Could not load product seller information.\n\n" +
-        errorText
-      );
-
-    }
-
-
-    const products =
-      await productResponse.json();
-
-
-    if (
-      !Array.isArray(products) ||
-      !products.length
-    ) {
-
-      throw new Error(
-        "The products for this order could not be found."
-      );
-
-    }
-
-
-    const sellerIds =
-      [
-        ...new Set(
-          products
-            .map(product =>
-              product.seller_id
-            )
-            .filter(
-              id =>
-                id !== null &&
-                id !== undefined
-            )
-        )
-      ];
-
-
-    if (!sellerIds.length) {
-
-      throw new Error(
-        "No seller was found for this order."
-      );
-
-    }
-
-
-    if (sellerIds.length > 1) {
-
-      throw new Error(
-        "This order contains products from multiple sellers. " +
-        "The current test payment system supports one seller per order."
-      );
-
-    }
-
-
-    return sellerIds[0];
+    return amount;
 
   }
 
 
   /* =========================================
-     FIND EXISTING PAYMENT
+     GET AUTH SESSION
   ========================================= */
 
-  async function findExistingPayment() {
+  async function getAccessToken(){
 
-    const response =
-      await fetch(
+    if(
+      window.ZYRE_CURRENT_SESSION &&
+      window.ZYRE_CURRENT_SESSION.access_token
+    ){
 
-        SUPABASE_URL +
-        "/rest/v1/payments?order_id=eq." +
-        encodeURIComponent(orderId) +
-        "&select=*",
+      return window
+        .ZYRE_CURRENT_SESSION
+        .access_token;
 
-        {
-          method:"GET",
+    }
 
-          headers:
-            supabaseHeaders()
+
+    try{
+
+      if(
+        !window.ZYRE_AUTH_CLIENT
+      ){
+
+        window.ZYRE_AUTH_CLIENT =
+          window.supabase
+            ? window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+              )
+            : null;
+
+      }
+
+
+      if(
+        window.ZYRE_AUTH_CLIENT
+      ){
+
+        const result =
+          await window
+            .ZYRE_AUTH_CLIENT
+            .auth
+            .getSession();
+
+
+        if(
+          result &&
+          result.data &&
+          result.data.session &&
+          result.data.session.access_token
+        ){
+
+          return result
+            .data
+            .session
+            .access_token;
+
         }
 
-      );
+      }
 
+    }catch(error){
 
-    if (!response.ok) {
-
-      const errorText =
-        await response.text();
-
-      throw new Error(
-        "Could not check existing payments.\n\n" +
-        errorText
+      console.warn(
+        "Could not retrieve session:",
+        error
       );
 
     }
 
 
-    const payments =
-      await response.json();
-
-
-    if (
-      !Array.isArray(payments)
-    ) {
-
-      return [];
-
-    }
-
-
-    return payments;
+    return null;
 
   }
 
 
   /* =========================================
-     MARK ORDER AS PAID
+     VERIFY PAYSTACK PAYMENT
   ========================================= */
 
-  async function markOrderPaid() {
+  async function verifyPayment(){
+
+    if(!orderId){
+
+      throw new Error(
+        "No order number was supplied."
+      );
+
+    }
+
+
+    if(!reference){
+
+      throw new Error(
+        "No Paystack payment reference was returned."
+      );
+
+    }
+
+
+    const accessToken =
+      await getAccessToken();
+
+
+    if(!accessToken){
+
+      throw new Error(
+        "Your customer login session could not be found. " +
+        "Please return to the marketplace and try the payment again."
+      );
+
+    }
+
 
     const response =
       await fetch(
 
         SUPABASE_URL +
-        "/rest/v1/orders?id=eq." +
-        encodeURIComponent(orderId),
+        "/functions/v1/paystack-verify",
 
         {
-          method:"PATCH",
+          method:"POST",
 
-          headers:
-            supabaseHeaders({
+          headers:{
 
-              "Content-Type":
-                "application/json",
+            "apikey":
+              SUPABASE_KEY,
 
-              "Prefer":
-                "return=representation"
+            "Authorization":
+              "Bearer " +
+              accessToken,
 
-            }),
+            "Content-Type":
+              "application/json"
+
+          },
 
           body:
             JSON.stringify({
 
-              status:"Paid"
+              order_id:
+                orderId,
+
+              reference:
+                reference
 
             })
 
@@ -901,283 +681,76 @@
       );
 
 
-    const responseText =
+    const text =
       await response.text();
 
 
-    if (!response.ok) {
+    let data = null;
+
+
+    try{
+
+      data =
+        text
+          ? JSON.parse(text)
+          : null;
+
+    }catch(error){
+
+      data = null;
+
+    }
+
+
+    if(!response.ok){
 
       throw new Error(
 
-        "Payment was recorded, but Order #" +
-        orderId +
-        " could not be marked as Paid.\n\n" +
-        "Supabase order update error:\n" +
-        responseText
-
-      );
-
-    }
-
-
-    let updatedOrders = [];
-
-
-    try {
-
-      updatedOrders =
-        responseText
-          ? JSON.parse(responseText)
-          : [];
-
-    } catch (error) {
-
-      updatedOrders = [];
-
-    }
-
-
-    if (
-      !Array.isArray(updatedOrders) ||
-      !updatedOrders.length
-    ) {
-
-      throw new Error(
-
-        "Payment was recorded, but the order update did not return Order #" +
-        orderId +
-        "."
-
-      );
-
-    }
-
-
-    const updatedStatus =
-      String(
-        updatedOrders[0].status || ""
-      );
-
-
-    if (
-      updatedStatus.toLowerCase() !==
-      "paid"
-    ) {
-
-      throw new Error(
-
-        "Payment was recorded, but Order #" +
-        orderId +
-        " still has status: " +
-        updatedStatus
-
-      );
-
-    }
-
-  }
-
-
-  /* =========================================
-     CREATE TEST PAYMENT
-  ========================================= */
-
-  async function createTestPayment() {
-
-    const amount =
-      Number(
-        orderData.total ||
-        orderData.Total ||
-        0
-      );
-
-
-    if (
-      !amount ||
-      amount <= 0
-    ) {
-
-      throw new Error(
-        "The order total is invalid."
-      );
-
-    }
-
-
-    const sellerId =
-      await findOrderSeller();
-
-
-    const customerId =
-      getCustomerId();
-
-
-    const existingPayments =
-      await findExistingPayment();
-
-
-    const existingPaid =
-      existingPayments.find(
-        payment =>
-          String(
-            payment.status || ""
-          ).toLowerCase() ===
-          "paid"
-      );
-
-
-    if (existingPaid) {
-
-      await markOrderPaid();
-
-      return {
-        amount: amount,
-        commission:
-          Number(
-            existingPaid.zyre_commission ??
-            amount * 0.10
-          ),
-        sellerAmount:
-          Number(
-            existingPaid.seller_amount ??
-            amount * 0.90
-          ),
-        existing:true
-      };
-
-    }
-
-
-    const zyreCommission =
-      Number(
-        (amount * 0.10)
-          .toFixed(2)
-      );
-
-
-    const sellerAmount =
-      Number(
-        (amount - zyreCommission)
-          .toFixed(2)
-      );
-
-
-    const paymentBody = {
-
-      order_id:
-        Number(orderId),
-
-      seller_id:
-        sellerId,
-
-      customer_id:
-        customerId || null,
-
-      provider:
-        "TEST",
-
-      provider_reference:
-        "ZYRE-TEST-PAYMENT-" +
-        orderId,
-
-      amount:
-        amount,
-
-      zyre_commission:
-        zyreCommission,
-
-      seller_amount:
-        sellerAmount,
-
-      currency:
-        "ZAR",
-
-      status:
-        "paid"
-
-    };
-
-
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/payments",
-
-        {
-          method:"POST",
-
-          headers:
-            supabaseHeaders({
-
-              "Content-Type":
-                "application/json",
-
-              "Prefer":
-                "return=representation"
-
-            }),
-
-          body:
-            JSON.stringify(
-              paymentBody
+        data &&
+        data.error
+
+          ? data.error +
+            (
+              data.details
+                ? "\n\n" +
+                  JSON.stringify(
+                    data.details,
+                    null,
+                    2
+                  )
+                : ""
             )
 
-        }
-
-      );
-
-
-    const responseText =
-      await response.text();
-
-
-    if (!response.ok) {
-
-      throw new Error(
-
-        "Payment could not be completed.\n\n" +
-        "Supabase payment error:\n" +
-        responseText
+          : text ||
+            "Paystack verification failed."
 
       );
 
     }
 
 
-    await markOrderPaid();
+    if(
+      !data ||
+      !data.success
+    ){
+
+      throw new Error(
+        "Paystack payment could not be verified."
+      );
+
+    }
 
 
-    return {
-
-      amount:
-        amount,
-
-      commission:
-        zyreCommission,
-
-      sellerAmount:
-        sellerAmount,
-
-      existing:
-        false
-
-    };
+    return data;
 
   }
 
 
   /* =========================================
-     PAYMENT BUTTON
+     SHOW SUCCESS
   ========================================= */
 
-  async function payNow() {
-
-    const button =
-      document.getElementById(
-        "payButton"
-      );
-
+  function showSuccess(data){
 
     const successBox =
       document.getElementById(
@@ -1185,116 +758,60 @@
       );
 
 
+    successBox.innerHTML =
+
+      "<strong>✅ Payment Successful</strong><br><br>" +
+
+      "Order #" +
+      esc(orderId) +
+      " has been marked as <strong>Paid</strong>.<br><br>" +
+
+      "Customer paid: <strong>" +
+      money(data.amount) +
+      "</strong><br>" +
+
+      "ZYRE Marketing 10%: <strong>" +
+      money(
+        Number(data.amount) * 0.10
+      ) +
+      "</strong><br>" +
+
+      "Seller 90%: <strong>" +
+      money(
+        Number(data.amount) * 0.90
+      ) +
+      "</strong><br><br>" +
+
+      "<span class='small'>" +
+      "Paystack reference: " +
+      esc(data.reference) +
+      "</span>";
+
+
+    successBox.style.display =
+      "block";
+
+  }
+
+
+  /* =========================================
+     SHOW ERROR
+  ========================================= */
+
+  function showError(message){
+
     const errorBox =
       document.getElementById(
         "errorBox"
       );
 
 
-    successBox.style.display =
-      "none";
+    errorBox.textContent =
+      message;
 
 
     errorBox.style.display =
-      "none";
-
-
-    button.disabled =
-      true;
-
-
-    button.textContent =
-      "Processing test payment...";
-
-
-    try {
-
-      const result =
-        await createTestPayment();
-
-
-      successBox.innerHTML =
-
-        "<strong>✅ Payment Successful</strong><br><br>" +
-
-        "Order #" +
-        esc(orderId) +
-        " has been marked as <strong>Paid</strong>.<br><br>" +
-
-        "Customer paid: <strong>" +
-        money(result.amount) +
-        "</strong><br>" +
-
-        "ZYRE Marketing 10%: <strong>" +
-        money(result.commission) +
-        "</strong><br>" +
-
-        "Seller 90%: <strong>" +
-        money(result.sellerAmount) +
-        "</strong>";
-
-
-      successBox.style.display =
-        "block";
-
-
-      button.textContent =
-        "✅ Payment Complete";
-
-
-      alert(
-
-        "Test payment successful!\n\n" +
-
-        "Order #" +
-        orderId +
-        "\n\n" +
-
-        "Customer paid: " +
-        money(result.amount) +
-        "\n" +
-
-        "ZYRE 10%: " +
-        money(result.commission) +
-        "\n" +
-
-        "Seller 90%: " +
-        money(result.sellerAmount)
-
-      );
-
-    } catch (error) {
-
-      console.error(
-        "ZYRE payment error:",
-        error
-      );
-
-
-      errorBox.textContent =
-        error &&
-        error.message
-          ? error.message
-          : String(error);
-
-
-      errorBox.style.display =
-        "block";
-
-
-      button.disabled =
-        false;
-
-
-      button.textContent =
-        "🧪 Complete Test Payment";
-
-
-      alert(
-        errorBox.textContent
-      );
-
-    }
+      "block";
 
   }
 
@@ -1305,27 +822,49 @@
 
   window.addEventListener(
     "DOMContentLoaded",
-    async function() {
+    async function(){
 
-      try {
+      try{
 
-        await loadOrder();
+        const order =
+          await loadOrder();
 
-      } catch (error) {
+
+        displayOrder(order);
+
+
+        const result =
+          await verifyPayment();
+
+
+        showSuccess(result);
+
+      }catch(error){
 
         console.error(
-          "ZYRE order loading error:",
+          "ZYRE Paystack verification error:",
           error
         );
 
 
         document.getElementById(
           "loading"
-        ).textContent =
+        ).style.display =
+          "none";
+
+
+        document.getElementById(
+          "paymentContent"
+        ).style.display =
+          "block";
+
+
+        showError(
           error &&
           error.message
             ? error.message
-            : "Could not load order.";
+            : String(error)
+        );
 
       }
 
@@ -1336,11 +875,3 @@
 
 </body>
 </html>
-
-Now only do these 3 things:
-
-1. Replace your entire "payment.html" with the code above.
-2. Save/commit it to GitHub.
-3. Test one new order and press Complete Test Payment.
-
-Then check that order in Owner Control Centre. If it still says "Pending", send me the exact message that appears on the payment page — don't change the Supabase policies yet.
