@@ -879,7 +879,7 @@ STORE IMAGE
 
 
         <!-- =========================
-        NEW STORE IMAGE
+        STORE IMAGE
         ========================= -->
 
         <div class="form-group">
@@ -912,14 +912,19 @@ STORE IMAGE
               type="file"
               id="storeImage"
               accept="image/*"
+              required
             >
 
 
             <div class="store-image-note">
 
-              Upload a picture or logo that represents
-              your store. JPG, PNG and other normal image
-              formats are supported.
+              Choose any picture or logo that represents
+              your store.
+
+              <br>
+
+              Maximum file size:
+              <strong>5 MB</strong>.
 
               <br>
 
@@ -1381,6 +1386,7 @@ document
           "storeImagePlaceholder"
         );
 
+
       if (!file) {
 
         if (preview) {
@@ -1425,10 +1431,6 @@ document
       }
 
 
-      /*
-      Keep uploads reasonably sized.
-      */
-
       if (
         file.size >
         5 * 1024 * 1024
@@ -1445,6 +1447,11 @@ document
         return;
 
       }
+
+
+      clearMessage(
+        "registerMessage"
+      );
 
 
       const reader =
@@ -1841,7 +1848,9 @@ async function uploadStoreImage(
 
   if (!file) {
 
-    return "";
+    throw new Error(
+      "Please choose a store picture before submitting your seller application."
+    );
 
   }
 
@@ -1911,11 +1920,17 @@ async function uploadStoreImage(
     extension;
 
 
+  /*
+  IMPORTANT:
+  Store pictures go into the
+  store-images bucket.
+  */
+
   const uploadResponse =
     await fetch(
 
       SUPABASE_URL +
-      "/storage/v1/object/Product-images/" +
+      "/storage/v1/object/store-images/" +
       filePath,
 
       {
@@ -1960,7 +1975,7 @@ async function uploadStoreImage(
 
   const publicUrl =
     SUPABASE_URL +
-    "/storage/v1/object/public/Product-images/" +
+    "/storage/v1/object/public/store-images/" +
     filePath;
 
 
@@ -2516,6 +2531,19 @@ document
         showMessage(
           "registerMessage",
           "Please enter your store name.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (!storeImageFile) {
+
+        showMessage(
+          "registerMessage",
+          "Please choose a store picture or logo. Every ZYRE Marketing store must have a store picture.",
           "error"
         );
 
