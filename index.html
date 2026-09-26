@@ -2636,6 +2636,30 @@ async function zyreCheckAuthentication() {
   </button>
 
 
+  <!-- =====================================================
+       LOGOUT
+  ====================================================== -->
+
+  <div class="sidebar-divider"></div>
+
+
+  <button
+    class="sidebar-item"
+    onclick="zyreLogout()"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      ↪
+    </span>
+
+    <span>
+      Logout
+    </span>
+
+  </button>
+
+
   <div class="sidebar-bottom">
 
     <div class="sidebar-bottom-logo">
@@ -3307,6 +3331,62 @@ function closeSidebar() {
 }
 
 
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function zyreLogout() {
+
+  closeSidebar();
+
+  try {
+
+    const {
+      error
+    } =
+      await zyreAuthClient.auth.signOut();
+
+    if (error) {
+
+      console.error(
+        "ZYRE logout error:",
+        error
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "ZYRE logout error:",
+      error
+    );
+
+  }
+
+  localStorage.removeItem(
+    "zava_seller_id"
+  );
+
+  localStorage.removeItem(
+    "zava_user_id"
+  );
+
+  localStorage.removeItem(
+    "zava_seller_email"
+  );
+
+  localStorage.removeItem(
+    "zava_access_token"
+  );
+
+  window.location.replace(
+    "auth.html"
+  );
+
+}
+
+
 function goHome() {
 
   closeSidebar();
@@ -3808,6 +3888,7 @@ if (
         );
 
     }
+
   );
 
 }
