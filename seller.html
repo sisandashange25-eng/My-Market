@@ -354,6 +354,16 @@
       color: #842029;
     }
 
+    .auth-warning {
+      background: #fff0f0;
+      border: 1px solid #e0aaaa;
+      color: #842029;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
     @media (max-width: 700px) {
       .summary-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -374,6 +384,15 @@
 </header>
 
 <div class="container">
+
+  <div
+    id="authWarning"
+    class="auth-warning"
+  >
+    ⚠️ Your seller login session could not be found.
+    Please log in again before adding or managing products.
+  </div>
+
 
   <div class="card">
 
@@ -644,24 +663,14 @@ const SELLER_SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
 
 const SELLER_SUPABASE_KEY =
-  "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+  "sb_publishable_902JguVx0M5DNLWVx8trpA_lUlUMDG0";
 
 
 /* ==============================
    PHONE BACK BUTTON
-   SELLER DASHBOARD → MARKETPLACE
 ============================== */
 
 (function setupSellerBackNavigation() {
-
-  /*
-    Create one extra history entry for this dashboard.
-
-    When the Android/browser Back button is pressed,
-    the duplicate dashboard history entry is removed
-    and popstate sends the seller directly to the
-    marketplace instead of the seller application.
-  */
 
   try {
 
@@ -704,6 +713,9 @@ const storedSellerId =
 const SELLER_ID =
   Number(storedSellerId);
 
+const SELLER_ACCESS_TOKEN =
+  localStorage.getItem("zava_access_token");
+
 
 if (
   !storedSellerId ||
@@ -733,26 +745,84 @@ let lastOrdersSignature = "";
 
 
 /* ==============================
+   AUTHENTICATION CHECK
+============================== */
+
+function hasSellerAuthentication() {
+
+  return (
+    typeof SELLER_ACCESS_TOKEN === "string" &&
+    SELLER_ACCESS_TOKEN.trim().length > 20
+  );
+
+}
+
+
+function showAuthenticationWarning() {
+
+  const warning =
+    document.getElementById(
+      "authWarning"
+    );
+
+  if (!warning) return;
+
+  if (!hasSellerAuthentication()) {
+
+    warning.style.display =
+      "block";
+
+  }
+
+  else {
+
+    warning.style.display =
+      "none";
+
+  }
+
+}
+
+
+/* ==============================
    HEADERS
 ============================== */
 
 function getHeaders() {
 
-  const accessToken =
-    localStorage.getItem("zava_access_token");
+  const headers = {
 
-  return {
-
-    "apikey": SELLER_SUPABASE_KEY,
-
-    "Authorization":
-      "Bearer " +
-      (accessToken || SELLER_SUPABASE_KEY),
+    "apikey":
+      SELLER_SUPABASE_KEY,
 
     "Content-Type":
       "application/json"
 
   };
+
+
+  /*
+    IMPORTANT:
+
+    Only send the Authorization header
+    when a real Supabase access token exists.
+
+    The publishable key must NOT be used
+    as a fake Bearer token.
+  */
+
+  if (
+    hasSellerAuthentication()
+  ) {
+
+    headers["Authorization"] =
+      "Bearer " +
+      SELLER_ACCESS_TOKEN;
+
+  }
+
+
+  return headers;
 
 }
 
@@ -993,10 +1063,12 @@ async function loadRentalSubscription() {
       "rentalMessage"
     );
 
-  if (!subscriptionStatus ||
-      !rentalPaymentStatus ||
-      !rentalInformation ||
-      !rentalMessage) {
+  if (
+    !subscriptionStatus ||
+    !rentalPaymentStatus ||
+    !rentalInformation ||
+    !rentalMessage
+  ) {
 
     return;
 
@@ -1255,6 +1327,17 @@ async function loadRentalSubscription() {
 
 async function addProduct() {
 
+  if (!hasSellerAuthentication()) {
+
+    alert(
+      "Your seller login session has expired or is missing.\n\nPlease log in again before adding a product."
+    );
+
+    return;
+
+  }
+
+
   const name =
     document.getElementById(
       "productName"
@@ -1292,12 +1375,14 @@ async function addProduct() {
 
   if (
     !name ||
-    !price ||
+    !Number.isFinite(price) ||
+    price <= 0 ||
+    !Number.isInteger(stock) ||
     stock < 0
   ) {
 
     alert(
-      "Please enter the product name, price and stock."
+      "Please enter the product name, a valid price and valid stock."
     );
 
     return;
@@ -1348,7 +1433,7 @@ async function addProduct() {
                 category,
 
               image_url:
-                image_url,
+                image_url || null,
 
               active:
                 true
@@ -1362,10 +1447,34 @@ async function addProduct() {
 
     if (!response.ok) {
 
-      alert(
-        "Could not add product:\n" +
-        await response.text()
+      const errorText =
+        await response.text();
+
+      console.error(
+        "Product insert error:",
+        errorText
       );
+
+
+      if (
+        response.status === 401 ||
+        response.status === 403
+      ) {
+
+        alert(
+          "Your seller session is not authorized.\n\nPlease log in again and try adding the product."
+        );
+
+      }
+
+      else {
+
+        alert(
+          "Could not add product:\n" +
+          errorText
+        );
+
+      }
 
       return;
 
@@ -1398,7 +1507,7 @@ async function addProduct() {
     ).value = "";
 
 
-    loadProducts();
+    await loadProducts();
 
   }
 
@@ -3236,6 +3345,8 @@ document.getElementById(
 ).textContent =
   SELLER_ID;
 
+
+showAuthenticationWarning();
 
 loadSellerInformation();
 
