@@ -1213,7 +1213,7 @@
           try {
 
             /*
-              Step 1:
+              STEP 1
               Authenticate through Supabase Auth.
             */
 
@@ -1252,9 +1252,8 @@
 
 
             /*
-              Step 2:
-              Find the seller application belonging
-              to this authenticated account.
+              STEP 2
+              Look for an existing seller application.
             */
 
             const {
@@ -1273,6 +1272,12 @@
                 .maybeSingle();
 
 
+            /*
+              If Supabase itself reports an error,
+              stop here. This is different from
+              simply having no seller application.
+            */
+
             if (sellerError) {
 
               throw sellerError;
@@ -1281,23 +1286,61 @@
 
 
             /*
-              No seller application means this
-              account is not registered as a seller.
+              IMPORTANT FIX
+
+              The Auth account can already exist
+              before the seller application exists.
+
+              We DO NOT sign the user out.
+
+              Instead, keep the authenticated
+              session and send them to the seller
+              registration page.
             */
 
             if (!seller) {
 
-              await supabaseClient.auth.signOut();
-
-              throw new Error(
-                "No seller application is linked to this account. Please choose Seller → Create Seller Account first."
+              localStorage.setItem(
+                "zava_user_id",
+                String(data.user.id)
               );
+
+              localStorage.setItem(
+                "zava_seller_email",
+                email
+              );
+
+              localStorage.setItem(
+                "zava_access_token",
+                data.session.access_token
+              );
+
+
+              showMessage(
+                "Your ZYRE account is signed in. Please complete your seller application before you can access the Seller Centre.",
+                "info"
+              );
+
+
+              setTimeout(
+                function() {
+
+                  window.location.replace(
+                    "seller-auth.html"
+                  );
+
+                },
+                900
+              );
+
+
+              return;
 
             }
 
 
             /*
-              Step 3:
+              STEP 3
               Check seller approval.
             */
 
