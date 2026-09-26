@@ -1056,13 +1056,7 @@
         <span>Search Products</span>
       </button>
 
-      <button
-        type="button"
-        onclick="openCart(); toggleStoreMenu();"
-      >
-        <span class="menu-icon">🛒</span>
-        <span>Cart</span>
-      </button>
+      <!-- STORE MENU CART REMOVED -->
 
       <a
         href="account.html"
@@ -1131,6 +1125,7 @@
 
     </a>
 
+    <!-- THIS CART BUTTON REMAINS ON STORE PAGE -->
     <button
       class="header-cart-button"
       type="button"
@@ -1865,13 +1860,12 @@
 
     /* =========================
        CART NAVIGATION
-       
+
        The store page does NOT
        open the cart itself.
 
-       It only returns to the
-       marketplace. The marketplace
-       controls the cart drawer.
+       It returns to the
+       marketplace.
     ========================= */
 
     function openCart() {
