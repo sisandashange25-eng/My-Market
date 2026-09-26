@@ -504,9 +504,19 @@ function escapeHtml(value) {
    SUPABASE HEADERS
 ========================================= */
 
-function supabaseHeaders(
-  extra = {}
-) {
+function supabaseHeaders(extra = {}) {
+
+  /*
+    TEST PAYMENT MODE
+
+    Always use the public anon role.
+    We intentionally do NOT use a logged-in
+    user's access token here.
+
+    The Supabase anon role has already been
+    granted SELECT and INSERT access to the
+    payments table.
+  */
 
   return {
 
@@ -515,10 +525,7 @@ function supabaseHeaders(
 
     "Authorization":
       "Bearer " +
-      (
-        window.ZYRE_CURRENT_SESSION?.access_token ||
-        SUPABASE_KEY
-      ),
+      SUPABASE_KEY,
 
     ...extra
 
@@ -578,6 +585,7 @@ function displayPaymentInformation() {
       "payButton"
     );
 
+
   if (
     !orderId ||
     !Number.isFinite(amount) ||
@@ -595,12 +603,15 @@ function displayPaymentInformation() {
 
   }
 
+
   orderNumber.textContent =
     "Order #" +
     orderId;
 
+
   productName.textContent =
     itemName;
+
 
   productInfo.innerHTML =
     "Order #" +
@@ -609,9 +620,11 @@ function displayPaymentInformation() {
     "Amount due: R" +
     amount.toFixed(2);
 
+
   totalAmount.textContent =
     "R" +
     amount.toFixed(2);
+
 
   document.getElementById(
     "breakdownAmount"
@@ -619,17 +632,20 @@ function displayPaymentInformation() {
     "R" +
     amount.toFixed(2);
 
+
   document.getElementById(
     "breakdownCommission"
   ).textContent =
     "R" +
     zyreCommission.toFixed(2);
 
+
   document.getElementById(
     "breakdownSeller"
   ).textContent =
     "R" +
     sellerAmount.toFixed(2);
+
 
   payButton.disabled =
     false;
@@ -644,14 +660,9 @@ function displayPaymentInformation() {
 async function findOrderSeller() {
 
   /*
-    IMPORTANT:
     The correct Supabase table is:
 
     order_items
-
-    NOT:
-
-    orders_items
   */
 
   const itemsResponse =
