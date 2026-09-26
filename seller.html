@@ -647,6 +647,57 @@ const SELLER_SUPABASE_KEY =
   "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
 
+/* ==============================
+   PHONE BACK BUTTON
+   SELLER DASHBOARD → MARKETPLACE
+============================== */
+
+(function setupSellerBackNavigation() {
+
+  /*
+    Create one extra history entry for this dashboard.
+
+    When the Android/browser Back button is pressed,
+    the duplicate dashboard history entry is removed
+    and popstate sends the seller directly to the
+    marketplace instead of the seller application.
+  */
+
+  try {
+
+    history.pushState(
+      {
+        zyreSellerDashboard: true
+      },
+      "",
+      window.location.href
+    );
+
+    window.addEventListener(
+      "popstate",
+      function() {
+
+        window.location.replace(
+          "index.html"
+        );
+
+      }
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Seller back navigation setup error:",
+      error
+    );
+
+  }
+
+})();
+
+
 const storedSellerId =
   localStorage.getItem("zava_seller_id");
 
