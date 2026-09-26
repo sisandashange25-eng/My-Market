@@ -1,244 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-<title>ZYRE Marketing - Pay Now</title>
+  <title>ZYRE Marketing - Pay Now</title>
 
-<style>
+  <meta
+    name="description"
+    content="ZYRE Marketing secure checkout and test payment page."
+  >
 
-* {
-  box-sizing: border-box;
-}
+  <style>
+    *{
+      box-sizing:border-box;
+    }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f5f5f5;
-  color: #111;
-}
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:#f5f5f5;
+      color:#111;
+    }
 
-.header {
-  background: #000;
-  color: #d4af37;
-  padding: 22px 18px;
-  text-align: center;
-}
+    header{
+      background:#111;
+      color:#fff;
+      padding:18px;
+      text-align:center;
+    }
 
-.logo {
-  font-size: 28px;
-  font-weight: bold;
-  letter-spacing: 4px;
-}
+    header h1{
+      margin:0;
+      font-size:22px;
+      letter-spacing:1px;
+    }
 
-.subtitle {
-  margin-top: 6px;
-  color: #fff;
-  font-size: 13px;
-}
+    header p{
+      margin:6px 0 0;
+      font-size:13px;
+      color:#ccc;
+    }
 
-.container {
-  width: 100%;
-  max-width: 520px;
-  margin: 25px auto;
-  padding: 0 15px;
-}
+    .container{
+      width:92%;
+      max-width:600px;
+      margin:30px auto;
+    }
 
-.card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 22px;
-  box-shadow: 0 4px 18px rgba(0,0,0,.08);
-  margin-bottom: 18px;
-}
+    .card{
+      background:#fff;
+      border-radius:14px;
+      padding:22px;
+      box-shadow:0 4px 18px rgba(0,0,0,.08);
+    }
 
-.title {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 18px;
-}
+    .test-badge{
+      display:inline-block;
+      background:#111;
+      color:#fff;
+      padding:7px 12px;
+      border-radius:20px;
+      font-size:12px;
+      font-weight:bold;
+      margin-bottom:15px;
+    }
 
-.order-number {
-  color: #666;
-  font-size: 14px;
-  margin-bottom: 20px;
-}
+    h2{
+      margin-top:0;
+      font-size:22px;
+    }
 
-.product {
-  border: 1px solid #eee;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 15px;
-}
+    .order-box{
+      background:#f7f7f7;
+      border-radius:10px;
+      padding:15px;
+      margin:18px 0;
+    }
 
-.product-name {
-  font-size: 17px;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
+    .row{
+      display:flex;
+      justify-content:space-between;
+      gap:15px;
+      padding:8px 0;
+      border-bottom:1px solid #ddd;
+    }
 
-.product-info {
-  color: #666;
-  font-size: 14px;
-  line-height: 1.6;
-}
+    .row:last-child{
+      border-bottom:none;
+    }
 
-.total-box {
-  border-top: 1px solid #ddd;
-  margin-top: 18px;
-  padding-top: 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+    .label{
+      color:#666;
+    }
 
-.total-label {
-  font-size: 17px;
-  font-weight: bold;
-}
+    .value{
+      font-weight:bold;
+      text-align:right;
+    }
 
-.total {
-  font-size: 25px;
-  font-weight: bold;
-  color: #000;
-}
+    .total{
+      font-size:22px;
+      font-weight:bold;
+      margin-top:10px;
+    }
 
-.pay-button {
-  width: 100%;
-  border: none;
-  border-radius: 10px;
-  padding: 17px;
-  background: #000;
-  color: #d4af37;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .breakdown{
+      margin-top:20px;
+      padding:15px;
+      background:#fafafa;
+      border:1px solid #ddd;
+      border-radius:10px;
+    }
 
-.pay-button:hover {
-  opacity: .9;
-}
+    .breakdown h3{
+      margin-top:0;
+      font-size:16px;
+    }
 
-.pay-button:disabled {
-  opacity: .55;
-  cursor: not-allowed;
-}
+    button{
+      width:100%;
+      border:none;
+      border-radius:10px;
+      padding:15px;
+      background:#111;
+      color:#fff;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+      margin-top:20px;
+    }
 
-.secure {
-  text-align: center;
-  color: #666;
-  font-size: 13px;
-  margin-top: 14px;
-  line-height: 1.5;
-}
+    button:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+    }
 
-.notice {
-  background: #fff8df;
-  border: 1px solid #ead27b;
-  color: #5f4c00;
-  border-radius: 10px;
-  padding: 13px;
-  font-size: 13px;
-  line-height: 1.5;
-  margin-top: 15px;
-}
+    .notice{
+      margin-top:15px;
+      padding:12px;
+      background:#fff8df;
+      border:1px solid #ead27b;
+      border-radius:8px;
+      font-size:13px;
+      line-height:1.5;
+    }
 
-.notice strong {
-  display: inline-block;
-  margin-bottom: 4px;
-}
+    .success{
+      margin-top:20px;
+      padding:18px;
+      background:#e9f8ed;
+      border:1px solid #9bd3a6;
+      border-radius:10px;
+      display:none;
+    }
 
-.back {
-  display: block;
-  text-align: center;
-  margin-top: 18px;
-  color: #000;
-  text-decoration: none;
-  font-size: 14px;
-}
+    .error{
+      margin-top:20px;
+      padding:18px;
+      background:#fff0f0;
+      border:1px solid #e2a0a0;
+      border-radius:10px;
+      display:none;
+      white-space:pre-wrap;
+      line-height:1.5;
+    }
 
-.footer {
-  text-align: center;
-  color: #777;
-  font-size: 12px;
-  padding: 20px;
-}
+    .loading{
+      text-align:center;
+      padding:30px;
+      color:#666;
+    }
 
-.error {
-  color: #b00020;
-  background: #ffe8ed;
-  border-radius: 10px;
-  padding: 15px;
-  display: none;
-  line-height: 1.5;
-  white-space: pre-wrap;
-}
+    .small{
+      font-size:12px;
+      color:#777;
+      margin-top:12px;
+      line-height:1.5;
+    }
 
-.success {
-  color: #14532d;
-  background: #dcfce7;
-  border-radius: 10px;
-  padding: 15px;
-  display: none;
-  line-height: 1.6;
-  margin-bottom: 15px;
-}
-
-.test-badge {
-  display: inline-block;
-  background: #fff3cd;
-  color: #664d03;
-  border: 1px solid #ffecb5;
-  border-radius: 20px;
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.breakdown {
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid #eee;
-  display: none;
-}
-
-.breakdown-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 7px 0;
-  font-size: 14px;
-}
-
-.breakdown-row strong {
-  font-size: 15px;
-}
-
-</style>
+    footer{
+      text-align:center;
+      padding:25px 15px;
+      color:#777;
+      font-size:12px;
+    }
+  </style>
 </head>
 
 <body>
 
-<header class="header">
-
-  <div class="logo">
-    ZYRE
-  </div>
-
-  <div class="subtitle">
-    ZYRE Marketing
-  </div>
-
+<header>
+  <h1>ZYRE Marketing</h1>
+  <p>Pay Now</p>
 </header>
 
 
-<main class="container">
+<div class="container">
 
   <div class="card">
 
@@ -246,907 +208,975 @@ body {
       🧪 TEST PAYMENT
     </div>
 
-    <div class="title">
-      💳 Pay Now
+    <h2>Complete Your Payment</h2>
+
+    <div id="loading" class="loading">
+      Loading order...
     </div>
 
-    <div
-      id="orderNumber"
-      class="order-number"
-    >
-      Order: Loading...
-    </div>
 
-    <div
-      id="errorBox"
-      class="error"
-    >
-      Payment information could not be loaded.
-    </div>
+    <div id="paymentContent" style="display:none;">
 
-    <div
-      id="successBox"
-      class="success"
-    >
-      Payment completed successfully.
-    </div>
+      <div class="order-box">
 
-    <div
-      id="productBox"
-      class="product"
-    >
+        <div class="row">
+          <span class="label">
+            Order Number
+          </span>
+
+          <span
+            class="value"
+            id="orderNumber"
+          >
+            -
+          </span>
+        </div>
+
+
+        <div class="row">
+          <span class="label">
+            Product
+          </span>
+
+          <span
+            class="value"
+            id="productName"
+          >
+            -
+          </span>
+        </div>
+
+
+        <div class="row">
+          <span class="label">
+            Amount
+          </span>
+
+          <span
+            class="value"
+            id="orderAmount"
+          >
+            R0.00
+          </span>
+        </div>
+
+
+        <div class="total">
+          Total:
+          <span id="totalAmount">
+            R0.00
+          </span>
+        </div>
+
+      </div>
+
+
+      <div class="breakdown">
+
+        <h3>
+          Payment Breakdown
+        </h3>
+
+        <div class="row">
+
+          <span class="label">
+            ZYRE Marketing Commission (10%)
+          </span>
+
+          <span
+            class="value"
+            id="zyreCommission"
+          >
+            R0.00
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span class="label">
+            Seller Amount (90%)
+          </span>
+
+          <span
+            class="value"
+            id="sellerAmount"
+          >
+            R0.00
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <button
+        id="payButton"
+        onclick="payNow()"
+      >
+        🧪 Complete Test Payment
+      </button>
+
+
+      <div class="notice">
+
+        <strong>Test Mode</strong><br>
+
+        This is a test payment.
+        No real money will be charged.
+
+        The test system records the payment,
+        calculates the 10% ZYRE commission,
+        gives the seller 90%,
+        and marks the order as Paid.
+
+      </div>
+
 
       <div
-        id="productName"
-        class="product-name"
-      >
-        Loading product...
-      </div>
+        id="successBox"
+        class="success"
+      ></div>
+
 
       <div
-        id="productInfo"
-        class="product-info"
-      >
-        Please wait...
-      </div>
-
-    </div>
-
-    <div class="total-box">
-
-      <div class="total-label">
-        Total
-      </div>
-
-      <div
-        id="totalAmount"
-        class="total"
-      >
-        R0.00
-      </div>
-
-    </div>
-
-    <div
-      id="breakdown"
-      class="breakdown"
-    >
-
-      <div class="breakdown-row">
-
-        <span>
-          Order amount
-        </span>
-
-        <strong id="breakdownAmount">
-          R0.00
-        </strong>
-
-      </div>
-
-      <div class="breakdown-row">
-
-        <span>
-          ZYRE Commission (10%)
-        </span>
-
-        <strong id="breakdownCommission">
-          R0.00
-        </strong>
-
-      </div>
-
-      <div class="breakdown-row">
-
-        <span>
-          Seller amount (90%)
-        </span>
-
-        <strong id="breakdownSeller">
-          R0.00
-        </strong>
-
-      </div>
+        id="errorBox"
+        class="error"
+      ></div>
 
     </div>
 
   </div>
 
-
-  <div class="card">
-
-    <button
-      id="payButton"
-      class="pay-button"
-      onclick="payNow()"
-      disabled
-    >
-      🧪 Complete Test Payment
-    </button>
-
-    <div class="secure">
-
-      🔒 Your order information is securely linked
-      to your ZYRE Marketing order.
-
-    </div>
-
-    <div class="notice">
-
-      <strong>TEST PAYMENT MODE</strong><br>
-
-      This is a temporary ZYRE Marketing test
-      payment system.
-
-      <br><br>
-
-      When the test payment is completed,
-      ZYRE automatically receives 10% commission
-      and the seller receives 90%.
-
-      <br><br>
-
-      Real PayFast processing will be connected
-      separately when your PayFast integration is
-      ready.
-
-    </div>
-
-    <a
-      href="./index.html"
-      class="back"
-    >
-      ← Back to ZYRE Marketing
-    </a>
-
-  </div>
-
-</main>
+</div>
 
 
-<footer class="footer">
-  © 2026 ZYRE Marketing
+<footer>
+  ZYRE Marketing &copy; 2026
+  <br>
+  Durban, South Africa
 </footer>
 
 
 <script>
 
-/* =========================================
-   SUPABASE
-========================================= */
+  /* =========================================
+     SUPABASE
+  ========================================= */
 
-const SUPABASE_URL =
-  "https://gaccizzlwswwynattgda.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+  const SUPABASE_URL =
+    "https://gaccizzlwswwynattgda.supabase.co";
 
 
-/* =========================================
-   READ PAYMENT INFORMATION
-========================================= */
-
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
-
-const orderId =
-  params.get("order_id") || "";
-
-const amount =
-  Number(
-    params.get("amount") || 0
-  );
-
-const itemName =
-  params.get("item_name") ||
-  "ZYRE Marketing Order";
-
-const customerId =
-  params.get("customer_id") || "";
+  const SUPABASE_KEY =
+    "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
 
-/* =========================================
-   CALCULATE ZYRE COMMISSION
-========================================= */
+  /* =========================================
+     GET ORDER ID
+  ========================================= */
 
-const zyreCommission =
-  Math.round(
-    amount * 0.10 * 100
-  ) / 100;
-
-const sellerAmount =
-  Math.round(
-    (amount - zyreCommission) * 100
-  ) / 100;
-
-
-/* =========================================
-   BASIC HTML ESCAPE
-========================================= */
-
-function escapeHtml(value) {
-
-  return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* =========================================
-   SUPABASE HEADERS
-========================================= */
-
-function supabaseHeaders(extra = {}) {
-
-  return {
-
-    "apikey":
-      SUPABASE_KEY,
-
-    "Authorization":
-      "Bearer " +
-      SUPABASE_KEY,
-
-    ...extra
-
-  };
-
-}
-
-
-/* =========================================
-   SHOW ERROR
-========================================= */
-
-function showError(message) {
-
-  const errorBox =
-    document.getElementById(
-      "errorBox"
-    );
-
-  errorBox.style.display =
-    "block";
-
-  errorBox.textContent =
-    String(message);
-
-}
-
-
-/* =========================================
-   DISPLAY ORDER
-========================================= */
-
-function displayPaymentInformation() {
-
-  const orderNumber =
-    document.getElementById(
-      "orderNumber"
-    );
-
-  const productName =
-    document.getElementById(
-      "productName"
-    );
-
-  const productInfo =
-    document.getElementById(
-      "productInfo"
-    );
-
-  const totalAmount =
-    document.getElementById(
-      "totalAmount"
-    );
-
-  const payButton =
-    document.getElementById(
-      "payButton"
+  const params =
+    new URLSearchParams(
+      window.location.search
     );
 
 
-  if (
-    !orderId ||
-    !Number.isFinite(amount) ||
-    amount <= 0
-  ) {
+  const orderId =
+    params.get("order_id") ||
+    params.get("orderId") ||
+    params.get("id");
 
-    showError(
-      "The payment information is missing or invalid."
-    );
 
-    payButton.disabled =
-      true;
+  let orderData = null;
 
-    return;
+
+  /* =========================================
+     SUPABASE HEADERS
+  ========================================= */
+
+  function supabaseHeaders(extra = {}) {
+
+    return {
+
+      "apikey":
+        SUPABASE_KEY,
+
+      "Authorization":
+        "Bearer " + SUPABASE_KEY,
+
+      ...extra
+
+    };
 
   }
 
 
-  orderNumber.textContent =
-    "Order #" +
-    orderId;
+  /* =========================================
+     FORMAT MONEY
+  ========================================= */
 
+  function money(value) {
 
-  productName.textContent =
-    itemName;
+    const number =
+      Number(value || 0);
 
-
-  productInfo.innerHTML =
-    "Order #" +
-    escapeHtml(orderId) +
-    "<br>" +
-    "Amount due: R" +
-    amount.toFixed(2);
-
-
-  totalAmount.textContent =
-    "R" +
-    amount.toFixed(2);
-
-
-  document.getElementById(
-    "breakdownAmount"
-  ).textContent =
-    "R" +
-    amount.toFixed(2);
-
-
-  document.getElementById(
-    "breakdownCommission"
-  ).textContent =
-    "R" +
-    zyreCommission.toFixed(2);
-
-
-  document.getElementById(
-    "breakdownSeller"
-  ).textContent =
-    "R" +
-    sellerAmount.toFixed(2);
-
-
-  payButton.disabled =
-    false;
-
-}
-
-
-/* =========================================
-   FIND SELLER FOR ORDER
-========================================= */
-
-async function findOrderSeller() {
-
-  const itemsResponse =
-    await fetch(
-
-      SUPABASE_URL +
-      "/rest/v1/order_items?order_id=eq." +
-      encodeURIComponent(orderId) +
-      "&select=*",
-
-      {
-        method: "GET",
-        headers:
-          supabaseHeaders()
-      }
-
-    );
-
-
-  if (!itemsResponse.ok) {
-
-    throw new Error(
-      "Could not load the order items.\n\n" +
-      await itemsResponse.text()
+    return (
+      "R" +
+      number.toFixed(2)
     );
 
   }
 
 
-  const items =
-    await itemsResponse.json();
+  /* =========================================
+     ESCAPE HTML
+  ========================================= */
 
+  function esc(value) {
 
-  if (
-    !Array.isArray(items) ||
-    !items.length
-  ) {
-
-    throw new Error(
-      "No products were found for Order #" +
-      orderId +
-      "."
-    );
+    return String(
+      value ?? ""
+    )
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
 
   }
 
 
-  const productIds =
-    [
-      ...new Set(
+  /* =========================================
+     GET CURRENT CUSTOMER
+  ========================================= */
 
-        items
-          .map(item =>
-            item.products_id ??
-            item.product_id
-          )
-          .filter(id =>
-            id !== null &&
-            id !== undefined
-          )
+  function getCustomerId() {
 
-      )
+    const possibleKeys = [
+
+      "customer_id",
+      "customerId",
+      "user_id",
+      "userId"
+
     ];
 
 
-  if (!productIds.length) {
+    for (
+      const key of possibleKeys
+    ) {
 
-    throw new Error(
-      "The order items do not contain product IDs."
-    );
+      const value =
+        localStorage.getItem(key);
 
-  }
+      if (value) {
 
-
-  const productFilter =
-    productIds
-      .map(id =>
-        String(id)
-      )
-      .join(",");
-
-
-  const productsResponse =
-    await fetch(
-
-      SUPABASE_URL +
-      "/rest/v1/products?id=in.(" +
-      encodeURIComponent(
-        productFilter
-      ) +
-      ")&select=id,seller_id",
-
-      {
-        method: "GET",
-        headers:
-          supabaseHeaders()
-      }
-
-    );
-
-
-  if (!productsResponse.ok) {
-
-    throw new Error(
-      "Could not load the products for this order.\n\n" +
-      await productsResponse.text()
-    );
-
-  }
-
-
-  const orderProducts =
-    await productsResponse.json();
-
-
-  if (
-    !Array.isArray(orderProducts) ||
-    !orderProducts.length
-  ) {
-
-    throw new Error(
-      "The products belonging to this order could not be found."
-    );
-
-  }
-
-
-  const sellerIds =
-    [
-      ...new Set(
-
-        orderProducts
-          .map(product =>
-            Number(
-              product.seller_id
-            )
-          )
-          .filter(sellerId =>
-            Number.isFinite(
-              sellerId
-            ) &&
-            sellerId > 0
-          )
-
-      )
-    ];
-
-
-  if (!sellerIds.length) {
-
-    throw new Error(
-      "No seller could be found for this order."
-    );
-
-  }
-
-
-  if (sellerIds.length > 1) {
-
-    throw new Error(
-      "This order contains products from more than one seller.\n\n" +
-      "The current payment system needs to split multi-seller orders before payment."
-    );
-
-  }
-
-
-  return sellerIds[0];
-
-}
-
-
-/* =========================================
-   CHECK FOR EXISTING PAYMENT
-========================================= */
-
-async function findExistingPayment() {
-
-  const response =
-    await fetch(
-
-      SUPABASE_URL +
-      "/rest/v1/payments?order_id=eq." +
-      encodeURIComponent(orderId) +
-      "&select=*",
-
-      {
-        method: "GET",
-        headers:
-          supabaseHeaders()
-      }
-
-    );
-
-
-  if (!response.ok) {
-
-    throw new Error(
-      "Could not check the payment status.\n\n" +
-      await response.text()
-    );
-
-  }
-
-
-  const payments =
-    await response.json();
-
-
-  if (
-    Array.isArray(payments) &&
-    payments.length
-  ) {
-
-    return payments[0];
-
-  }
-
-
-  return null;
-
-}
-
-
-/* =========================================
-   UPDATE ORDER AFTER PAYMENT
-========================================= */
-
-async function markOrderPaid() {
-
-  const response =
-    await fetch(
-
-      SUPABASE_URL +
-      "/rest/v1/orders?id=eq." +
-      encodeURIComponent(orderId),
-
-      {
-
-        method: "PATCH",
-
-        headers:
-          supabaseHeaders({
-
-            "Content-Type":
-              "application/json",
-
-            "Prefer":
-              "return=minimal"
-
-          }),
-
-        body:
-          JSON.stringify({
-
-            status:
-              "Paid"
-
-          })
+        return value;
 
       }
 
-    );
+    }
 
 
-  if (!response.ok) {
-
-    const errorText =
-      await response.text();
-
-    throw new Error(
-      "Payment was recorded, but Order #" +
-      orderId +
-      " could not be marked as Paid.\n\n" +
-      "Supabase order update error:\n" +
-      errorText
-    );
+    return null;
 
   }
 
-}
+
+  /* =========================================
+     LOAD ORDER
+  ========================================= */
+
+  async function loadOrder() {
+
+    if (!orderId) {
+
+      throw new Error(
+        "No order number was supplied."
+      );
+
+    }
 
 
-/* =========================================
-   CREATE TEST PAYMENT
-========================================= */
+    const response =
+      await fetch(
 
-async function createTestPayment() {
+        SUPABASE_URL +
+        "/rest/v1/orders?id=eq." +
+        encodeURIComponent(orderId) +
+        "&select=*",
 
-  const sellerId =
-    await findOrderSeller();
+        {
+          method:"GET",
+
+          headers:
+            supabaseHeaders()
+        }
+
+      );
 
 
-  const existingPayment =
-    await findExistingPayment();
+    if (!response.ok) {
+
+      const errorText =
+        await response.text();
+
+      throw new Error(
+        "Could not load order.\n\n" +
+        errorText
+      );
+
+    }
 
 
-  if (existingPayment) {
-
-    const existingStatus =
-      String(
-        existingPayment.status || ""
-      ).toLowerCase();
+    const orders =
+      await response.json();
 
 
     if (
-      existingStatus === "paid" ||
-      existingStatus === "completed" ||
-      existingStatus === "successful" ||
-      existingStatus === "success"
+      !Array.isArray(orders) ||
+      !orders.length
     ) {
 
-      await markOrderPaid();
+      throw new Error(
+        "Order #" +
+        orderId +
+        " could not be found."
+      );
+
+    }
 
 
-      return {
+    orderData =
+      orders[0];
 
-        alreadyPaid:
-          true,
 
-        payment:
-          existingPayment
+    displayOrder();
 
-      };
+  }
+
+
+  /* =========================================
+     DISPLAY ORDER
+  ========================================= */
+
+  function displayOrder() {
+
+    const amount =
+      Number(
+        orderData.total ||
+        orderData.Total ||
+        0
+      );
+
+
+    const commission =
+      amount * 0.10;
+
+
+    const sellerAmount =
+      amount - commission;
+
+
+    document.getElementById(
+      "orderNumber"
+    ).textContent =
+      "#" + orderId;
+
+
+    document.getElementById(
+      "productName"
+    ).textContent =
+      "Marketplace Order";
+
+
+    document.getElementById(
+      "orderAmount"
+    ).textContent =
+      money(amount);
+
+
+    document.getElementById(
+      "totalAmount"
+    ).textContent =
+      money(amount);
+
+
+    document.getElementById(
+      "zyreCommission"
+    ).textContent =
+      money(commission);
+
+
+    document.getElementById(
+      "sellerAmount"
+    ).textContent =
+      money(sellerAmount);
+
+
+    document.getElementById(
+      "loading"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "paymentContent"
+    ).style.display =
+      "block";
+
+  }
+
+
+  /* =========================================
+     FIND SELLER
+  ========================================= */
+
+  async function findOrderSeller() {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/order_items?order_id=eq." +
+        encodeURIComponent(orderId) +
+        "&select=*",
+
+        {
+          method:"GET",
+
+          headers:
+            supabaseHeaders()
+        }
+
+      );
+
+
+    if (!response.ok) {
+
+      const errorText =
+        await response.text();
+
+      throw new Error(
+        "Could not load order items.\n\n" +
+        errorText
+      );
+
+    }
+
+
+    const items =
+      await response.json();
+
+
+    if (
+      !Array.isArray(items) ||
+      !items.length
+    ) {
+
+      throw new Error(
+        "No products were found for Order #" +
+        orderId +
+        "."
+      );
+
+    }
+
+
+    const productIds =
+      items
+        .map(item =>
+          item.products_id ??
+          item.product_id ??
+          item.Products_id ??
+          item.Product_id
+        )
+        .filter(
+          id =>
+            id !== null &&
+            id !== undefined
+        );
+
+
+    if (!productIds.length) {
+
+      throw new Error(
+        "The order items do not contain product IDs."
+      );
+
+    }
+
+
+    const uniqueProductIds =
+      [
+        ...new Set(productIds)
+      ];
+
+
+    const idList =
+      uniqueProductIds
+        .join(",");
+
+
+    const productResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/products?id=in.(" +
+        encodeURIComponent(idList) +
+        ")&select=id,seller_id",
+
+        {
+          method:"GET",
+
+          headers:
+            supabaseHeaders()
+        }
+
+      );
+
+
+    if (!productResponse.ok) {
+
+      const errorText =
+        await productResponse.text();
+
+      throw new Error(
+        "Could not load product seller information.\n\n" +
+        errorText
+      );
+
+    }
+
+
+    const products =
+      await productResponse.json();
+
+
+    if (
+      !Array.isArray(products) ||
+      !products.length
+    ) {
+
+      throw new Error(
+        "The products for this order could not be found."
+      );
+
+    }
+
+
+    const sellerIds =
+      [
+        ...new Set(
+          products
+            .map(product =>
+              product.seller_id
+            )
+            .filter(
+              id =>
+                id !== null &&
+                id !== undefined
+            )
+        )
+      ];
+
+
+    if (!sellerIds.length) {
+
+      throw new Error(
+        "No seller was found for this order."
+      );
+
+    }
+
+
+    if (sellerIds.length > 1) {
+
+      throw new Error(
+        "This order contains products from multiple sellers. " +
+        "The current test payment system supports one seller per order."
+      );
+
+    }
+
+
+    return sellerIds[0];
+
+  }
+
+
+  /* =========================================
+     FIND EXISTING PAYMENT
+  ========================================= */
+
+  async function findExistingPayment() {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/payments?order_id=eq." +
+        encodeURIComponent(orderId) +
+        "&select=*",
+
+        {
+          method:"GET",
+
+          headers:
+            supabaseHeaders()
+        }
+
+      );
+
+
+    if (!response.ok) {
+
+      const errorText =
+        await response.text();
+
+      throw new Error(
+        "Could not check existing payments.\n\n" +
+        errorText
+      );
+
+    }
+
+
+    const payments =
+      await response.json();
+
+
+    if (
+      !Array.isArray(payments)
+    ) {
+
+      return [];
+
+    }
+
+
+    return payments;
+
+  }
+
+
+  /* =========================================
+     MARK ORDER AS PAID
+  ========================================= */
+
+  async function markOrderPaid() {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/orders?id=eq." +
+        encodeURIComponent(orderId),
+
+        {
+          method:"PATCH",
+
+          headers:
+            supabaseHeaders({
+
+              "Content-Type":
+                "application/json",
+
+              "Prefer":
+                "return=representation"
+
+            }),
+
+          body:
+            JSON.stringify({
+
+              status:"Paid"
+
+            })
+
+        }
+
+      );
+
+
+    const responseText =
+      await response.text();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+
+        "Payment was recorded, but Order #" +
+        orderId +
+        " could not be marked as Paid.\n\n" +
+        "Supabase order update error:\n" +
+        responseText
+
+      );
+
+    }
+
+
+    let updatedOrders = [];
+
+
+    try {
+
+      updatedOrders =
+        responseText
+          ? JSON.parse(responseText)
+          : [];
+
+    } catch (error) {
+
+      updatedOrders = [];
+
+    }
+
+
+    if (
+      !Array.isArray(updatedOrders) ||
+      !updatedOrders.length
+    ) {
+
+      throw new Error(
+
+        "Payment was recorded, but the order update did not return Order #" +
+        orderId +
+        "."
+
+      );
+
+    }
+
+
+    const updatedStatus =
+      String(
+        updatedOrders[0].status || ""
+      );
+
+
+    if (
+      updatedStatus.toLowerCase() !==
+      "paid"
+    ) {
+
+      throw new Error(
+
+        "Payment was recorded, but Order #" +
+        orderId +
+        " still has status: " +
+        updatedStatus
+
+      );
 
     }
 
   }
 
 
-  const paymentBody = {
+  /* =========================================
+     CREATE TEST PAYMENT
+  ========================================= */
 
-    order_id:
-      Number(orderId),
+  async function createTestPayment() {
 
-    seller_id:
-      sellerId,
-
-    customer_id:
-      customerId || null,
-
-    provider:
-      "TEST",
-
-    provider_reference:
-      "ZYRE-TEST-PAYMENT-" +
-      orderId,
-
-    amount:
-      amount,
-
-    zyre_commission:
-      zyreCommission,
-
-    seller_amount:
-      sellerAmount,
-
-    currency:
-      "ZAR",
-
-    status:
-      "paid"
-
-  };
+    const amount =
+      Number(
+        orderData.total ||
+        orderData.Total ||
+        0
+      );
 
 
-  const response =
-    await fetch(
+    if (
+      !amount ||
+      amount <= 0
+    ) {
 
-      SUPABASE_URL +
-      "/rest/v1/payments",
+      throw new Error(
+        "The order total is invalid."
+      );
 
-      {
-
-        method: "POST",
-
-        headers:
-          supabaseHeaders({
-
-            "Content-Type":
-              "application/json",
-
-            "Prefer":
-              "return=representation"
-
-          }),
-
-        body:
-          JSON.stringify(
-            paymentBody
-          )
-
-      }
-
-    );
+    }
 
 
-  if (!response.ok) {
+    const sellerId =
+      await findOrderSeller();
 
-    throw new Error(
-      "Payment could not be recorded.\n\n" +
-      await response.text()
-    );
+
+    const customerId =
+      getCustomerId();
+
+
+    const existingPayments =
+      await findExistingPayment();
+
+
+    const existingPaid =
+      existingPayments.find(
+        payment =>
+          String(
+            payment.status || ""
+          ).toLowerCase() ===
+          "paid"
+      );
+
+
+    if (existingPaid) {
+
+      await markOrderPaid();
+
+      return {
+        amount: amount,
+        commission:
+          Number(
+            existingPaid.zyre_commission ??
+            amount * 0.10
+          ),
+        sellerAmount:
+          Number(
+            existingPaid.seller_amount ??
+            amount * 0.90
+          ),
+        existing:true
+      };
+
+    }
+
+
+    const zyreCommission =
+      Number(
+        (amount * 0.10)
+          .toFixed(2)
+      );
+
+
+    const sellerAmount =
+      Number(
+        (amount - zyreCommission)
+          .toFixed(2)
+      );
+
+
+    const paymentBody = {
+
+      order_id:
+        Number(orderId),
+
+      seller_id:
+        sellerId,
+
+      customer_id:
+        customerId || null,
+
+      provider:
+        "TEST",
+
+      provider_reference:
+        "ZYRE-TEST-PAYMENT-" +
+        orderId,
+
+      amount:
+        amount,
+
+      zyre_commission:
+        zyreCommission,
+
+      seller_amount:
+        sellerAmount,
+
+      currency:
+        "ZAR",
+
+      status:
+        "paid"
+
+    };
+
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/payments",
+
+        {
+          method:"POST",
+
+          headers:
+            supabaseHeaders({
+
+              "Content-Type":
+                "application/json",
+
+              "Prefer":
+                "return=representation"
+
+            }),
+
+          body:
+            JSON.stringify(
+              paymentBody
+            )
+
+        }
+
+      );
+
+
+    const responseText =
+      await response.text();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+
+        "Payment could not be completed.\n\n" +
+        "Supabase payment error:\n" +
+        responseText
+
+      );
+
+    }
+
+
+    await markOrderPaid();
+
+
+    return {
+
+      amount:
+        amount,
+
+      commission:
+        zyreCommission,
+
+      sellerAmount:
+        sellerAmount,
+
+      existing:
+        false
+
+    };
 
   }
 
 
-  const payment =
-    await response.json();
+  /* =========================================
+     PAYMENT BUTTON
+  ========================================= */
 
+  async function payNow() {
 
-  await markOrderPaid();
-
-
-  return {
-
-    alreadyPaid:
-      false,
-
-    payment:
-      Array.isArray(payment)
-        ? payment[0]
-        : payment
-
-  };
-
-}
-
-
-/* =========================================
-   PAY NOW
-========================================= */
-
-async function payNow() {
-
-  const payButton =
-    document.getElementById(
-      "payButton"
-    );
-
-
-  if (
-    !orderId ||
-    !Number.isFinite(amount) ||
-    amount <= 0
-  ) {
-
-    showError(
-      "The payment information is invalid."
-    );
-
-    return;
-
-  }
-
-
-  const confirmed =
-    confirm(
-
-      "🧪 TEST PAYMENT\n\n" +
-
-      "Order #" +
-      orderId +
-
-      "\n\n" +
-
-      "Customer pays: R" +
-      amount.toFixed(2) +
-
-      "\n\n" +
-
-      "ZYRE Commission (10%): R" +
-      zyreCommission.toFixed(2) +
-
-      "\n\n" +
-
-      "Seller receives (90%): R" +
-      sellerAmount.toFixed(2) +
-
-      "\n\n" +
-
-      "Complete this TEST payment?"
-
-    );
-
-
-  if (!confirmed) {
-
-    return;
-
-  }
-
-
-  payButton.disabled =
-    true;
-
-  payButton.textContent =
-    "⏳ Processing Test Payment...";
-
-
-  try {
-
-    const result =
-      await createTestPayment();
+    const button =
+      document.getElementById(
+        "payButton"
+      );
 
 
     const successBox =
@@ -1155,142 +1185,162 @@ async function payNow() {
       );
 
 
-    const breakdown =
+    const errorBox =
       document.getElementById(
-        "breakdown"
+        "errorBox"
       );
 
 
-    breakdown.style.display =
-      "block";
-
-
     successBox.style.display =
-      "block";
+      "none";
 
 
-    if (result.alreadyPaid) {
+    errorBox.style.display =
+      "none";
+
+
+    button.disabled =
+      true;
+
+
+    button.textContent =
+      "Processing test payment...";
+
+
+    try {
+
+      const result =
+        await createTestPayment();
+
 
       successBox.innerHTML =
 
-        "<strong>✅ This order is already paid.</strong><br><br>" +
+        "<strong>✅ Payment Successful</strong><br><br>" +
 
         "Order #" +
-        escapeHtml(orderId) +
+        esc(orderId) +
+        " has been marked as <strong>Paid</strong>.<br><br>" +
 
-        "<br>" +
+        "Customer paid: <strong>" +
+        money(result.amount) +
+        "</strong><br>" +
 
-        "Payment amount: R" +
-        Number(
-          result.payment.amount || amount
-        ).toFixed(2);
+        "ZYRE Marketing 10%: <strong>" +
+        money(result.commission) +
+        "</strong><br>" +
 
-    } else {
+        "Seller 90%: <strong>" +
+        money(result.sellerAmount) +
+        "</strong>";
 
-      successBox.innerHTML =
 
-        "<strong>✅ TEST PAYMENT SUCCESSFUL</strong><br><br>" +
+      successBox.style.display =
+        "block";
+
+
+      button.textContent =
+        "✅ Payment Complete";
+
+
+      alert(
+
+        "Test payment successful!\n\n" +
 
         "Order #" +
-        escapeHtml(orderId) +
+        orderId +
+        "\n\n" +
 
-        "<br>" +
+        "Customer paid: " +
+        money(result.amount) +
+        "\n" +
 
-        "Customer paid: R" +
-        amount.toFixed(2) +
+        "ZYRE 10%: " +
+        money(result.commission) +
+        "\n" +
 
-        "<br>" +
+        "Seller 90%: " +
+        money(result.sellerAmount)
 
-        "ZYRE Commission (10%): R" +
-        zyreCommission.toFixed(2) +
+      );
 
-        "<br>" +
+    } catch (error) {
 
-        "Seller amount (90%): R" +
-        sellerAmount.toFixed(2) +
+      console.error(
+        "ZYRE payment error:",
+        error
+      );
 
-        "<br><br>" +
 
-        "Order status: Paid";
+      errorBox.textContent =
+        error &&
+        error.message
+          ? error.message
+          : String(error);
+
+
+      errorBox.style.display =
+        "block";
+
+
+      button.disabled =
+        false;
+
+
+      button.textContent =
+        "🧪 Complete Test Payment";
+
+
+      alert(
+        errorBox.textContent
+      );
 
     }
 
-
-    payButton.disabled =
-      true;
-
-    payButton.textContent =
-      "✅ Payment Completed";
-
-
-    alert(
-
-      "✅ TEST PAYMENT SUCCESSFUL!\n\n" +
-
-      "Order #" +
-      orderId +
-
-      "\n\n" +
-
-      "Customer paid: R" +
-      amount.toFixed(2) +
-
-      "\n" +
-
-      "ZYRE 10% commission: R" +
-      zyreCommission.toFixed(2) +
-
-      "\n" +
-
-      "Seller receives: R" +
-      sellerAmount.toFixed(2) +
-
-      "\n\n" +
-
-      "Order status: PAID"
-
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      "TEST PAYMENT ERROR:",
-      error
-    );
-
-
-    showError(
-      error.message
-    );
-
-
-    payButton.disabled =
-      false;
-
-    payButton.textContent =
-      "🧪 Complete Test Payment";
-
-
-    alert(
-
-      "Payment could not be completed.\n\n" +
-      error.message
-
-    );
-
   }
 
-}
+
+  /* =========================================
+     START
+  ========================================= */
+
+  window.addEventListener(
+    "DOMContentLoaded",
+    async function() {
+
+      try {
+
+        await loadOrder();
+
+      } catch (error) {
+
+        console.error(
+          "ZYRE order loading error:",
+          error
+        );
 
 
-/* =========================================
-   START
-========================================= */
+        document.getElementById(
+          "loading"
+        ).textContent =
+          error &&
+          error.message
+            ? error.message
+            : "Could not load order.";
 
-displayPaymentInformation();
+      }
+
+    }
+  );
 
 </script>
 
 </body>
 </html>
+
+Now only do these 3 things:
+
+1. Replace your entire "payment.html" with the code above.
+2. Save/commit it to GitHub.
+3. Test one new order and press Complete Test Payment.
+
+Then check that order in Owner Control Centre. If it still says "Pending", send me the exact message that appears on the payment page — don't change the Supabase policies yet.
