@@ -717,14 +717,8 @@ return;
 
 }
 
-
-/* =========================================================
-GET LOGGED-IN CUSTOMER
-========================================================= */
-
 const user =
   await getZYRECurrentUser();
-
 
 if (!user) {
 
@@ -739,14 +733,8 @@ return;
 
 }
 
-
-/* =========================================================
-GET SAVED CUSTOMER PROFILE
-========================================================= */
-
 const profile =
   await getZYRECustomerProfile();
-
 
 if (!profile) {
 
@@ -758,24 +746,20 @@ return;
 
 }
 
-
 const fullName =
 String(
   profile.full_name || ""
 ).trim();
-
 
 const phone =
 String(
   profile.phone || ""
 ).trim();
 
-
 const deliveryAddress =
 String(
   profile.address || ""
 ).trim();
-
 
 if (!fullName) {
 
@@ -787,7 +771,6 @@ return;
 
 }
 
-
 if (!phone) {
 
 alert(
@@ -798,7 +781,6 @@ return;
 
 }
 
-
 if (!deliveryAddress) {
 
 alert(
@@ -808,7 +790,6 @@ alert(
 return;
 
 }
-
 
 const counts = {};
 
@@ -838,7 +819,6 @@ const product =
       String(id)
   );
 
-
 if (!product) {
 
   alert(
@@ -849,14 +829,11 @@ if (!product) {
 
 }
 
-
 const price =
   Number(product.price);
 
-
 total +=
   price * quantity;
-
 
 orderItems.push({
 
@@ -873,13 +850,7 @@ orderItems.push({
 
 }
 
-
 try {
-
-
-/* =========================================================
-FINAL STOCK CHECK
-========================================================= */
 
 for (const item of orderItems) {
 
@@ -889,7 +860,6 @@ for (const item of orderItems) {
         String(p.id) ===
         String(item.product_id)
     );
-
 
   if (
     !product ||
@@ -906,11 +876,6 @@ for (const item of orderItems) {
   }
 
 }
-
-
-/* =========================================================
-ENSURE CUSTOMER PROFILE BELONGS TO LOGGED-IN USER
-========================================================= */
 
 const profileResponse =
   await fetch(
@@ -964,7 +929,6 @@ const profileResponse =
 
   );
 
-
 if (!profileResponse.ok) {
 
   const profileError =
@@ -976,11 +940,6 @@ if (!profileResponse.ok) {
   );
 
 }
-
-
-/* =========================================================
-CREATE CUSTOMER ORDER
-========================================================= */
 
 const orderResponse =
   await fetch(
@@ -1033,7 +992,6 @@ const orderResponse =
 
   );
 
-
 if (!orderResponse.ok) {
 
   alert(
@@ -1045,14 +1003,8 @@ if (!orderResponse.ok) {
 
 }
 
-
 const orderId =
   await orderResponse.json();
-
-
-/* =========================================================
-SEND NEW ORDER NOTIFICATION TO SELLER
-========================================================= */
 
 try {
 
@@ -1080,7 +1032,6 @@ const sellerIds = [
       )
   )
 ];
-
 
 for (const sellerId of sellerIds) {
 
@@ -1125,7 +1076,6 @@ for (const sellerId of sellerIds) {
         }
       );
 
-
   if (!notificationResponse.ok) {
 
     console.warn(
@@ -1152,11 +1102,6 @@ console.warn(
 );
 
 }
-
-
-/* =========================================================
-BUILD PAYMENT PAGE PRODUCT INFORMATION
-========================================================= */
 
 const cartProducts =
   orderItems.map(item => {
@@ -1186,7 +1131,6 @@ const cartProducts =
 
   });
 
-
 const productSummary =
   cartProducts
     .map(item =>
@@ -1200,11 +1144,6 @@ const productSummary =
       ).toFixed(2)
     )
     .join(" | ");
-
-
-/* =========================================================
-GO DIRECTLY TO ZYRE PAYMENT PAGE
-========================================================= */
 
 const paymentUrl =
   "https://sisandashange25-eng.github.io/My-Market/payment.html" +
@@ -1229,15 +1168,12 @@ const paymentUrl =
     user.id
   );
 
-
 cart = [];
 
 save();
 
-
 window.location.href =
   paymentUrl;
-
 
 } catch (error) {
 
@@ -1255,10 +1191,173 @@ alert(
 SELLER CENTRE
 ========================================================= */
 
-function sellerCentre() {
+async function sellerCentre() {
 
-window.location.href =
-  "seller-auth.html";
+  try {
+
+    /*
+      First check whether the current account
+      is actually logged in.
+    */
+
+    const user =
+      await getZYRECurrentUser();
+
+    if (!user) {
+
+      window.location.href =
+        "seller-auth.html";
+
+      return;
+
+    }
+
+
+    /*
+      Get the seller record belonging
+      to the logged-in account.
+    */
+
+    const accessToken =
+      window.ZYRE_CURRENT_SESSION?.access_token ||
+      localStorage.getItem("zava_access_token") ||
+      SUPABASE_KEY;
+
+
+    const sellerResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/sellers?user_id=eq." +
+        encodeURIComponent(user.id) +
+        "&select=id,store_name,approved,status",
+
+        {
+
+          method: "GET",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              accessToken
+
+          }
+
+        }
+
+      );
+
+
+    if (!sellerResponse.ok) {
+
+      console.warn(
+        "Could not check seller approval:",
+        await sellerResponse.text()
+      );
+
+      /*
+        If the seller record cannot be checked,
+        fail safely and do not open seller.html.
+      */
+
+      window.location.href =
+        "seller-auth.html";
+
+      return;
+
+    }
+
+
+    const sellers =
+      await sellerResponse.json();
+
+
+    /*
+      This account is not registered
+      as a seller.
+    */
+
+    if (
+      !Array.isArray(sellers) ||
+      !sellers.length
+    ) {
+
+      window.location.href =
+        "seller-auth.html";
+
+      return;
+
+    }
+
+
+    const seller =
+      sellers[0];
+
+
+    /*
+      APPROVED SELLER
+      → Directly open Seller Dashboard.
+    */
+
+    if (
+      seller.approved === true ||
+      seller.status === "seller_approved"
+    ) {
+
+      localStorage.setItem(
+        "zava_seller_id",
+        seller.id
+      );
+
+      localStorage.setItem(
+        "zava_user_id",
+        user.id
+      );
+
+      if (accessToken) {
+
+        localStorage.setItem(
+          "zava_access_token",
+          accessToken
+        );
+
+      }
+
+      window.location.href =
+        "seller.html";
+
+      return;
+
+    }
+
+
+    /*
+      PENDING SELLER
+      → Keep them in the application flow.
+    */
+
+    window.location.href =
+      "seller-auth.html";
+
+  } catch (error) {
+
+    console.error(
+      "Seller Centre routing error:",
+      error
+    );
+
+    /*
+      Fail safely.
+    */
+
+    window.location.href =
+      "seller-auth.html";
+
+  }
 
 }
 
@@ -1336,7 +1435,6 @@ let userId = null;
 let accessToken =
   SUPABASE_KEY;
 
-
 const signupResponse =
   await fetch(
 
@@ -1372,12 +1470,10 @@ const signupResponse =
 
   );
 
-
 if (signupResponse.ok) {
 
   const signupData =
     await signupResponse.json();
-
 
   if (signupData.user) {
 
@@ -1385,7 +1481,6 @@ if (signupResponse.ok) {
       signupData.user.id;
 
   }
-
 
   if (signupData.access_token) {
 
@@ -1398,7 +1493,6 @@ if (signupResponse.ok) {
 
   const signupError =
     await signupResponse.text();
-
 
   if (
     signupError
@@ -1441,7 +1535,6 @@ if (signupResponse.ok) {
 
       );
 
-
     if (!loginResponse.ok) {
 
       alert(
@@ -1454,14 +1547,11 @@ if (signupResponse.ok) {
 
     }
 
-
     const loginData =
       await loginResponse.json();
 
-
     userId =
       loginData.user.id;
-
 
     accessToken =
       loginData.access_token;
@@ -1479,7 +1569,6 @@ if (signupResponse.ok) {
 
 }
 
-
 if (!userId) {
 
   alert(
@@ -1489,7 +1578,6 @@ if (!userId) {
   return;
 
 }
-
 
 const profileResponse =
   await fetch(
@@ -1539,7 +1627,6 @@ const profileResponse =
 
     );
 
-
 if (!profileResponse.ok) {
 
   alert(
@@ -1550,7 +1637,6 @@ if (!profileResponse.ok) {
   return;
 
 }
-
 
 const existingSellerResponse =
   await fetch(
@@ -1577,15 +1663,12 @@ const existingSellerResponse =
 
   );
 
-
 let sellerId = null;
-
 
 if (existingSellerResponse.ok) {
 
   const existingSellers =
     await existingSellerResponse.json();
-
 
   if (existingSellers.length) {
 
@@ -1595,7 +1678,6 @@ if (existingSellerResponse.ok) {
   }
 
 }
-
 
 if (!sellerId) {
 
@@ -1650,7 +1732,6 @@ if (!sellerId) {
 
       );
 
-
   if (!sellerResponse.ok) {
 
     alert(
@@ -1662,16 +1743,13 @@ if (!sellerId) {
 
   }
 
-
   const sellerData =
     await sellerResponse.json();
-
 
   sellerId =
     sellerData[0].id;
 
 }
-
 
 const planResponse =
   await fetch(
@@ -1696,7 +1774,6 @@ const planResponse =
 
   );
 
-
 if (!planResponse.ok) {
 
   alert(
@@ -1708,10 +1785,8 @@ if (!planResponse.ok) {
 
 }
 
-
 const plans =
   await planResponse.json();
-
 
 if (!plans.length) {
 
@@ -1723,10 +1798,8 @@ if (!plans.length) {
 
 }
 
-
 const rentalPlan =
   plans[0];
-
 
 const existingSubscriptionResponse =
   await fetch(
@@ -1753,15 +1826,12 @@ const existingSubscriptionResponse =
 
   );
 
-
 let subscriptionId = null;
-
 
 if (existingSubscriptionResponse.ok) {
 
   const subscriptions =
     await existingSubscriptionResponse.json();
-
 
   if (subscriptions.length) {
 
@@ -1771,7 +1841,6 @@ if (existingSubscriptionResponse.ok) {
   }
 
 }
-
 
 if (!subscriptionId) {
 
@@ -1820,7 +1889,6 @@ if (!subscriptionId) {
 
       );
 
-
   if (!subscriptionResponse.ok) {
 
     alert(
@@ -1832,16 +1900,13 @@ if (!subscriptionId) {
 
   }
 
-
   const subscriptionData =
     await subscriptionResponse.json();
-
 
   subscriptionId =
     subscriptionData[0].id;
 
 }
-
 
 const existingPaymentResponse =
   await fetch(
@@ -1868,9 +1933,7 @@ const existingPaymentResponse =
 
   );
 
-
 let paymentExists = false;
-
 
 if (existingPaymentResponse.ok) {
 
@@ -1881,7 +1944,6 @@ if (existingPaymentResponse.ok) {
     payments.length > 0;
 
 }
-
 
 if (!paymentExists) {
 
@@ -1938,7 +2000,6 @@ if (!paymentExists) {
 
       );
 
-
   if (!paymentResponse.ok) {
 
     alert(
@@ -1951,7 +2012,6 @@ if (!paymentExists) {
   }
 
 }
-
 
 localStorage.setItem(
   "zava_seller_id",
@@ -1972,7 +2032,6 @@ localStorage.setItem(
   "zava_access_token",
   accessToken
 );
-
 
 const rentalPaymentUrl =
 
@@ -2003,7 +2062,6 @@ const rentalPaymentUrl =
 
   "&payment_type=rental";
 
-
 alert(
 
   "🎉 Store application created!\n\n" +
@@ -2022,7 +2080,6 @@ alert(
   "Next: You will be taken to PayFast Sandbox to complete the R100 rental payment."
 
 );
-
 
 window.location.href =
   rentalPaymentUrl;
@@ -2115,7 +2172,6 @@ const loginResponse =
 
   );
 
-
 if (!loginResponse.ok) {
 
   alert(
@@ -2127,18 +2183,14 @@ if (!loginResponse.ok) {
 
 }
 
-
 const loginData =
   await loginResponse.json();
-
 
 const accessToken =
   loginData.access_token;
 
-
 const userId =
   loginData.user.id;
-
 
 const sellerResponse =
   await fetch(
@@ -2165,7 +2217,6 @@ const sellerResponse =
 
   );
 
-
 if (!sellerResponse.ok) {
 
   alert(
@@ -2177,10 +2228,8 @@ if (!sellerResponse.ok) {
 
 }
 
-
 const sellers =
   await sellerResponse.json();
-
 
 if (!sellers.length) {
 
@@ -2192,10 +2241,8 @@ if (!sellers.length) {
 
 }
 
-
 const seller =
   sellers[0];
-
 
 if (seller.approved !== true) {
 
@@ -2206,7 +2253,6 @@ if (seller.approved !== true) {
   return;
 
 }
-
 
 localStorage.setItem(
   "zava_access_token",
@@ -2223,11 +2269,9 @@ localStorage.setItem(
   seller.id
 );
 
-
 alert(
   "Seller login successful! 🎉"
 );
-
 
 window.location.href =
   "seller.html";
@@ -2316,7 +2360,6 @@ const response =
 
     );
 
-
 if (!response.ok) {
 
   alert(
@@ -2328,10 +2371,8 @@ if (!response.ok) {
 
 }
 
-
 const orders =
   await response.json();
-
 
 if (
 !Array.isArray(orders) ||
@@ -2346,12 +2387,10 @@ if (
 
 }
 
-
 const wantedId =
   Number(
     orderId.trim()
   );
-
 
 const order =
   orders.find(o => {
@@ -2367,7 +2406,6 @@ const order =
 
   });
 
-
 if (!order) {
 
   alert(
@@ -2380,12 +2418,10 @@ if (!order) {
 
 }
 
-
 const displayId =
   order.id ??
   order.order_id ??
   order.orderid;
-
 
 const displayTotal =
   order.total ??
@@ -2393,17 +2429,14 @@ const displayTotal =
   order.amount ??
   0;
 
-
 const displayStatus =
   order.status ??
   "Pending";
-
 
 const displayAddress =
   order.delivery_address ??
   order.deliveryaddress ??
   "Not provided";
-
 
 let delivery = null;
 
@@ -2438,12 +2471,10 @@ try {
 
     );
 
-
   if (deliveryResponse.ok) {
 
     const deliveryData =
       await deliveryResponse.json();
-
 
     if (
       Array.isArray(deliveryData) &&
@@ -2475,10 +2506,8 @@ try {
 
 }
 
-
 let deliveryText =
 "🚚 Delivery: Not assigned yet";
-
 
 if (delivery) {
 
@@ -2486,25 +2515,20 @@ if (delivery) {
     delivery.status ||
     "Assigned";
 
-
   const deliveryPerson =
     delivery.delivery_person_name ||
     "Not assigned";
-
 
   const deliveryPhone =
     delivery.delivery_person_phone ||
     "Not provided";
 
-
   const trackingNumber =
     delivery.tracking_number ||
     "Not provided";
 
-
   let estimatedDelivery =
     "Not provided";
-
 
   if (
     delivery.estimated_delivery
@@ -2515,7 +2539,6 @@ if (delivery) {
         delivery.estimated_delivery +
         "T00:00:00"
       );
-
 
     if (
       !Number.isNaN(
@@ -2547,7 +2570,6 @@ if (delivery) {
 
   }
 
-
   deliveryText =
 
     "🚚 Delivery Status: " +
@@ -2566,7 +2588,6 @@ if (delivery) {
     estimatedDelivery;
 
 }
-
 
 alert(
 
@@ -3001,7 +3022,6 @@ if (
 const permission =
 Notification.permission;
 
-
 if (permission !== "granted") {
 
   updateZYRENotificationButton(false);
@@ -3010,13 +3030,11 @@ if (permission !== "granted") {
 
 }
 
-
 const registration =
 await getZYREServiceWorkerRegistration();
 
 const subscription =
 await registration.pushManager.getSubscription();
-
 
 if (!subscription) {
 
@@ -3030,16 +3048,13 @@ if (!subscription) {
 
 }
 
-
 console.log(
 "Existing ZYRE push subscription found."
 );
 
-
 await saveZYREPushSubscription(
 subscription
 );
-
 
 updateZYRENotificationButton(true);
 
@@ -3078,7 +3093,6 @@ if (!("Notification" in window)) {
 
 }
 
-
 if (!("serviceWorker" in navigator)) {
 
   alert(
@@ -3088,7 +3102,6 @@ if (!("serviceWorker" in navigator)) {
   return false;
 
 }
-
 
 if (
 !window.PushManager
@@ -3102,12 +3115,10 @@ if (
 
 }
 
-
 try {
 
   let permission =
     Notification.permission;
-
 
   if (permission !== "granted") {
 
@@ -3115,7 +3126,6 @@ try {
       await Notification.requestPermission();
 
   }
-
 
   if (permission !== "granted") {
 
@@ -3130,10 +3140,8 @@ try {
 
   }
 
-
   const subscription =
     await subscribeToZYREPush();
-
 
   if (!subscription) {
 
@@ -3143,24 +3151,19 @@ try {
 
   }
 
-
   updateZYRENotificationButton(true);
-
 
   console.log(
     "ZYRE Marketing notifications enabled.",
     subscription
   );
 
-
   alert(
     "🔔 ZYRE Marketing notifications are enabled!\n\n" +
     "This phone is now registered for push notifications."
   );
 
-
   return true;
-
 
 } catch (error) {
 
@@ -3169,15 +3172,12 @@ try {
     error
   );
 
-
   updateZYRENotificationButton(false);
-
 
   alert(
     "Notification setup failed:\n\n" +
     error.message
   );
-
 
   return false;
 
@@ -3206,7 +3206,6 @@ try {
 
   }
 
-
   if (
     !("serviceWorker" in navigator) ||
     !("PushManager" in window)
@@ -3218,14 +3217,11 @@ try {
 
   }
 
-
   const registration =
     await getZYREServiceWorkerRegistration();
 
-
   let subscription =
     await registration.pushManager.getSubscription();
-
 
   if (!subscription) {
 
@@ -3244,22 +3240,17 @@ try {
 
   }
 
-
   await saveZYREPushSubscription(
     subscription
   );
 
-
   updateZYRENotificationButton(true);
-
 
   console.log(
     "ZYRE push subscription checked and restored."
   );
 
-
   return true;
-
 
 } catch (error) {
 
@@ -3297,7 +3288,6 @@ setTimeout(
 
     const alreadyEnabled =
       await checkZYRENotificationStatus();
-
 
     if (
       !alreadyEnabled &&
