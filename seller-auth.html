@@ -38,10 +38,6 @@ body {
   min-height: 100vh;
 }
 
-/* =========================
-HEADER
-========================= */
-
 .header {
   width: 100%;
   padding: 18px 20px;
@@ -91,20 +87,12 @@ HEADER
   font-size: 13px;
 }
 
-/* =========================
-MAIN
-========================= */
-
 .main {
   width: 100%;
   max-width: 1080px;
   margin: 0 auto;
   padding: 20px;
 }
-
-/* =========================
-INTRO
-========================= */
 
 .intro {
   text-align: center;
@@ -126,10 +114,6 @@ INTRO
   font-size: 15px;
 }
 
-/* =========================
-AUTH GRID
-========================= */
-
 .auth-grid {
   display: grid;
   grid-template-columns:
@@ -138,10 +122,6 @@ AUTH GRID
   max-width: 700px;
   margin: 0 auto;
 }
-
-/* =========================
-CARD
-========================= */
 
 .card {
   background: white;
@@ -164,10 +144,6 @@ CARD
   line-height: 1.5;
 }
 
-/* =========================
-SECTION TITLE
-========================= */
-
 .form-section-title {
   margin: 25px 0 15px;
   padding-top: 20px;
@@ -176,10 +152,6 @@ SECTION TITLE
   font-weight: 800;
   color: #111;
 }
-
-/* =========================
-FORM
-========================= */
 
 .form-group {
   margin-bottom: 17px;
@@ -254,10 +226,6 @@ select {
   cursor: pointer;
 }
 
-/* =========================
-PASSWORD REQUIREMENTS
-========================= */
-
 .password-requirements {
   margin-top: 8px;
   padding: 10px 12px;
@@ -271,10 +239,6 @@ PASSWORD REQUIREMENTS
 .password-requirements strong {
   color: #333;
 }
-
-/* =========================
-BUTTON
-========================= */
 
 .primary-button {
   width: 100%;
@@ -315,10 +279,6 @@ BUTTON
   background: #f5f5f5;
 }
 
-/* =========================
-CHECKBOX
-========================= */
-
 .checkbox-row {
   display: flex;
   align-items: flex-start;
@@ -338,15 +298,6 @@ CHECKBOX
   line-height: 1.5;
   color: #555;
 }
-
-.checkbox-row a {
-  color: #111;
-  font-weight: 700;
-}
-
-/* =========================
-MESSAGE
-========================= */
 
 .message {
   display: none;
@@ -379,10 +330,6 @@ MESSAGE
   color: #27458f;
 }
 
-/* =========================
-APPLICATION NOTICE
-========================= */
-
 .application-notice {
   background: #f7f7f7;
   border: 1px solid #e5e5e5;
@@ -397,10 +344,6 @@ APPLICATION NOTICE
 .application-notice strong {
   color: #111;
 }
-
-/* =========================
-RENTAL PAYMENT
-========================= */
 
 .rental-section {
   display: none;
@@ -505,10 +448,6 @@ RENTAL PAYMENT
   background: #777;
 }
 
-/* =========================
-SELLER BENEFITS
-========================= */
-
 .benefits {
   margin-top: 30px;
   padding-top: 22px;
@@ -533,20 +472,12 @@ SELLER BENEFITS
   font-size: 16px;
 }
 
-/* =========================
-FOOTER
-========================= */
-
 .footer {
   text-align: center;
   color: #888;
   padding: 30px 20px;
   font-size: 12px;
 }
-
-/* =========================
-MOBILE
-========================= */
 
 @media (max-width: 760px) {
 
@@ -577,10 +508,6 @@ MOBILE
 
   .intro p {
     font-size: 13px;
-  }
-
-  .auth-grid {
-    grid-template-columns: 1fr;
   }
 
   .card {
@@ -659,10 +586,6 @@ MOBILE
   </section>
 
 
-  <!-- =========================
-  SELLER APPLICATION
-  ========================= -->
-
   <section
     class="auth-grid"
     id="authArea"
@@ -699,13 +622,7 @@ MOBILE
       </div>
 
 
-      <form
-        id="registerForm"
-      >
-
-        <!-- =========================
-        PERSONAL INFORMATION
-        ========================= -->
+      <form id="registerForm">
 
         <div class="form-section-title">
           👤 Personal information
@@ -804,10 +721,6 @@ MOBILE
         </div>
 
 
-        <!-- =========================
-        SECURITY
-        ========================= -->
-
         <div class="form-section-title">
           🔐 Account security
         </div>
@@ -885,10 +798,6 @@ MOBILE
 
         </div>
 
-
-        <!-- =========================
-        STORE INFORMATION
-        ========================= -->
 
         <div class="form-section-title">
           🏪 Store information
@@ -998,10 +907,6 @@ MOBILE
         </div>
 
 
-        <!-- =========================
-        TERMS
-        ========================= -->
-
         <div class="checkbox-row">
 
           <input
@@ -1066,10 +971,6 @@ MOBILE
 
   </section>
 
-
-  <!-- =========================
-  RENTAL PAYMENT AREA
-  ========================= -->
 
   <section
     class="rental-section"
@@ -1238,20 +1139,11 @@ MOBILE
 
 <script>
 
-/* =========================
-SUPABASE
-========================= */
-
 const SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
 
 const SUPABASE_KEY =
   "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
-
-
-/* =========================
-CONSTANTS
-========================= */
 
 const STORE_RENTAL_AMOUNT =
   100;
@@ -1259,10 +1151,6 @@ const STORE_RENTAL_AMOUNT =
 const STORE_RENTAL_METHOD =
   "PayFast";
 
-
-/* =========================
-HELPERS
-========================= */
 
 function showMessage(
   elementId,
@@ -1302,10 +1190,6 @@ function clearMessage(
 }
 
 
-/* =========================
-PASSWORD SHOW / HIDE
-========================= */
-
 function togglePassword(
   inputId,
   button
@@ -1339,10 +1223,6 @@ function togglePassword(
 }
 
 
-/* =========================
-PASSWORD VALIDATION
-========================= */
-
 function isStrongPassword(
   password
 ) {
@@ -1359,80 +1239,133 @@ function isStrongPassword(
 
 
 /* =========================
-AUTH HELPER
+GET CURRENT SUPABASE SESSION
 ========================= */
 
-async function loginExistingUser(
-  email,
-  password
-) {
+async function getCurrentSession() {
+
+  /*
+  Look through Supabase's stored browser
+  sessions without storing any password.
+  */
+
+  let storedSession = null;
+
+  try {
+
+    for (
+      const key of Object.keys(localStorage)
+    ) {
+
+      if (
+        key.startsWith("sb-") &&
+        key.endsWith("-auth-token")
+      ) {
+
+        const raw =
+          localStorage.getItem(key);
+
+        if (!raw) continue;
+
+        const parsed =
+          JSON.parse(raw);
+
+        if (
+          parsed &&
+          parsed.access_token &&
+          parsed.user
+        ) {
+
+          storedSession = {
+            access_token:
+              parsed.access_token,
+
+            user:
+              parsed.user
+          };
+
+          break;
+
+        }
+
+      }
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      "Could not read existing Supabase session.",
+      error
+    );
+
+  }
+
+
+  if (
+    !storedSession
+  ) {
+
+    return null;
+
+  }
+
+
+  /*
+  Verify the token with Supabase.
+  */
 
   const response =
     await fetch(
       SUPABASE_URL +
-      "/auth/v1/token?grant_type=password",
+      "/auth/v1/user",
       {
-
-        method: "POST",
 
         headers: {
 
           "apikey":
             SUPABASE_KEY,
 
-          "Content-Type":
-            "application/json"
+          "Authorization":
+            "Bearer " +
+            storedSession.access_token
 
-        },
-
-        body:
-          JSON.stringify({
-
-            email:
-              email,
-
-            password:
-              password
-
-          })
+        }
 
       }
     );
 
 
-  const text =
-    await response.text();
-
-  let data = {};
-
-  try {
-
-    data =
-      text
-        ? JSON.parse(text)
-        : {};
-
-  } catch {
-
-    data = {};
-
-  }
-
-
   if (!response.ok) {
 
-    throw new Error(
-      data.error_description ||
-      data.msg ||
-      data.message ||
-      text ||
-      "The account could not be signed in."
-    );
+    return null;
 
   }
 
 
-  return data;
+  const user =
+    await response.json();
+
+
+  if (!user?.id) {
+
+    return null;
+
+  }
+
+
+  return {
+
+    accessToken:
+      storedSession.access_token,
+
+    userId:
+      user.id,
+
+    email:
+      user.email || ""
+
+  };
 
 }
 
@@ -1454,20 +1387,6 @@ async function createSellerStore(
   description,
   email
 ) {
-
-  /*
-  New applications are always created as:
-
-  status = seller_pending
-  approved = false
-
-  Owner approval is handled separately.
-  */
-
-
-  /* =========================
-  CHECK EXISTING SELLER
-  ========================= */
 
   const existingSellerResponse =
     await fetch(
@@ -1515,6 +1434,7 @@ async function createSellerStore(
   ) {
 
     return {
+
       sellerId:
         existingSellers[0].id,
 
@@ -1534,14 +1454,11 @@ async function createSellerStore(
             ? "seller_approved"
             : "seller_pending"
         )
+
     };
 
   }
 
-
-  /* =========================
-  CREATE SELLER APPLICATION
-  ========================= */
 
   const sellerResponse =
     await fetch(
@@ -1645,6 +1562,7 @@ async function createSellerStore(
 
 
   return {
+
     sellerId:
       sellerId,
 
@@ -1659,6 +1577,7 @@ async function createSellerStore(
 
     status:
       "seller_pending"
+
   };
 
 }
@@ -1672,13 +1591,6 @@ async function createOrFindRentalPayment(
   sellerId,
   accessToken
 ) {
-
-  /*
-  First check whether this seller already
-  has a pending rental payment.
-
-  This prevents duplicate R100 records.
-  */
 
   const existingResponse =
     await fetch(
@@ -1733,10 +1645,6 @@ async function createOrFindRentalPayment(
 
   }
 
-
-  /* =========================
-  CREATE NEW RENTAL RECORD
-  ========================= */
 
   const rentalResponse =
     await fetch(
@@ -1967,10 +1875,6 @@ document
         );
 
 
-      /* =========================
-      GET FORM VALUES
-      ========================= */
-
       const fullName =
         document
           .getElementById(
@@ -2067,10 +1971,6 @@ document
           .value
           .trim();
 
-
-      /* =========================
-      VALIDATION
-      ========================= */
 
       if (!fullName) {
 
@@ -2228,198 +2128,246 @@ document
         let userId =
           null;
 
+        let accountEmail =
+          email;
+
 
         /* =========================
-        TRY NEW ACCOUNT FIRST
+        CHECK IF ALREADY SIGNED IN
         ========================= */
 
-        const signupResponse =
-          await fetch(
-            SUPABASE_URL +
-            "/auth/v1/signup",
-            {
-
-              method: "POST",
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Content-Type":
-                  "application/json"
-
-              },
-
-              body:
-                JSON.stringify({
-
-                  email:
-                    email,
-
-                  password:
-                    password,
-
-                  data: {
-
-                    full_name:
-                      fullName,
-
-                    phone:
-                      phone
-
-                  }
-
-                })
-
-            }
-          );
+        const currentSession =
+          await getCurrentSession();
 
 
-        const signupText =
-          await signupResponse.text();
+        if (currentSession) {
 
-        let signupData = {};
+          accessToken =
+            currentSession.accessToken;
 
+          userId =
+            currentSession.userId;
 
-        try {
-
-          signupData =
-            signupText
-              ? JSON.parse(
-                  signupText
-                )
-              : {};
-
-        } catch {
-
-          signupData = {};
+          accountEmail =
+            currentSession.email ||
+            email;
 
         }
 
 
         /* =========================
-        NEW USER
+        CREATE ACCOUNT IF NEEDED
         ========================= */
 
         if (
-          signupResponse.ok
+          !accessToken ||
+          !userId
         ) {
 
-          userId =
-            signupData.user?.id ||
-            signupData.id ||
-            null;
-
-          accessToken =
-            signupData.access_token ||
-            null;
+          button.textContent =
+            "Creating seller account...";
 
 
-          if (!userId) {
+          const signupResponse =
+            await fetch(
+              SUPABASE_URL +
+              "/auth/v1/signup",
+              {
 
-            throw new Error(
-              "Your account was created, but Supabase did not return the user ID."
+                method: "POST",
+
+                headers: {
+
+                  "apikey":
+                    SUPABASE_KEY,
+
+                  "Content-Type":
+                    "application/json"
+
+                },
+
+                body:
+                  JSON.stringify({
+
+                    email:
+                      email,
+
+                    password:
+                      password,
+
+                    data: {
+
+                      full_name:
+                        fullName,
+
+                      phone:
+                        phone
+
+                    }
+
+                  })
+
+              }
             );
+
+
+          const signupText =
+            await signupResponse.text();
+
+          let signupData = {};
+
+
+          try {
+
+            signupData =
+              signupText
+                ? JSON.parse(
+                    signupText
+                  )
+                : {};
+
+          } catch {
+
+            signupData = {};
 
           }
 
 
-          /*
-          Email confirmation may be required.
-          */
-
-          if (!accessToken) {
-
-            showMessage(
-              "registerMessage",
-              "Your account has been created. Please confirm your email address first, then return to the main ZYRE Account page and sign in as Seller.",
-              "success"
-            );
-
-
-            return;
-
-          }
-
-        }
-
-
-        /* =========================
-        EXISTING USER
-        ========================= */
-
-        else {
-
-          const combinedError =
-            (
-              signupData.msg ||
-              signupData.message ||
-              signupData.error_description ||
-              signupText ||
-              ""
-            ).toLowerCase();
-
-
-          const alreadyRegistered =
-            combinedError.includes(
-              "already registered"
-            ) ||
-            combinedError.includes(
-              "already exists"
-            ) ||
-            combinedError.includes(
-              "user already"
-            );
-
+          /* =========================
+          NEW ACCOUNT CREATED
+          ========================= */
 
           if (
-            !alreadyRegistered
+            signupResponse.ok
           ) {
+
+            userId =
+              signupData.user?.id ||
+              signupData.id ||
+              null;
+
+            accessToken =
+              signupData.access_token ||
+              null;
+
+
+            if (!userId) {
+
+              throw new Error(
+                "Your account was created, but Supabase did not return the user ID."
+              );
+
+            }
+
+
+            /*
+            Email confirmation required.
+            */
+
+            if (!accessToken) {
+
+              showMessage(
+                "registerMessage",
+                "Your seller account has been created.\n\nPlease confirm your email address first. Then return to the main ZYRE Account page, choose Seller and sign in.\n\nAfter signing in, return here to complete the seller application.",
+                "success"
+              );
+
+              return;
+
+            }
+
+          }
+
+          /* =========================
+          EMAIL ALREADY EXISTS
+          ========================= */
+
+          else {
+
+            const combinedError =
+              (
+                signupData.msg ||
+                signupData.message ||
+                signupData.error_description ||
+                signupData.error ||
+                signupText ||
+                ""
+              ).toLowerCase();
+
+
+            const alreadyRegistered =
+              combinedError.includes(
+                "already registered"
+              ) ||
+              combinedError.includes(
+                "already exists"
+              ) ||
+              combinedError.includes(
+                "user already"
+              ) ||
+              combinedError.includes(
+                "email already"
+              );
+
+
+            if (
+              alreadyRegistered
+            ) {
+
+              /*
+              IMPORTANT:
+
+              Do NOT try to guess the user's
+              existing password.
+
+              The old code attempted an automatic
+              login here, which caused:
+
+              "Invalid login credentials"
+
+              Instead, send the user to the
+              normal Account login.
+              */
+
+              showMessage(
+                "registerMessage",
+                "This email address already has a ZYRE account.\n\nPlease go back to Account and sign in as Seller using your existing account password.\n\nAfter you are signed in, return to Seller registration to submit your seller application.",
+                "info"
+              );
+
+              return;
+
+            }
+
 
             throw new Error(
               signupData.msg ||
               signupData.message ||
               signupData.error_description ||
+              signupData.error ||
               signupText ||
               "The seller account could not be created."
             );
 
           }
 
-
-          /*
-          Existing Auth account.
-          */
-
-          button.textContent =
-            "Signing in to existing account...";
+        }
 
 
-          const existingLogin =
-            await loginExistingUser(
-              email,
-              password
-            );
+        /* =========================
+        VERIFY EMAIL MATCH
+        ========================= */
 
+        if (
+          accountEmail &&
+          email &&
+          accountEmail.toLowerCase() !==
+            email.toLowerCase()
+        ) {
 
-          accessToken =
-            existingLogin.access_token;
-
-          userId =
-            existingLogin.user?.id;
-
-
-          if (
-            !accessToken ||
-            !userId
-          ) {
-
-            throw new Error(
-              "The existing account could not be signed in."
-            );
-
-          }
+          throw new Error(
+            "The signed-in ZYRE account uses a different email address.\n\nPlease use the email address belonging to your signed-in account."
+          );
 
         }
 
@@ -2480,7 +2428,6 @@ document
               "success"
             );
 
-
             return;
 
           }
@@ -2530,17 +2477,6 @@ document
           );
 
 
-        /*
-        IMPORTANT:
-
-        The seller remains:
-
-        seller_pending
-
-        They are NOT approved here.
-        */
-
-
         showRentalPayment(
           storeName,
           rentalPayment
@@ -2569,11 +2505,6 @@ document
         );
 
       } finally {
-
-        /*
-          Only restore the button if the form
-          is still visible.
-        */
 
         const authArea =
           document.getElementById(
