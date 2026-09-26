@@ -18,9 +18,181 @@ let cart =
 JSON.parse(localStorage.getItem("cart") || "[]");
 
 
-/* =========================
+/* =========================================================
+ZYRE CUSTOMER ACCOUNT
+========================================================= */
+
+async function getZYRECurrentUser() {
+
+  try {
+
+    if (
+      window.ZYRE_CURRENT_SESSION &&
+      window.ZYRE_CURRENT_SESSION.user
+    ) {
+
+      return window.ZYRE_CURRENT_SESSION.user;
+
+    }
+
+    if (
+      !window.supabase ||
+      !window.supabase.createClient
+    ) {
+
+      return null;
+
+    }
+
+    if (!window.ZYRE_AUTH_CLIENT) {
+
+      window.ZYRE_AUTH_CLIENT =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY
+        );
+
+    }
+
+    const {
+      data,
+      error
+    } =
+      await window.ZYRE_AUTH_CLIENT.auth.getUser();
+
+    if (error) {
+
+      console.warn(
+        "Could not get current ZYRE customer:",
+        error
+      );
+
+      return null;
+
+    }
+
+    return data?.user || null;
+
+  } catch (error) {
+
+    console.warn(
+      "Could not get current ZYRE user:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================================
+GET CUSTOMER PROFILE
+========================================================= */
+
+async function getZYRECustomerProfile() {
+
+  try {
+
+    const user =
+      await getZYRECurrentUser();
+
+    if (!user) {
+
+      return null;
+
+    }
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/profiles?id=eq." +
+        encodeURIComponent(user.id) +
+        "&select=id,full_name,phone,address,role",
+
+        {
+
+          method: "GET",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              (
+                window.ZYRE_CURRENT_SESSION?.access_token ||
+                SUPABASE_KEY
+              )
+
+          }
+
+        }
+
+      );
+
+
+    if (!response.ok) {
+
+      console.warn(
+        "Customer profile could not be loaded:",
+        await response.text()
+      );
+
+      return null;
+
+    }
+
+
+    const profiles =
+      await response.json();
+
+
+    if (
+      !Array.isArray(profiles) ||
+      !profiles.length
+    ) {
+
+      return null;
+
+    }
+
+
+    return profiles[0];
+
+  } catch (error) {
+
+    console.warn(
+      "Could not load customer profile:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================================
+OPEN CUSTOMER ACCOUNT
+========================================================= */
+
+window.customerAccount =
+function() {
+
+  window.location.href =
+    "account.html";
+
+};
+
+
+/* =========================================================
 RENDER PRODUCTS
-========================= */
+========================================================= */
 
 function renderProducts() {
 
@@ -145,9 +317,9 @@ filtered.map(x => `
 }
 
 
-/* =========================
+/* =========================================================
 LOAD PRODUCTS
-========================= */
+========================================================= */
 
 async function loadProducts() {
 
@@ -275,9 +447,9 @@ alert(
 }
 
 
-/* =========================
+/* =========================================================
 CATEGORY
-========================= */
+========================================================= */
 
 function setCategory(c) {
 
@@ -298,9 +470,9 @@ renderProducts();
 }
 
 
-/* =========================
+/* =========================================================
 ADD TO CART
-========================= */
+========================================================= */
 
 function add(id) {
 
@@ -349,9 +521,9 @@ alert("Added to cart");
 }
 
 
-/* =========================
+/* =========================================================
 SAVE CART
-========================= */
+========================================================= */
 
 function save() {
 
@@ -363,9 +535,9 @@ JSON.stringify(cart)
 }
 
 
-/* =========================
+/* =========================================================
 CLEAR CART
-========================= */
+========================================================= */
 
 function clearCart() {
 
@@ -382,9 +554,9 @@ alert(
 }
 
 
-/* =========================
+/* =========================================================
 UPDATE CART
-========================= */
+========================================================= */
 
 function updateCart() {
 
@@ -511,9 +683,9 @@ total.toFixed(2);
 }
 
 
-/* =========================
+/* =========================================================
 TOGGLE CART
-========================= */
+========================================================= */
 
 function toggleCart() {
 
@@ -529,9 +701,9 @@ updateCart();
 }
 
 
-/* =========================
+/* =========================================================
 CUSTOMER CHECKOUT
-========================= */
+========================================================= */
 
 async function checkout() {
 
@@ -545,59 +717,98 @@ return;
 
 }
 
-const fullName =
-prompt(
-"Enter your full name:"
-);
 
-if (
-!fullName ||
-!fullName.trim()
-) {
+/* =========================================================
+GET LOGGED-IN CUSTOMER
+========================================================= */
+
+const user =
+  await getZYRECurrentUser();
+
+
+if (!user) {
 
 alert(
-  "Checkout cancelled."
+  "Your customer session could not be found.\n\nPlease sign in again."
+);
+
+window.location.href =
+  "auth.html";
+
+return;
+
+}
+
+
+/* =========================================================
+GET SAVED CUSTOMER PROFILE
+========================================================= */
+
+const profile =
+  await getZYRECustomerProfile();
+
+
+if (!profile) {
+
+alert(
+  "Your customer profile could not be found.\n\nPlease open your Customer Account and complete your profile before checkout."
 );
 
 return;
 
 }
+
+
+const fullName =
+String(
+  profile.full_name || ""
+).trim();
+
 
 const phone =
-prompt(
-"Enter your phone number:"
-);
+String(
+  profile.phone || ""
+).trim();
 
-if (
-!phone ||
-!phone.trim()
-) {
-
-alert(
-  "Checkout cancelled."
-);
-
-return;
-
-}
 
 const deliveryAddress =
-prompt(
-"Enter your delivery address:"
-);
+String(
+  profile.address || ""
+).trim();
 
-if (
-!deliveryAddress ||
-!deliveryAddress.trim()
-) {
+
+if (!fullName) {
 
 alert(
-  "Checkout cancelled."
+  "Your full name is missing from your customer account.\n\nPlease update your account before checkout."
 );
 
 return;
 
 }
+
+
+if (!phone) {
+
+alert(
+  "Your phone number is missing from your customer account.\n\nPlease update your account before checkout."
+);
+
+return;
+
+}
+
+
+if (!deliveryAddress) {
+
+alert(
+  "Your delivery address is missing from your customer account.\n\nPlease update your account before checkout."
+);
+
+return;
+
+}
+
 
 const counts = {};
 
@@ -662,7 +873,13 @@ orderItems.push({
 
 }
 
+
 try {
+
+
+/* =========================================================
+FINAL STOCK CHECK
+========================================================= */
 
 for (const item of orderItems) {
 
@@ -691,65 +908,79 @@ for (const item of orderItems) {
 }
 
 
+/* =========================================================
+ENSURE CUSTOMER PROFILE BELONGS TO LOGGED-IN USER
+========================================================= */
+
 const profileResponse =
   await fetch(
+
     SUPABASE_URL +
-    "/rest/v1/profiles",
+    "/rest/v1/profiles?id=eq." +
+    encodeURIComponent(user.id),
+
     {
-      method: "POST",
+
+      method: "PATCH",
 
       headers: {
+
         "apikey":
           SUPABASE_KEY,
 
         "Authorization":
           "Bearer " +
-          SUPABASE_KEY,
+          (
+            window.ZYRE_CURRENT_SESSION?.access_token ||
+            SUPABASE_KEY
+          ),
 
         "Content-Type":
           "application/json",
 
         "Prefer":
-          "return=representation"
+          "return=minimal"
 
       },
 
-      body: JSON.stringify({
+      body:
+        JSON.stringify({
 
-        full_name:
-          fullName.trim(),
+          full_name:
+            fullName,
 
-        phone:
-          phone.trim(),
+          phone:
+            phone,
 
-        role:
-          "customer"
+          address:
+            deliveryAddress,
 
-      })
+          role:
+            "customer"
+
+        })
 
     }
+
   );
 
 
 if (!profileResponse.ok) {
 
-  alert(
-    "Customer profile could not be created.\n\n" +
-    await profileResponse.text()
-  );
+  const profileError =
+    await profileResponse.text();
 
-  return;
+  console.warn(
+    "Customer profile update failed:",
+    profileError
+  );
 
 }
 
 
-const profileData =
-  await profileResponse.json();
-
-
-const customerId =
-  profileData[0].id;
-
+/* =========================================================
+CREATE CUSTOMER ORDER
+========================================================= */
 
 const orderResponse =
   await fetch(
@@ -768,7 +999,10 @@ const orderResponse =
 
         "Authorization":
           "Bearer " +
-          SUPABASE_KEY,
+          (
+            window.ZYRE_CURRENT_SESSION?.access_token ||
+            SUPABASE_KEY
+          ),
 
         "Content-Type":
           "application/json"
@@ -779,7 +1013,7 @@ const orderResponse =
         JSON.stringify({
 
           p_customer_id:
-            customerId,
+            user.id,
 
           p_total:
             total,
@@ -788,7 +1022,7 @@ const orderResponse =
             "Pending",
 
           p_delivery_address:
-            deliveryAddress.trim(),
+            deliveryAddress,
 
           p_items:
             orderItems
@@ -822,97 +1056,100 @@ SEND NEW ORDER NOTIFICATION TO SELLER
 
 try {
 
-  const sellerIds = [
-    ...new Set(
-      orderItems
-        .map(item => {
+const sellerIds = [
+  ...new Set(
+    orderItems
+      .map(item => {
 
-          const product =
-            products.find(
-              p =>
-                String(p.id) ===
-                String(item.product_id)
-            );
+        const product =
+          products.find(
+            p =>
+              String(p.id) ===
+              String(item.product_id)
+          );
 
-          return product
-            ? Number(product.seller_id)
-            : null;
+        return product
+          ? Number(product.seller_id)
+          : null;
 
-        })
-        .filter(
-          sellerId =>
-            Number.isFinite(sellerId) &&
-            sellerId > 0
-        )
-    )
-  ];
+      })
+      .filter(
+        sellerId =>
+          Number.isFinite(sellerId) &&
+          sellerId > 0
+      )
+  )
+];
 
 
-  for (const sellerId of sellerIds) {
+for (const sellerId of sellerIds) {
 
-    const notificationResponse =
-      await fetch(
-        SUPABASE_URL +
-        "/functions/v1/send-order-notification",
-        {
-          method: "POST",
+  const notificationResponse =
+    await fetch(
+      SUPABASE_URL +
+      "/functions/v1/send-order-notification",
+      {
+        method: "POST",
 
-          headers: {
-            "apikey":
-              SUPABASE_KEY,
+        headers: {
+          "apikey":
+            SUPABASE_KEY,
 
-            "Authorization":
-              "Bearer " +
-              SUPABASE_KEY,
+          "Authorization":
+            "Bearer " +
+            (
+              window.ZYRE_CURRENT_SESSION?.access_token ||
+              SUPABASE_KEY
+            ),
 
-            "Content-Type":
-              "application/json"
-          },
+          "Content-Type":
+            "application/json"
+        },
 
-          body:
-            JSON.stringify({
+        body:
+          JSON.stringify({
 
-              seller_id:
-                sellerId,
+            seller_id:
+              sellerId,
 
-              title:
-                "🛍️ New ZavaMarket Order",
+            title:
+              "🛍️ New ZYRE Marketing Order",
 
-              message:
-                "Order #" +
-                orderId +
-                " received — Total: R" +
-                Number(total).toFixed(2)
+            message:
+              "Order #" +
+              orderId +
+              " received — Total: R" +
+              Number(total).toFixed(2)
 
-            })
+          })
         }
       );
 
 
-    if (!notificationResponse.ok) {
+  if (!notificationResponse.ok) {
 
-      console.warn(
-        "Seller notification request failed:",
-        await notificationResponse.text()
-      );
+    console.warn(
+      "Seller notification request failed:",
+      await notificationResponse.text()
+    );
 
-    } else {
+  } else {
 
-      console.log(
-        "ZYRE Marketing seller notification sent for Order #" +
-        orderId
-      );
-
-    }
+    console.log(
+      "ZYRE Marketing seller notification sent for Order #" +
+      orderId
+    );
 
   }
 
+}
+
 } catch (notificationError) {
 
-  console.warn(
-    "Order notification could not be sent:",
-    notificationError
-  );
+console.warn(
+  "Order notification could not be sent:",
+  notificationError
+);
 
 }
 
@@ -989,7 +1226,7 @@ const paymentUrl =
 
   "&customer_id=" +
   encodeURIComponent(
-    customerId
+    user.id
   );
 
 
@@ -1000,6 +1237,7 @@ save();
 
 window.location.href =
   paymentUrl;
+
 
 } catch (error) {
 
@@ -1013,14 +1251,9 @@ alert(
 }
 
 
-/* =========================
+/* =========================================================
 SELLER CENTRE
-========================= */
-
-/*
-  Seller Centre now opens the
-  professional seller authentication page.
-*/
+========================================================= */
 
 function sellerCentre() {
 
@@ -1030,9 +1263,9 @@ window.location.href =
 }
 
 
-/* =========================
+/* =========================================================
 REGISTER SELLER
-========================= */
+========================================================= */
 
 async function registerSeller() {
 
@@ -1806,9 +2039,9 @@ alert(
 }
 
 
-/* =========================
+/* =========================================================
 SELLER LOGIN
-========================= */
+========================================================= */
 
 async function sellerLogin() {
 
@@ -2011,9 +2244,9 @@ alert(
 }
 
 
-/* =========================
+/* =========================================================
 CHECK ORDER STATUS
-========================= */
+========================================================= */
 
 async function checkOrderStatus() {
 
@@ -2369,8 +2602,7 @@ alert(
 
 
 /* =========================================================
-ZYRE MARKETING
-PUSH NOTIFICATION HELPERS
+ZYRE MARKETING PUSH NOTIFICATION HELPERS
 ========================================================= */
 
 function urlBase64ToUint8Array(base64String) {
@@ -2412,9 +2644,9 @@ return outputArray;
 }
 
 
-/* =========================
+/* =========================================================
 GET SERVICE WORKER
-========================= */
+========================================================= */
 
 async function getZYREServiceWorkerRegistration() {
 
@@ -2648,7 +2880,10 @@ await fetch(
 
       "Authorization":
         "Bearer " +
-        SUPABASE_KEY,
+        (
+          window.ZYRE_CURRENT_SESSION?.access_token ||
+          SUPABASE_KEY
+        ),
 
       "Content-Type":
         "application/json",
