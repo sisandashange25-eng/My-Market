@@ -14,7 +14,7 @@
 
 <meta
   name="description"
-  content="Private ZYRE Marketing owner control centre for managing sellers, products, orders and marketplace payments."
+  content="Private ZYRE Marketing owner control centre for monitoring sellers, stores, products, orders, customers and marketplace payments."
 >
 
 <meta
@@ -459,6 +459,112 @@ button:disabled {
 
 
 /* =========================
+   MONITORING CARDS
+========================= */
+
+.monitor-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(220px, 1fr)
+    );
+
+  gap: 12px;
+
+  margin-bottom: 15px;
+
+}
+
+.monitor-card {
+
+  background: #0d0d0d;
+
+  border:
+    1px solid #292929;
+
+  border-radius: 12px;
+
+  padding: 16px;
+
+}
+
+.monitor-card h3 {
+
+  margin:
+    0 0 8px;
+
+  color: #ffffff;
+
+}
+
+.monitor-card p {
+
+  color: #999;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  margin:
+    6px 0;
+
+}
+
+
+/* =========================
+   SYSTEM STATUS
+========================= */
+
+.system-status {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(180px, 1fr)
+    );
+
+  gap: 10px;
+
+}
+
+.system-status-item {
+
+  background: #0b0b0b;
+
+  border:
+    1px solid #292929;
+
+  border-radius: 10px;
+
+  padding: 13px;
+
+}
+
+.system-status-title {
+
+  color: #999;
+
+  font-size: 12px;
+
+}
+
+.system-status-value {
+
+  color: #55d187;
+
+  font-weight: bold;
+
+  margin-top: 5px;
+
+}
+
+
+/* =========================
    PAYMENT STATS
 ========================= */
 
@@ -862,7 +968,7 @@ th {
   </button>
 
   <button onclick="showSection('orders')">
-    📦 Orders
+    👁️ Order Monitoring
   </button>
 
   <button onclick="showSection('payments')">
@@ -887,7 +993,7 @@ th {
     <div class="stat">
 
       <div class="stat-title">
-        Sellers
+        👥 Sellers
       </div>
 
       <div
@@ -903,7 +1009,7 @@ th {
     <div class="stat">
 
       <div class="stat-title">
-        Products
+        🛍️ Products
       </div>
 
       <div
@@ -919,7 +1025,7 @@ th {
     <div class="stat">
 
       <div class="stat-title">
-        Orders
+        📦 Orders Being Monitored
       </div>
 
       <div
@@ -935,7 +1041,7 @@ th {
     <div class="stat">
 
       <div class="stat-title">
-        Rental Payments
+        🏪 Rental Payments
       </div>
 
       <div
@@ -953,23 +1059,257 @@ th {
   <div class="card">
 
     <h2>
-      🏢 ZYRE Marketing
+      🏢 ZYRE Marketing Company Monitor
     </h2>
 
     <p>
-      Welcome to your central marketplace
-      control centre.
+      Welcome to the central ZYRE Marketing
+      company control centre.
     </p>
 
     <p>
-      From here you can manage sellers,
-      products, orders and seller
-      subscriptions.
+      Your role as Owner is to monitor the
+      complete marketplace system and see
+      what is happening throughout the company.
+    </p>
+
+    <p>
+      👥 Sellers manage their stores and
+      customer orders.
+    </p>
+
+    <p>
+      🛍️ Sellers manage their own products
+      and stock.
+    </p>
+
+    <p>
+      📊 The Owner monitors the complete
+      system, company data, payments,
+      activity and marketplace performance.
     </p>
 
     <p class="success">
       ✅ Marketplace systems connected
     </p>
+
+  </div>
+
+
+  <!-- =========================
+       COMPANY MONITORING
+  ========================= -->
+
+  <div class="card">
+
+    <h2>
+      📊 Company Monitoring
+    </h2>
+
+    <div class="monitor-grid">
+
+      <div class="monitor-card">
+
+        <h3>
+          👥 Sellers
+        </h3>
+
+        <p>
+          Monitor seller applications,
+          approval status and seller accounts.
+        </p>
+
+        <p class="success">
+          Owner monitoring
+        </p>
+
+      </div>
+
+
+      <div class="monitor-card">
+
+        <h3>
+          🏪 Stores
+        </h3>
+
+        <p>
+          Monitor the stores operating
+          inside the ZYRE marketplace.
+        </p>
+
+        <p class="success">
+          Owner monitoring
+        </p>
+
+      </div>
+
+
+      <div class="monitor-card">
+
+        <h3>
+          🛍️ Products
+        </h3>
+
+        <p>
+          Monitor marketplace products,
+          categories and stock information.
+        </p>
+
+        <p class="success">
+          Owner monitoring
+        </p>
+
+      </div>
+
+
+      <div class="monitor-card">
+
+        <h3>
+          📦 Orders
+        </h3>
+
+        <p>
+          Monitor order activity across
+          the marketplace.
+        </p>
+
+        <p class="pending">
+          Sellers manage orders
+        </p>
+
+      </div>
+
+
+      <div class="monitor-card">
+
+        <h3>
+          💳 Payments
+        </h3>
+
+        <p>
+          Monitor marketplace payments,
+          commissions and seller earnings.
+        </p>
+
+        <p class="success">
+          Owner monitoring
+        </p>
+
+      </div>
+
+
+      <div class="monitor-card">
+
+        <h3>
+          💸 Payouts
+        </h3>
+
+        <p>
+          Monitor seller balances,
+          payout requests and payout records.
+        </p>
+
+        <p class="success">
+          Owner financial monitoring
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       SYSTEM STATUS
+  ========================= -->
+
+  <div class="card">
+
+    <h2>
+      🛡️ ZYRE System Status
+    </h2>
+
+    <div class="system-status">
+
+      <div class="system-status-item">
+
+        <div class="system-status-title">
+          Marketplace
+        </div>
+
+        <div class="system-status-value">
+          ● Connected
+        </div>
+
+      </div>
+
+
+      <div class="system-status-item">
+
+        <div class="system-status-title">
+          Seller System
+        </div>
+
+        <div class="system-status-value">
+          ● Connected
+        </div>
+
+      </div>
+
+
+      <div class="system-status-item">
+
+        <div class="system-status-title">
+          Product System
+        </div>
+
+        <div class="system-status-value">
+          ● Connected
+        </div>
+
+      </div>
+
+
+      <div class="system-status-item">
+
+        <div class="system-status-title">
+          Order Monitoring
+        </div>
+
+        <div class="system-status-value">
+          ● Connected
+        </div>
+
+      </div>
+
+
+      <div class="system-status-item">
+
+        <div class="system-status-title">
+          Payment Monitoring
+        </div>
+
+        <div class="system-status-value">
+          ● Connected
+        </div>
+
+      </div>
+
+
+      <div class="system-status-item">
+
+        <div class="system-status-title">
+          Owner Access
+        </div>
+
+        <div class="system-status-value">
+          ● Active
+        </div>
+
+      </div>
+
+    </div>
 
   </div>
 
@@ -1005,6 +1345,11 @@ th {
       👥 Seller Applications
     </h2>
 
+    <p>
+      Monitor seller applications and
+      control seller approval.
+    </p>
+
     <button
       class="gold-button"
       onclick="loadSellers()"
@@ -1036,6 +1381,11 @@ th {
     <h2>
       🛍️ Marketplace Products
     </h2>
+
+    <p>
+      Monitor products listed by sellers
+      across the ZYRE marketplace.
+    </p>
 
     <button
       class="gold-button"
@@ -1069,14 +1419,24 @@ th {
   <div class="card">
 
     <h2>
-      📦 Marketplace Orders
+      👁️ Marketplace Order Monitoring
     </h2>
+
+    <p>
+      This section is for the Owner to
+      monitor order activity across ZYRE.
+    </p>
+
+    <p class="pending">
+      ℹ️ Sellers are responsible for managing
+      and fulfilling their own customer orders.
+    </p>
 
     <button
       class="gold-button"
       onclick="loadOrders()"
     >
-      🔄 Refresh Orders
+      🔄 Refresh Order Monitoring
     </button>
 
     <div
@@ -1111,14 +1471,14 @@ th {
     </h2>
 
     <p>
-      Manage customer marketplace payments,
+      Monitor customer marketplace payments,
       seller earnings, ZYRE commissions and
       seller payouts.
     </p>
 
     <p class="success">
-      🔐 Payout processing is restricted to
-      ZYRE administrator accounts.
+      🔐 Financial monitoring is restricted
+      to ZYRE administrator accounts.
     </p>
 
 
@@ -1252,20 +1612,20 @@ th {
   <div class="card">
 
     <h2>
-      💸 Seller Payout Management
+      💸 Seller Payout Monitoring
     </h2>
 
     <p>
-      Review seller payout requests and
-      process approved payouts from the
-      ZYRE owner dashboard.
+      Monitor seller payout requests and
+      payout records from the ZYRE owner
+      control centre.
     </p>
 
     <p class="pending">
-      ⚠️ Processing a payout here records the
-      payout as completed in the ZYRE ledger.
-      A real bank/provider transfer is not yet
-      connected.
+      ⚠️ The current payout processing
+      function records the payout in the
+      ZYRE ledger. A real bank/provider
+      transfer is not yet connected.
     </p>
 
     <div
@@ -1288,8 +1648,9 @@ th {
     </h2>
 
     <p>
-      Seller bank/payment-provider accounts
-      connected to the ZYRE payout system.
+      Monitor seller bank/payment-provider
+      accounts connected to the ZYRE payout
+      system.
     </p>
 
     <p class="pending">
@@ -1317,8 +1678,8 @@ th {
     </h2>
 
     <p>
-      Seller store subscriptions and
-      rental payments.
+      Monitor seller store subscriptions
+      and rental payments.
     </p>
 
     <button
@@ -3936,7 +4297,7 @@ async function loadPayoutTotals() {
               payout.amount || 0
             );
 
-          }
+        }
 
       }
     );
@@ -4176,33 +4537,41 @@ function loadRecentActivity() {
   activity.innerHTML = `
 
     <p>
-      👥 Seller applications:
-      Check the Sellers section.
+      👥 <strong>Seller system:</strong>
+      Monitor applications and approval status
+      in the Sellers section.
     </p>
 
     <p>
-      🛍️ Marketplace products:
-      Check the Products section.
+      🏪 <strong>Store system:</strong>
+      Monitor stores operating inside ZYRE.
     </p>
 
     <p>
-      📦 Customer orders:
-      Check the Orders section.
+      🛍️ <strong>Product system:</strong>
+      Monitor products, categories and stock.
     </p>
 
     <p>
-      💳 Customer marketplace payments:
-      Check the Payments section.
+      📦 <strong>Order system:</strong>
+      Sellers manage customer orders.
+      Owner monitors marketplace order activity.
     </p>
 
     <p>
-      💸 Seller payouts:
-      Check the Payments section.
+      💳 <strong>Payment system:</strong>
+      Monitor customer payments, commissions
+      and seller earnings.
     </p>
 
     <p>
-      🏪 Seller subscriptions:
-      Check the Payments section.
+      💸 <strong>Payout system:</strong>
+      Monitor seller payout activity.
+    </p>
+
+    <p>
+      🏪 <strong>Rental system:</strong>
+      Monitor seller store subscriptions.
     </p>
 
   `;
