@@ -1,8 +1,12 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ZYRE Marketing | Owner Control Centre</title><style>
+
+<title>ZYRE Marketing | Owner Control Centre</title>
+
+<style>
 *{box-sizing:border-box}
 
 body{
@@ -225,8 +229,6 @@ font-weight:800;
 font-size:16px
 }
 
-/* STORE IMAGE */
-
 .store-image{
 width:60px;
 height:60px;
@@ -249,8 +251,6 @@ color:#fff;
 font-weight:800;
 font-size:22px
 }
-
-/* MODAL */
 
 .modal{
 position:fixed;
@@ -382,6 +382,19 @@ background:#eee;
 color:#555
 }
 
+.login-title{
+margin-top:0
+}
+
+.login-subtitle{
+color:#666;
+line-height:1.5
+}
+
+.login-email{
+background:#fafafa
+}
+
 @media(max-width:1100px){
 .grid,
 .monitor{
@@ -415,139 +428,447 @@ padding:16px
 flex-direction:column
 }
 }
-</style></head><body><div id="loginBox" class="login-wrap"><div class="login-box"><h1>🛡️ ZYRE Marketing</h1><h2>Owner Login</h2><p>
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     OWNER LOGIN
+========================================================= -->
+
+<div id="loginBox" class="login-wrap">
+
+<div class="login-box">
+
+<h1>🛡️ ZYRE Marketing</h1>
+
+<h2 class="login-title">
+Owner Login
+</h2>
+
+<p class="login-subtitle">
 Sign in to your private ZYRE Marketing control centre.
-</p><input
+</p>
+
+<label for="email">
+Owner email
+</label>
+
+<input
 id="email"
+class="login-email"
 type="email"
 placeholder="Owner email"
+autocomplete="username"
+value="mfanarhshange43@gmail.com"
+>
 
-«»
+<label for="password">
+Password
+</label>
 
 <input
 id="password"
 type="password"
-placeholder="Password"
-
-«»
+placeholder="Owner password"
+autocomplete="current-password"
+>
 
 <button
+id="loginButton"
 class="login-button"
+type="button"
 onclick="loginAdmin()"
-
-«»
-
+>
 🔐 Login
 </button>
 
-<div id="loginMessage" class="msg"></div></div></div><div id="adminPanel" class="hidden"><header><div><h1>🛡️ ZYRE Marketing</h1><small>Owner Control Centre</small>
+<div id="loginMessage" class="msg"></div>
 
-</div><div>👑 Owner
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     OWNER DASHBOARD
+========================================================= -->
+
+<div id="adminPanel" class="hidden">
+
+<header>
+
+<div>
+
+<h1>🛡️ ZYRE Marketing</h1>
+
+<small>
+Owner Control Centre
+</small>
+
+</div>
+
+<div>
+
+👑 Owner
 
 <span id="ownerEmail"></span>
 
-<button onclick="logoutAdmin()">
+<button
+type="button"
+onclick="logoutAdmin()"
+>
 Logout
-</button></div></header><main><nav><button
+</button>
+
+</div>
+
+</header>
+
+
+<main>
+
+<nav>
+
+<button
+type="button"
 class="active"
 onclick="showSection('overview',this)"
-
-«»
-
+>
 📊 Overview
 </button>
 
 <button
+type="button"
 onclick="showSection('sellers',this)"
-
-«»
-
+>
 👥 Sellers
 </button>
 
 <button
+type="button"
 onclick="showSection('stores',this)"
-
-«»
-
+>
 🏪 Stores
 </button>
 
 <button
+type="button"
 onclick="showSection('products',this)"
-
-«»
-
+>
 🛍️ Products
 </button>
 
 <button
+type="button"
 onclick="showSection('orders',this)"
-
-«»
-
+>
 📦 Order Monitoring
 </button>
 
 <button
+type="button"
 onclick="showSection('payments',this)"
-
-«»
-
+>
 💳 Payments
 </button>
 
-</nav><!-- OVERVIEW --><section id="overview" class="panel active"><h2>Company Overview</h2><div class="grid"><div class="card">
-<div class="label">👥 Total Sellers</div>
-<div class="value" id="statSellers">0</div>
-</div><div class="card">
-<div class="label">🏪 Active Stores</div>
-<div class="value" id="statStores">0</div>
-</div><div class="card">
-<div class="label">🛍️ Total Products</div>
-<div class="value" id="statProducts">0</div>
-</div><div class="card">
-<div class="label">📦 Orders Monitored</div>
-<div class="value" id="statOrders">0</div>
-</div><div class="card">
-<div class="label">💰 Marketplace Sales</div>
-<div class="value" id="statMarketplaceSales">
+</nav>
+
+
+<!-- =========================================================
+     OVERVIEW
+========================================================= -->
+
+<section
+id="overview"
+class="panel active"
+>
+
+<h2>
+Company Overview
+</h2>
+
+<div class="grid">
+
+<div class="card">
+
+<div class="label">
+👥 Total Sellers
+</div>
+
+<div
+class="value"
+id="statSellers"
+>
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
+🏪 Active Stores
+</div>
+
+<div
+class="value"
+id="statStores"
+>
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
+🛍️ Total Products
+</div>
+
+<div
+class="value"
+id="statProducts"
+>
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
+📦 Orders Monitored
+</div>
+
+<div
+class="value"
+id="statOrders"
+>
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
+💰 Marketplace Sales
+</div>
+
+<div
+class="value"
+id="statMarketplaceSales"
+>
 R0.00
 </div>
-</div><div class="card">
-<div class="label">💳 ZYRE Commission</div>
-<div class="value" id="statCommission">
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
+💳 ZYRE Commission
+</div>
+
+<div
+class="value"
+id="statCommission"
+>
 R0.00
 </div>
-</div><div class="card">
-<div class="label">🏪 Rental Revenue</div>
-<div class="value" id="statRentalRevenue">
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
+🏪 Rental Revenue
+</div>
+
+<div
+class="value"
+id="statRentalRevenue"
+>
 R0.00
 </div>
-</div><div class="card">
-<div class="label">💸 Seller Payouts</div>
-<div class="value" id="statSellerPayouts">
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
+💸 Seller Payouts
+</div>
+
+<div
+class="value"
+id="statSellerPayouts"
+>
 R0.00
 </div>
-</div></div><h2>Company Monitoring</h2><div class="monitor"><div class="card"><h3>👥 Seller System</h3><p>
+
+</div>
+
+</div>
+
+
+<h2>
+Company Monitoring
+</h2>
+
+
+<div class="monitor">
+
+<div class="card">
+
+<h3>
+👥 Seller System
+</h3>
+
+<p>
 Monitor applications, approvals and seller records.
-</p></div><div class="card"><h3>🏪 Store System</h3><p>
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🏪 Store System
+</h3>
+
+<p>
 Monitor stores, store performance, products and sales.
-</p></div><div class="card"><h3>🛍️ Product System</h3><p>
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🛍️ Product System
+</h3>
+
+<p>
 Monitor marketplace products.
-</p></div><div class="card"><h3>📦 Order Monitoring</h3><p>
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+📦 Order Monitoring
+</h3>
+
+<p>
 Monitor orders. Sellers manage customer orders.
-</p></div><div class="card"><h3>💳 Payment Monitoring</h3><p>
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+💳 Payment Monitoring
+</h3>
+
+<p>
 Monitor payments and company commission.
-</p></div><div class="card"><h3>💸 Payout Monitoring</h3><p>
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+💸 Payout Monitoring
+</h3>
+
+<p>
 Monitor seller payout records.
-</p></div><div class="card"><h3>🏪 Rental System</h3><p>
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🏪 Rental System
+</h3>
+
+<p>
 Monitor seller rental payments.
-</p></div><div class="card"><h3>⚙️ System Activity</h3><p>
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+⚙️ System Activity
+</h3>
+
+<p>
 Monitor activity across ZYRE.
-</p></div></div><div class="activity"><h2>Live Marketplace Activity</h2><div id="recentActivity">
+</p>
+
+</div>
+
+</div>
+
+
+<div class="activity">
+
+<h2>
+Live Marketplace Activity
+</h2>
+
+<div id="recentActivity">
 Loading...
-</div></div></section><!-- SELLERS --><section id="sellers" class="panel"><h2>Seller System</h2><div class="activity"><b>Owner responsibility:</b>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     SELLERS
+========================================================= -->
+
+<section
+id="sellers"
+class="panel"
+>
+
+<h2>
+Seller System
+</h2>
+
+
+<div class="activity">
+
+<b>
+Owner responsibility:
+</b>
 
 Monitor seller applications, seller accounts,
 stores, products, payments and seller activity.
@@ -555,7 +876,23 @@ stores, products, payments and seller activity.
 <p>
 Sellers manage their own customer orders.
 The Owner monitors the company data.
-</p></div><div class="table-box"><div id="sellerMessage"></div><div class="scroll"><table><thead><tr>
+</p>
+
+</div>
+
+
+<div class="table-box">
+
+<div id="sellerMessage"></div>
+
+<div class="scroll">
+
+<table>
+
+<thead>
+
+<tr>
+
 <th>Image</th>
 <th>ID</th>
 <th>Seller</th>
@@ -568,29 +905,182 @@ The Owner monitors the company data.
 <th>Orders</th>
 <th>Created</th>
 <th>Action</th>
-</tr></thead><tbody id="sellersTable"></tbody></table></div></div></section><!-- STORES --><section id="stores" class="panel"><h2>🏪 Store System</h2><div class="activity"><b>Owner Store Monitoring</b>
+
+</tr>
+
+</thead>
+
+<tbody id="sellersTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     STORES
+========================================================= -->
+
+<section
+id="stores"
+class="panel"
+>
+
+<h2>
+🏪 Store System
+</h2>
+
+
+<div class="activity">
+
+<b>
+Owner Store Monitoring
+</b>
 
 <p>
 Monitor every store operating through ZYRE Marketing.
 View store information, seller details, products,
 orders and store sales.
-</p></div><div class="grid"><div class="card"><div class="label">
+</p>
+
+</div>
+
+
+<div class="grid">
+
+
+<div class="card">
+
+<div class="label">
 🏪 Total Stores
-</div><div class="value" id="storeTotalCount">
+</div>
+
+<div
+class="value"
+id="storeTotalCount"
+>
 0
-</div></div><div class="card"><div class="label">
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
 🟢 Active Stores
-</div><div class="value" id="storeActiveCount">
+</div>
+
+<div
+class="value"
+id="storeActiveCount"
+>
 0
-</div></div><div class="card"><div class="label">
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
 🛍️ Store Products
-</div><div class="value" id="storeProductCount">
+</div>
+
+<div
+class="value"
+id="storeProductCount"
+>
 0
-</div></div><div class="card"><div class="label">
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
 💰 Store Sales
-</div><div class="value" id="storeSalesTotal">
+</div>
+
+<div
+class="value"
+id="storeSalesTotal"
+>
 R0.00
-</div></div></div><div class="table-box"><div class="scroll"><table><thead><tr><th>Store Image</th><th>Store Name</th><th>Seller</th><th>Email</th><th>Phone</th><th>Category</th><th>Products</th><th>Orders</th><th>Store Sales</th><th>Status</th><th>Created</th><th>Action</th></tr></thead><tbody id="storesTable"></tbody></table></div></div></section><!-- PRODUCTS --><section id="products" class="panel"><h2>Product Monitoring</h2><div class="table-box"><div class="scroll"><table><thead><tr>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="table-box">
+
+<div class="scroll">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Store Image</th>
+<th>Store Name</th>
+<th>Seller</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Category</th>
+<th>Products</th>
+<th>Orders</th>
+<th>Store Sales</th>
+<th>Status</th>
+<th>Created</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="storesTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     PRODUCTS
+========================================================= -->
+
+<section
+id="products"
+class="panel"
+>
+
+<h2>
+Product Monitoring
+</h2>
+
+
+<div class="table-box">
+
+<div class="scroll">
+
+<table>
+
+<thead>
+
+<tr>
+
 <th>ID</th>
 <th>Product</th>
 <th>Seller</th>
@@ -598,90 +1088,343 @@ R0.00
 <th>Stock</th>
 <th>Category</th>
 <th>Active</th>
-</tr></thead><tbody id="productsTable"></tbody></table></div></div></section><!-- ORDERS --><section id="orders" class="panel"><h2>Order Monitoring</h2><div class="activity"><b>Owner role:</b>
+
+</tr>
+
+</thead>
+
+<tbody id="productsTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     ORDERS
+========================================================= -->
+
+<section
+id="orders"
+class="panel"
+>
+
+<h2>
+Order Monitoring
+</h2>
+
+
+<div class="activity">
+
+<b>
+Owner role:
+</b>
+
 monitor company order data.
 
 Sellers manage customer orders.
 
-</div><div class="table-box"><div class="scroll"><table><thead><tr>
+</div>
+
+
+<div class="table-box">
+
+<div class="scroll">
+
+<table>
+
+<thead>
+
+<tr>
+
 <th>Order ID</th>
 <th>Customer</th>
 <th>Total</th>
 <th>Status</th>
 <th>Delivery</th>
 <th>Created</th>
-</tr></thead><tbody id="ordersTable"></tbody></table></div></div></section><!-- PAYMENTS --><section id="payments" class="panel"><h2>Payment Monitoring</h2><div class="grid"><div class="card"><div class="label">
+
+</tr>
+
+</thead>
+
+<tbody id="ordersTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     PAYMENTS
+========================================================= -->
+
+<section
+id="payments"
+class="panel"
+>
+
+<h2>
+Payment Monitoring
+</h2>
+
+
+<div class="grid">
+
+
+<div class="card">
+
+<div class="label">
 Marketplace Sales
-</div><div class="money" id="paymentSales">
+</div>
+
+<div
+class="money"
+id="paymentSales"
+>
 R0.00
-</div></div><div class="card"><div class="label">
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
 ZYRE Commission
-</div><div class="money" id="paymentCommission">
+</div>
+
+<div
+class="money"
+id="paymentCommission"
+>
 R0.00
-</div></div><div class="card"><div class="label">
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
 Seller Amount
-</div><div class="money" id="paymentSellerTotal">
+</div>
+
+<div
+class="money"
+id="paymentSellerTotal"
+>
 R0.00
-</div></div></div><div class="table-box"><h3>Marketplace Payments</h3><div class="scroll"><table><thead><tr>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="table-box">
+
+<h3>
+Marketplace Payments
+</h3>
+
+<div class="scroll">
+
+<table>
+
+<thead>
+
+<tr>
+
 <th>ID</th>
 <th>Seller</th>
 <th>Amount</th>
 <th>Status</th>
 <th>Commission</th>
 <th>Created</th>
-</tr></thead><tbody id="paymentsTable"></tbody></table></div></div><div class="table-box"><h3>Seller Payouts</h3><div class="scroll"><table><thead><tr>
+
+</tr>
+
+</thead>
+
+<tbody id="paymentsTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div class="table-box">
+
+<h3>
+Seller Payouts
+</h3>
+
+<div class="scroll">
+
+<table>
+
+<thead>
+
+<tr>
+
 <th>ID</th>
 <th>Seller</th>
 <th>Amount</th>
 <th>Status</th>
 <th>Created</th>
 <th>Action</th>
-</tr></thead><tbody id="payoutsTable"></tbody></table></div></div><div class="table-box"><h3>Rental Payments</h3><div class="scroll"><table><thead><tr>
+
+</tr>
+
+</thead>
+
+<tbody id="payoutsTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div class="table-box">
+
+<h3>
+Rental Payments
+</h3>
+
+<div class="scroll">
+
+<table>
+
+<thead>
+
+<tr>
+
 <th>ID</th>
 <th>Seller</th>
 <th>Amount</th>
 <th>Status</th>
 <th>Created</th>
-</tr></thead><tbody id="rentalTable"></tbody></table></div></div></section></main></div><!-- SELLER MODAL --><div
+
+</tr>
+
+</thead>
+
+<tbody id="rentalTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- =========================================================
+     SELLER MODAL
+========================================================= -->
+
+<div
 id="sellerModal"
 class="modal hidden"
 onclick="closeSellerModal(event)"
-><div
+>
+
+<div
 class="modal-box"
 onclick="event.stopPropagation()"
-><div class="modal-header"><h2>Seller Details</h2><button
+>
+
+<div class="modal-header">
+
+<h2>
+Seller Details
+</h2>
+
+<button
+type="button"
 class="modal-close"
 onclick="closeSellerModal()"
-
-«»
-
+>
 ✕
 </button>
 
-</div><div id="sellerDetails">
+</div>
+
+<div id="sellerDetails">
 Loading...
-</div></div></div><!-- STORE MODAL --><div
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     STORE MODAL
+========================================================= -->
+
+<div
 id="storeModal"
 class="modal hidden"
 onclick="closeStoreModal(event)"
-><div
+>
+
+<div
 class="modal-box"
 onclick="event.stopPropagation()"
-><div class="modal-header"><h2>🏪 Store Details</h2><button
+>
+
+<div class="modal-header">
+
+<h2>
+🏪 Store Details
+</h2>
+
+<button
+type="button"
 class="modal-close"
 onclick="closeStoreModal()"
-
-«»
-
+>
 ✕
 </button>
 
-</div><div id="storeDetails">
+</div>
+
+<div id="storeDetails">
 Loading...
-</div></div></div><script>
+</div>
+
+</div>
+
+</div>
+
+
+<script>
 
 "use strict";
 
+
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 const SUPABASE_URL =
 "https://gaccizzlwswwynattgda.supabase.co";
@@ -690,32 +1433,43 @@ const SUPABASE_KEY =
 "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
 
-let accessToken=null;
-let adminUserId=null;
+let accessToken = null;
+let adminUserId = null;
 
-let sellerMap={};
+let sellerMap = {};
 
-let sellersData=[];
-let productsData=[];
-let ordersData=[];
-let orderItemsData=[];
-let paymentsData=[];
+let sellersData = [];
+let productsData = [];
+let ordersData = [];
+let orderItemsData = [];
+let paymentsData = [];
 
 
-/* HEADERS */
+/* =========================================================
+   HEADERS
+========================================================= */
 
 function headers(){
 
 return {
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+accessToken,
-"Content-Type":"application/json"
+
+"apikey":
+SUPABASE_KEY,
+
+"Authorization":
+"Bearer "+accessToken,
+
+"Content-Type":
+"application/json"
+
 };
 
 }
 
 
-/* MONEY */
+/* =========================================================
+   MONEY
+========================================================= */
 
 function money(v){
 
@@ -724,7 +1478,9 @@ return "R"+Number(v||0).toFixed(2);
 }
 
 
-/* ESCAPE HTML */
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
 function esc(v){
 
@@ -737,7 +1493,9 @@ return String(v??"")
 }
 
 
-/* DATE */
+/* =========================================================
+   DATE
+========================================================= */
 
 function dateText(v){
 
@@ -752,19 +1510,34 @@ return Number.isNaN(d.getTime())
 }
 
 
-/* API */
+/* =========================================================
+   API
+========================================================= */
 
 async function api(path,opt={}){
 
+if(!accessToken){
+
+throw new Error(
+"Owner session is not active."
+);
+
+}
+
 const r=await fetch(
+
 SUPABASE_URL+path,
+
 {
 ...opt,
+
 headers:{
 ...headers(),
 ...(opt.headers||{})
 }
+
 }
+
 );
 
 const t=await r.text();
@@ -772,17 +1545,27 @@ const t=await r.text();
 let d=null;
 
 try{
+
 d=t?JSON.parse(t):null;
+
 }catch(e){
+
 d=t;
+
 }
 
 if(!r.ok){
 
 throw new Error(
+
 (d&&d.message) ||
+
 (d&&d.error_description) ||
-(typeof d==="string"?d:JSON.stringify(d))
+
+(typeof d==="string"
+?d
+:JSON.stringify(d))
+
 );
 
 }
@@ -792,103 +1575,41 @@ return d;
 }
 
 
-/* OWNER LOGIN */
+/* =========================================================
+   SHOW LOGIN
+========================================================= */
 
-async function loginAdmin(){
+function showLogin(message=""){
 
-const email=
-document.getElementById("email")
-.value.trim();
+document
+.getElementById("adminPanel")
+.classList.add("hidden");
 
-const password=
-document.getElementById("password")
-.value;
+document
+.getElementById("loginBox")
+.classList.remove("hidden");
 
 const msg=
 document.getElementById("loginMessage");
 
 msg.className="msg";
 
-if(!email||!password){
+if(message){
 
-msg.textContent=
-"Please enter your owner email and password.";
+msg.textContent=message;
 
 msg.classList.add("error");
 
-return;
-
 }
-
-msg.textContent="Signing in...";
-
-
-try{
-
-const r=await fetch(
-SUPABASE_URL+
-"/auth/v1/token?grant_type=password",
-{
-method:"POST",
-headers:{
-"apikey":SUPABASE_KEY,
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-email,
-password
-})
-}
-);
-
-const d=await r.json();
-
-if(!r.ok){
-
-throw new Error(
-d.error_description ||
-d.msg ||
-d.message ||
-"Login failed."
-);
-
-}
-
-accessToken=d.access_token;
-adminUserId=d.user.id;
-
-
-const p=await api(
-"/rest/v1/profiles?id=eq."+
-encodeURIComponent(adminUserId)+
-"&select=role"
-);
-
-
-if(!p.length||p[0].role!=="admin"){
-
-throw new Error(
-"This account is not authorised as a ZYRE owner."
-);
 
 }
 
 
-localStorage.setItem(
-"zyre_owner_access_token",
-accessToken
-);
+/* =========================================================
+   SHOW DASHBOARD
+========================================================= */
 
-localStorage.setItem(
-"zyre_owner_user_id",
-adminUserId
-);
-
-localStorage.setItem(
-"zyre_owner_email",
-email
-);
-
+function showDashboard(email){
 
 document
 .getElementById("loginBox")
@@ -900,29 +1621,16 @@ document
 
 document
 .getElementById("ownerEmail")
-.textContent=email;
-
-
-await loadDashboard();
-
-
-}catch(e){
-
-console.error(e);
-
-msg.textContent=
-e.message||"Login failed.";
-
-msg.classList.add("error");
-
-}
+.textContent=email||"";
 
 }
 
 
-/* LOGOUT */
+/* =========================================================
+   CLEAR OWNER SESSION
+========================================================= */
 
-function logoutAdmin(){
+function clearOwnerSession(){
 
 accessToken=null;
 adminUserId=null;
@@ -940,69 +1648,323 @@ localStorage.removeItem(
 "zyre_owner_email"
 );
 
-document
-.getElementById("adminPanel")
-.classList.add("hidden");
+}
 
+
+/* =========================================================
+   OWNER LOGIN
+========================================================= */
+
+async function loginAdmin(){
+
+const email=
 document
-.getElementById("loginBox")
-.classList.remove("hidden");
+.getElementById("email")
+.value
+.trim();
+
+const password=
+document
+.getElementById("password")
+.value;
+
+const msg=
+document
+.getElementById("loginMessage");
+
+const loginButton=
+document
+.getElementById("loginButton");
+
+
+msg.className="msg";
+
+if(!email||!password){
+
+msg.textContent=
+"Please enter your owner email and password.";
+
+msg.classList.add("error");
+
+return;
+
+}
+
+
+msg.textContent=
+"Signing in...";
+
+
+loginButton.disabled=true;
+
+loginButton.textContent=
+"Signing in...";
+
+
+try{
+
+/*
+Sign in using Supabase email/password.
+*/
+
+const r=await fetch(
+
+SUPABASE_URL+
+"/auth/v1/token?grant_type=password",
+
+{
+
+method:"POST",
+
+headers:{
+
+"apikey":
+SUPABASE_KEY,
+
+"Content-Type":
+"application/json"
+
+},
+
+body:JSON.stringify({
+
+email:email,
+
+password:password
+
+})
+
+}
+
+);
+
+
+const d=await r.json();
+
+
+if(!r.ok){
+
+throw new Error(
+
+d.error_description ||
+
+d.msg ||
+
+d.message ||
+
+"Login failed."
+
+);
+
+}
+
+
+if(!d.access_token){
+
+throw new Error(
+"Supabase did not return an access token."
+);
+
+}
+
+
+accessToken=
+d.access_token;
+
+adminUserId=
+d.user.id;
+
+
+/*
+Check the owner role.
+*/
+
+const p=await api(
+
+"/rest/v1/profiles?id="+
+encodeURIComponent(adminUserId)+
+"&select=role"
+
+);
+
+
+if(
+!p ||
+!p.length ||
+String(p[0].role||"").toLowerCase()!=="admin"
+){
+
+clearOwnerSession();
+
+throw new Error(
+"This account is not authorised as a ZYRE owner."
+);
+
+}
+
+
+/*
+Save the current owner session.
+*/
+
+localStorage.setItem(
+"zyre_owner_access_token",
+accessToken
+);
+
+localStorage.setItem(
+"zyre_owner_user_id",
+adminUserId
+);
+
+localStorage.setItem(
+"zyre_owner_email",
+email
+);
+
+
+showDashboard(email);
+
+
+/*
+Load the dashboard.
+*/
+
+await loadDashboard();
+
+
+}catch(e){
+
+console.error(
+"Owner login error:",
+e
+);
+
+clearOwnerSession();
+
+showLogin(
+e.message||"Login failed."
+);
+
+}finally{
+
+loginButton.disabled=false;
+
+loginButton.textContent=
+"🔐 Login";
+
+}
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logoutAdmin(){
+
+clearOwnerSession();
 
 document
 .getElementById("password")
 .value="";
 
+document
+.getElementById("loginMessage")
+.textContent="";
+
+showLogin();
+
 }
 
 
-/* NAVIGATION */
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
 function showSection(id,btn){
 
 document
 .querySelectorAll(".panel")
-.forEach(x=>x.classList.remove("active"));
+.forEach(
+x=>x.classList.remove("active")
+);
+
 
 document
 .querySelectorAll("nav button")
-.forEach(x=>x.classList.remove("active"));
+.forEach(
+x=>x.classList.remove("active")
+);
 
-document
-.getElementById(id)
-.classList.add("active");
+
+const section=
+document.getElementById(id);
+
+if(section){
+
+section.classList.add("active");
+
+}
+
 
 if(btn){
+
 btn.classList.add("active");
-}
 
 }
 
+}
 
-/* DASHBOARD */
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
 async function loadDashboard(){
+
+try{
 
 await loadSellers();
 
 await loadSellerMap();
 
 await Promise.all([
+
 loadProducts(),
+
 loadOrders(),
+
 loadOrderItems(),
+
 loadRentalPayments(),
+
 loadSellerPayments(),
+
 loadPayouts()
+
 ]);
 
 await loadStores();
 
 loadRecentActivity();
 
+}catch(e){
+
+console.error(
+"Dashboard loading error:",
+e
+);
+
+}
+
 }
 
 
-/* SELLER MAP */
+/* =========================================================
+   SELLER MAP
+========================================================= */
 
 async function loadSellerMap(){
 
@@ -1013,6 +1975,7 @@ const s=await api(
 );
 
 sellerMap={};
+
 
 (s||[]).forEach(x=>{
 
@@ -1039,19 +2002,23 @@ return sellerMap[String(id)] ||
 }
 
 
-/* SELLER IMAGE */
+/* =========================================================
+   SELLER IMAGE
+========================================================= */
 
 function sellerImage(x){
 
 if(x.store_image_url){
 
 return `
+
 <img
 class="seller-image"
 src="${esc(x.store_image_url)}"
 alt="Store image"
 onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
 >
+
 <div
 class="seller-placeholder"
 style="display:none"
@@ -1062,11 +2029,14 @@ String(x.store_name||"S")
 .toUpperCase()
 )}
 </div>
+
 `;
 
 }
 
+
 return `
+
 <div class="seller-placeholder">
 ${esc(
 String(x.store_name||"S")
@@ -1074,24 +2044,29 @@ String(x.store_name||"S")
 .toUpperCase()
 )}
 </div>
+
 `;
 
 }
 
 
-/* STORE IMAGE */
+/* =========================================================
+   STORE IMAGE
+========================================================= */
 
 function storeImage(x){
 
 if(x.store_image_url){
 
 return `
+
 <img
 class="store-image"
 src="${esc(x.store_image_url)}"
 alt="${esc(x.store_name||"Store")}"
 onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
 >
+
 <div
 class="store-placeholder"
 style="display:none"
@@ -1102,11 +2077,14 @@ String(x.store_name||"S")
 .toUpperCase()
 )}
 </div>
+
 `;
 
 }
 
+
 return `
+
 <div class="store-placeholder">
 ${esc(
 String(x.store_name||"S")
@@ -1114,12 +2092,15 @@ String(x.store_name||"S")
 .toUpperCase()
 )}
 </div>
+
 `;
 
 }
 
 
-/* SELLER STATUS */
+/* =========================================================
+   SELLER STATUS
+========================================================= */
 
 function sellerStatusLabel(seller){
 
@@ -1127,18 +2108,22 @@ const status=
 String(seller.status||"")
 .toLowerCase();
 
+
 if(
 seller.approved===true &&
 status==="seller_approved"
 ){
 
 return `
+
 <span class="success">
 <strong>Approved</strong>
 </span>
+
 `;
 
 }
+
 
 if(
 seller.approved===false &&
@@ -1146,35 +2131,45 @@ status==="seller_disabled"
 ){
 
 return `
+
 <span class="error">
 <strong>Disabled</strong>
 </span>
+
 `;
 
 }
+
 
 if(
 seller.approved===true
 ){
 
 return `
+
 <span class="success">
 <strong>Approved</strong>
 </span>
+
 `;
 
 }
 
+
 return `
+
 <span>
 Pending
 </span>
+
 `;
 
 }
 
 
-/* STORE STATUS */
+/* =========================================================
+   STORE STATUS
+========================================================= */
 
 function storeStatusLabel(store){
 
@@ -1182,18 +2177,22 @@ const status=
 String(store.status||"")
 .toLowerCase();
 
+
 if(
 store.approved===true &&
 status!=="seller_disabled"
 ){
 
 return `
+
 <span class="status-badge status-active">
 Active
 </span>
+
 `;
 
 }
+
 
 if(
 store.approved===false &&
@@ -1201,28 +2200,38 @@ status==="seller_disabled"
 ){
 
 return `
+
 <span class="status-badge status-disabled">
 Disabled
 </span>
+
 `;
 
 }
 
+
 return `
+
 <span class="status-badge status-pending">
 Pending
 </span>
+
 `;
 
 }
 
 
-/* SELLERS */
+/* =========================================================
+   SELLERS
+========================================================= */
 
 async function loadSellers(){
 
 const tb=
-document.getElementById("sellersTable");
+document.getElementById(
+"sellersTable"
+);
+
 
 tb.innerHTML=
 '<tr><td colspan="12">Loading sellers...</td></tr>';
@@ -1234,9 +2243,11 @@ const s=await api(
 "/rest/v1/sellers?select=*&order=id.desc"
 );
 
+
 sellersData=s||[];
 
 sellerMap={};
+
 
 sellersData.forEach(x=>{
 
@@ -1256,16 +2267,25 @@ sellersData.length;
 document
 .getElementById("statStores")
 .textContent=
+
 sellersData.filter(
+
 x =>
+
 x.approved===true &&
-String(x.status||"").toLowerCase()!=="seller_disabled"
+
+String(x.status||"")
+.toLowerCase()!=="seller_disabled"
+
 ).length;
 
 
-/* PRODUCT COUNTS */
+/*
+Product counts
+*/
 
 let productCounts={};
+
 
 try{
 
@@ -1275,9 +2295,11 @@ const p=await api(
 
 productsData=p||[];
 
+
 productsData.forEach(x=>{
 
-const id=String(x.seller_id);
+const id=
+String(x.seller_id);
 
 productCounts[id]=
 (productCounts[id]||0)+1;
@@ -1294,9 +2316,12 @@ e
 }
 
 
-/* ORDER DATA */
+/*
+Order data
+*/
 
 let orderCounts={};
+
 
 try{
 
@@ -1305,6 +2330,7 @@ const o=await api(
 );
 
 ordersData=o||[];
+
 
 }catch(e){
 
@@ -1316,9 +2342,12 @@ e
 }
 
 
-/* SELLER ORDER COUNTS */
+/*
+Seller order counts
+*/
 
 const sellerOrderCounts={};
+
 
 if(ordersData.length){
 
@@ -1328,12 +2357,14 @@ const items=await api(
 "/rest/v1/orders_items?select=order_id,products_id,quantity"
 );
 
+
 if(
 productsData.length &&
 items.length
 ){
 
 const productSeller={};
+
 
 productsData.forEach(p=>{
 
@@ -1346,6 +2377,7 @@ String(p.id)
 
 const sellerOrderSets={};
 
+
 items.forEach(item=>{
 
 const productId=
@@ -1357,7 +2389,10 @@ item.order_id ??
 item.Order_id;
 
 const sellerId=
-productSeller[String(productId)];
+productSeller[
+String(productId)
+];
+
 
 if(
 sellerId &&
@@ -1365,9 +2400,12 @@ orderId!=null
 ){
 
 if(!sellerOrderSets[sellerId]){
+
 sellerOrderSets[sellerId]=
 new Set();
+
 }
+
 
 sellerOrderSets[sellerId].add(
 String(orderId)
@@ -1415,14 +2453,19 @@ sellersData.map(x=>{
 
 const ok=
 x.approved===true &&
-String(x.status||"").toLowerCase()==="seller_approved";
+String(x.status||"")
+.toLowerCase()==="seller_approved";
+
 
 const disabled=
 x.approved===false &&
-String(x.status||"").toLowerCase()==="seller_disabled";
+String(x.status||"")
+.toLowerCase()==="seller_disabled";
+
 
 const productCount=
 productCounts[String(x.id)]||0;
+
 
 const orderCount=
 sellerOrderCounts[String(x.id)]||0;
@@ -1467,13 +2510,18 @@ ${sellerStatusLabel(x)}
 </td>
 
 <td>
+
 ${
 ok
+
 ?
 '<span class="success">Yes</span>'
+
 :
 '<span class="error">No</span>'
+
 }
+
 </td>
 
 <td>
@@ -1491,11 +2539,13 @@ ${dateText(x.created_at)}
 <td>
 
 <button
+type="button"
 class="view"
 onclick="viewSeller(${Number(x.id)})"
 >
 View
 </button>
+
 
 ${
 ok
@@ -1503,12 +2553,15 @@ ok
 ?
 
 `
+
 <button
+type="button"
 class="reject"
 onclick="rejectSeller(${Number(x.id)})"
 >
 Disable
 </button>
+
 `
 
 :
@@ -1518,23 +2571,29 @@ disabled
 ?
 
 `
+
 <button
+type="button"
 class="approve"
 onclick="approveSeller(${Number(x.id)})"
 >
 Re-approve
 </button>
+
 `
 
 :
 
 `
+
 <button
+type="button"
 class="approve"
 onclick="approveSeller(${Number(x.id)})"
 >
 Approve
 </button>
+
 `
 
 }
@@ -1560,12 +2619,17 @@ console.error(e);
 }
 
 
-/* STORE SYSTEM */
+/* =========================================================
+   STORE SYSTEM
+========================================================= */
 
 async function loadStores(){
 
 const tb=
-document.getElementById("storesTable");
+document.getElementById(
+"storesTable"
+);
+
 
 tb.innerHTML=
 '<tr><td colspan="12">Loading stores...</td></tr>';
@@ -1575,16 +2639,18 @@ try{
 
 /*
 Every seller represents a store in the current
-ZYRE system. We use the existing sellers table
-so no new database table is required.
+ZYRE system. We use the existing sellers table.
 */
 
 const stores=sellersData||[];
 
 
-/* PRODUCT COUNTS */
+/*
+Product counts
+*/
 
 const productCounts={};
+
 
 (productsData||[]).forEach(p=>{
 
@@ -1597,16 +2663,19 @@ productCounts[sellerId]=
 });
 
 
-/* ORDER COUNTS */
+/*
+Order counts
+*/
 
 const orderSets={};
 
 
 /*
-Build product -> seller map.
+Product -> seller map
 */
 
 const productSeller={};
+
 
 (productsData||[]).forEach(p=>{
 
@@ -1617,7 +2686,7 @@ String(p.seller_id);
 
 
 /*
-Count unique orders for each store.
+Count unique orders
 */
 
 (orderItemsData||[]).forEach(item=>{
@@ -1633,13 +2702,17 @@ item.Order_id;
 const sellerId=
 productSeller[String(productId)];
 
+
 if(
 sellerId &&
 orderId!=null
 ){
 
 if(!orderSets[sellerId]){
-orderSets[sellerId]=new Set();
+
+orderSets[sellerId]=
+new Set();
+
 }
 
 orderSets[sellerId].add(
@@ -1651,9 +2724,12 @@ String(orderId)
 });
 
 
-/* SALES */
+/*
+Sales
+*/
 
 const storeSales={};
+
 
 (paymentsData||[]).forEach(payment=>{
 
@@ -1661,16 +2737,20 @@ const status=
 String(payment.status||"")
 .toLowerCase();
 
+
 if([
+
 "paid",
 "completed",
 "successful",
 "success"
+
 ].includes(status)){
 
 const sellerId=
 payment.seller_id ??
 payment.Seller_id;
+
 
 if(sellerId!=null){
 
@@ -1681,7 +2761,9 @@ payment.total ??
 0
 );
 
+
 storeSales[String(sellerId)] =
+
 (storeSales[String(sellerId)]||0)+
 amount;
 
@@ -1692,19 +2774,30 @@ amount;
 });
 
 
-/* STORE STATS */
+/*
+Store stats
+*/
 
 const activeStores=
 stores.filter(x=>
+
 x.approved===true &&
-String(x.status||"").toLowerCase()!=="seller_disabled"
+
+String(x.status||"")
+.toLowerCase()!=="seller_disabled"
+
 ).length;
+
 
 let totalStoreSales=0;
 
+
 Object.values(storeSales)
 .forEach(v=>{
-totalStoreSales+=Number(v||0);
+
+totalStoreSales+=
+Number(v||0);
+
 });
 
 
@@ -1742,7 +2835,9 @@ return;
 }
 
 
-/* STORE TABLE */
+/*
+Store table
+*/
 
 tb.innerHTML=
 stores.map(store=>{
@@ -1750,8 +2845,10 @@ stores.map(store=>{
 const id=
 String(store.id);
 
+
 const productCount=
 productCounts[id]||0;
+
 
 const orderCount=
 orderSets[id]
@@ -1760,12 +2857,15 @@ orderSets[id].size
 :
 0;
 
+
 const sales=
 storeSales[id]||0;
 
+
 const active=
 store.approved===true &&
-String(store.status||"").toLowerCase()!=="seller_disabled";
+String(store.status||"")
+.toLowerCase()!=="seller_disabled";
 
 
 return `
@@ -1830,6 +2930,7 @@ ${dateText(store.created_at)}
 <td>
 
 <button
+type="button"
 class="view"
 onclick="viewStore(${Number(store.id)})"
 >
@@ -1860,15 +2961,20 @@ e
 }
 
 
-/* LOAD ORDER ITEMS */
+/* =========================================================
+   LOAD ORDER ITEMS
+========================================================= */
 
 async function loadOrderItems(){
 
 try{
 
-orderItemsData=await api(
+orderItemsData=
+
+await api(
 "/rest/v1/orders_items?select=*"
 ) || [];
+
 
 }catch(e){
 
@@ -1884,7 +2990,9 @@ e
 }
 
 
-/* VIEW STORE */
+/* =========================================================
+   VIEW STORE
+========================================================= */
 
 function viewStore(id){
 
@@ -1909,7 +3017,9 @@ const storeId=
 String(store.id);
 
 
-/* PRODUCTS */
+/*
+Products
+*/
 
 const storeProducts=
 (productsData||[]).filter(
@@ -1919,7 +3029,9 @@ storeId
 );
 
 
-/* ORDER IDS */
+/*
+Order IDs
+*/
 
 const productIds=
 new Set(
@@ -1928,8 +3040,10 @@ p=>String(p.id)
 )
 );
 
+
 const storeOrderIds=
 new Set();
+
 
 (orderItemsData||[]).forEach(item=>{
 
@@ -1940,6 +3054,7 @@ item.Products_id;
 const orderId=
 item.order_id ??
 item.Order_id;
+
 
 if(
 productIds.has(
@@ -1956,9 +3071,12 @@ String(orderId)
 });
 
 
-/* SALES */
+/*
+Sales
+*/
 
 let storeSales=0;
+
 
 (paymentsData||[]).forEach(payment=>{
 
@@ -1966,18 +3084,23 @@ const paymentSeller=
 payment.seller_id ??
 payment.Seller_id;
 
+
 const status=
 String(payment.status||"")
 .toLowerCase();
 
+
 if(
+
 String(paymentSeller)===storeId &&
+
 [
 "paid",
 "completed",
 "successful",
 "success"
 ].includes(status)
+
 ){
 
 storeSales+=Number(
@@ -1993,7 +3116,8 @@ payment.total ??
 
 const active=
 store.approved===true &&
-String(store.status||"").toLowerCase()!=="seller_disabled";
+String(store.status||"")
+.toLowerCase()!=="seller_disabled";
 
 
 const details=
@@ -2155,10 +3279,15 @@ store.created_at
 
 ${
 store.approved===true
+
 ?
+
 '<span class="success">Approved</span>'
+
 :
+
 '<span class="error">Not Approved</span>'
+
 }
 
 </div>
@@ -2203,10 +3332,15 @@ store.business_address||"-"
 
 ${
 store.store_image_url
+
 ?
+
 '<span class="success">Uploaded</span>'
+
 :
+
 'Not uploaded'
+
 }
 
 </div>
@@ -2216,7 +3350,9 @@ store.store_image_url
 
 <div class="store-products">
 
-<h3>🛍️ Store Products</h3>
+<h3>
+🛍️ Store Products
+</h3>
 
 ${
 storeProducts.length
@@ -2262,6 +3398,7 @@ Stock: ${esc(p.stock??"-")}
 :
 
 "<p>No products found for this store.</p>"
+
 }
 
 </div>
@@ -2269,7 +3406,9 @@ Stock: ${esc(p.stock??"-")}
 
 <div class="store-orders">
 
-<h3>📦 Store Orders</h3>
+<h3>
+📦 Store Orders
+</h3>
 
 <p>
 
@@ -2293,23 +3432,29 @@ active
 ?
 
 `
+
 <button
+type="button"
 class="reject"
 onclick="closeStoreModal();rejectSeller(${Number(store.id)})"
 >
 Disable Store
 </button>
+
 `
 
 :
 
 `
+
 <button
+type="button"
 class="approve"
 onclick="closeStoreModal();approveSeller(${Number(store.id)})"
 >
 Re-activate Store
 </button>
+
 `
 
 }
@@ -2326,19 +3471,25 @@ document
 }
 
 
-/* CLOSE STORE MODAL */
+/* =========================================================
+   CLOSE STORE MODAL
+========================================================= */
 
 function closeStoreModal(event){
 
 if(
+
 event &&
+
 event.target !==
 document.getElementById("storeModal")
+
 ){
 
 return;
 
 }
+
 
 document
 .getElementById("storeModal")
@@ -2347,7 +3498,9 @@ document
 }
 
 
-/* APPROVE SELLER */
+/* =========================================================
+   APPROVE SELLER
+========================================================= */
 
 async function approveSeller(id){
 
@@ -2361,9 +3514,12 @@ if(
 try{
 
 await api(
-"/rest/v1/sellers?id=eq."+
+
+"/rest/v1/sellers?id="+
 encodeURIComponent(id),
+
 {
+
 method:"PATCH",
 
 headers:{
@@ -2371,17 +3527,22 @@ headers:{
 },
 
 body:JSON.stringify({
+
 approved:true,
+
 status:"seller_approved"
+
 })
 
 }
+
 );
 
 
 alert(
 "Seller approved successfully."
 );
+
 
 await loadSellers();
 
@@ -2400,7 +3561,9 @@ e.message
 }
 
 
-/* DISABLE SELLER */
+/* =========================================================
+   DISABLE SELLER
+========================================================= */
 
 async function rejectSeller(id){
 
@@ -2414,9 +3577,12 @@ if(
 try{
 
 await api(
-"/rest/v1/sellers?id=eq."+
+
+"/rest/v1/sellers?id="+
 encodeURIComponent(id),
+
 {
+
 method:"PATCH",
 
 headers:{
@@ -2424,17 +3590,22 @@ headers:{
 },
 
 body:JSON.stringify({
+
 approved:false,
+
 status:"seller_disabled"
+
 })
 
 }
+
 );
 
 
 alert(
 "Seller has been disabled."
 );
+
 
 await loadSellers();
 
@@ -2453,7 +3624,9 @@ e.message
 }
 
 
-/* VIEW SELLER */
+/* =========================================================
+   VIEW SELLER
+========================================================= */
 
 function viewSeller(id){
 
@@ -2476,12 +3649,14 @@ return;
 
 const ok=
 seller.approved===true &&
-String(seller.status||"").toLowerCase()==="seller_approved";
+String(seller.status||"")
+.toLowerCase()==="seller_approved";
 
 
 const disabled=
 seller.approved===false &&
-String(seller.status||"").toLowerCase()==="seller_disabled";
+String(seller.status||"")
+.toLowerCase()==="seller_disabled";
 
 
 const productCount=
@@ -2494,6 +3669,7 @@ String(seller.id)
 
 let sellerOrderCount=0;
 
+
 const sellerProductIds=
 productsData
 .filter(
@@ -2505,10 +3681,14 @@ String(seller.id)
 x=>String(x.id)
 );
 
+
 const sellerProductSet=
 new Set(sellerProductIds);
 
-const sellerOrders=new Set();
+
+const sellerOrders=
+new Set();
+
 
 (orderItemsData||[]).forEach(item=>{
 
@@ -2519,6 +3699,7 @@ item.Products_id;
 const orderId=
 item.order_id ??
 item.Order_id;
+
 
 if(
 sellerProductSet.has(
@@ -2533,6 +3714,7 @@ String(orderId)
 }
 
 });
+
 
 sellerOrderCount=
 sellerOrders.size;
@@ -2593,14 +3775,23 @@ ${esc(seller.id)}
 
 ${
 ok
+
 ?
+
 '<span class="success">Approved</span>'
+
 :
+
 disabled
+
 ?
+
 '<span class="error">Disabled</span>'
+
 :
+
 '<span>Pending</span>'
+
 }
 
 </div>
@@ -2740,10 +3931,15 @@ seller.description||"-"
 
 ${
 seller.store_image_url
+
 ?
+
 '<span class="success">Uploaded</span>'
+
 :
+
 'Not uploaded'
+
 }
 
 </div>
@@ -2759,23 +3955,29 @@ ok
 ?
 
 `
+
 <button
+type="button"
 class="reject"
 onclick="closeSellerModal();rejectSeller(${Number(seller.id)})"
 >
 Disable Seller
 </button>
+
 `
 
 :
 
 `
+
 <button
+type="button"
 class="approve"
 onclick="closeSellerModal();approveSeller(${Number(seller.id)})"
 >
 Approve Seller
 </button>
+
 `
 
 }
@@ -2792,19 +3994,25 @@ document
 }
 
 
-/* CLOSE SELLER MODAL */
+/* =========================================================
+   CLOSE SELLER MODAL
+========================================================= */
 
 function closeSellerModal(event){
 
 if(
+
 event &&
+
 event.target !==
 document.getElementById("sellerModal")
+
 ){
 
 return;
 
 }
+
 
 document
 .getElementById("sellerModal")
@@ -2813,12 +4021,17 @@ document
 }
 
 
-/* PRODUCTS */
+/* =========================================================
+   PRODUCTS
+========================================================= */
 
 async function loadProducts(){
 
 const tb=
-document.getElementById("productsTable");
+document.getElementById(
+"productsTable"
+);
+
 
 tb.innerHTML=
 '<tr><td colspan="7">Loading...</td></tr>';
@@ -2830,7 +4043,9 @@ const p=await api(
 "/rest/v1/products?select=*&order=id.desc"
 );
 
+
 productsData=p||[];
+
 
 document
 .getElementById("statProducts")
@@ -2839,6 +4054,7 @@ productsData.length;
 
 
 tb.innerHTML=
+
 productsData.length
 
 ?
@@ -2847,26 +4063,47 @@ productsData.map(x=>`
 
 <tr>
 
-<td>${esc(x.id)}</td>
-
-<td>${esc(x.name||"-")}</td>
-
-<td>${esc(
-sellerName(x.seller_id)
-)}</td>
-
-<td>${money(x.price)}</td>
-
-<td>${esc(x.stock??"-")}</td>
-
-<td>${esc(x.category||"-")}</td>
+<td>
+${esc(x.id)}
+</td>
 
 <td>
+${esc(x.name||"-")}
+</td>
+
+<td>
+${esc(
+sellerName(x.seller_id)
+)}
+</td>
+
+<td>
+${money(x.price)}
+</td>
+
+<td>
+${esc(x.stock??"-")}
+</td>
+
+<td>
+${esc(x.category||"-")}
+</td>
+
+<td>
+
 ${
 x.active===false
-?"No"
-:"Yes"
+
+?
+
+"No"
+
+:
+
+"Yes"
+
 }
+
 </td>
 
 </tr>
@@ -2890,12 +4127,17 @@ console.error(e);
 }
 
 
-/* ORDERS */
+/* =========================================================
+   ORDERS
+========================================================= */
 
 async function loadOrders(){
 
 const tb=
-document.getElementById("ordersTable");
+document.getElementById(
+"ordersTable"
+);
+
 
 tb.innerHTML=
 '<tr><td colspan="6">Loading...</td></tr>';
@@ -2907,7 +4149,9 @@ const o=await api(
 "/rest/v1/orders?select=*&order=id.desc"
 );
 
+
 ordersData=o||[];
+
 
 document
 .getElementById("statOrders")
@@ -2916,6 +4160,7 @@ ordersData.length;
 
 
 tb.innerHTML=
+
 ordersData.length
 
 ?
@@ -2924,34 +4169,56 @@ ordersData.map(x=>`
 
 <tr>
 
-<td>${esc(x.id)}</td>
+<td>
+${esc(x.id)}
+</td>
 
-<td>${esc(
+<td>
+
+${esc(
 x.customer_id ??
 x.Customer_id ??
 "-"
-)}</td>
+)}
 
-<td>${money(
+</td>
+
+<td>
+
+${money(
 x.total ??
 x.Total
-)}</td>
+)}
 
-<td>${esc(
+</td>
+
+<td>
+
+${esc(
 x.status ??
 x.Status ??
 "-"
-)}</td>
+)}
 
-<td>${esc(
+</td>
+
+<td>
+
+${esc(
 x.delivery_address ??
 x.Delivery_address ??
 "-"
-)}</td>
+)}
 
-<td>${dateText(
+</td>
+
+<td>
+
+${dateText(
 x.created_at
-)}</td>
+)}
+
+</td>
 
 </tr>
 
@@ -2974,12 +4241,17 @@ console.error(e);
 }
 
 
-/* RENTAL PAYMENTS */
+/* =========================================================
+   RENTAL PAYMENTS
+========================================================= */
 
 async function loadRentalPayments(){
 
 const tb=
-document.getElementById("rentalTable");
+document.getElementById(
+"rentalTable"
+);
+
 
 tb.innerHTML=
 '<tr><td colspan="5">Loading...</td></tr>';
@@ -2991,23 +4263,28 @@ const p=await api(
 "/rest/v1/rental_payments?select=*&order=id.desc"
 );
 
+
 let total=0;
+
 
 p.forEach(x=>{
 
 const s=
-String(x.status||"").toLowerCase();
+String(x.status||"")
+.toLowerCase();
 
-if(
-[
+
+if([
+
 "paid",
 "completed",
 "successful",
 "success"
-].includes(s)
-){
 
-total+=Number(x.amount||0);
+].includes(s)){
+
+total+=
+Number(x.amount||0);
 
 }
 
@@ -3021,6 +4298,7 @@ money(total);
 
 
 tb.innerHTML=
+
 p.length
 
 ?
@@ -3029,24 +4307,32 @@ p.map(x=>`
 
 <tr>
 
-<td>${esc(x.id)}</td>
+<td>
+${esc(x.id)}
+</td>
 
-<td>${esc(
+<td>
+
+${esc(
 sellerName(
 x.seller_id ??
 x.Seller_id
 )
-)}</td>
+)}
 
-<td>${money(x.amount)}</td>
+</td>
 
-<td>${esc(
-x.status||"-"
-)}</td>
+<td>
+${money(x.amount)}
+</td>
 
-<td>${dateText(
-x.created_at
-)}</td>
+<td>
+${esc(x.status||"-")}
+</td>
+
+<td>
+${dateText(x.created_at)}
+</td>
 
 </tr>
 
@@ -3069,12 +4355,17 @@ console.error(e);
 }
 
 
-/* PAYMENTS */
+/* =========================================================
+   PAYMENTS
+========================================================= */
 
 async function loadSellerPayments(){
 
 const tb=
-document.getElementById("paymentsTable");
+document.getElementById(
+"paymentsTable"
+);
+
 
 tb.innerHTML=
 '<tr><td colspan="6">Loading...</td></tr>';
@@ -3086,7 +4377,9 @@ const p=await api(
 "/rest/v1/payments?select=*&order=id.desc"
 );
 
+
 paymentsData=p||[];
+
 
 let sales=0;
 let commission=0;
@@ -3096,16 +4389,18 @@ let sellerTotal=0;
 p.forEach(x=>{
 
 const s=
-String(x.status||"").toLowerCase();
+String(x.status||"")
+.toLowerCase();
 
-if(
-[
+
+if([
+
 "paid",
 "completed",
 "successful",
 "success"
-].includes(s)
-){
+
+].includes(s)){
 
 const a=
 Number(
@@ -3114,6 +4409,7 @@ x.total ||
 0
 );
 
+
 const c=
 Number(
 x.commission ||
@@ -3121,9 +4417,13 @@ x.commission_amount ||
 0
 );
 
+
 sales+=a;
+
 commission+=c;
-sellerTotal+=a-c;
+
+sellerTotal+=
+a-c;
 
 }
 
@@ -3135,20 +4435,24 @@ document
 .textContent=
 money(sales);
 
+
 document
 .getElementById("statCommission")
 .textContent=
 money(commission);
+
 
 document
 .getElementById("paymentSales")
 .textContent=
 money(sales);
 
+
 document
 .getElementById("paymentCommission")
 .textContent=
 money(commission);
+
 
 document
 .getElementById("paymentSellerTotal")
@@ -3157,6 +4461,7 @@ money(sellerTotal);
 
 
 tb.innerHTML=
+
 p.length
 
 ?
@@ -3165,32 +4470,54 @@ p.map(x=>`
 
 <tr>
 
-<td>${esc(x.id)}</td>
+<td>
+${esc(x.id)}
+</td>
 
-<td>${esc(
+<td>
+
+${esc(
 sellerName(
 x.seller_id ??
 x.Seller_id
 )
-)}</td>
+)}
 
-<td>${money(
+</td>
+
+<td>
+
+${money(
 x.amount ||
 x.total
-)}</td>
+)}
 
-<td>${esc(
+</td>
+
+<td>
+
+${esc(
 x.status||"-"
-)}</td>
+)}
 
-<td>${money(
+</td>
+
+<td>
+
+${money(
 x.commission ||
 x.commission_amount
-)}</td>
+)}
 
-<td>${dateText(
+</td>
+
+<td>
+
+${dateText(
 x.created_at
-)}</td>
+)}
+
+</td>
 
 </tr>
 
@@ -3213,12 +4540,17 @@ console.error(e);
 }
 
 
-/* PAYOUTS */
+/* =========================================================
+   PAYOUTS
+========================================================= */
 
 async function loadPayouts(){
 
 const tb=
-document.getElementById("payoutsTable");
+document.getElementById(
+"payoutsTable"
+);
+
 
 tb.innerHTML=
 '<tr><td colspan="6">Loading...</td></tr>';
@@ -3230,22 +4562,27 @@ const p=await api(
 "/rest/v1/payouts?select=*&order=id.desc"
 );
 
+
 let total=0;
 
 
 p.forEach(x=>{
 
-if(
-[
+if([
+
 "processed",
 "paid",
 "completed"
-].includes(
-String(x.status||"").toLowerCase()
-)
-){
 
-total+=Number(x.amount||0);
+].includes(
+
+String(x.status||"")
+.toLowerCase()
+
+)){
+
+total+=
+Number(x.amount||0);
 
 }
 
@@ -3259,6 +4596,7 @@ money(total);
 
 
 tb.innerHTML=
+
 p.length
 
 ?
@@ -3267,24 +4605,32 @@ p.map(x=>`
 
 <tr>
 
-<td>${esc(x.id)}</td>
+<td>
+${esc(x.id)}
+</td>
 
-<td>${esc(
+<td>
+
+${esc(
 sellerName(
 x.seller_id ??
 x.Seller_id
 )
-)}</td>
+)}
 
-<td>${money(x.amount)}</td>
+</td>
 
-<td>${esc(
-x.status||"-"
-)}</td>
+<td>
+${money(x.amount)}
+</td>
 
-<td>${dateText(
-x.created_at
-)}</td>
+<td>
+${esc(x.status||"-")}
+</td>
+
+<td>
+${dateText(x.created_at)}
+</td>
 
 <td>
 
@@ -3293,20 +4639,25 @@ ${
 "pending",
 "processing"
 ].includes(
+
 String(
 x.status||""
 ).toLowerCase()
+
 )
 
 ?
 
 `
+
 <button
+type="button"
 class="approve"
 onclick="processPayout(${Number(x.id)})"
 >
 Process
 </button>
+
 `
 
 :
@@ -3338,7 +4689,9 @@ console.error(e);
 }
 
 
-/* PAYOUT PROCESSING */
+/* =========================================================
+   PAYOUT PROCESSING
+========================================================= */
 
 async function processPayout(id){
 
@@ -3352,18 +4705,28 @@ if(
 try{
 
 await api(
+
 "/rest/v1/rpc/process_seller_payout",
+
 {
+
 method:"POST",
+
 body:JSON.stringify({
+
 payout_id:id
+
 })
+
 }
+
 );
+
 
 alert(
 "Payout processed successfully."
 );
+
 
 await loadPayouts();
 
@@ -3380,7 +4743,9 @@ e.message
 }
 
 
-/* ACTIVITY */
+/* =========================================================
+   ACTIVITY
+========================================================= */
 
 function loadRecentActivity(){
 
@@ -3399,50 +4764,264 @@ document
 }
 
 
-/* AUTO LOGIN */
+/* =========================================================
+   AUTO LOGIN / SESSION RESTORE
+========================================================= */
 
-document.addEventListener(
-"DOMContentLoaded",
-function(){
+async function restoreOwnerSession(){
 
-const t=
+const savedToken=
 localStorage.getItem(
 "zyre_owner_access_token"
 );
 
-const u=
+const savedUserId=
 localStorage.getItem(
 "zyre_owner_user_id"
 );
 
-const e=
+const savedEmail=
 localStorage.getItem(
 "zyre_owner_email"
 );
 
 
-if(t&&u&&e){
+if(
+!savedToken ||
+!savedUserId ||
+!savedEmail
+){
 
-accessToken=t;
-adminUserId=u;
+showLogin();
 
-document
-.getElementById("loginBox")
-.classList.add("hidden");
+return;
 
-document
-.getElementById("adminPanel")
-.classList.remove("hidden");
+}
 
-document
-.getElementById("ownerEmail")
-.textContent=e;
 
-loadDashboard();
+accessToken=
+savedToken;
+
+adminUserId=
+savedUserId;
+
+
+showDashboard(savedEmail);
+
+
+/*
+First try the existing token.
+*/
+
+try{
+
+await api(
+"/rest/v1/profiles?id="+
+encodeURIComponent(adminUserId)+
+"&select=role"
+);
+
+await loadDashboard();
+
+return;
+
+}catch(firstError){
+
+console.warn(
+"Saved owner session failed:",
+firstError
+);
+
+}
+
+
+/*
+The old token may have expired.
+Try to refresh the Supabase session
+using the saved refresh token if one exists.
+*/
+
+const savedRefreshToken=
+localStorage.getItem(
+"zyre_owner_refresh_token"
+);
+
+
+if(savedRefreshToken){
+
+try{
+
+const refreshResponse=
+await fetch(
+
+SUPABASE_URL+
+"/auth/v1/token?grant_type=refresh_token",
+
+{
+
+method:"POST",
+
+headers:{
+
+"apikey":
+SUPABASE_KEY,
+
+"Content-Type":
+"application/json"
+
+},
+
+body:JSON.stringify({
+
+refresh_token:
+savedRefreshToken
+
+})
+
+}
+
+);
+
+
+const refreshData=
+await refreshResponse.json();
+
+
+if(
+refreshResponse.ok &&
+refreshData.access_token
+){
+
+accessToken=
+refreshData.access_token;
+
+adminUserId=
+refreshData.user.id;
+
+
+localStorage.setItem(
+"zyre_owner_access_token",
+accessToken
+);
+
+
+if(refreshData.refresh_token){
+
+localStorage.setItem(
+"zyre_owner_refresh_token",
+refreshData.refresh_token
+);
+
+}
+
+
+const p=await api(
+
+"/rest/v1/profiles?id="+
+encodeURIComponent(adminUserId)+
+"&select=role"
+
+);
+
+
+if(
+p.length &&
+String(p[0].role||"")
+.toLowerCase()==="admin"
+){
+
+showDashboard(savedEmail);
+
+await loadDashboard();
+
+return;
+
+}
+
+}
+
+}catch(refreshError){
+
+console.warn(
+"Owner session refresh failed:",
+refreshError
+);
+
+}
+
+}
+
+
+/*
+No valid session remains.
+Return to login.
+*/
+
+clearOwnerSession();
+
+showLogin(
+"Your owner session expired. Please sign in again."
+);
+
+}
+
+
+/* =========================================================
+   DOM READY
+========================================================= */
+
+document.addEventListener(
+
+"DOMContentLoaded",
+
+function(){
+
+const emailInput=
+document.getElementById("email");
+
+const passwordInput=
+document.getElementById("password");
+
+
+/*
+Allow Enter key to log in.
+*/
+
+emailInput.addEventListener(
+"keydown",
+function(event){
+
+if(event.key==="Enter"){
+
+passwordInput.focus();
 
 }
 
 });
 
-</script></body>
+
+passwordInput.addEventListener(
+"keydown",
+function(event){
+
+if(event.key==="Enter"){
+
+loginAdmin();
+
+}
+
+});
+
+
+/*
+Restore owner session.
+*/
+
+restoreOwnerSession();
+
+});
+
+</script>
+
+</body>
 </html>
