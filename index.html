@@ -68,7 +68,6 @@
 >
 
 <meta property="og:site_name" content="ZYRE Marketing">
-
 <meta property="og:locale" content="en_ZA">
 
 <meta
@@ -100,7 +99,7 @@
 
 <link rel="manifest" href="manifest.json">
 
-<meta name="theme-color" content="#050505">
+<meta name="theme-color" content="#080808">
 
 <meta
   name="mobile-web-app-capable"
@@ -130,51 +129,50 @@
 <style>
 
 /* =========================================================
-   ZYRE PREMIUM MARKETPLACE
-   ========================================================= */
+   ZYRE MARKETPLACE
+   PREMIUM BLACK / WHITE / GOLD DESIGN
+========================================================= */
 
 :root {
 
-  --black: #050505;
-  --black-2: #0b0b0b;
-  --black-3: #111111;
+  --zyre-black: #050505;
+  --zyre-black-2: #0b0b0b;
+  --zyre-black-3: #111111;
 
-  --white: #ffffff;
-  --ivory: #f7f7f5;
+  --zyre-white: #ffffff;
+  --zyre-off-white: #f7f7f5;
+  --zyre-soft: #eeeeeb;
 
-  --text: #111111;
-  --muted: #777777;
+  --zyre-gold: #c8a63a;
+  --zyre-gold-light: #e1c75b;
 
-  --line: #e8e8e5;
+  --zyre-grey: #777;
+  --zyre-border: #e2e2de;
 
-  --gold: #c9a227;
-  --gold-light: #e5ca63;
+  --sidebar-width: 275px;
 
   --shadow:
-    0 25px 70px rgba(0,0,0,.10);
+    0 20px 60px rgba(0,0,0,.10);
 
-  --radius: 20px;
+  --radius: 18px;
 }
-
 
 * {
   box-sizing: border-box;
 }
 
-
 html {
   scroll-behavior: smooth;
 }
-
 
 body {
 
   margin: 0;
 
   background:
-    #f7f7f5;
+    #f6f6f3;
 
-  color: var(--text);
+  color: #111;
 
   font-family:
     Inter,
@@ -185,17 +183,15 @@ body {
   visibility: hidden;
 }
 
-
 body.zyre-auth-ready {
   visibility: visible;
 }
 
-
 button,
-input {
+input,
+select {
   font: inherit;
 }
-
 
 button {
   cursor: pointer;
@@ -204,7 +200,7 @@ button {
 
 /* =========================================================
    AUTH LOADING
-   ========================================================= */
+========================================================= */
 
 #zyreAuthLoading {
 
@@ -214,7 +210,12 @@ button {
 
   z-index: 999999;
 
-  background: #050505;
+  background:
+    radial-gradient(
+      circle at center,
+      #181818,
+      #050505 65%
+    );
 
   color: white;
 
@@ -231,7 +232,6 @@ button {
   padding: 25px;
 }
 
-
 #zyreAuthLoading .auth-logo {
 
   font-size: 42px;
@@ -243,12 +243,11 @@ button {
   margin-bottom: 14px;
 }
 
-
 #zyreAuthLoading .auth-text {
 
   color: #888;
 
-  font-size: 11px;
+  font-size: 12px;
 
   letter-spacing: 3px;
 
@@ -257,8 +256,8 @@ button {
 
 
 /* =========================================================
-   PREMIUM HEADER
-   ========================================================= */
+   DESKTOP HEADER
+========================================================= */
 
 .zyre-header {
 
@@ -268,84 +267,26 @@ button {
 
   z-index: 5000;
 
-  min-height: 82px;
+  height: 82px;
 
-  padding:
-    14px
-    clamp(18px, 4vw, 55px);
-
-  display: grid;
-
-  grid-template-columns:
-    auto
-    auto
-    minmax(220px, 720px)
-    auto;
-
-  gap: 20px;
-
-  align-items: center;
+  padding: 0 30px;
 
   background:
     rgba(5,5,5,.97);
 
-  backdrop-filter:
-    blur(20px);
+  color: white;
 
   border-bottom:
-    1px solid
-    rgba(255,255,255,.08);
-}
-
-
-/* MENU IS NOW ON THE LEFT */
-
-.menu-button {
-
-  order: 1;
-
-  width: 48px;
-
-  height: 48px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.14);
-
-  border-radius: 14px;
-
-  background:
-    rgba(255,255,255,.05);
-
-  color: white;
+    1px solid rgba(255,255,255,.10);
 
   display: flex;
 
   align-items: center;
 
-  justify-content: center;
-
-  font-size: 22px;
-
-  transition: .25s ease;
+  gap: 25px;
 }
-
-
-.menu-button:hover {
-
-  border-color:
-    rgba(255,255,255,.35);
-
-  background:
-    rgba(255,255,255,.10);
-}
-
-
-/* LOGO */
 
 .brand {
-
-  order: 2;
 
   display: flex;
 
@@ -353,25 +294,24 @@ button {
 
   line-height: 1;
 
-  min-width: 125px;
+  min-width: 170px;
 }
-
 
 .brand-main {
 
   color: white;
 
-  font-size: 27px;
+  font-size: 28px;
 
-  font-weight: 800;
+  font-weight: 700;
 
-  letter-spacing: 7px;
+  letter-spacing: 8px;
 }
-
 
 .brand-sub {
 
-  color: var(--gold-light);
+  color:
+    var(--zyre-gold-light);
 
   font-size: 8px;
 
@@ -380,278 +320,399 @@ button {
   margin-top: 8px;
 }
 
+.header-tagline {
 
-/* SEARCH */
+  flex: 1;
 
-.header-search {
-
-  order: 3;
-
-  width: 100%;
-}
-
-
-.header-search input {
-
-  width: 100%;
-
-  height: 48px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.15);
-
-  border-radius: 30px;
-
-  background:
-    rgba(255,255,255,.07);
-
-  color: white;
-
-  padding:
-    0 22px;
-
-  outline: none;
-
-  transition: .25s ease;
-}
-
-
-.header-search input::placeholder {
+  text-align: center;
 
   color: #999;
+
+  font-size: 10px;
+
+  letter-spacing: 3px;
+
+  text-transform: uppercase;
 }
 
-
-.header-search input:focus {
-
-  border-color:
-    rgba(255,255,255,.40);
-
-  background:
-    rgba(255,255,255,.10);
-
-  box-shadow:
-    0 0 0 4px
-    rgba(255,255,255,.04);
-}
-
-
-/* CART */
-
-.cart-button {
-
-  order: 4;
-
-  min-width: 48px;
-
-  height: 48px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.14);
-
-  border-radius: 14px;
-
-  background:
-    rgba(255,255,255,.05);
-
-  color: white;
-
-  padding:
-    0 13px;
-
-  transition: .25s ease;
-}
-
-
-.cart-button:hover {
-
-  background:
-    rgba(255,255,255,.10);
-}
-
-
-#cartCount {
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  min-width: 21px;
-
-  height: 21px;
-
-  margin-left: 5px;
-
-  padding: 0 5px;
-
-  border-radius: 50px;
-
-  background: white;
-
-  color: black;
-
-  font-size: 11px;
-}
-
-
-/* =========================================================
-   CLEAN CATEGORY BAR
-   ========================================================= */
-
-.zyre-nav {
+.header-actions {
 
   display: flex;
 
   align-items: center;
 
-  gap: 8px;
-
-  padding:
-    12px
-    clamp(18px, 4vw, 55px);
-
-  background: white;
-
-  border-bottom:
-    1px solid
-    var(--line);
-
-  overflow-x: auto;
-
-  scrollbar-width: none;
+  gap: 10px;
 }
 
+.header-action {
 
-.zyre-nav::-webkit-scrollbar {
+  min-width: 46px;
+
+  height: 46px;
+
+  padding: 0 14px;
+
+  border-radius: 14px;
+
+  border:
+    1px solid rgba(255,255,255,.14);
+
+  background:
+    rgba(255,255,255,.04);
+
+  color: white;
+
+  transition: .25s ease;
+}
+
+.header-action:hover {
+
+  background:
+    rgba(201,162,39,.14);
+
+  border-color:
+    rgba(201,162,39,.55);
+}
+
+.mobile-menu-button {
   display: none;
 }
 
 
-.zyre-nav button {
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.zyre-layout {
+
+  display: flex;
+
+  min-height:
+    calc(100vh - 82px);
+}
+
+
+/* =========================================================
+   LEFT SIDEBAR
+========================================================= */
+
+.zyre-sidebar {
+
+  position: sticky;
+
+  top: 82px;
+
+  width: var(--sidebar-width);
+
+  height:
+    calc(100vh - 82px);
+
+  flex-shrink: 0;
+
+  background:
+    #080808;
+
+  color: white;
+
+  border-right:
+    1px solid #1d1d1d;
+
+  overflow-y: auto;
+
+  padding: 24px 17px;
+
+  z-index: 4000;
+}
+
+.sidebar-search {
+
+  position: relative;
+
+  margin-bottom: 25px;
+}
+
+.sidebar-search input {
+
+  width: 100%;
+
+  height: 48px;
+
+  padding:
+    0 42px 0 17px;
+
+  border:
+    1px solid #3a3a3a;
+
+  border-radius: 13px;
+
+  outline: none;
+
+  background: #101010;
+
+  color: white;
+
+  font-size: 14px;
+}
+
+.sidebar-search input::placeholder {
+  color: #777;
+}
+
+.sidebar-search input:focus {
+
+  border-color:
+    var(--zyre-gold);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(201,162,39,.08);
+}
+
+.sidebar-search-icon {
+
+  position: absolute;
+
+  right: 15px;
+
+  top: 50%;
+
+  transform:
+    translateY(-50%);
+
+  color: #aaa;
+
+  font-size: 18px;
+
+  pointer-events: none;
+}
+
+.sidebar-section-title {
+
+  margin:
+    23px 10px 10px;
+
+  color: #666;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+}
+
+.sidebar-item {
+
+  width: 100%;
+
+  min-height: 48px;
+
+  margin: 3px 0;
+
+  padding:
+    0 13px;
 
   border: none;
 
+  border-radius: 11px;
+
   background: transparent;
 
-  color: #555;
+  color: #ccc;
 
-  padding:
-    8px 18px;
+  display: flex;
 
-  border-radius: 50px;
+  align-items: center;
 
-  white-space: nowrap;
+  gap: 13px;
 
-  font-size: 13px;
-
-  font-weight: 600;
+  text-align: left;
 
   transition: .2s ease;
 }
 
+.sidebar-item:hover {
 
-.zyre-nav button:hover {
+  background: #171717;
 
-  background: #f0f0ed;
+  color: white;
+}
 
-  color: #000;
+.sidebar-item.active {
+
+  background: white;
+
+  color: #111;
+
+  font-weight: 600;
+}
+
+.sidebar-icon {
+
+  width: 25px;
+
+  text-align: center;
+
+  font-size: 18px;
+}
+
+.sidebar-divider {
+
+  height: 1px;
+
+  background:
+    rgba(255,255,255,.08);
+
+  margin:
+    22px 5px;
+}
+
+.sidebar-bottom {
+
+  margin-top: 35px;
+
+  padding:
+    25px 12px;
+
+  border-top:
+    1px solid rgba(255,255,255,.08);
+
+  text-align: center;
+}
+
+.sidebar-bottom-logo {
+
+  font-size: 27px;
+
+  letter-spacing: 7px;
+
+  font-weight: 700;
+}
+
+.sidebar-bottom-gold {
+
+  color:
+    var(--zyre-gold-light);
+
+  font-size: 8px;
+
+  letter-spacing: 4px;
+
+  margin-top: 7px;
+}
+
+.sidebar-bottom p {
+
+  color: #666;
+
+  font-size: 11px;
+
+  line-height: 1.7;
+
+  margin-top: 17px;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.zyre-main {
+
+  min-width: 0;
+
+  flex: 1;
+
+  background:
+    #f7f7f5;
 }
 
 
 /* =========================================================
    HERO
-   ========================================================= */
+========================================================= */
 
-.hero {
+.market-hero {
 
   position: relative;
 
-  min-height:
-    min(720px, calc(100vh - 130px));
+  min-height: 470px;
+
+  margin: 25px;
+
+  border-radius: 22px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 80% 40%,
+      rgba(201,162,39,.20),
+      transparent 25%
+    ),
+    linear-gradient(
+      135deg,
+      #050505,
+      #101010 55%,
+      #070707
+    );
+
+  color: white;
 
   display: flex;
 
   align-items: center;
 
-  overflow: hidden;
-
-  background:
-    #050505;
-
-  color: white;
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.15);
 }
 
-
-.hero::before {
+.market-hero::before {
 
   content: "";
 
   position: absolute;
 
-  width: 650px;
+  width: 520px;
 
-  height: 650px;
+  height: 520px;
 
-  right: -250px;
+  right: -190px;
 
-  top: -230px;
-
-  border-radius: 50%;
-
-  border:
-    1px solid
-    rgba(255,255,255,.08);
-}
-
-
-.hero::after {
-
-  content: "";
-
-  position: absolute;
-
-  width: 500px;
-
-  height: 500px;
-
-  left: -260px;
-
-  bottom: -280px;
+  top: -180px;
 
   border-radius: 50%;
 
   border:
     1px solid
-    rgba(255,255,255,.05);
+    rgba(201,162,39,.22);
+
+  box-shadow:
+    0 0 0 60px
+    rgba(201,162,39,.025),
+    0 0 0 120px
+    rgba(201,162,39,.015);
 }
 
-
-.hero-content {
+.market-hero-content {
 
   position: relative;
 
   z-index: 2;
 
-  width:
-    min(850px, 100%);
+  max-width: 720px;
 
   padding:
-    95px
-    clamp(24px, 7vw, 100px);
+    65px clamp(30px,6vw,80px);
 }
-
 
 .eyebrow {
 
-  margin:
-    0 0 18px;
+  margin: 0 0 17px;
 
   color:
-    var(--gold-light);
+    var(--zyre-gold-light);
 
   font-size: 10px;
 
@@ -662,8 +723,7 @@ button {
   text-transform: uppercase;
 }
 
-
-.hero h1 {
+.market-hero h1 {
 
   margin: 0;
 
@@ -673,23 +733,22 @@ button {
     serif;
 
   font-size:
-    clamp(52px, 8vw, 105px);
+    clamp(48px,6vw,82px);
 
-  line-height: .94;
+  line-height: .96;
 
   font-weight: 400;
 
-  letter-spacing: -4px;
+  letter-spacing: -3px;
 }
 
-
-.hero h1 span {
+.market-hero h1 span {
 
   display: block;
 
-  margin-top: 22px;
+  margin-top: 20px;
 
-  color: #aaa;
+  color: #bbb;
 
   font-family:
     Arial,
@@ -697,106 +756,105 @@ button {
     sans-serif;
 
   font-size:
-    clamp(19px, 3vw, 32px);
+    clamp(17px,2vw,25px);
 
-  line-height: 1.2;
+  line-height: 1.3;
 
   letter-spacing: 0;
 
   font-weight: 300;
 }
 
+.market-hero-text {
 
-.hero-text {
-
-  max-width: 610px;
+  max-width: 590px;
 
   margin:
-    32px 0 0;
+    25px 0 0;
 
   color: #999;
 
   font-size: 15px;
 
-  line-height: 1.9;
+  line-height: 1.8;
 }
 
 
-.hero-buttons {
+/* HERO SEARCH */
+
+.hero-store-search {
 
   display: flex;
 
-  flex-wrap: wrap;
+  align-items: center;
 
-  gap: 12px;
+  width: min(530px,100%);
 
-  margin-top: 36px;
-}
+  height: 54px;
 
-
-.primary-button,
-.secondary-button {
-
-  min-height: 52px;
-
-  border-radius: 50px;
+  margin-top: 30px;
 
   padding:
-    0 27px;
-
-  font-weight: 700;
-
-  transition: .25s ease;
-}
-
-
-.primary-button {
+    0 8px 0 18px;
 
   background: white;
 
-  color: black;
+  border-radius: 30px;
+}
+
+.hero-store-search span {
+
+  color: #555;
+
+  font-size: 19px;
+
+  margin-right: 10px;
+}
+
+.hero-store-search input {
+
+  flex: 1;
+
+  min-width: 0;
 
   border: none;
-}
 
-
-.primary-button:hover {
-
-  background: #eeeeee;
-
-  transform: translateY(-2px);
-}
-
-
-.secondary-button {
+  outline: none;
 
   background: transparent;
 
+  color: #111;
+
+  font-size: 14px;
+}
+
+.hero-store-search input::placeholder {
+  color: #888;
+}
+
+.hero-store-search button {
+
+  width: 42px;
+
+  height: 42px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #080808;
+
   color: white;
 
-  border:
-    1px solid
-    rgba(255,255,255,.25);
+  font-size: 18px;
 }
-
-
-.secondary-button:hover {
-
-  background:
-    rgba(255,255,255,.08);
-
-  transform: translateY(-2px);
-}
-
-
-/* HERO MARK */
 
 .hero-mark {
 
   position: absolute;
 
   right:
-    clamp(40px, 9vw, 150px);
+    clamp(35px,7vw,100px);
 
   top: 50%;
 
@@ -804,82 +862,73 @@ button {
     translateY(-50%);
 
   width:
-    clamp(180px, 27vw, 390px);
+    clamp(180px,25vw,330px);
 
   height:
-    clamp(180px, 27vw, 390px);
+    clamp(180px,25vw,330px);
 
   border:
     1px solid
-    rgba(255,255,255,.10);
+    rgba(201,162,39,.24);
 
   border-radius: 50%;
 
   display: flex;
 
-  flex-direction: column;
-
   align-items: center;
 
   justify-content: center;
 
+  flex-direction: column;
+
   color:
     rgba(255,255,255,.15);
-
-  font-size: 17px;
-
-  letter-spacing: 10px;
 
   pointer-events: none;
 }
 
-
 .hero-z {
 
-  font-family:
-    Georgia,
-    serif;
-
-  color:
-    rgba(255,255,255,.10);
+  font-family: Georgia, serif;
 
   font-size:
-    clamp(120px, 18vw, 270px);
+    clamp(120px,17vw,230px);
 
-  line-height: .8;
+  line-height: .7;
+
+  color:
+    rgba(201,162,39,.25);
 
   letter-spacing: -10px;
 }
 
 
 /* =========================================================
-   MARKETPLACE INTRO
-   ========================================================= */
+   CONTENT SECTIONS
+========================================================= */
 
-.marketplace {
-
-  width:
-    min(1280px, calc(100% - 36px));
-
-  margin: 0 auto;
+.content-section {
 
   padding:
-    95px 0;
+    65px 25px;
 }
 
+.section-heading {
 
-.marketplace .toolbar {
+  display: flex;
 
-  max-width: 850px;
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 28px;
 }
 
+.section-heading h2 {
 
-.marketplace h2,
-.categories h2,
-.how-it-works h2 {
-
-  margin:
-    0 0 22px;
+  margin: 0;
 
   font-family:
     Georgia,
@@ -887,164 +936,69 @@ button {
     serif;
 
   font-size:
-    clamp(35px, 5vw, 58px);
+    clamp(32px,4vw,50px);
 
-  line-height: 1.05;
-
-  font-weight: 400;
-
-  letter-spacing: -1.5px;
-}
-
-
-.marketplace p:not(.eyebrow) {
-
-  color: #666;
-
-  font-size: 15px;
-
-  line-height: 1.9;
-
-  max-width: 800px;
-}
-
-
-/* =========================================================
-   SELLER BANNER
-   ========================================================= */
-
-.seller-banner {
-
-  width:
-    min(1280px, calc(100% - 36px));
-
-  margin:
-    0 auto 90px;
-
-  padding:
-    clamp(35px, 6vw, 75px);
-
-  border-radius: 24px;
-
-  background: #050505;
-
-  color: white;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  gap: 35px;
-
-  box-shadow:
-    0 30px 80px
-    rgba(0,0,0,.15);
-}
-
-
-.seller-banner h2 {
-
-  margin:
-    0 0 14px;
-
-  font-family:
-    Georgia,
-    serif;
-
-  font-size:
-    clamp(32px, 5vw, 58px);
+  line-height: 1;
 
   font-weight: 400;
 }
 
+.section-heading p {
 
-.seller-banner p {
+  margin:
+    8px 0 0;
 
-  margin: 0;
-
-  color: #999;
+  color: #777;
 
   line-height: 1.7;
 }
 
+.section-link {
 
-.seller-banner strong {
+  border: none;
 
-  color: white;
-}
+  background: transparent;
 
-
-.seller-banner button {
-
-  flex-shrink: 0;
-
-  border:
-    1px solid
-    rgba(255,255,255,.25);
-
-  background: white;
-
-  color: black;
-
-  padding:
-    16px 24px;
-
-  border-radius: 50px;
+  color: #111;
 
   font-weight: 700;
 
-  transition: .25s ease;
+  white-space: nowrap;
 }
 
-
-.seller-banner button:hover {
-
-  background: #e9e9e9;
-
-  transform: translateY(-2px);
+.section-link:hover {
+  color: var(--zyre-gold);
 }
 
 
 /* =========================================================
-   STORE DIRECTORY
-   ========================================================= */
-
-#stores {
-
-  padding-top: 35px;
-}
-
+   STORE GRID
+========================================================= */
 
 #storesGrid {
 
   display: grid;
 
   grid-template-columns:
-    repeat(auto-fit, minmax(270px, 1fr));
+    repeat(3,minmax(0,1fr));
 
-  gap: 22px;
-
-  margin-top: 45px;
+  gap: 17px;
 }
-
 
 .store-card {
 
   position: relative;
 
-  min-height: 310px;
+  min-height: 330px;
 
-  padding: 30px;
-
-  border-radius: 22px;
-
-  background: white;
+  padding: 25px;
 
   border:
-    1px solid
-    #e5e5e2;
+    1px solid #deded9;
+
+  border-radius: 18px;
+
+  background: white;
 
   overflow: hidden;
 
@@ -1055,35 +1009,73 @@ button {
   justify-content: flex-end;
 
   transition:
-    transform .3s ease,
-    box-shadow .3s ease;
+    transform .25s ease,
+    box-shadow .25s ease,
+    border-color .25s ease;
 }
-
 
 .store-card:hover {
 
   transform:
-    translateY(-6px);
+    translateY(-5px);
 
   box-shadow:
-    0 25px 55px
+    0 20px 45px
     rgba(0,0,0,.10);
+
+  border-color:
+    rgba(201,162,39,.55);
 }
 
+.store-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  right: 0;
+
+  top: 0;
+
+  height: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #111,
+      var(--zyre-gold),
+      #111
+    );
+}
+
+
+/* STORE LOGO */
 
 .store-logo-area {
 
   position: absolute;
 
-  top: 27px;
+  top: 25px;
 
-  left: 28px;
+  left: 25px;
 
-  width: 78px;
+  width: 72px;
 
-  height: 78px;
+  height: 72px;
+}
+
+.store-logo-image,
+.store-logo-placeholder {
+
+  width: 72px;
+
+  height: 72px;
 
   border-radius: 50%;
+
+  object-fit: cover;
 
   display: flex;
 
@@ -1092,40 +1084,49 @@ button {
   justify-content: center;
 }
 
-
 .store-logo-image {
-
-  width: 78px;
-
-  height: 78px;
-
-  border-radius: 50%;
-
-  object-fit: cover;
-
-  display: block;
 
   border:
     2px solid
-    #111;
+    var(--zyre-gold);
 
   background: #111;
-}
 
+  box-shadow:
+    0 0 0 4px
+    rgba(201,162,39,.08);
+}
 
 .store-logo-placeholder {
 
-  width: 78px;
+  border:
+    2px solid
+    var(--zyre-gold);
 
-  height: 78px;
+  background:
+    #f1f1ed;
+
+  color:
+    #806516;
+
+  font-size: 24px;
+}
+
+.store-symbol {
+
+  position: absolute;
+
+  right: 23px;
+
+  top: 23px;
+
+  width: 46px;
+
+  height: 46px;
 
   border-radius: 50%;
 
-  border:
-    2px solid
-    #111;
-
-  background: #f1f1ef;
+  background: #f1f1ed;
 
   display: flex;
 
@@ -1134,144 +1135,131 @@ button {
   justify-content: center;
 
   color: #333;
-
-  font-size: 26px;
 }
-
-
-.store-symbol {
-
-  position: absolute;
-
-  top: 28px;
-
-  right: 28px;
-
-  width: 48px;
-
-  height: 48px;
-
-  border-radius: 50%;
-
-  background: #f3f3f0;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  font-size: 20px;
-
-  color: #111;
-}
-
 
 .store-card h3 {
 
   margin:
-    0 0 10px;
+    0 0 8px;
 
-  padding-top: 88px;
+  padding-top: 82px;
 
   font-family:
     Georgia,
+    "Times New Roman",
     serif;
 
-  font-size: 29px;
+  font-size: 27px;
 
   font-weight: 400;
 
   word-break: break-word;
 }
 
-
 .store-card p {
 
   margin:
-    0 0 22px;
+    0 0 18px;
 
   color: #777;
 
+  font-size: 13px;
+
   line-height: 1.6;
 
-  min-height: 50px;
+  min-height: 42px;
 }
-
 
 .store-card .primary-button {
 
   align-self: flex-start;
 
-  min-height: 44px;
+  min-height: 42px;
 
   padding:
-    0 20px;
+    0 19px;
+
+  border: 1px solid #111;
+
+  border-radius: 30px;
+
+  background: #111;
+
+  color: white;
+
+  font-weight: 700;
+}
+
+.store-card .primary-button:hover {
+
+  background:
+    var(--zyre-gold);
+
+  color: #000;
+
+  border-color:
+    var(--zyre-gold);
 }
 
 
 /* =========================================================
    CATEGORIES
-   ========================================================= */
+========================================================= */
 
-.categories {
+.category-section {
+
+  margin:
+    20px 25px 65px;
 
   padding:
-    100px
-    clamp(18px, 5vw, 80px);
+    55px 25px;
 
-  background:
-    #050505;
+  border-radius: 22px;
+
+  background: #080808;
 
   color: white;
 }
 
-
-.section-title {
-
-  max-width: 1280px;
-
-  margin:
-    0 auto 45px;
-}
-
-
-.section-title h2 {
+.category-section h2 {
 
   margin: 0;
+
+  font-family:
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(32px,4vw,48px);
+
+  font-weight: 400;
 }
 
-
 .category-grid {
-
-  width:
-    min(1280px, 100%);
-
-  margin: 0 auto;
 
   display: grid;
 
   grid-template-columns:
-    repeat(4, 1fr);
+    repeat(5,1fr);
 
-  gap: 16px;
+  gap: 12px;
+
+  margin-top: 30px;
 }
-
 
 .category-card {
 
-  min-height: 220px;
+  min-height: 145px;
 
-  padding: 30px;
+  padding: 20px;
 
   border:
     1px solid
     rgba(255,255,255,.10);
 
-  border-radius: 20px;
+  border-radius: 15px;
 
-  background:
-    #0d0d0d;
+  background: #111;
 
   color: white;
 
@@ -1283,31 +1271,190 @@ button {
 
   justify-content: flex-end;
 
-  transition: .3s ease;
+  transition: .25s ease;
 }
 
+.category-card:hover,
+.category-card.active {
 
-.category-card:hover {
+  background: white;
+
+  color: #111;
+
+  border-color: white;
 
   transform:
-    translateY(-6px);
-
-  border-color:
-    rgba(255,255,255,.25);
+    translateY(-4px);
 }
 
-
-.category-card > span {
+.category-icon {
 
   margin-bottom: auto;
 
-  font-size: 34px;
+  font-size: 25px;
+}
 
-  color: #777;
+.category-card strong {
+
+  font-family:
+    Georgia,
+    serif;
+
+  font-size: 20px;
+
+  font-weight: 400;
+}
+
+.category-card small {
+
+  margin-top: 5px;
+
+  color: #888;
+
+  font-size: 11px;
 }
 
 
-.category-card strong {
+/* =========================================================
+   SELLER SECTION
+========================================================= */
+
+.seller-banner {
+
+  margin:
+    0 25px 65px;
+
+  padding:
+    45px clamp(25px,5vw,60px);
+
+  border-radius: 20px;
+
+  background:
+    #111;
+
+  color: white;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 30px;
+}
+
+.seller-banner h2 {
+
+  margin:
+    0 0 12px;
+
+  font-family:
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(30px,4vw,48px);
+
+  font-weight: 400;
+}
+
+.seller-banner p {
+
+  margin: 0;
+
+  color: #888;
+
+  line-height: 1.7;
+}
+
+.seller-banner strong {
+
+  color:
+    var(--zyre-gold-light);
+}
+
+.seller-banner button {
+
+  flex-shrink: 0;
+
+  min-height: 50px;
+
+  padding:
+    0 24px;
+
+  border:
+    1px solid
+    var(--zyre-gold);
+
+  border-radius: 30px;
+
+  background: transparent;
+
+  color:
+    var(--zyre-gold-light);
+
+  font-weight: 700;
+}
+
+.seller-banner button:hover {
+
+  background:
+    var(--zyre-gold);
+
+  color: #000;
+}
+
+
+/* =========================================================
+   HOW IT WORKS
+========================================================= */
+
+.how-it-works {
+
+  padding:
+    10px 25px 70px;
+}
+
+.steps {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap: 15px;
+}
+
+.step {
+
+  min-height: 210px;
+
+  padding: 28px;
+
+  border:
+    1px solid #ddd;
+
+  border-radius: 17px;
+
+  background: white;
+}
+
+.step > span {
+
+  color:
+    var(--zyre-gold);
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 3px;
+}
+
+.step h3 {
+
+  margin:
+    30px 0 10px;
 
   font-family:
     Georgia,
@@ -1317,104 +1464,6 @@ button {
 
   font-weight: 400;
 }
-
-
-.category-card small {
-
-  margin-top: 8px;
-
-  color: #777;
-}
-
-
-/* =========================================================
-   HOW IT WORKS
-   ========================================================= */
-
-.how-it-works {
-
-  width:
-    min(1280px, calc(100% - 36px));
-
-  margin: auto;
-
-  padding:
-    100px 0;
-}
-
-
-.steps {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 20px;
-}
-
-
-.step {
-
-  position: relative;
-
-  padding: 35px;
-
-  background: white;
-
-  border:
-    1px solid
-    #e5e5e2;
-
-  border-radius: 20px;
-
-  min-height: 250px;
-
-  transition: .3s ease;
-}
-
-
-.step:hover {
-
-  transform:
-    translateY(-5px);
-
-  box-shadow:
-    0 20px 50px
-    rgba(0,0,0,.07);
-}
-
-
-.step > span {
-
-  display: block;
-
-  margin-bottom: 35px;
-
-  color: #777;
-
-  font-size: 13px;
-
-  font-weight: 800;
-
-  letter-spacing: 3px;
-}
-
-
-.step h3 {
-
-  margin:
-    0 0 12px;
-
-  font-family:
-    Georgia,
-    serif;
-
-  font-size: 26px;
-
-  font-weight: 400;
-}
-
 
 .step p {
 
@@ -1428,7 +1477,7 @@ button {
 
 /* =========================================================
    SERVICES
-   ========================================================= */
+========================================================= */
 
 .services {
 
@@ -1436,37 +1485,33 @@ button {
 
   flex-wrap: wrap;
 
-  justify-content: center;
-
-  gap: 10px;
+  gap: 9px;
 
   padding:
-    0 18px 100px;
+    0 25px 70px;
 }
-
 
 .services button {
 
   border:
-    1px solid
-    #ddd;
+    1px solid #d8d8d4;
 
   background: white;
 
   color: #222;
 
   padding:
-    14px 20px;
+    13px 18px;
 
-  border-radius: 50px;
+  border-radius: 30px;
 
-  transition: .25s ease;
+  transition: .2s ease;
 }
-
 
 .services button:hover {
 
-  border-color: #111;
+  border-color:
+    var(--zyre-gold);
 
   transform:
     translateY(-2px);
@@ -1475,7 +1520,7 @@ button {
 
 /* =========================================================
    CART
-   ========================================================= */
+========================================================= */
 
 .drawer {
 
@@ -1486,7 +1531,7 @@ button {
   right: 0;
 
   width:
-    min(430px, 100%);
+    min(430px,100%);
 
   height: 100vh;
 
@@ -1496,13 +1541,12 @@ button {
 
   box-shadow:
     -20px 0 60px
-    rgba(0,0,0,.22);
+    rgba(0,0,0,.25);
 
   padding: 30px;
 
   overflow-y: auto;
 }
-
 
 .drawer .close {
 
@@ -1512,15 +1556,12 @@ button {
 
   border-radius: 50%;
 
-  border:
-    1px solid
-    #ddd;
+  border: 1px solid #ddd;
 
   background: white;
 
   float: right;
 }
-
 
 .drawer h2 {
 
@@ -1535,7 +1576,6 @@ button {
   font-weight: 400;
 }
 
-
 .drawer .total {
 
   margin-top: 25px;
@@ -1543,14 +1583,12 @@ button {
   padding-top: 20px;
 
   border-top:
-    1px solid
-    #ddd;
+    1px solid #ddd;
 
   font-size: 20px;
 
   font-weight: 700;
 }
-
 
 .clear-cart,
 .checkout {
@@ -1566,7 +1604,6 @@ button {
   font-weight: 700;
 }
 
-
 .clear-cart {
 
   background: #f2f2f2;
@@ -1574,12 +1611,12 @@ button {
   border: none;
 }
 
-
 .checkout {
 
-  background: #050505;
+  background: #080808;
 
-  color: white;
+  color:
+    var(--zyre-gold-light);
 
   border: none;
 }
@@ -1587,51 +1624,48 @@ button {
 
 /* =========================================================
    FOOTER
-   ========================================================= */
+========================================================= */
 
 .zyre-footer {
+
+  margin-left:
+    var(--sidebar-width);
 
   background: #050505;
 
   color: white;
 
   padding:
-    75px
-    clamp(24px, 6vw, 100px)
-    30px;
+    65px 35px 30px;
 }
-
 
 .footer-brand strong {
 
   display: block;
 
-  font-size: 40px;
+  font-size: 36px;
 
   letter-spacing: 8px;
 }
 
-
 .footer-brand span {
 
   color:
-    var(--gold-light);
+    var(--zyre-gold-light);
 
-  font-size: 9px;
+  font-size: 8px;
 
   letter-spacing: 5px;
 }
 
-
 .footer-brand p {
 
-  max-width: 420px;
+  max-width: 400px;
 
-  color: #777;
+  color: #666;
 
   line-height: 1.7;
 }
-
 
 .footer-links {
 
@@ -1641,9 +1675,8 @@ button {
 
   gap: 8px;
 
-  margin: 45px 0;
+  margin: 35px 0;
 }
-
 
 .footer-links button {
 
@@ -1653,176 +1686,23 @@ button {
     1px solid
     rgba(255,255,255,.12);
 
-  color: #bbb;
+  color: #aaa;
 
-  border-radius: 50px;
+  border-radius: 30px;
 
   padding:
-    11px 16px;
+    10px 15px;
 }
-
 
 .footer-links button:hover {
 
   color: white;
 
   border-color:
-    rgba(255,255,255,.35);
+    rgba(201,162,39,.5);
 }
-
 
 .footer-bottom {
-
-  padding-top: 25px;
-
-  border-top:
-    1px solid
-    rgba(255,255,255,.08);
-
-  color: #555;
-
-  font-size: 12px;
-
-  line-height: 1.8;
-}
-
-
-/* =========================================================
-   LEFT SIDE MENU
-   ========================================================= */
-
-.zyre-menu {
-
-  position: fixed !important;
-
-  top: 0;
-
-  left: 0;
-
-  right: auto;
-
-  width: 330px;
-
-  max-width: 90%;
-
-  height: 100vh;
-
-  background:
-    #050505;
-
-  color: white;
-
-  z-index: 99999;
-
-  box-shadow:
-    25px 0 70px
-    rgba(0,0,0,.55);
-
-  overflow-y: auto;
-}
-
-
-.zyre-menu-header {
-
-  min-height: 150px;
-
-  padding: 25px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.08);
-}
-
-
-.zyre-menu-logo {
-
-  width: 165px;
-
-  max-width: 75%;
-}
-
-
-.zyre-menu-close {
-
-  background: transparent;
-
-  border: none;
-
-  color: white;
-
-  font-size: 24px;
-}
-
-
-.zyre-menu-items {
-
-  padding: 18px;
-}
-
-
-.zyre-menu-items button {
-
-  width: 100%;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 14px;
-
-  padding: 16px;
-
-  margin: 5px 0;
-
-  border: none;
-
-  border-radius: 12px;
-
-  background: transparent;
-
-  color: white;
-
-  text-align: left;
-}
-
-
-.zyre-menu-items button:hover {
-
-  background:
-    rgba(255,255,255,.08);
-}
-
-
-.zyre-menu-items button span:first-child {
-
-  width: 28px;
-
-  text-align: center;
-}
-
-
-#zyreMyAccountButton {
-
-  display: flex !important;
-}
-
-
-#zyreSellerButton,
-#zyreOwnerButton {
-
-  display: none;
-}
-
-
-.zyre-menu-footer {
-
-  margin: 20px;
 
   padding-top: 20px;
 
@@ -1830,140 +1710,223 @@ button {
     1px solid
     rgba(255,255,255,.08);
 
-  text-align: center;
-}
-
-
-.zyre-menu-footer span {
-
-  display: block;
+  color: #555;
 
   font-size: 11px;
 
-  letter-spacing: 3px;
+  line-height: 1.8;
 }
 
 
-.zyre-menu-footer small {
+/* =========================================================
+   MOBILE OVERLAY
+========================================================= */
 
-  display: block;
+.menu-overlay {
 
-  margin-top: 8px;
+  display: none;
 
-  color: #666;
+  position: fixed;
+
+  inset: 0;
+
+  background:
+    rgba(0,0,0,.55);
+
+  z-index: 8999;
 }
 
 
 /* =========================================================
    MOBILE
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 900px) {
 
+  :root {
+    --sidebar-width: 290px;
+  }
+
   .zyre-header {
 
-    grid-template-columns:
-      auto
-      1fr
-      auto;
-
-    gap: 12px;
+    height: 70px;
 
     padding:
-      12px 16px;
+      0 15px;
+
+    gap: 10px;
   }
 
+  .mobile-menu-button {
 
-  .menu-button {
+    display: inline-flex;
 
-    order: 1;
+    order: -1;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 44px;
+
+    height: 44px;
+
+    border:
+      1px solid
+      rgba(255,255,255,.13);
+
+    border-radius: 12px;
+
+    background:
+      rgba(255,255,255,.05);
+
+    color: white;
+
+    font-size: 21px;
   }
-
 
   .brand {
-
-    order: 2;
+    min-width: 0;
   }
-
-
-  .header-search {
-
-    position: absolute;
-
-    left: 16px;
-
-    right: 16px;
-
-    top: 78px;
-
-    width: auto;
-
-    order: 3;
-  }
-
-
-  .cart-button {
-
-    order: 4;
-
-    font-size: 0;
-  }
-
-
-  .cart-button #cartCount {
-
-    font-size: 11px;
-  }
-
-
-  .zyre-header {
-
-    margin-bottom: 58px;
-  }
-
 
   .brand-main {
 
-    font-size: 22px;
+    font-size: 21px;
 
     letter-spacing: 5px;
   }
 
-
   .brand-sub {
 
-    font-size: 7px;
+    font-size: 6px;
+
+    letter-spacing: 4px;
+
+    margin-top: 6px;
   }
 
-
-  .hero {
-
-    min-height: 690px;
+  .header-tagline {
+    display: none;
   }
 
+  .header-actions {
+    margin-left: auto;
+  }
+
+  .header-action {
+
+    width: 45px;
+
+    min-width: 45px;
+
+    padding: 0;
+  }
+
+  .zyre-layout {
+    display: block;
+  }
+
+  .zyre-sidebar {
+
+    position: fixed;
+
+    left: 0;
+
+    top: 0;
+
+    bottom: 0;
+
+    width:
+      min(290px,88vw);
+
+    height: 100vh;
+
+    z-index: 10000;
+
+    transform:
+      translateX(-105%);
+
+    transition:
+      transform .3s ease;
+
+    box-shadow:
+      20px 0 60px
+      rgba(0,0,0,.45);
+  }
+
+  .zyre-sidebar.open {
+
+    transform:
+      translateX(0);
+  }
+
+  .menu-overlay.open {
+    display: block;
+  }
+
+  .zyre-main {
+    width: 100%;
+  }
+
+  .zyre-footer {
+    margin-left: 0;
+  }
+
+  .market-hero {
+
+    min-height: 560px;
+
+    margin: 14px;
+
+    border-radius: 18px;
+  }
+
+  .market-hero-content {
+
+    padding:
+      50px 25px;
+  }
+
+  .market-hero h1 {
+
+    font-size:
+      clamp(46px,14vw,68px);
+  }
+
+  .market-hero-text {
+
+    font-size: 14px;
+  }
 
   .hero-mark {
 
-    opacity: .35;
-
-    right: -90px;
+    right: -80px;
 
     top: 70%;
+
+    opacity: .45;
   }
 
+  .hero-store-search {
+    width: 100%;
+  }
+
+  #storesGrid {
+
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
 
   .category-grid {
 
     grid-template-columns:
-      repeat(2, 1fr);
+      repeat(2,1fr);
   }
-
 
   .steps {
 
     grid-template-columns: 1fr;
   }
-
 
   .seller-banner {
 
@@ -1971,68 +1934,39 @@ button {
 
     align-items: flex-start;
   }
-
 }
 
 
 @media (max-width: 600px) {
 
-  .zyre-nav {
+  .header-action.account-action {
+    display: none;
+  }
 
-    justify-content: flex-start;
+  .market-hero {
+
+    min-height: 570px;
+
+    margin: 10px;
+  }
+
+  .market-hero-content {
 
     padding:
-      11px 14px;
+      42px 22px;
   }
 
+  .market-hero h1 {
 
-  .zyre-nav button {
+    font-size: 51px;
 
-    padding:
-      8px 14px;
+    letter-spacing: -2px;
   }
 
+  .market-hero h1 span {
 
-  .hero-content {
-
-    padding:
-      70px 22px;
+    font-size: 18px;
   }
-
-
-  .hero h1 {
-
-    font-size: 54px;
-  }
-
-
-  .hero h1 span {
-
-    font-size: 19px;
-  }
-
-
-  .hero-text {
-
-    font-size: 14px;
-
-    line-height: 1.8;
-  }
-
-
-  .hero-buttons {
-
-    flex-direction: column;
-
-    align-items: stretch;
-  }
-
-
-  .hero-buttons button {
-
-    width: 100%;
-  }
-
 
   .hero-mark {
 
@@ -2040,143 +1974,93 @@ button {
 
     height: 230px;
 
-    right: -85px;
+    right: -100px;
 
-    top: 68%;
+    top: 75%;
   }
 
-
-  .hero-z {
-
-    font-size: 150px;
-  }
-
-
-  .marketplace,
-  .how-it-works {
-
-    width:
-      calc(100% - 28px);
+  .content-section {
 
     padding:
-      75px 0;
+      55px 15px;
   }
 
+  .section-heading {
 
-  .seller-banner {
+    align-items: flex-start;
 
-    width:
-      calc(100% - 28px);
+    flex-direction: column;
 
-    margin-bottom: 70px;
-
-    padding:
-      32px 25px;
-
-    border-radius: 22px;
+    margin-bottom: 22px;
   }
 
-
-  .category-grid {
+  #storesGrid {
 
     grid-template-columns: 1fr;
+
+    gap: 13px;
   }
-
-
-  .categories {
-
-    padding:
-      75px 14px;
-  }
-
-
-  .category-card {
-
-    min-height: 190px;
-  }
-
 
   .store-card {
 
-    min-height: 290px;
+    min-height: 310px;
   }
 
+  .category-section {
 
-  .store-logo-area,
-  .store-logo-image,
-  .store-logo-placeholder {
+    margin:
+      15px 10px 55px;
 
-    width: 70px;
-
-    height: 70px;
+    padding:
+      42px 15px;
   }
 
+  .category-grid {
 
-  .store-logo-placeholder {
+    grid-template-columns:
+      repeat(2,1fr);
 
-    font-size: 25px;
+    gap: 9px;
   }
 
+  .category-card {
 
-  .store-card h3 {
+    min-height: 125px;
 
-    padding-top: 80px;
+    padding: 15px;
   }
 
+  .category-card strong {
+
+    font-size: 17px;
+  }
+
+  .seller-banner {
+
+    margin:
+      0 15px 55px;
+
+    padding:
+      35px 23px;
+  }
+
+  .how-it-works {
+
+    padding:
+      10px 15px 55px;
+  }
+
+  .services {
+
+    padding:
+      0 15px 55px;
+  }
 
   .zyre-footer {
 
     padding:
-      60px 22px 25px;
+      55px 20px 25px;
   }
-
-
-  .zyre-menu {
-
-    width: 310px;
-
-    max-width: 88%;
-  }
-
-}
-
-
-/* VERY SMALL PHONES */
-
-@media (max-width: 380px) {
-
-  .brand-main {
-
-    font-size: 19px;
-
-    letter-spacing: 4px;
-  }
-
-
-  .brand-sub {
-
-    font-size: 6px;
-
-    letter-spacing: 4px;
-  }
-
-
-  .menu-button,
-  .cart-button {
-
-    width: 43px;
-
-    height: 43px;
-
-    min-width: 43px;
-  }
-
-
-  .header-search input {
-
-    height: 46px;
-  }
-
 }
 
 </style>
@@ -2189,7 +2073,6 @@ const ZYRE_AUTH_URL =
 
 const ZYRE_AUTH_KEY =
   "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
-
 
 const zyreAuthClient =
   window.supabase.createClient(
@@ -2238,7 +2121,6 @@ async function zyreCheckAuthentication() {
     } =
       await zyreAuthClient.auth.getSession();
 
-
     if (error) {
 
       console.error(
@@ -2253,7 +2135,6 @@ async function zyreCheckAuthentication() {
       return;
     }
 
-
     if (!session) {
 
       window.location.replace(
@@ -2263,18 +2144,14 @@ async function zyreCheckAuthentication() {
       return;
     }
 
-
     window.ZYRE_CURRENT_SESSION =
       session;
-
 
     const marketplaceScript =
       document.createElement("script");
 
-
     marketplaceScript.src =
       "app.js?v=5006";
-
 
     marketplaceScript.onload =
       function () {
@@ -2283,17 +2160,14 @@ async function zyreCheckAuthentication() {
           "zyre-auth-ready"
         );
 
-
         const loading =
           document.getElementById(
             "zyreAuthLoading"
           );
 
-
         if (loading) {
           loading.remove();
         }
-
 
         if (
           typeof setupZYRERoleMenu ===
@@ -2306,7 +2180,6 @@ async function zyreCheckAuthentication() {
 
       };
 
-
     marketplaceScript.onerror =
       function () {
 
@@ -2314,17 +2187,14 @@ async function zyreCheckAuthentication() {
           "ZYRE app.js could not be loaded."
         );
 
-
         document.body.classList.add(
           "zyre-auth-ready"
         );
-
 
         const loading =
           document.getElementById(
             "zyreAuthLoading"
           );
-
 
         if (loading) {
 
@@ -2347,11 +2217,9 @@ async function zyreCheckAuthentication() {
 
       };
 
-
     document.body.appendChild(
       marketplaceScript
     );
-
 
   } catch (error) {
 
@@ -2359,7 +2227,6 @@ async function zyreCheckAuthentication() {
       "ZYRE authentication error:",
       error
     );
-
 
     window.location.replace(
       "auth.html"
@@ -2396,26 +2263,21 @@ async function zyreCheckAuthentication() {
 <body>
 
 
-<!-- =====================================================
+<!-- =======================================================
      HEADER
-     ===================================================== -->
+======================================================== -->
 
 <header class="zyre-header">
 
-
-  <!-- LEFT MENU -->
-
   <button
-    class="menu-button"
-    onclick="toggleZyreMenu()"
+    class="mobile-menu-button"
+    onclick="toggleSidebar()"
     type="button"
-    aria-label="Open menu"
+    aria-label="Open marketplace menu"
   >
     ☰
   </button>
 
-
-  <!-- BRAND -->
 
   <div class="brand">
 
@@ -2430,9 +2292,73 @@ async function zyreCheckAuthentication() {
   </div>
 
 
-  <!-- STORE SEARCH -->
+  <div class="header-tagline">
 
-  <div class="header-search">
+    PREMIUM BRANDS
+    &nbsp;•&nbsp;
+    REAL BUSINESSES
+    &nbsp;•&nbsp;
+    ONE MARKETPLACE
+
+  </div>
+
+
+  <div class="header-actions">
+
+    <button
+      class="header-action account-action"
+      onclick="window.location.href='account.html'"
+      type="button"
+      aria-label="My Account"
+    >
+      ◯
+    </button>
+
+
+    <button
+      class="header-action"
+      onclick="toggleCart()"
+      type="button"
+      aria-label="Shopping Cart"
+    >
+      🛒
+      <b id="cartCount">0</b>
+    </button>
+
+  </div>
+
+</header>
+
+
+<!-- =======================================================
+     MOBILE OVERLAY
+======================================================== -->
+
+<div
+  id="menuOverlay"
+  class="menu-overlay"
+  onclick="toggleSidebar()"
+></div>
+
+
+<!-- =======================================================
+     MAIN LAYOUT
+======================================================== -->
+
+<div class="zyre-layout">
+
+
+<!-- =======================================================
+     LEFT MARKETPLACE MENU
+======================================================== -->
+
+<aside
+  id="zyreSidebar"
+  class="zyre-sidebar"
+>
+
+
+  <div class="sidebar-search">
 
     <input
       id="search"
@@ -2440,310 +2366,365 @@ async function zyreCheckAuthentication() {
       placeholder="Search stores..."
       oninput="searchStores()"
       autocomplete="off"
+      aria-label="Search stores"
     >
 
-  </div>
-
-
-  <!-- CART -->
-
-  <button
-    class="cart-button"
-    onclick="toggleCart()"
-    type="button"
-    aria-label="Shopping cart"
-  >
-
-    🛒
-
-    <b id="cartCount">
-      0
-    </b>
-
-  </button>
-
-
-</header>
-
-
-<!-- =====================================================
-     SIDE MENU
-     ===================================================== -->
-
-<div
-  id="zyreMenu"
-  class="zyre-menu"
-  style="display:none;"
->
-
-
-  <div class="zyre-menu-header">
-
-
-    <img
-      src="icon-512.png"
-      alt="ZYRE Marketing"
-      class="zyre-menu-logo"
-    >
-
-
-    <button
-      onclick="toggleZyreMenu()"
-      type="button"
-      aria-label="Close menu"
-      class="zyre-menu-close"
-    >
-      ✕
-    </button>
-
-
-  </div>
-
-
-  <div
-    class="zyre-menu-items"
-    id="zyreMainMenuItems"
-  >
-
-
-    <button
-      id="zyreHomeButton"
-      onclick="window.location.href='index.html'"
-      type="button"
-    >
-
-      <span>⌂</span>
-
-      <span>
-        Home
-      </span>
-
-    </button>
-
-
-    <button
-      id="zyreMarketplaceButton"
-      onclick="scrollToStores()"
-      type="button"
-    >
-
-      <span>◈</span>
-
-      <span>
-        Marketplace
-      </span>
-
-    </button>
-
-
-    <button
-      id="zyreMyAccountButton"
-      onclick="window.location.href='account.html'"
-      type="button"
-    >
-
-      <span>◉</span>
-
-      <span>
-        My Account
-      </span>
-
-    </button>
-
-
-    <button
-      id="zyreSellerButton"
-      onclick="sellerCentre(); toggleZyreMenu();"
-      type="button"
-    >
-
-      <span>▣</span>
-
-      <span>
-        Seller Dashboard
-      </span>
-
-    </button>
-
-
-    <button
-      id="zyreOwnerButton"
-      onclick="window.location.href='admin.html'"
-      type="button"
-    >
-
-      <span>♛</span>
-
-      <span>
-        Owner Dashboard
-      </span>
-
-    </button>
-
-
-    <button
-      id="zyreCartButton"
-      onclick="toggleCart(); toggleZyreMenu();"
-      type="button"
-    >
-
-      <span>
-        🛒
-      </span>
-
-      <span>
-        Cart
-      </span>
-
-    </button>
-
-
-  </div>
-
-
-  <div class="zyre-menu-footer">
-
-    <span>
-      ZYRE MARKETING
+    <span class="sidebar-search-icon">
+      ⌕
     </span>
 
-    <small>
-      Your business. Your store.
-    </small>
+  </div>
+
+
+  <div class="sidebar-section-title">
+    SHOP
+  </div>
+
+
+  <button
+    class="sidebar-item active"
+    id="sidebarHome"
+    onclick="goHome()"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      ⌂
+    </span>
+
+    <span>
+      Home
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="filterStores('all')"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      ▦
+    </span>
+
+    <span>
+      All Stores
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="filterStores('Electronics')"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      ▣
+    </span>
+
+    <span>
+      Electronics
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="filterStores('Fashion')"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      ◇
+    </span>
+
+    <span>
+      Fashion
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="filterStores('Home')"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      ⌂
+    </span>
+
+    <span>
+      Home & Living
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="filterStores('Beauty')"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      ✧
+    </span>
+
+    <span>
+      Beauty
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="filterStores('Sports')"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      ◉
+    </span>
+
+    <span>
+      Sports & Outdoors
+    </span>
+
+  </button>
+
+
+  <div class="sidebar-divider"></div>
+
+
+  <div class="sidebar-section-title">
+    MY ZYRE
+  </div>
+
+
+  <button
+    id="zyreMyAccountButton"
+    class="sidebar-item"
+    onclick="window.location.href='account.html'"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      ◯
+    </span>
+
+    <span>
+      My Account
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="window.location.href='orders.html'"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      □
+    </span>
+
+    <span>
+      My Orders
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="toggleCart(); toggleSidebar();"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      🛒
+    </span>
+
+    <span>
+      Cart
+    </span>
+
+  </button>
+
+
+  <button
+    id="zyreSellerButton"
+    class="sidebar-item"
+    onclick="sellerCentre(); toggleSidebar();"
+    type="button"
+    style="display:none;"
+  >
+
+    <span class="sidebar-icon">
+      ▣
+    </span>
+
+    <span>
+      Seller Dashboard
+    </span>
+
+  </button>
+
+
+  <button
+    id="zyreOwnerButton"
+    class="sidebar-item"
+    onclick="window.location.href='admin.html'"
+    type="button"
+    style="display:none;"
+  >
+
+    <span class="sidebar-icon">
+      ♛
+    </span>
+
+    <span>
+      Owner Dashboard
+    </span>
+
+  </button>
+
+
+  <div class="sidebar-divider"></div>
+
+
+  <button
+    class="sidebar-item"
+    onclick="sellerCentre(); toggleSidebar();"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      +
+    </span>
+
+    <span>
+      Open a ZYRE Store
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="window.location.href='contact.html'"
+    type="button"
+  >
+
+    <span class="sidebar-icon">
+      ?
+    </span>
+
+    <span>
+      Customer Support
+    </span>
+
+  </button>
+
+
+  <div class="sidebar-bottom">
+
+    <div class="sidebar-bottom-logo">
+      ZYRE
+    </div>
+
+    <div class="sidebar-bottom-gold">
+      MARKETING
+    </div>
+
+    <p>
+      Your business.<br>
+      Your store.<br>
+      One marketplace.
+    </p>
 
   </div>
 
 
-</div>
+</aside>
 
 
-<!-- =====================================================
-     CATEGORY NAVIGATION
-     ===================================================== -->
+<!-- =======================================================
+     MAIN CONTENT
+======================================================== -->
 
-<nav class="zyre-nav">
-
-
-  <button
-    onclick="scrollToStores()"
-    type="button"
-  >
-    All Stores
-  </button>
+<main class="zyre-main">
 
 
-  <button
-    onclick="scrollToStores()"
-    type="button"
-  >
-    Electronics
-  </button>
+<!-- HERO -->
+
+<section class="market-hero">
 
 
-  <button
-    onclick="scrollToStores()"
-    type="button"
-  >
-    Fashion
-  </button>
-
-
-  <button
-    onclick="scrollToStores()"
-    type="button"
-  >
-    Home
-  </button>
-
-
-  <button
-    onclick="scrollToStores()"
-    type="button"
-  >
-    Beauty
-  </button>
-
-
-</nav>
-
-
-<main>
-
-
-<!-- =====================================================
-     HERO
-     ===================================================== -->
-
-<section
-  class="hero"
-  aria-labelledby="zyre-main-heading"
->
-
-
-  <div class="hero-content">
-
+  <div class="market-hero-content">
 
     <p class="eyebrow">
       THE ZYRE MARKETPLACE
     </p>
 
 
-    <h1 id="zyre-main-heading">
+    <h1>
 
-      Discover
+      World-Class
       <br>
-
-      something
+      Stores.
       <br>
-
-      exceptional.
-
+      One Place.
 
       <span>
-        Stores. Businesses. Possibilities.
+        Discover premium products from
+        independent South African businesses.
       </span>
 
     </h1>
 
 
-    <p class="hero-text">
+    <p class="market-hero-text">
 
-      A premium marketplace built for
-      South African customers and ambitious
-      businesses. Discover independent stores,
-      explore unique collections and shop
-      everything in one place.
+      Explore stores, discover new brands
+      and shop everything you love through
+      one premium marketplace.
 
     </p>
 
 
-    <div class="hero-buttons">
+    <div class="hero-store-search">
 
+      <span>
+        ⌕
+      </span>
 
-      <button
-        class="primary-button"
-        onclick="scrollToStores()"
-        type="button"
+      <input
+        id="heroStoreSearch"
+        type="search"
+        placeholder="Search stores..."
+        autocomplete="off"
+        oninput="syncStoreSearch(this.value)"
       >
 
-        Explore Stores →
-
-      </button>
-
-
       <button
-        class="secondary-button"
-        onclick="sellerCentre()"
+        onclick="focusStoreResults()"
         type="button"
+        aria-label="Search stores"
       >
-
-        Open a ZYRE Store
-
+        →
       </button>
-
 
     </div>
-
 
   </div>
 
@@ -2767,136 +2748,58 @@ async function zyreCheckAuthentication() {
 </section>
 
 
-<!-- =====================================================
-     INTRO
-     ===================================================== -->
-
-<section class="marketplace">
-
-
-  <div class="toolbar">
-
-
-    <p class="eyebrow">
-      THE ZYRE EXPERIENCE
-    </p>
-
-
-    <h2>
-      A marketplace built around stores.
-    </h2>
-
-
-    <p>
-
-      Search for a store, discover its collection
-      and shop directly from the business.
-
-    </p>
-
-
-    <p>
-
-      Every approved seller gets a dedicated
-      digital storefront where customers can
-      explore products and place orders.
-
-    </p>
-
-
-  </div>
-
-
-</section>
-
-
-<!-- =====================================================
-     SELLER BANNER
-     ===================================================== -->
-
-<section class="seller-banner">
-
-
-  <div>
-
-
-    <p class="eyebrow">
-      FOR AMBITIOUS BUSINESSES
-    </p>
-
-
-    <h2>
-      Your brand deserves a store.
-    </h2>
-
-
-    <p>
-
-      Launch your online presence with
-      a ZYRE store for
-
-      <strong>
-        R100 per month.
-      </strong>
-
-    </p>
-
-
-  </div>
-
-
-  <button
-    onclick="sellerCentre()"
-    type="button"
-  >
-
-    Open Your Store →
-
-  </button>
-
-
-</section>
-
-
-<!-- =====================================================
-     STORE DIRECTORY
-     ===================================================== -->
+<!-- STORES -->
 
 <section
   id="stores"
-  class="marketplace"
+  class="content-section"
 >
 
 
-  <div class="toolbar">
+  <div class="section-heading">
+
+    <div>
+
+      <p class="eyebrow">
+        FEATURED STORES
+      </p>
+
+      <h2>
+        Shop by Store
+      </h2>
+
+      <p>
+        Discover businesses and explore
+        their collections.
+      </p>
+
+    </div>
 
 
-    <p class="eyebrow">
-      THE ZYRE DIRECTORY
-    </p>
-
-
-    <h2>
-      Explore our stores.
-    </h2>
-
-
-    <p>
-
-      Search above to find the store
-      you want to visit.
-
-    </p>
-
+    <button
+      class="section-link"
+      onclick="filterStores('all')"
+      type="button"
+    >
+      View All →
+    </button>
 
   </div>
 
 
   <section id="storesGrid">
 
-    <p>
-      Loading stores...
-    </p>
+    <div class="store-card">
+
+      <h3>
+        Loading stores...
+      </h3>
+
+      <p>
+        Discovering stores on ZYRE.
+      </p>
+
+    </div>
 
   </section>
 
@@ -2904,39 +2807,33 @@ async function zyreCheckAuthentication() {
 </section>
 
 
-<!-- =====================================================
-     CATEGORIES
-     ===================================================== -->
+<!-- CATEGORIES -->
 
-<section class="categories">
+<section class="category-section">
 
 
-  <div class="section-title">
+  <p class="eyebrow">
+    EXPLORE
+  </p>
 
 
-    <p class="eyebrow">
-      EXPLORE
-    </p>
-
-
-    <h2>
-      Shop by world.
-    </h2>
-
-
-  </div>
+  <h2>
+    Browse Categories
+  </h2>
 
 
   <div class="category-grid">
 
 
     <button
-      onclick="scrollToStores()"
       class="category-card"
+      onclick="filterStores('Electronics')"
       type="button"
     >
 
-      <span>◇</span>
+      <span class="category-icon">
+        ▣
+      </span>
 
       <strong>
         Electronics
@@ -2950,34 +2847,38 @@ async function zyreCheckAuthentication() {
 
 
     <button
-      onclick="scrollToStores()"
       class="category-card"
+      onclick="filterStores('Fashion')"
       type="button"
     >
 
-      <span>◇</span>
+      <span class="category-icon">
+        ◇
+      </span>
 
       <strong>
         Fashion
       </strong>
 
       <small>
-        Clothing & personal style
+        Clothing & style
       </small>
 
     </button>
 
 
     <button
-      onclick="scrollToStores()"
       class="category-card"
+      onclick="filterStores('Home')"
       type="button"
     >
 
-      <span>◇</span>
+      <span class="category-icon">
+        ⌂
+      </span>
 
       <strong>
-        Home
+        Home & Living
       </strong>
 
       <small>
@@ -2988,12 +2889,14 @@ async function zyreCheckAuthentication() {
 
 
     <button
-      onclick="scrollToStores()"
       class="category-card"
+      onclick="filterStores('Beauty')"
       type="button"
     >
 
-      <span>◇</span>
+      <span class="category-icon">
+        ✧
+      </span>
 
       <strong>
         Beauty
@@ -3006,31 +2909,89 @@ async function zyreCheckAuthentication() {
     </button>
 
 
+    <button
+      class="category-card"
+      onclick="filterStores('Sports')"
+      type="button"
+    >
+
+      <span class="category-icon">
+        ◉
+      </span>
+
+      <strong>
+        Sports
+      </strong>
+
+      <small>
+        Sports & outdoors
+      </small>
+
+    </button>
+
+
   </div>
+
+</section>
+
+
+<!-- SELLER -->
+
+<section class="seller-banner">
+
+
+  <div>
+
+    <p class="eyebrow">
+      FOR AMBITIOUS BUSINESSES
+    </p>
+
+
+    <h2>
+      Your brand deserves a store.
+    </h2>
+
+
+    <p>
+
+      Build your digital storefront
+      and reach customers through ZYRE
+      for <strong>R100 per month.</strong>
+
+    </p>
+
+  </div>
+
+
+  <button
+    onclick="sellerCentre()"
+    type="button"
+  >
+    Open Your Store →
+  </button>
 
 
 </section>
 
 
-<!-- =====================================================
-     HOW IT WORKS
-     ===================================================== -->
+<!-- HOW IT WORKS -->
 
 <section class="how-it-works">
 
 
-  <div class="section-title">
+  <div class="section-heading">
 
+    <div>
 
-    <p class="eyebrow">
-      BUILD WITH ZYRE
-    </p>
+      <p class="eyebrow">
+        BUILD WITH ZYRE
+      </p>
 
+      <h2>
+        From idea to online store.
+      </h2>
 
-    <h2>
-      From idea to online store.
-    </h2>
-
+    </div>
 
   </div>
 
@@ -3049,11 +3010,9 @@ async function zyreCheckAuthentication() {
       </h3>
 
       <p>
-
         Register your seller account
         and submit your business details
         for review.
-
       </p>
 
     </div>
@@ -3070,11 +3029,9 @@ async function zyreCheckAuthentication() {
       </h3>
 
       <p>
-
         Once approved, activate your
         ZYRE store and build your
         product catalogue.
-
       </p>
 
     </div>
@@ -3091,11 +3048,9 @@ async function zyreCheckAuthentication() {
       </h3>
 
       <p>
-
-        Manage orders, products and
-        your customers from your
+        Manage products, orders and
+        customers from your
         Seller Dashboard.
-
       </p>
 
     </div>
@@ -3103,13 +3058,10 @@ async function zyreCheckAuthentication() {
 
   </div>
 
-
 </section>
 
 
-<!-- =====================================================
-     SERVICES
-     ===================================================== -->
+<!-- SERVICES -->
 
 <section class="services">
 
@@ -3143,10 +3095,12 @@ async function zyreCheckAuthentication() {
 
 </main>
 
+</div>
 
-<!-- =====================================================
+
+<!-- =======================================================
      CART
-     ===================================================== -->
+======================================================== -->
 
 <aside
   id="cart"
@@ -3187,9 +3141,7 @@ async function zyreCheckAuthentication() {
     onclick="clearCart()"
     type="button"
   >
-
     Clear Cart
-
   </button>
 
 
@@ -3198,49 +3150,40 @@ async function zyreCheckAuthentication() {
     onclick="checkout()"
     type="button"
   >
-
     Continue to checkout
-
   </button>
 
 
 </aside>
 
 
-<!-- =====================================================
+<!-- =======================================================
      FOOTER
-     ===================================================== -->
+======================================================== -->
 
 <footer class="zyre-footer">
 
 
   <div class="footer-brand">
 
-
     <strong>
       ZYRE
     </strong>
-
 
     <span>
       MARKETING
     </span>
 
-
     <p>
-
       Your business.
       Your store.
       One marketplace.
-
     </p>
-
 
   </div>
 
 
   <div class="footer-links">
-
 
     <button
       onclick="sellerCentre()"
@@ -3281,7 +3224,6 @@ async function zyreCheckAuthentication() {
       Customer Support
     </button>
 
-
   </div>
 
 
@@ -3299,72 +3241,283 @@ async function zyreCheckAuthentication() {
 </footer>
 
 
-<!-- =====================================================
-     MENU FUNCTIONS
-     ===================================================== -->
+<!-- =======================================================
+     MARKETPLACE MENU FUNCTIONS
+======================================================== -->
 
 <script>
 
-function toggleZyreMenu() {
+function toggleSidebar() {
 
-  const menu =
+  const sidebar =
     document.getElementById(
-      "zyreMenu"
+      "zyreSidebar"
     );
 
+  const overlay =
+    document.getElementById(
+      "menuOverlay"
+    );
 
-  if (!menu) return;
+  if (!sidebar) return;
 
+  sidebar.classList.toggle(
+    "open"
+  );
 
-  if (
-    menu.style.display === "none" ||
-    menu.style.display === ""
-  ) {
+  if (overlay) {
 
-    menu.style.display =
-      "block";
-
-  } else {
-
-    menu.style.display =
-      "none";
+    overlay.classList.toggle(
+      "open"
+    );
 
   }
 
 }
 
 
-function scrollToStores() {
+function closeSidebar() {
+
+  const sidebar =
+    document.getElementById(
+      "zyreSidebar"
+    );
+
+  const overlay =
+    document.getElementById(
+      "menuOverlay"
+    );
+
+  if (sidebar) {
+
+    sidebar.classList.remove(
+      "open"
+    );
+
+  }
+
+  if (overlay) {
+
+    overlay.classList.remove(
+      "open"
+    );
+
+  }
+
+}
+
+
+function goHome() {
+
+  closeSidebar();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+function focusStoreResults() {
 
   const stores =
     document.getElementById(
       "stores"
     );
 
+  if (stores) {
 
-  if (!stores) return;
-
-
-  stores.scrollIntoView({
-    behavior: "smooth"
-  });
-
-
-  const menu =
-    document.getElementById(
-      "zyreMenu"
-    );
-
-
-  if (menu) {
-
-    menu.style.display =
-      "none";
+    stores.scrollIntoView({
+      behavior: "smooth"
+    });
 
   }
 
 }
 
+
+function syncStoreSearch(
+  value
+) {
+
+  const sidebarSearch =
+    document.getElementById(
+      "search"
+    );
+
+  if (sidebarSearch) {
+
+    sidebarSearch.value =
+      value;
+
+  }
+
+  searchStores();
+
+}
+
+
+function updateActiveSidebar(
+  category
+) {
+
+  const buttons =
+    document.querySelectorAll(
+      ".sidebar-item"
+    );
+
+  buttons.forEach(
+    function(button) {
+
+      button.classList.remove(
+        "active"
+      );
+
+    }
+  );
+
+  if (category === "all") {
+
+    const allButtons =
+      document.querySelectorAll(
+        ".sidebar-item"
+      );
+
+    allButtons.forEach(
+      function(button) {
+
+        if (
+          button.textContent
+            .trim()
+            .toLowerCase()
+            .includes("all stores")
+        ) {
+
+          button.classList.add(
+            "active"
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+}
+
+
+function filterStores(
+  category
+) {
+
+  closeSidebar();
+
+  updateActiveSidebar(
+    category
+  );
+
+  const normalized =
+    String(
+      category || "all"
+    )
+    .trim()
+    .toLowerCase();
+
+
+  if (
+    normalized === "all"
+  ) {
+
+    renderStores(
+      window.ZYRE_STORES
+    );
+
+  } else {
+
+    const filtered =
+      window.ZYRE_STORES.filter(
+        function(store) {
+
+          const storeCategory =
+            String(
+              store.category || ""
+            )
+            .trim()
+            .toLowerCase();
+
+          const description =
+            String(
+              store.description || ""
+            )
+            .toLowerCase();
+
+          const name =
+            String(
+              store.store_name || ""
+            )
+            .toLowerCase();
+
+          return (
+
+            storeCategory ===
+            normalized
+
+            ||
+
+            storeCategory.includes(
+              normalized
+            )
+
+            ||
+
+            description.includes(
+              normalized
+            )
+
+            ||
+
+            name.includes(
+              normalized
+            )
+
+          );
+
+        }
+      );
+
+    renderStores(
+      filtered
+    );
+
+  }
+
+
+  const stores =
+    document.getElementById(
+      "stores"
+    );
+
+  if (stores) {
+
+    stores.scrollIntoView({
+      behavior: "smooth"
+    });
+
+  }
+
+}
+
+
+</script>
+
+
+<!-- =======================================================
+     ROLE MENU
+======================================================== -->
+
+<script>
 
 async function setupZYRERoleMenu() {
 
@@ -3373,12 +3526,10 @@ async function setupZYRERoleMenu() {
       "zyreSellerButton"
     );
 
-
   const ownerButton =
     document.getElementById(
       "zyreOwnerButton"
     );
-
 
   if (sellerButton) {
 
@@ -3386,7 +3537,6 @@ async function setupZYRERoleMenu() {
       "none";
 
   }
-
 
   if (ownerButton) {
 
@@ -3464,10 +3614,12 @@ async function setupZYRERoleMenu() {
 
     const role =
       String(
+
         profile &&
         profile.role
           ? profile.role
           : "customer"
+
       )
       .trim()
       .toLowerCase();
@@ -3577,9 +3729,9 @@ async function setupZYRERoleMenu() {
 </script>
 
 
-<!-- =====================================================
+<!-- =======================================================
      CART HASH
-     ===================================================== -->
+======================================================== -->
 
 <script>
 
@@ -3616,9 +3768,9 @@ if (
 </script>
 
 
-<!-- =====================================================
+<!-- =======================================================
      SERVICE WORKER
-     ===================================================== -->
+======================================================== -->
 
 <script>
 
@@ -3663,19 +3815,17 @@ if (
 </script>
 
 
-<!-- =====================================================
+<!-- =======================================================
      STORE DIRECTORY
-     ===================================================== -->
+======================================================== -->
 
 <script>
 
 const ZYRE_SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
 
-
 const ZYRE_SUPABASE_KEY =
   "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
-
 
 window.ZYRE_STORES = [];
 
@@ -3687,7 +3837,6 @@ async function loadStores() {
       "storesGrid"
     );
 
-
   if (!container) return;
 
 
@@ -3698,8 +3847,11 @@ async function loadStores() {
 
         ZYRE_SUPABASE_URL +
         "/rest/v1/sellers" +
+
         "?approved=eq.true" +
-        "&select=id,store_name,description,store_image_url" +
+
+        "&select=id,store_name,description,store_image_url,category" +
+
         "&order=id.desc",
 
         {
@@ -3810,7 +3962,6 @@ function renderStores(
       "storesGrid"
     );
 
-
   if (!container) return;
 
 
@@ -3838,9 +3989,11 @@ function renderStores(
 
 
   container.innerHTML =
+
     stores
+
       .map(
-        function (store) {
+        function(store) {
 
 
           const storeName =
@@ -3862,11 +4015,15 @@ function renderStores(
 
 
           if (
+
             store.store_image_url &&
+
             String(
               store.store_image_url
             ).trim()
+
           ) {
+
 
             const logoURL =
               escapeStoreText(
@@ -3883,7 +4040,6 @@ function renderStores(
                   src="${logoURL}"
                   alt="${storeName} store logo"
                   loading="lazy"
-
                   onerror="
                     this.style.display='none';
                     this.nextElementSibling.style.display='flex';
@@ -3893,7 +4049,6 @@ function renderStores(
                 <div
                   class="store-logo-placeholder"
                   style="display:none;"
-                  aria-label="Store logo placeholder"
                 >
                   🏪
                 </div>
@@ -3905,13 +4060,13 @@ function renderStores(
 
           } else {
 
+
             storeLogoHTML = `
 
               <div class="store-logo-area">
 
                 <div
                   class="store-logo-placeholder"
-                  aria-label="Store logo placeholder"
                 >
                   🏪
                 </div>
@@ -3925,21 +4080,27 @@ function renderStores(
 
           return `
 
-            <article class="store-card">
+            <article
+              class="store-card"
+            >
 
               ${storeLogoHTML}
+
 
               <div class="store-symbol">
                 ◇
               </div>
 
+
               <h3>
                 ${storeName}
               </h3>
 
+
               <p>
                 ${description}
               </p>
+
 
               <button
                 class="primary-button"
@@ -3949,12 +4110,14 @@ function renderStores(
                 Visit Store →
               </button>
 
+
             </article>
 
           `;
 
         }
       )
+
       .join("");
 
 }
@@ -3967,7 +4130,6 @@ function searchStores() {
       "search"
     );
 
-
   if (!searchInput) return;
 
 
@@ -3979,9 +4141,27 @@ function searchStores() {
     .toLowerCase();
 
 
+  const heroSearch =
+    document.getElementById(
+      "heroStoreSearch"
+    );
+
+
+  if (
+    heroSearch &&
+    heroSearch.value !==
+      searchInput.value
+  ) {
+
+    heroSearch.value =
+      searchInput.value;
+
+  }
+
+
   const filtered =
     window.ZYRE_STORES.filter(
-      function (store) {
+      function(store) {
 
 
         const name =
@@ -3998,13 +4178,34 @@ function searchStores() {
           .toLowerCase();
 
 
+        const category =
+          String(
+            store.category || ""
+          )
+          .toLowerCase();
+
+
         return (
 
-          !search ||
+          !search
 
-          name.includes(search) ||
+          ||
 
-          description.includes(search)
+          name.includes(
+            search
+          )
+
+          ||
+
+          description.includes(
+            search
+          )
+
+          ||
+
+          category.includes(
+            search
+          )
 
         );
 
@@ -4017,20 +4218,20 @@ function searchStores() {
   );
 
 
-  const stores =
-    document.getElementById(
-      "stores"
-    );
+  if (search) {
 
+    const stores =
+      document.getElementById(
+        "stores"
+      );
 
-  if (
-    search &&
-    stores
-  ) {
+    if (stores) {
 
-    stores.scrollIntoView({
-      behavior: "smooth"
-    });
+      stores.scrollIntoView({
+        behavior: "smooth"
+      });
+
+    }
 
   }
 
