@@ -387,7 +387,6 @@
               required
             >
 
-
             <label for="signupEmail">
               Email address
             </label>
@@ -399,7 +398,6 @@
               autocomplete="email"
               required
             >
-
 
             <label for="phone">
               Phone number
@@ -413,7 +411,6 @@
               required
             >
 
-
             <label for="address">
               Physical / delivery address
             </label>
@@ -424,7 +421,6 @@
               autocomplete="street-address"
               required
             ></textarea>
-
 
             <label for="signupPassword">
               Create password
@@ -443,7 +439,6 @@
               a number and a special character.
             </div>
 
-
             <label for="confirmPassword">
               Confirm password
             </label>
@@ -455,7 +450,6 @@
               autocomplete="new-password"
               required
             >
-
 
             <button
               type="submit"
@@ -500,7 +494,6 @@
 
         </div>
 
-
         <form id="sellerLoginForm">
 
           <label for="sellerLoginEmail">
@@ -515,7 +508,6 @@
             required
           >
 
-
           <label for="sellerLoginPassword">
             Seller password
           </label>
@@ -527,7 +519,6 @@
             autocomplete="current-password"
             required
           >
-
 
           <button
             type="submit"
@@ -744,11 +735,6 @@
         }
 
 
-        /*
-          Confirm this account is actually
-          registered as a customer.
-        */
-
         const {
           data: profile,
           error: profileError
@@ -952,10 +938,6 @@
             }
 
 
-            /*
-              Save customer profile.
-            */
-
             const {
               error: profileError
             } =
@@ -982,10 +964,6 @@
 
             }
 
-
-            /*
-              Email confirmation enabled.
-            */
 
             if (!data.session) {
 
@@ -1253,7 +1231,8 @@
 
             /*
               STEP 2
-              Look for an existing seller application.
+              Look for the seller application
+              belonging to this Auth user.
             */
 
             const {
@@ -1273,29 +1252,33 @@
 
 
             /*
-              If Supabase itself reports an error,
-              stop here. This is different from
-              simply having no seller application.
+              A real database/RLS error is NOT the
+              same as a missing seller application.
             */
 
             if (sellerError) {
 
-              throw sellerError;
+              console.error(
+                "Seller application lookup error:",
+                sellerError
+              );
+
+              throw new Error(
+                sellerError.message ||
+                "ZYRE Marketing could not check your seller application."
+              );
 
             }
 
 
             /*
-              IMPORTANT FIX
+              NO SELLER APPLICATION YET
+              
+              The Auth account exists, but there
+              is no seller row linked to it.
 
-              The Auth account can already exist
-              before the seller application exists.
-
-              We DO NOT sign the user out.
-
-              Instead, keep the authenticated
-              session and send them to the seller
-              registration page.
+              Keep the Auth session active and
+              continue to seller registration.
             */
 
             if (!seller) {
@@ -1317,7 +1300,7 @@
 
 
               showMessage(
-                "Your ZYRE account is signed in. Please complete your seller application before you can access the Seller Centre.",
+                "Your ZYRE account is signed in.\n\nPlease complete your seller application before accessing the Seller Centre.",
                 "info"
               );
 
@@ -1341,7 +1324,7 @@
 
             /*
               STEP 3
-              Check seller approval.
+              Seller application exists.
             */
 
             const approved =
@@ -1407,9 +1390,6 @@
 
             /*
               PENDING SELLER
-
-              The seller is authenticated, but
-              must NOT enter Seller Centre yet.
             */
 
             localStorage.setItem(
