@@ -186,6 +186,7 @@
       border-radius: 10px;
       font-size: 14px;
       line-height: 1.5;
+      white-space: pre-line;
     }
 
     .message.error {
@@ -200,6 +201,13 @@
       background: #12351e;
       color: #b7f5c5;
       border: 1px solid #246b38;
+    }
+
+    .message.info {
+      display: block;
+      background: #171f2f;
+      color: #c5d5ff;
+      border: 1px solid #30436d;
     }
 
     .seller-note {
@@ -487,7 +495,8 @@
 
           <strong>Already registered as a seller?</strong><br>
 
-          Use your seller account email and password below to sign in.
+          Sign in below using the same email address and password you
+          registered with.
 
         </div>
 
@@ -1204,8 +1213,8 @@
           try {
 
             /*
-              First authenticate the user
-              through Supabase Auth.
+              Step 1:
+              Authenticate through Supabase Auth.
             */
 
             const {
@@ -1243,8 +1252,9 @@
 
 
             /*
-              Find the seller application
-              belonging to this authenticated user.
+              Step 2:
+              Find the seller application belonging
+              to this authenticated account.
             */
 
             const {
@@ -1270,6 +1280,11 @@
             }
 
 
+            /*
+              No seller application means this
+              account is not registered as a seller.
+            */
+
             if (!seller) {
 
               await supabaseClient.auth.signOut();
@@ -1282,7 +1297,8 @@
 
 
             /*
-              APPROVED SELLER
+              Step 3:
+              Check seller approval.
             */
 
             const approved =
@@ -1293,6 +1309,10 @@
               "seller_approved";
 
 
+            /*
+              APPROVED SELLER
+            */
+
             if (
               approved ||
               approvedStatus
@@ -1301,6 +1321,16 @@
               localStorage.setItem(
                 "zava_seller_id",
                 String(seller.id)
+              );
+
+              localStorage.setItem(
+                "zava_user_id",
+                String(data.user.id)
+              );
+
+              localStorage.setItem(
+                "zava_seller_email",
+                email
               );
 
               localStorage.setItem(
@@ -1334,11 +1364,24 @@
 
             /*
               PENDING SELLER
+
+              The seller is authenticated, but
+              must NOT enter Seller Centre yet.
             */
 
             localStorage.setItem(
               "zava_seller_id",
               String(seller.id)
+            );
+
+            localStorage.setItem(
+              "zava_user_id",
+              String(data.user.id)
+            );
+
+            localStorage.setItem(
+              "zava_seller_email",
+              email
             );
 
             localStorage.setItem(
@@ -1348,21 +1391,17 @@
 
 
             showMessage(
-              "Your seller application is still pending approval. Please complete or check your seller application and rental payment status.",
-              "success"
+              "Your seller account is signed in, but your seller application is still pending approval.\n\nStore: " +
+              (seller.store_name || "Your Store") +
+              "\n\nYou cannot access the Seller Centre until ZYRE Marketing approves your application.\n\nPlease wait for your seller application to be reviewed.",
+              "info"
             );
 
 
-            setTimeout(
-              function() {
+            button.disabled = false;
 
-                window.location.replace(
-                  "seller-auth.html"
-                );
-
-              },
-              1000
-            );
+            button.textContent =
+              "Sign In as Seller";
 
 
           } catch (error) {
@@ -1393,6 +1432,7 @@
 
     /*
       IMPORTANT:
+
       There is intentionally NO automatic
       getSession() redirect when auth.html
       first opens.
