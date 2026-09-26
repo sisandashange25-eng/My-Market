@@ -14,8 +14,98 @@ const ZYRE_VAPID_PUBLIC_KEY =
 let products = [];
 let category = "All";
 
-let cart =
-JSON.parse(localStorage.getItem("cart") || "[]");
+/* =========================================================
+CART
+========================================================= */
+
+let cart = [];
+
+/*
+  Repair old cart data.
+
+  Older versions of the marketplace may have saved
+  complete product objects instead of product IDs.
+
+  Example old item:
+  { id: 12, name: "Wireless Earbuds", price: 299 }
+
+  The cart must contain only:
+  12
+*/
+
+function loadCart() {
+
+  let raw = [];
+
+  try {
+
+    raw =
+      JSON.parse(
+        localStorage.getItem("cart") || "[]"
+      );
+
+  } catch (error) {
+
+    console.warn(
+      "Old cart data could not be read. Clearing cart.",
+      error
+    );
+
+    raw = [];
+
+  }
+
+  if (!Array.isArray(raw)) {
+
+    raw = [];
+
+  }
+
+  cart =
+    raw
+      .map(item => {
+
+        /*
+          If an old cart item is a product object,
+          extract its ID.
+        */
+
+        if (
+          item &&
+          typeof item === "object"
+        ) {
+
+          return (
+            item.id ??
+            item.product_id ??
+            item.productId ??
+            null
+          );
+
+        }
+
+        /*
+          Normal cart item:
+          product ID
+        */
+
+        return item;
+
+      })
+      .filter(
+        id =>
+          id !== null &&
+          id !== undefined &&
+          id !== ""
+      );
+
+  save();
+
+}
+
+
+/* Load and repair the cart immediately. */
+loadCart();
 
 
 /* =========================================================
@@ -431,6 +521,13 @@ products =
   }));
 
 
+/*
+  Run cart repair again now that products
+  have loaded.
+*/
+
+loadCart();
+
 renderProducts();
 
 updateCart();
@@ -510,6 +607,11 @@ return;
 
 }
 
+/*
+  IMPORTANT:
+  Save ONLY the product ID.
+*/
+
 cart.push(product.id);
 
 save();
@@ -579,24 +681,13 @@ return;
 
 }
 
-try {
 
-cart =
-  JSON.parse(
-    localStorage.getItem("cart") || "[]"
-  );
+/*
+  Always repair the cart before displaying it.
+*/
 
-} catch (error) {
+loadCart();
 
-cart = [];
-
-}
-
-if (!Array.isArray(cart)) {
-
-cart = [];
-
-}
 
 cartCount.textContent =
 cart.length;
@@ -1195,11 +1286,6 @@ async function sellerCentre() {
 
   try {
 
-    /*
-      First check whether the current account
-      is actually logged in.
-    */
-
     const user =
       await getZYRECurrentUser();
 
@@ -1211,12 +1297,6 @@ async function sellerCentre() {
       return;
 
     }
-
-
-    /*
-      Get the seller record belonging
-      to the logged-in account.
-    */
 
     const accessToken =
       window.ZYRE_CURRENT_SESSION?.access_token ||
@@ -1259,11 +1339,6 @@ async function sellerCentre() {
         await sellerResponse.text()
       );
 
-      /*
-        If the seller record cannot be checked,
-        fail safely and do not open seller.html.
-      */
-
       window.location.href =
         "seller-auth.html";
 
@@ -1275,11 +1350,6 @@ async function sellerCentre() {
     const sellers =
       await sellerResponse.json();
 
-
-    /*
-      This account is not registered
-      as a seller.
-    */
 
     if (
       !Array.isArray(sellers) ||
@@ -1297,11 +1367,6 @@ async function sellerCentre() {
     const seller =
       sellers[0];
 
-
-    /*
-      APPROVED SELLER
-      → Directly open Seller Dashboard.
-    */
 
     if (
       seller.approved === true ||
@@ -1335,11 +1400,6 @@ async function sellerCentre() {
     }
 
 
-    /*
-      PENDING SELLER
-      → Keep them in the application flow.
-    */
-
     window.location.href =
       "seller-auth.html";
 
@@ -1349,10 +1409,6 @@ async function sellerCentre() {
       "Seller Centre routing error:",
       error
     );
-
-    /*
-      Fail safely.
-    */
 
     window.location.href =
       "seller-auth.html";
@@ -2275,15 +2331,6 @@ alert(
 
 window.location.href =
   "seller.html";
-
-} catch (error) {
-
-alert(
-  "Seller login failed:\n\n" +
-  error.message
-);
-
-}
 
 }
 
