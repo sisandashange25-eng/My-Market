@@ -441,10 +441,6 @@ flex-direction:column
 
 <body>
 
-<!-- =========================================================
-     OWNER LOGIN
-========================================================= -->
-
 <div id="loginBox" class="login-wrap">
 
 <div class="login-box">
@@ -501,10 +497,6 @@ type="submit"
 
 </div>
 
-
-<!-- =========================================================
-     OWNER DASHBOARD
-========================================================= -->
 
 <div id="adminPanel" class="hidden">
 
@@ -584,10 +576,6 @@ onclick="showSection('payments',this)"
 
 </nav>
 
-
-<!-- =========================================================
-     OVERVIEW
-========================================================= -->
 
 <section
 id="overview"
@@ -701,10 +689,6 @@ Loading...
 </section>
 
 
-<!-- =========================================================
-     SELLERS
-========================================================= -->
-
 <section id="sellers" class="panel">
 
 <h2>Seller System</h2>
@@ -762,10 +746,6 @@ The Owner monitors the company data.
 
 </section>
 
-
-<!-- =========================================================
-     STORES
-========================================================= -->
 
 <section id="stores" class="panel">
 
@@ -843,10 +823,6 @@ orders and store sales.
 </section>
 
 
-<!-- =========================================================
-     PRODUCTS
-========================================================= -->
-
 <section id="products" class="panel">
 
 <h2>Product Monitoring</h2>
@@ -881,10 +857,6 @@ orders and store sales.
 
 </section>
 
-
-<!-- =========================================================
-     ORDERS
-========================================================= -->
 
 <section id="orders" class="panel">
 
@@ -933,10 +905,6 @@ Sellers manage customer orders.
 
 </section>
 
-
-<!-- =========================================================
-     PAYMENTS
-========================================================= -->
 
 <section id="payments" class="panel">
 
@@ -1057,10 +1025,6 @@ Sellers manage customer orders.
 </div>
 
 
-<!-- =========================================================
-     SELLER MODAL
-========================================================= -->
-
 <div id="sellerModal"
 class="modal hidden"
 onclick="closeSellerModal(event)">
@@ -1090,10 +1054,6 @@ Loading...
 
 </div>
 
-
-<!-- =========================================================
-     STORE MODAL
-========================================================= -->
 
 <div id="storeModal"
 class="modal hidden"
@@ -1130,10 +1090,6 @@ Loading...
 "use strict";
 
 
-/* =========================================================
-   SUPABASE
-========================================================= */
-
 const SUPABASE_URL =
 "https://gaccizzlwswwynattgda.supabase.co";
 
@@ -1153,10 +1109,6 @@ let orderItemsData = [];
 let paymentsData = [];
 
 
-/* =========================================================
-   HEADERS
-========================================================= */
-
 function headers(){
 
 return {
@@ -1174,20 +1126,12 @@ return {
 }
 
 
-/* =========================================================
-   MONEY
-========================================================= */
-
 function money(v){
 
 return "R"+Number(v||0).toFixed(2);
 
 }
 
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
 
 function esc(v){
 
@@ -1199,10 +1143,6 @@ return String(v??"")
 
 }
 
-
-/* =========================================================
-   DATE
-========================================================= */
 
 function dateText(v){
 
@@ -1216,10 +1156,6 @@ return Number.isNaN(d.getTime())
 
 }
 
-
-/* =========================================================
-   API
-========================================================= */
 
 async function api(path,opt={}){
 
@@ -1278,28 +1214,6 @@ return d;
 
 }
 
-
-/* =========================================================
-   OWNER PROFILE CHECK
-========================================================= */
-
-/*
- FIXED:
-
- The previous code used:
-
- profiles?select=*&Id=eq...
-
- Supabase/PostgREST reported:
-
- column profiles.Id does not exist
-
- The profile query now uses the normal lowercase
- Supabase columns:
-
- id
- role
-*/
 
 async function verifyOwnerProfile(userId,token){
 
@@ -1402,10 +1316,6 @@ return profile;
 }
 
 
-/* =========================================================
-   OWNER LOGIN
-========================================================= */
-
 async function loginAdmin(event){
 
 if(event){
@@ -1473,10 +1383,6 @@ button.textContent=
 
 
 try{
-
-/* =====================================================
-   SUPABASE AUTHENTICATION
-===================================================== */
 
 const response=
 await fetch(
@@ -1588,19 +1494,11 @@ adminUserId=
 data.user.id;
 
 
-/* =====================================================
-   VERIFY OWNER ROLE
-===================================================== */
-
 await verifyOwnerProfile(
 adminUserId,
 accessToken
 );
 
-
-/* =====================================================
-   SUCCESS
-===================================================== */
 
 document
 .getElementById("loginBox")
@@ -1615,20 +1513,6 @@ document
 .textContent=
 email;
 
-
-/*
- IMPORTANT:
-
- Nothing is saved to localStorage.
-
- If the page is refreshed, the owner must
- enter the email and password again.
-*/
-
-
-/* =====================================================
-   LOAD DASHBOARD
-===================================================== */
 
 msg.textContent="";
 
@@ -1690,10 +1574,6 @@ button.textContent=
 }
 
 
-/* =========================================================
-   LOGOUT
-========================================================= */
-
 function logoutAdmin(){
 
 accessToken=null;
@@ -1739,10 +1619,6 @@ document
 }
 
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
 function showSection(id,btn){
 
 document
@@ -1770,10 +1646,6 @@ btn.classList.add("active");
 }
 
 
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
 async function loadDashboard(){
 
 await loadSellers();
@@ -1797,10 +1669,6 @@ loadRecentActivity();
 
 }
 
-
-/* =========================================================
-   SELLER MAP
-========================================================= */
 
 async function loadSellerMap(){
 
@@ -1836,10 +1704,6 @@ return sellerMap[String(id)] ||
 
 }
 
-
-/* =========================================================
-   SELLER IMAGE
-========================================================= */
 
 function sellerImage(x){
 
@@ -1889,10 +1753,6 @@ x.store_name||"S"
 }
 
 
-/* =========================================================
-   STORE IMAGE
-========================================================= */
-
 function storeImage(x){
 
 if(x.store_image_url){
@@ -1940,10 +1800,6 @@ x.store_name||"S"
 
 }
 
-
-/* =========================================================
-   SELLER STATUS
-========================================================= */
 
 function sellerStatusLabel(seller){
 
@@ -2000,10 +1856,6 @@ return `
 }
 
 
-/* =========================================================
-   STORE STATUS
-========================================================= */
-
 function storeStatusLabel(store){
 
 const status=
@@ -2047,10 +1899,6 @@ Pending
 
 }
 
-
-/* =========================================================
-   SELLERS
-========================================================= */
 
 async function loadSellers(){
 
@@ -2385,10 +2233,6 @@ console.error(e);
 }
 
 
-/* =========================================================
-   STORE SYSTEM
-========================================================= */
-
 async function loadStores(){
 
 const tb=
@@ -2645,10 +2489,6 @@ e
 }
 
 
-/* =========================================================
-   ORDER ITEMS
-========================================================= */
-
 async function loadOrderItems(){
 
 try{
@@ -2671,10 +2511,6 @@ e
 
 }
 
-
-/* =========================================================
-   VIEW STORE
-========================================================= */
 
 function viewStore(id){
 
@@ -3023,10 +2859,6 @@ document
 }
 
 
-/* =========================================================
-   CLOSE STORE MODAL
-========================================================= */
-
 function closeStoreModal(event){
 
 if(
@@ -3045,10 +2877,6 @@ document
 
 }
 
-
-/* =========================================================
-   APPROVE SELLER
-========================================================= */
 
 async function approveSeller(id){
 
@@ -3094,10 +2922,6 @@ e.message
 
 }
 
-
-/* =========================================================
-   DISABLE SELLER
-========================================================= */
 
 async function rejectSeller(id){
 
@@ -3147,10 +2971,6 @@ e.message
 
 }
 
-
-/* =========================================================
-   VIEW SELLER
-========================================================= */
 
 function viewSeller(id){
 
@@ -3421,10 +3241,6 @@ document
 }
 
 
-/* =========================================================
-   CLOSE SELLER MODAL
-========================================================= */
-
 function closeSellerModal(event){
 
 if(
@@ -3443,10 +3259,6 @@ document
 
 }
 
-
-/* =========================================================
-   PRODUCTS
-========================================================= */
 
 async function loadProducts(){
 
@@ -3513,10 +3325,6 @@ console.error(e);
 
 }
 
-
-/* =========================================================
-   ORDERS
-========================================================= */
 
 async function loadOrders(){
 
@@ -3594,10 +3402,6 @@ console.error(e);
 
 }
 
-
-/* =========================================================
-   RENTAL PAYMENTS
-========================================================= */
 
 async function loadRentalPayments(){
 
@@ -3687,6 +3491,11 @@ console.error(e);
 
 /* =========================================================
    PAYMENTS
+   FIXED FOR YOUR ACTUAL DATABASE COLUMNS
+
+   amount
+   zyre_commission
+   seller_amount
 ========================================================= */
 
 async function loadSellerPayments(){
@@ -3728,22 +3537,33 @@ if([
 
 const a=
 Number(
-x.amount ||
-x.total ||
-0
+x.amount ?? 0
 );
+
+
+/* FIX:
+   Your database column is zyre_commission
+*/
 
 const c=
 Number(
-x.commission ||
-x.commission_amount ||
-0
+x.zyre_commission ?? 0
+);
+
+
+/* FIX:
+   Your database already stores seller_amount
+*/
+
+const sa=
+Number(
+x.seller_amount ?? (a-c)
 );
 
 
 sales+=a;
 commission+=c;
-sellerTotal+=a-c;
+sellerTotal+=sa;
 
 }
 
@@ -3797,15 +3617,13 @@ x.Seller_id
 )}</td>
 
 <td>${money(
-x.amount ||
-x.total
+x.amount
 )}</td>
 
 <td>${esc(x.status||"-")}</td>
 
 <td>${money(
-x.commission ||
-x.commission_amount
+x.zyre_commission
 )}</td>
 
 <td>${dateText(x.created_at)}</td>
@@ -3828,10 +3646,6 @@ console.error(e);
 
 }
 
-
-/* =========================================================
-   PAYOUTS
-========================================================= */
 
 async function loadPayouts(){
 
@@ -3940,10 +3754,6 @@ console.error(e);
 }
 
 
-/* =========================================================
-   PAYOUT PROCESSING
-========================================================= */
-
 async function processPayout(id){
 
 if(
@@ -3987,10 +3797,6 @@ e.message
 }
 
 
-/* =========================================================
-   ACTIVITY
-========================================================= */
-
 function loadRecentActivity(){
 
 document
@@ -4008,28 +3814,9 @@ document
 }
 
 
-/* =========================================================
-   PAGE START
-========================================================= */
-
 document.addEventListener(
 "DOMContentLoaded",
 function(){
-
-/*
- IMPORTANT:
-
- There is NO automatic login.
-
- There is NO saved email.
-
- There is NO saved password.
-
- There is NO saved token.
-
- The owner must manually enter the credentials
- every time the page is opened.
-*/
 
 accessToken=null;
 adminUserId=null;
@@ -4063,12 +3850,6 @@ password.value="";
 
 loginMessage.textContent="";
 loginMessage.className="msg";
-
-
-/*
- Use the form submit event instead of relying
- on an inline onclick.
-*/
 
 loginForm.addEventListener(
 "submit",
