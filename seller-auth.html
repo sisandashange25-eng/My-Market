@@ -255,6 +255,23 @@ BUTTON
   cursor: not-allowed;
 }
 
+.secondary-button {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 11px;
+  padding: 13px;
+  background: white;
+  color: #111;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.secondary-button:hover {
+  background: #f5f5f5;
+}
+
 /* =========================
 LOGIN
 ========================= */
@@ -334,6 +351,113 @@ MESSAGE
   background: #f1f5ff;
   border: 1px solid #cbd7ff;
   color: #27458f;
+}
+
+/* =========================
+RENTAL PAYMENT
+========================= */
+
+.rental-section {
+  display: none;
+  margin-top: 25px;
+}
+
+.rental-card {
+  background: white;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow:
+    0 20px 60px
+    rgba(0,0,0,.35);
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.rental-card h2 {
+  margin: 0 0 8px;
+  font-size: 26px;
+}
+
+.rental-intro {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.rental-price {
+  border: 1px solid #e4e4e4;
+  border-radius: 15px;
+  padding: 22px;
+  margin-bottom: 20px;
+  background: #fafafa;
+}
+
+.rental-price-label {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.rental-price-value {
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.rental-price-period {
+  color: #777;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.rental-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  padding: 14px;
+  background: #fff8e8;
+  border: 1px solid #f1d99b;
+  color: #775400;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.rental-status-icon {
+  font-size: 21px;
+}
+
+.rental-info {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+.rental-info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 9px 0;
+  font-size: 13px;
+}
+
+.rental-info-row span:first-child {
+  color: #777;
+}
+
+.rental-info-row span:last-child {
+  font-weight: 700;
+  text-align: right;
+}
+
+.pending-button {
+  background: #777;
+  cursor: not-allowed;
+}
+
+.pending-button:hover {
+  background: #777;
 }
 
 /* =========================
@@ -419,6 +543,14 @@ MOBILE
     border-radius: 15px;
   }
 
+  .rental-card {
+    padding: 22px 18px;
+  }
+
+  .rental-price-value {
+    font-size: 30px;
+  }
+
 }
 
 </style>
@@ -478,7 +610,14 @@ MOBILE
   </section>
 
 
-  <section class="auth-grid">
+  <!-- =========================
+  AUTH AREA
+  ========================= -->
+
+  <section
+    class="auth-grid"
+    id="authArea"
+  >
 
 
     <!-- REGISTER -->
@@ -828,6 +967,148 @@ MOBILE
 
   </section>
 
+
+  <!-- =========================
+  RENTAL PAYMENT AREA
+  ========================= -->
+
+  <section
+    class="rental-section"
+    id="rentalSection"
+  >
+
+    <div class="rental-card">
+
+      <h2>
+        Store Rental Payment
+      </h2>
+
+      <p class="rental-intro">
+        Your seller store has been created.
+        A monthly store rental of
+        <strong>R100</strong> is required before
+        your store can become active.
+      </p>
+
+
+      <div class="rental-price">
+
+        <div class="rental-price-label">
+          Monthly store rental
+        </div>
+
+        <div class="rental-price-value">
+          R100
+        </div>
+
+        <div class="rental-price-period">
+          per month
+        </div>
+
+      </div>
+
+
+      <div class="rental-status">
+
+        <span class="rental-status-icon">
+          ⏳
+        </span>
+
+        <span>
+          Your rental payment is currently
+          <strong>pending</strong>.
+          PayFast payment will become available
+          once ZYRE Marketing's PayFast merchant
+          approval is complete.
+        </span>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="primary-button pending-button"
+        disabled
+      >
+        ⏳ PayFast Approval Pending
+      </button>
+
+
+      <button
+        type="button"
+        class="secondary-button"
+        onclick="returnToMarketplace()"
+      >
+        Return to Marketplace
+      </button>
+
+
+      <div class="rental-info">
+
+        <div class="rental-info-row">
+
+          <span>
+            Store
+          </span>
+
+          <span id="rentalStoreName">
+            —
+          </span>
+
+        </div>
+
+
+        <div class="rental-info-row">
+
+          <span>
+            Rental amount
+          </span>
+
+          <span>
+            R100 / month
+          </span>
+
+        </div>
+
+
+        <div class="rental-info-row">
+
+          <span>
+            Payment status
+          </span>
+
+          <span id="rentalPaymentStatus">
+            Pending
+          </span>
+
+        </div>
+
+
+        <div class="rental-info-row">
+
+          <span>
+            Seller approval
+          </span>
+
+          <span>
+            Waiting for owner approval
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="rentalMessage"
+        class="message"
+        style="margin-top:20px;"
+      ></div>
+
+    </div>
+
+  </section>
+
 </main>
 
 
@@ -850,6 +1131,17 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
   "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
+
+/* =========================
+CONSTANTS
+========================= */
+
+const STORE_RENTAL_AMOUNT =
+  100;
+
+const STORE_RENTAL_METHOD =
+  "PayFast";
 
 
 /* =========================
@@ -1157,7 +1449,9 @@ async function createSellerStore(
   if (!sellerResponse.ok) {
 
     throw new Error(
-      "Your login account is valid, but ISTHIXO could not be created.\n\n" +
+      "Your login account is valid, but " +
+      storeName +
+      " could not be created.\n\n" +
       await sellerResponse.text()
     );
 
@@ -1176,7 +1470,7 @@ async function createSellerStore(
   if (!sellerId) {
 
     throw new Error(
-      "ISTHIXO was created, but the seller ID was not returned."
+      "Your store was created, but the seller ID was not returned."
     );
 
   }
@@ -1195,6 +1489,236 @@ async function createSellerStore(
     approved:
       false
   };
+
+}
+
+
+/* =========================
+CREATE / FIND RENTAL PAYMENT
+========================= */
+
+async function createOrFindRentalPayment(
+  sellerId,
+  accessToken
+) {
+
+  /*
+  First check whether this seller already
+  has a pending rental payment.
+
+  This prevents duplicate R100 records.
+  */
+
+  const existingResponse =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/rental_payments" +
+      "?seller_id=eq." +
+      encodeURIComponent(sellerId) +
+      "&status=eq.pending" +
+      "&select=id,seller_id,amount,status,payment_method,payment_reference" +
+      "&order=id.desc" +
+      "&limit=1",
+
+      {
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            accessToken
+
+        }
+
+      }
+
+    );
+
+
+  if (!existingResponse.ok) {
+
+    throw new Error(
+      "The store was created, but we could not check its R100 rental payment.\n\n" +
+      await existingResponse.text()
+    );
+
+  }
+
+
+  const existingPayments =
+    await existingResponse.json();
+
+
+  if (
+    Array.isArray(existingPayments) &&
+    existingPayments.length > 0
+  ) {
+
+    return existingPayments[0];
+
+  }
+
+
+  /* =========================
+  CREATE NEW RENTAL RECORD
+  ========================= */
+
+  const rentalResponse =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/rental_payments",
+
+      {
+
+        method: "POST",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            accessToken,
+
+          "Content-Type":
+            "application/json",
+
+          "Prefer":
+            "return=representation"
+
+        },
+
+        body:
+          JSON.stringify({
+
+            seller_id:
+              sellerId,
+
+            amount:
+              STORE_RENTAL_AMOUNT,
+
+            status:
+              "pending",
+
+            payment_method:
+              STORE_RENTAL_METHOD
+
+          })
+
+      }
+
+    );
+
+
+  if (!rentalResponse.ok) {
+
+    throw new Error(
+      "Your store was created, but the R100 rental payment could not be registered.\n\n" +
+      await rentalResponse.text()
+    );
+
+  }
+
+
+  const rentalData =
+    await rentalResponse.json();
+
+
+  if (
+    !Array.isArray(rentalData) ||
+    !rentalData.length
+  ) {
+
+    throw new Error(
+      "The R100 rental payment was created, but no payment record was returned."
+    );
+
+  }
+
+
+  return rentalData[0];
+
+}
+
+
+/* =========================
+SHOW RENTAL PAYMENT
+========================= */
+
+function showRentalPayment(
+  sellerName,
+  rentalPayment
+) {
+
+  const authArea =
+    document.getElementById(
+      "authArea"
+    );
+
+  const rentalSection =
+    document.getElementById(
+      "rentalSection"
+    );
+
+  const rentalStoreName =
+    document.getElementById(
+      "rentalStoreName"
+    );
+
+  const rentalPaymentStatus =
+    document.getElementById(
+      "rentalPaymentStatus"
+    );
+
+
+  if (authArea) {
+
+    authArea.style.display =
+      "none";
+
+  }
+
+
+  if (rentalSection) {
+
+    rentalSection.style.display =
+      "block";
+
+  }
+
+
+  if (rentalStoreName) {
+
+    rentalStoreName.textContent =
+      sellerName ||
+      "Your Store";
+
+  }
+
+
+  if (rentalPaymentStatus) {
+
+    rentalPaymentStatus.textContent =
+      rentalPayment?.status
+        ? rentalPayment.status
+            .charAt(0)
+            .toUpperCase() +
+          rentalPayment.status.slice(1)
+        : "Pending";
+
+  }
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 
 }
 
@@ -1234,6 +1758,18 @@ function saveSellerSession(
 
 
 /* =========================
+RETURN MARKETPLACE
+========================= */
+
+function returnToMarketplace() {
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+/* =========================
 REGISTER
 ========================= */
 
@@ -1249,10 +1785,16 @@ document
         "registerMessage"
       );
 
+      clearMessage(
+        "rentalMessage"
+      );
+
+
       const button =
         document.getElementById(
           "registerButton"
         );
+
 
       const fullName =
         document
@@ -1262,6 +1804,7 @@ document
           .value
           .trim();
 
+
       const storeName =
         document
           .getElementById(
@@ -1269,6 +1812,7 @@ document
           )
           .value
           .trim();
+
 
       const email =
         document
@@ -1278,6 +1822,7 @@ document
           .value
           .trim();
 
+
       const phone =
         document
           .getElementById(
@@ -1286,6 +1831,7 @@ document
           .value
           .trim();
 
+
       const password =
         document
           .getElementById(
@@ -1293,12 +1839,14 @@ document
           )
           .value;
 
+
       const confirmPassword =
         document
           .getElementById(
             "confirmPassword"
           )
           .value;
+
 
       const description =
         document
@@ -1370,9 +1918,6 @@ document
         let userId =
           null;
 
-        let isExistingAccount =
-          false;
-
 
         /* =========================
         TRY NEW ACCOUNT FIRST
@@ -1426,6 +1971,7 @@ document
 
         let signupData = {};
 
+
         try {
 
           signupData =
@@ -1459,6 +2005,7 @@ document
             signupData.access_token ||
             null;
 
+
           if (!userId) {
 
             throw new Error(
@@ -1480,12 +2027,14 @@ document
               "success"
             );
 
+
             document
               .getElementById(
                 "loginEmail"
               )
               .value =
               email;
+
 
             return;
 
@@ -1538,14 +2087,14 @@ document
 
 
           /*
-          The Auth user already exists.
-          Sign into that existing account
-          using the password entered in
-          the registration form.
+          Existing Auth account.
+          Sign into it using the password
+          entered in the registration form.
           */
 
           button.textContent =
             "Signing in to existing account...";
+
 
           const existingLogin =
             await loginExistingUser(
@@ -1572,10 +2121,6 @@ document
 
           }
 
-
-          isExistingAccount =
-            true;
-
         }
 
 
@@ -1584,7 +2129,9 @@ document
         ========================= */
 
         button.textContent =
-          "Creating ISTHIXO...";
+          "Creating " +
+          storeName +
+          "...";
 
 
         const seller =
@@ -1612,7 +2159,7 @@ document
 
 
         /* =========================
-        EXISTING STORE
+        EXISTING SELLER
         ========================= */
 
         if (
@@ -1629,6 +2176,7 @@ document
               "success"
             );
 
+
             setTimeout(
               function() {
 
@@ -1639,18 +2187,40 @@ document
               1200
             );
 
+
             return;
 
           }
 
 
+          /*
+          Existing unapproved seller:
+          create/find its pending rental.
+          */
+
+          button.textContent =
+            "Checking R100 rental...";
+
+
+          const rentalPayment =
+            await createOrFindRentalPayment(
+              seller.sellerId,
+              accessToken
+            );
+
+
+          showRentalPayment(
+            seller.existingStore,
+            rentalPayment
+          );
+
+
           showMessage(
-            "registerMessage",
-            "This account already has a seller store: " +
-            seller.existingStore +
-            ". It is still waiting for ZYRE Marketing approval.",
+            "rentalMessage",
+            "Your store already exists. Your R100 monthly rental payment is pending.",
             "info"
           );
+
 
           return;
 
@@ -1658,18 +2228,37 @@ document
 
 
         /* =========================
-        NEW SELLER STORE
+        NEW SELLER
         ========================= */
 
-        showMessage(
-          "registerMessage",
-          "🎉 ISTHIXO has been created successfully!\n\nYour store is now waiting for ZYRE Marketing approval.\n\nYour existing login account has been kept unchanged.",
-          "success"
+        button.textContent =
+          "Preparing R100 rental...";
+
+
+        const rentalPayment =
+          await createOrFindRentalPayment(
+            seller.sellerId,
+            accessToken
+          );
+
+
+        /*
+        The seller is NOT approved here.
+        Owner approval remains separate.
+        */
+
+
+        showRentalPayment(
+          storeName,
+          rentalPayment
         );
 
 
-        button.textContent =
-          "ISTHIXO Submitted";
+        showMessage(
+          "rentalMessage",
+          "🎉 Your store has been created successfully.\n\nYour R100 monthly store rental has been registered as pending.\n\nPayFast is currently awaiting merchant approval, so no money has been charged.\n\nAfter payment is activated and the rental is paid, ZYRE Marketing can approve your store.",
+          "success"
+        );
 
 
       } catch (error) {
@@ -1719,10 +2308,12 @@ document
         "loginMessage"
       );
 
+
       const button =
         document.getElementById(
           "loginButton"
         );
+
 
       const email =
         document
@@ -1731,6 +2322,7 @@ document
           )
           .value
           .trim();
+
 
       const password =
         document
@@ -1864,11 +2456,34 @@ document
           seller.approved !== true
         ) {
 
+          /*
+          If seller is still waiting for approval,
+          make sure the R100 rental record exists.
+          */
+
+          button.textContent =
+            "Checking R100 rental...";
+
+
+          const rentalPayment =
+            await createOrFindRentalPayment(
+              seller.id,
+              accessToken
+            );
+
+
+          showRentalPayment(
+            seller.store_name,
+            rentalPayment
+          );
+
+
           showMessage(
-            "loginMessage",
-            "Your seller store is registered, but it is still waiting for ZYRE Marketing approval.",
+            "rentalMessage",
+            "Your seller store is registered, but it is still waiting for ZYRE Marketing approval. Your R100 monthly rental is currently pending.",
             "info"
           );
+
 
           return;
 
@@ -1926,6 +2541,7 @@ async function forgotPassword(
 
   event.preventDefault();
 
+
   const email =
     document
       .getElementById(
@@ -1943,11 +2559,13 @@ async function forgotPassword(
       "info"
     );
 
+
     document
       .getElementById(
         "loginEmail"
       )
       .focus();
+
 
     return;
 
@@ -1987,6 +2605,7 @@ async function forgotPassword(
           }
 
         );
+
 
     if (!response.ok) {
 
