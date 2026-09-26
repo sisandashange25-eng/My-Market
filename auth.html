@@ -735,13 +735,6 @@
 
     /*
       CUSTOMER LOGIN VALIDATION
-
-      A customer login is ONLY allowed when
-      the authenticated account is actually
-      a customer.
-
-      If the account belongs to a seller,
-      customer login is rejected.
     */
 
     async function validateCustomerAccount(
@@ -879,38 +872,51 @@
       SELLER LOGIN VALIDATION
 
       IMPORTANT:
-      The sellers table is the primary source
-      for identifying a seller account.
+      We identify the seller using BOTH:
 
-      This is necessary because an existing
-      seller may still have profile.role set
-      to "customer".
+      1. authenticated Supabase user ID
+      2. authenticated email address
+
+      This prevents a valid seller from being
+      incorrectly treated as a customer when
+      the seller record is not returned by the
+      user_id lookup.
     */
 
     async function getSellerAccount(
       session
     ) {
 
+      const userId =
+        session.user.id;
+
+      const userEmail =
+        (
+          session.user.email ||
+          ""
+        )
+        .trim()
+        .toLowerCase();
+
+
       /*
         FIRST:
-        Check the seller record.
-
-        We do this BEFORE checking
-        profile.role.
+        Try seller lookup by authenticated
+        Supabase user ID.
       */
 
-      const {
+      let {
         data: seller,
         error: sellerError
       } =
         await supabaseClient
           .from("sellers")
           .select(
-            "id, user_id, store_name, approved, status"
+            "id, user_id, store_name, approved, status, email"
           )
           .eq(
             "user_id",
-            session.user.id
+            userId
           )
           .maybeSingle();
 
@@ -926,15 +932,66 @@
 
 
       /*
+        SECOND:
+        If no seller was found by user_id,
+        check the seller email.
+
+        The email must match the authenticated
+        Supabase account email.
+      */
+
+      if (
+        !seller &&
+        userEmail
+      ) {
+
+        const emailLookup =
+          await supabaseClient
+            .from("sellers")
+            .select(
+              "id, user_id, store_name, approved, status, email"
+            )
+            .ilike(
+              "email",
+              userEmail
+            )
+            .limit(1);
+
+
+        if (emailLookup.error) {
+
+          throw new Error(
+            emailLookup.error.message ||
+            "Could not check your seller email."
+          );
+
+        }
+
+
+        if (
+          Array.isArray(
+            emailLookup.data
+          ) &&
+          emailLookup.data.length > 0
+        ) {
+
+          seller =
+            emailLookup.data[0];
+
+        }
+
+      }
+
+
+      /*
         If a seller record exists, this is
-        a seller account even if the profile
-        role still says customer.
+        definitely being handled as a seller.
       */
 
       if (seller) {
 
         /*
-          Get the profile only after the seller
+          Get profile only after seller
           record has been confirmed.
         */
 
@@ -949,7 +1006,7 @@
             )
             .eq(
               "id",
-              session.user.id
+              userId
             )
             .maybeSingle();
 
@@ -967,11 +1024,6 @@
         /*
           Owner/admin accounts must not use
           Seller Login.
-
-          However, customer role does NOT
-          block the seller because the seller
-          record above already proved that this
-          is a seller account.
         */
 
         if (
@@ -998,10 +1050,9 @@
 
 
       /*
-        NO SELLER RECORD.
+        NO SELLER RECORD FOUND.
 
-        Now check the profile to determine
-        whether this is a customer or owner.
+        Now check the profile.
       */
 
       const {
@@ -1015,7 +1066,7 @@
           )
           .eq(
             "id",
-            session.user.id
+            userId
           )
           .maybeSingle();
 
