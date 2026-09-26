@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>ZYRE Marketing | My Account</title>
+
+<meta
+  name="description"
+  content="Manage your ZYRE Marketing customer account."
+>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+
+  margin: 0;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background:
+    #f5f5f5;
+
+  color:
+    #111;
+
+}
+
+.header {
+
+  background:
+    #000;
+
+  color:
+    #fff;
+
+  padding:
+    18px 20px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+}
+
+.logo {
+
+  font-size:
+    24px;
+
+  font-weight:
+    bold;
+
+  letter-spacing:
+    3px;
+
+}
+
+.header button {
+
+  background:
+    #fff;
+
+  color:
+    #000;
+
+  border:
+    none;
+
+  padding:
+    9px 14px;
+
+  border-radius:
+    8px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+}
+
+.container {
+
+  max-width:
+    650px;
+
+  margin:
+    25px auto;
+
+  padding:
+    0 16px;
+
+}
+
+.card {
+
+  background:
+    #fff;
+
+  border-radius:
+    16px;
+
+  padding:
+    22px;
+
+  margin-bottom:
+    18px;
+
+  box-shadow:
+    0 3px 14px
+    rgba(0,0,0,.08);
+
+}
+
+h1 {
+
+  margin-top:
+    0;
+
+  font-size:
+    26px;
+
+}
+
+h2 {
+
+  font-size:
+    20px;
+
+  margin-top:
+    0;
+
+}
+
+.subtitle {
+
+  color:
+    #666;
+
+  margin-bottom:
+    22px;
+
+}
+
+label {
+
+  display:
+    block;
+
+  font-weight:
+    bold;
+
+  margin:
+    15px 0 7px;
+
+}
+
+input,
+textarea {
+
+  width:
+    100%;
+
+  padding:
+    13px;
+
+  border:
+    1px solid #ccc;
+
+  border-radius:
+    9px;
+
+  font-size:
+    15px;
+
+  outline:
+    none;
+
+}
+
+input:focus,
+textarea:focus {
+
+  border-color:
+    #000;
+
+}
+
+textarea {
+
+  min-height:
+    100px;
+
+  resize:
+    vertical;
+
+}
+
+.email-box {
+
+  background:
+    #f1f1f1;
+
+  padding:
+    13px;
+
+  border-radius:
+    9px;
+
+  color:
+    #555;
+
+  word-break:
+    break-word;
+
+}
+
+.save {
+
+  width:
+    100%;
+
+  margin-top:
+    20px;
+
+  padding:
+    14px;
+
+  background:
+    #000;
+
+  color:
+    #fff;
+
+  border:
+    none;
+
+  border-radius:
+    10px;
+
+  font-size:
+    16px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+}
+
+.save:disabled {
+
+  opacity:
+    .6;
+
+}
+
+.action {
+
+  display:
+    block;
+
+  width:
+    100%;
+
+  padding:
+    14px;
+
+  margin-top:
+    10px;
+
+  border:
+    1px solid #ddd;
+
+  background:
+    #fff;
+
+  color:
+    #111;
+
+  border-radius:
+    10px;
+
+  font-size:
+    15px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+}
+
+.logout {
+
+  background:
+    #111;
+
+  color:
+    #fff;
+
+  border:
+    none;
+
+}
+
+.message {
+
+  display:
+    none;
+
+  padding:
+    12px;
+
+  border-radius:
+    9px;
+
+  margin-top:
+    15px;
+
+  font-size:
+    14px;
+
+}
+
+.message.show {
+
+  display:
+    block;
+
+}
+
+.success {
+
+  background:
+    #e7f7e7;
+
+  color:
+    #176b2c;
+
+}
+
+.error {
+
+  background:
+    #fdeaea;
+
+  color:
+    #a40000;
+
+}
+
+.loading {
+
+  text-align:
+    center;
+
+  padding:
+    50px 20px;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+  <div class="logo">
+    ZYRE
+  </div>
+
+  <button
+    onclick="goMarketplace()"
+  >
+    🛍️ Marketplace
+  </button>
+
+</header>
+
+
+<main class="container">
+
+
+  <div
+    id="loading"
+    class="card loading"
+  >
+
+    Loading your account...
+
+  </div>
+
+
+  <div
+    id="accountContent"
+    style="display:none;"
+  >
+
+
+    <div class="card">
+
+      <h1>
+        👤 My Account
+      </h1>
+
+      <p class="subtitle">
+        Manage your customer information and saved delivery address.
+      </p>
+
+
+      <label>
+        Full Name
+      </label>
+
+      <input
+        id="fullName"
+        type="text"
+        placeholder="Your full name"
+      >
+
+
+      <label>
+        Email Address
+      </label>
+
+      <div
+        id="email"
+        class="email-box"
+      >
+        Loading...
+      </div>
+
+
+      <label>
+        Phone Number
+      </label>
+
+      <input
+        id="phone"
+        type="tel"
+        placeholder="Your phone number"
+      >
+
+
+      <label>
+        Delivery Address
+      </label>
+
+      <textarea
+        id="address"
+        placeholder="Enter your physical/delivery address"
+      ></textarea>
+
+
+      <button
+        id="saveButton"
+        class="save"
+        onclick="saveAccount()"
+      >
+        💾 Save Account Details
+      </button>
+
+
+      <div
+        id="message"
+        class="message"
+      ></div>
+
+    </div>
+
+
+    <div class="card">
+
+      <h2>
+        📦 Orders
+      </h2>
+
+      <button
+        class="action"
+        onclick="goOrders()"
+      >
+        View My Orders
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <h2>
+        🛍️ Shopping
+      </h2>
+
+      <button
+        class="action"
+        onclick="goMarketplace()"
+      >
+        Continue Shopping
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <button
+        class="action logout"
+        onclick="logout()"
+      >
+        🚪 Log Out
+      </button>
+
+    </div>
+
+
+  </div>
+
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://gaccizzlwswwynattgda.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
+
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* =========================
+LOAD CUSTOMER ACCOUNT
+========================= */
+
+async function loadAccount() {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient.auth.getSession();
+
+
+    if (
+      error ||
+      !data ||
+      !data.session
+    ) {
+
+      window.location.replace(
+        "auth.html"
+      );
+
+      return;
+
+    }
+
+
+    const session =
+      data.session;
+
+    const user =
+      session.user;
+
+
+    document.getElementById(
+      "email"
+    ).textContent =
+      user.email || "";
+
+
+    const response =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/profiles?id=eq." +
+      encodeURIComponent(
+        user.id
+      ) +
+      "&select=id,full_name,phone,address,role",
+
+      {
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            session.access_token
+
+        }
+
+      }
+
+    );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        await response.text()
+      );
+
+    }
+
+
+    const profiles =
+      await response.json();
+
+
+    if (
+      !Array.isArray(profiles) ||
+      !profiles.length
+    ) {
+
+      throw new Error(
+        "Customer profile was not found."
+      );
+
+    }
+
+
+    const profile =
+      profiles[0];
+
+
+    document.getElementById(
+      "fullName"
+    ).value =
+      profile.full_name || "";
+
+
+    document.getElementById(
+      "phone"
+    ).value =
+      profile.phone || "";
+
+
+    document.getElementById(
+      "address"
+    ).value =
+      profile.address || "";
+
+
+    document.getElementById(
+      "loading"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "accountContent"
+    ).style.display =
+      "block";
+
+
+  } catch (error) {
+
+    console.error(
+      "Account loading error:",
+      error
+    );
+
+
+    document.getElementById(
+      "loading"
+    ).innerHTML =
+
+      "❌ Could not load your account.<br><br>" +
+
+      error.message;
+
+  }
+
+}
+
+
+/* =========================
+SAVE ACCOUNT
+========================= */
+
+async function saveAccount() {
+
+  const saveButton =
+    document.getElementById(
+      "saveButton"
+    );
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+
+  const fullName =
+    document.getElementById(
+      "fullName"
+    ).value.trim();
+
+
+  const phone =
+    document.getElementById(
+      "phone"
+    ).value.trim();
+
+
+  const address =
+    document.getElementById(
+      "address"
+    ).value.trim();
+
+
+  message.className =
+    "message";
+
+
+  if (!fullName) {
+
+    showMessage(
+      "Please enter your full name.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  if (!phone) {
+
+    showMessage(
+      "Please enter your phone number.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  if (!address) {
+
+    showMessage(
+      "Please enter your delivery address.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    saveButton.disabled =
+      true;
+
+    saveButton.textContent =
+      "Saving...";
+
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient.auth.getSession();
+
+
+    if (
+      error ||
+      !data ||
+      !data.session
+    ) {
+
+      window.location.replace(
+        "auth.html"
+      );
+
+      return;
+
+    }
+
+
+    const session =
+      data.session;
+
+    const user =
+      session.user;
+
+
+    const response =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/profiles?id=eq." +
+      encodeURIComponent(
+        user.id
+      ),
+
+      {
+
+        method:
+          "PATCH",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            session.access_token,
+
+          "Content-Type":
+            "application/json",
+
+          "Prefer":
+            "return=minimal"
+
+        },
+
+        body:
+          JSON.stringify({
+
+            full_name:
+              fullName,
+
+            phone:
+              phone,
+
+            address:
+              address
+
+          })
+
+      }
+
+    );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        await response.text()
+      );
+
+    }
+
+
+    showMessage(
+      "✅ Your account details were saved successfully.",
+      true
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Account save error:",
+      error
+    );
+
+
+    showMessage(
+      "❌ Could not save your account details.\n\n" +
+      error.message,
+      false
+    );
+
+
+  } finally {
+
+    saveButton.disabled =
+      false;
+
+    saveButton.textContent =
+      "💾 Save Account Details";
+
+  }
+
+}
+
+
+/* =========================
+MESSAGE
+========================= */
+
+function showMessage(
+  text,
+  success
+) {
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+
+  message.textContent =
+    text;
+
+
+  message.className =
+    "message show " +
+    (
+      success
+        ? "success"
+        : "error"
+    );
+
+}
+
+
+/* =========================
+NAVIGATION
+========================= */
+
+function goMarketplace() {
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+function goOrders() {
+
+  window.location.href =
+    "orders.html";
+
+}
+
+
+/* =========================
+LOGOUT
+========================= */
+
+async function logout() {
+
+  try {
+
+    await supabaseClient.auth.signOut();
+
+  } catch (error) {
+
+    console.error(
+      "Logout error:",
+      error
+    );
+
+  }
+
+
+  localStorage.removeItem(
+    "zava_access_token"
+  );
+
+  localStorage.removeItem(
+    "zava_user_id"
+  );
+
+  localStorage.removeItem(
+    "zava_seller_id"
+  );
+
+  localStorage.removeItem(
+    "zava_seller_email"
+  );
+
+
+  window.location.replace(
+    "auth.html"
+  );
+
+}
+
+
+/* =========================
+START
+========================= */
+
+loadAccount();
+
+</script>
+
+
+</body>
+
+</html>
