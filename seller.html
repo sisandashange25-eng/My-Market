@@ -655,6 +655,7 @@
 </div>
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./app.js"></script>
 
 <script>
@@ -667,44 +668,21 @@ const SELLER_SUPABASE_KEY =
 
 
 /* ==============================
-   SUPABASE AUTH CLIENT
+   SELLER AUTH CLIENT
 ============================== */
 
-let SELLER_AUTH_CLIENT = null;
-
-try {
-
-  if (
-    window.supabase &&
-    typeof window.supabase.createClient ===
-      "function"
-  ) {
-
-    SELLER_AUTH_CLIENT =
-      window.supabase.createClient(
-        SELLER_SUPABASE_URL,
-        SELLER_SUPABASE_KEY,
-        {
-          auth: {
-            persistSession: true,
-            autoRefreshToken: true,
-            detectSessionInUrl: true
-          }
-        }
-      );
-
-  }
-
-}
-
-catch (error) {
-
-  console.error(
-    "Could not create seller authentication client:",
-    error
+const SELLER_AUTH_CLIENT =
+  window.supabase.createClient(
+    SELLER_SUPABASE_URL,
+    SELLER_SUPABASE_KEY,
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
   );
-
-}
 
 
 /* ==============================
@@ -755,6 +733,212 @@ const SELLER_ID =
   Number(storedSellerId);
 
 
+/*
+  IMPORTANT AUTH FIX:
+
+  Do NOT permanently capture the access token
+  when the page first loads.
+
+  Supabase can refresh the access token.
+
+  We therefore keep the token in a variable
+  that can be refreshed whenever necessary.
+*/
+
+let SELLER_ACCESS_TOKEN =
+  localStorage.getItem(
+    "zava_access_token"
+  ) || "";
+
+
+/* ==============================
+   AUTHENTICATION REFRESH
+============================== */
+
+async function refreshSellerAuthentication() {
+
+  try {
+
+    /*
+      First ask the Supabase client for the
+      current session.
+
+      This allows Supabase to automatically
+      refresh an expired access token.
+    */
+
+    const {
+      data,
+      error
+    } =
+      await SELLER_AUTH_CLIENT.auth.getSession();
+
+
+    if (
+      !error &&
+      data &&
+      data.session &&
+      data.session.access_token
+    ) {
+
+      SELLER_ACCESS_TOKEN =
+        data.session.access_token;
+
+
+      localStorage.setItem(
+        "zava_access_token",
+        SELLER_ACCESS_TOKEN
+      );
+
+
+      if (
+        data.session.user &&
+        data.session.user.id
+      ) {
+
+        localStorage.setItem(
+          "zava_user_id",
+          data.session.user.id
+        );
+
+      }
+
+
+      return true;
+
+    }
+
+
+    /*
+      Fallback:
+
+      If the Supabase client does not currently
+      have a session, check the token already
+      stored by the seller login.
+    */
+
+    const storedToken =
+      localStorage.getItem(
+        "zava_access_token"
+      );
+
+
+    if (
+      storedToken &&
+      storedToken.trim().length > 20
+    ) {
+
+      const userResponse =
+        await fetch(
+          SELLER_SUPABASE_URL +
+          "/auth/v1/user",
+          {
+            method: "GET",
+            headers: {
+              "apikey":
+                SELLER_SUPABASE_KEY,
+              "Authorization":
+                "Bearer " +
+                storedToken
+            }
+          }
+        );
+
+
+      if (userResponse.ok) {
+
+        SELLER_ACCESS_TOKEN =
+          storedToken;
+
+        return true;
+
+      }
+
+    }
+
+
+    SELLER_ACCESS_TOKEN = "";
+
+    return false;
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Seller authentication refresh error:",
+      error
+    );
+
+    /*
+      Last fallback to the locally stored
+      access token.
+    */
+
+    const storedToken =
+      localStorage.getItem(
+        "zava_access_token"
+      );
+
+
+    if (
+      storedToken &&
+      storedToken.trim().length > 20
+    ) {
+
+      SELLER_ACCESS_TOKEN =
+        storedToken;
+
+      return true;
+
+    }
+
+
+    SELLER_ACCESS_TOKEN = "";
+
+    return false;
+
+  }
+
+}
+
+
+/* ==============================
+   ENSURE SELLER AUTHENTICATION
+============================== */
+
+async function ensureSellerAuthentication() {
+
+  const authenticated =
+    await refreshSellerAuthentication();
+
+
+  if (authenticated) {
+
+    showAuthenticationWarning();
+
+    return true;
+
+  }
+
+
+  showAuthenticationWarning();
+
+
+  alert(
+    "Your seller login session has expired or is missing.\n\nPlease log in again before adding a product."
+  );
+
+
+  return false;
+
+}
+
+
+/* ==============================
+   SELLER ID CHECK
+============================== */
+
 if (
   !storedSellerId ||
   !Number.isFinite(SELLER_ID) ||
@@ -783,209 +967,20 @@ let lastOrdersSignature = "";
 
 
 /* ==============================
-   AUTHENTICATION
-   FIXED:
-   ALWAYS GET CURRENT SESSION
-============================== */
-
-async function getSellerSession() {
-
-  try {
-
-    if (
-      !SELLER_AUTH_CLIENT
-    ) {
-
-      return null;
-
-    }
-
-
-    const {
-      data,
-      error
-    } =
-      await SELLER_AUTH_CLIENT.auth.getSession();
-
-
-    if (
-      error
-    ) {
-
-      console.error(
-        "Could not get seller session:",
-        error
-      );
-
-      return null;
-
-    }
-
-
-    if (
-      data &&
-      data.session &&
-      data.session.access_token
-    ) {
-
-      return data.session;
-
-    }
-
-
-    /*
-      Fallback for the existing
-      localStorage login system.
-    */
-
-    const storedToken =
-      localStorage.getItem(
-        "zava_access_token"
-      );
-
-
-    if (
-      storedToken &&
-      storedToken.trim().length > 20
-    ) {
-
-      return {
-        access_token:
-          storedToken
-      };
-
-    }
-
-
-    return null;
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "Seller session error:",
-      error
-    );
-
-    return null;
-
-  }
-
-}
-
-
-/* ==============================
-   REFRESH AUTHENTICATION
-============================== */
-
-async function refreshSellerSession() {
-
-  try {
-
-    if (
-      !SELLER_AUTH_CLIENT
-    ) {
-
-      return null;
-
-    }
-
-
-    const {
-      data,
-      error
-    } =
-      await SELLER_AUTH_CLIENT.auth.refreshSession();
-
-
-    if (
-      error
-    ) {
-
-      console.warn(
-        "Seller session refresh failed:",
-        error
-      );
-
-      return null;
-
-    }
-
-
-    if (
-      data &&
-      data.session &&
-      data.session.access_token
-    ) {
-
-      localStorage.setItem(
-        "zava_access_token",
-        data.session.access_token
-      );
-
-
-      if (
-        data.user &&
-        data.user.id
-      ) {
-
-        localStorage.setItem(
-          "zava_user_id",
-          data.user.id
-        );
-
-      }
-
-
-      return data.session;
-
-    }
-
-
-    return null;
-
-  }
-
-  catch (error) {
-
-    console.warn(
-      "Seller session refresh error:",
-      error
-    );
-
-    return null;
-
-  }
-
-}
-
-
-/* ==============================
    AUTHENTICATION CHECK
 ============================== */
 
-async function hasSellerAuthentication() {
+function hasSellerAuthentication() {
 
-  const session =
-    await getSellerSession();
-
-
-  return !!(
-    session &&
-    typeof session.access_token ===
-      "string" &&
-    session.access_token.trim().length > 20
+  return (
+    typeof SELLER_ACCESS_TOKEN === "string" &&
+    SELLER_ACCESS_TOKEN.trim().length > 20
   );
 
 }
 
 
-/* ==============================
-   SHOW AUTH WARNING
-============================== */
-
-async function showAuthenticationWarning() {
+function showAuthenticationWarning() {
 
   const warning =
     document.getElementById(
@@ -994,12 +989,7 @@ async function showAuthenticationWarning() {
 
   if (!warning) return;
 
-
-  const authenticated =
-    await hasSellerAuthentication();
-
-
-  if (!authenticated) {
+  if (!hasSellerAuthentication()) {
 
     warning.style.display =
       "block";
@@ -1018,11 +1008,9 @@ async function showAuthenticationWarning() {
 
 /* ==============================
    HEADERS
-   FIXED:
-   TOKEN IS READ EVERY TIME
 ============================== */
 
-async function getHeaders() {
+function getHeaders() {
 
   const headers = {
 
@@ -1035,78 +1023,25 @@ async function getHeaders() {
   };
 
 
-  const session =
-    await getSellerSession();
+  /*
+    IMPORTANT:
 
+    Only send Authorization when we have
+    a real Supabase access token.
+
+    NEVER use the publishable key as a
+    Bearer token.
+  */
 
   if (
-    session &&
-    session.access_token
+    hasSellerAuthentication()
   ) {
 
     headers["Authorization"] =
       "Bearer " +
-      session.access_token;
+      SELLER_ACCESS_TOKEN;
 
   }
-
-
-  return headers;
-
-}
-
-
-/* ==============================
-   AUTHORIZED HEADERS
-============================== */
-
-async function getAuthorizedHeaders() {
-
-  let session =
-    await getSellerSession();
-
-
-  /*
-    If there is no current session,
-    try one refresh before giving up.
-  */
-
-  if (
-    !session ||
-    !session.access_token
-  ) {
-
-    session =
-      await refreshSellerSession();
-
-  }
-
-
-  if (
-    !session ||
-    !session.access_token
-  ) {
-
-    throw new Error(
-      "Your seller login session has expired or is missing."
-    );
-
-  }
-
-
-  const headers = {
-
-    "apikey":
-      SELLER_SUPABASE_KEY,
-
-    "Content-Type":
-      "application/json",
-
-    "Authorization":
-      "Bearer " +
-      session.access_token
-
-  };
 
 
   return headers;
@@ -1267,9 +1202,7 @@ async function loadSellerInformation() {
 
   try {
 
-    const headers =
-      await getHeaders();
-
+    await refreshSellerAuthentication();
 
     const response =
       await fetch(
@@ -1280,7 +1213,7 @@ async function loadSellerInformation() {
         "&select=id,store_name",
 
         {
-          headers
+          headers: getHeaders()
         }
 
       );
@@ -1373,9 +1306,7 @@ async function loadRentalSubscription() {
 
   try {
 
-    const headers =
-      await getHeaders();
-
+    await refreshSellerAuthentication();
 
     const response =
       await fetch(
@@ -1386,7 +1317,7 @@ async function loadRentalSubscription() {
         "&select=id,seller_id,amount,status,payment_method,payment_reference&order=id.desc&limit=1",
 
         {
-          headers
+          headers: getHeaders()
         }
 
       );
@@ -1618,40 +1549,25 @@ async function loadRentalSubscription() {
 
 /* ==============================
    ADD PRODUCT
-   AUTH FIX
 ============================== */
 
 async function addProduct() {
 
-  let session =
-    await getSellerSession();
-
-
   /*
-    Try refreshing the session if necessary.
+    IMPORTANT AUTH FIX:
+
+    Refresh the Supabase session immediately
+    before attempting the INSERT.
+
+    This prevents the dashboard from using
+    an expired token.
   */
 
-  if (
-    !session ||
-    !session.access_token
-  ) {
-
-    session =
-      await refreshSellerSession();
-
-  }
+  const authenticated =
+    await ensureSellerAuthentication();
 
 
-  if (
-    !session ||
-    !session.access_token
-  ) {
-
-    await showAuthenticationWarning();
-
-    alert(
-      "Your seller login session has expired or is missing.\n\nPlease log in again before adding a product."
-    );
+  if (!authenticated) {
 
     return;
 
@@ -1712,12 +1628,12 @@ async function addProduct() {
 
   try {
 
-    const headers =
-      await getAuthorizedHeaders();
+    /*
+      Refresh one more time immediately before
+      the database request.
+    */
 
-
-    headers["Prefer"] =
-      "return=representation";
+    await refreshSellerAuthentication();
 
 
     const response =
@@ -1730,7 +1646,14 @@ async function addProduct() {
 
           method: "POST",
 
-          headers,
+          headers: {
+
+            ...getHeaders(),
+
+            "Prefer":
+              "return=representation"
+
+          },
 
           body:
             JSON.stringify({
@@ -1778,44 +1701,121 @@ async function addProduct() {
 
 
       if (
-        response.status === 401
+        response.status === 401 ||
+        response.status === 403
       ) {
 
         /*
-          Try one final session refresh
-          before reporting the session error.
+          Try refreshing the session once more.
+
+          This handles an access token that expired
+          immediately before the request.
         */
 
         const refreshed =
-          await refreshSellerSession();
+          await refreshSellerAuthentication();
 
 
-        if (
-          refreshed &&
-          refreshed.access_token
-        ) {
+        if (refreshed) {
 
-          alert(
-            "Your seller session was refreshed.\n\nPlease tap Add Product again."
+          const retryResponse =
+            await fetch(
+
+              SELLER_SUPABASE_URL +
+              "/rest/v1/products",
+
+              {
+
+                method: "POST",
+
+                headers: {
+
+                  ...getHeaders(),
+
+                  "Prefer":
+                    "return=representation"
+
+                },
+
+                body:
+                  JSON.stringify({
+
+                    seller_id:
+                      SELLER_ID,
+
+                    name:
+                      name,
+
+                    description:
+                      description,
+
+                    price:
+                      price,
+
+                    stock:
+                      stock,
+
+                    category:
+                      category,
+
+                    image_url:
+                      image_url || null,
+
+                    active:
+                      true
+
+                  })
+
+              }
+
+            );
+
+
+          if (retryResponse.ok) {
+
+            alert(
+              "Product added successfully!"
+            );
+
+
+            document.getElementById(
+              "productName"
+            ).value = "";
+
+            document.getElementById(
+              "productDescription"
+            ).value = "";
+
+            document.getElementById(
+              "productPrice"
+            ).value = "";
+
+            document.getElementById(
+              "productStock"
+            ).value = "";
+
+            document.getElementById(
+              "productImage"
+            ).value = "";
+
+
+            await loadProducts();
+
+            return;
+
+          }
+
+
+          console.error(
+            "Retry product insert error:",
+            await retryResponse.text()
           );
-
-          return;
 
         }
 
 
         alert(
-          "Your seller session is no longer valid.\n\nPlease log in again and try adding the product."
-        );
-
-      }
-
-      else if (
-        response.status === 403
-      ) {
-
-        alert(
-          "Your seller account is logged in, but Supabase is not allowing this seller account to add products.\n\nPlease check the seller/product permissions."
+          "Your seller session is not authorized.\n\nPlease log in again and try adding the product."
         );
 
       }
@@ -1895,9 +1895,7 @@ async function loadProducts() {
 
   try {
 
-    const headers =
-      await getHeaders();
-
+    await refreshSellerAuthentication();
 
     const response =
       await fetch(
@@ -1908,7 +1906,7 @@ async function loadProducts() {
         "&select=id,name,description,price,stock,category,image_url,active&order=id.desc",
 
         {
-          headers
+          headers: getHeaders()
         }
 
       );
@@ -2112,12 +2110,7 @@ async function saveProduct(
 
   try {
 
-    const headers =
-      await getAuthorizedHeaders();
-
-
-    headers["Prefer"] =
-      "return=representation";
+    await refreshSellerAuthentication();
 
 
     const response =
@@ -2133,7 +2126,14 @@ async function saveProduct(
 
           method: "PATCH",
 
-          headers,
+          headers: {
+
+            ...getHeaders(),
+
+            "Prefer":
+              "return=representation"
+
+          },
 
           body:
             JSON.stringify({
@@ -2205,8 +2205,7 @@ async function deleteProduct(
 
   try {
 
-    const headers =
-      await getAuthorizedHeaders();
+    await refreshSellerAuthentication();
 
 
     const response =
@@ -2222,7 +2221,8 @@ async function deleteProduct(
 
           method: "DELETE",
 
-          headers
+          headers:
+            getHeaders()
 
         }
 
@@ -2299,8 +2299,7 @@ async function loadCustomerProfiles(
 
   try {
 
-    const headers =
-      await getHeaders();
+    await refreshSellerAuthentication();
 
 
     const response =
@@ -2315,7 +2314,7 @@ async function loadCustomerProfiles(
         "&select=id,full_name,phone",
 
         {
-          headers
+          headers: getHeaders()
         }
 
       );
@@ -2390,8 +2389,7 @@ async function loadDeliveries(
 
   try {
 
-    const headers =
-      await getHeaders();
+    await refreshSellerAuthentication();
 
 
     const response =
@@ -2406,7 +2404,7 @@ async function loadDeliveries(
         "&select=*",
 
         {
-          headers
+          headers: getHeaders()
         }
 
       );
@@ -2459,6 +2457,9 @@ async function loadDeliveries(
 async function saveDelivery(
   orderId
 ) {
+
+  await refreshSellerAuthentication();
+
 
   const name =
     document.getElementById(
@@ -2528,14 +2529,6 @@ async function saveDelivery(
 
   try {
 
-    const headers =
-      await getAuthorizedHeaders();
-
-
-    headers["Prefer"] =
-      "return=representation";
-
-
     let response;
 
 
@@ -2552,7 +2545,14 @@ async function saveDelivery(
 
             method: "PATCH",
 
-            headers,
+            headers: {
+
+              ...getHeaders(),
+
+              "Prefer":
+                "return=representation"
+
+            },
 
             body:
               JSON.stringify(
@@ -2577,7 +2577,14 @@ async function saveDelivery(
 
             method: "POST",
 
-            headers,
+            headers: {
+
+              ...getHeaders(),
+
+              "Prefer":
+                "return=representation"
+
+            },
 
             body:
               JSON.stringify(
@@ -2725,8 +2732,7 @@ async function loadOrders(
 
   try {
 
-    const headers =
-      await getHeaders();
+    await refreshSellerAuthentication();
 
 
     const ordersResponse =
@@ -2736,7 +2742,7 @@ async function loadOrders(
         "/rest/v1/orders?select=*&order=id.desc",
 
         {
-          headers
+          headers: getHeaders()
         }
 
       );
@@ -2776,8 +2782,7 @@ async function loadOrders(
         "&select=id",
 
         {
-          headers:
-            await getHeaders()
+          headers: getHeaders()
         }
 
       );
@@ -2818,8 +2823,7 @@ async function loadOrders(
         "/rest/v1/order_items?select=*",
 
         {
-          headers:
-            await getHeaders()
+          headers: getHeaders()
         }
 
       );
@@ -3626,12 +3630,7 @@ async function updateOrderStatus(
 
   try {
 
-    const headers =
-      await getAuthorizedHeaders();
-
-
-    headers["Prefer"] =
-      "return=representation";
+    await refreshSellerAuthentication();
 
 
     const response =
@@ -3645,7 +3644,14 @@ async function updateOrderStatus(
 
           method: "PATCH",
 
-          headers,
+          headers: {
+
+            ...getHeaders(),
+
+            "Prefer":
+              "return=representation"
+
+          },
 
           body:
             JSON.stringify({
@@ -3655,7 +3661,7 @@ async function updateOrderStatus(
 
             })
 
-        }
+          }
 
       );
 
@@ -3716,17 +3722,33 @@ document.getElementById(
   SELLER_ID;
 
 
-showAuthenticationWarning();
+/*
+  IMPORTANT:
 
-loadSellerInformation();
+  Authenticate first.
 
-loadRentalSubscription();
+  Only after the current Supabase session
+  has been recovered/refreshed do we load
+  the seller dashboard.
+*/
 
-loadProducts();
+(async function startSellerDashboard() {
 
-loadOrders(true);
+  await refreshSellerAuthentication();
 
-checkNotificationStatus();
+  showAuthenticationWarning();
+
+  loadSellerInformation();
+
+  loadRentalSubscription();
+
+  loadProducts();
+
+  loadOrders(true);
+
+  checkNotificationStatus();
+
+})();
 
 
 /* ==============================
@@ -3734,7 +3756,9 @@ checkNotificationStatus();
 ============================== */
 
 setInterval(
-  function() {
+  async function() {
+
+    await refreshSellerAuthentication();
 
     loadOrders(false);
 
