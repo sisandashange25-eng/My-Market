@@ -15,7 +15,6 @@
     content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications."
   >
 
-  <!-- Private seller dashboard: do not show in search engines -->
   <meta
     name="robots"
     content="noindex, nofollow, noarchive, nosnippet"
@@ -307,6 +306,54 @@
       margin-bottom: 10px;
     }
 
+    .rental-box {
+      background: #fff8e1;
+      border: 1px solid #f0d98c;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 12px;
+    }
+
+    .rental-box.pending {
+      background: #fff8e1;
+      border-color: #f0d98c;
+    }
+
+    .rental-box.paid {
+      background: #eaf7ef;
+      border-color: #b8dfc6;
+    }
+
+    .rental-box.failed {
+      background: #fff0f0;
+      border-color: #e0aaaa;
+    }
+
+    .rental-status {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      background: #eee;
+      margin-top: 5px;
+    }
+
+    .rental-status.pending {
+      background: #fff0b8;
+      color: #765b00;
+    }
+
+    .rental-status.paid {
+      background: #ccebd6;
+      color: #146c2e;
+    }
+
+    .rental-status.failed {
+      background: #f5c2c2;
+      color: #842029;
+    }
+
     @media (max-width: 700px) {
       .summary-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -550,13 +597,32 @@
 
       <p>
         <strong>Subscription:</strong>
-        Active
+        <span id="subscriptionStatus">Checking...</span>
       </p>
 
       <p>
-        <strong>Expires:</strong>
-        24/10/2026
+        <strong>Rental Payment:</strong>
+        <span id="rentalPaymentStatus">Checking...</span>
       </p>
+
+      <p>
+        <strong>Rental Amount:</strong>
+        <span id="rentalAmountDisplay">R100.00 / month</span>
+      </p>
+
+      <div
+        id="rentalInformation"
+        class="rental-box"
+        style="display:none;"
+      >
+
+        <strong>🏪 Store Rental</strong>
+
+        <div id="rentalMessage">
+          Checking rental payment...
+        </div>
+
+      </div>
 
     </div>
 
@@ -661,7 +727,6 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
-
 
 }
 
@@ -845,6 +910,288 @@ async function loadSellerInformation() {
       "Could not load seller information:",
       error
     );
+
+  }
+
+}
+
+
+/* ==============================
+   RENTAL / SUBSCRIPTION STATUS
+============================== */
+
+async function loadRentalSubscription() {
+
+  const subscriptionStatus =
+    document.getElementById(
+      "subscriptionStatus"
+    );
+
+  const rentalPaymentStatus =
+    document.getElementById(
+      "rentalPaymentStatus"
+    );
+
+  const rentalInformation =
+    document.getElementById(
+      "rentalInformation"
+    );
+
+  const rentalMessage =
+    document.getElementById(
+      "rentalMessage"
+    );
+
+  if (!subscriptionStatus ||
+      !rentalPaymentStatus ||
+      !rentalInformation ||
+      !rentalMessage) {
+
+    return;
+
+  }
+
+  subscriptionStatus.textContent =
+    "Checking...";
+
+  rentalPaymentStatus.textContent =
+    "Checking...";
+
+  try {
+
+    const response =
+      await fetch(
+
+        SELLER_SUPABASE_URL +
+        "/rest/v1/rental_payments?seller_id=eq." +
+        SELLER_ID +
+        "&select=id,seller_id,amount,status,payment_method,payment_reference&order=id.desc&limit=1",
+
+        {
+          headers: getHeaders()
+        }
+
+      );
+
+
+    if (!response.ok) {
+
+      console.error(
+        "Could not load rental payment:",
+        await response.text()
+      );
+
+      subscriptionStatus.textContent =
+        "Active";
+
+      rentalPaymentStatus.textContent =
+        "Unable to check";
+
+      rentalInformation.style.display =
+        "block";
+
+      rentalInformation.className =
+        "rental-box";
+
+      rentalMessage.innerHTML =
+        "Rental payment status could not be loaded right now.";
+
+      return;
+
+    }
+
+
+    const payments =
+      await response.json();
+
+
+    if (!payments.length) {
+
+      subscriptionStatus.textContent =
+        "Active";
+
+      rentalPaymentStatus.textContent =
+        "No rental record";
+
+      rentalInformation.style.display =
+        "block";
+
+      rentalInformation.className =
+        "rental-box";
+
+      rentalMessage.innerHTML = `
+
+        <p>
+          No store rental payment has been recorded yet.
+        </p>
+
+        <p>
+          <strong>Monthly rental:</strong>
+          R100.00
+        </p>
+
+      `;
+
+      return;
+
+    }
+
+
+    const rental =
+      payments[0];
+
+
+    const status =
+      String(
+        rental.status || "pending"
+      ).toLowerCase();
+
+
+    rentalInformation.style.display =
+      "block";
+
+
+    if (status === "paid") {
+
+      subscriptionStatus.textContent =
+        "Active";
+
+      rentalPaymentStatus.textContent =
+        "Paid";
+
+      rentalInformation.className =
+        "rental-box paid";
+
+      rentalMessage.innerHTML = `
+
+        <p>
+          <strong>Payment:</strong>
+          R${Number(
+            rental.amount || 100
+          ).toFixed(2)}
+        </p>
+
+        <span class="rental-status paid">
+          🟢 Rental Paid
+        </span>
+
+        <p>
+          Your store rental payment has been recorded.
+        </p>
+
+      `;
+
+    }
+
+    else if (
+      status === "failed" ||
+      status === "cancelled"
+    ) {
+
+      subscriptionStatus.textContent =
+        "Payment Required";
+
+      rentalPaymentStatus.textContent =
+        status === "failed"
+          ? "Failed"
+          : "Cancelled";
+
+      rentalInformation.className =
+        "rental-box failed";
+
+      rentalMessage.innerHTML = `
+
+        <p>
+          <strong>Amount:</strong>
+          R${Number(
+            rental.amount || 100
+          ).toFixed(2)}
+        </p>
+
+        <span class="rental-status failed">
+          🔴 ${escapeHtml(
+            status.charAt(0).toUpperCase() +
+            status.slice(1)
+          )}
+        </span>
+
+        <p>
+          Your store rental payment needs attention.
+        </p>
+
+      `;
+
+    }
+
+    else {
+
+      subscriptionStatus.textContent =
+        "Payment Pending";
+
+      rentalPaymentStatus.textContent =
+        "Pending";
+
+      rentalInformation.className =
+        "rental-box pending";
+
+      rentalMessage.innerHTML = `
+
+        <p>
+          <strong>Amount due:</strong>
+          R${Number(
+            rental.amount || 100
+          ).toFixed(2)}
+        </p>
+
+        <p>
+          <strong>Payment method:</strong>
+          ${escapeHtml(
+            rental.payment_method ||
+            "PayFast"
+          )}
+        </p>
+
+        <span class="rental-status pending">
+          🟡 Payment Pending
+        </span>
+
+        <p>
+          Your R100 monthly store rental is waiting
+          for payment confirmation.
+        </p>
+
+        <p style="color:#765b00;">
+          PayFast payment will become available after
+          ZYRE Marketing's PayFast merchant approval.
+        </p>
+
+      `;
+
+    }
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Rental subscription error:",
+      error
+    );
+
+    subscriptionStatus.textContent =
+      "Active";
+
+    rentalPaymentStatus.textContent =
+      "Unable to check";
+
+    rentalInformation.style.display =
+      "block";
+
+    rentalInformation.className =
+      "rental-box";
+
+    rentalMessage.innerHTML =
+      "Could not check the rental payment status.";
 
   }
 
@@ -1842,15 +2189,6 @@ async function loadOrders(
   if (!container) return;
 
 
-  /*
-    Only show "Loading orders..." on the
-    first load or when we explicitly force
-    a refresh.
-
-    Automatic 10-second checks will now
-    happen silently.
-  */
-
   if (
     forceRender ||
     !lastOrdersSignature
@@ -2012,11 +2350,6 @@ async function loadOrders(
     const newSignature =
       createOrdersSignature();
 
-
-    /*
-      If nothing changed, keep the current
-      Customer Orders screen exactly as it is.
-    */
 
     if (
       !forceRender &&
@@ -2855,6 +3188,8 @@ document.getElementById(
 
 loadSellerInformation();
 
+loadRentalSubscription();
+
 loadProducts();
 
 loadOrders(true);
@@ -2868,14 +3203,6 @@ checkNotificationStatus();
 
 setInterval(
   function() {
-
-    /*
-      Check silently every 10 seconds.
-
-      The dashboard will only redraw the
-      Customer Orders section if something
-      actually changed.
-    */
 
     loadOrders(false);
 
