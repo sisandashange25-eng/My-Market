@@ -709,6 +709,344 @@
 
 
     /*
+      CLEAR SELLER SESSION STORAGE
+    */
+
+    function clearSellerStorage() {
+
+      localStorage.removeItem(
+        "zava_access_token"
+      );
+
+      localStorage.removeItem(
+        "zava_user_id"
+      );
+
+      localStorage.removeItem(
+        "zava_seller_id"
+      );
+
+      localStorage.removeItem(
+        "zava_seller_email"
+      );
+
+    }
+
+
+    /*
+      CUSTOMER LOGIN VALIDATION
+
+      A customer login is ONLY allowed when
+      the authenticated account is actually
+      a customer.
+
+      If the account belongs to a seller,
+      customer login is rejected.
+    */
+
+    async function validateCustomerAccount(
+      session
+    ) {
+
+      /*
+        First check the profile role.
+      */
+
+      const {
+        data: profile,
+        error: profileError
+      } =
+        await supabaseClient
+          .from("profiles")
+          .select(
+            "id, role, full_name"
+          )
+          .eq(
+            "id",
+            session.user.id
+          )
+          .maybeSingle();
+
+
+      if (profileError) {
+
+        throw new Error(
+          profileError.message ||
+          "Could not verify the account type."
+        );
+
+      }
+
+
+      /*
+        If profile explicitly says seller
+        or seller_pending, this is NOT a
+        customer account.
+      */
+
+      if (
+        profile &&
+        (
+          profile.role === "seller_pending" ||
+          profile.role === "seller_approved" ||
+          profile.role === "seller"
+        )
+      ) {
+
+        throw new Error(
+          "This is a Seller account. Please choose Seller and use Seller Login."
+        );
+
+      }
+
+
+      /*
+        Owner/admin accounts are also not
+        customer accounts.
+      */
+
+      if (
+        profile &&
+        (
+          profile.role === "admin" ||
+          profile.role === "owner"
+        )
+      ) {
+
+        throw new Error(
+          "This account is an Owner account. Please use the private Owner Centre."
+        );
+
+      }
+
+
+      /*
+        IMPORTANT:
+        Check the sellers table too.
+
+        This catches seller accounts where
+        the profile role was not correctly
+        updated during seller registration.
+      */
+
+      const {
+        data: seller,
+        error: sellerError
+      } =
+        await supabaseClient
+          .from("sellers")
+          .select(
+            "id, user_id, store_name, approved, status"
+          )
+          .eq(
+            "user_id",
+            session.user.id
+          )
+          .maybeSingle();
+
+
+      if (sellerError) {
+
+        throw new Error(
+          sellerError.message ||
+          "Could not verify whether this is a seller account."
+        );
+
+      }
+
+
+      if (seller) {
+
+        throw new Error(
+          "This is already a Seller account" +
+          (
+            seller.store_name
+              ? " for \"" +
+                seller.store_name +
+                "\"."
+              : "."
+          ) +
+          "\n\nPlease choose Seller and use Seller Login."
+        );
+
+      }
+
+
+      /*
+        If a profile exists and its role is
+        something other than customer, do not
+        silently treat it as a customer.
+      */
+
+      if (
+        profile &&
+        profile.role &&
+        profile.role !== "customer"
+      ) {
+
+        throw new Error(
+          "This account is not registered as a Customer account."
+        );
+
+      }
+
+
+      /*
+        No profile should not be treated as
+        a customer account.
+      */
+
+      if (!profile) {
+
+        throw new Error(
+          "This account does not have a customer profile. Please choose the correct account type."
+        );
+
+      }
+
+
+      return true;
+
+    }
+
+
+    /*
+      SELLER LOGIN VALIDATION
+
+      A seller login is ONLY allowed when
+      the authenticated account has a seller
+      application.
+
+      A normal customer account is rejected.
+    */
+
+    async function getSellerAccount(
+      session
+    ) {
+
+      /*
+        First check the profile role.
+      */
+
+      const {
+        data: profile,
+        error: profileError
+      } =
+        await supabaseClient
+          .from("profiles")
+          .select(
+            "id, role, full_name"
+          )
+          .eq(
+            "id",
+            session.user.id
+          )
+          .maybeSingle();
+
+
+      if (profileError) {
+
+        throw new Error(
+          profileError.message ||
+          "Could not verify the account type."
+        );
+
+      }
+
+
+      /*
+        Owner/admin cannot use Seller Login.
+      */
+
+      if (
+        profile &&
+        (
+          profile.role === "admin" ||
+          profile.role === "owner"
+        )
+      ) {
+
+        throw new Error(
+          "This is an Owner account. Please use the private Owner Centre."
+        );
+
+      }
+
+
+      /*
+        Explicit customer profile means this
+        account is NOT a seller.
+      */
+
+      if (
+        profile &&
+        profile.role === "customer"
+      ) {
+
+        throw new Error(
+          "This is a Customer account. Customer accounts cannot sign in through Seller Login."
+        );
+
+      }
+
+
+      /*
+        Now find the seller application.
+      */
+
+      const {
+        data: seller,
+        error: sellerError
+      } =
+        await supabaseClient
+          .from("sellers")
+          .select(
+            "id, user_id, store_name, approved, status"
+          )
+          .eq(
+            "user_id",
+            session.user.id
+          )
+          .maybeSingle();
+
+
+      if (sellerError) {
+
+        throw new Error(
+          sellerError.message ||
+          "Could not check your seller application."
+        );
+
+      }
+
+
+      /*
+        No seller record means this is not
+        an existing seller account.
+
+        IMPORTANT:
+        We do NOT send a customer to the
+        seller application anymore.
+      */
+
+      if (!seller) {
+
+        throw new Error(
+          "This account is not registered as a Seller.\n\nIf you want to become a seller, please create a separate Seller account first."
+        );
+
+      }
+
+
+      return {
+        seller,
+        profile
+      };
+
+    }
+
+
+    /*
       CUSTOMER REDIRECT
     */
 
@@ -726,56 +1064,16 @@
 
         if (!session) {
 
-          showMessage(
-            "Your login was accepted, but the account session is not ready yet. Please try signing in again.",
-            "error"
-          );
-
-          return;
-        }
-
-
-        const {
-          data: profile,
-          error: profileError
-        } =
-          await supabaseClient
-            .from("profiles")
-            .select("id, role, full_name")
-            .eq("id", session.user.id)
-            .maybeSingle();
-
-
-        if (profileError) {
-
-          throw profileError;
-
-        }
-
-
-        if (!profile) {
-
-          await supabaseClient.auth.signOut();
-
           throw new Error(
-            "Customer profile could not be found."
+            "Your login session is not ready. Please try again."
           );
 
         }
 
 
-        if (
-          profile.role &&
-          profile.role !== "customer"
-        ) {
-
-          await supabaseClient.auth.signOut();
-
-          throw new Error(
-            "This account is not registered as a customer. Please choose Seller if this is your seller account."
-          );
-
-        }
+        await validateCustomerAccount(
+          session
+        );
 
 
         window.location.replace(
@@ -790,9 +1088,16 @@
           error
         );
 
+
+        await supabaseClient.auth.signOut();
+
+
+        clearSellerStorage();
+
+
         showMessage(
           error.message ||
-          "Your account was signed in, but ZYRE Marketing could not open the marketplace.",
+          "This account cannot be used as a Customer.",
           "error"
         );
 
@@ -894,6 +1199,54 @@
 
 
           try {
+
+            /*
+              Before creating a customer,
+              check whether a seller already
+              exists with this email.
+
+              This prevents an existing seller
+              from creating another customer
+              identity using the same email.
+            */
+
+            const {
+              data: existingSeller,
+              error: sellerCheckError
+            } =
+              await supabaseClient
+                .from("sellers")
+                .select(
+                  "id, email, store_name"
+                )
+                .ilike(
+                  "email",
+                  email
+                )
+                .limit(1);
+
+
+            if (sellerCheckError) {
+
+              console.error(
+                "Seller email check error:",
+                sellerCheckError
+              );
+
+            }
+
+
+            if (
+              Array.isArray(existingSeller) &&
+              existingSeller.length
+            ) {
+
+              throw new Error(
+                "This email address is already registered as a Seller account.\n\nPlease use Seller Login instead."
+              );
+
+            }
+
 
             const {
               data,
@@ -1103,6 +1456,17 @@
             }
 
 
+            /*
+              IMPORTANT:
+              Verify the account type BEFORE
+              allowing access to the marketplace.
+            */
+
+            await validateCustomerAccount(
+              data.session
+            );
+
+
             showMessage(
               "Customer signed in successfully. Opening ZYRE Marketing...",
               "success"
@@ -1110,7 +1474,13 @@
 
 
             setTimeout(
-              redirectCustomerAfterLogin,
+              function() {
+
+                window.location.replace(
+                  "index.html"
+                );
+
+              },
               500
             );
 
@@ -1123,9 +1493,31 @@
             );
 
 
+            /*
+              If the account was authenticated
+              but is not a customer, sign it out.
+            */
+
+            try {
+
+              await supabaseClient.auth.signOut();
+
+            } catch (signOutError) {
+
+              console.error(
+                "Customer sign-out error:",
+                signOutError
+              );
+
+            }
+
+
+            clearSellerStorage();
+
+
             showMessage(
               error.message ||
-              "Could not sign in as Customer.",
+              "This account cannot sign in as Customer.",
               "error"
             );
 
@@ -1134,8 +1526,6 @@
 
             button.textContent =
               "Sign In as Customer";
-
-            return;
 
           }
 
@@ -1231,100 +1621,20 @@
 
             /*
               STEP 2
-              Look for the seller application
-              belonging to this Auth user.
+              Verify that this Auth account
+              is actually a seller account.
             */
 
             const {
-              data: seller,
-              error: sellerError
+              seller
             } =
-              await supabaseClient
-                .from("sellers")
-                .select(
-                  "id, user_id, store_name, approved, status"
-                )
-                .eq(
-                  "user_id",
-                  data.user.id
-                )
-                .maybeSingle();
+              await getSellerAccount(
+                data.session
+              );
 
 
             /*
-              A real database/RLS error is NOT the
-              same as a missing seller application.
-            */
-
-            if (sellerError) {
-
-              console.error(
-                "Seller application lookup error:",
-                sellerError
-              );
-
-              throw new Error(
-                sellerError.message ||
-                "ZYRE Marketing could not check your seller application."
-              );
-
-            }
-
-
-            /*
-              NO SELLER APPLICATION YET
-              
-              The Auth account exists, but there
-              is no seller row linked to it.
-
-              Keep the Auth session active and
-              continue to seller registration.
-            */
-
-            if (!seller) {
-
-              localStorage.setItem(
-                "zava_user_id",
-                String(data.user.id)
-              );
-
-              localStorage.setItem(
-                "zava_seller_email",
-                email
-              );
-
-              localStorage.setItem(
-                "zava_access_token",
-                data.session.access_token
-              );
-
-
-              showMessage(
-                "Your ZYRE account is signed in.\n\nPlease complete your seller application before accessing the Seller Centre.",
-                "info"
-              );
-
-
-              setTimeout(
-                function() {
-
-                  window.location.replace(
-                    "seller-auth.html"
-                  );
-
-                },
-                900
-              );
-
-
-              return;
-
-            }
-
-
-            /*
-              STEP 3
-              Seller application exists.
+              APPROVED SELLER
             */
 
             const approved =
@@ -1334,10 +1644,6 @@
               seller.status ===
               "seller_approved";
 
-
-            /*
-              APPROVED SELLER
-            */
 
             if (
               approved ||
@@ -1414,9 +1720,12 @@
 
 
             showMessage(
-              "Your seller account is signed in, but your seller application is still pending approval.\n\nStore: " +
-              (seller.store_name || "Your Store") +
-              "\n\nYou cannot access the Seller Centre until ZYRE Marketing approves your application.\n\nPlease wait for your seller application to be reviewed.",
+              "Your Seller account is signed in, but your Seller application is still pending approval.\n\nStore: " +
+              (
+                seller.store_name ||
+                "Your Store"
+              ) +
+              "\n\nYou cannot access the Seller Centre until ZYRE Marketing approves your application.",
               "info"
             );
 
@@ -1435,9 +1744,32 @@
             );
 
 
+            /*
+              A customer account or any other
+              wrong account type must NOT remain
+              signed in through Seller Login.
+            */
+
+            try {
+
+              await supabaseClient.auth.signOut();
+
+            } catch (signOutError) {
+
+              console.error(
+                "Seller sign-out error:",
+                signOutError
+              );
+
+            }
+
+
+            clearSellerStorage();
+
+
             showMessage(
               error.message ||
-              "Could not sign in as Seller.",
+              "This account cannot sign in as Seller.",
               "error"
             );
 
@@ -1460,8 +1792,8 @@
       getSession() redirect when auth.html
       first opens.
 
-      This prevents auth.html and index.html
-      from repeatedly redirecting each other.
+      The selected login type must be
+      validated before any redirect.
     */
 
   </script>
