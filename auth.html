@@ -202,6 +202,7 @@
     <div class="card">
 
       <div class="tabs">
+
         <button
           type="button"
           class="tab active"
@@ -219,7 +220,9 @@
         >
           Create Account
         </button>
+
       </div>
+
 
       <!-- LOGIN -->
 
@@ -233,21 +236,27 @@
 
         <form id="loginForm">
 
-          <label for="loginEmail">Email address</label>
+          <label for="loginEmail">
+            Email address
+          </label>
 
           <input
             type="email"
             id="loginEmail"
             placeholder="you@example.com"
+            autocomplete="email"
             required
           >
 
-          <label for="loginPassword">Password</label>
+          <label for="loginPassword">
+            Password
+          </label>
 
           <input
             type="password"
             id="loginPassword"
             placeholder="Your password"
+            autocomplete="current-password"
             required
           >
 
@@ -277,7 +286,9 @@
 
         <form id="signupForm">
 
-          <label for="fullName">Full name</label>
+          <label for="fullName">
+            Full name
+          </label>
 
           <input
             type="text"
@@ -288,7 +299,9 @@
           >
 
 
-          <label for="signupEmail">Email address</label>
+          <label for="signupEmail">
+            Email address
+          </label>
 
           <input
             type="email"
@@ -299,7 +312,9 @@
           >
 
 
-          <label for="phone">Phone number</label>
+          <label for="phone">
+            Phone number
+          </label>
 
           <input
             type="tel"
@@ -310,7 +325,9 @@
           >
 
 
-          <label for="address">Physical / delivery address</label>
+          <label for="address">
+            Physical / delivery address
+          </label>
 
           <textarea
             id="address"
@@ -320,7 +337,9 @@
           ></textarea>
 
 
-          <label for="signupPassword">Create password</label>
+          <label for="signupPassword">
+            Create password
+          </label>
 
           <input
             type="password"
@@ -336,7 +355,9 @@
           </div>
 
 
-          <label for="confirmPassword">Confirm password</label>
+          <label for="confirmPassword">
+            Confirm password
+          </label>
 
           <input
             type="password"
@@ -430,9 +451,11 @@
       clearMessage();
 
       loginSection.classList.remove("hidden");
+
       signupSection.classList.add("hidden");
 
       loginTab.classList.add("active");
+
       signupTab.classList.remove("active");
     }
 
@@ -442,9 +465,11 @@
       clearMessage();
 
       loginSection.classList.add("hidden");
+
       signupSection.classList.remove("hidden");
 
       loginTab.classList.remove("active");
+
       signupTab.classList.add("active");
     }
 
@@ -461,35 +486,49 @@
     }
 
 
+    /*
+      Open the marketplace only after
+      Supabase confirms that a session exists.
+    */
+
     async function redirectAfterLogin() {
-
-      window.location.href = "index.html";
-    }
-
-
-    // CHECK IF ALREADY LOGGED IN
-
-    async function checkExistingSession() {
 
       try {
 
         const {
-          data: { session }
+          data: {
+            session
+          }
         } = await supabaseClient.auth.getSession();
 
-        if (session) {
 
-          window.location.href = "index.html";
+        if (!session) {
+
+          showMessage(
+            "Your login was accepted, but the account session is not ready yet. Please try signing in again.",
+            "error"
+          );
+
+          return;
         }
+
+
+        window.location.replace("index.html");
 
       } catch (error) {
 
         console.error(
-          "Session check error:",
+          "Redirect session check error:",
           error
         );
 
+        showMessage(
+          "Your account was signed in, but ZYRE Marketing could not open the marketplace. Please try again.",
+          "error"
+        );
+
       }
+
     }
 
 
@@ -497,302 +536,350 @@
 
     document
       .getElementById("signupForm")
-      .addEventListener("submit", async function(event) {
+      .addEventListener(
+        "submit",
+        async function(event) {
 
-        event.preventDefault();
+          event.preventDefault();
 
-        clearMessage();
-
-        const fullName =
-          document
-            .getElementById("fullName")
-            .value
-            .trim();
-
-        const email =
-          document
-            .getElementById("signupEmail")
-            .value
-            .trim()
-            .toLowerCase();
-
-        const phone =
-          document
-            .getElementById("phone")
-            .value
-            .trim();
-
-        const address =
-          document
-            .getElementById("address")
-            .value
-            .trim();
-
-        const password =
-          document
-            .getElementById("signupPassword")
-            .value;
-
-        const confirmPassword =
-          document
-            .getElementById("confirmPassword")
-            .value;
-
-        const button =
-          document.getElementById("signupButton");
+          clearMessage();
 
 
-        if (!strongPassword(password)) {
-
-          showMessage(
-            "Password must be at least 8 characters and contain uppercase and lowercase letters, a number and a special character.",
-            "error"
-          );
-
-          return;
-        }
+          const fullName =
+            document
+              .getElementById("fullName")
+              .value
+              .trim();
 
 
-        if (password !== confirmPassword) {
-
-          showMessage(
-            "The passwords do not match.",
-            "error"
-          );
-
-          return;
-        }
+          const email =
+            document
+              .getElementById("signupEmail")
+              .value
+              .trim()
+              .toLowerCase();
 
 
-        button.disabled = true;
-
-        button.textContent =
-          "Creating account...";
-
-
-        try {
-
-          const {
-            data,
-            error
-          } = await supabaseClient.auth.signUp({
-
-            email: email,
-
-            password: password,
-
-            options: {
-
-              data: {
-
-                full_name: fullName,
-
-                phone: phone,
-
-                role: "customer"
-
-              }
-
-            }
-
-          });
+          const phone =
+            document
+              .getElementById("phone")
+              .value
+              .trim();
 
 
-          if (error) {
-
-            throw error;
-          }
-
-
-          if (!data.user) {
-
-            throw new Error(
-              "The account could not be created."
-            );
-          }
+          const address =
+            document
+              .getElementById("address")
+              .value
+              .trim();
 
 
-          /*
-            Save customer profile.
-
-            The profile uses the same UUID
-            as the Supabase Auth user.
-          */
-
-          const {
-            error: profileError
-          } = await supabaseClient
-            .from("profiles")
-            .upsert({
-
-              id: data.user.id,
-
-              full_name: fullName,
-
-              phone: phone,
-
-              address: address,
-
-              role: "customer"
-
-            });
+          const password =
+            document
+              .getElementById("signupPassword")
+              .value;
 
 
-          if (profileError) {
+          const confirmPassword =
+            document
+              .getElementById("confirmPassword")
+              .value;
 
-            throw profileError;
-          }
+
+          const button =
+            document.getElementById("signupButton");
 
 
-          if (!data.session) {
+          if (!strongPassword(password)) {
 
             showMessage(
-              "Account created successfully. Please check your email and confirm your account, then sign in.",
-              "success"
+              "Password must be at least 8 characters and contain uppercase and lowercase letters, a number and a special character.",
+              "error"
             );
 
-            document
-              .getElementById("loginEmail")
-              .value = email;
+            return;
+          }
 
-            showLogin();
 
-          } else {
+          if (password !== confirmPassword) {
+
+            showMessage(
+              "The passwords do not match.",
+              "error"
+            );
+
+            return;
+          }
+
+
+          button.disabled = true;
+
+          button.textContent =
+            "Creating account...";
+
+
+          try {
+
+            const {
+              data,
+              error
+            } =
+              await supabaseClient.auth.signUp({
+
+                email: email,
+
+                password: password,
+
+                options: {
+
+                  data: {
+
+                    full_name: fullName,
+
+                    phone: phone,
+
+                    role: "customer"
+
+                  }
+
+                }
+
+              });
+
+
+            if (error) {
+
+              throw error;
+            }
+
+
+            if (!data.user) {
+
+              throw new Error(
+                "The account could not be created."
+              );
+            }
+
+
+            /*
+              Save customer profile.
+            */
+
+            const {
+              error: profileError
+            } =
+              await supabaseClient
+                .from("profiles")
+                .upsert({
+
+                  id: data.user.id,
+
+                  full_name: fullName,
+
+                  phone: phone,
+
+                  address: address,
+
+                  role: "customer"
+
+                });
+
+
+            if (profileError) {
+
+              throw profileError;
+            }
+
+
+            /*
+              If email confirmation is enabled,
+              Supabase will not create a session yet.
+            */
+
+            if (!data.session) {
+
+              showMessage(
+                "Account created successfully. Please check your email and confirm your account, then sign in.",
+                "success"
+              );
+
+
+              document
+                .getElementById("loginEmail")
+                .value = email;
+
+
+              showLogin();
+
+              return;
+            }
+
 
             showMessage(
               "Account created successfully. Opening ZYRE Marketing...",
               "success"
             );
 
+
             setTimeout(
               redirectAfterLogin,
-              1000
+              500
             );
+
+
+          } catch (error) {
+
+            console.error(
+              "Account creation error:",
+              error
+            );
+
+
+            showMessage(
+              error.message ||
+              "Could not create your account.",
+              "error"
+            );
+
+
+          } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+              "Create Customer Account";
+
           }
 
-
-        } catch (error) {
-
-          console.error(
-            "Account creation error:",
-            error
-          );
-
-          showMessage(
-            error.message ||
-            "Could not create your account.",
-            "error"
-          );
-
-        } finally {
-
-          button.disabled = false;
-
-          button.textContent =
-            "Create Customer Account";
         }
-
-      });
+      );
 
 
     // LOGIN
 
     document
       .getElementById("loginForm")
-      .addEventListener("submit", async function(event) {
+      .addEventListener(
+        "submit",
+        async function(event) {
 
-        event.preventDefault();
+          event.preventDefault();
 
-        clearMessage();
-
-        const email =
-          document
-            .getElementById("loginEmail")
-            .value
-            .trim()
-            .toLowerCase();
-
-        const password =
-          document
-            .getElementById("loginPassword")
-            .value;
-
-        const button =
-          document.getElementById("loginButton");
+          clearMessage();
 
 
-        button.disabled = true;
-
-        button.textContent =
-          "Signing in...";
-
-
-        try {
-
-          const {
-            data,
-            error
-          } = await supabaseClient.auth
-            .signInWithPassword({
-
-              email: email,
-
-              password: password
-
-            });
+          const email =
+            document
+              .getElementById("loginEmail")
+              .value
+              .trim()
+              .toLowerCase();
 
 
-          if (error) {
-
-            throw error;
-          }
-
-
-          if (!data.session) {
-
-            throw new Error(
-              "Login succeeded but no session was created."
-            );
-          }
+          const password =
+            document
+              .getElementById("loginPassword")
+              .value;
 
 
-          showMessage(
-            "Signed in successfully. Opening ZYRE Marketing...",
-            "success"
-          );
+          const button =
+            document.getElementById("loginButton");
 
 
-          setTimeout(
-            redirectAfterLogin,
-            700
-          );
-
-
-        } catch (error) {
-
-          console.error(
-            "Login error:",
-            error
-          );
-
-          showMessage(
-            error.message ||
-            "Could not sign in.",
-            "error"
-          );
-
-        } finally {
-
-          button.disabled = false;
+          button.disabled = true;
 
           button.textContent =
-            "Sign In";
+            "Signing in...";
+
+
+          try {
+
+            const {
+              data,
+              error
+            } =
+              await supabaseClient.auth
+                .signInWithPassword({
+
+                  email: email,
+
+                  password: password
+
+                });
+
+
+            if (error) {
+
+              throw error;
+            }
+
+
+            if (!data || !data.session) {
+
+              throw new Error(
+                "Login succeeded but no session was created."
+              );
+            }
+
+
+            /*
+              Give Supabase a moment to persist
+              the authenticated session before
+              changing pages.
+            */
+
+            showMessage(
+              "Signed in successfully. Opening ZYRE Marketing...",
+              "success"
+            );
+
+
+            setTimeout(
+              redirectAfterLogin,
+              500
+            );
+
+
+          } catch (error) {
+
+            console.error(
+              "Login error:",
+              error
+            );
+
+
+            showMessage(
+              error.message ||
+              "Could not sign in.",
+              "error"
+            );
+
+
+            button.disabled = false;
+
+            button.textContent =
+              "Sign In";
+
+            return;
+
+          }
+
+
+          button.disabled = true;
+
         }
+      );
 
-      });
 
+    /*
+      IMPORTANT:
+      There is intentionally NO automatic
+      getSession() redirect when auth.html
+      first opens.
 
-    checkExistingSession();
+      This prevents auth.html and index.html
+      from repeatedly redirecting each other.
+    */
 
   </script>
 
