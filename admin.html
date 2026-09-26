@@ -1283,55 +1283,36 @@ return d;
    OWNER PROFILE CHECK
 ========================================================= */
 
-async function verifyOwnerProfile(userId,token){
-
 /*
- We try the common Supabase/PostgREST naming
- possibilities because the database may expose
- the table/columns using different casing.
+ FIXED:
+
+ The previous code used:
+
+ profiles?select=*&Id=eq...
+
+ Supabase/PostgREST reported:
+
+ column profiles.Id does not exist
+
+ The profile query now uses the normal lowercase
+ Supabase columns:
+
+ id
+ role
 */
 
-const attempts=[
+async function verifyOwnerProfile(userId,token){
 
-{
-name:"Profiles / Id / Role",
-url:
-SUPABASE_URL+
-"/rest/v1/Profiles?select=*&Id=eq."+
-encodeURIComponent(userId)+
-"&limit=1"
-},
-
-{
-name:"profiles / Id / Role",
-url:
-SUPABASE_URL+
-"/rest/v1/profiles?select=*&Id=eq."+
-encodeURIComponent(userId)+
-"&limit=1"
-},
-
-{
-name:"profiles / id / role",
-url:
-SUPABASE_URL+
-"/rest/v1/profiles?select=*&id=eq."+
-encodeURIComponent(userId)+
-"&limit=1"
-}
-
-];
-
-let lastError="Owner profile was not found.";
+const profileUrl =
+SUPABASE_URL +
+"/rest/v1/profiles?select=id,role&id=eq." +
+encodeURIComponent(userId) +
+"&limit=1";
 
 
-for(const attempt of attempts){
-
-try{
-
-const response=
+const response =
 await fetch(
-attempt.url,
+profileUrl,
 {
 method:"GET",
 
@@ -1347,14 +1328,17 @@ headers:{
 }
 );
 
-const text=
+
+const text =
 await response.text();
 
 let data=null;
 
+
 try{
 
-data=text
+data=
+text
 ?JSON.parse(text)
 :null;
 
@@ -1367,56 +1351,53 @@ data=null;
 
 if(!response.ok){
 
-lastError=
-(data&&data.message) ||
-(data&&data.error) ||
-lastError;
+throw new Error(
 
-continue;
+(data&&data.message) ||
+
+(data&&data.error) ||
+
+(data&&data.error_description) ||
+
+"Could not verify your owner profile."
+
+);
 
 }
 
 
 if(
-Array.isArray(data) &&
-data.length>0
+!Array.isArray(data) ||
+data.length===0
 ){
 
-const row=data[0];
-
-const role=
-String(
-row.Role ??
-row.role ??
-""
-).trim().toLowerCase();
-
-
-if(role==="admin"){
-
-return row;
-
-}
-
-
 throw new Error(
-"This account is not authorised as a ZYRE owner."
+"Owner profile was not found. Make sure your account has a row in the profiles table."
 );
 
 }
 
-}catch(error){
 
-lastError=
-error.message ||
-lastError;
+const profile=data[0];
+
+const role=
+String(
+profile.role || ""
+)
+.trim()
+.toLowerCase();
+
+
+if(role!=="admin"){
+
+throw new Error(
+"This account is not authorised as a ZYRE owner. Your profile role must be admin."
+);
 
 }
 
-}
 
-
-throw new Error(lastError);
+return profile;
 
 }
 
