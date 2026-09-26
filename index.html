@@ -241,28 +241,35 @@
 
 
     /*
-      Show a temporary loading screen while
-      we check whether the visitor is logged in.
+      Authentication and marketplace loading
+      are started only after the page body
+      has been created.
     */
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
 
-      const loading =
-        document.createElement("div");
+        const loading =
+          document.createElement("div");
 
-      loading.id =
-        "zyreAuthLoading";
+        loading.id =
+          "zyreAuthLoading";
 
-      loading.innerHTML = `
-        <div class="auth-logo">ZYRE</div>
-        <div class="auth-text">
-          Checking your account...
-        </div>
-      `;
+        loading.innerHTML = `
+          <div class="auth-logo">ZYRE</div>
+          <div class="auth-text">
+            Checking your account...
+          </div>
+        `;
 
-      document.body.appendChild(loading);
+        document.body.appendChild(loading);
 
-    });
+
+        zyreCheckAuthentication();
+
+      }
+    );
 
 
     async function zyreCheckAuthentication() {
@@ -285,8 +292,9 @@
             error
           );
 
-          window.location.href =
-            "auth.html";
+          window.location.replace(
+            "auth.html"
+          );
 
           return;
 
@@ -311,7 +319,8 @@
 
         /*
           Authenticated:
-          allow the marketplace to load.
+          make the current session available
+          to the marketplace.
         */
 
         window.ZYRE_CURRENT_SESSION =
@@ -319,16 +328,17 @@
 
 
         /*
-          Load the existing marketplace
-          JavaScript only after authentication
-          has been confirmed.
+          Load app.js only AFTER the body exists
+          and authentication has been confirmed.
         */
 
         const marketplaceScript =
           document.createElement("script");
 
+
         marketplaceScript.src =
-          "app.js?v=5003";
+          "app.js?v=5004";
+
 
         marketplaceScript.onload =
           function () {
@@ -337,13 +347,17 @@
               "zyre-auth-ready"
             );
 
+
             const loading =
               document.getElementById(
                 "zyreAuthLoading"
               );
 
+
             if (loading) {
+
               loading.remove();
+
             }
 
           };
@@ -352,19 +366,27 @@
         marketplaceScript.onerror =
           function () {
 
+            console.error(
+              "ZYRE app.js could not be loaded."
+            );
+
+
             document.body.classList.add(
               "zyre-auth-ready"
             );
+
 
             const loading =
               document.getElementById(
                 "zyreAuthLoading"
               );
 
+
             if (loading) {
 
               loading.innerHTML = `
                 <div class="auth-logo">ZYRE</div>
+
                 <div class="auth-text">
                   Marketplace could not be loaded.
                   Please refresh the page.
@@ -388,6 +410,7 @@
           error
         );
 
+
         window.location.replace(
           "auth.html"
         );
@@ -395,9 +418,6 @@
       }
 
     }
-
-
-    zyreCheckAuthentication();
 
   </script>
 
