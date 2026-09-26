@@ -1,11 +1,17 @@
-<!DOCTYPE html><html lang="en">
-<head><meta charset="UTF-8"><meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
-«»
+<meta charset="UTF-8">
 
-<title>ZYRE Marketing - Pay Now</title><style>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>ZYRE Marketing - Pay Now</title>
+
+<style>
 
 * {
   box-sizing: border-box;
@@ -213,175 +219,199 @@ body {
   font-size: 15px;
 }
 
-</style></head><body><header class="header">  <div class="logo">
+</style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="logo">
     ZYRE
-  </div>  <div class="subtitle">
+  </div>
+
+  <div class="subtitle">
     ZYRE Marketing
-  </div></header><main class="container">  <div class="card"><div class="test-badge">
-  🧪 TEST PAYMENT
-</div>
-
-<div class="title">
-  💳 Pay Now
-</div>
-
-<div
-  id="orderNumber"
-  class="order-number"
->
-  Order: Loading...
-</div>
-
-
-<div
-  id="errorBox"
-  class="error"
->
-  Payment information could not be loaded.
-</div>
-
-
-<div
-  id="successBox"
-  class="success"
->
-  Payment completed successfully.
-</div>
-
-
-<div
-  id="productBox"
-  class="product"
->
-
-  <div
-    id="productName"
-    class="product-name"
-  >
-    Loading product...
   </div>
 
-  <div
-    id="productInfo"
-    class="product-info"
-  >
-    Please wait...
+</header>
+
+
+<main class="container">
+
+  <div class="card">
+
+    <div class="test-badge">
+      🧪 TEST PAYMENT
+    </div>
+
+    <div class="title">
+      💳 Pay Now
+    </div>
+
+    <div
+      id="orderNumber"
+      class="order-number"
+    >
+      Order: Loading...
+    </div>
+
+    <div
+      id="errorBox"
+      class="error"
+    >
+      Payment information could not be loaded.
+    </div>
+
+    <div
+      id="successBox"
+      class="success"
+    >
+      Payment completed successfully.
+    </div>
+
+    <div
+      id="productBox"
+      class="product"
+    >
+
+      <div
+        id="productName"
+        class="product-name"
+      >
+        Loading product...
+      </div>
+
+      <div
+        id="productInfo"
+        class="product-info"
+      >
+        Please wait...
+      </div>
+
+    </div>
+
+    <div class="total-box">
+
+      <div class="total-label">
+        Total
+      </div>
+
+      <div
+        id="totalAmount"
+        class="total"
+      >
+        R0.00
+      </div>
+
+    </div>
+
+    <div
+      id="breakdown"
+      class="breakdown"
+    >
+
+      <div class="breakdown-row">
+
+        <span>
+          Order amount
+        </span>
+
+        <strong id="breakdownAmount">
+          R0.00
+        </strong>
+
+      </div>
+
+      <div class="breakdown-row">
+
+        <span>
+          ZYRE Commission (10%)
+        </span>
+
+        <strong id="breakdownCommission">
+          R0.00
+        </strong>
+
+      </div>
+
+      <div class="breakdown-row">
+
+        <span>
+          Seller amount (90%)
+        </span>
+
+        <strong id="breakdownSeller">
+          R0.00
+        </strong>
+
+      </div>
+
+    </div>
+
   </div>
 
-</div>
 
+  <div class="card">
 
-<div class="total-box">
+    <button
+      id="payButton"
+      class="pay-button"
+      onclick="payNow()"
+      disabled
+    >
+      🧪 Complete Test Payment
+    </button>
 
-  <div class="total-label">
-    Total
-  </div>
+    <div class="secure">
 
-  <div
-    id="totalAmount"
-    class="total"
-  >
-    R0.00
-  </div>
+      🔒 Your order information is securely linked
+      to your ZYRE Marketing order.
 
-</div>
+    </div>
 
+    <div class="notice">
 
-<div
-  id="breakdown"
-  class="breakdown"
->
+      <strong>TEST PAYMENT MODE</strong><br>
 
-  <div class="breakdown-row">
+      This is a temporary ZYRE Marketing test
+      payment system.
 
-    <span>
-      Order amount
-    </span>
+      <br><br>
 
-    <strong id="breakdownAmount">
-      R0.00
-    </strong>
+      When the test payment is completed,
+      ZYRE automatically receives 10% commission
+      and the seller receives 90%.
 
-  </div>
+      <br><br>
 
+      Real PayFast processing will be connected
+      separately when your PayFast integration is
+      ready.
 
-  <div class="breakdown-row">
+    </div>
 
-    <span>
-      ZYRE Commission (10%)
-    </span>
-
-    <strong id="breakdownCommission">
-      R0.00
-    </strong>
-
-  </div>
-
-
-  <div class="breakdown-row">
-
-    <span>
-      Seller amount (90%)
-    </span>
-
-    <strong id="breakdownSeller">
-      R0.00
-    </strong>
+    <a
+      href="./index.html"
+      class="back"
+    >
+      ← Back to ZYRE Marketing
+    </a>
 
   </div>
 
-</div>
-
-  </div>  <div class="card"><button
-  id="payButton"
-  class="pay-button"
-  onclick="payNow()"
-  disabled
->
-  🧪 Complete Test Payment
-</button>
+</main>
 
 
-<div class="secure">
+<footer class="footer">
 
-  🔒 Your order information is securely linked
-  to your ZYRE Marketing order.
+© 2026 ZYRE Marketing
 
-</div>
-
-
-<div class="notice">
-
-  <strong>TEST PAYMENT MODE</strong><br>
-
-  This is a temporary ZYRE Marketing test
-  payment system.
-
-  <br><br>
-
-  When the test payment is completed,
-  ZYRE automatically receives 10% commission
-  and the seller receives 90%.
-
-  <br><br>
-
-  Real PayFast processing will be connected
-  separately when your PayFast integration is
-  ready.
-
-</div>
+</footer>
 
 
-<a
-  href="./index.html"
-  class="back"
->
-  ← Back to ZYRE Marketing
-</a>
-
-  </div></main><footer class="footer">© 2026 ZYRE Marketing
-
-</footer><script>
+<script>
 
 /* =========================================
    SUPABASE
@@ -403,21 +433,17 @@ const params =
     window.location.search
   );
 
-
 const orderId =
   params.get("order_id") || "";
-
 
 const amount =
   Number(
     params.get("amount") || 0
   );
 
-
 const itemName =
   params.get("item_name") ||
   "ZYRE Marketing Order";
-
 
 const customerId =
   params.get("customer_id") || "";
@@ -431,7 +457,6 @@ const zyreCommission =
   Math.round(
     amount * 0.10 * 100
   ) / 100;
-
 
 const sellerAmount =
   Math.round(
@@ -553,7 +578,6 @@ function displayPaymentInformation() {
       "payButton"
     );
 
-
   if (
     !orderId ||
     !Number.isFinite(amount) ||
@@ -571,15 +595,12 @@ function displayPaymentInformation() {
 
   }
 
-
   orderNumber.textContent =
     "Order #" +
     orderId;
 
-
   productName.textContent =
     itemName;
-
 
   productInfo.innerHTML =
     "Order #" +
@@ -588,11 +609,9 @@ function displayPaymentInformation() {
     "Amount due: R" +
     amount.toFixed(2);
 
-
   totalAmount.textContent =
     "R" +
     amount.toFixed(2);
-
 
   document.getElementById(
     "breakdownAmount"
@@ -600,20 +619,17 @@ function displayPaymentInformation() {
     "R" +
     amount.toFixed(2);
 
-
   document.getElementById(
     "breakdownCommission"
   ).textContent =
     "R" +
     zyreCommission.toFixed(2);
 
-
   document.getElementById(
     "breakdownSeller"
   ).textContent =
     "R" +
     sellerAmount.toFixed(2);
-
 
   payButton.disabled =
     false;
@@ -628,15 +644,21 @@ function displayPaymentInformation() {
 async function findOrderSeller() {
 
   /*
-    Get the order items belonging to this order.
-    Your marketplace uses the orders_items table.
+    IMPORTANT:
+    The correct Supabase table is:
+
+    order_items
+
+    NOT:
+
+    orders_items
   */
 
   const itemsResponse =
     await fetch(
 
       SUPABASE_URL +
-      "/rest/v1/orders_items?order_id=eq." +
+      "/rest/v1/order_items?order_id=eq." +
       encodeURIComponent(orderId) +
       "&select=*",
 
@@ -1303,5 +1325,7 @@ async function payNow() {
 
 displayPaymentInformation();
 
-</script></body>
+</script>
+
+</body>
 </html>
