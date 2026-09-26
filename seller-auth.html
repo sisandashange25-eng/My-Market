@@ -312,6 +312,7 @@ MESSAGE
   margin-bottom: 18px;
   font-size: 13px;
   line-height: 1.5;
+  white-space: pre-line;
 }
 
 .message.error {
@@ -425,10 +426,6 @@ MOBILE
 
 <body>
 
-<!-- =========================
-HEADER
-========================= -->
-
 <header class="header">
 
   <div class="brand">
@@ -464,10 +461,6 @@ HEADER
 </header>
 
 
-<!-- =========================
-MAIN
-========================= -->
-
 <main class="main">
 
   <section class="intro">
@@ -488,9 +481,7 @@ MAIN
   <section class="auth-grid">
 
 
-    <!-- =========================
-    REGISTER
-    ========================= -->
+    <!-- REGISTER -->
 
     <div class="card">
 
@@ -665,11 +656,9 @@ MAIN
           >
 
           <label for="terms">
-
             I agree to the ZYRE Marketing seller
             terms and understand that my store may
             require approval before selling.
-
           </label>
 
         </div>
@@ -693,43 +682,23 @@ MAIN
         </h3>
 
         <div class="benefit">
-
           <span class="benefit-icon">🏪</span>
-
-          <span>
-            Your own marketplace store
-          </span>
-
+          <span>Your own marketplace store</span>
         </div>
 
         <div class="benefit">
-
           <span class="benefit-icon">📦</span>
-
-          <span>
-            Product and inventory management
-          </span>
-
+          <span>Product and inventory management</span>
         </div>
 
         <div class="benefit">
-
           <span class="benefit-icon">🛍️</span>
-
-          <span>
-            Access to ZYRE customers
-          </span>
-
+          <span>Access to ZYRE customers</span>
         </div>
 
         <div class="benefit">
-
           <span class="benefit-icon">💰</span>
-
-          <span>
-            Seller earnings and payout management
-          </span>
-
+          <span>Seller earnings and payout management</span>
         </div>
 
       </div>
@@ -737,9 +706,7 @@ MAIN
     </div>
 
 
-    <!-- =========================
-    LOGIN
-    ========================= -->
+    <!-- LOGIN -->
 
     <div class="card">
 
@@ -836,43 +803,23 @@ MAIN
         </h3>
 
         <div class="benefit">
-
           <span class="benefit-icon">📊</span>
-
-          <span>
-            View your store performance
-          </span>
-
+          <span>View your store performance</span>
         </div>
 
         <div class="benefit">
-
           <span class="benefit-icon">➕</span>
-
-          <span>
-            Add and manage products
-          </span>
-
+          <span>Add and manage products</span>
         </div>
 
         <div class="benefit">
-
           <span class="benefit-icon">📦</span>
-
-          <span>
-            Manage customer orders
-          </span>
-
+          <span>Manage customer orders</span>
         </div>
 
         <div class="benefit">
-
           <span class="benefit-icon">🔔</span>
-
-          <span>
-            Receive new order notifications
-          </span>
-
+          <span>Receive new order notifications</span>
         </div>
 
       </div>
@@ -985,6 +932,308 @@ function togglePassword(
 
 
 /* =========================
+AUTH HELPER
+========================= */
+
+async function loginExistingUser(
+  email,
+  password
+) {
+
+  const response =
+    await fetch(
+      SUPABASE_URL +
+      "/auth/v1/token?grant_type=password",
+      {
+
+        method: "POST",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Content-Type":
+            "application/json"
+
+        },
+
+        body:
+          JSON.stringify({
+
+            email:
+              email,
+
+            password:
+              password
+
+          })
+
+      }
+    );
+
+
+  const text =
+    await response.text();
+
+  let data = {};
+
+  try {
+
+    data =
+      text
+        ? JSON.parse(text)
+        : {};
+
+  } catch {
+
+    data = {};
+
+  }
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      data.error_description ||
+      data.msg ||
+      data.message ||
+      text ||
+      "The existing account could not be signed in."
+    );
+
+  }
+
+
+  return data;
+
+}
+
+
+/* =========================
+CREATE SELLER STORE
+========================= */
+
+async function createSellerStore(
+  userId,
+  accessToken,
+  fullName,
+  storeName,
+  phone,
+  description,
+  email
+) {
+
+  /*
+  IMPORTANT:
+  We deliberately DO NOT change the
+  existing profile role here.
+
+  This protects an existing admin account.
+  */
+
+  /* =========================
+  CHECK EXISTING SELLER
+  ========================= */
+
+  const existingSellerResponse =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/sellers?user_id=eq." +
+      encodeURIComponent(userId) +
+      "&select=id,store_name,approved,email",
+
+      {
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            accessToken
+
+        }
+
+      }
+
+    );
+
+
+  if (!existingSellerResponse.ok) {
+
+    throw new Error(
+      "We could not check your existing seller store.\n\n" +
+      await existingSellerResponse.text()
+    );
+
+  }
+
+
+  const existingSellers =
+    await existingSellerResponse.json();
+
+
+  if (
+    Array.isArray(existingSellers) &&
+    existingSellers.length > 0
+  ) {
+
+    return {
+      sellerId:
+        existingSellers[0].id,
+
+      existingStore:
+        existingSellers[0].store_name,
+
+      alreadyExists:
+        true,
+
+      approved:
+        existingSellers[0].approved === true
+    };
+
+  }
+
+
+  /* =========================
+  CREATE SELLER
+  ========================= */
+
+  const sellerResponse =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/sellers",
+
+      {
+
+        method: "POST",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            accessToken,
+
+          "Content-Type":
+            "application/json",
+
+          "Prefer":
+            "return=representation"
+
+        },
+
+        body:
+          JSON.stringify({
+
+            user_id:
+              userId,
+
+            store_name:
+              storeName,
+
+            description:
+              description,
+
+            approved:
+              false,
+
+            email:
+              email
+
+          })
+
+      }
+
+    );
+
+
+  if (!sellerResponse.ok) {
+
+    throw new Error(
+      "Your login account is valid, but ISTHIXO could not be created.\n\n" +
+      await sellerResponse.text()
+    );
+
+  }
+
+
+  const sellerData =
+    await sellerResponse.json();
+
+
+  const sellerId =
+    sellerData[0]?.id ||
+    null;
+
+
+  if (!sellerId) {
+
+    throw new Error(
+      "ISTHIXO was created, but the seller ID was not returned."
+    );
+
+  }
+
+
+  return {
+    sellerId:
+      sellerId,
+
+    existingStore:
+      storeName,
+
+    alreadyExists:
+      false,
+
+    approved:
+      false
+  };
+
+}
+
+
+/* =========================
+SAVE SELLER SESSION
+========================= */
+
+function saveSellerSession(
+  accessToken,
+  userId,
+  sellerId,
+  email
+) {
+
+  localStorage.setItem(
+    "zava_access_token",
+    accessToken
+  );
+
+  localStorage.setItem(
+    "zava_user_id",
+    userId
+  );
+
+  localStorage.setItem(
+    "zava_seller_id",
+    sellerId
+  );
+
+  localStorage.setItem(
+    "zava_seller_email",
+    email
+  );
+
+}
+
+
+/* =========================
 REGISTER
 ========================= */
 
@@ -1091,17 +1340,42 @@ document
       }
 
 
+      if (
+        !storeName
+      ) {
+
+        showMessage(
+          "registerMessage",
+          "Please enter your store name.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
       button.disabled =
         true;
 
       button.textContent =
-        "Creating account...";
+        "Checking account...";
 
 
       try {
 
+        let accessToken =
+          null;
+
+        let userId =
+          null;
+
+        let isExistingAccount =
+          false;
+
+
         /* =========================
-        CREATE AUTH ACCOUNT
+        TRY NEW ACCOUNT FIRST
         ========================= */
 
         const signupResponse =
@@ -1137,10 +1411,7 @@ document
                       fullName,
 
                     phone:
-                      phone,
-
-                    store_name:
-                      storeName
+                      phone
 
                   }
 
@@ -1171,45 +1442,213 @@ document
         }
 
 
+        /* =========================
+        NEW USER
+        ========================= */
+
         if (
-          !signupResponse.ok
+          signupResponse.ok
         ) {
 
-          const errorMessage =
-            signupData.msg ||
-            signupData.message ||
-            signupData.error_description ||
-            signupText ||
-            "The seller account could not be created.";
+          userId =
+            signupData.user?.id ||
+            signupData.id ||
+            null;
+
+          accessToken =
+            signupData.access_token ||
+            null;
+
+          if (!userId) {
+
+            throw new Error(
+              "Your account was created, but Supabase did not return the user ID."
+            );
+
+          }
 
 
-          showMessage(
-            "registerMessage",
-            errorMessage,
-            "error"
-          );
+          /*
+          Email confirmation may be required.
+          */
 
-          return;
+          if (!accessToken) {
+
+            showMessage(
+              "registerMessage",
+              "Your account has been created. Please confirm your email address first, then return here and sign in.",
+              "success"
+            );
+
+            document
+              .getElementById(
+                "loginEmail"
+              )
+              .value =
+              email;
+
+            return;
+
+          }
 
         }
 
 
-        const userId =
-          signupData.user?.id ||
-          signupData.id ||
-          null;
+        /* =========================
+        EXISTING USER
+        ========================= */
+
+        else {
+
+          const combinedError =
+            (
+              signupData.msg ||
+              signupData.message ||
+              signupData.error_description ||
+              signupText ||
+              ""
+            ).toLowerCase();
 
 
-        const accessToken =
-          signupData.access_token ||
-          null;
+          const alreadyRegistered =
+            combinedError.includes(
+              "already registered"
+            ) ||
+            combinedError.includes(
+              "already exists"
+            ) ||
+            combinedError.includes(
+              "user already"
+            );
 
 
-        if (!userId) {
+          if (
+            !alreadyRegistered
+          ) {
+
+            throw new Error(
+              signupData.msg ||
+              signupData.message ||
+              signupData.error_description ||
+              signupText ||
+              "The seller account could not be created."
+            );
+
+          }
+
+
+          /*
+          The Auth user already exists.
+          Sign into that existing account
+          using the password entered in
+          the registration form.
+          */
+
+          button.textContent =
+            "Signing in to existing account...";
+
+          const existingLogin =
+            await loginExistingUser(
+              email,
+              password
+            );
+
+
+          accessToken =
+            existingLogin.access_token;
+
+          userId =
+            existingLogin.user?.id;
+
+
+          if (
+            !accessToken ||
+            !userId
+          ) {
+
+            throw new Error(
+              "The existing account could not be signed in."
+            );
+
+          }
+
+
+          isExistingAccount =
+            true;
+
+        }
+
+
+        /* =========================
+        CREATE SELLER STORE
+        ========================= */
+
+        button.textContent =
+          "Creating ISTHIXO...";
+
+
+        const seller =
+          await createSellerStore(
+            userId,
+            accessToken,
+            fullName,
+            storeName,
+            phone,
+            description,
+            email
+          );
+
+
+        /* =========================
+        SAVE SESSION
+        ========================= */
+
+        saveSellerSession(
+          accessToken,
+          userId,
+          seller.sellerId,
+          email
+        );
+
+
+        /* =========================
+        EXISTING STORE
+        ========================= */
+
+        if (
+          seller.alreadyExists
+        ) {
+
+          if (
+            seller.approved
+          ) {
+
+            showMessage(
+              "registerMessage",
+              "Your seller store already exists and is approved. Redirecting to Seller Centre...",
+              "success"
+            );
+
+            setTimeout(
+              function() {
+
+                window.location.href =
+                  "seller.html";
+
+              },
+              1200
+            );
+
+            return;
+
+          }
+
 
           showMessage(
             "registerMessage",
-            "Your account was created, but Supabase did not return the user ID. Please try logging in with your email and password.",
+            "This account already has a seller store: " +
+            seller.existingStore +
+            ". It is still waiting for ZYRE Marketing approval.",
             "info"
           );
 
@@ -1218,332 +1657,27 @@ document
         }
 
 
-        /*
-        Supabase may require email confirmation.
-        If there is no access token yet, the account
-        cannot safely create the seller record from
-        this browser session.
-        */
-
-        if (!accessToken) {
-
-          showMessage(
-            "registerMessage",
-            "Your account has been created. Please check your email and confirm your email address. After confirmation, return here and sign in.",
-            "success"
-          );
-
-          document
-            .getElementById(
-              "loginEmail"
-            )
-            .value =
-            email;
-
-          return;
-
-        }
-
-
         /* =========================
-        CREATE / UPDATE PROFILE
+        NEW SELLER STORE
         ========================= */
-
-        const profileResponse =
-          await fetch(
-            SUPABASE_URL +
-            "/rest/v1/profiles",
-            {
-
-              method: "POST",
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Authorization":
-                  "Bearer " +
-                  accessToken,
-
-                "Content-Type":
-                  "application/json",
-
-                "Prefer":
-                  "resolution=merge-duplicates,return=representation"
-
-              },
-
-              body:
-                JSON.stringify({
-
-                  id:
-                    userId,
-
-                  full_name:
-                    fullName,
-
-                  phone:
-                    phone,
-
-                  role:
-                    "seller"
-
-                })
-
-            }
-          );
-
-
-        if (
-          !profileResponse.ok
-        ) {
-
-          showMessage(
-            "registerMessage",
-            "Your login account was created, but the seller profile could not be created.\n\n" +
-            await profileResponse.text(),
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        /* =========================
-        CHECK EXISTING SELLER
-        ========================= */
-
-        const existingSellerResponse =
-          await fetch(
-
-            SUPABASE_URL +
-            "/rest/v1/sellers?user_id=eq." +
-            encodeURIComponent(
-              userId
-            ) +
-            "&select=id,store_name,approved",
-
-            {
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Authorization":
-                  "Bearer " +
-                  accessToken
-
-              }
-
-            }
-
-          );
-
-
-        if (
-          !existingSellerResponse.ok
-        ) {
-
-          showMessage(
-            "registerMessage",
-            "Your account was created, but we could not check the seller store.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        const existingSellers =
-          await existingSellerResponse.json();
-
-
-        let sellerId =
-          existingSellers.length
-            ? existingSellers[0].id
-            : null;
-
-
-        /* =========================
-        CREATE SELLER
-        ========================= */
-
-        if (!sellerId) {
-
-          const sellerResponse =
-            await fetch(
-
-              SUPABASE_URL +
-              "/rest/v1/sellers",
-
-              {
-
-                method: "POST",
-
-                headers: {
-
-                  "apikey":
-                    SUPABASE_KEY,
-
-                  "Authorization":
-                    "Bearer " +
-                    accessToken,
-
-                  "Content-Type":
-                    "application/json",
-
-                  "Prefer":
-                    "return=representation"
-
-                },
-
-                body:
-                  JSON.stringify({
-
-                    user_id:
-                      userId,
-
-                    store_name:
-                      storeName,
-
-                    description:
-                      description,
-
-                    approved:
-                      false,
-
-                    email:
-                      email
-
-                  })
-
-              }
-
-            );
-
-
-          if (
-            !sellerResponse.ok
-          ) {
-
-            showMessage(
-              "registerMessage",
-              "Your account was created, but your seller store could not be created.\n\n" +
-              await sellerResponse.text(),
-              "error"
-            );
-
-            return;
-
-          }
-
-
-          const sellerData =
-            await sellerResponse.json();
-
-
-          sellerId =
-            sellerData[0]?.id ||
-            null;
-
-        }
-
-
-        if (!sellerId) {
-
-          showMessage(
-            "registerMessage",
-            "Your seller account was created, but the seller ID could not be found.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        /* =========================
-        SAVE SESSION
-        ========================= */
-
-        localStorage.setItem(
-          "zava_access_token",
-          accessToken
-        );
-
-        localStorage.setItem(
-          "zava_user_id",
-          userId
-        );
-
-        localStorage.setItem(
-          "zava_seller_id",
-          sellerId
-        );
-
-        localStorage.setItem(
-          "zava_seller_email",
-          email
-        );
-
-
-        /* =========================
-        CHECK APPROVAL
-        ========================= */
-
-        const currentSeller =
-          existingSellers.length
-            ? existingSellers[0]
-            : null;
-
-
-        if (
-          currentSeller &&
-          currentSeller.approved === true
-        ) {
-
-          showMessage(
-            "registerMessage",
-            "Your seller account is ready. Redirecting to Seller Centre...",
-            "success"
-          );
-
-          setTimeout(
-            function() {
-
-              window.location.href =
-                "seller.html";
-
-            },
-            1200
-          );
-
-          return;
-
-        }
-
 
         showMessage(
           "registerMessage",
-          "🎉 Your seller account and store have been created. Your store is now waiting for ZYRE Marketing approval.",
+          "🎉 ISTHIXO has been created successfully!\n\nYour store is now waiting for ZYRE Marketing approval.\n\nYour existing login account has been kept unchanged.",
           "success"
         );
 
 
         button.textContent =
-          "Application Submitted";
+          "ISTHIXO Submitted";
 
 
       } catch (error) {
 
         showMessage(
           "registerMessage",
-          "Registration failed.\n\n" +
-          error.message,
+          error.message ||
+          "Registration failed.",
           "error"
         );
 
@@ -1615,84 +1749,11 @@ document
 
       try {
 
-        /* =========================
-        LOGIN
-        ========================= */
-
-        const loginResponse =
-          await fetch(
-
-            SUPABASE_URL +
-            "/auth/v1/token?grant_type=password",
-
-            {
-
-              method: "POST",
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Content-Type":
-                  "application/json"
-
-              },
-
-              body:
-                JSON.stringify({
-
-                  email:
-                    email,
-
-                  password:
-                    password
-
-                })
-
-            }
-
+        const loginData =
+          await loginExistingUser(
+            email,
+            password
           );
-
-
-        const loginText =
-          await loginResponse.text();
-
-        let loginData = {};
-
-        try {
-
-          loginData =
-            loginText
-              ? JSON.parse(
-                  loginText
-                )
-              : {};
-
-        } catch {
-
-          loginData = {};
-
-        }
-
-
-        if (
-          !loginResponse.ok
-        ) {
-
-          showMessage(
-            "loginMessage",
-            loginData.error_description ||
-            loginData.msg ||
-            loginData.message ||
-            loginText ||
-            "Login failed. Please check your email and password.",
-            "error"
-          );
-
-          return;
-
-        }
 
 
         const accessToken =
@@ -1707,13 +1768,9 @@ document
           !userId
         ) {
 
-          showMessage(
-            "loginMessage",
-            "Login succeeded, but the seller session could not be created.",
-            "error"
+          throw new Error(
+            "Login succeeded, but the seller session could not be created."
           );
-
-          return;
 
         }
 
@@ -1754,14 +1811,10 @@ document
           !sellerResponse.ok
         ) {
 
-          showMessage(
-            "loginMessage",
+          throw new Error(
             "We could not check your seller account.\n\n" +
-            await sellerResponse.text(),
-            "error"
+            await sellerResponse.text()
           );
-
-          return;
 
         }
 
@@ -1777,7 +1830,7 @@ document
 
           showMessage(
             "loginMessage",
-            "This account does not have a ZYRE Marketing seller store yet. Please create your seller account first.",
+            "This account does not have a ZYRE Marketing seller store yet. Use the Create your store section to create one.",
             "error"
           );
 
@@ -1794,30 +1847,17 @@ document
         SAVE SESSION
         ========================= */
 
-        localStorage.setItem(
-          "zava_access_token",
-          accessToken
-        );
-
-        localStorage.setItem(
-          "zava_user_id",
-          userId
-        );
-
-        localStorage.setItem(
-          "zava_seller_id",
-          seller.id
-        );
-
-        localStorage.setItem(
-          "zava_seller_email",
+        saveSellerSession(
+          accessToken,
+          userId,
+          seller.id,
           seller.email ||
           email
         );
 
 
         /* =========================
-        APPROVAL CHECK
+        APPROVAL
         ========================= */
 
         if (
@@ -1826,7 +1866,7 @@ document
 
           showMessage(
             "loginMessage",
-            "Your seller account is registered, but your store is still waiting for ZYRE Marketing approval.",
+            "Your seller store is registered, but it is still waiting for ZYRE Marketing approval.",
             "info"
           );
 
@@ -1944,10 +1984,9 @@ async function forgotPassword(
 
             })
 
-        }
+          }
 
-      );
-
+        );
 
     if (!response.ok) {
 
