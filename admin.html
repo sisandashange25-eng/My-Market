@@ -477,7 +477,7 @@ Password
 id="password"
 type="password"
 placeholder="Enter password"
-autocomplete="new-password"
+autocomplete="off"
 >
 
 <button
@@ -607,42 +607,22 @@ class="panel active"
 
 <div class="card">
 <div class="label">💰 Marketplace Sales</div>
-<div
-class="value"
-id="statMarketplaceSales"
->
-R0.00
-</div>
+<div class="value" id="statMarketplaceSales">R0.00</div>
 </div>
 
 <div class="card">
 <div class="label">💳 ZYRE Commission</div>
-<div
-class="value"
-id="statCommission"
->
-R0.00
-</div>
+<div class="value" id="statCommission">R0.00</div>
 </div>
 
 <div class="card">
 <div class="label">🏪 Rental Revenue</div>
-<div
-class="value"
-id="statRentalRevenue"
->
-R0.00
-</div>
+<div class="value" id="statRentalRevenue">R0.00</div>
 </div>
 
 <div class="card">
 <div class="label">💸 Seller Payouts</div>
-<div
-class="value"
-id="statSellerPayouts"
->
-R0.00
-</div>
+<div class="value" id="statSellerPayouts">R0.00</div>
 </div>
 
 </div>
@@ -654,58 +634,42 @@ R0.00
 
 <div class="card">
 <h3>👥 Seller System</h3>
-<p>
-Monitor applications, approvals and seller records.
-</p>
+<p>Monitor applications, approvals and seller records.</p>
 </div>
 
 <div class="card">
 <h3>🏪 Store System</h3>
-<p>
-Monitor stores, store performance, products and sales.
-</p>
+<p>Monitor stores, store performance, products and sales.</p>
 </div>
 
 <div class="card">
 <h3>🛍️ Product System</h3>
-<p>
-Monitor marketplace products.
-</p>
+<p>Monitor marketplace products.</p>
 </div>
 
 <div class="card">
 <h3>📦 Order Monitoring</h3>
-<p>
-Monitor orders. Sellers manage customer orders.
-</p>
+<p>Monitor orders. Sellers manage customer orders.</p>
 </div>
 
 <div class="card">
 <h3>💳 Payment Monitoring</h3>
-<p>
-Monitor payments and company commission.
-</p>
+<p>Monitor payments and company commission.</p>
 </div>
 
 <div class="card">
 <h3>💸 Payout Monitoring</h3>
-<p>
-Monitor seller payout records.
-</p>
+<p>Monitor seller payout records.</p>
 </div>
 
 <div class="card">
 <h3>🏪 Rental System</h3>
-<p>
-Monitor seller rental payments.
-</p>
+<p>Monitor seller rental payments.</p>
 </div>
 
 <div class="card">
 <h3>⚙️ System Activity</h3>
-<p>
-Monitor activity across ZYRE.
-</p>
+<p>Monitor activity across ZYRE.</p>
 </div>
 
 </div>
@@ -728,10 +692,7 @@ Loading...
      SELLERS
 ========================================================= -->
 
-<section
-id="sellers"
-class="panel"
->
+<section id="sellers" class="panel">
 
 <h2>Seller System</h2>
 
@@ -762,7 +723,6 @@ The Owner monitors the company data.
 <thead>
 
 <tr>
-
 <th>Image</th>
 <th>ID</th>
 <th>Seller</th>
@@ -775,7 +735,6 @@ The Owner monitors the company data.
 <th>Orders</th>
 <th>Created</th>
 <th>Action</th>
-
 </tr>
 
 </thead>
@@ -795,10 +754,7 @@ The Owner monitors the company data.
      STORES
 ========================================================= -->
 
-<section
-id="stores"
-class="panel"
->
+<section id="stores" class="panel">
 
 <h2>🏪 Store System</h2>
 
@@ -814,74 +770,29 @@ orders and store sales.
 
 </div>
 
-
 <div class="grid">
 
 <div class="card">
-
-<div class="label">
-🏪 Total Stores
+<div class="label">🏪 Total Stores</div>
+<div class="value" id="storeTotalCount">0</div>
 </div>
-
-<div
-class="value"
-id="storeTotalCount"
->
-0
-</div>
-
-</div>
-
 
 <div class="card">
-
-<div class="label">
-🟢 Active Stores
+<div class="label">🟢 Active Stores</div>
+<div class="value" id="storeActiveCount">0</div>
 </div>
-
-<div
-class="value"
-id="storeActiveCount"
->
-0
-</div>
-
-</div>
-
 
 <div class="card">
-
-<div class="label">
-🛍️ Store Products
+<div class="label">🛍️ Store Products</div>
+<div class="value" id="storeProductCount">0</div>
 </div>
-
-<div
-class="value"
-id="storeProductCount"
->
-0
-</div>
-
-</div>
-
 
 <div class="card">
-
-<div class="label">
-💰 Store Sales
-</div>
-
-<div
-class="value"
-id="storeSalesTotal"
->
-R0.00
+<div class="label">💰 Store Sales</div>
+<div class="value" id="storeSalesTotal">R0.00</div>
 </div>
 
 </div>
-
-</div>
-
 
 <div class="table-box">
 
@@ -892,7 +803,6 @@ R0.00
 <thead>
 
 <tr>
-
 <th>Store Image</th>
 <th>Store Name</th>
 <th>Seller</th>
@@ -905,7 +815,6 @@ R0.00
 <th>Status</th>
 <th>Created</th>
 <th>Action</th>
-
 </tr>
 
 </thead>
@@ -925,10 +834,7 @@ R0.00
      PRODUCTS
 ========================================================= -->
 
-<section
-id="products"
-class="panel"
->
+<section id="products" class="panel">
 
 <h2>Product Monitoring</h2>
 
@@ -941,7 +847,6 @@ class="panel"
 <thead>
 
 <tr>
-
 <th>ID</th>
 <th>Product</th>
 <th>Seller</th>
@@ -949,7 +854,6 @@ class="panel"
 <th>Stock</th>
 <th>Category</th>
 <th>Active</th>
-
 </tr>
 
 </thead>
@@ -969,10 +873,7 @@ class="panel"
      ORDERS
 ========================================================= -->
 
-<section
-id="orders"
-class="panel"
->
+<section id="orders" class="panel">
 
 <h2>Order Monitoring</h2>
 
@@ -990,7 +891,6 @@ Sellers manage customer orders.
 
 </div>
 
-
 <div class="table-box">
 
 <div class="scroll">
@@ -1000,14 +900,12 @@ Sellers manage customer orders.
 <thead>
 
 <tr>
-
 <th>Order ID</th>
 <th>Customer</th>
 <th>Total</th>
 <th>Status</th>
 <th>Delivery</th>
 <th>Created</th>
-
 </tr>
 
 </thead>
@@ -1027,60 +925,25 @@ Sellers manage customer orders.
      PAYMENTS
 ========================================================= -->
 
-<section
-id="payments"
-class="panel"
->
+<section id="payments" class="panel">
 
 <h2>Payment Monitoring</h2>
 
 <div class="grid">
 
 <div class="card">
-
-<div class="label">
-Marketplace Sales
+<div class="label">Marketplace Sales</div>
+<div class="money" id="paymentSales">R0.00</div>
 </div>
-
-<div
-class="money"
-id="paymentSales"
->
-R0.00
-</div>
-
-</div>
-
 
 <div class="card">
-
-<div class="label">
-ZYRE Commission
+<div class="label">ZYRE Commission</div>
+<div class="money" id="paymentCommission">R0.00</div>
 </div>
-
-<div
-class="money"
-id="paymentCommission"
->
-R0.00
-</div>
-
-</div>
-
 
 <div class="card">
-
-<div class="label">
-Seller Amount
-</div>
-
-<div
-class="money"
-id="paymentSellerTotal"
->
-R0.00
-</div>
-
+<div class="label">Seller Amount</div>
+<div class="money" id="paymentSellerTotal">R0.00</div>
 </div>
 
 </div>
@@ -1097,14 +960,12 @@ R0.00
 <thead>
 
 <tr>
-
 <th>ID</th>
 <th>Seller</th>
 <th>Amount</th>
 <th>Status</th>
 <th>Commission</th>
 <th>Created</th>
-
 </tr>
 
 </thead>
@@ -1129,14 +990,12 @@ R0.00
 <thead>
 
 <tr>
-
 <th>ID</th>
 <th>Seller</th>
 <th>Amount</th>
 <th>Status</th>
 <th>Created</th>
 <th>Action</th>
-
 </tr>
 
 </thead>
@@ -1161,13 +1020,11 @@ R0.00
 <thead>
 
 <tr>
-
 <th>ID</th>
 <th>Seller</th>
 <th>Amount</th>
 <th>Status</th>
 <th>Created</th>
-
 </tr>
 
 </thead>
@@ -1191,16 +1048,12 @@ R0.00
      SELLER MODAL
 ========================================================= -->
 
-<div
-id="sellerModal"
+<div id="sellerModal"
 class="modal hidden"
-onclick="closeSellerModal(event)"
->
+onclick="closeSellerModal(event)">
 
-<div
-class="modal-box"
-onclick="event.stopPropagation()"
->
+<div class="modal-box"
+onclick="event.stopPropagation()">
 
 <div class="modal-header">
 
@@ -1228,16 +1081,12 @@ Loading...
      STORE MODAL
 ========================================================= -->
 
-<div
-id="storeModal"
+<div id="storeModal"
 class="modal hidden"
-onclick="closeStoreModal(event)"
->
+onclick="closeStoreModal(event)">
 
-<div
-class="modal-box"
-onclick="event.stopPropagation()"
->
+<div class="modal-box"
+onclick="event.stopPropagation()">
 
 <div class="modal-header">
 
@@ -1409,30 +1258,21 @@ return d;
 
 /* =========================================================
    OWNER LOGIN
-   IMPORTANT:
-   EMAIL IS NEVER AUTOMATICALLY FILLED.
 ========================================================= */
 
 async function loginAdmin(){
 
 const email=
-document
-.getElementById("email")
-.value
-.trim();
+document.getElementById("email").value.trim();
 
 const password=
-document
-.getElementById("password")
-.value;
+document.getElementById("password").value;
 
 const msg=
-document
-.getElementById("loginMessage");
+document.getElementById("loginMessage");
 
 const button=
-document
-.getElementById("loginButton");
+document.getElementById("loginButton");
 
 
 msg.className="msg";
@@ -1464,15 +1304,12 @@ return;
 
 
 button.disabled=true;
-
-button.textContent=
-"🔄 Signing in...";
+button.textContent="🔄 Signing in...";
 
 
 try{
 
-
-/* LOGIN THROUGH SUPABASE AUTH */
+/* AUTHENTICATION */
 
 const r=await fetch(
 
@@ -1485,18 +1322,14 @@ method:"POST",
 
 headers:{
 
-"apikey":
-SUPABASE_KEY,
-
-"Content-Type":
-"application/json"
+"apikey":SUPABASE_KEY,
+"Content-Type":"application/json"
 
 },
 
 body:JSON.stringify({
 
 email:email,
-
 password:password
 
 })
@@ -1514,11 +1347,8 @@ if(!r.ok){
 throw new Error(
 
 d.error_description ||
-
 d.msg ||
-
 d.message ||
-
 "Login failed."
 
 );
@@ -1538,10 +1368,8 @@ throw new Error(
 accessToken=d.access_token;
 
 adminUserId=
-d.user &&
-d.user.id
-?
-d.user.id
+d.user && d.user.id
+?d.user.id
 :null;
 
 
@@ -1555,24 +1383,25 @@ throw new Error(
 
 
 /* =====================================================
-   OWNER VERIFICATION
+   OWNER PROFILE CHECK
 
-   Your Profiles table uses:
+   IMPORTANT:
+   Your profile columns are:
    Id
    Full_name
    Phone
    Role
+
+   We use the exact column names.
 ===================================================== */
 
-const profileUrl=
-
-SUPABASE_URL+
-"/rest/v1/Profiles?select=Id,Role&Id=eq."+
-encodeURIComponent(adminUserId)+
-"&limit=1";
+const profileUrl =
+SUPABASE_URL +
+"/rest/v1/profiles?select=*&Id=eq." +
+encodeURIComponent(adminUserId);
 
 
-const profileResponse=
+const profileResponse =
 await fetch(
 
 profileUrl,
@@ -1583,8 +1412,7 @@ method:"GET",
 
 headers:{
 
-"apikey":
-SUPABASE_KEY,
+"apikey":SUPABASE_KEY,
 
 "Authorization":
 "Bearer "+accessToken,
@@ -1594,26 +1422,25 @@ SUPABASE_KEY,
 
 }
 
-);
+});
 
 
-const profileText=
+const profileText =
 await profileResponse.text();
 
-let profileData=null;
+let profileData;
 
 
 try{
 
-profileData=
+profileData =
 profileText
-?
-JSON.parse(profileText)
-:null;
+?JSON.parse(profileText)
+:[];
 
 }catch(e){
 
-profileData=null;
+profileData=[];
 
 }
 
@@ -1622,7 +1449,8 @@ if(!profileResponse.ok){
 
 throw new Error(
 
-(profileData&&profileData.message) ||
+(profileData &&
+profileData.message) ||
 
 "Could not verify your owner profile."
 
@@ -1637,17 +1465,20 @@ profileData.length===0
 ){
 
 throw new Error(
-"Owner profile was not found in Profiles."
+"Owner profile was not found."
 );
 
 }
 
 
+const profile=profileData[0];
+
 const role=
 String(
-profileData[0].Role || ""
-)
-.toLowerCase();
+profile.Role ??
+profile.role ??
+""
+).toLowerCase();
 
 
 if(role!=="admin"){
@@ -1660,30 +1491,13 @@ throw new Error(
 
 
 /* =====================================================
-   SAVE SESSION
+   LOGIN SUCCESS
 
-   Notice:
-   EMAIL IS ONLY SAVED AFTER SUCCESSFUL LOGIN.
-   It is NOT used to pre-fill the login form.
+   IMPORTANT:
+   We do NOT save the email.
+   We do NOT save the token.
+   Refreshing the page will require login again.
 ===================================================== */
-
-localStorage.setItem(
-"zyre_owner_access_token",
-accessToken
-);
-
-localStorage.setItem(
-"zyre_owner_user_id",
-adminUserId
-);
-
-localStorage.setItem(
-"zyre_owner_email",
-email
-);
-
-
-/* SHOW DASHBOARD */
 
 document
 .getElementById("loginBox")
@@ -1695,14 +1509,28 @@ document
 
 document
 .getElementById("ownerEmail")
-.textContent=
-email;
+.textContent=email;
 
 
-/* LOAD DATA */
+/* LOAD DASHBOARD */
+
+try{
 
 await loadDashboard();
 
+}catch(dashboardError){
+
+console.error(
+"Dashboard loading error:",
+dashboardError
+);
+
+alert(
+"Login successful, but some dashboard data could not be loaded.\n\n"+
+dashboardError.message
+);
+
+}
 
 }
 catch(e){
@@ -1711,6 +1539,9 @@ console.error(
 "OWNER LOGIN ERROR:",
 e
 );
+
+accessToken=null;
+adminUserId=null;
 
 msg.textContent=
 e.message ||
@@ -1722,9 +1553,7 @@ msg.classList.add("error");
 finally{
 
 button.disabled=false;
-
-button.textContent=
-"🔐 Login";
+button.textContent="🔐 Login";
 
 }
 
@@ -1738,32 +1567,8 @@ button.textContent=
 function logoutAdmin(){
 
 accessToken=null;
-
 adminUserId=null;
-
 sellerMap={};
-
-
-/*
-Clear owner session.
-*/
-
-localStorage.removeItem(
-"zyre_owner_access_token"
-);
-
-localStorage.removeItem(
-"zyre_owner_user_id"
-);
-
-localStorage.removeItem(
-"zyre_owner_email"
-);
-
-
-/*
-Clear login fields.
-*/
 
 document
 .getElementById("email")
@@ -1773,6 +1578,9 @@ document
 .getElementById("password")
 .value="";
 
+document
+.getElementById("ownerEmail")
+.textContent="";
 
 document
 .getElementById("adminPanel")
@@ -1781,7 +1589,6 @@ document
 document
 .getElementById("loginBox")
 .classList.remove("hidden");
-
 
 document
 .getElementById("loginMessage")
@@ -1834,15 +1641,10 @@ await loadSellerMap();
 await Promise.all([
 
 loadProducts(),
-
 loadOrders(),
-
 loadOrderItems(),
-
 loadRentalPayments(),
-
 loadSellerPayments(),
-
 loadPayouts()
 
 ]);
@@ -1920,9 +1722,7 @@ style="display:none"
 ${esc(
 String(
 x.store_name||"S"
-)
-.charAt(0)
-.toUpperCase()
+).charAt(0).toUpperCase()
 )}
 </div>
 
@@ -1937,9 +1737,7 @@ return `
 ${esc(
 String(
 x.store_name||"S"
-)
-.charAt(0)
-.toUpperCase()
+).charAt(0).toUpperCase()
 )}
 
 </div>
@@ -1976,9 +1774,7 @@ style="display:none"
 ${esc(
 String(
 x.store_name||"S"
-)
-.charAt(0)
-.toUpperCase()
+).charAt(0).toUpperCase()
 )}
 </div>
 
@@ -1993,9 +1789,7 @@ return `
 ${esc(
 String(
 x.store_name||"S"
-)
-.charAt(0)
-.toUpperCase()
+).charAt(0).toUpperCase()
 )}
 
 </div>
@@ -2058,9 +1852,7 @@ return `
 
 
 return `
-<span>
-Pending
-</span>
+<span>Pending</span>
 `;
 
 }
@@ -2121,9 +1913,7 @@ Pending
 async function loadSellers(){
 
 const tb=
-document.getElementById(
-"sellersTable"
-);
+document.getElementById("sellersTable");
 
 tb.innerHTML=
 '<tr><td colspan="12">Loading sellers...</td></tr>';
@@ -2166,8 +1956,6 @@ String(x.status||"")
 ).length;
 
 
-/* PRODUCT COUNTS */
-
 let productCounts={};
 
 
@@ -2182,8 +1970,7 @@ productsData=p||[];
 
 productsData.forEach(x=>{
 
-const id=
-String(x.seller_id);
+const id=String(x.seller_id);
 
 productCounts[id]=
 (productCounts[id]||0)+1;
@@ -2199,8 +1986,6 @@ e
 
 }
 
-
-/* ORDER DATA */
 
 let orderCounts={};
 
@@ -2342,28 +2127,20 @@ String(x.status||"")
 
 
 const productCount=
-productCounts[
-String(x.id)
-]||0;
+productCounts[String(x.id)]||0;
 
 
 const orderCount=
-sellerOrderCounts[
-String(x.id)
-]||0;
+sellerOrderCounts[String(x.id)]||0;
 
 
 return `
 
 <tr>
 
-<td>
-${sellerImage(x)}
-</td>
+<td>${sellerImage(x)}</td>
 
-<td>
-${esc(x.id)}
-</td>
+<td>${esc(x.id)}</td>
 
 <td>
 <strong>
@@ -2375,27 +2152,13 @@ x.name ||
 </strong>
 </td>
 
-<td>
-${esc(
-x.store_name||"-"
-)}
-</td>
+<td>${esc(x.store_name||"-")}</td>
 
-<td>
-${esc(
-x.email||"-"
-)}
-</td>
+<td>${esc(x.email||"-")}</td>
 
-<td>
-${esc(
-x.category||"-"
-)}
-</td>
+<td>${esc(x.category||"-")}</td>
 
-<td>
-${sellerStatusLabel(x)}
-</td>
+<td>${sellerStatusLabel(x)}</td>
 
 <td>
 ${
@@ -2407,17 +2170,11 @@ ok
 }
 </td>
 
-<td>
-${productCount}
-</td>
+<td>${productCount}</td>
 
-<td>
-${orderCount}
-</td>
+<td>${orderCount}</td>
 
-<td>
-${dateText(x.created_at)}
-</td>
+<td>${dateText(x.created_at)}</td>
 
 <td>
 
@@ -2430,9 +2187,7 @@ View
 
 ${
 ok
-
 ?
-
 `
 <button
 class="reject"
@@ -2441,13 +2196,9 @@ onclick="rejectSeller(${Number(x.id)})"
 Disable
 </button>
 `
-
 :
-
 disabled
-
 ?
-
 `
 <button
 class="approve"
@@ -2456,9 +2207,7 @@ onclick="approveSeller(${Number(x.id)})"
 Re-approve
 </button>
 `
-
 :
-
 `
 <button
 class="approve"
@@ -2467,7 +2216,6 @@ onclick="approveSeller(${Number(x.id)})"
 Approve
 </button>
 `
-
 }
 
 </td>
@@ -2498,9 +2246,7 @@ console.error(e);
 async function loadStores(){
 
 const tb=
-document.getElementById(
-"storesTable"
-);
+document.getElementById("storesTable");
 
 tb.innerHTML=
 '<tr><td colspan="12">Loading stores...</td></tr>';
@@ -2516,8 +2262,7 @@ const productCounts={};
 (productsData||[])
 .forEach(p=>{
 
-const sellerId=
-String(p.seller_id);
+const sellerId=String(p.seller_id);
 
 productCounts[sellerId]=
 (productCounts[sellerId]||0)+1;
@@ -2526,7 +2271,6 @@ productCounts[sellerId]=
 
 
 const orderSets={};
-
 const productSeller={};
 
 
@@ -2552,9 +2296,7 @@ item.order_id ??
 item.Order_id;
 
 const sellerId=
-productSeller[
-String(productId)
-];
+productSeller[String(productId)];
 
 
 if(
@@ -2564,8 +2306,7 @@ orderId!=null
 
 if(!orderSets[sellerId]){
 
-orderSets[sellerId]=
-new Set();
+orderSets[sellerId]=new Set();
 
 }
 
@@ -2611,12 +2352,8 @@ payment.total ??
 );
 
 
-storeSales[
-String(sellerId)
-]=
-(storeSales[
-String(sellerId)
-]||0)+amount;
+storeSales[String(sellerId)]=
+(storeSales[String(sellerId)]||0)+amount;
 
 }
 
@@ -2638,35 +2375,28 @@ let totalStoreSales=0;
 
 Object.values(storeSales)
 .forEach(v=>{
-
-totalStoreSales+=
-Number(v||0);
-
+totalStoreSales+=Number(v||0);
 });
 
 
 document
 .getElementById("storeTotalCount")
-.textContent=
-stores.length;
+.textContent=stores.length;
 
 
 document
 .getElementById("storeActiveCount")
-.textContent=
-activeStores;
+.textContent=activeStores;
 
 
 document
 .getElementById("storeProductCount")
-.textContent=
-productsData.length;
+.textContent=productsData.length;
 
 
 document
 .getElementById("storeSalesTotal")
-.textContent=
-money(totalStoreSales);
+.textContent=money(totalStoreSales);
 
 
 if(!stores.length){
@@ -2682,39 +2412,25 @@ return;
 tb.innerHTML=
 stores.map(store=>{
 
-const id=
-String(store.id);
-
+const id=String(store.id);
 
 const productCount=
 productCounts[id]||0;
 
-
 const orderCount=
 orderSets[id]
-?
-orderSets[id].size
-:
-0;
-
+?orderSets[id].size
+:0;
 
 const sales=
 storeSales[id]||0;
-
-
-const active=
-store.approved===true &&
-String(store.status||"")
-.toLowerCase()!=="seller_disabled";
 
 
 return `
 
 <tr>
 
-<td>
-${storeImage(store)}
-</td>
+<td>${storeImage(store)}</td>
 
 <td>
 <strong>
@@ -2733,49 +2449,21 @@ store.name ||
 )}
 </td>
 
-<td>
-${esc(
-store.email||"-"
-)}
-</td>
+<td>${esc(store.email||"-")}</td>
 
-<td>
-${esc(
-store.phone||"-"
-)}
-</td>
+<td>${esc(store.phone||"-")}</td>
 
-<td>
-${esc(
-store.category||"-"
-)}
-</td>
+<td>${esc(store.category||"-")}</td>
 
-<td>
-<strong>
-${productCount}
-</strong>
-</td>
+<td><strong>${productCount}</strong></td>
 
-<td>
-<strong>
-${orderCount}
-</strong>
-</td>
+<td><strong>${orderCount}</strong></td>
 
-<td>
-<strong>
-${money(sales)}
-</strong>
-</td>
+<td><strong>${money(sales)}</strong></td>
 
-<td>
-${storeStatusLabel(store)}
-</td>
+<td>${storeStatusLabel(store)}</td>
 
-<td>
-${dateText(store.created_at)}
-</td>
+<td>${dateText(store.created_at)}</td>
 
 <td>
 
@@ -2860,29 +2548,22 @@ return;
 }
 
 
-const storeId=
-String(store.id);
+const storeId=String(store.id);
 
 
 const storeProducts=
 (productsData||[])
 .filter(
-p=>
-String(p.seller_id)===
-storeId
+p=>String(p.seller_id)===storeId
 );
 
 
-const productIds=
-new Set(
-storeProducts.map(
-p=>String(p.id)
-)
+const productIds=new Set(
+storeProducts.map(p=>String(p.id))
 );
 
 
-const storeOrderIds=
-new Set();
+const storeOrderIds=new Set();
 
 
 (orderItemsData||[])
@@ -2897,15 +2578,9 @@ item.order_id ??
 item.Order_id;
 
 
-if(
-productIds.has(
-String(productId)
-)
-){
+if(productIds.has(String(productId))){
 
-storeOrderIds.add(
-String(orderId)
-);
+storeOrderIds.add(String(orderId));
 
 }
 
@@ -2955,9 +2630,7 @@ String(store.status||"")
 
 
 const details=
-document.getElementById(
-"storeDetails"
-);
+document.getElementById("storeDetails");
 
 
 details.innerHTML=`
@@ -2969,22 +2642,18 @@ ${storeImage(store)}
 <div>
 
 <h2 style="margin:0 0 5px">
-
 ${esc(
 store.store_name ||
 "Unnamed Store"
 )}
-
 </h2>
 
 <div>
-
 ${esc(
 store.full_name ||
 store.name ||
 "Seller"
 )}
-
 </div>
 
 </div>
@@ -2994,124 +2663,67 @@ store.name ||
 
 <div class="detail-grid">
 
-
 <div class="detail">
-
 <strong>Store ID</strong>
-
 ${esc(store.id)}
-
 </div>
 
-
 <div class="detail">
-
 <strong>Status</strong>
-
 ${storeStatusLabel(store)}
-
 </div>
 
-
 <div class="detail">
-
 <strong>Store Name</strong>
-
-${esc(
-store.store_name||"-"
-)}
-
+${esc(store.store_name||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Seller</strong>
-
 ${esc(
 store.full_name ||
 store.name ||
 "-"
 )}
-
 </div>
 
-
 <div class="detail">
-
 <strong>Email</strong>
-
-${esc(
-store.email||"-"
-)}
-
+${esc(store.email||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Phone</strong>
-
-${esc(
-store.phone||"-"
-)}
-
+${esc(store.phone||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Category</strong>
-
-${esc(
-store.category||"-"
-)}
-
+${esc(store.category||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Products</strong>
-
 ${storeProducts.length}
-
 </div>
 
-
 <div class="detail">
-
 <strong>Orders</strong>
-
 ${storeOrderIds.size}
-
 </div>
 
-
 <div class="detail">
-
 <strong>Store Sales</strong>
-
 ${money(storeSales)}
-
 </div>
 
-
 <div class="detail">
-
 <strong>Created Date</strong>
-
-${dateText(
-store.created_at
-)}
-
+${dateText(store.created_at)}
 </div>
 
-
 <div class="detail">
-
 <strong>Approval</strong>
-
 ${
 store.approved===true
 ?
@@ -3119,47 +2731,25 @@ store.approved===true
 :
 '<span class="error">Not Approved</span>'
 }
-
 </div>
 
-
 <div class="detail">
-
 <strong>Store Description</strong>
-
-${esc(
-store.description||"-"
-)}
-
+${esc(store.description||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Residential Address</strong>
-
-${esc(
-store.residential_address||"-"
-)}
-
+${esc(store.residential_address||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Business Address</strong>
-
-${esc(
-store.business_address||"-"
-)}
-
+${esc(store.business_address||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Store Image</strong>
-
 ${
 store.store_image_url
 ?
@@ -3167,9 +2757,7 @@ store.store_image_url
 :
 'Not uploaded'
 }
-
 </div>
-
 
 </div>
 
@@ -3180,9 +2768,7 @@ store.store_image_url
 
 ${
 storeProducts.length
-
 ?
-
 storeProducts.map(p=>`
 
 <div class="store-product-row">
@@ -3191,7 +2777,7 @@ storeProducts.map(p=>`
 
 <strong>
 ${esc(
-p.name||
+p.name ||
 "Unnamed Product"
 )}
 </strong>
@@ -3199,9 +2785,7 @@ p.name||
 <br>
 
 <small>
-${esc(
-p.category||"-"
-)}
+${esc(p.category||"-")}
 </small>
 
 </div>
@@ -3215,9 +2799,7 @@ ${money(p.price)}
 <br>
 
 <small>
-Stock: ${esc(
-p.stock??"-"
-)}
+Stock: ${esc(p.stock??"-")}
 </small>
 
 </div>
@@ -3225,9 +2807,7 @@ p.stock??"-"
 </div>
 
 `).join("")
-
 :
-
 "<p>No products found for this store.</p>"
 }
 
@@ -3256,9 +2836,7 @@ products from this store.
 
 ${
 active
-
 ?
-
 `
 <button
 class="reject"
@@ -3270,9 +2848,7 @@ rejectSeller(${Number(store.id)})
 Disable Store
 </button>
 `
-
 :
-
 `
 <button
 class="approve"
@@ -3284,7 +2860,6 @@ approveSeller(${Number(store.id)})
 Re-activate Store
 </button>
 `
-
 }
 
 </div>
@@ -3328,38 +2903,25 @@ document
 
 async function approveSeller(id){
 
-if(
-!confirm(
-"Approve this seller?"
-)
-)return;
+if(!confirm("Approve this seller?"))
+return;
 
 
 try{
 
 await api(
-
 "/rest/v1/sellers?id=eq."+
 encodeURIComponent(id),
-
 {
-
 method:"PATCH",
-
 headers:{
 "Prefer":"return=minimal"
 },
-
 body:JSON.stringify({
-
 approved:true,
-
 status:"seller_approved"
-
 })
-
 }
-
 );
 
 
@@ -3369,7 +2931,6 @@ alert(
 
 
 await loadSellers();
-
 await loadStores();
 
 
@@ -3395,34 +2956,25 @@ if(
 !confirm(
 "Disable approval for this seller?"
 )
-)return;
+)
+return;
 
 
 try{
 
 await api(
-
 "/rest/v1/sellers?id=eq."+
 encodeURIComponent(id),
-
 {
-
 method:"PATCH",
-
 headers:{
 "Prefer":"return=minimal"
 },
-
 body:JSON.stringify({
-
 approved:false,
-
 status:"seller_disabled"
-
 })
-
 }
-
 );
 
 
@@ -3432,7 +2984,6 @@ alert(
 
 
 await loadSellers();
-
 await loadStores();
 
 
@@ -3537,10 +3088,6 @@ String(orderId)
 });
 
 
-const sellerOrderCount=
-sellerOrders.size;
-
-
 const details=
 document.getElementById(
 "sellerDetails"
@@ -3581,18 +3128,12 @@ seller.name ||
 
 <div class="detail-grid">
 
-
 <div class="detail">
-
 <strong>Seller ID</strong>
-
 ${esc(seller.id)}
-
 </div>
 
-
 <div class="detail">
-
 <strong>Approval</strong>
 
 ${
@@ -3609,139 +3150,72 @@ disabled
 
 </div>
 
-
 <div class="detail">
-
 <strong>Full Name</strong>
-
 ${esc(
 seller.full_name ||
 seller.name ||
 "-"
 )}
-
 </div>
 
-
 <div class="detail">
-
 <strong>Email</strong>
-
-${esc(
-seller.email||"-"
-)}
-
+${esc(seller.email||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Phone</strong>
-
-${esc(
-seller.phone||"-"
-)}
-
+${esc(seller.phone||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Category</strong>
-
-${esc(
-seller.category||"-"
-)}
-
+${esc(seller.category||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Store Name</strong>
-
-${esc(
-seller.store_name||"-"
-)}
-
+${esc(seller.store_name||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Seller Status</strong>
-
 ${sellerStatusLabel(seller)}
-
 </div>
 
-
 <div class="detail">
-
 <strong>Products</strong>
-
 ${productCount}
-
 </div>
 
-
 <div class="detail">
-
 <strong>Orders</strong>
-
-${sellerOrderCount}
-
+${sellerOrders.size}
 </div>
 
-
 <div class="detail">
-
 <strong>Store Created</strong>
-
-${dateText(
-seller.created_at
-)}
-
+${dateText(seller.created_at)}
 </div>
 
-
 <div class="detail">
-
 <strong>Residential Address</strong>
-
-${esc(
-seller.residential_address||"-"
-)}
-
+${esc(seller.residential_address||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Business Address</strong>
-
-${esc(
-seller.business_address||"-"
-)}
-
+${esc(seller.business_address||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Store Description</strong>
-
-${esc(
-seller.description||"-"
-)}
-
+${esc(seller.description||"-")}
 </div>
 
-
 <div class="detail">
-
 <strong>Store Image</strong>
-
 ${
 seller.store_image_url
 ?
@@ -3749,9 +3223,7 @@ seller.store_image_url
 :
 'Not uploaded'
 }
-
 </div>
-
 
 </div>
 
@@ -3760,9 +3232,7 @@ seller.store_image_url
 
 ${
 ok
-
 ?
-
 `
 <button
 class="reject"
@@ -3774,9 +3244,7 @@ rejectSeller(${Number(seller.id)})
 Disable Seller
 </button>
 `
-
 :
-
 `
 <button
 class="approve"
@@ -3788,7 +3256,6 @@ approveSeller(${Number(seller.id)})
 Approve Seller
 </button>
 `
-
 }
 
 </div>
@@ -3833,9 +3300,7 @@ document
 async function loadProducts(){
 
 const tb=
-document.getElementById(
-"productsTable"
-);
+document.getElementById("productsTable");
 
 tb.innerHTML=
 '<tr><td colspan="7">Loading...</td></tr>';
@@ -3858,55 +3323,31 @@ productsData.length;
 
 tb.innerHTML=
 productsData.length
-
 ?
-
 productsData.map(x=>`
 
 <tr>
 
-<td>
-${esc(x.id)}
-</td>
+<td>${esc(x.id)}</td>
+
+<td>${esc(x.name||"-")}</td>
+
+<td>${esc(sellerName(x.seller_id))}</td>
+
+<td>${money(x.price)}</td>
+
+<td>${esc(x.stock??"-")}</td>
+
+<td>${esc(x.category||"-")}</td>
 
 <td>
-${esc(x.name||"-")}
-</td>
-
-<td>
-${esc(
-sellerName(x.seller_id)
-)}
-</td>
-
-<td>
-${money(x.price)}
-</td>
-
-<td>
-${esc(x.stock??"-")}
-</td>
-
-<td>
-${esc(x.category||"-")}
-</td>
-
-<td>
-${
-x.active===false
-?
-"No"
-:
-"Yes"
-}
+${x.active===false?"No":"Yes"}
 </td>
 
 </tr>
 
 `).join("")
-
 :
-
 '<tr><td colspan="7">No products found.</td></tr>';
 
 
@@ -3929,9 +3370,7 @@ console.error(e);
 async function loadOrders(){
 
 const tb=
-document.getElementById(
-"ordersTable"
-);
+document.getElementById("ordersTable");
 
 tb.innerHTML=
 '<tr><td colspan="6">Loading...</td></tr>';
@@ -3954,60 +3393,42 @@ ordersData.length;
 
 tb.innerHTML=
 ordersData.length
-
 ?
-
 ordersData.map(x=>`
 
 <tr>
 
-<td>
-${esc(x.id)}
-</td>
+<td>${esc(x.id)}</td>
 
-<td>
-${esc(
+<td>${esc(
 x.customer_id ??
 x.Customer_id ??
 "-"
-)}
-</td>
+)}</td>
 
-<td>
-${money(
+<td>${money(
 x.total ??
 x.Total
-)}
-</td>
+)}</td>
 
-<td>
-${esc(
+<td>${esc(
 x.status ??
 x.Status ??
 "-"
-)}
-</td>
+)}</td>
 
-<td>
-${esc(
+<td>${esc(
 x.delivery_address ??
 x.Delivery_address ??
 "-"
-)}
-</td>
+)}</td>
 
-<td>
-${dateText(
-x.created_at
-)}
-</td>
+<td>${dateText(x.created_at)}</td>
 
 </tr>
 
 `).join("")
-
 :
-
 '<tr><td colspan="6">No orders found.</td></tr>';
 
 
@@ -4030,9 +3451,7 @@ console.error(e);
 async function loadRentalPayments(){
 
 const tb=
-document.getElementById(
-"rentalTable"
-);
+document.getElementById("rentalTable");
 
 tb.innerHTML=
 '<tr><td colspan="5">Loading...</td></tr>';
@@ -4061,9 +3480,7 @@ if([
 "success"
 ].includes(s)){
 
-total+=Number(
-x.amount||0
-);
+total+=Number(x.amount||0);
 
 }
 
@@ -4078,48 +3495,30 @@ money(total);
 
 tb.innerHTML=
 p.length
-
 ?
-
 p.map(x=>`
 
 <tr>
 
-<td>
-${esc(x.id)}
-</td>
+<td>${esc(x.id)}</td>
 
-<td>
-${esc(
+<td>${esc(
 sellerName(
 x.seller_id ??
 x.Seller_id
 )
-)}
-</td>
+)}</td>
 
-<td>
-${money(x.amount)}
-</td>
+<td>${money(x.amount)}</td>
 
-<td>
-${esc(
-x.status||"-"
-)}
-</td>
+<td>${esc(x.status||"-")}</td>
 
-<td>
-${dateText(
-x.created_at
-)}
-</td>
+<td>${dateText(x.created_at)}</td>
 
 </tr>
 
 `).join("")
-
 :
-
 '<tr><td colspan="5">No rental payments found.</td></tr>';
 
 
@@ -4142,9 +3541,7 @@ console.error(e);
 async function loadSellerPayments(){
 
 const tb=
-document.getElementById(
-"paymentsTable"
-);
+document.getElementById("paymentsTable");
 
 tb.innerHTML=
 '<tr><td colspan="6">Loading...</td></tr>';
@@ -4160,9 +3557,7 @@ paymentsData=p||[];
 
 
 let sales=0;
-
 let commission=0;
-
 let sellerTotal=0;
 
 
@@ -4187,7 +3582,6 @@ x.total ||
 0
 );
 
-
 const c=
 Number(
 x.commission ||
@@ -4197,11 +3591,8 @@ x.commission_amount ||
 
 
 sales+=a;
-
 commission+=c;
-
-sellerTotal+=
-a-c;
+sellerTotal+=a-c;
 
 }
 
@@ -4209,99 +3600,69 @@ a-c;
 
 
 document
-.getElementById(
-"statMarketplaceSales"
-)
+.getElementById("statMarketplaceSales")
 .textContent=
 money(sales);
 
 
 document
-.getElementById(
-"statCommission"
-)
+.getElementById("statCommission")
 .textContent=
 money(commission);
 
 
 document
-.getElementById(
-"paymentSales"
-)
+.getElementById("paymentSales")
 .textContent=
 money(sales);
 
 
 document
-.getElementById(
-"paymentCommission"
-)
+.getElementById("paymentCommission")
 .textContent=
 money(commission);
 
 
 document
-.getElementById(
-"paymentSellerTotal"
-)
+.getElementById("paymentSellerTotal")
 .textContent=
 money(sellerTotal);
 
 
 tb.innerHTML=
 p.length
-
 ?
-
 p.map(x=>`
 
 <tr>
 
-<td>
-${esc(x.id)}
-</td>
+<td>${esc(x.id)}</td>
 
-<td>
-${esc(
+<td>${esc(
 sellerName(
 x.seller_id ??
 x.Seller_id
 )
-)}
-</td>
+)}</td>
 
-<td>
-${money(
+<td>${money(
 x.amount ||
 x.total
-)}
-</td>
+)}</td>
 
-<td>
-${esc(
-x.status||"-"
-)}
-</td>
+<td>${esc(x.status||"-")}</td>
 
-<td>
-${money(
+<td>${money(
 x.commission ||
 x.commission_amount
-)}
-</td>
+)}</td>
 
-<td>
-${dateText(
-x.created_at
-)}
-</td>
+<td>${dateText(x.created_at)}</td>
 
 </tr>
 
 `).join("")
-
 :
-
 '<tr><td colspan="6">No payments found.</td></tr>';
 
 
@@ -4324,9 +3685,7 @@ console.error(e);
 async function loadPayouts(){
 
 const tb=
-document.getElementById(
-"payoutsTable"
-);
+document.getElementById("payoutsTable");
 
 tb.innerHTML=
 '<tr><td colspan="6">Loading...</td></tr>';
@@ -4348,13 +3707,10 @@ if([
 "paid",
 "completed"
 ].includes(
-String(x.status||"")
-.toLowerCase()
+String(x.status||"").toLowerCase()
 )){
 
-total+=Number(
-x.amount||0
-);
+total+=Number(x.amount||0);
 
 }
 
@@ -4362,50 +3718,32 @@ x.amount||0
 
 
 document
-.getElementById(
-"statSellerPayouts"
-)
+.getElementById("statSellerPayouts")
 .textContent=
 money(total);
 
 
 tb.innerHTML=
 p.length
-
 ?
-
 p.map(x=>`
 
 <tr>
 
-<td>
-${esc(x.id)}
-</td>
+<td>${esc(x.id)}</td>
 
-<td>
-${esc(
+<td>${esc(
 sellerName(
 x.seller_id ??
 x.Seller_id
 )
-)}
-</td>
+)}</td>
 
-<td>
-${money(x.amount)}
-</td>
+<td>${money(x.amount)}</td>
 
-<td>
-${esc(
-x.status||"-"
-)}
-</td>
+<td>${esc(x.status||"-")}</td>
 
-<td>
-${dateText(
-x.created_at
-)}
-</td>
+<td>${dateText(x.created_at)}</td>
 
 <td>
 
@@ -4414,28 +3752,19 @@ ${
 "pending",
 "processing"
 ].includes(
-String(
-x.status||""
-).toLowerCase()
+String(x.status||"").toLowerCase()
 )
-
 ?
-
 `
 <button
 class="approve"
-onclick="
-processPayout(${Number(x.id)})
-"
+onclick="processPayout(${Number(x.id)})"
 >
 Process
 </button>
 `
-
 :
-
 "-"
-
 }
 
 </td>
@@ -4443,9 +3772,7 @@ Process
 </tr>
 
 `).join("")
-
 :
-
 '<tr><td colspan="6">No payouts found.</td></tr>';
 
 
@@ -4471,7 +3798,8 @@ if(
 !confirm(
 "Process this seller payout?"
 )
-)return;
+)
+return;
 
 
 try{
@@ -4514,9 +3842,7 @@ e.message
 function loadRecentActivity(){
 
 document
-.getElementById(
-"recentActivity"
-)
+.getElementById("recentActivity")
 .innerHTML=
 
 "<p>👥 Seller applications and approvals are monitored here.</p>"+
@@ -4531,156 +3857,23 @@ document
 
 
 /* =========================================================
-   AUTO LOGIN
-=========================================================
-
-   IMPORTANT:
-   We DO NOT put the saved email into the login form.
-
-   If a valid owner session exists, the dashboard opens.
-   If there is no session, the login form stays completely
-   empty and YOU type the email manually.
+   IMPORTANT
+   NO AUTO LOGIN
+   NO SAVED EMAIL
+   NO SAVED TOKEN
 ========================================================= */
 
 document.addEventListener(
 "DOMContentLoaded",
-async function(){
-
-const t=
-localStorage.getItem(
-"zyre_owner_access_token"
-);
-
-const u=
-localStorage.getItem(
-"zyre_owner_user_id"
-);
-
-const savedEmail=
-localStorage.getItem(
-"zyre_owner_email"
-);
-
-
-if(t&&u){
-
-accessToken=t;
-
-adminUserId=u;
-
-
-try{
+function(){
 
 /*
-Verify the saved session by loading
-the owner profile.
-
+Always start on the login screen.
+The email and password fields remain blank.
 */
-
-const profileUrl=
-
-SUPABASE_URL+
-"/rest/v1/Profiles?select=Id,Role&Id=eq."+
-encodeURIComponent(u)+
-"&limit=1";
-
-
-const r=
-await fetch(
-profileUrl,
-{
-headers:{
-"apikey":
-SUPABASE_KEY,
-
-"Authorization":
-"Bearer "+t,
-
-"Content-Type":
-"application/json"
-}
-}
-);
-
-
-const profile=
-await r.json();
-
-
-if(
-r.ok &&
-Array.isArray(profile) &&
-profile.length &&
-String(
-profile[0].Role||""
-).toLowerCase()==="admin"
-){
-
-document
-.getElementById("loginBox")
-.classList.add("hidden");
-
-document
-.getElementById("adminPanel")
-.classList.remove("hidden");
-
-
-/*
-Only show the email AFTER successful
-session restoration.
-
-*/
-
-document
-.getElementById("ownerEmail")
-.textContent=
-savedEmail||"Owner";
-
-
-await loadDashboard();
-
-return;
-
-}
-
-}catch(e){
-
-console.error(
-"Saved owner session error:",
-e
-);
-
-}
-
-
-/*
-Invalid/expired session.
-Clear it.
-*/
-
-localStorage.removeItem(
-"zyre_owner_access_token"
-);
-
-localStorage.removeItem(
-"zyre_owner_user_id"
-);
-
-localStorage.removeItem(
-"zyre_owner_email"
-);
 
 accessToken=null;
-
 adminUserId=null;
-
-}
-
-
-/*
-LOGIN FORM IS LEFT EMPTY.
-NO AUTOMATIC EMAIL.
-*/
 
 document
 .getElementById("email")
@@ -4690,7 +3883,20 @@ document
 .getElementById("password")
 .value="";
 
-});
+document
+.getElementById("ownerEmail")
+.textContent="";
+
+document
+.getElementById("adminPanel")
+.classList.add("hidden");
+
+document
+.getElementById("loginBox")
+.classList.remove("hidden");
+
+}
+);
 
 </script>
 
