@@ -748,10 +748,6 @@
       session
     ) {
 
-      /*
-        First check the profile role.
-      */
-
       const {
         data: profile,
         error: profileError
@@ -778,12 +774,6 @@
       }
 
 
-      /*
-        If profile explicitly says seller
-        or seller_pending, this is NOT a
-        customer account.
-      */
-
       if (
         profile &&
         (
@@ -800,11 +790,6 @@
       }
 
 
-      /*
-        Owner/admin accounts are also not
-        customer accounts.
-      */
-
       if (
         profile &&
         (
@@ -819,15 +804,6 @@
 
       }
 
-
-      /*
-        IMPORTANT:
-        Check the sellers table too.
-
-        This catches seller accounts where
-        the profile role was not correctly
-        updated during seller registration.
-      */
 
       const {
         data: seller,
@@ -872,12 +848,6 @@
       }
 
 
-      /*
-        If a profile exists and its role is
-        something other than customer, do not
-        silently treat it as a customer.
-      */
-
       if (
         profile &&
         profile.role &&
@@ -890,11 +860,6 @@
 
       }
 
-
-      /*
-        No profile should not be treated as
-        a customer account.
-      */
 
       if (!profile) {
 
@@ -913,11 +878,13 @@
     /*
       SELLER LOGIN VALIDATION
 
-      A seller login is ONLY allowed when
-      the authenticated account has a seller
-      application.
+      IMPORTANT:
+      The sellers table is the primary source
+      for identifying a seller account.
 
-      A normal customer account is rejected.
+      This is necessary because an existing
+      seller may still have profile.role set
+      to "customer".
     */
 
     async function getSellerAccount(
@@ -925,73 +892,11 @@
     ) {
 
       /*
-        First check the profile role.
-      */
+        FIRST:
+        Check the seller record.
 
-      const {
-        data: profile,
-        error: profileError
-      } =
-        await supabaseClient
-          .from("profiles")
-          .select(
-            "id, role, full_name"
-          )
-          .eq(
-            "id",
-            session.user.id
-          )
-          .maybeSingle();
-
-
-      if (profileError) {
-
-        throw new Error(
-          profileError.message ||
-          "Could not verify the account type."
-        );
-
-      }
-
-
-      /*
-        Owner/admin cannot use Seller Login.
-      */
-
-      if (
-        profile &&
-        (
-          profile.role === "admin" ||
-          profile.role === "owner"
-        )
-      ) {
-
-        throw new Error(
-          "This is an Owner account. Please use the private Owner Centre."
-        );
-
-      }
-
-
-      /*
-        Explicit customer profile means this
-        account is NOT a seller.
-      */
-
-      if (
-        profile &&
-        profile.role === "customer"
-      ) {
-
-        throw new Error(
-          "This is a Customer account. Customer accounts cannot sign in through Seller Login."
-        );
-
-      }
-
-
-      /*
-        Now find the seller application.
+        We do this BEFORE checking
+        profile.role.
       */
 
       const {
@@ -1021,27 +926,140 @@
 
 
       /*
-        No seller record means this is not
-        an existing seller account.
-
-        IMPORTANT:
-        We do NOT send a customer to the
-        seller application anymore.
+        If a seller record exists, this is
+        a seller account even if the profile
+        role still says customer.
       */
 
-      if (!seller) {
+      if (seller) {
+
+        /*
+          Get the profile only after the seller
+          record has been confirmed.
+        */
+
+        const {
+          data: profile,
+          error: profileError
+        } =
+          await supabaseClient
+            .from("profiles")
+            .select(
+              "id, role, full_name"
+            )
+            .eq(
+              "id",
+              session.user.id
+            )
+            .maybeSingle();
+
+
+        if (profileError) {
+
+          throw new Error(
+            profileError.message ||
+            "Could not read your seller profile."
+          );
+
+        }
+
+
+        /*
+          Owner/admin accounts must not use
+          Seller Login.
+
+          However, customer role does NOT
+          block the seller because the seller
+          record above already proved that this
+          is a seller account.
+        */
+
+        if (
+          profile &&
+          (
+            profile.role === "admin" ||
+            profile.role === "owner"
+          )
+        ) {
+
+          throw new Error(
+            "This is an Owner account. Please use the private Owner Centre."
+          );
+
+        }
+
+
+        return {
+          seller,
+          profile
+        };
+
+      }
+
+
+      /*
+        NO SELLER RECORD.
+
+        Now check the profile to determine
+        whether this is a customer or owner.
+      */
+
+      const {
+        data: profile,
+        error: profileError
+      } =
+        await supabaseClient
+          .from("profiles")
+          .select(
+            "id, role, full_name"
+          )
+          .eq(
+            "id",
+            session.user.id
+          )
+          .maybeSingle();
+
+
+      if (profileError) {
 
         throw new Error(
-          "This account is not registered as a Seller.\n\nIf you want to become a seller, please create a separate Seller account first."
+          profileError.message ||
+          "Could not verify the account type."
         );
 
       }
 
 
-      return {
-        seller,
-        profile
-      };
+      if (
+        profile &&
+        (
+          profile.role === "admin" ||
+          profile.role === "owner"
+        )
+      ) {
+
+        throw new Error(
+          "This is an Owner account. Please use the private Owner Centre."
+        );
+
+      }
+
+
+      if (
+        profile &&
+        profile.role === "customer"
+      ) {
+
+        throw new Error(
+          "This is a Customer account. Customer accounts cannot sign in through Seller Login."
+        );
+
+      }
+
+
+      throw new Error(
+        "This account is not registered as a Seller.\n\nIf you want to become a seller, please create a separate Seller account first."
+      );
 
     }
 
@@ -1199,16 +1217,6 @@
 
 
           try {
-
-            /*
-              Before creating a customer,
-              check whether a seller already
-              exists with this email.
-
-              This prevents an existing seller
-              from creating another customer
-              identity using the same email.
-            */
 
             const {
               data: existingSeller,
@@ -1456,12 +1464,6 @@
             }
 
 
-            /*
-              IMPORTANT:
-              Verify the account type BEFORE
-              allowing access to the marketplace.
-            */
-
             await validateCustomerAccount(
               data.session
             );
@@ -1492,11 +1494,6 @@
               error
             );
 
-
-            /*
-              If the account was authenticated
-              but is not a customer, sign it out.
-            */
 
             try {
 
@@ -1580,11 +1577,6 @@
 
           try {
 
-            /*
-              STEP 1
-              Authenticate through Supabase Auth.
-            */
-
             const {
               data,
               error
@@ -1618,12 +1610,6 @@
 
             }
 
-
-            /*
-              STEP 2
-              Verify that this Auth account
-              is actually a seller account.
-            */
 
             const {
               seller
@@ -1743,12 +1729,6 @@
               error
             );
 
-
-            /*
-              A customer account or any other
-              wrong account type must NOT remain
-              signed in through Seller Login.
-            */
 
             try {
 
