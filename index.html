@@ -178,7 +178,6 @@
 
   <!-- =========================
        AUTHENTICATION GATE
-       Customers must sign in first
   ========================= -->
 
   <style>
@@ -313,7 +312,7 @@
 
 
         marketplaceScript.src =
-          "app.js?v=5005";
+          "app.js?v=5006";
 
 
         marketplaceScript.onload =
@@ -564,9 +563,15 @@
     </div>
 
 
-    <div class="zyre-menu-items">
+    <div
+      class="zyre-menu-items"
+      id="zyreMainMenuItems"
+    >
+
+      <!-- HOME -->
 
       <button
+        id="zyreHomeButton"
         onclick="window.location.href='index.html'"
         type="button"
       >
@@ -575,8 +580,11 @@
       </button>
 
 
+      <!-- MARKETPLACE -->
+
       <button
-        onclick="document.getElementById('stores').scrollIntoView({behavior:'smooth'}); toggleZyreMenu();"
+        id="zyreMarketplaceButton"
+        onclick="scrollToStores()"
         type="button"
       >
         <span>🛍️</span>
@@ -584,18 +592,23 @@
       </button>
 
 
-      <!-- CUSTOMER ACCOUNT -->
+      <!-- MY ACCOUNT -->
 
       <button
-        onclick="window.location.href='account.html';"
+        id="zyreMyAccountButton"
+        onclick="window.location.href='account.html'"
         type="button"
+        aria-label="Open My Account"
       >
         <span>👤</span>
         <span>My Account</span>
       </button>
 
 
+      <!-- SELLER DASHBOARD -->
+
       <button
+        id="zyreSellerButton"
         onclick="sellerCentre(); toggleZyreMenu();"
         type="button"
       >
@@ -604,7 +617,10 @@
       </button>
 
 
+      <!-- OWNER DASHBOARD -->
+
       <button
+        id="zyreOwnerButton"
         onclick="window.location.href='admin.html'"
         type="button"
       >
@@ -613,7 +629,10 @@
       </button>
 
 
+      <!-- CART -->
+
       <button
+        id="zyreCartButton"
         onclick="toggleCart(); toggleZyreMenu();"
         type="button"
       >
@@ -641,7 +660,7 @@
 
   <!-- =========================
        NAVIGATION
-       Store-focused marketplace
+       STORE-FOCUSED
   ========================= -->
 
   <nav class="zyre-nav">
@@ -908,8 +927,6 @@
 
     <!-- =========================
          CATEGORIES
-         Categories now lead customers
-         back to the store directory.
     ========================= -->
 
     <section class="categories">
@@ -1016,6 +1033,12 @@
       </div>
 
     </section>
+
+
+    <!-- =========================
+         NO HOME PRODUCTS
+         PRODUCTS LIVE INSIDE STORES
+    ========================= -->
 
 
     <!-- =========================
@@ -1258,6 +1281,14 @@
 
 
       <button
+        onclick="window.location.href='account.html'"
+        type="button"
+      >
+        👤 My Account
+      </button>
+
+
+      <button
         onclick="window.location.href='contact.html'"
         type="button"
       >
@@ -1374,7 +1405,7 @@
 
 
   <!-- =========================
-       ZYRE MARKETING NOTIFICATION SERVICE WORKER
+       SERVICE WORKER
   ========================= -->
 
   <script>
@@ -1846,6 +1877,25 @@
     }
 
 
+    /* =========================
+       MY ACCOUNT BUTTON
+    ========================= */
+
+    #zyreMyAccountButton {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      position: relative !important;
+    }
+
+
+    #zyreMyAccountButton span:last-child {
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+
     .zyre-menu-footer {
       margin: 15px 20px 30px;
       padding-top: 20px;
@@ -1900,6 +1950,7 @@
     }
 
   </style>
+
 
 </body>
 
