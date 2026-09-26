@@ -1,21 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 
-<head>
+«»
 
-<meta charset="UTF-8">
+<title>ZYRE Marketing | My Account</title><meta
+name="description"
+content="Manage your ZYRE Marketing account."
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<title>ZYRE Marketing | My Account</title>
-
-<meta
-  name="description"
-  content="Manage your ZYRE Marketing account."
->
+«»
 
 <style>
 
@@ -24,813 +17,625 @@
 }
 
 body {
-
   margin: 0;
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  background:
-    #f5f5f5;
-
-  color:
-    #111;
-
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f5f5;
+  color: #111;
 }
 
 .header {
-
-  background:
-    #000;
-
-  color:
-    #fff;
-
-  padding:
-    18px 20px;
-
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    space-between;
-
+  background: #000;
+  color: #fff;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .logo {
-
-  font-size:
-    24px;
-
-  font-weight:
-    bold;
-
-  letter-spacing:
-    3px;
-
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 3px;
 }
 
 .header button {
-
-  background:
-    #fff;
-
-  color:
-    #000;
-
-  border:
-    none;
-
-  padding:
-    9px 14px;
-
-  border-radius:
-    8px;
-
-  font-weight:
-    bold;
-
-  cursor:
-    pointer;
-
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 9px 14px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .container {
-
-  max-width:
-    650px;
-
-  margin:
-    25px auto;
-
-  padding:
-    0 16px;
-
+  max-width: 650px;
+  margin: 25px auto;
+  padding: 0 16px;
 }
 
 .card {
-
-  background:
-    #fff;
-
-  border-radius:
-    16px;
-
-  padding:
-    22px;
-
-  margin-bottom:
-    18px;
-
-  box-shadow:
-    0 3px 14px
-    rgba(0,0,0,.08);
-
+  background: #fff;
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 3px 14px rgba(0,0,0,.08);
 }
 
 h1 {
-
-  margin-top:
-    0;
-
-  font-size:
-    26px;
-
+  margin-top: 0;
+  font-size: 26px;
 }
 
 h2 {
-
-  font-size:
-    20px;
-
-  margin-top:
-    0;
-
+  font-size: 20px;
+  margin-top: 0;
 }
 
 .subtitle {
-
-  color:
-    #666;
-
-  margin-bottom:
-    22px;
-
+  color: #666;
+  margin-bottom: 22px;
 }
 
 label {
-
-  display:
-    block;
-
-  font-weight:
-    bold;
-
-  margin:
-    15px 0 7px;
-
+  display: block;
+  font-weight: bold;
+  margin: 15px 0 7px;
 }
 
 input,
 textarea {
-
-  width:
-    100%;
-
-  padding:
-    13px;
-
-  border:
-    1px solid #ccc;
-
-  border-radius:
-    9px;
-
-  font-size:
-    15px;
-
-  outline:
-    none;
-
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ccc;
+  border-radius: 9px;
+  font-size: 15px;
+  outline: none;
 }
 
 input:focus,
 textarea:focus {
-
-  border-color:
-    #000;
-
+  border-color: #000;
 }
 
 textarea {
-
-  min-height:
-    100px;
-
-  resize:
-    vertical;
-
+  min-height: 100px;
+  resize: vertical;
 }
 
 .email-box {
-
-  background:
-    #f1f1f1;
-
-  padding:
-    13px;
-
-  border-radius:
-    9px;
-
-  color:
-    #555;
-
-  word-break:
-    break-word;
-
+  background: #f1f1f1;
+  padding: 13px;
+  border-radius: 9px;
+  color: #555;
+  word-break: break-word;
 }
 
 .status-box {
-
-  padding:
-    13px;
-
-  border-radius:
-    9px;
-
-  margin-top:
-    8px;
-
-  font-weight:
-    bold;
-
+  padding: 13px;
+  border-radius: 9px;
+  margin-top: 8px;
+  font-weight: bold;
 }
 
 .status-approved {
-
-  background:
-    #e7f7e7;
-
-  color:
-    #176b2c;
-
+  background: #e7f7e7;
+  color: #176b2c;
 }
 
 .status-pending {
-
-  background:
-    #fff4d6;
-
-  color:
-    #805900;
-
+  background: #fff4d6;
+  color: #805900;
 }
 
 .status-info {
+  background: #f1f1f1;
+  color: #555;
+}
 
-  background:
-    #f1f1f1;
+/* =========================
+STORE IMAGE
+========================= */
 
-  color:
-    #555;
+.store-image-box {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 8px;
+  background: #fafafa;
+  text-align: center;
+}
 
+.store-image-preview {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 14px;
+  display: none;
+  margin: 0 auto 12px;
+  border: 1px solid #ddd;
+}
+
+.store-image-placeholder {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 12px;
+  border-radius: 14px;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  color: #999;
+}
+
+.store-image-box input[type="file"] {
+  padding: 10px;
+  background: #fff;
+}
+
+.image-help {
+  color: #777;
+  font-size: 13px;
+  margin-top: 8px;
 }
 
 .save {
-
-  width:
-    100%;
-
-  margin-top:
-    20px;
-
-  padding:
-    14px;
-
-  background:
-    #000;
-
-  color:
-    #fff;
-
-  border:
-    none;
-
-  border-radius:
-    10px;
-
-  font-size:
-    16px;
-
-  font-weight:
-    bold;
-
-  cursor:
-    pointer;
-
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .save:disabled {
-
-  opacity:
-    .6;
-
+  opacity: .6;
 }
 
 .action {
-
-  display:
-    block;
-
-  width:
-    100%;
-
-  padding:
-    14px;
-
-  margin-top:
-    10px;
-
-  border:
-    1px solid #ddd;
-
-  background:
-    #fff;
-
-  color:
-    #111;
-
-  border-radius:
-    10px;
-
-  font-size:
-    15px;
-
-  font-weight:
-    bold;
-
-  cursor:
-    pointer;
-
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #111;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .dashboard {
-
-  background:
-    #000;
-
-  color:
-    #fff;
-
-  border:
-    none;
-
+  background: #000;
+  color: #fff;
+  border: none;
 }
 
 .logout {
-
-  background:
-    #111;
-
-  color:
-    #fff;
-
-  border:
-    none;
-
+  background: #111;
+  color: #fff;
+  border: none;
 }
 
 .message {
-
-  display:
-    none;
-
-  padding:
-    12px;
-
-  border-radius:
-    9px;
-
-  margin-top:
-    15px;
-
-  font-size:
-    14px;
-
-  white-space:
-    pre-line;
-
+  display: none;
+  padding: 12px;
+  border-radius: 9px;
+  margin-top: 15px;
+  font-size: 14px;
+  white-space: pre-line;
 }
 
 .message.show {
-
-  display:
-    block;
-
+  display: block;
 }
 
 .success {
-
-  background:
-    #e7f7e7;
-
-  color:
-    #176b2c;
-
+  background: #e7f7e7;
+  color: #176b2c;
 }
 
 .error {
-
-  background:
-    #fdeaea;
-
-  color:
-    #a40000;
-
+  background: #fdeaea;
+  color: #a40000;
 }
 
 .loading {
-
-  text-align:
-    center;
-
-  padding:
-    50px 20px;
-
+  text-align: center;
+  padding: 50px 20px;
 }
 
 .hidden {
-
-  display:
-    none !important;
-
+  display: none !important;
 }
 
-</style>
-
-</head>
-
-
-<body>
-
-
-<header class="header">
-
-  <div class="logo">
+</style></head><body><header class="header">  <div class="logo">
     ZYRE
-  </div>
+  </div><button
+onclick="goMarketplace()"
 
-  <button
-    onclick="goMarketplace()"
-  >
-    🛍️ Marketplace
-  </button>
+«»
 
-</header>
+🛍️ Marketplace
 
-
-<main class="container">
-
-
-  <div
+  </button></header><main class="container">  <div
     id="loading"
     class="card loading"
+  >Loading your account...
+
+  </div>  <div
+    id="accountContent"
+    style="display:none;"
+  ><!-- =========================
+     CUSTOMER PROFILE
+========================== -->
+
+<div
+  id="customerProfile"
+  class="card hidden"
+>
+
+  <h1>
+    👤 My Account
+  </h1>
+
+  <p class="subtitle">
+    Manage your customer information and saved delivery address.
+  </p>
+
+
+  <label>
+    Full Name
+  </label>
+
+  <input
+    id="customerFullName"
+    type="text"
+    placeholder="Your full name"
   >
 
-    Loading your account...
 
+  <label>
+    Email Address
+  </label>
+
+  <div
+    id="customerEmail"
+    class="email-box"
+  >
+    Loading...
   </div>
+
+
+  <label>
+    Phone Number
+  </label>
+
+  <input
+    id="customerPhone"
+    type="tel"
+    placeholder="Your phone number"
+  >
+
+
+  <label>
+    Delivery Address
+  </label>
+
+  <textarea
+    id="customerAddress"
+    placeholder="Enter your physical/delivery address"
+  ></textarea>
+
+
+  <button
+    id="customerSaveButton"
+    class="save"
+    onclick="saveCustomerAccount()"
+  >
+    💾 Save Account Details
+  </button>
 
 
   <div
-    id="accountContent"
-    style="display:none;"
+    id="customerMessage"
+    class="message"
+  ></div>
+
+</div>
+
+
+<!-- =========================
+     SELLER PROFILE
+========================== -->
+
+<div
+  id="sellerProfile"
+  class="card hidden"
+>
+
+  <h1>
+    🏪 Seller Profile
+  </h1>
+
+  <p class="subtitle">
+    Manage your seller and store information.
+  </p>
+
+
+  <label>
+    Legal Full Name
+  </label>
+
+  <input
+    id="sellerFullName"
+    type="text"
+    placeholder="Your full legal name"
   >
 
 
-    <!-- =========================
-         CUSTOMER PROFILE
-    ========================== -->
+  <label>
+    Email Address
+  </label>
 
-    <div
-      id="customerProfile"
-      class="card hidden"
+  <div
+    id="sellerEmail"
+    class="email-box"
+  >
+    Loading...
+  </div>
+
+
+  <label>
+    Phone Number
+  </label>
+
+  <input
+    id="sellerPhone"
+    type="tel"
+    placeholder="Your phone number"
+  >
+
+
+  <label>
+    Residential Address
+  </label>
+
+  <textarea
+    id="sellerResidentialAddress"
+    placeholder="Your residential address"
+  ></textarea>
+
+
+  <label>
+    Store Name
+  </label>
+
+  <input
+    id="sellerStoreName"
+    type="text"
+    placeholder="Your store name"
+  >
+
+
+  <!-- =========================
+       STORE PHOTO / LOGO
+  ========================== -->
+
+  <label>
+    Store Picture / Logo
+  </label>
+
+  <div class="store-image-box">
+
+    <img
+      id="storeImagePreview"
+      class="store-image-preview"
+      alt="Store picture"
     >
 
-      <h1>
-        👤 My Account
-      </h1>
-
-      <p class="subtitle">
-        Manage your customer information and saved delivery address.
-      </p>
-
-
-      <label>
-        Full Name
-      </label>
-
-      <input
-        id="customerFullName"
-        type="text"
-        placeholder="Your full name"
-      >
-
-
-      <label>
-        Email Address
-      </label>
-
-      <div
-        id="customerEmail"
-        class="email-box"
-      >
-        Loading...
-      </div>
-
-
-      <label>
-        Phone Number
-      </label>
-
-      <input
-        id="customerPhone"
-        type="tel"
-        placeholder="Your phone number"
-      >
-
-
-      <label>
-        Delivery Address
-      </label>
-
-      <textarea
-        id="customerAddress"
-        placeholder="Enter your physical/delivery address"
-      ></textarea>
-
-
-      <button
-        id="customerSaveButton"
-        class="save"
-        onclick="saveCustomerAccount()"
-      >
-        💾 Save Account Details
-      </button>
-
-
-      <div
-        id="customerMessage"
-        class="message"
-      ></div>
-
+    <div
+      id="storeImagePlaceholder"
+      class="store-image-placeholder"
+    >
+      🏪
     </div>
 
-
-    <!-- =========================
-         SELLER PROFILE
-    ========================== -->
-
-    <div
-      id="sellerProfile"
-      class="card hidden"
+    <input
+      id="storeImage"
+      type="file"
+      accept="image/*"
     >
 
-      <h1>
-        🏪 Seller Profile
-      </h1>
-
-      <p class="subtitle">
-        Manage your seller and store information.
-      </p>
-
-
-      <label>
-        Legal Full Name
-      </label>
-
-      <input
-        id="sellerFullName"
-        type="text"
-        placeholder="Your full legal name"
-      >
-
-
-      <label>
-        Email Address
-      </label>
-
-      <div
-        id="sellerEmail"
-        class="email-box"
-      >
-        Loading...
-      </div>
-
-
-      <label>
-        Phone Number
-      </label>
-
-      <input
-        id="sellerPhone"
-        type="tel"
-        placeholder="Your phone number"
-      >
-
-
-      <label>
-        Residential Address
-      </label>
-
-      <textarea
-        id="sellerResidentialAddress"
-        placeholder="Your residential address"
-      ></textarea>
-
-
-      <label>
-        Store Name
-      </label>
-
-      <input
-        id="sellerStoreName"
-        type="text"
-        placeholder="Your store name"
-      >
-
-
-      <label>
-        Store / Business Address
-      </label>
-
-      <textarea
-        id="sellerBusinessAddress"
-        placeholder="Your store or business address"
-      ></textarea>
-
-
-      <label>
-        Store Category
-      </label>
-
-      <input
-        id="sellerCategory"
-        type="text"
-        placeholder="Store category"
-      >
-
-
-      <label>
-        Store Description
-      </label>
-
-      <textarea
-        id="sellerDescription"
-        placeholder="Describe your store"
-      ></textarea>
-
-
-      <label>
-        Seller Approval Status
-      </label>
-
-      <div
-        id="sellerStatus"
-        class="status-box status-info"
-      >
-        Checking seller status...
-      </div>
-
-
-      <button
-        id="sellerSaveButton"
-        class="save"
-        onclick="saveSellerAccount()"
-      >
-        💾 Save Seller Details
-      </button>
-
-
-      <div
-        id="sellerMessage"
-        class="message"
-      ></div>
-
+    <div class="image-help">
+      Choose your store logo or business picture.
+      Maximum size: 5 MB.
     </div>
-
-
-    <!-- =========================
-         SELLER ACTIONS
-    ========================== -->
-
-    <div
-      id="sellerActions"
-      class="card hidden"
-    >
-
-      <h2>
-        🏪 Seller Centre
-      </h2>
-
-      <p class="subtitle">
-        Manage your products, orders and store.
-      </p>
-
-      <button
-        class="action dashboard"
-        onclick="goSellerDashboard()"
-      >
-        📊 Seller Dashboard
-      </button>
-
-    </div>
-
-
-    <!-- =========================
-         SELLER PENDING
-    ========================== -->
-
-    <div
-      id="sellerPendingActions"
-      class="card hidden"
-    >
-
-      <h2>
-        ⏳ Seller Application
-      </h2>
-
-      <p class="subtitle">
-        Your seller application is still waiting for approval.
-      </p>
-
-      <div
-        class="status-box status-pending"
-      >
-        Your store is currently under review.
-      </div>
-
-    </div>
-
-
-    <!-- =========================
-         CUSTOMER ORDERS
-    ========================== -->
-
-    <div
-      id="customerOrders"
-      class="card hidden"
-    >
-
-      <h2>
-        📦 Orders
-      </h2>
-
-      <button
-        class="action"
-        onclick="goOrders()"
-      >
-        View My Orders
-      </button>
-
-    </div>
-
-
-    <!-- =========================
-         SHOPPING
-    ========================== -->
-
-    <div
-      id="shoppingSection"
-      class="card"
-    >
-
-      <h2>
-        🛍️ Shopping
-      </h2>
-
-      <button
-        class="action"
-        onclick="goMarketplace()"
-      >
-        Continue Shopping
-      </button>
-
-    </div>
-
-
-    <!-- =========================
-         LOGOUT
-    ========================== -->
-
-    <div class="card">
-
-      <button
-        class="action logout"
-        onclick="logout()"
-      >
-        🚪 Log Out
-      </button>
-
-    </div>
-
 
   </div>
 
 
-</main>
+  <label>
+    Store / Business Address
+  </label>
+
+  <textarea
+    id="sellerBusinessAddress"
+    placeholder="Your store or business address"
+  ></textarea>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <label>
+    Store Category
+  </label>
+
+  <input
+    id="sellerCategory"
+    type="text"
+    placeholder="Store category"
+  >
 
 
-<script>
+  <label>
+    Store Description
+  </label>
+
+  <textarea
+    id="sellerDescription"
+    placeholder="Describe your store"
+  ></textarea>
+
+
+  <label>
+    Seller Approval Status
+  </label>
+
+  <div
+    id="sellerStatus"
+    class="status-box status-info"
+  >
+    Checking seller status...
+  </div>
+
+
+  <button
+    id="sellerSaveButton"
+    class="save"
+    onclick="saveSellerAccount()"
+  >
+    💾 Save Seller Details
+  </button>
+
+
+  <div
+    id="sellerMessage"
+    class="message"
+  ></div>
+
+</div>
+
+
+<!-- =========================
+     SELLER ACTIONS
+========================== -->
+
+<div
+  id="sellerActions"
+  class="card hidden"
+>
+
+  <h2>
+    🏪 Seller Centre
+  </h2>
+
+  <p class="subtitle">
+    Manage your products, orders and store.
+  </p>
+
+  <button
+    class="action dashboard"
+    onclick="goSellerDashboard()"
+  >
+    📊 Seller Dashboard
+  </button>
+
+</div>
+
+
+<!-- =========================
+     SELLER PENDING
+========================== -->
+
+<div
+  id="sellerPendingActions"
+  class="card hidden"
+>
+
+  <h2>
+    ⏳ Seller Application
+  </h2>
+
+  <p class="subtitle">
+    Your seller application is still waiting for approval.
+  </p>
+
+  <div
+    class="status-box status-pending"
+  >
+    Your store is currently under review.
+  </div>
+
+</div>
+
+
+<!-- =========================
+     CUSTOMER ORDERS
+========================== -->
+
+<div
+  id="customerOrders"
+  class="card hidden"
+>
+
+  <h2>
+    📦 Orders
+  </h2>
+
+  <button
+    class="action"
+    onclick="goOrders()"
+  >
+    View My Orders
+  </button>
+
+</div>
+
+
+<!-- =========================
+     SHOPPING
+========================== -->
+
+<div
+  id="shoppingSection"
+  class="card"
+>
+
+  <h2>
+    🛍️ Shopping
+  </h2>
+
+  <button
+    class="action"
+    onclick="goMarketplace()"
+  >
+    Continue Shopping
+  </button>
+
+</div>
+
+
+<!-- =========================
+     LOGOUT
+========================== -->
+
+<div class="card">
+
+  <button
+    class="action logout"
+    onclick="logout()"
+  >
+    🚪 Log Out
+  </button>
+
+</div>
+
+  </div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 
 const SUPABASE_URL =
 "https://gaccizzlwswwynattgda.supabase.co";
@@ -843,6 +648,103 @@ const supabaseClient =
 window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
+);
+
+
+/* =========================
+STORE IMAGE PREVIEW
+========================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
+
+    const input =
+      document.getElementById(
+        "storeImage"
+      );
+
+    if (!input) return;
+
+
+    input.addEventListener(
+      "change",
+      function() {
+
+        const file =
+          input.files &&
+          input.files[0];
+
+
+        if (!file) {
+          return;
+        }
+
+
+        if (!file.type.startsWith("image/")) {
+
+          alert(
+            "Please choose an image file."
+          );
+
+          input.value = "";
+
+          return;
+
+        }
+
+
+        if (file.size > 5 * 1024 * 1024) {
+
+          alert(
+            "Image is too large. Maximum size is 5 MB."
+          );
+
+          input.value = "";
+
+          return;
+
+        }
+
+
+        const reader =
+          new FileReader();
+
+
+        reader.onload =
+          function(event) {
+
+            const preview =
+              document.getElementById(
+                "storeImagePreview"
+              );
+
+            const placeholder =
+              document.getElementById(
+                "storeImagePlaceholder"
+              );
+
+
+            preview.src =
+              event.target.result;
+
+            preview.style.display =
+              "block";
+
+            placeholder.style.display =
+              "none";
+
+          };
+
+
+        reader.readAsDataURL(
+          file
+        );
+
+      }
+    );
+
+  }
 );
 
 
@@ -1161,6 +1063,35 @@ function loadSellerProfile(
     seller.description || "";
 
 
+  /* =========================
+     LOAD EXISTING STORE IMAGE
+  ========================== */
+
+  if (seller.store_image_url) {
+
+    const preview =
+      document.getElementById(
+        "storeImagePreview"
+      );
+
+    const placeholder =
+      document.getElementById(
+        "storeImagePlaceholder"
+      );
+
+
+    preview.src =
+      seller.store_image_url;
+
+    preview.style.display =
+      "block";
+
+    placeholder.style.display =
+      "none";
+
+  }
+
+
   const approved =
     seller.approved === true ||
     seller.status === "seller_approved";
@@ -1435,6 +1366,116 @@ async function saveCustomerAccount() {
 
 
 /* =========================
+UPLOAD STORE IMAGE
+========================= */
+
+async function uploadStoreImage(
+  file,
+  userId,
+  sellerId,
+  accessToken
+) {
+
+  if (!file) {
+    return null;
+  }
+
+
+  if (!file.type.startsWith("image/")) {
+
+    throw new Error(
+      "Please choose a valid image."
+    );
+
+  }
+
+
+  if (file.size > 5 * 1024 * 1024) {
+
+    throw new Error(
+      "Image is too large. Maximum size is 5 MB."
+    );
+
+  }
+
+
+  const extension =
+    (
+      file.name.split(".").pop() ||
+      "jpg"
+    ).toLowerCase();
+
+
+  const filePath =
+    "stores/" +
+    userId +
+    "-" +
+    sellerId +
+    "-" +
+    Date.now() +
+    "." +
+    extension;
+
+
+  const uploadResponse =
+    await fetch(
+
+      SUPABASE_URL +
+      "/storage/v1/object/store-images/" +
+      filePath,
+
+      {
+
+        method:
+          "POST",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            accessToken,
+
+          "Content-Type":
+            file.type,
+
+          "x-upsert":
+            "false"
+
+        },
+
+        body:
+          file
+
+      }
+
+    );
+
+
+  if (!uploadResponse.ok) {
+
+    throw new Error(
+      "Store image upload failed:\n\n" +
+      await uploadResponse.text()
+    );
+
+  }
+
+
+  const publicUrl =
+    SUPABASE_URL +
+    "/storage/v1/object/public/store-images/" +
+    filePath;
+
+
+  return publicUrl;
+
+}
+
+
+/* =========================
 SAVE SELLER ACCOUNT
 ========================= */
 
@@ -1491,6 +1532,18 @@ async function saveSellerAccount() {
     document.getElementById(
       "sellerDescription"
     ).value.trim();
+
+
+  const imageInput =
+    document.getElementById(
+      "storeImage"
+    );
+
+
+  const imageFile =
+    imageInput &&
+    imageInput.files &&
+    imageInput.files[0];
 
 
   message.className =
@@ -1600,6 +1653,134 @@ async function saveSellerAccount() {
       session.user;
 
 
+    /* =========================
+       GET SELLER RECORD
+    ========================== */
+
+    const sellerLookupResponse =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/sellers?user_id=eq." +
+      encodeURIComponent(
+        user.id
+      ) +
+      "&select=id",
+
+      {
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            session.access_token
+
+        }
+
+      }
+
+    );
+
+
+    if (!sellerLookupResponse.ok) {
+
+      throw new Error(
+        await sellerLookupResponse.text()
+      );
+
+    }
+
+
+    const sellerRows =
+      await sellerLookupResponse.json();
+
+
+    if (
+      !Array.isArray(sellerRows) ||
+      !sellerRows.length
+    ) {
+
+      throw new Error(
+        "Seller record could not be found."
+      );
+
+    }
+
+
+    const sellerId =
+      sellerRows[0].id;
+
+
+    /* =========================
+       UPLOAD NEW STORE IMAGE
+    ========================== */
+
+    let storeImageUrl =
+      null;
+
+
+    if (imageFile) {
+
+      saveButton.textContent =
+        "Uploading store image...";
+
+
+      storeImageUrl =
+        await uploadStoreImage(
+          imageFile,
+          user.id,
+          sellerId,
+          session.access_token
+        );
+
+    }
+
+
+    /* =========================
+       SAVE SELLER DETAILS
+    ========================== */
+
+    saveButton.textContent =
+      "Saving seller details...";
+
+
+    const sellerData = {
+
+      full_name:
+        fullName,
+
+      phone:
+        phone,
+
+      residential_address:
+        residentialAddress,
+
+      store_name:
+        storeName,
+
+      business_address:
+        businessAddress,
+
+      category:
+        category,
+
+      description:
+        description
+
+    };
+
+
+    if (storeImageUrl) {
+
+      sellerData.store_image_url =
+        storeImageUrl;
+
+    }
+
+
     const response =
     await fetch(
 
@@ -1632,30 +1813,9 @@ async function saveSellerAccount() {
         },
 
         body:
-          JSON.stringify({
-
-            full_name:
-              fullName,
-
-            phone:
-              phone,
-
-            residential_address:
-              residentialAddress,
-
-            store_name:
-              storeName,
-
-            business_address:
-              businessAddress,
-
-            category:
-              category,
-
-            description:
-              description
-
-          })
+          JSON.stringify(
+            sellerData
+          )
 
       }
 
@@ -1671,8 +1831,35 @@ async function saveSellerAccount() {
     }
 
 
+    if (storeImageUrl) {
+
+      const preview =
+        document.getElementById(
+          "storeImagePreview"
+        );
+
+      const placeholder =
+        document.getElementById(
+          "storeImagePlaceholder"
+        );
+
+
+      preview.src =
+        storeImageUrl;
+
+      preview.style.display =
+        "block";
+
+      placeholder.style.display =
+        "none";
+
+    }
+
+
     showMessage(
-      "✅ Your seller details were saved successfully.",
+      storeImageUrl
+        ? "✅ Seller details and store picture were saved successfully."
+        : "✅ Your seller details were saved successfully.",
       true,
       "sellerMessage"
     );
@@ -1816,9 +2003,4 @@ START
 
 loadAccount();
 
-</script>
-
-
-</body>
-
-</html>
+</script></body></html>
