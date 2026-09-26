@@ -14,7 +14,7 @@
 
 <meta
   name="description"
-  content="Manage your ZYRE Marketing customer account."
+  content="Manage your ZYRE Marketing account."
 >
 
 <style>
@@ -236,6 +236,52 @@ textarea {
 
 }
 
+.status-box {
+
+  padding:
+    13px;
+
+  border-radius:
+    9px;
+
+  margin-top:
+    8px;
+
+  font-weight:
+    bold;
+
+}
+
+.status-approved {
+
+  background:
+    #e7f7e7;
+
+  color:
+    #176b2c;
+
+}
+
+.status-pending {
+
+  background:
+    #fff4d6;
+
+  color:
+    #805900;
+
+}
+
+.status-info {
+
+  background:
+    #f1f1f1;
+
+  color:
+    #555;
+
+}
+
 .save {
 
   width:
@@ -314,6 +360,19 @@ textarea {
 
 }
 
+.dashboard {
+
+  background:
+    #000;
+
+  color:
+    #fff;
+
+  border:
+    none;
+
+}
+
 .logout {
 
   background:
@@ -343,6 +402,9 @@ textarea {
 
   font-size:
     14px;
+
+  white-space:
+    pre-line;
 
 }
 
@@ -380,6 +442,13 @@ textarea {
 
   padding:
     50px 20px;
+
+}
+
+.hidden {
+
+  display:
+    none !important;
 
 }
 
@@ -425,7 +494,14 @@ textarea {
   >
 
 
-    <div class="card">
+    <!-- =========================
+         CUSTOMER PROFILE
+    ========================== -->
+
+    <div
+      id="customerProfile"
+      class="card hidden"
+    >
 
       <h1>
         👤 My Account
@@ -441,7 +517,7 @@ textarea {
       </label>
 
       <input
-        id="fullName"
+        id="customerFullName"
         type="text"
         placeholder="Your full name"
       >
@@ -452,7 +528,7 @@ textarea {
       </label>
 
       <div
-        id="email"
+        id="customerEmail"
         class="email-box"
       >
         Loading...
@@ -464,7 +540,7 @@ textarea {
       </label>
 
       <input
-        id="phone"
+        id="customerPhone"
         type="tel"
         placeholder="Your phone number"
       >
@@ -475,29 +551,222 @@ textarea {
       </label>
 
       <textarea
-        id="address"
+        id="customerAddress"
         placeholder="Enter your physical/delivery address"
       ></textarea>
 
 
       <button
-        id="saveButton"
+        id="customerSaveButton"
         class="save"
-        onclick="saveAccount()"
+        onclick="saveCustomerAccount()"
       >
         💾 Save Account Details
       </button>
 
 
       <div
-        id="message"
+        id="customerMessage"
         class="message"
       ></div>
 
     </div>
 
 
-    <div class="card">
+    <!-- =========================
+         SELLER PROFILE
+    ========================== -->
+
+    <div
+      id="sellerProfile"
+      class="card hidden"
+    >
+
+      <h1>
+        🏪 Seller Profile
+      </h1>
+
+      <p class="subtitle">
+        Manage your seller and store information.
+      </p>
+
+
+      <label>
+        Legal Full Name
+      </label>
+
+      <input
+        id="sellerFullName"
+        type="text"
+        placeholder="Your full legal name"
+      >
+
+
+      <label>
+        Email Address
+      </label>
+
+      <div
+        id="sellerEmail"
+        class="email-box"
+      >
+        Loading...
+      </div>
+
+
+      <label>
+        Phone Number
+      </label>
+
+      <input
+        id="sellerPhone"
+        type="tel"
+        placeholder="Your phone number"
+      >
+
+
+      <label>
+        Residential Address
+      </label>
+
+      <textarea
+        id="sellerResidentialAddress"
+        placeholder="Your residential address"
+      ></textarea>
+
+
+      <label>
+        Store Name
+      </label>
+
+      <input
+        id="sellerStoreName"
+        type="text"
+        placeholder="Your store name"
+      >
+
+
+      <label>
+        Store / Business Address
+      </label>
+
+      <textarea
+        id="sellerBusinessAddress"
+        placeholder="Your store or business address"
+      ></textarea>
+
+
+      <label>
+        Store Category
+      </label>
+
+      <input
+        id="sellerCategory"
+        type="text"
+        placeholder="Store category"
+      >
+
+
+      <label>
+        Store Description
+      </label>
+
+      <textarea
+        id="sellerDescription"
+        placeholder="Describe your store"
+      ></textarea>
+
+
+      <label>
+        Seller Approval Status
+      </label>
+
+      <div
+        id="sellerStatus"
+        class="status-box status-info"
+      >
+        Checking seller status...
+      </div>
+
+
+      <button
+        id="sellerSaveButton"
+        class="save"
+        onclick="saveSellerAccount()"
+      >
+        💾 Save Seller Details
+      </button>
+
+
+      <div
+        id="sellerMessage"
+        class="message"
+      ></div>
+
+    </div>
+
+
+    <!-- =========================
+         SELLER ACTIONS
+    ========================== -->
+
+    <div
+      id="sellerActions"
+      class="card hidden"
+    >
+
+      <h2>
+        🏪 Seller Centre
+      </h2>
+
+      <p class="subtitle">
+        Manage your products, orders and store.
+      </p>
+
+      <button
+        class="action dashboard"
+        onclick="goSellerDashboard()"
+      >
+        📊 Seller Dashboard
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         SELLER PENDING
+    ========================== -->
+
+    <div
+      id="sellerPendingActions"
+      class="card hidden"
+    >
+
+      <h2>
+        ⏳ Seller Application
+      </h2>
+
+      <p class="subtitle">
+        Your seller application is still waiting for approval.
+      </p>
+
+      <div
+        class="status-box status-pending"
+      >
+        Your store is currently under review.
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         CUSTOMER ORDERS
+    ========================== -->
+
+    <div
+      id="customerOrders"
+      class="card hidden"
+    >
 
       <h2>
         📦 Orders
@@ -513,7 +782,14 @@ textarea {
     </div>
 
 
-    <div class="card">
+    <!-- =========================
+         SHOPPING
+    ========================== -->
+
+    <div
+      id="shoppingSection"
+      class="card"
+    >
 
       <h2>
         🛍️ Shopping
@@ -528,6 +804,10 @@ textarea {
 
     </div>
 
+
+    <!-- =========================
+         LOGOUT
+    ========================== -->
 
     <div class="card">
 
@@ -567,7 +847,7 @@ window.supabase.createClient(
 
 
 /* =========================
-LOAD CUSTOMER ACCOUNT
+LOAD ACCOUNT
 ========================= */
 
 async function loadAccount() {
@@ -603,13 +883,11 @@ async function loadAccount() {
       session.user;
 
 
-    document.getElementById(
-      "email"
-    ).textContent =
-      user.email || "";
+    /* =========================
+       LOAD PROFILE
+    ========================== */
 
-
-    const response =
+    const profileResponse =
     await fetch(
 
       SUPABASE_URL +
@@ -637,17 +915,17 @@ async function loadAccount() {
     );
 
 
-    if (!response.ok) {
+    if (!profileResponse.ok) {
 
       throw new Error(
-        await response.text()
+        await profileResponse.text()
       );
 
     }
 
 
     const profiles =
-      await response.json();
+      await profileResponse.json();
 
 
     if (
@@ -656,7 +934,7 @@ async function loadAccount() {
     ) {
 
       throw new Error(
-        "Customer profile was not found."
+        "Your account profile was not found."
       );
 
     }
@@ -666,22 +944,73 @@ async function loadAccount() {
       profiles[0];
 
 
-    document.getElementById(
-      "fullName"
-    ).value =
-      profile.full_name || "";
+    /*
+      Seller information is stored
+      separately in the sellers table.
+    */
+
+    const sellerResponse =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/sellers?user_id=eq." +
+      encodeURIComponent(
+        user.id
+      ) +
+      "&select=*",
+
+      {
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            session.access_token
+
+        }
+
+      }
+
+    );
 
 
-    document.getElementById(
-      "phone"
-    ).value =
-      profile.phone || "";
+    let sellers = [];
 
 
-    document.getElementById(
-      "address"
-    ).value =
-      profile.address || "";
+    if (sellerResponse.ok) {
+
+      sellers =
+        await sellerResponse.json();
+
+    }
+
+
+    /*
+      If a seller record exists,
+      this account is treated as a seller.
+    */
+
+    if (
+      Array.isArray(sellers) &&
+      sellers.length
+    ) {
+
+      loadSellerProfile(
+        user,
+        sellers[0]
+      );
+
+    } else {
+
+      loadCustomerProfile(
+        user,
+        profile
+      );
+
+    }
 
 
     document.getElementById(
@@ -718,37 +1047,214 @@ async function loadAccount() {
 
 
 /* =========================
-SAVE ACCOUNT
+LOAD CUSTOMER PROFILE
 ========================= */
 
-async function saveAccount() {
+function loadCustomerProfile(
+  user,
+  profile
+) {
+
+  document.getElementById(
+    "customerProfile"
+  ).classList.remove(
+    "hidden"
+  );
+
+
+  document.getElementById(
+    "customerOrders"
+  ).classList.remove(
+    "hidden"
+  );
+
+
+  document.getElementById(
+    "customerFullName"
+  ).value =
+    profile.full_name || "";
+
+
+  document.getElementById(
+    "customerEmail"
+  ).textContent =
+    user.email || "";
+
+
+  document.getElementById(
+    "customerPhone"
+  ).value =
+    profile.phone || "";
+
+
+  document.getElementById(
+    "customerAddress"
+  ).value =
+    profile.address || "";
+
+}
+
+
+/* =========================
+LOAD SELLER PROFILE
+========================= */
+
+function loadSellerProfile(
+  user,
+  seller
+) {
+
+  document.getElementById(
+    "sellerProfile"
+  ).classList.remove(
+    "hidden"
+  );
+
+
+  document.getElementById(
+    "sellerFullName"
+  ).value =
+    seller.full_name || "";
+
+
+  document.getElementById(
+    "sellerEmail"
+  ).textContent =
+    seller.email ||
+    user.email ||
+    "";
+
+
+  document.getElementById(
+    "sellerPhone"
+  ).value =
+    seller.phone || "";
+
+
+  document.getElementById(
+    "sellerResidentialAddress"
+  ).value =
+    seller.residential_address || "";
+
+
+  document.getElementById(
+    "sellerStoreName"
+  ).value =
+    seller.store_name || "";
+
+
+  document.getElementById(
+    "sellerBusinessAddress"
+  ).value =
+    seller.business_address || "";
+
+
+  document.getElementById(
+    "sellerCategory"
+  ).value =
+    seller.category || "";
+
+
+  document.getElementById(
+    "sellerDescription"
+  ).value =
+    seller.description || "";
+
+
+  const approved =
+    seller.approved === true ||
+    seller.status === "seller_approved";
+
+
+  const status =
+    document.getElementById(
+      "sellerStatus"
+    );
+
+
+  const sellerActions =
+    document.getElementById(
+      "sellerActions"
+    );
+
+
+  const pendingActions =
+    document.getElementById(
+      "sellerPendingActions"
+    );
+
+
+  if (approved) {
+
+    status.textContent =
+      "✅ Seller Approved";
+
+    status.className =
+      "status-box status-approved";
+
+
+    sellerActions.classList.remove(
+      "hidden"
+    );
+
+    pendingActions.classList.add(
+      "hidden"
+    );
+
+  } else {
+
+    status.textContent =
+      "⏳ Seller Application Pending Approval";
+
+    status.className =
+      "status-box status-pending";
+
+
+    sellerActions.classList.add(
+      "hidden"
+    );
+
+    pendingActions.classList.remove(
+      "hidden"
+    );
+
+  }
+
+}
+
+
+/* =========================
+SAVE CUSTOMER ACCOUNT
+========================= */
+
+async function saveCustomerAccount() {
 
   const saveButton =
     document.getElementById(
-      "saveButton"
+      "customerSaveButton"
     );
 
   const message =
     document.getElementById(
-      "message"
+      "customerMessage"
     );
 
 
   const fullName =
     document.getElementById(
-      "fullName"
+      "customerFullName"
     ).value.trim();
 
 
   const phone =
     document.getElementById(
-      "phone"
+      "customerPhone"
     ).value.trim();
 
 
   const address =
     document.getElementById(
-      "address"
+      "customerAddress"
     ).value.trim();
 
 
@@ -760,7 +1266,8 @@ async function saveAccount() {
 
     showMessage(
       "Please enter your full name.",
-      false
+      false,
+      "customerMessage"
     );
 
     return;
@@ -772,7 +1279,8 @@ async function saveAccount() {
 
     showMessage(
       "Please enter your phone number.",
-      false
+      false,
+      "customerMessage"
     );
 
     return;
@@ -784,7 +1292,8 @@ async function saveAccount() {
 
     showMessage(
       "Please enter your delivery address.",
-      false
+      false,
+      "customerMessage"
     );
 
     return;
@@ -891,14 +1400,15 @@ async function saveAccount() {
 
     showMessage(
       "✅ Your account details were saved successfully.",
-      true
+      true,
+      "customerMessage"
     );
 
 
   } catch (error) {
 
     console.error(
-      "Account save error:",
+      "Customer account save error:",
       error
     );
 
@@ -906,7 +1416,8 @@ async function saveAccount() {
     showMessage(
       "❌ Could not save your account details.\n\n" +
       error.message,
-      false
+      false,
+      "customerMessage"
     );
 
 
@@ -924,17 +1435,291 @@ async function saveAccount() {
 
 
 /* =========================
+SAVE SELLER ACCOUNT
+========================= */
+
+async function saveSellerAccount() {
+
+  const saveButton =
+    document.getElementById(
+      "sellerSaveButton"
+    );
+
+  const message =
+    document.getElementById(
+      "sellerMessage"
+    );
+
+
+  const fullName =
+    document.getElementById(
+      "sellerFullName"
+    ).value.trim();
+
+
+  const phone =
+    document.getElementById(
+      "sellerPhone"
+    ).value.trim();
+
+
+  const residentialAddress =
+    document.getElementById(
+      "sellerResidentialAddress"
+    ).value.trim();
+
+
+  const storeName =
+    document.getElementById(
+      "sellerStoreName"
+    ).value.trim();
+
+
+  const businessAddress =
+    document.getElementById(
+      "sellerBusinessAddress"
+    ).value.trim();
+
+
+  const category =
+    document.getElementById(
+      "sellerCategory"
+    ).value.trim();
+
+
+  const description =
+    document.getElementById(
+      "sellerDescription"
+    ).value.trim();
+
+
+  message.className =
+    "message";
+
+
+  if (!fullName) {
+
+    showMessage(
+      "Please enter your legal full name.",
+      false,
+      "sellerMessage"
+    );
+
+    return;
+
+  }
+
+
+  if (!phone) {
+
+    showMessage(
+      "Please enter your phone number.",
+      false,
+      "sellerMessage"
+    );
+
+    return;
+
+  }
+
+
+  if (!residentialAddress) {
+
+    showMessage(
+      "Please enter your residential address.",
+      false,
+      "sellerMessage"
+    );
+
+    return;
+
+  }
+
+
+  if (!storeName) {
+
+    showMessage(
+      "Please enter your store name.",
+      false,
+      "sellerMessage"
+    );
+
+    return;
+
+  }
+
+
+  if (!businessAddress) {
+
+    showMessage(
+      "Please enter your store/business address.",
+      false,
+      "sellerMessage"
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    saveButton.disabled =
+      true;
+
+    saveButton.textContent =
+      "Saving...";
+
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient.auth.getSession();
+
+
+    if (
+      error ||
+      !data ||
+      !data.session
+    ) {
+
+      window.location.replace(
+        "auth.html"
+      );
+
+      return;
+
+    }
+
+
+    const session =
+      data.session;
+
+    const user =
+      session.user;
+
+
+    const response =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/sellers?user_id=eq." +
+      encodeURIComponent(
+        user.id
+      ),
+
+      {
+
+        method:
+          "PATCH",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            session.access_token,
+
+          "Content-Type":
+            "application/json",
+
+          "Prefer":
+            "return=minimal"
+
+        },
+
+        body:
+          JSON.stringify({
+
+            full_name:
+              fullName,
+
+            phone:
+              phone,
+
+            residential_address:
+              residentialAddress,
+
+            store_name:
+              storeName,
+
+            business_address:
+              businessAddress,
+
+            category:
+              category,
+
+            description:
+              description
+
+          })
+
+      }
+
+    );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        await response.text()
+      );
+
+    }
+
+
+    showMessage(
+      "✅ Your seller details were saved successfully.",
+      true,
+      "sellerMessage"
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Seller account save error:",
+      error
+    );
+
+
+    showMessage(
+      "❌ Could not save your seller details.\n\n" +
+      error.message,
+      false,
+      "sellerMessage"
+    );
+
+
+  } finally {
+
+    saveButton.disabled =
+      false;
+
+    saveButton.textContent =
+      "💾 Save Seller Details";
+
+  }
+
+}
+
+
+/* =========================
 MESSAGE
 ========================= */
 
 function showMessage(
   text,
-  success
+  success,
+  elementId
 ) {
 
   const message =
     document.getElementById(
-      "message"
+      elementId
     );
 
 
@@ -969,6 +1754,14 @@ function goOrders() {
 
   window.location.href =
     "orders.html";
+
+}
+
+
+function goSellerDashboard() {
+
+  window.location.href =
+    "seller.html";
 
 }
 
