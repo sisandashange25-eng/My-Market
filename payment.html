@@ -133,7 +133,6 @@
     }
   </style>
 
-  <!-- Supabase browser library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
@@ -174,11 +173,13 @@
   </div>
 
 <script>
+
 const SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
 
 const SUPABASE_KEY =
   "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
 
 const supabaseClient =
   window.supabase.createClient(
@@ -193,11 +194,17 @@ const supabaseClient =
     }
   );
 
+
 const statusBox =
-  document.getElementById("statusBox");
+  document.getElementById(
+    "statusBox"
+  );
+
 
 const paymentDetails =
-  document.getElementById("paymentDetails");
+  document.getElementById(
+    "paymentDetails"
+  );
 
 
 function showError(message) {
@@ -222,17 +229,12 @@ function showSuccess(message) {
 
 async function getCustomerSession() {
 
-  /*
-    First try the Supabase browser session.
-    Supabase stores the session in browser
-    storage when persistSession is enabled.
-  */
-
   const {
     data,
     error
   } =
     await supabaseClient.auth.getSession();
+
 
   if (
     !error &&
@@ -243,12 +245,6 @@ async function getCustomerSession() {
     return data.session;
   }
 
-  /*
-    Backup:
-    some versions of the marketplace
-    may already have placed the session
-    in this variable.
-  */
 
   if (
     window.ZYRE_CURRENT_SESSION &&
@@ -258,59 +254,8 @@ async function getCustomerSession() {
     return window.ZYRE_CURRENT_SESSION;
   }
 
+
   return null;
-}
-
-
-async function loadOrder(orderId, session) {
-
-  const response =
-    await fetch(
-      SUPABASE_URL +
-      "/rest/v1/orders" +
-      "?select=id,total,status" +
-      "&id=eq." +
-      encodeURIComponent(orderId),
-      {
-        method: "GET",
-
-        headers: {
-          "apikey": SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            session.access_token
-        }
-      }
-    );
-
-  if (!response.ok) {
-
-    const text =
-      await response.text();
-
-    throw new Error(
-      "Could not load order: " +
-      text
-    );
-  }
-
-  const orders =
-    await response.json();
-
-  if (
-    !orders ||
-    orders.length === 0
-  ) {
-
-    throw new Error(
-      "Order #" +
-      orderId +
-      " could not be found."
-    );
-  }
-
-  return orders[0];
 }
 
 
@@ -319,7 +264,7 @@ async function verifyPayment() {
   try {
 
     /*
-      Read Paystack callback information.
+      Get Paystack callback information.
     */
 
     const params =
@@ -327,12 +272,15 @@ async function verifyPayment() {
         window.location.search
       );
 
+
     const orderId =
       params.get("order_id");
+
 
     const reference =
       params.get("reference") ||
       params.get("trxref");
+
 
     if (!orderId) {
 
@@ -343,6 +291,7 @@ async function verifyPayment() {
       return;
     }
 
+
     if (!reference) {
 
       showError(
@@ -352,36 +301,33 @@ async function verifyPayment() {
       return;
     }
 
+
     /*
-      Get the customer's Supabase session.
+      Get customer session.
     */
 
     const session =
       await getCustomerSession();
 
+
     if (!session) {
 
       showError(
         "Your customer login session could not be found. " +
-        "Please return to the marketplace and log in again before retrying payment."
+        "Please return to the marketplace, log in again, and retry payment."
       );
 
       return;
     }
 
-    /*
-      Load the order.
-    */
-
-    const order =
-      await loadOrder(
-        orderId,
-        session
-      );
 
     /*
-      Verify the payment through the
-      secure Supabase Edge Function.
+      IMPORTANT:
+      We do NOT read the orders table
+      directly from the browser.
+
+      The secure Edge Function does that
+      using the server-side service role.
     */
 
     const verifyResponse =
@@ -392,6 +338,7 @@ async function verifyPayment() {
           method: "POST",
 
           headers: {
+
             "Content-Type":
               "application/json",
 
@@ -404,17 +351,21 @@ async function verifyPayment() {
           },
 
           body: JSON.stringify({
+
             order_id:
-              order.id,
+              orderId,
 
             reference:
               reference
+
           })
         }
       );
 
+
     const result =
       await verifyResponse.json();
+
 
     if (
       !verifyResponse.ok ||
@@ -427,69 +378,109 @@ async function verifyPayment() {
       );
     }
 
+
     /*
       SUCCESS
     */
 
+    const amount =
+      Number(result.amount);
+
+
+    const commission =
+      amount * 0.10;
+
+
+    const sellerAmount =
+      amount * 0.90;
+
+
     showSuccess(
       "Payment successful! Your order has been marked as Paid."
     );
+
 
     paymentDetails.innerHTML = `
 
       <div class="card">
 
         <div class="row">
+
           <span class="label">
             Order Number
           </span>
 
           <span class="value">
-            #${order.id}
+            #${result.order_id}
           </span>
+
         </div>
 
+
         <div class="row">
+
           <span class="label">
             Amount
           </span>
 
           <span class="value">
-            R${Number(order.total).toFixed(2)}
+            R${amount.toFixed(2)}
           </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span class="label">
+            Payment Status
+          </span>
+
+          <span class="value">
+            Paid
+          </span>
+
         </div>
 
       </div>
+
 
       <div class="breakdown-title">
         Payment Breakdown
       </div>
 
+
       <div class="card">
 
         <div class="row">
+
           <span class="label">
             ZYRE Marketing Commission (10%)
           </span>
 
           <span class="value">
-            R${(Number(order.total) * 0.10).toFixed(2)}
+            R${commission.toFixed(2)}
           </span>
+
         </div>
 
+
         <div class="row">
+
           <span class="label">
             Seller Amount (90%)
           </span>
 
           <span class="value">
-            R${(Number(order.total) * 0.90).toFixed(2)}
+            R${sellerAmount.toFixed(2)}
           </span>
+
         </div>
 
       </div>
 
     `;
+
 
   } catch (error) {
 
@@ -498,15 +489,19 @@ async function verifyPayment() {
       error
     );
 
+
     showError(
       error.message ||
       "Payment verification failed."
     );
+
   }
+
 }
 
 
 verifyPayment();
+
 </script>
 
 </body>
