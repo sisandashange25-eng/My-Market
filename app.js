@@ -2036,7 +2036,7 @@ async function checkout() {
       await fetch(
 
         SUPABASE_URL +
-        "/functions/v1/paystack-initialize",
+        "/functions/v1/paystack-initialize8",
 
         {
 
