@@ -18,20 +18,27 @@ let category = "All";
 CART
 ========================================================= */
 
+/*
+  IMPORTANT:
+  We are now using a NEW storage key.
+
+  The old "cart" storage may contain broken product objects
+  that caused:
+
+  Product #[object Object]
+
+  The new cart uses only product IDs.
+*/
+
+const CART_STORAGE_KEY =
+"zyre_cart_v2";
+
 let cart = [];
 
-/*
-  Repair old cart data.
 
-  Older versions of the marketplace may have saved
-  complete product objects instead of product IDs.
-
-  Example old item:
-  { id: 12, name: "Wireless Earbuds", price: 299 }
-
-  The cart must contain only:
-  12
-*/
+/* =========================================================
+LOAD CART
+========================================================= */
 
 function loadCart() {
 
@@ -41,13 +48,15 @@ function loadCart() {
 
     raw =
       JSON.parse(
-        localStorage.getItem("cart") || "[]"
+        localStorage.getItem(
+          CART_STORAGE_KEY
+        ) || "[]"
       );
 
   } catch (error) {
 
     console.warn(
-      "Old cart data could not be read. Clearing cart.",
+      "ZYRE cart could not be read. Starting a new cart.",
       error
     );
 
@@ -61,14 +70,16 @@ function loadCart() {
 
   }
 
+  /*
+    Only accept simple product IDs.
+
+    If anything is an old product object,
+    extract its ID.
+  */
+
   cart =
     raw
       .map(item => {
-
-        /*
-          If an old cart item is a product object,
-          extract its ID.
-        */
 
         if (
           item &&
@@ -84,11 +95,6 @@ function loadCart() {
 
         }
 
-        /*
-          Normal cart item:
-          product ID
-        */
-
         return item;
 
       })
@@ -96,7 +102,8 @@ function loadCart() {
         id =>
           id !== null &&
           id !== undefined &&
-          id !== ""
+          id !== "" &&
+          typeof id !== "object"
       );
 
   save();
@@ -104,7 +111,7 @@ function loadCart() {
 }
 
 
-/* Load and repair the cart immediately. */
+/* Load the NEW cart immediately. */
 loadCart();
 
 
@@ -521,11 +528,6 @@ products =
   }));
 
 
-/*
-  Run cart repair again now that products
-  have loaded.
-*/
-
 loadCart();
 
 renderProducts();
@@ -630,7 +632,7 @@ SAVE CART
 function save() {
 
 localStorage.setItem(
-"cart",
+CART_STORAGE_KEY,
 JSON.stringify(cart)
 );
 
@@ -683,7 +685,7 @@ return;
 
 
 /*
-  Always repair the cart before displaying it.
+  Load the NEW cart.
 */
 
 loadCart();
