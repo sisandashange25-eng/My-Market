@@ -133,11 +133,10 @@ AUTH GRID
 .auth-grid {
   display: grid;
   grid-template-columns:
-    repeat(
-      2,
-      minmax(0, 1fr)
-    );
+    minmax(0, 1fr);
   gap: 22px;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 /* =========================
@@ -314,23 +313,6 @@ BUTTON
 
 .secondary-button:hover {
   background: #f5f5f5;
-}
-
-/* =========================
-LOGIN
-========================= */
-
-.forgot {
-  display: block;
-  margin: -5px 0 18px;
-  text-align: right;
-  color: #555;
-  font-size: 12px;
-  text-decoration: none;
-}
-
-.forgot:hover {
-  text-decoration: underline;
 }
 
 /* =========================
@@ -651,10 +633,10 @@ MOBILE
   </div>
 
   <a
-    href="index.html"
+    href="auth.html"
     class="back-button"
   >
-    ← Marketplace
+    ← Account
   </a>
 
 </header>
@@ -678,16 +660,13 @@ MOBILE
 
 
   <!-- =========================
-  AUTH AREA
+  SELLER APPLICATION
   ========================= -->
 
   <section
     class="auth-grid"
     id="authArea"
   >
-
-
-    <!-- REGISTER -->
 
     <div class="card">
 
@@ -1085,128 +1064,6 @@ MOBILE
 
     </div>
 
-
-    <!-- LOGIN -->
-
-    <div class="card">
-
-      <h2>
-        Seller login
-      </h2>
-
-      <p class="card-description">
-        Already have a ZYRE Marketing seller account?
-        Sign in to check your application or access
-        your Seller Centre if approved.
-      </p>
-
-
-      <div
-        id="loginMessage"
-        class="message"
-      ></div>
-
-
-      <form
-        id="loginForm"
-      >
-
-        <div class="form-group">
-
-          <label for="loginEmail">
-            Email address
-          </label>
-
-          <input
-            type="email"
-            id="loginEmail"
-            placeholder="you@example.com"
-            autocomplete="email"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="loginPassword">
-            Password
-          </label>
-
-          <div class="password-wrap">
-
-            <input
-              type="password"
-              id="loginPassword"
-              placeholder="Your password"
-              autocomplete="current-password"
-              required
-            >
-
-            <button
-              type="button"
-              class="password-toggle"
-              onclick="togglePassword('loginPassword', this)"
-            >
-              Show
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <a
-          href="#"
-          class="forgot"
-          onclick="forgotPassword(event)"
-        >
-          Forgot password?
-        </a>
-
-
-        <button
-          type="submit"
-          class="primary-button"
-          id="loginButton"
-        >
-          Sign In
-        </button>
-
-      </form>
-
-
-      <div class="benefits">
-
-        <h3>
-          Seller Centre
-        </h3>
-
-        <div class="benefit">
-          <span class="benefit-icon">⏳</span>
-          <span>Check your seller application status</span>
-        </div>
-
-        <div class="benefit">
-          <span class="benefit-icon">📊</span>
-          <span>Approved sellers can view store performance</span>
-        </div>
-
-        <div class="benefit">
-          <span class="benefit-icon">➕</span>
-          <span>Approved sellers can manage products</span>
-        </div>
-
-        <div class="benefit">
-          <span class="benefit-icon">📦</span>
-          <span>Approved sellers can manage customer orders</span>
-        </div>
-
-      </div>
-
-    </div>
-
   </section>
 
 
@@ -1283,9 +1140,9 @@ MOBILE
       <button
         type="button"
         class="secondary-button"
-        onclick="returnToMarketplace()"
+        onclick="returnToAccount()"
       >
-        Return to Marketplace
+        Return to Account
       </button>
 
 
@@ -1569,7 +1426,7 @@ async function loginExistingUser(
       data.msg ||
       data.message ||
       text ||
-      "The existing account could not be signed in."
+      "The account could not be signed in."
     );
 
   }
@@ -2072,13 +1929,13 @@ function saveSellerSession(
 
 
 /* =========================
-RETURN MARKETPLACE
+RETURN TO ACCOUNT
 ========================= */
 
-function returnToMarketplace() {
+function returnToAccount() {
 
   window.location.href =
-    "index.html";
+    "auth.html";
 
 }
 
@@ -2129,7 +1986,8 @@ document
             "registerEmail"
           )
           .value
-          .trim();
+          .trim()
+          .toLowerCase();
 
 
       const phone =
@@ -2475,17 +2333,9 @@ document
 
             showMessage(
               "registerMessage",
-              "Your account has been created. Please confirm your email address first, then return here and sign in.",
+              "Your account has been created. Please confirm your email address first, then return to the main ZYRE Account page and sign in as Seller.",
               "success"
             );
-
-
-            document
-              .getElementById(
-                "loginEmail"
-              )
-              .value =
-              email;
 
 
             return;
@@ -2626,19 +2476,8 @@ document
 
             showMessage(
               "registerMessage",
-              "Your seller store is already approved. Redirecting to Seller Centre...",
+              "Your seller store is already approved. Please return to the main Account page and sign in as Seller to access Seller Centre.",
               "success"
-            );
-
-
-            setTimeout(
-              function() {
-
-                window.location.href =
-                  "seller.html";
-
-              },
-              1200
             );
 
 
@@ -2717,6 +2556,11 @@ document
 
       } catch (error) {
 
+        console.error(
+          "Seller registration error:",
+          error
+        );
+
         showMessage(
           "registerMessage",
           error.message ||
@@ -2726,10 +2570,20 @@ document
 
       } finally {
 
+        /*
+          Only restore the button if the form
+          is still visible.
+        */
+
+        const authArea =
+          document.getElementById(
+            "authArea"
+          );
+
         if (
-          !button.textContent.includes(
-            "Submitted"
-          )
+          authArea &&
+          authArea.style.display !==
+            "none"
         ) {
 
           button.disabled =
@@ -2744,370 +2598,6 @@ document
 
     }
   );
-
-
-/* =========================
-LOGIN
-========================= */
-
-document
-  .getElementById("loginForm")
-  .addEventListener(
-    "submit",
-    async function(event) {
-
-      event.preventDefault();
-
-      clearMessage(
-        "loginMessage"
-      );
-
-
-      const button =
-        document.getElementById(
-          "loginButton"
-        );
-
-
-      const email =
-        document
-          .getElementById(
-            "loginEmail"
-          )
-          .value
-          .trim();
-
-
-      const password =
-        document
-          .getElementById(
-            "loginPassword"
-          )
-          .value;
-
-
-      button.disabled =
-        true;
-
-      button.textContent =
-        "Signing in...";
-
-
-      try {
-
-        const loginData =
-          await loginExistingUser(
-            email,
-            password
-          );
-
-
-        const accessToken =
-          loginData.access_token;
-
-        const userId =
-          loginData.user?.id;
-
-
-        if (
-          !accessToken ||
-          !userId
-        ) {
-
-          throw new Error(
-            "Login succeeded, but the seller session could not be created."
-          );
-
-        }
-
-
-        /* =========================
-        FIND SELLER
-        ========================= */
-
-        const sellerResponse =
-          await fetch(
-
-            SUPABASE_URL +
-            "/rest/v1/sellers?user_id=eq." +
-            encodeURIComponent(
-              userId
-            ) +
-            "&select=id,store_name,approved,email,status",
-
-            {
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Authorization":
-                  "Bearer " +
-                  accessToken
-
-              }
-
-            }
-
-          );
-
-
-        if (
-          !sellerResponse.ok
-        ) {
-
-          throw new Error(
-            "We could not check your seller application.\n\n" +
-            await sellerResponse.text()
-          );
-
-        }
-
-
-        const sellers =
-          await sellerResponse.json();
-
-
-        if (
-          !Array.isArray(sellers) ||
-          !sellers.length
-        ) {
-
-          showMessage(
-            "loginMessage",
-            "This account does not have a ZYRE Marketing seller application yet. Use the Seller Application section to create one.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        const seller =
-          sellers[0];
-
-
-        /* =========================
-        SAVE SESSION
-        ========================= */
-
-        saveSellerSession(
-          accessToken,
-          userId,
-          seller.id,
-          seller.email ||
-          email
-        );
-
-
-        /* =========================
-        APPROVAL STATUS
-        ========================= */
-
-        const sellerStatus =
-          seller.status ||
-          (
-            seller.approved === true
-              ? "seller_approved"
-              : "seller_pending"
-          );
-
-
-        /* =========================
-        APPROVED SELLER
-        ========================= */
-
-        if (
-          seller.approved === true ||
-          sellerStatus ===
-            "seller_approved"
-        ) {
-
-          showMessage(
-            "loginMessage",
-            "Welcome back! Your seller account is approved. Redirecting to your Seller Centre...",
-            "success"
-          );
-
-
-          setTimeout(
-            function() {
-
-              window.location.href =
-                "seller.html";
-
-            },
-            900
-          );
-
-
-          return;
-
-        }
-
-
-        /* =========================
-        PENDING SELLER
-        ========================= */
-
-        button.textContent =
-          "Checking application...";
-
-
-        const rentalPayment =
-          await createOrFindRentalPayment(
-            seller.id,
-            accessToken
-          );
-
-
-        showRentalPayment(
-          seller.store_name,
-          rentalPayment
-        );
-
-
-        showMessage(
-          "rentalMessage",
-          "Your seller application is still Seller Pending. ZYRE Marketing must approve your application before you can access the Seller Centre.",
-          "info"
-        );
-
-
-      } catch (error) {
-
-        showMessage(
-          "loginMessage",
-          "Login failed.\n\n" +
-          error.message,
-          "error"
-        );
-
-      } finally {
-
-        button.disabled =
-          false;
-
-        button.textContent =
-          "Sign In";
-
-      }
-
-    }
-  );
-
-
-/* =========================
-FORGOT PASSWORD
-========================= */
-
-async function forgotPassword(
-  event
-) {
-
-  event.preventDefault();
-
-
-  const email =
-    document
-      .getElementById(
-        "loginEmail"
-      )
-      .value
-      .trim();
-
-
-  if (!email) {
-
-    showMessage(
-      "loginMessage",
-      "Enter your email address first, then click Forgot password.",
-      "info"
-    );
-
-
-    document
-      .getElementById(
-        "loginEmail"
-      )
-      .focus();
-
-
-    return;
-
-  }
-
-
-  try {
-
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/auth/v1/recover",
-
-        {
-
-          method: "POST",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Content-Type":
-              "application/json"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              email:
-                email
-
-            })
-
-          }
-
-        );
-
-
-    if (!response.ok) {
-
-      showMessage(
-        "loginMessage",
-        "Password reset could not be requested.\n\n" +
-        await response.text(),
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    showMessage(
-      "loginMessage",
-      "If an account exists for this email, Supabase will send a password reset email.",
-      "success"
-    );
-
-
-  } catch (error) {
-
-    showMessage(
-      "loginMessage",
-      "Password reset failed.\n\n" +
-      error.message,
-      "error"
-    );
-
-  }
-
-}
 
 </script>
 
