@@ -664,7 +664,7 @@ const SELLER_SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
 
 const SELLER_SUPABASE_KEY =
-  "sb_publishable_902JguVx0M5DNLWVx8trpA_lUlUMDG0";
+  "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
 
 /* ==============================
@@ -733,17 +733,9 @@ const SELLER_ID =
   Number(storedSellerId);
 
 
-/*
-  IMPORTANT AUTH FIX:
-
-  Do NOT permanently capture the access token
-  when the page first loads.
-
-  Supabase can refresh the access token.
-
-  We therefore keep the token in a variable
-  that can be refreshed whenever necessary.
-*/
+/* ==============================
+   SELLER AUTH TOKEN
+============================== */
 
 let SELLER_ACCESS_TOKEN =
   localStorage.getItem(
@@ -760,11 +752,100 @@ async function refreshSellerAuthentication() {
   try {
 
     /*
-      First ask the Supabase client for the
-      current session.
+      1. CHECK THE CURRENT SESSION
+      CREATED BY APP.JS
+    */
 
-      This allows Supabase to automatically
-      refresh an expired access token.
+    if (
+      window.ZYRE_CURRENT_SESSION &&
+      window.ZYRE_CURRENT_SESSION.access_token
+    ) {
+
+      SELLER_ACCESS_TOKEN =
+        window.ZYRE_CURRENT_SESSION.access_token;
+
+      localStorage.setItem(
+        "zava_access_token",
+        SELLER_ACCESS_TOKEN
+      );
+
+      if (
+        window.ZYRE_CURRENT_SESSION.user &&
+        window.ZYRE_CURRENT_SESSION.user.id
+      ) {
+
+        localStorage.setItem(
+          "zava_user_id",
+          window.ZYRE_CURRENT_SESSION.user.id
+        );
+
+      }
+
+      console.log(
+        "ZYRE seller authentication recovered from current session."
+      );
+
+      return true;
+
+    }
+
+
+    /*
+      2. CHECK THE AUTH CLIENT
+      USED BY APP.JS
+    */
+
+    if (
+      window.ZYRE_AUTH_CLIENT &&
+      window.ZYRE_AUTH_CLIENT.auth
+    ) {
+
+      const {
+        data,
+        error
+      } =
+        await window.ZYRE_AUTH_CLIENT.auth.getSession();
+
+      if (
+        !error &&
+        data &&
+        data.session &&
+        data.session.access_token
+      ) {
+
+        SELLER_ACCESS_TOKEN =
+          data.session.access_token;
+
+        localStorage.setItem(
+          "zava_access_token",
+          SELLER_ACCESS_TOKEN
+        );
+
+        if (
+          data.session.user &&
+          data.session.user.id
+        ) {
+
+          localStorage.setItem(
+            "zava_user_id",
+            data.session.user.id
+          );
+
+        }
+
+        console.log(
+          "ZYRE seller authentication recovered from app.js Supabase client."
+        );
+
+        return true;
+
+      }
+
+    }
+
+
+    /*
+      3. CHECK THIS PAGE'S SUPABASE CLIENT
     */
 
     const {
@@ -784,12 +865,10 @@ async function refreshSellerAuthentication() {
       SELLER_ACCESS_TOKEN =
         data.session.access_token;
 
-
       localStorage.setItem(
         "zava_access_token",
         SELLER_ACCESS_TOKEN
       );
-
 
       if (
         data.session.user &&
@@ -803,6 +882,9 @@ async function refreshSellerAuthentication() {
 
       }
 
+      console.log(
+        "ZYRE seller authentication recovered from seller auth client."
+      );
 
       return true;
 
@@ -810,17 +892,13 @@ async function refreshSellerAuthentication() {
 
 
     /*
-      Fallback:
-
-      If the Supabase client does not currently
-      have a session, check the token already
-      stored by the seller login.
+      4. CHECK zava_access_token
     */
 
     const storedToken =
       localStorage.getItem(
         "zava_access_token"
-      );
+      ) || "";
 
 
     if (
@@ -834,9 +912,11 @@ async function refreshSellerAuthentication() {
           "/auth/v1/user",
           {
             method: "GET",
+
             headers: {
               "apikey":
                 SELLER_SUPABASE_KEY,
+
               "Authorization":
                 "Bearer " +
                 storedToken
@@ -847,8 +927,30 @@ async function refreshSellerAuthentication() {
 
       if (userResponse.ok) {
 
+        const userData =
+          await userResponse.json();
+
+
         SELLER_ACCESS_TOKEN =
           storedToken;
+
+
+        if (
+          userData &&
+          userData.id
+        ) {
+
+          localStorage.setItem(
+            "zava_user_id",
+            userData.id
+          );
+
+        }
+
+
+        console.log(
+          "ZYRE seller authentication recovered from zava_access_token."
+        );
 
         return true;
 
@@ -857,7 +959,120 @@ async function refreshSellerAuthentication() {
     }
 
 
+    /*
+      5. CHECK SUPABASE'S NORMAL AUTH
+      LOCAL STORAGE
+    */
+
+    for (
+      let i = 0;
+      i < localStorage.length;
+      i++
+    ) {
+
+      const key =
+        localStorage.key(i);
+
+
+      if (
+        !key ||
+        !key.startsWith("sb-") ||
+        !key.endsWith("-auth-token")
+      ) {
+
+        continue;
+
+      }
+
+
+      try {
+
+        const raw =
+          localStorage.getItem(key);
+
+
+        if (!raw) continue;
+
+
+        const parsed =
+          JSON.parse(raw);
+
+
+        let session =
+          parsed;
+
+
+        if (
+          parsed &&
+          parsed.currentSession
+        ) {
+
+          session =
+            parsed.currentSession;
+
+        }
+
+
+        if (
+          session &&
+          session.access_token
+        ) {
+
+          SELLER_ACCESS_TOKEN =
+            session.access_token;
+
+
+          localStorage.setItem(
+            "zava_access_token",
+            SELLER_ACCESS_TOKEN
+          );
+
+
+          if (
+            session.user &&
+            session.user.id
+          ) {
+
+            localStorage.setItem(
+              "zava_user_id",
+              session.user.id
+            );
+
+          }
+
+
+          console.log(
+            "ZYRE seller authentication recovered from Supabase local storage."
+          );
+
+          return true;
+
+        }
+
+      }
+
+      catch (storageError) {
+
+        console.warn(
+          "Could not read Supabase auth storage:",
+          key,
+          storageError
+        );
+
+      }
+
+    }
+
+
+    /*
+      NOTHING FOUND
+    */
+
     SELLER_ACCESS_TOKEN = "";
+
+    console.warn(
+      "No valid ZYRE seller authentication session was found."
+    );
 
     return false;
 
@@ -870,24 +1085,20 @@ async function refreshSellerAuthentication() {
       error
     );
 
-    /*
-      Last fallback to the locally stored
-      access token.
-    */
 
-    const storedToken =
+    const fallbackToken =
       localStorage.getItem(
         "zava_access_token"
-      );
+      ) || "";
 
 
     if (
-      storedToken &&
-      storedToken.trim().length > 20
+      fallbackToken &&
+      fallbackToken.trim().length > 20
     ) {
 
       SELLER_ACCESS_TOKEN =
-        storedToken;
+        fallbackToken;
 
       return true;
 
@@ -926,7 +1137,7 @@ async function ensureSellerAuthentication() {
 
 
   alert(
-    "Your seller login session has expired or is missing.\n\nPlease log in again before adding a product."
+    "Your ZYRE seller login could not be recovered.\n\nPlease return to the main store, log in again, and then open Seller Dashboard."
   );
 
 
@@ -1022,16 +1233,6 @@ function getHeaders() {
 
   };
 
-
-  /*
-    IMPORTANT:
-
-    Only send Authorization when we have
-    a real Supabase access token.
-
-    NEVER use the publishable key as a
-    Bearer token.
-  */
 
   if (
     hasSellerAuthentication()
@@ -1553,16 +1754,6 @@ async function loadRentalSubscription() {
 
 async function addProduct() {
 
-  /*
-    IMPORTANT AUTH FIX:
-
-    Refresh the Supabase session immediately
-    before attempting the INSERT.
-
-    This prevents the dashboard from using
-    an expired token.
-  */
-
   const authenticated =
     await ensureSellerAuthentication();
 
@@ -1627,11 +1818,6 @@ async function addProduct() {
 
 
   try {
-
-    /*
-      Refresh one more time immediately before
-      the database request.
-    */
 
     await refreshSellerAuthentication();
 
@@ -1704,13 +1890,6 @@ async function addProduct() {
         response.status === 401 ||
         response.status === 403
       ) {
-
-        /*
-          Try refreshing the session once more.
-
-          This handles an access token that expired
-          immediately before the request.
-        */
 
         const refreshed =
           await refreshSellerAuthentication();
@@ -3722,19 +3901,19 @@ document.getElementById(
   SELLER_ID;
 
 
-/*
-  IMPORTANT:
-
-  Authenticate first.
-
-  Only after the current Supabase session
-  has been recovered/refreshed do we load
-  the seller dashboard.
-*/
-
 (async function startSellerDashboard() {
 
-  await refreshSellerAuthentication();
+  console.log(
+    "ZYRE Seller Dashboard starting..."
+  );
+
+  const authenticated =
+    await refreshSellerAuthentication();
+
+  console.log(
+    "ZYRE Seller authentication:",
+    authenticated
+  );
 
   showAuthenticationWarning();
 
