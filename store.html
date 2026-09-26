@@ -1,130 +1,122 @@
 <!doctype html>
-<html lang="en-ZA">
 
-<head>
+<html lang="en-ZA"><head><meta charset="utf-8"><meta
+name="viewport"
+content="width=device-width,initial-scale=1"
 
-<meta charset="utf-8">
+«»
 
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1"
->
+<title>ZYRE Marketing | Online Store</title><meta
+id="metaDescription"
+name="description"
+content="Shop products from businesses on ZYRE Marketing, a South African online marketplace."
 
-<!-- =========================
-     ZYRE STORE SEO
-========================= -->
-
-<title>
-  ZYRE Marketing | Online Store
-</title>
+«»
 
 <meta
-  id="metaDescription"
-  name="description"
-  content="Shop products from businesses on ZYRE Marketing, a South African online marketplace where customers can discover and shop products online."
->
+name="robots"
+content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+
+«»
 
 <meta
-  name="robots"
-  content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
->
+name="author"
+content="ZYRE Marketing"
+
+«»
 
 <meta
-  name="googlebot"
-  content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
->
+name="geo.region"
+content="ZA"
+
+«»
 
 <meta
-  name="author"
-  content="ZYRE Marketing"
->
+name="geo.placename"
+content="Durban, South Africa"
 
-<meta
-  name="geo.region"
-  content="ZA"
->
-
-<meta
-  name="geo.placename"
-  content="Durban, South Africa"
->
+«»
 
 <link
   id="canonicalLink"
   rel="canonical"
   href="https://sisandashange25-eng.github.io/My-Market/store.html"
->
+><meta
+id="ogTitle"
+property="og:title"
+content="ZYRE Marketing | Online Store"
 
-
-<!-- =========================
-     SOCIAL SHARING
-========================= -->
-
-<meta
-  id="ogTitle"
-  property="og:title"
-  content="ZYRE Marketing | Online Store"
->
+«»
 
 <meta
-  id="ogDescription"
-  property="og:description"
-  content="Shop products from businesses on ZYRE Marketing, a South African online marketplace."
->
+id="ogDescription"
+property="og:description"
+content="Shop products from businesses on ZYRE Marketing, a South African online marketplace."
+
+«»
 
 <meta
-  property="og:type"
-  content="website"
->
+property="og:type"
+content="website"
+
+«»
 
 <meta
-  id="ogUrl"
-  property="og:url"
-  content="https://sisandashange25-eng.github.io/My-Market/store.html"
->
+id="ogUrl"
+property="og:url"
+content="https://sisandashange25-eng.github.io/My-Market/store.html"
+
+«»
 
 <meta
-  property="og:site_name"
-  content="ZYRE Marketing"
->
+property="og:site_name"
+content="ZYRE Marketing"
+
+«»
 
 <meta
-  property="og:locale"
-  content="en_ZA"
->
+property="og:locale"
+content="en_ZA"
+
+«»
 
 <meta
-  property="og:image"
-  content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
->
+property="og:image"
+content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
+
+«»
 
 <meta
-  property="og:image:alt"
-  content="ZYRE Marketing logo"
->
+property="og:image:alt"
+content="ZYRE Marketing logo"
+
+«»
 
 <meta
-  name="twitter:card"
-  content="summary"
->
+name="twitter:card"
+content="summary"
+
+«»
 
 <meta
-  id="twitterTitle"
-  name="twitter:title"
-  content="ZYRE Marketing | Online Store"
->
+id="twitterTitle"
+name="twitter:title"
+content="ZYRE Marketing | Online Store"
+
+«»
 
 <meta
-  id="twitterDescription"
-  name="twitter:description"
-  content="Shop products from businesses on ZYRE Marketing."
->
+id="twitterDescription"
+name="twitter:description"
+content="Shop products from businesses on ZYRE Marketing."
+
+«»
 
 <meta
-  name="twitter:image"
-  content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
->
+name="twitter:image"
+content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
 
+«»
 
 <style>
 
@@ -239,6 +231,41 @@ body {
     );
   border: 1px solid #292929;
   border-radius: 14px;
+}
+
+/* STORE LOGO */
+
+.store-logo-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.store-logo {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #d4af37;
+  background: #111;
+  display: block;
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
+}
+
+.store-logo-placeholder {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 3px solid #d4af37;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d4af37;
+  font-size: 38px;
+  font-weight: bold;
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
 }
 
 .store-label {
@@ -506,173 +533,122 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .store-logo,
+  .store-logo-placeholder {
+    width: 95px;
+    height: 95px;
+  }
+
 }
 
-</style>
+</style></head><body><header class="store-header">  <div class="brand"><span class="brand-main">
+  ZYRE
+</span>
 
-</head>
+<span class="brand-sub">
+  MARKETING
+</span>
 
-<body>
+  </div><button
+class="cart-button"
+type="button"
+onclick="openCart()"
 
-<header class="store-header">
+«»
 
-  <div class="brand">
+🛒 View Cart
 
-    <span class="brand-main">
-      ZYRE
-    </span>
+<span
+  id="cartCount"
+  class="cart-count"
+>0</span>
 
-    <span class="brand-sub">
-      MARKETING
-    </span>
+  </button></header><a
+href="index.html"
+class="back-button"
 
-  </div>
+«»
 
-  <button
-    class="cart-button"
-    type="button"
-    onclick="openCart()"
-  >
-    🛒 View Cart
-
-    <span
-      id="cartCount"
-      class="cart-count"
-    >0</span>
-
-  </button>
-
-</header>
-
-<a
-  href="index.html"
-  class="back-button"
->
-  ← Back to Marketplace
+← Back to Marketplace
 </a>
 
 <section
   class="store-hero"
   aria-labelledby="storeName"
->
+>  <!-- STORE LOGO -->  <div
+    id="storeLogoWrap"
+    class="store-logo-wrap"
+  ><div class="store-logo-placeholder">
+  🏪
+</div>
 
-  <div class="store-label">
+  </div>  <div class="store-label">
     ZYRE MARKETPLACE
-  </div>
-
-  <h1
+  </div>  <h1
     id="storeName"
     class="store-name"
   >
     ZYRE Marketing Online Store
-  </h1>
-
-  <p
+  </h1>  <p
     id="storeDescription"
     class="store-description"
   >
     Discover products from businesses and independent sellers on ZYRE Marketing, a South African online marketplace.
-  </p>
-
-</section>
-
-
-<!-- =========================
-     STATIC SEO CONTENT
-========================= -->
-
-<section
+  </p></section><section
   class="store-seo-intro"
   aria-label="About the ZYRE Marketing online store"
->
-
-  <p>
+>  <p>
     Welcome to the <strong>ZYRE Marketing online store</strong>.
     Browse products from businesses and independent sellers,
     discover different categories, and shop online through the
     ZYRE Marketing marketplace.
-  </p>
-
-  <p>
+  </p>  <p>
     ZYRE Marketing connects customers with online stores in
     <strong>South Africa</strong>, making it easier to discover
     products, compare available items, and add products to your cart.
-  </p>
+  </p></section><section class="products-section">  <div class="section-title"><p>
+  SHOP THIS STORE
+</p>
 
-</section>
+<h2>
+  Products
+</h2>
 
+  </div>  <div class="store-tools"><input
+  id="storeSearch"
+  class="store-search"
+  type="search"
+  placeholder="🔎 Search products in this store..."
+  autocomplete="off"
+  aria-label="Search products in this store"
+>
 
-<section class="products-section">
+<select
+  id="categoryFilter"
+  class="category-filter"
+  aria-label="Filter products by category"
+>
 
-  <div class="section-title">
+  <option value="">
+    All Categories
+  </option>
 
-    <p>
-      SHOP THIS STORE
-    </p>
+</select>
 
-    <h2>
-      Products
-    </h2>
-
-  </div>
-
-  <!-- STORE SEARCH -->
-
-  <div class="store-tools">
-
-    <input
-      id="storeSearch"
-      class="store-search"
-      type="search"
-      placeholder="🔎 Search products in this store..."
-      autocomplete="off"
-      aria-label="Search products in this store"
-    >
-
-    <select
-      id="categoryFilter"
-      class="category-filter"
-      aria-label="Filter products by category"
-    >
-
-      <option value="">
-        All Categories
-      </option>
-
-    </select>
-
-  </div>
-
-  <div
+  </div>  <div
     id="productsGrid"
     class="products-grid"
-  >
+  ><div class="message">
+  Loading products...
+</div>
 
-    <div class="message">
-      Loading products...
-    </div>
-
-  </div>
-
-</section>
-
-<footer>
-
-  <div class="footer-brand">
+  </div></section><footer>  <div class="footer-brand">
     ZYRE MARKETING
-  </div>
-
-  <div class="footer-text">
+  </div>  <div class="footer-text">
     Your business. Your store. One marketplace.
-  </div>
-
-  <div class="footer-text">
+  </div>  <div class="footer-text">
     © 2026 ZYRE Marketing · Durban, South Africa
-  </div>
-
-</footer>
-
-<script>
+  </div></footer><script>
 
 const SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
@@ -826,11 +802,6 @@ function updateStoreSEO(
     );
 
   }
-
-  /*
-    Add dynamic structured data
-    for the individual store.
-  */
 
   const existingSchema =
     document.getElementById(
@@ -1181,18 +1152,14 @@ function renderProducts() {
 
               ${
                 image
-
                 ?
-
                 `
                   <img
                     src="${escapeText(image)}"
                     alt="${escapeText(product.name)}"
                   >
                 `
-
                 :
-
                 `
                   <div class="product-placeholder">
                     🛍️
@@ -1283,6 +1250,67 @@ function renderProducts() {
 
 
 /* =========================
+   STORE LOGO
+========================= */
+
+function displayStoreLogo(storeImageUrl) {
+
+  const logoWrap =
+    document.getElementById(
+      "storeLogoWrap"
+    );
+
+  if (!logoWrap) {
+    return;
+  }
+
+  const imageUrl =
+    String(
+      storeImageUrl || ""
+    ).trim();
+
+  if (!imageUrl) {
+
+    logoWrap.innerHTML =
+      `
+        <div
+          class="store-logo-placeholder"
+          aria-label="Store logo placeholder"
+        >
+          🏪
+        </div>
+      `;
+
+    return;
+
+  }
+
+  const safeUrl =
+    escapeText(imageUrl);
+
+  logoWrap.innerHTML =
+    `
+      <img
+        class="store-logo"
+        src="${safeUrl}"
+        alt="Store logo"
+        loading="eager"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      >
+
+      <div
+        class="store-logo-placeholder"
+        style="display:none;"
+        aria-label="Store logo placeholder"
+      >
+        🏪
+      </div>
+    `;
+
+}
+
+
+/* =========================
    LOAD STORE
 ========================= */
 
@@ -1304,14 +1332,6 @@ async function loadStore() {
     );
 
   if (!sellerId) {
-
-    /*
-      Keep the base store.html page
-      useful for search engines and
-      visitors while still allowing
-      specific stores to load through
-      ?seller_id=...
-    */
 
     nameBox.textContent =
       "ZYRE Marketing Online Store";
@@ -1347,16 +1367,18 @@ async function loadStore() {
         "/rest/v1/sellers" +
         "?id=eq." +
         encodeURIComponent(sellerId) +
-        "&select=id,store_name,description",
+        "&select=id,store_name,description,store_image_url",
 
         {
           headers: {
+
             "apikey":
               SUPABASE_KEY,
 
             "Authorization":
               "Bearer " +
               SUPABASE_KEY
+
           }
         }
 
@@ -1399,9 +1421,14 @@ async function loadStore() {
       storeDescription;
 
 
-    /* =========================
-       UPDATE STORE SEO
-    ========================= */
+    /* DISPLAY SELLER LOGO */
+
+    displayStoreLogo(
+      seller.store_image_url
+    );
+
+
+    /* UPDATE STORE SEO */
 
     updateStoreSEO(
       storeName,
@@ -1422,12 +1449,14 @@ async function loadStore() {
 
         {
           headers: {
+
             "apikey":
               SUPABASE_KEY,
 
             "Authorization":
               "Bearer " +
               SUPABASE_KEY
+
           }
         }
 
@@ -1524,8 +1553,4 @@ updateCartCount();
 
 loadStore();
 
-</script>
-
-</body>
-
-</html>
+</script></body></html>
