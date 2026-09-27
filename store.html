@@ -169,7 +169,6 @@
     .cart-button {
       min-width: 44px;
       height: 44px;
-
       padding: 0 12px;
 
       display: flex;
@@ -183,7 +182,6 @@
       border: 1px solid rgba(255,255,255,.12);
 
       color: #ffffff;
-
       font-size: 18px;
     }
 
@@ -236,7 +234,6 @@
 
     .store-menu-header {
       min-height: 110px;
-
       padding: 25px;
 
       display: flex;
@@ -286,7 +283,6 @@
       gap: 14px;
 
       padding: 16px;
-
       margin: 5px 0;
 
       border: none;
@@ -296,7 +292,6 @@
       color: #ffffff;
 
       text-align: left;
-
       font-size: 14px;
     }
 
@@ -312,11 +307,8 @@
 
     .logout-menu-button {
       margin-top: 14px !important;
-
       border-top: 1px solid rgba(255,255,255,.08) !important;
-
       border-radius: 12px !important;
-
       color: #ffb4b4 !important;
     }
 
@@ -381,7 +373,6 @@
       min-width: 0;
 
       height: 46px;
-
       padding: 0 18px;
 
       border: 1px solid #d9d5cc;
@@ -612,7 +603,6 @@
 
     .rental-locked-icon {
       font-size: 48px;
-
       margin-bottom: 15px;
     }
 
@@ -820,15 +810,12 @@
 
     .add-cart-button:hover {
       background: #d4af37;
-
       color: #000000;
     }
 
     .add-cart-button:disabled {
       background: #dddddd;
-
       color: #777777;
-
       cursor: not-allowed;
     }
 
@@ -850,7 +837,6 @@
 
     .empty-state h3 {
       margin: 0 0 8px;
-
       color: #222222;
     }
 
@@ -1046,13 +1032,11 @@
 
       .product-name {
         font-size: 13px;
-
         min-height: 34px;
       }
 
       .product-description {
         font-size: 11px;
-
         min-height: 32px;
       }
 
@@ -1062,7 +1046,6 @@
 
       .product-stock {
         font-size: 10px;
-
         margin-bottom: 9px;
       }
 
@@ -1108,6 +1091,11 @@
     }
 
   </style>
+
+  <!-- Supabase client -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
 
 </head>
 
@@ -1476,10 +1464,180 @@
 
     window.storeRentalAccess = false;
 
+    /*
+      =====================================================
+      CUSTOMER AUTH FIX
+      =====================================================
 
-    /* =====================================================
-       AUTHENTICATED HEADERS
-       ===================================================== */
+      The old page depended mainly on:
+
+      localStorage["zava_access_token"]
+
+      That can fail on the customer store page even when
+      the customer is actually logged in to Supabase.
+
+      We now create the official Supabase client and ask
+      Supabase for the current authenticated session.
+
+      The real access token from that session is then used
+      for the customer-side database requests.
+    */
+
+    let zyreSupabaseClient = null;
+
+    let zyreCurrentSession = null;
+
+
+    function initializeZYRESupabaseClient() {
+
+      try {
+
+        if (
+          !window.supabase ||
+          typeof window.supabase.createClient !==
+            "function"
+        ) {
+
+          console.error(
+            "ZYRE: Supabase client library is unavailable."
+          );
+
+          return false;
+
+        }
+
+        zyreSupabaseClient =
+          window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+          );
+
+        return true;
+
+      } catch (error) {
+
+        console.error(
+          "ZYRE: Could not initialize Supabase client:",
+          error
+        );
+
+        return false;
+
+      }
+
+    }
+
+
+    async function getZYRECustomerSession() {
+
+      try {
+
+        /*
+          First try the official Supabase session.
+        */
+
+        if (zyreSupabaseClient) {
+
+          const result =
+            await zyreSupabaseClient.auth.getSession();
+
+          if (
+            result &&
+            result.data &&
+            result.data.session
+          ) {
+
+            zyreCurrentSession =
+              result.data.session;
+
+            /*
+              Keep the existing ZYRE local token
+              working for the rest of the site.
+            */
+
+            try {
+
+              localStorage.setItem(
+                "zava_access_token",
+                zyreCurrentSession.access_token
+              );
+
+            } catch (storageError) {
+
+              console.warn(
+                "ZYRE: Could not update local access token:",
+                storageError
+              );
+
+            }
+
+            console.log(
+              "ZYRE: Customer Supabase session confirmed."
+            );
+
+            return zyreCurrentSession;
+
+          }
+
+        }
+
+        /*
+          Compatibility fallback for the existing
+          ZYRE authentication system.
+        */
+
+        let oldAccessToken = "";
+
+        try {
+
+          oldAccessToken =
+            localStorage.getItem(
+              "zava_access_token"
+            ) || "";
+
+        } catch (error) {
+
+          console.warn(
+            "ZYRE: Could not read existing access token:",
+            error
+          );
+
+        }
+
+        if (oldAccessToken) {
+
+          zyreCurrentSession = {
+            access_token:
+              oldAccessToken
+          };
+
+          console.log(
+            "ZYRE: Existing customer access token found."
+          );
+
+          return zyreCurrentSession;
+
+        }
+
+        console.warn(
+          "ZYRE: No authenticated customer session was found."
+        );
+
+        return null;
+
+      } catch (error) {
+
+        console.error(
+          "ZYRE: Customer session check failed:",
+          error
+        );
+
+        return null;
+
+      }
+
+    }
+
 
     function getAuthenticatedHeaders() {
 
@@ -1495,30 +1653,52 @@
 
       let accessToken = "";
 
-      try {
+      /*
+        PRIMARY:
+        Real Supabase authenticated session.
+      */
+
+      if (
+        zyreCurrentSession &&
+        zyreCurrentSession.access_token
+      ) {
 
         accessToken =
-          localStorage.getItem(
-            "zava_access_token"
-          ) || "";
-
-      } catch (error) {
-
-        console.warn(
-          "Could not read access token:",
-          error
-        );
+          zyreCurrentSession.access_token;
 
       }
 
       /*
-        IMPORTANT FIX:
+        FALLBACK:
+        Existing ZYRE token.
+      */
 
-        Only use the real logged-in access token
-        as the Authorization bearer token.
+      if (!accessToken) {
 
-        DO NOT use the publishable key as the
-        Authorization bearer token.
+        try {
+
+          accessToken =
+            localStorage.getItem(
+              "zava_access_token"
+            ) || "";
+
+        } catch (error) {
+
+          console.warn(
+            "Could not read access token:",
+            error
+          );
+
+        }
+
+      }
+
+      /*
+        Only send Authorization when we have
+        a real user access token.
+
+        NEVER use the publishable key as a
+        Bearer token.
       */
 
       if (accessToken) {
@@ -1581,6 +1761,23 @@
       }
 
       try {
+
+        if (zyreSupabaseClient) {
+
+          try {
+
+            await zyreSupabaseClient.auth.signOut();
+
+          } catch (supabaseLogoutError) {
+
+            console.warn(
+              "Supabase sign out failed:",
+              supabaseLogoutError
+            );
+
+          }
+
+        }
 
         const accessToken =
           localStorage.getItem(
@@ -2594,17 +2791,8 @@
       }
 
       /*
-        PRIMARY CHECK:
-        Active store subscription.
-
-        Your existing subscription is:
-
-        seller_id = 16
-        rental_plan_id = 1
-        status = active
-        expires_at = 2026-10-31
-
-        Therefore it should keep the store open.
+        PRIMARY:
+        Active subscription.
       */
 
       const activeSubscription =
@@ -2615,17 +2803,16 @@
       if (activeSubscription) {
 
         console.log(
-          "ZYRE rental access granted by active subscription."
+          "ZYRE: rental access granted by active subscription."
         );
 
         return true;
 
       }
 
-
       /*
         FALLBACK:
-        Current-month paid rental payment.
+        Current-month paid rental.
       */
 
       const currentMonthPayment =
@@ -2636,16 +2823,15 @@
       if (currentMonthPayment) {
 
         console.log(
-          "ZYRE rental access granted by current-month paid rental."
+          "ZYRE: rental access granted by current-month paid rental."
         );
 
         return true;
 
       }
 
-
       console.warn(
-        "ZYRE rental access could not be confirmed for seller:",
+        "ZYRE: rental access could not be confirmed for seller:",
         sellerIdValue
       );
 
@@ -3177,6 +3363,51 @@
 
       try {
 
+        /*
+          =================================================
+          STEP 0 — CUSTOMER SESSION
+          =================================================
+
+          This is the important fix.
+
+          We obtain the real Supabase customer session
+          before making the RLS-protected subscription
+          request.
+        */
+
+        const customerSession =
+          await getZYRECustomerSession();
+
+        if (!customerSession) {
+
+          console.warn(
+            "ZYRE: Customer session was not available."
+          );
+
+          const warning =
+            document.getElementById(
+              "rentalWarning"
+            );
+
+          const warningText =
+            warning?.querySelector(
+              ".rental-warning-text"
+            );
+
+          if (warningText) {
+
+            warningText.textContent =
+              "Your customer session could not be verified. Please return to the login page and sign in again.";
+
+          }
+
+          showRentalLockedState();
+
+          return;
+
+        }
+
+
         /* =========================
            STEP 1 — SELLER
         ========================= */
@@ -3267,7 +3498,7 @@
         if (!rentalAccess) {
 
           console.warn(
-            "Store locked: rental could not be confirmed."
+            "ZYRE: Store rental access could not be confirmed."
           );
 
           showRentalLockedState();
@@ -3343,14 +3574,8 @@
         );
 
         /*
-          IMPORTANT:
-
-          A technical loading error should NOT
-          tell the customer that the rental is
-          unpaid.
-
-          We leave the rental message only when
-          the rental check itself returns false.
+          A technical error must NOT be presented
+          as an unpaid rental.
         */
 
         const warning =
@@ -3464,9 +3689,23 @@
        START
        ===================================================== */
 
-    updateStoreCartCount();
+    async function startZYREStore() {
 
-    loadStore();
+      updateStoreCartCount();
+
+      /*
+        Initialize Supabase first, then load the
+        customer store.
+      */
+
+      initializeZYRESupabaseClient();
+
+      await loadStore();
+
+    }
+
+
+    startZYREStore();
 
   </script>
 
