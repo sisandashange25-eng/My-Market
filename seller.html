@@ -19,7 +19,6 @@ content="noindex,nofollow"
 
 <!-- =====================================================
      SUPABASE JAVASCRIPT LIBRARY
-     REQUIRED FOR SELLER AUTHENTICATION
 ===================================================== --><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 
 *{
@@ -874,11 +873,8 @@ let CURRENT_ORDER_FILTER = "all";
 
 
 /* =====================================================
-SUPABASE CLIENT
+CREATE SUPABASE CLIENT
 ===================================================== */
-
-let SUPABASE_CLIENT = null;
-
 
 function createSupabaseClient(){
 
@@ -894,19 +890,10 @@ function createSupabaseClient(){
 
   }
 
-
-  if(!SUPABASE_CLIENT){
-
-    SUPABASE_CLIENT =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
-
-  }
-
-
-  return SUPABASE_CLIENT;
+  return window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 }
 
@@ -981,6 +968,9 @@ async function refreshSellerAuthentication(){
 
 /* =====================================================
 SELLER ACCOUNT RESOLUTION
+IMPORTANT:
+The sellers table does NOT contain a "name"
+column. Do not request it.
 ===================================================== */
 
 async function resolveSellerFromAccount(){
@@ -1006,9 +996,17 @@ async function resolveSellerFromAccount(){
     session.user.id;
 
 
+  /*
+  FIXED:
+
+  Removed "name" from the SELECT list.
+
+  Your sellers table uses full_name.
+  */
+
   const sellers =
     await supabaseRequest(
-      "sellers?select=id,user_id,store_name,approved,status,full_name,name,email,phone,category&user_id=eq." +
+      "sellers?select=id,user_id,store_name,approved,status,full_name,email,phone,category&user_id=eq." +
       encodeURIComponent(userId) +
       "&limit=1"
     );
@@ -1640,10 +1638,6 @@ async function checkRental(){
   );
 
 
-  /* ===================================================
-     CHECK ACTIVE SUBSCRIPTION
-  =================================================== */
-
   let subscriptions = [];
 
 
@@ -1698,10 +1692,6 @@ async function checkRental(){
 
   }
 
-
-  /* ===================================================
-     CHECK PAID RENTAL PAYMENT
-  =================================================== */
 
   let payments = [];
 
@@ -1978,7 +1968,6 @@ async function loadSellerInformation(){
 
       const name =
         seller.full_name ||
-        seller.name ||
         SELLER_EMAIL ||
         "Seller";
 
@@ -4032,19 +4021,10 @@ async function logoutSeller(){
 
   try{
 
-    if(
-      window.supabase &&
-      typeof window.supabase.createClient ===
-      "function"
-    ){
+    const client =
+      createSupabaseClient();
 
-      const client =
-        createSupabaseClient();
-
-
-      await client.auth.signOut();
-
-    }
+    await client.auth.signOut();
 
   }catch(error){
 
