@@ -1,89 +1,26 @@
-<!DOCTYPE html><html lang="en"><head>  <meta charset="UTF-8"><meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
+<!DOCTYPE html>
+<html lang="en">
 
-«»
+<head>
 
-  <title>ZYRE Marketing | Order Tracking</title><meta
-name="description"
-content="Track your ZYRE Marketing order using your order number and phone number."
+  <meta charset="UTF-8">
 
-«»
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-<meta
-name="robots"
-content="noindex, follow, noarchive, nosnippet"
+  <title>ZYRE Marketing | Order Tracking</title>
 
-«»
+  <meta
+    name="description"
+    content="Track your ZYRE Marketing order using your order number and phone number."
+  >
 
-<meta
-name="googlebot"
-content="noindex, follow, noarchive, nosnippet"
-
-«»
-
-<meta
-name="author"
-content="ZYRE Marketing"
-
-«»
-
-  <link
-    rel="canonical"
-    href="https://sisandashange25-eng.github.io/My-Market/track.html"
-  ><meta
-property="og:title"
-content="ZYRE Marketing | Order Tracking"
-
-«»
-
-<meta
-property="og:description"
-content="Track your ZYRE Marketing order using your order number and phone number."
-
-«»
-
-<meta
-property="og:type"
-content="website"
-
-«»
-
-<meta
-property="og:url"
-content="https://sisandashange25-eng.github.io/My-Market/track.html"
-
-«»
-
-<meta
-property="og:image"
-content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
-
-«»
-
-<meta
-name="twitter:card"
-content="summary"
-
-«»
-
-<meta
-name="twitter:title"
-content="ZYRE Marketing | Order Tracking"
-
-«»
-
-<meta
-name="twitter:description"
-content="Track your ZYRE Marketing order using your order number and phone number."
-
-«»
-
-<meta
-name="twitter:image"
-content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
-
-«»
+  <meta
+    name="robots"
+    content="noindex, follow, noarchive, nosnippet"
+  >
 
   <style>
 
@@ -94,37 +31,44 @@ content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f7f7f7;
-      color: #222;
+      background: #f5f5f5;
+      color: #111;
     }
 
     header {
       background: #111;
-      color: white;
-      padding: 20px;
+      color: #fff;
+      padding: 24px 15px;
       text-align: center;
     }
 
     header h1 {
       margin: 0;
-      font-size: 25px;
+      font-size: 28px;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      margin: 8px 0 0;
+      color: #ccc;
     }
 
     main {
-      max-width: 600px;
+      max-width: 650px;
       margin: 30px auto;
-      padding: 20px;
+      padding: 15px;
     }
 
     .box {
-      background: white;
+      background: #fff;
       padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
 
     h2 {
       margin-top: 0;
+      font-size: 24px;
     }
 
     input {
@@ -134,6 +78,11 @@ content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #111;
     }
 
     button {
@@ -143,7 +92,7 @@ content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
       border: 0;
       border-radius: 8px;
       background: #111;
-      color: white;
+      color: #fff;
       font-size: 16px;
       cursor: pointer;
     }
@@ -158,23 +107,25 @@ content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
 
     .order {
       border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 18px;
+      border-radius: 12px;
+      padding: 20px;
       background: #fafafa;
     }
 
     .order h3 {
       margin-top: 0;
+      font-size: 21px;
     }
 
     .status {
       display: inline-block;
-      padding: 8px 14px;
+      padding: 8px 15px;
       border-radius: 20px;
-      background: #111;
-      color: white;
+      background: #555;
+      color: #fff;
       font-weight: bold;
-      margin: 8px 0 15px;
+      margin: 8px 0 18px;
+      text-transform: capitalize;
     }
 
     .status.paid {
@@ -198,36 +149,41 @@ content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
     }
 
     .details {
-      line-height: 1.7;
+      line-height: 1.9;
     }
 
     .delivery-box {
       margin-top: 20px;
-      padding: 18px;
-      border-radius: 10px;
-      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      background: #fff;
       border: 1px solid #ddd;
     }
 
     .delivery-box h4 {
-      margin-top: 0;
-      margin-bottom: 12px;
-      font-size: 18px;
+      margin: 0 0 15px;
+      font-size: 19px;
+    }
+
+    .delivery-box div {
+      margin: 9px 0;
+      line-height: 1.5;
     }
 
     .delivery-status {
       display: inline-block;
-      padding: 7px 12px;
-      border-radius: 18px;
+      padding: 8px 13px;
+      border-radius: 20px;
       background: #198754;
-      color: white;
+      color: #fff;
       font-weight: bold;
-      margin-bottom: 12px;
     }
 
     .tracking-number {
       font-weight: bold;
-      letter-spacing: 0.5px;
+      background: #f1f1f1;
+      padding: 5px 8px;
+      border-radius: 5px;
     }
 
     .back {
@@ -242,47 +198,100 @@ content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
       font-size: 14px;
     }
 
-  </style></head><body><header>  <h1>ZYRE Marketing</h1>  <p>Track your order</p></header><main>  <div class="box"><h2>📦 Track Order</h2>
+    @media (max-width: 600px) {
 
-<p>
-  Enter your order number and phone number below.
-</p>
+      main {
+        margin: 15px auto;
+        padding: 12px;
+      }
 
+      .box {
+        padding: 20px;
+      }
 
-<input
-  type="number"
-  id="orderNumber"
-  placeholder="Order number"
->
+      header h1 {
+        font-size: 24px;
+      }
 
+      h2 {
+        font-size: 21px;
+      }
 
-<input
-  type="tel"
-  id="phone"
-  placeholder="Phone number"
->
+    }
 
+  </style>
 
-<button onclick="trackOrder()">
-  Track Order
-</button>
-
-
-<div id="result"></div>
+</head>
 
 
-<button
-  class="back"
-  onclick="window.location.href='index.html'"
->
-  ← Back to ZYRE Marketing
-</button>
+<body>
 
-  </div></main><footer>ZYRE Marketing<br>
 
-Shop smart. Shop local.
+<header>
 
-</footer><script>
+  <h1>ZYRE Marketing</h1>
+
+  <p>Track your order</p>
+
+</header>
+
+
+<main>
+
+  <div class="box">
+
+    <h2>📦 Track Order</h2>
+
+    <p>
+      Enter your order number and phone number below.
+    </p>
+
+
+    <input
+      type="number"
+      id="orderNumber"
+      placeholder="Order number"
+    >
+
+
+    <input
+      type="tel"
+      id="phone"
+      placeholder="Phone number"
+    >
+
+
+    <button onclick="trackOrder()">
+      Track Order
+    </button>
+
+
+    <div id="result"></div>
+
+
+    <button
+      class="back"
+      onclick="window.location.href='index.html'"
+    >
+      ← Back to ZYRE Marketing
+    </button>
+
+  </div>
+
+</main>
+
+
+<footer>
+
+  ZYRE Marketing<br>
+
+  Shop smart. Shop local.
+
+</footer>
+
+
+
+<script>
 
 
 const SUPABASE_URL =
@@ -298,21 +307,15 @@ async function trackOrder() {
 
 
   const orderNumber =
-    document.getElementById(
-      "orderNumber"
-    ).value.trim();
+    document.getElementById("orderNumber").value.trim();
 
 
   const phone =
-    document.getElementById(
-      "phone"
-    ).value.trim();
+    document.getElementById("phone").value.trim();
 
 
   const result =
-    document.getElementById(
-      "result"
-    );
+    document.getElementById("result");
 
 
   if (!orderNumber || !phone) {
@@ -331,6 +334,12 @@ async function trackOrder() {
 
   try {
 
+
+    /*
+    =====================================
+    FIND CUSTOMER ORDERS
+    =====================================
+    */
 
     const response =
       await fetch(
@@ -396,6 +405,12 @@ async function trackOrder() {
     }
 
 
+    /*
+    =====================================
+    FIND REQUESTED ORDER
+    =====================================
+    */
+
     const wantedId =
       Number(orderNumber);
 
@@ -424,6 +439,12 @@ async function trackOrder() {
 
     }
 
+
+    /*
+    =====================================
+    ORDER INFORMATION
+    =====================================
+    */
 
     const displayId =
       order.id ??
@@ -467,25 +488,17 @@ async function trackOrder() {
       if (!isNaN(date.getTime())) {
 
         formattedDate =
-          date.toLocaleString(
-            "en-ZA"
-          );
+          date.toLocaleString("en-ZA");
 
       }
 
     }
 
 
-    const statusClass =
-      String(displayStatus)
-        .toLowerCase()
-        .replace(/\s+/g, "-");
-
-
     /*
-      =====================================
-      GET DELIVERY INFORMATION
-      =====================================
+    =====================================
+    GET DELIVERY INFORMATION
+    =====================================
     */
 
     let delivery = null;
@@ -551,9 +564,9 @@ async function trackOrder() {
 
 
     /*
-      =====================================
-      DELIVERY FIELD SUPPORT
-      =====================================
+    =====================================
+    DELIVERY INFORMATION
+    =====================================
     */
 
     const deliveryStatus =
@@ -592,6 +605,12 @@ async function trackOrder() {
       null;
 
 
+    /*
+    =====================================
+    DELIVERY HTML
+    =====================================
+    */
+
     let deliveryHtml = "";
 
 
@@ -613,6 +632,7 @@ async function trackOrder() {
 
         const estimatedDate =
           new Date(estimatedDelivery);
+
 
         if (
           !isNaN(
@@ -641,8 +661,10 @@ async function trackOrder() {
           ${
             deliveryStatus
               ? `
-                <div class="delivery-status">
-                  Status: ${deliveryStatus}
+                <div>
+                  <span class="delivery-status">
+                    Status: ${deliveryStatus}
+                  </span>
                 </div>
               `
               : ""
@@ -698,7 +720,9 @@ async function trackOrder() {
 
       `;
 
+
     } else {
+
 
       deliveryHtml = `
 
@@ -717,6 +741,18 @@ async function trackOrder() {
       `;
 
     }
+
+
+    /*
+    =====================================
+    DISPLAY ORDER
+    =====================================
+    */
+
+    const statusClass =
+      String(displayStatus)
+        .toLowerCase()
+        .replace(/\s+/g, "-");
 
 
     result.innerHTML = `
@@ -769,4 +805,9 @@ async function trackOrder() {
 }
 
 
-</script></body></html>
+</script>
+
+
+</body>
+
+</html>
