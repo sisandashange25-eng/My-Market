@@ -1,16 +1,14 @@
 <!DOCTYPE html><html lang="en">
-<head><meta charset="UTF-8"><meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-
-«»
-
+<head>
+<meta charset="UTF-8">
 <meta
-name="theme-color"
-content="#111111"
-
-«»
-
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+<meta
+  name="theme-color"
+  content="#111111"
+>
 <title>Seller Account | ZYRE Marketing</title><style>
 
 * {
@@ -79,12 +77,9 @@ body {
   color: white;
   padding: 10px 15px;
   border-radius: 9px;
+  text-decoration: none;
   font-size: 13px;
   cursor: pointer;
-}
-
-.back-button:hover {
-  background: rgba(255,255,255,.15);
 }
 
 .main {
@@ -239,6 +234,7 @@ select {
 .password-requirements strong {
   color: #333;
 }
+
 
 /* =========================
 STORE IMAGE
@@ -496,12 +492,12 @@ STORE IMAGE
 }
 
 .pending-button {
-  background: #777;
-  cursor: not-allowed;
+  background: #111;
+  cursor: pointer;
 }
 
 .pending-button:hover {
-  background: #777;
+  background: #2a2a2a;
 }
 
 .benefits {
@@ -637,10 +633,12 @@ id="accountButton"
     for a ZYRE Marketing seller account.
   </p>
 
+
   <div
     id="registerMessage"
     class="message"
   ></div>
+
 
   <div class="application-notice">
 
@@ -654,11 +652,13 @@ id="accountButton"
 
   </div>
 
+
   <form id="registerForm">
 
     <div class="form-section-title">
       👤 Personal information
     </div>
+
 
     <div class="form-group">
 
@@ -676,6 +676,7 @@ id="accountButton"
 
     </div>
 
+
     <div class="form-group">
 
       <label for="registerEmail">
@@ -692,6 +693,7 @@ id="accountButton"
 
     </div>
 
+
     <div class="form-group">
 
       <label for="registerPhone">
@@ -707,6 +709,7 @@ id="accountButton"
       >
 
     </div>
+
 
     <div class="form-group">
 
@@ -732,6 +735,7 @@ id="accountButton"
 
     </div>
 
+
     <div class="form-group">
 
       <label for="residentialAddress">
@@ -747,9 +751,11 @@ id="accountButton"
 
     </div>
 
+
     <div class="form-section-title">
       🔐 Account security
     </div>
+
 
     <div class="form-group">
 
@@ -778,6 +784,7 @@ id="accountButton"
 
       </div>
 
+
       <div class="password-requirements">
 
         <strong>Password must contain:</strong><br>
@@ -791,6 +798,7 @@ id="accountButton"
       </div>
 
     </div>
+
 
     <div class="form-group">
 
@@ -821,9 +829,11 @@ id="accountButton"
 
     </div>
 
+
     <div class="form-section-title">
       🏪 Store information
     </div>
+
 
     <div class="form-group">
 
@@ -840,6 +850,7 @@ id="accountButton"
       >
 
     </div>
+
 
     <div class="form-group">
 
@@ -866,12 +877,14 @@ id="accountButton"
 
         </div>
 
+
         <input
           type="file"
           id="storeImage"
           accept="image/*"
           required
         >
+
 
         <div class="store-image-note">
 
@@ -894,6 +907,7 @@ id="accountButton"
 
     </div>
 
+
     <div class="form-group">
 
       <label for="businessAddress">
@@ -907,6 +921,7 @@ id="accountButton"
       ></textarea>
 
     </div>
+
 
     <div class="form-group">
 
@@ -963,6 +978,7 @@ id="accountButton"
 
     </div>
 
+
     <div class="form-group">
 
       <label for="storeDescription">
@@ -976,6 +992,7 @@ id="accountButton"
       ></textarea>
 
     </div>
+
 
     <div class="checkbox-row">
 
@@ -997,6 +1014,7 @@ id="accountButton"
 
     </div>
 
+
     <button
       type="submit"
       class="primary-button"
@@ -1006,6 +1024,7 @@ id="accountButton"
     </button>
 
   </form>
+
 
   <div class="benefits">
 
@@ -1054,6 +1073,7 @@ id="accountButton"
 
   </p>
 
+
   <div class="rental-price">
 
     <div class="rental-price-label">
@@ -1069,6 +1089,7 @@ id="accountButton"
     </div>
 
   </div>
+
 
   <div class="rental-status">
 
@@ -1089,21 +1110,24 @@ id="accountButton"
 
   </div>
 
+
   <button
     type="button"
     class="primary-button pending-button"
-    disabled
+    id="paystackRentalButton"
   >
-    ⏳ PayFast Approval Pending
+    💳 Pay R100 with Paystack
   </button>
+
 
   <button
     type="button"
     class="secondary-button"
-    id="returnAccountButton"
+    onclick="returnToAccount()"
   >
     Return to Account
   </button>
+
 
   <div class="rental-info">
 
@@ -1119,6 +1143,7 @@ id="accountButton"
 
     </div>
 
+
     <div class="rental-info-row">
 
       <span>
@@ -1130,6 +1155,7 @@ id="accountButton"
       </span>
 
     </div>
+
 
     <div class="rental-info-row">
 
@@ -1143,6 +1169,7 @@ id="accountButton"
 
     </div>
 
+
     <div class="rental-info-row">
 
       <span>
@@ -1150,10 +1177,11 @@ id="accountButton"
       </span>
 
       <span id="rentalPaymentStatus">
-        Pending
+        Ready for Paystack payment
       </span>
 
     </div>
+
 
     <div class="rental-info-row">
 
@@ -1169,6 +1197,7 @@ id="accountButton"
 
   </div>
 
+
   <div
     id="rentalMessage"
     class="message"
@@ -1177,9 +1206,9 @@ id="accountButton"
 
 </div>
 
-  </section></main><footer class="footer">© 2026 ZYRE Marketing.
-All rights reserved.
-
+  </section></main><footer class="footer">
+  © 2026 ZYRE Marketing.
+  All rights reserved.
 </footer><script>
 
 const SUPABASE_URL =
@@ -1192,37 +1221,26 @@ const STORE_RENTAL_AMOUNT =
   100;
 
 const STORE_RENTAL_METHOD =
-  "PayFast";
+  "Paystack";
+
+const RENTAL_PAYSTACK_FUNCTION =
+  SUPABASE_URL +
+  "/functions/v1/rental-paystack";
 
 
 /* =========================
-ACCOUNT NAVIGATION
+ACCOUNT BUTTON
 ========================= */
 
 document
   .getElementById("accountButton")
-  .addEventListener("click", function(event) {
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    window.location.href =
-      "auth.html";
-
-  });
-
-
-document
-  .getElementById("returnAccountButton")
-  .addEventListener("click", function(event) {
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    window.location.href =
-      "auth.html";
-
-  });
+  ?.addEventListener(
+    "click",
+    () => {
+      window.location.href =
+        "auth.html";
+    }
+  );
 
 
 /* =========================
@@ -2064,78 +2082,21 @@ async function uploadStoreImage(
 
 
 /* =========================
-CREATE / FIND RENTAL PAYMENT
+INITIALIZE PAYSTACK RENTAL
 ========================= */
 
-async function createOrFindRentalPayment(
+async function initializePaystackRental(
   sellerId,
+  email,
   accessToken
 ) {
 
-  const existingResponse =
+  const response =
     await fetch(
-
-      SUPABASE_URL +
-      "/rest/v1/rental_payments" +
-      "?seller_id=eq." +
-      encodeURIComponent(sellerId) +
-      "&status=eq.pending" +
-      "&select=id,seller_id,amount,status,payment_method,payment_reference" +
-      "&order=id.desc" +
-      "&limit=1",
-
+      RENTAL_PAYSTACK_FUNCTION,
       {
 
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            accessToken
-
-        }
-
-      }
-
-    );
-
-
-  if (!existingResponse.ok) {
-
-    throw new Error(
-      "The seller application was created, but we could not check its R100 rental payment.\n\n" +
-      await existingResponse.text()
-    );
-
-  }
-
-
-  const existingPayments =
-    await existingResponse.json();
-
-
-  if (
-    Array.isArray(existingPayments) &&
-    existingPayments.length > 0
-  ) {
-
-    return existingPayments[0];
-
-  }
-
-
-  const rentalResponse =
-    await fetch(
-
-      SUPABASE_URL +
-      "/rest/v1/rental_payments",
-
-      {
-
-        method:
-          "POST",
+        method: "POST",
 
         headers: {
 
@@ -2147,62 +2108,75 @@ async function createOrFindRentalPayment(
             accessToken,
 
           "Content-Type":
-            "application/json",
-
-          "Prefer":
-            "return=representation"
+            "application/json"
 
         },
 
         body:
           JSON.stringify({
 
+            action:
+              "initialize",
+
             seller_id:
               sellerId,
 
-            amount:
-              STORE_RENTAL_AMOUNT,
-
-            status:
-              "pending",
-
-            payment_method:
-              STORE_RENTAL_METHOD
+            email:
+              email
 
           })
 
       }
-
     );
 
 
-  if (!rentalResponse.ok) {
+  const text =
+    await response.text();
 
-    throw new Error(
-      "Your seller application was created, but the R100 rental payment could not be registered.\n\n" +
-      await rentalResponse.text()
-    );
+
+  let data =
+    {};
+
+
+  try {
+
+    data =
+      text
+        ? JSON.parse(text)
+        : {};
+
+  } catch {
+
+    data =
+      {};
 
   }
 
 
-  const rentalData =
-    await rentalResponse.json();
+  if (!response.ok) {
+
+    throw new Error(
+      data.message ||
+      data.error ||
+      text ||
+      "Paystack rental payment could not be initialized."
+    );
+
+  }
 
 
   if (
-    !Array.isArray(rentalData) ||
-    !rentalData.length
+    !data.authorization_url
   ) {
 
     throw new Error(
-      "The R100 rental payment was created, but no payment record was returned."
+      "Paystack was reached, but no payment authorization URL was returned."
     );
 
   }
 
 
-  return rentalData[0];
+  return data;
 
 }
 
@@ -2265,12 +2239,8 @@ function showRentalPayment(
   if (rentalPaymentStatus) {
 
     rentalPaymentStatus.textContent =
-      rentalPayment?.status
-        ? rentalPayment.status
-            .charAt(0)
-            .toUpperCase() +
-          rentalPayment.status.slice(1)
-        : "Pending";
+      rentalPayment?.status ||
+      "Ready for Paystack payment";
 
   }
 
@@ -2315,6 +2285,47 @@ function saveSellerSession(
   );
 
 }
+
+
+/* =========================
+RETURN TO ACCOUNT
+========================= */
+
+function returnToAccount() {
+
+  window.location.href =
+    "auth.html";
+
+}
+
+
+/* =========================
+PAYSTACK BUTTON
+========================= */
+
+let currentPaystackAuthorizationUrl =
+  null;
+
+
+document
+  .getElementById(
+    "paystackRentalButton"
+  )
+  ?.addEventListener(
+    "click",
+    function() {
+
+      if (
+        currentPaystackAuthorizationUrl
+      ) {
+
+        window.location.href =
+          currentPaystackAuthorizationUrl;
+
+      }
+
+    }
+  );
 
 
 /* =========================
@@ -2711,7 +2722,8 @@ document
           const signupText =
             await signupResponse.text();
 
-          let signupData = {};
+          let signupData =
+            {};
 
 
           try {
@@ -2725,7 +2737,8 @@ document
 
           } catch {
 
-            signupData = {};
+            signupData =
+              {};
 
           }
 
@@ -2943,27 +2956,40 @@ document
 
 
           button.textContent =
-            "Checking application...";
+            "Preparing Paystack payment...";
 
 
-          const rentalPayment =
-            await createOrFindRentalPayment(
+          const paystackData =
+            await initializePaystackRental(
               seller.sellerId,
+              accountEmail ||
+              email,
               accessToken
             );
 
 
+          currentPaystackAuthorizationUrl =
+            paystackData.authorization_url;
+
+
           showRentalPayment(
             seller.existingStore,
-            rentalPayment
+            {
+              status:
+                "Ready for Paystack payment"
+            }
           );
 
 
           showMessage(
             "rentalMessage",
-            "Your seller application already exists and is still pending ZYRE Marketing approval. Your R100 monthly rental is currently pending.",
+            "Your seller application already exists and is still pending ZYRE Marketing approval.\n\nYour R100 monthly store rental is ready for secure payment through Paystack.\n\nComplete the Paystack payment to continue.",
             "info"
           );
+
+
+          window.location.href =
+            paystackData.authorization_url;
 
 
           return;
@@ -2976,27 +3002,40 @@ document
         ========================= */
 
         button.textContent =
-          "Preparing R100 rental...";
+          "Preparing Paystack payment...";
 
 
-        const rentalPayment =
-          await createOrFindRentalPayment(
+        const paystackData =
+          await initializePaystackRental(
             seller.sellerId,
+            accountEmail ||
+            email,
             accessToken
           );
 
 
+        currentPaystackAuthorizationUrl =
+          paystackData.authorization_url;
+
+
         showRentalPayment(
           storeName,
-          rentalPayment
+          {
+            status:
+              "Ready for Paystack payment"
+          }
         );
 
 
         showMessage(
           "rentalMessage",
-          "🎉 Your seller application has been submitted successfully.\n\nYour account is now Seller Pending.\n\nYour store picture has been saved.\n\nYour R100 monthly store rental has been registered as pending.\n\nPayFast is currently awaiting merchant approval, so no money has been charged.\n\nZYRE Marketing must review and approve your seller application before you can access the Seller Centre.",
+          "🎉 Your seller application has been submitted successfully.\n\nYour account is now Seller Pending.\n\nYour store picture has been saved.\n\nYour R100 monthly store rental is ready for secure payment through Paystack.\n\nComplete the Paystack payment to continue.\n\nZYRE Marketing must review and approve your seller application before you can access the Seller Centre.",
           "success"
         );
+
+
+        window.location.href =
+          paystackData.authorization_url;
 
 
       } catch (error) {
