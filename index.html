@@ -1,132 +1,116 @@
 <!doctype html>
-<html lang="en-ZA">
 
-<head>
+<html lang="en-ZA"><head><meta charset="utf-8"><meta
+name="viewport"
+content="width=device-width,initial-scale=1"
 
-<meta charset="utf-8">
+«»
 
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1"
->
+<title>ZYRE Marketing | South Africa's Premium Marketplace</title><meta
+name="description"
+content="ZYRE Marketing is a premium South African marketplace connecting customers with independent stores and ambitious businesses."
 
-<title>ZYRE Marketing | South Africa's Premium Marketplace</title>
+«»
 
-<meta
-  name="description"
-  content="ZYRE Marketing is a premium South African marketplace connecting customers with independent stores and ambitious businesses."
->
+<meta name="author" content="ZYRE Marketing"><meta
+name="robots"
+content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
 
-<meta name="author" content="ZYRE Marketing">
-
-<meta
-  name="robots"
-  content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
->
+«»
 
 <meta
-  name="googlebot"
-  content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
->
+name="googlebot"
+content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+
+«»
 
 <meta name="geo.region" content="ZA">
-<meta name="geo.placename" content="Durban, South Africa">
-
-<link
+<meta name="geo.placename" content="Durban, South Africa"><link
   rel="canonical"
   href="https://sisandashange25-eng.github.io/My-Market/"
->
-
-<link
+><link
   rel="sitemap"
   type="application/xml"
   title="Sitemap"
   href="https://sisandashange25-eng.github.io/My-Market/sitemap.xml"
->
-
-<link
+><link
   rel="icon"
   type="image/png"
   href="icon-512.png"
->
+><meta property="og:type" content="website"><meta
+property="og:title"
+content="ZYRE Marketing | Premium Marketplace"
 
-<meta property="og:type" content="website">
-
-<meta
-  property="og:title"
-  content="ZYRE Marketing | Premium Marketplace"
->
+«»
 
 <meta
-  property="og:description"
-  content="Discover stores. Shop with confidence. Build your business with ZYRE Marketing."
->
+property="og:description"
+content="Discover stores. Shop with confidence. Build your business with ZYRE Marketing."
+
+«»
 
 <meta
-  property="og:url"
-  content="https://sisandashange25-eng.github.io/My-Market/"
->
+property="og:url"
+content="https://sisandashange25-eng.github.io/My-Market/"
+
+«»
 
 <meta property="og:site_name" content="ZYRE Marketing">
-<meta property="og:locale" content="en_ZA">
+<meta property="og:locale" content="en_ZA"><meta
+property="og:image"
+content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
+
+«»
 
 <meta
-  property="og:image"
-  content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
->
+property="og:image:alt"
+content="ZYRE Marketing"
+
+«»
+
+<meta name="twitter:card" content="summary"><meta
+name="twitter:title"
+content="ZYRE Marketing | Premium Marketplace"
+
+«»
 
 <meta
-  property="og:image:alt"
-  content="ZYRE Marketing"
->
+name="twitter:description"
+content="Discover premium stores and independent businesses on ZYRE Marketing."
 
-<meta name="twitter:card" content="summary">
-
-<meta
-  name="twitter:title"
-  content="ZYRE Marketing | Premium Marketplace"
->
+«»
 
 <meta
-  name="twitter:description"
-  content="Discover premium stores and independent businesses on ZYRE Marketing."
->
+name="twitter:image"
+content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
+
+«»
+
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#080808"><meta
+name="mobile-web-app-capable"
+content="yes"
+
+«»
 
 <meta
-  name="twitter:image"
-  content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
->
+name="apple-mobile-web-app-capable"
+content="yes"
 
-<link rel="manifest" href="manifest.json">
-
-<meta name="theme-color" content="#080808">
+«»
 
 <meta
-  name="mobile-web-app-capable"
-  content="yes"
->
+name="apple-mobile-web-app-status-bar-style"
+content="black"
+
+«»
 
 <meta
-  name="apple-mobile-web-app-capable"
-  content="yes"
->
+name="apple-mobile-web-app-title"
+content="ZYRE"
 
-<meta
-  name="apple-mobile-web-app-status-bar-style"
-  content="black"
->
+«»
 
-<meta
-  name="apple-mobile-web-app-title"
-  content="ZYRE"
->
-
-<link rel="stylesheet" href="style.css">
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-<style>
+<link rel="stylesheet" href="style.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 
 :root {
   --zyre-black:#050505;
@@ -704,6 +688,73 @@ button {
   border-color:var(--zyre-gold);
 }
 
+
+/* =========================================================
+   RENTAL LOCK
+========================================================= */
+
+.store-card.store-locked {
+  background:#fafaf8;
+  border-color:#ded6b7;
+}
+
+.store-card.store-locked::before {
+  background:linear-gradient(
+    90deg,
+    #777,
+    var(--zyre-gold),
+    #777
+  );
+}
+
+.store-card.store-locked:hover {
+  transform:none;
+  box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+
+.store-lock-badge {
+  position:absolute;
+  right:18px;
+  top:18px;
+  padding:7px 10px;
+  border-radius:20px;
+  background:#f3eee0;
+  color:#6e591c;
+  border:1px solid #dfcf9b;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.store-locked h3 {
+  color:#333;
+}
+
+.store-rental-warning {
+  margin:0 0 18px !important;
+  padding:12px 13px;
+  min-height:auto !important;
+  border-radius:11px;
+  background:#f7f1df;
+  border:1px solid #e5d7ad;
+  color:#6b571d !important;
+  font-size:12px !important;
+  line-height:1.55 !important;
+}
+
+.store-locked-button {
+  align-self:flex-start;
+  min-height:42px;
+  padding:0 17px;
+  border:1px solid #d5d0c0;
+  border-radius:30px;
+  background:#efede7;
+  color:#777;
+  font-weight:700;
+  cursor:not-allowed;
+}
+
 .category-section {
   margin:20px 25px 65px;
   padding:55px 25px;
@@ -868,8 +919,6 @@ button {
   border-color:var(--zyre-gold);
   transform:translateY(-2px);
 }
-
-/* CUSTOMER NOTIFICATION BUTTON */
 
 #zyreCustomerNotificationButton {
   border:1px solid #111;
@@ -1240,12 +1289,10 @@ button {
   .zyre-footer {
     padding:55px 20px 25px;
   }
+
 }
 
-</style>
-
-
-<script>
+</style><script>
 
 const ZYRE_AUTH_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
@@ -1551,10 +1598,6 @@ function setupZYRECustomerNotifications() {
     };
 
 
-  /*
-     Check current notification permission.
-  */
-
   if (
     typeof window.checkZYRENotificationStatus ===
     "function"
@@ -1595,10 +1638,7 @@ function setupZYRECustomerNotifications() {
 
 }
 
-</script>
-
-
-<script type="application/ld+json">
+</script><script type="application/ld+json">
 
 {
   "@context": "https://schema.org",
@@ -1614,784 +1654,621 @@ function setupZYRECustomerNotifications() {
   }
 }
 
-</script>
+</script></head><body><header class="zyre-header"><button
+class="mobile-menu-button"
+onclick="toggleSidebar()"
+type="button"
+aria-label="Open marketplace menu"
 
-</head>
+«»
 
+☰
 
-<body>
+  </button>  <div class="brand"><span class="brand-main">
+  ZYRE
+</span>
 
+<span class="brand-sub">
+  MARKETING
+</span>
 
-<header class="zyre-header">
+  </div>  <div class="header-tagline">PREMIUM BRANDS
+&nbsp;•&nbsp;
+REAL BUSINESSES
+&nbsp;•&nbsp;
+ONE MARKETPLACE
 
-  <button
-    class="mobile-menu-button"
-    onclick="toggleSidebar()"
-    type="button"
-    aria-label="Open marketplace menu"
-  >
-    ☰
-  </button>
+  </div>  <div class="header-actions"><button
+  class="header-action account-action"
+  onclick="window.location.href='account.html'"
+  type="button"
+  aria-label="My Account"
+>
+  ◯
+</button>
 
-  <div class="brand">
+<button
+  class="header-action"
+  onclick="openZYRECart()"
+  type="button"
+  aria-label="Shopping Cart"
+>
+  🛒
+  <b id="cartCount">0</b>
+</button>
 
-    <span class="brand-main">
-      ZYRE
-    </span>
-
-    <span class="brand-sub">
-      MARKETING
-    </span>
-
-  </div>
-
-  <div class="header-tagline">
-
-    PREMIUM BRANDS
-    &nbsp;•&nbsp;
-    REAL BUSINESSES
-    &nbsp;•&nbsp;
-    ONE MARKETPLACE
-
-  </div>
-
-  <div class="header-actions">
-
-    <button
-      class="header-action account-action"
-      onclick="window.location.href='account.html'"
-      type="button"
-      aria-label="My Account"
-    >
-      ◯
-    </button>
-
-    <button
-      class="header-action"
-      onclick="openZYRECart()"
-      type="button"
-      aria-label="Shopping Cart"
-    >
-      🛒
-      <b id="cartCount">0</b>
-    </button>
-
-  </div>
-
-</header>
-
-
-<div
+  </div></header><div
   id="menuOverlay"
   class="menu-overlay"
   onclick="toggleSidebar()"
-></div>
-
-
-<div class="zyre-layout">
-
-
-<aside
+></div><div class="zyre-layout"><aside
   id="zyreSidebar"
   class="zyre-sidebar"
+>  <div class="sidebar-search"><input
+  id="search"
+  type="search"
+  placeholder="Search stores..."
+  oninput="searchStores()"
+  autocomplete="off"
+  aria-label="Search stores"
 >
 
-  <div class="sidebar-search">
+<span class="sidebar-search-icon">
+  ⌕
+</span>
 
-    <input
-      id="search"
-      type="search"
-      placeholder="Search stores..."
-      oninput="searchStores()"
-      autocomplete="off"
-      aria-label="Search stores"
-    >
-
-    <span class="sidebar-search-icon">
-      ⌕
-    </span>
-
-  </div>
-
-
-  <div class="sidebar-section-title">
+  </div>  <div class="sidebar-section-title">
     SHOP
-  </div>
+  </div><button
+class="sidebar-item active"
+id="sidebarHome"
+onclick="goHome()"
+type="button"
 
+«»
 
-  <button
-    class="sidebar-item active"
-    id="sidebarHome"
-    onclick="goHome()"
-    type="button"
-  >
-    <span class="sidebar-icon">⌂</span>
-    <span>Home</span>
-  </button>
+<span class="sidebar-icon">⌂</span>
+<span>Home</span>
 
+  </button><button
+class="sidebar-item"
+onclick="filterStores('all')"
+type="button"
 
-  <button
-    class="sidebar-item"
-    onclick="filterStores('all')"
-    type="button"
-  >
-    <span class="sidebar-icon">▦</span>
-    <span>All Stores</span>
-  </button>
+«»
 
+<span class="sidebar-icon">▦</span>
+<span>All Stores</span>
 
-  <button
-    class="sidebar-item"
-    onclick="filterStores('Electronics')"
-    type="button"
-  >
-    <span class="sidebar-icon">▣</span>
-    <span>Electronics</span>
-  </button>
+  </button><button
+class="sidebar-item"
+onclick="filterStores('Electronics')"
+type="button"
 
+«»
 
-  <button
-    class="sidebar-item"
-    onclick="filterStores('Fashion')"
-    type="button"
-  >
-    <span class="sidebar-icon">◇</span>
-    <span>Fashion</span>
-  </button>
+<span class="sidebar-icon">▣</span>
+<span>Electronics</span>
 
+  </button><button
+class="sidebar-item"
+onclick="filterStores('Fashion')"
+type="button"
 
-  <button
-    class="sidebar-item"
-    onclick="filterStores('Home')"
-    type="button"
-  >
-    <span class="sidebar-icon">⌂</span>
-    <span>Home & Living</span>
-  </button>
+«»
 
+<span class="sidebar-icon">◇</span>
+<span>Fashion</span>
 
-  <button
-    class="sidebar-item"
-    onclick="filterStores('Beauty')"
-    type="button"
-  >
-    <span class="sidebar-icon">✧</span>
-    <span>Beauty</span>
-  </button>
+  </button><button
+class="sidebar-item"
+onclick="filterStores('Home')"
+type="button"
 
+«»
 
-  <button
-    class="sidebar-item"
-    onclick="filterStores('Sports')"
-    type="button"
-  >
-    <span class="sidebar-icon">◉</span>
-    <span>Sports & Outdoors</span>
-  </button>
+<span class="sidebar-icon">⌂</span>
+<span>Home & Living</span>
 
+  </button><button
+class="sidebar-item"
+onclick="filterStores('Beauty')"
+type="button"
 
-  <div class="sidebar-divider"></div>
+«»
 
+<span class="sidebar-icon">✧</span>
+<span>Beauty</span>
 
-  <div class="sidebar-section-title">
+  </button><button
+class="sidebar-item"
+onclick="filterStores('Sports')"
+type="button"
+
+«»
+
+<span class="sidebar-icon">◉</span>
+<span>Sports & Outdoors</span>
+
+  </button>  <div class="sidebar-divider"></div>  <div class="sidebar-section-title">
     MY ZYRE
-  </div>
+  </div><button
+id="zyreMyAccountButton"
+class="sidebar-item"
+onclick="window.location.href='account.html'"
+type="button"
 
+«»
+
+<span class="sidebar-icon">◯</span>
+<span>My Account</span>
+
+  </button><button
+class="sidebar-item"
+onclick="window.location.href='orders.html'"
+type="button"
+
+«»
+
+<span class="sidebar-icon">□</span>
+<span>My Orders</span>
+
+  </button><button
+class="sidebar-item"
+onclick="openZYRECart(); toggleSidebar();"
+type="button"
+
+«»
+
+<span class="sidebar-icon">🛒</span>
+<span>Cart</span>
+
+  </button><button
+id="zyreSellerButton"
+class="sidebar-item"
+onclick="sellerCentre(); toggleSidebar();"
+type="button"
+style="display:none;"
+
+«»
+
+<span class="sidebar-icon">▣</span>
+<span>Seller Dashboard</span>
+
+  </button><button
+id="zyreOwnerButton"
+class="sidebar-item"
+onclick="window.location.href='admin.html'"
+type="button"
+style="display:none;"
+
+«»
+
+<span class="sidebar-icon">♛</span>
+<span>Owner Dashboard</span>
+
+  </button>  <div class="sidebar-divider"></div><button
+class="sidebar-item"
+onclick="sellerCentre(); toggleSidebar();"
+type="button"
+
+«»
+
+<span class="sidebar-icon">+</span>
+<span>Open a ZYRE Store</span>
+
+  </button><button
+class="sidebar-item"
+onclick="window.location.href='contact.html'"
+type="button"
+
+«»
+
+<span class="sidebar-icon">?</span>
+<span>Customer Support</span>
+
+  </button>  <div class="sidebar-divider"></div><button
+class="sidebar-item"
+onclick="zyreLogout()"
+type="button"
+
+«»
+
+<span class="sidebar-icon">↪</span>
+<span>Logout</span>
+
+  </button>  <div class="sidebar-bottom"><div class="sidebar-bottom-logo">
+  ZYRE
+</div>
+
+<div class="sidebar-bottom-gold">
+  MARKETING
+</div>
+
+<p>
+  Your business.<br>
+  Your store.<br>
+  One marketplace.
+</p>
+
+  </div></aside><main class="zyre-main"><section class="market-hero">  <div class="market-hero-content"><p class="eyebrow">
+  THE ZYRE MARKETPLACE
+</p>
+
+<h1>
+
+  World-Class
+  <br>
+  Stores.
+  <br>
+  One Place.
+
+  <span>
+    Discover premium products from
+    independent South African businesses.
+  </span>
+
+</h1>
+
+<p class="market-hero-text">
+
+  Explore stores, discover new brands
+  and shop everything you love through
+  one premium marketplace.
+
+</p>
+
+<div class="hero-store-search">
+
+  <span>⌕</span>
+
+  <input
+    id="heroStoreSearch"
+    type="search"
+    placeholder="Search stores..."
+    autocomplete="off"
+    oninput="syncStoreSearch(this.value)"
+  >
 
   <button
-    id="zyreMyAccountButton"
-    class="sidebar-item"
-    onclick="window.location.href='account.html'"
+    onclick="focusStoreResults()"
     type="button"
+    aria-label="Search stores"
   >
-    <span class="sidebar-icon">◯</span>
-    <span>My Account</span>
+    →
   </button>
 
+</div>
 
-  <button
-    class="sidebar-item"
-    onclick="window.location.href='orders.html'"
-    type="button"
-  >
-    <span class="sidebar-icon">□</span>
-    <span>My Orders</span>
-  </button>
-
-
-  <button
-    class="sidebar-item"
-    onclick="openZYRECart(); toggleSidebar();"
-    type="button"
-  >
-    <span class="sidebar-icon">🛒</span>
-    <span>Cart</span>
-  </button>
-
-
-  <button
-    id="zyreSellerButton"
-    class="sidebar-item"
-    onclick="sellerCentre(); toggleSidebar();"
-    type="button"
-    style="display:none;"
-  >
-    <span class="sidebar-icon">▣</span>
-    <span>Seller Dashboard</span>
-  </button>
-
-
-  <button
-    id="zyreOwnerButton"
-    class="sidebar-item"
-    onclick="window.location.href='admin.html'"
-    type="button"
-    style="display:none;"
-  >
-    <span class="sidebar-icon">♛</span>
-    <span>Owner Dashboard</span>
-  </button>
-
-
-  <div class="sidebar-divider"></div>
-
-
-  <button
-    class="sidebar-item"
-    onclick="sellerCentre(); toggleSidebar();"
-    type="button"
-  >
-    <span class="sidebar-icon">+</span>
-    <span>Open a ZYRE Store</span>
-  </button>
-
-
-  <button
-    class="sidebar-item"
-    onclick="window.location.href='contact.html'"
-    type="button"
-  >
-    <span class="sidebar-icon">?</span>
-    <span>Customer Support</span>
-  </button>
-
-
-  <div class="sidebar-divider"></div>
-
-
-  <button
-    class="sidebar-item"
-    onclick="zyreLogout()"
-    type="button"
-  >
-    <span class="sidebar-icon">↪</span>
-    <span>Logout</span>
-  </button>
-
-
-  <div class="sidebar-bottom">
-
-    <div class="sidebar-bottom-logo">
-      ZYRE
-    </div>
-
-    <div class="sidebar-bottom-gold">
-      MARKETING
-    </div>
-
-    <p>
-      Your business.<br>
-      Your store.<br>
-      One marketplace.
-    </p>
-
-  </div>
-
-</aside>
-
-
-<main class="zyre-main">
-
-
-<section class="market-hero">
-
-  <div class="market-hero-content">
-
-    <p class="eyebrow">
-      THE ZYRE MARKETPLACE
-    </p>
-
-    <h1>
-
-      World-Class
-      <br>
-      Stores.
-      <br>
-      One Place.
-
-      <span>
-        Discover premium products from
-        independent South African businesses.
-      </span>
-
-    </h1>
-
-    <p class="market-hero-text">
-
-      Explore stores, discover new brands
-      and shop everything you love through
-      one premium marketplace.
-
-    </p>
-
-    <div class="hero-store-search">
-
-      <span>⌕</span>
-
-      <input
-        id="heroStoreSearch"
-        type="search"
-        placeholder="Search stores..."
-        autocomplete="off"
-        oninput="syncStoreSearch(this.value)"
-      >
-
-      <button
-        onclick="focusStoreResults()"
-        type="button"
-        aria-label="Search stores"
-      >
-        →
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div
+  </div>  <div
     class="hero-mark"
     aria-hidden="true"
-  >
+  ><div class="hero-z">
+  Z
+</div>
 
-    <div class="hero-z">
-      Z
-    </div>
+<div>
+  ZYRE
+</div>
 
-    <div>
-      ZYRE
-    </div>
-
-  </div>
-
-</section>
-
-
-<section
+  </div></section><section
   id="stores"
   class="content-section"
->
-
-  <div class="section-heading">
-
-    <div>
-
-      <p class="eyebrow">
-        FEATURED STORES
-      </p>
-
-      <h2>
-        Shop by Store
-      </h2>
-
-      <p>
-        Discover businesses and explore
-        their collections.
-      </p>
-
-    </div>
-
-    <button
-      class="section-link"
-      onclick="filterStores('all')"
-      type="button"
-    >
-      View All →
-    </button>
-
-  </div>
-
-
-  <section id="storesGrid">
-
-    <div class="store-card">
-
-      <h3>
-        Loading stores...
-      </h3>
-
-      <p>
-        Discovering stores on ZYRE.
-      </p>
-
-    </div>
-
-  </section>
-
-</section>
-
-
-<section class="category-section">
+>  <div class="section-heading"><div>
 
   <p class="eyebrow">
-    EXPLORE
+    FEATURED STORES
   </p>
 
   <h2>
-    Browse Categories
+    Shop by Store
   </h2>
 
-  <div class="category-grid">
+  <p>
+    Discover businesses and explore
+    their collections.
+  </p>
+
+</div>
+
+<button
+  class="section-link"
+  onclick="filterStores('all')"
+  type="button"
+>
+  View All →
+</button>
+
+  </div>  <section id="storesGrid"><div class="store-card">
+
+  <h3>
+    Loading stores...
+  </h3>
+
+  <p>
+    Discovering stores on ZYRE.
+  </p>
+
+</div>
+
+  </section></section><section class="category-section">  <p class="eyebrow">
+    EXPLORE
+  </p>  <h2>
+    Browse Categories
+  </h2>  <div class="category-grid"><button
+  class="category-card"
+  onclick="filterStores('Electronics')"
+  type="button"
+>
+  <span class="category-icon">▣</span>
+  <strong>Electronics</strong>
+  <small>Technology & gadgets</small>
+</button>
+
+
+<button
+  class="category-card"
+  onclick="filterStores('Fashion')"
+  type="button"
+>
+  <span class="category-icon">◇</span>
+  <strong>Fashion</strong>
+  <small>Clothing & style</small>
+</button>
+
+
+<button
+  class="category-card"
+  onclick="filterStores('Home')"
+  type="button"
+>
+  <span class="category-icon">⌂</span>
+  <strong>Home & Living</strong>
+  <small>Living & lifestyle</small>
+</button>
+
+
+<button
+  class="category-card"
+  onclick="filterStores('Beauty')"
+  type="button"
+>
+  <span class="category-icon">✧</span>
+  <strong>Beauty</strong>
+  <small>Beauty & skincare</small>
+</button>
+
+
+<button
+  class="category-card"
+  onclick="filterStores('Sports')"
+  type="button"
+>
+  <span class="category-icon">◉</span>
+  <strong>Sports</strong>
+  <small>Sports & outdoors</small>
+</button>
+
+  </div></section><section class="seller-banner">  <div><p class="eyebrow">
+  FOR AMBITIOUS BUSINESSES
+</p>
+
+<h2>
+  Your brand deserves a store.
+</h2>
+
+<p>
+
+  Build your digital storefront
+  and reach customers through ZYRE
+  for <strong>R100 per month.</strong>
+
+</p>
+
+  </div><button
+onclick="sellerCentre()"
+type="button"
 
-    <button
-      class="category-card"
-      onclick="filterStores('Electronics')"
-      type="button"
-    >
-      <span class="category-icon">▣</span>
-      <strong>Electronics</strong>
-      <small>Technology & gadgets</small>
-    </button>
+«»
 
+Open Your Store →
 
-    <button
-      class="category-card"
-      onclick="filterStores('Fashion')"
-      type="button"
-    >
-      <span class="category-icon">◇</span>
-      <strong>Fashion</strong>
-      <small>Clothing & style</small>
-    </button>
+  </button></section><section class="how-it-works">  <div class="section-heading"><div>
 
+  <p class="eyebrow">
+    BUILD WITH ZYRE
+  </p>
 
-    <button
-      class="category-card"
-      onclick="filterStores('Home')"
-      type="button"
-    >
-      <span class="category-icon">⌂</span>
-      <strong>Home & Living</strong>
-      <small>Living & lifestyle</small>
-    </button>
+  <h2>
+    From idea to online store.
+  </h2>
 
+</div>
 
-    <button
-      class="category-card"
-      onclick="filterStores('Beauty')"
-      type="button"
-    >
-      <span class="category-icon">✧</span>
-      <strong>Beauty</strong>
-      <small>Beauty & skincare</small>
-    </button>
+  </div>  <div class="steps"><div class="step">
 
+  <span>01</span>
 
-    <button
-      class="category-card"
-      onclick="filterStores('Sports')"
-      type="button"
-    >
-      <span class="category-icon">◉</span>
-      <strong>Sports</strong>
-      <small>Sports & outdoors</small>
-    </button>
+  <h3>Create</h3>
 
-  </div>
-
-</section>
-
-
-<section class="seller-banner">
-
-  <div>
-
-    <p class="eyebrow">
-      FOR AMBITIOUS BUSINESSES
-    </p>
-
-    <h2>
-      Your brand deserves a store.
-    </h2>
-
-    <p>
-
-      Build your digital storefront
-      and reach customers through ZYRE
-      for <strong>R100 per month.</strong>
-
-    </p>
-
-  </div>
-
-  <button
-    onclick="sellerCentre()"
-    type="button"
-  >
-    Open Your Store →
-  </button>
-
-</section>
-
-
-<section class="how-it-works">
-
-  <div class="section-heading">
-
-    <div>
-
-      <p class="eyebrow">
-        BUILD WITH ZYRE
-      </p>
-
-      <h2>
-        From idea to online store.
-      </h2>
-
-    </div>
-
-  </div>
-
-
-  <div class="steps">
-
-    <div class="step">
-
-      <span>01</span>
-
-      <h3>Create</h3>
-
-      <p>
-        Register your seller account
-        and submit your business details
-        for review.
-      </p>
-
-    </div>
-
-
-    <div class="step">
-
-      <span>02</span>
-
-      <h3>Launch</h3>
-
-      <p>
-        Once approved, activate your
-        ZYRE store and build your
-        product catalogue.
-      </p>
-
-    </div>
-
-
-    <div class="step">
-
-      <span>03</span>
-
-      <h3>Grow</h3>
-
-      <p>
-        Manage products, orders and
-        customers from your
-        Seller Dashboard.
-      </p>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<section class="services">
-
-  <button
-    onclick="checkOrderStatus()"
-    type="button"
-  >
-    📦 Track an Order
-  </button>
-
-
-  <button
-    onclick="window.location.href='orders.html'"
-    type="button"
-  >
-    📋 My Orders
-  </button>
-
-
-  <button
-    id="zyreCustomerNotificationButton"
-    type="button"
-    onclick="enableZYRECustomerNotifications()"
-  >
-    🔔 Enable Order Notifications
-  </button>
-
-
-  <small
-    id="zyreCustomerNotificationStatus"
-  >
-    Get notified when your ZYRE order
-    changes from Pending to Processing,
-    Shipped or Delivered.
-  </small>
-
-
-  <button
-    onclick="window.location.href='contact.html'"
-    type="button"
-  >
-    🛟 Customer Support
-  </button>
-
-</section>
-
-
-</main>
+  <p>
+    Register your seller account
+    and submit your business details
+    for review.
+  </p>
 
 </div>
 
 
-<aside
+<div class="step">
+
+  <span>02</span>
+
+  <h3>Launch</h3>
+
+  <p>
+    Once approved, activate your
+    ZYRE store and build your
+    product catalogue.
+  </p>
+
+</div>
+
+
+<div class="step">
+
+  <span>03</span>
+
+  <h3>Grow</h3>
+
+  <p>
+    Manage products, orders and
+    customers from your
+    Seller Dashboard.
+  </p>
+
+</div>
+
+  </div></section><section class="services"><button
+onclick="checkOrderStatus()"
+type="button"
+
+«»
+
+📦 Track an Order
+
+  </button><button
+onclick="window.location.href='orders.html'"
+type="button"
+
+«»
+
+📋 My Orders
+
+  </button><button
+id="zyreCustomerNotificationButton"
+type="button"
+onclick="enableZYRECustomerNotifications()"
+
+«»
+
+🔔 Enable Order Notifications
+
+  </button><small
+id="zyreCustomerNotificationStatus"
+
+«»
+
+Get notified when your ZYRE order
+changes from Pending to Processing,
+Shipped or Delivered.
+
+  </small><button
+onclick="window.location.href='contact.html'"
+type="button"
+
+«»
+
+🛟 Customer Support
+
+  </button></section></main></div><aside
   id="cart"
   class="drawer"
->
+><button
+class="close"
+onclick="toggleCart()"
+type="button"
 
-  <button
-    class="close"
-    onclick="toggleCart()"
-    type="button"
-  >
-    ✕
-  </button>
+«»
 
-  <h2>
+✕
+
+  </button>  <h2>
     Your Cart
-  </h2>
+  </h2>  <div id="cartItems"></div>  <div class="total">Total:
 
-  <div id="cartItems"></div>
+R<span id="total">
+  0.00
+</span>
 
-  <div class="total">
+  </div><button
+class="clear-cart"
+onclick="clearCart()"
+type="button"
 
-    Total:
+«»
 
-    R<span id="total">
-      0.00
-    </span>
+Clear Cart
 
-  </div>
+  </button><button
+class="checkout"
+onclick="checkout()"
+type="button"
 
-  <button
-    class="clear-cart"
-    onclick="clearCart()"
-    type="button"
-  >
-    Clear Cart
-  </button>
+«»
 
-  <button
-    class="checkout"
-    onclick="checkout()"
-    type="button"
-  >
-    Continue to checkout
-  </button>
+Continue to checkout
 
-</aside>
+  </button></aside><footer class="zyre-footer">  <div class="footer-brand"><strong>
+  ZYRE
+</strong>
 
+<span>
+  MARKETING
+</span>
 
-<footer class="zyre-footer">
+<p>
+  Your business.
+  Your store.
+  One marketplace.
+</p>
 
-  <div class="footer-brand">
-
-    <strong>
-      ZYRE
-    </strong>
-
-    <span>
-      MARKETING
-    </span>
-
-    <p>
-      Your business.
-      Your store.
-      One marketplace.
-    </p>
-
-  </div>
+  </div>  <div class="footer-links"><button
+  onclick="sellerCentre()"
+  type="button"
+>
+  Seller Centre
+</button>
 
 
-  <div class="footer-links">
-
-    <button
-      onclick="sellerCentre()"
-      type="button"
-    >
-      Seller Centre
-    </button>
+<button
+  onclick="checkOrderStatus()"
+  type="button"
+>
+  Track Order
+</button>
 
 
-    <button
-      onclick="checkOrderStatus()"
-      type="button"
-    >
-      Track Order
-    </button>
+<button
+  onclick="window.location.href='orders.html'"
+  type="button"
+>
+  My Orders
+</button>
 
 
-    <button
-      onclick="window.location.href='orders.html'"
-      type="button"
-    >
-      My Orders
-    </button>
+<button
+  onclick="window.location.href='account.html'"
+  type="button"
+>
+  My Account
+</button>
 
 
-    <button
-      onclick="window.location.href='account.html'"
-      type="button"
-    >
-      My Account
-    </button>
+<button
+  onclick="window.location.href='contact.html'"
+  type="button"
+>
+  Customer Support
+</button>
 
+  </div>  <div class="footer-bottom">© 2026 ZYRE Marketing
 
-    <button
-      onclick="window.location.href='contact.html'"
-      type="button"
-    >
-      Customer Support
-    </button>
+<br>
 
-  </div>
+Durban, South Africa
 
-
-  <div class="footer-bottom">
-
-    © 2026 ZYRE Marketing
-
-    <br>
-
-    Durban, South Africa
-
-  </div>
-
-</footer>
-
-
-<script>
+  </div></footer><script>
 
 function enableZYRECustomerNotifications() {
 
@@ -2469,10 +2346,7 @@ function enableZYRECustomerNotifications() {
 
 }
 
-</script>
-
-
-<script>
+</script><script>
 
 function toggleSidebar() {
 
@@ -2788,10 +2662,7 @@ function filterStores(
 
 }
 
-</script>
-
-
-<script>
+</script><script>
 
 async function setupZYRERoleMenu() {
 
@@ -3000,10 +2871,7 @@ async function setupZYRERoleMenu() {
 
 }
 
-</script>
-
-
-<script>
+</script><script>
 
 function openZYRECart() {
 
@@ -3168,10 +3036,7 @@ window.addEventListener(
   }
 );
 
-</script>
-
-
-<script>
+</script><script>
 
 if (
   window.location.hash ===
@@ -3203,10 +3068,7 @@ if (
 
 }
 
-</script>
-
-
-<script>
+</script><script>
 
 if (
   "serviceWorker" in navigator
@@ -3239,6 +3101,7 @@ if (
             );
 
           }
+
         );
 
     }
@@ -3247,10 +3110,11 @@ if (
 
 }
 
-</script>
+</script><script>
 
-
-<script>
+/* =========================================================
+   ZYRE CUSTOMER STORE + RENTAL ACCESS SYSTEM
+========================================================= */
 
 const ZYRE_SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
@@ -3259,6 +3123,207 @@ const ZYRE_SUPABASE_KEY =
   "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
 window.ZYRE_STORES = [];
+
+/*
+   Stores whose current-month rental has NOT been confirmed.
+
+   This is also used by openSellerStore() so a locked store
+   cannot be opened by clicking the card button.
+*/
+window.ZYRE_LOCKED_SELLER_IDS = new Set();
+
+
+function isCurrentMonthRentalPaid(
+  payment
+) {
+
+  if (!payment) {
+    return false;
+  }
+
+  if (
+    String(
+      payment.status || ""
+    )
+    .trim()
+    .toLowerCase() !==
+    "paid"
+  ) {
+
+    return false;
+
+  }
+
+
+  const paymentDate =
+    payment.paid_at ||
+    payment.created_at;
+
+
+  if (!paymentDate) {
+    return false;
+  }
+
+
+  const date =
+    new Date(
+      paymentDate
+    );
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return false;
+
+  }
+
+
+  const now =
+    new Date();
+
+
+  return (
+
+    date.getFullYear() ===
+    now.getFullYear()
+
+    &&
+
+    date.getMonth() ===
+    now.getMonth()
+
+  );
+
+}
+
+
+async function getZYRECurrentMonthPaidSellerIds(
+  sellerIds
+) {
+
+  const paidSellerIds =
+    new Set();
+
+
+  if (
+    !Array.isArray(sellerIds) ||
+    !sellerIds.length
+  ) {
+
+    return paidSellerIds;
+
+  }
+
+
+  /*
+     Fetch paid rental records.
+
+     We deliberately fail closed:
+     if this request fails, no seller is treated
+     as paid by mistake.
+  */
+
+  const response =
+    await fetch(
+
+      ZYRE_SUPABASE_URL +
+      "/rest/v1/rental_payments" +
+
+      "?seller_id=in.(" +
+      sellerIds
+        .map(
+          function(id) {
+
+            return encodeURIComponent(
+              id
+            );
+
+          }
+        )
+        .join(",") +
+      ")" +
+
+      "&status=eq.paid" +
+
+      "&select=id,seller_id,status,payment_reference,payment_method,paid_at,created_at" +
+
+      "&order=id.desc",
+
+      {
+
+        headers: {
+
+          "apikey":
+            ZYRE_SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            ZYRE_SUPABASE_KEY,
+
+          "Accept":
+            "application/json"
+
+        }
+
+      }
+
+    );
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      "Could not verify store rental payments."
+    );
+
+  }
+
+
+  const payments =
+    await response.json();
+
+
+  if (
+    !Array.isArray(
+      payments
+    )
+  ) {
+
+    throw new Error(
+      "Invalid rental payment response."
+    );
+
+  }
+
+
+  payments.forEach(
+    function(payment) {
+
+      if (
+        isCurrentMonthRentalPaid(
+          payment
+        )
+      ) {
+
+        paidSellerIds.add(
+          String(
+            payment.seller_id
+          )
+        );
+
+      }
+
+    }
+  );
+
+
+  return paidSellerIds;
+
+}
 
 
 async function loadStores() {
@@ -3272,6 +3337,11 @@ async function loadStores() {
 
 
   try {
+
+    /*
+       STEP 1
+       Load approved stores.
+    */
 
     const response =
       await fetch(
@@ -3347,6 +3417,72 @@ async function loadStores() {
     }
 
 
+    /*
+       STEP 2
+       Get the seller IDs.
+    */
+
+    const sellerIds =
+      stores.map(
+        function(store) {
+
+          return store.id;
+
+        }
+      );
+
+
+    /*
+       STEP 3
+       Check which sellers have actually
+       paid their rental during the current
+       calendar month.
+    */
+
+    const paidSellerIds =
+      await getZYRECurrentMonthPaidSellerIds(
+        sellerIds
+      );
+
+
+    /*
+       STEP 4
+       Fail closed.
+
+       Every approved store starts locked.
+       Only a seller with confirmed current-month
+       payment is unlocked.
+    */
+
+    window.ZYRE_LOCKED_SELLER_IDS =
+      new Set(
+
+        sellerIds
+          .map(
+            function(id) {
+
+              return String(id);
+
+            }
+          )
+          .filter(
+            function(id) {
+
+              return !paidSellerIds.has(
+                id
+              );
+
+            }
+          )
+
+      );
+
+
+    /*
+       STEP 5
+       Render the stores.
+    */
+
     renderStores(
       stores
     );
@@ -3355,20 +3491,44 @@ async function loadStores() {
   } catch (error) {
 
     console.error(
-      "Store loading error:",
+      "Store loading/rental verification error:",
       error
     );
+
+
+    /*
+       If rental verification cannot be completed,
+       do NOT allow stores to be opened.
+    */
+
+    window.ZYRE_LOCKED_SELLER_IDS =
+      new Set(
+        window.ZYRE_STORES.map(
+          function(store) {
+
+            return String(
+              store.id
+            );
+
+          }
+        )
+      );
 
 
     container.innerHTML = `
 
       <div class="store-card">
 
+        <div class="store-symbol">
+          ⚠️
+        </div>
+
         <h3>
-          Stores unavailable
+          Stores temporarily unavailable
         </h3>
 
         <p>
+          We could not verify store availability.
           Please refresh and try again.
         </p>
 
@@ -3437,6 +3597,19 @@ function renderStores(
             );
 
 
+          const sellerId =
+            String(
+              store.id
+            );
+
+
+          const storeLocked =
+            window.ZYRE_LOCKED_SELLER_IDS
+              .has(
+                sellerId
+              );
+
+
           let storeLogoHTML =
             "";
 
@@ -3496,6 +3669,60 @@ function renderStores(
                 </div>
 
               </div>
+
+            `;
+
+          }
+
+
+          if (storeLocked) {
+
+            return `
+
+              <article
+                class="store-card store-locked"
+              >
+
+                ${storeLogoHTML}
+
+                <div class="store-lock-badge">
+                  🔒 CLOSED
+                </div>
+
+                <div class="store-symbol">
+                  🔒
+                </div>
+
+                <h3>
+                  ${storeName}
+                </h3>
+
+                <p>
+                  ${description}
+                </p>
+
+                <p class="store-rental-warning">
+
+                  ⚠️ <strong>Store temporarily unavailable.</strong>
+
+                  <br>
+
+                  Monthly rental payment is required
+                  before customers can enter this store
+                  or place orders.
+
+                </p>
+
+                <button
+                  class="store-locked-button"
+                  type="button"
+                  disabled
+                  aria-disabled="true"
+                >
+                  Store Unavailable
+                </button>
+
+              </article>
 
             `;
 
@@ -3694,6 +3921,33 @@ function openSellerStore(
   sellerId
 ) {
 
+  const normalizedSellerId =
+    String(
+      sellerId
+    );
+
+
+  /*
+     Final customer-side check before navigation.
+  */
+
+  if (
+    window.ZYRE_LOCKED_SELLER_IDS &&
+    window.ZYRE_LOCKED_SELLER_IDS.has(
+      normalizedSellerId
+    )
+  ) {
+
+    alert(
+      "⚠️ This store is temporarily unavailable.\n\n" +
+      "The store's monthly rental payment has not been confirmed yet."
+    );
+
+    return;
+
+  }
+
+
   window.location.href =
     "store.html?seller_id=" +
     encodeURIComponent(
@@ -3703,11 +3957,10 @@ function openSellerStore(
 }
 
 
+/*
+   Load stores after all rental functions exist.
+*/
+
 loadStores();
 
-</script>
-
-
-</body>
-
-</html>
+</script></body></html>
