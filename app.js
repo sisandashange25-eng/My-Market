@@ -1048,6 +1048,7 @@ function updateCart() {
                 ${product.name}
               </div>
 
+
               <div
                 style="
                   font-size:13px;
@@ -1551,17 +1552,6 @@ async function checkout() {
   }
 
 
-  /*
-    Convert:
-
-    [12,12,15]
-
-    into:
-
-    Product 12 × 2
-    Product 15 × 1
-  */
-
   const counts = {};
 
 
@@ -1773,13 +1763,9 @@ async function checkout() {
 
     if (!profileResponse.ok) {
 
-      const profileError =
-        await profileResponse.text();
-
-
       console.warn(
         "Customer profile update failed:",
-        profileError
+        await profileResponse.text()
       );
 
     }
@@ -1854,13 +1840,6 @@ async function checkout() {
     const orderId =
       await orderResponse.json();
 
-
-    /*
-      Some RPC functions return an
-      object instead of a plain ID.
-
-      Support both formats.
-    */
 
     let normalizedOrderId =
       orderId;
@@ -3184,7 +3163,7 @@ async function sellerLogin() {
 
   const password =
     prompt(
-      "Enter your ZavaMarket password:"
+      "Enter your ZavaMarket seller password:"
     );
 
 
@@ -3968,164 +3947,278 @@ async function saveZYREPushSubscription(
   subscription
 ) {
 
-  const endpoint =
-    subscription.endpoint;
+  try {
+
+    const user =
+      await getZYRECurrentUser();
+
+    const profile =
+      await getZYRECustomerProfile();
+
+    const endpoint =
+      subscription.endpoint;
+
+    const subscriptionJson =
+      subscription.toJSON();
 
 
-  const existingResponse =
-    await fetch(
+    /* =====================================================
+    CUSTOMER NOTIFICATION SUBSCRIPTION
+    ===================================================== */
 
-      SUPABASE_URL +
-      "/rest/v1/push_subscriptions?endpoint=eq." +
-      encodeURIComponent(
-        endpoint
-      ) +
-      "&select=id",
+    if (user) {
 
-      {
+      const customerData = {
 
-        method:
-          "GET",
+        user_id:
+          user.id,
 
-        headers: {
+        phone:
+          profile?.phone || null,
 
-          "apikey":
-            SUPABASE_KEY,
+        endpoint:
+          endpoint,
 
-          "Authorization":
-            "Bearer " +
-            SUPABASE_KEY
+        p256dh:
+          subscriptionJson.keys?.p256dh || "",
+
+        auth:
+          subscriptionJson.keys?.auth || ""
+
+      };
+
+
+      const customerResponse =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/notification_subscriptions",
+
+          {
+
+            method:
+              "POST",
+
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                (
+                  window.ZYRE_CURRENT_SESSION?.access_token ||
+                  SUPABASE_KEY
+                ),
+
+              "Content-Type":
+                "application/json",
+
+              "Prefer":
+                "resolution=merge-duplicates,return=minimal"
+
+            },
+
+            body:
+              JSON.stringify(
+                customerData
+              )
+
+          }
+
+        );
+
+
+      if (!customerResponse.ok) {
+
+        throw new Error(
+          "Customer notification subscription could not be saved:\n\n" +
+          await customerResponse.text()
+        );
+
+      }
+
+
+      console.log(
+        "✅ ZYRE customer notification subscription saved."
+      );
+
+    }
+
+
+    /* =====================================================
+    KEEP EXISTING SELLER NOTIFICATIONS WORKING
+    ===================================================== */
+
+    const existingResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/push_subscriptions?endpoint=eq." +
+        encodeURIComponent(
+          endpoint
+        ) +
+        "&select=id",
+
+        {
+
+          method:
+            "GET",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_KEY
+
+          }
 
         }
 
-      }
-
-    );
-
-
-  if (!existingResponse.ok) {
-
-    throw new Error(
-      "Could not check the existing push subscription:\n\n" +
-      await existingResponse.text()
-    );
-
-  }
-
-
-  const existing =
-    await existingResponse.json();
-
-
-  if (
-    Array.isArray(existing) &&
-    existing.length > 0
-  ) {
-
-    console.log(
-      "ZYRE push subscription already exists."
-    );
-
-    return;
-
-  }
-
-
-  const userId =
-    localStorage.getItem(
-      "zava_user_id"
-    );
-
-
-  const sellerId =
-    localStorage.getItem(
-      "zava_seller_id"
-    );
-
-
-  const subscriptionData = {
-
-    endpoint:
-      endpoint,
-
-    subscription:
-      subscription.toJSON()
-
-  };
-
-
-  if (userId) {
-
-    subscriptionData.user_id =
-      userId;
-
-  }
-
-
-  if (sellerId) {
-
-    subscriptionData.seller_id =
-      Number(
-        sellerId
       );
 
-  }
+
+    if (!existingResponse.ok) {
+
+      console.warn(
+        "Existing seller push subscription check failed:",
+        await existingResponse.text()
+      );
+
+      return;
+
+    }
 
 
-  const saveResponse =
-    await fetch(
+    const existing =
+      await existingResponse.json();
 
-      SUPABASE_URL +
-      "/rest/v1/push_subscriptions",
 
-      {
+    if (
+      Array.isArray(existing) &&
+      existing.length > 0
+    ) {
 
-        method:
-          "POST",
+      console.log(
+        "ZYRE seller push subscription already exists."
+      );
 
-        headers: {
+      return;
 
-          "apikey":
-            SUPABASE_KEY,
+    }
 
-          "Authorization":
-            "Bearer " +
-            (
-              window.ZYRE_CURRENT_SESSION?.access_token ||
-              SUPABASE_KEY
-            ),
 
-          "Content-Type":
-            "application/json",
+    const userId =
+      localStorage.getItem(
+        "zava_user_id"
+      );
 
-          "Prefer":
-            "return=minimal"
 
-        },
+    const sellerId =
+      localStorage.getItem(
+        "zava_seller_id"
+      );
 
-        body:
-          JSON.stringify(
-            subscriptionData
-          )
 
-      }
+    const sellerSubscriptionData = {
 
+      endpoint:
+        endpoint,
+
+      subscription:
+        subscriptionJson
+
+    };
+
+
+    if (userId) {
+
+      sellerSubscriptionData.user_id =
+        userId;
+
+    }
+
+
+    if (sellerId) {
+
+      sellerSubscriptionData.seller_id =
+        Number(
+          sellerId
+        );
+
+    }
+
+
+    const saveResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/push_subscriptions",
+
+        {
+
+          method:
+            "POST",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              (
+                window.ZYRE_CURRENT_SESSION?.access_token ||
+                SUPABASE_KEY
+              ),
+
+            "Content-Type":
+              "application/json",
+
+            "Prefer":
+              "return=minimal"
+
+          },
+
+          body:
+            JSON.stringify(
+              sellerSubscriptionData
+            )
+
+        }
+
+      );
+
+
+    if (!saveResponse.ok) {
+
+      console.warn(
+        "Existing seller push subscription could not be saved:",
+        await saveResponse.text()
+      );
+
+      return;
+
+    }
+
+
+    console.log(
+      "ZYRE seller push subscription saved successfully."
     );
 
+  } catch (error) {
 
-  if (!saveResponse.ok) {
-
-    throw new Error(
-      "Push subscription could not be saved:\n\n" +
-      await saveResponse.text()
+    console.error(
+      "ZYRE push subscription save error:",
+      error
     );
 
+    throw error;
+
   }
-
-
-  console.log(
-    "ZYRE push subscription saved successfully."
-  );
 
 }
 
