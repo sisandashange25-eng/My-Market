@@ -1352,7 +1352,7 @@ async function refreshSellerAuthentication(){
 
 
 /* =========================
-GET CURRENT SELLER
+RESOLVE SELLER FROM LOGIN
 ========================= */
 
 async function resolveSellerFromAccount(){
@@ -1378,9 +1378,18 @@ async function resolveSellerFromAccount(){
     session.user.id;
 
 
+  /*
+  IMPORTANT:
+  Do NOT trust the old seller ID stored
+  in the phone's localStorage.
+
+  Instead, find the seller belonging to
+  the currently authenticated Supabase user.
+  */
+
   const sellers =
     await supabaseRequest(
-      "sellers?select=*&user_id=eq." +
+      "sellers?select=id,user_id,store_name,approved,full_name,name,email&user_id=eq." +
       encodeURIComponent(userId) +
       "&limit=1"
     );
@@ -1402,6 +1411,10 @@ async function resolveSellerFromAccount(){
     sellers[0];
 
 
+  /*
+  This is now the authoritative seller ID.
+  */
+
   SELLER_ID =
     String(seller.id);
 
@@ -1412,7 +1425,9 @@ async function resolveSellerFromAccount(){
   );
 
 
-  if(seller.email){
+  if(
+    seller.email
+  ){
 
     SELLER_EMAIL =
       seller.email;
@@ -1423,6 +1438,16 @@ async function resolveSellerFromAccount(){
     );
 
   }
+
+
+  console.log(
+    "ZYRE SELLER RESOLVED:",
+    {
+      sellerId:SELLER_ID,
+      userId:userId,
+      storeName:seller.store_name
+    }
+  );
 
 
   return seller;
@@ -1585,11 +1610,12 @@ async function uploadProductImage(file){
     await getSellerAccessToken();
 
 
-  if(!SELLER_ID){
+  /*
+  Always make sure SELLER_ID is resolved
+  from the authenticated account.
+  */
 
-    await resolveSellerFromAccount();
-
-  }
+  await resolveSellerFromAccount();
 
 
   if(!SELLER_ID){
@@ -1878,6 +1904,17 @@ function isPaidThisMonth(payment){
     new Date();
 
 
+  if(
+    Number.isNaN(
+      paymentDate.getTime()
+    )
+  ){
+
+    return false;
+
+  }
+
+
   return (
     paymentDate.getFullYear() ===
     now.getFullYear()
@@ -1906,17 +1943,27 @@ function isActiveSubscription(subscription){
     String(
       subscription.status || ""
     )
+    .trim()
     .toLowerCase();
 
 
-  if(status !== "active"){
+  if(
+    status !== "active"
+  ){
 
     return false;
 
   }
 
 
-  if(!subscription.expires_at){
+  /*
+  If there is no expiry date, the subscription
+  is treated as active.
+  */
+
+  if(
+    !subscription.expires_at
+  ){
 
     return true;
 
@@ -1940,7 +1987,10 @@ function isActiveSubscription(subscription){
   }
 
 
-  return expiry.getTime() > Date.now();
+  return (
+    expiry.getTime() >
+    Date.now()
+  );
 
 }
 
@@ -1954,32 +2004,25 @@ async function checkRental(){
   try{
 
     /*
-    First make sure the logged-in
-    Supabase account is linked to
-    the correct seller record.
+    STEP 1:
+    Resolve the seller from the currently
+    logged-in Supabase account.
+
+    This prevents an old/wrong localStorage
+    seller ID from causing the rental lock.
     */
 
     const seller =
       await resolveSellerFromAccount();
 
 
-    if(!seller){
-
-      return false;
-
-    }
-
-
-    /*
-    Seller must be approved.
-    */
-
     if(
-      seller.approved !== true
+      !seller ||
+      !SELLER_ID
     ){
 
-      console.warn(
-        "Seller is not approved."
+      console.error(
+        "ZYRE: Seller could not be resolved."
       );
 
       return false;
@@ -1987,8 +2030,22 @@ async function checkRental(){
     }
 
 
+    const sellerId =
+      String(SELLER_ID);
+
+
     /*
-    Check the active subscription.
+    STEP 2:
+    Check store_subscriptions.
+
+    Your known active record is:
+
+    seller_id = 16
+    rental_plan_id = 1
+    status = active
+    expires_at = 2026-10-31
+
+    Therefore this should unlock the dashboard.
     */
 
     let subscriptions = [];
@@ -1998,15 +2055,15 @@ async function checkRental(){
 
       subscriptions =
         await supabaseRequest(
-          "store_subscriptions?select=*&seller_id=eq." +
-          encodeURIComponent(SELLER_ID) +
+          "store_subscriptions?select=id,seller_id,rental_plan_id,status,started_at,expires_at,created_at&seller_id=eq." +
+          encodeURIComponent(sellerId) +
           "&order=id.desc"
         );
 
     }catch(error){
 
       console.warn(
-        "Subscription check failed:",
+        "ZYRE subscription check failed:",
         error
       );
 
@@ -2026,10 +2083,11 @@ async function checkRental(){
 
 
     /*
-    Also check the actual rental payment.
-    This is important because the successful
-    Paystack payment is already recorded as
-    status = paid.
+    STEP 3:
+    Check rental_payments.
+
+    A paid rental this month also unlocks
+    the dashboard.
     */
 
     let payments = [];
@@ -2039,15 +2097,15 @@ async function checkRental(){
 
       payments =
         await supabaseRequest(
-          "rental_payments?select=*&seller_id=eq." +
-          encodeURIComponent(SELLER_ID) +
+          "rental_payments?select=id,seller_id,subscription_id,amount,status,payment_reference,payment_method,paid_at,created_at&seller_id=eq." +
+          encodeURIComponent(sellerId) +
           "&order=id.desc"
         );
 
     }catch(error){
 
       console.warn(
-        "Rental payment check failed:",
+        "ZYRE rental payment check failed:",
         error
       );
 
@@ -2066,26 +2124,44 @@ async function checkRental(){
       );
 
 
+    /*
+    STEP 4:
+    Log exactly what was found.
+
+    This is useful if another database
+    permission problem appears.
+    */
+
     console.log(
-      "ZYRE RENTAL CHECK",
+      "ZYRE RENTAL CHECK RESULT",
       {
-        sellerId: SELLER_ID,
-        activeSubscription,
-        paidThisMonth,
-        subscriptions,
-        payments
+        authenticatedSellerId:
+          sellerId,
+
+        storeName:
+          seller.store_name,
+
+        activeSubscription:
+          activeSubscription,
+
+        paidThisMonth:
+          paidThisMonth,
+
+        subscriptionRecords:
+          subscriptions,
+
+        paymentRecords:
+          payments
       }
     );
 
 
     /*
-    Either of these valid records can
-    unlock the dashboard:
-    
-    1. Active subscription that has not expired
-    OR
-    2. Paid rental payment during the
-       current month.
+    STEP 5:
+    Unlock when either trusted record
+    confirms the rental.
+
+    Active subscription OR paid monthly rental.
     */
 
     if(
@@ -2103,7 +2179,7 @@ async function checkRental(){
   }catch(error){
 
     console.error(
-      "Rental check error:",
+      "ZYRE rental check error:",
       error
     );
 
@@ -2190,36 +2266,46 @@ async function startDashboard(){
 
   try{
 
+    /*
+    First authenticate.
+    */
+
     await refreshSellerAuthentication();
 
 
     /*
-    Resolve seller from the logged-in
-    account instead of trusting an old
-    localStorage seller ID.
+    IMPORTANT:
+    Resolve the seller from the logged-in
+    account every time the dashboard starts.
     */
 
-    await resolveSellerFromAccount();
+    const seller =
+      await resolveSellerFromAccount();
 
 
-    if(!SELLER_ID){
+    if(
+      !seller ||
+      !SELLER_ID
+    ){
 
-      alert(
+      throw new Error(
         "Seller information was not found. Please log in again."
       );
 
-      logoutSeller();
-
-      return;
-
     }
 
+
+    /*
+    Now check rental.
+    */
 
     const rentalPaid =
       await checkRental();
 
 
     if(!rentalPaid){
+
+      updateRentalDisplay(false);
 
       showRentalLock();
 
@@ -2228,8 +2314,19 @@ async function startDashboard(){
     }
 
 
+    /*
+    Rental confirmed.
+    Unlock dashboard.
+    */
+
     showDashboard();
 
+    updateRentalDisplay(true);
+
+
+    /*
+    Load dashboard data.
+    */
 
     await loadSellerInformation();
 
@@ -2241,8 +2338,6 @@ async function startDashboard(){
 
     await loadNotifications();
 
-    updateRentalDisplay(true);
-
 
   }catch(error){
 
@@ -2252,17 +2347,21 @@ async function startDashboard(){
     );
 
 
+    const message =
+      String(
+        error.message || ""
+      );
+
+
     if(
-      error.message &&
-      (
-        error.message.includes("session") ||
-        error.message.includes("account") ||
-        error.message.includes("seller profile")
-      )
+      message.includes("session") ||
+      message.includes("login") ||
+      message.includes("account") ||
+      message.includes("seller profile")
     ){
 
       alert(
-        error.message
+        message
       );
 
       logoutSeller();
@@ -2271,6 +2370,11 @@ async function startDashboard(){
 
     }
 
+
+    /*
+    Fail closed if the rental cannot
+    be verified.
+    */
 
     showRentalLock();
 
@@ -2286,6 +2390,14 @@ SELLER INFORMATION
 async function loadSellerInformation(){
 
   try{
+
+    /*
+    Make sure seller ID is still linked
+    to the authenticated account.
+    */
+
+    await resolveSellerFromAccount();
+
 
     const sellers =
       await supabaseRequest(
@@ -2646,7 +2758,10 @@ document
       }
 
 
-      if(!Number.isFinite(price) || price < 0){
+      if(
+        !Number.isFinite(price) ||
+        price < 0
+      ){
 
         alert(
           "Please enter a valid product price."
@@ -2657,7 +2772,10 @@ document
       }
 
 
-      if(!Number.isFinite(stock) || stock < 0){
+      if(
+        !Number.isFinite(stock) ||
+        stock < 0
+      ){
 
         alert(
           "Please enter valid stock."
@@ -2701,6 +2819,7 @@ document
 
           uploadStatus.textContent =
             "⏳ Uploading picture...";
+
         }
 
 
@@ -2714,6 +2833,7 @@ document
 
           uploadStatus.textContent =
             "✓ Picture uploaded";
+
         }
 
 
@@ -2721,6 +2841,7 @@ document
 
           button.textContent =
             "Saving product...";
+
         }
 
 
@@ -2821,6 +2942,7 @@ document
           uploadStatus.textContent =
             "❌ " +
             error.message;
+
         }
 
       }finally{
@@ -4280,15 +4402,41 @@ async function checkRentalAgain(){
 
   try{
 
+    /*
+    Allow a completely fresh dashboard
+    verification.
+    */
+
     dashboardStarted =
       false;
 
+
+    /*
+    Clear only the OLD cached seller ID.
+    The new function will immediately resolve
+    the correct seller from the Supabase login.
+    */
+
+    localStorage.removeItem(
+      "zava_seller_id"
+    );
+
+
+    SELLER_ID = null;
+
+
+    /*
+    Check the rental again.
+    */
 
     const paid =
       await checkRental();
 
 
     if(paid){
+
+      updateRentalDisplay(true);
+
 
       alert(
         "✓ Rental payment confirmed. Your dashboard is unlocked."
