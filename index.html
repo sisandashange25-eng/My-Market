@@ -883,6 +883,12 @@ button {
   color:#000;
 }
 
+#zyreCustomerNotificationButton:disabled {
+  opacity:.65;
+  cursor:wait;
+  transform:none;
+}
+
 #zyreCustomerNotificationStatus {
   display:block;
   width:100%;
@@ -1322,7 +1328,7 @@ async function zyreCheckAuthentication() {
       document.createElement("script");
 
     marketplaceScript.src =
-      "app.js?v=5008";
+      "app.js?v=5009";
 
     marketplaceScript.onload =
       function () {
@@ -1546,8 +1552,7 @@ function setupZYRECustomerNotifications() {
 
 
   /*
-     Check the current notification
-     permission when the page loads.
+     Check current notification permission.
   */
 
   if (
@@ -2227,14 +2232,14 @@ function setupZYRECustomerNotifications() {
   </button>
 
 
-  <!-- NEW CUSTOMER NOTIFICATION BUTTON -->
-
   <button
     id="zyreCustomerNotificationButton"
     type="button"
+    onclick="enableZYRECustomerNotifications()"
   >
     🔔 Enable Order Notifications
   </button>
+
 
   <small
     id="zyreCustomerNotificationStatus"
@@ -2384,6 +2389,87 @@ function setupZYRECustomerNotifications() {
   </div>
 
 </footer>
+
+
+<script>
+
+function enableZYRECustomerNotifications() {
+
+  const button =
+    document.getElementById(
+      "zyreCustomerNotificationButton"
+    );
+
+  if (
+    typeof window.enableZYRENotifications !==
+    "function"
+  ) {
+
+    alert(
+      "Notification system is still loading.\n\nPlease wait a moment and try again."
+    );
+
+    return;
+
+  }
+
+  if (button) {
+
+    button.disabled =
+      true;
+
+    button.textContent =
+      "🔄 Enabling...";
+
+  }
+
+  window.enableZYRENotifications()
+    .then(
+      function () {
+
+        if (button) {
+
+          button.textContent =
+            "✅ Order Notifications Enabled";
+
+        }
+
+      }
+    )
+    .catch(
+      function (error) {
+
+        console.error(
+          "Customer notification error:",
+          error
+        );
+
+        if (button) {
+
+          button.disabled =
+            false;
+
+          button.textContent =
+            "🔔 Enable Order Notifications";
+
+        }
+
+        alert(
+          "Could not enable order notifications.\n\n" +
+          (
+            error &&
+            error.message
+              ? error.message
+              : error
+          )
+        );
+
+      }
+    );
+
+}
+
+</script>
 
 
 <script>
