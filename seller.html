@@ -1366,16 +1366,17 @@ async function resolveSellerFromAccount(){
 
   /*
   IMPORTANT:
-  Always find the seller using the
-  authenticated Supabase user ID.
 
-  This prevents an old or incorrect
-  localStorage seller ID from being used.
+  The seller ID stored in localStorage
+  is NOT trusted.
+
+  The seller is always resolved from
+  the authenticated Supabase user ID.
   */
 
   const sellers =
     await supabaseRequest(
-      "sellers?select=*&user_id=eq." +
+      "sellers?select=id,user_id,store_name,approved,status,full_name,name,email,phone,category&user_id=eq." +
       encodeURIComponent(userId) +
       "&limit=1"
     );
@@ -1425,12 +1426,13 @@ async function resolveSellerFromAccount(){
 
 
   console.log(
-    "ZYRE SELLER RESOLVED:",
+    "ZYRE SELLER RESOLVED",
     {
+      authenticatedUserId:userId,
       sellerId:SELLER_ID,
-      userId:userId,
       storeName:seller.store_name,
-      approved:seller.approved
+      approved:seller.approved,
+      status:seller.status
     }
   );
 
@@ -1531,7 +1533,7 @@ async function supabaseRequest(
 
   if(!response.ok){
 
-    throw new Error(
+    const errorMessage =
       data &&
       data.message
         ? data.message
@@ -1539,7 +1541,21 @@ async function supabaseRequest(
           typeof data === "string"
             ? data
             : "Supabase request failed"
-        )
+        );
+
+
+    console.error(
+      "SUPABASE REQUEST FAILED",
+      {
+        path,
+        status:response.status,
+        data
+      }
+    );
+
+
+    throw new Error(
+      errorMessage
     );
 
   }
@@ -1925,12 +1941,6 @@ function isActiveSubscription(subscription){
   }
 
 
-  /*
-  If there is no expiry date,
-  an active subscription remains
-  valid.
-  */
-
   if(!subscription.expires_at){
 
     return true;
@@ -1969,199 +1979,193 @@ RENTAL CHECK
 
 async function checkRental(){
 
+  /*
+  IMPORTANT:
+
+  Do NOT silently convert database
+  errors into "not paid".
+
+  If Supabase refuses the query,
+  we want to know that rather than
+  displaying a misleading payment
+  message.
+  */
+
+  const seller =
+    await resolveSellerFromAccount();
+
+
+  if(
+    !seller ||
+    !seller.id
+  ){
+
+    throw new Error(
+      "Seller ID could not be found."
+    );
+
+  }
+
+
+  const sellerId =
+    String(seller.id);
+
+
+  console.log(
+    "ZYRE RENTAL CHECK START",
+    {
+      sellerId,
+      storeName:seller.store_name
+    }
+  );
+
+
+  /*
+  =========================
+  CHECK ACTIVE SUBSCRIPTION
+  =========================
+  */
+
+  let subscriptions = [];
+
+
   try{
 
-    /*
-    STEP 1
-    Resolve seller from the actual
-    logged-in Supabase account.
-    */
-
-    const seller =
-      await resolveSellerFromAccount();
-
-
-    if(
-      !seller ||
-      !seller.id
-    ){
-
-      throw new Error(
-        "Seller ID could not be found."
+    subscriptions =
+      await supabaseRequest(
+        "store_subscriptions?select=id,seller_id,rental_plan_id,status,started_at,expires_at,created_at&seller_id=eq." +
+        encodeURIComponent(sellerId) +
+        "&order=id.desc"
       );
-
-    }
-
-
-    const sellerId =
-      String(seller.id);
-
-
-    /*
-    STEP 2
-    Check active subscription.
-
-    Your current database record is:
-
-    seller_id = 16
-    rental_plan_id = 1
-    status = active
-    expires_at = 2026-10-31
-
-    This should unlock the dashboard.
-    */
-
-    let subscriptions = [];
-
-
-    try{
-
-      subscriptions =
-        await supabaseRequest(
-          "store_subscriptions?select=*&seller_id=eq." +
-          encodeURIComponent(sellerId) +
-          "&order=id.desc"
-        );
-
-    }catch(error){
-
-      console.error(
-        "Subscription query error:",
-        error
-      );
-
-      subscriptions = [];
-
-    }
-
-
-    const activeSubscription =
-      Array.isArray(subscriptions) &&
-      subscriptions.some(
-        subscription =>
-          isActiveSubscription(
-            subscription
-          )
-      );
-
-
-    /*
-    STEP 3
-    Check paid rental payments too.
-    */
-
-    let payments = [];
-
-
-    try{
-
-      payments =
-        await supabaseRequest(
-          "rental_payments?select=*&seller_id=eq." +
-          encodeURIComponent(sellerId) +
-          "&order=id.desc"
-        );
-
-    }catch(error){
-
-      console.error(
-        "Rental payment query error:",
-        error
-      );
-
-      payments = [];
-
-    }
-
-
-    const paidThisMonth =
-      Array.isArray(payments) &&
-      payments.some(
-        payment =>
-          isPaidThisMonth(
-            payment
-          )
-      );
-
-
-    /*
-    STEP 4
-    Debug information.
-    */
-
-    console.log(
-      "=============================="
-    );
-
-    console.log(
-      "ZYRE RENTAL VERIFICATION"
-    );
-
-    console.log(
-      "Seller ID:",
-      sellerId
-    );
-
-    console.log(
-      "Store:",
-      seller.store_name
-    );
-
-    console.log(
-      "Active subscription:",
-      activeSubscription
-    );
-
-    console.log(
-      "Paid this month:",
-      paidThisMonth
-    );
-
-    console.log(
-      "Subscriptions:",
-      subscriptions
-    );
-
-    console.log(
-      "Rental payments:",
-      payments
-    );
-
-    console.log(
-      "=============================="
-    );
-
-
-    /*
-    STEP 5
-
-    Either a valid active subscription
-    OR a valid paid rental payment
-    unlocks the seller dashboard.
-    */
-
-    if(
-      activeSubscription ||
-      paidThisMonth
-    ){
-
-      return true;
-
-    }
-
-
-    return false;
 
   }catch(error){
 
     console.error(
-      "FINAL RENTAL CHECK ERROR:",
+      "STORE SUBSCRIPTION CHECK FAILED:",
       error
     );
 
-    return false;
+    /*
+    We do not pretend the seller is
+    unpaid when the database rejected
+    the query.
+    */
+
+    throw new Error(
+      "ZYRE could not read your store rental subscription. " +
+      error.message
+    );
 
   }
+
+
+  const activeSubscription =
+    Array.isArray(subscriptions) &&
+    subscriptions.some(
+      subscription =>
+        isActiveSubscription(
+          subscription
+        )
+    );
+
+
+  console.log(
+    "ZYRE ACTIVE SUBSCRIPTION:",
+    activeSubscription,
+    subscriptions
+  );
+
+
+  /*
+  If the subscription is active,
+  unlock immediately.
+
+  Your database currently contains:
+
+  seller_id = 16
+  rental_plan_id = 1
+  status = active
+  expires_at = 2026-10-31
+  */
+
+  if(activeSubscription){
+
+    console.log(
+      "ZYRE RENTAL UNLOCKED BY ACTIVE SUBSCRIPTION"
+    );
+
+    return true;
+
+  }
+
+
+  /*
+  =========================
+  CHECK PAID RENTAL PAYMENT
+  =========================
+  */
+
+  let payments = [];
+
+
+  try{
+
+    payments =
+      await supabaseRequest(
+        "rental_payments?select=id,seller_id,subscription_id,amount,status,payment_reference,payment_method,paid_at,created_at&seller_id=eq." +
+        encodeURIComponent(sellerId) +
+        "&order=id.desc"
+      );
+
+  }catch(error){
+
+    console.error(
+      "RENTAL PAYMENT CHECK FAILED:",
+      error
+    );
+
+    throw new Error(
+      "ZYRE could not read your rental payment record. " +
+      error.message
+    );
+
+  }
+
+
+  const paidThisMonth =
+    Array.isArray(payments) &&
+    payments.some(
+      payment =>
+        isPaidThisMonth(
+          payment
+        )
+    );
+
+
+  console.log(
+    "ZYRE PAID THIS MONTH:",
+    paidThisMonth,
+    payments
+  );
+
+
+  if(paidThisMonth){
+
+    console.log(
+      "ZYRE RENTAL UNLOCKED BY PAID RENTAL PAYMENT"
+    );
+
+    return true;
+
+  }
+
+
+  console.log(
+    "ZYRE RENTAL NOT CONFIRMED"
+  );
+
+
+  return false;
 
 }
 
@@ -2251,16 +2255,8 @@ async function startDashboard(){
 
   try{
 
-    /*
-    Always authenticate first.
-    */
-
     await refreshSellerAuthentication();
 
-
-    /*
-    Always resolve seller again.
-    */
 
     const seller =
       await resolveSellerFromAccount();
@@ -2278,26 +2274,25 @@ async function startDashboard(){
     }
 
 
-    /*
-    Check rental.
-    */
-
     const rentalPaid =
       await checkRental();
 
 
     if(!rentalPaid){
 
+      updateRentalDisplay(
+        false
+      );
+
       showRentalLock();
+
+      dashboardStarted =
+        false;
 
       return;
 
     }
 
-
-    /*
-    Rental is confirmed.
-    */
 
     showDashboard();
 
@@ -2327,8 +2322,8 @@ async function startDashboard(){
 
 
     /*
-    Authentication/account problems
-    require login again.
+    Authentication problems require
+    logging in again.
     */
 
     if(
@@ -2345,6 +2340,9 @@ async function startDashboard(){
         error.message
       );
 
+      dashboardStarted =
+        false;
+
       logoutSeller();
 
       return;
@@ -2353,10 +2351,22 @@ async function startDashboard(){
 
 
     /*
-    Other failures fail closed.
+    Database/rental errors remain
+    locked for security.
+
+    The error is displayed so we
+    know the actual problem.
     */
 
     showRentalLock();
+
+    dashboardStarted =
+      false;
+
+    alert(
+      "ZYRE could not verify the rental.\n\n" +
+      error.message
+    );
 
   }
 
@@ -4363,11 +4373,6 @@ async function checkRentalAgain(){
 
   try{
 
-    /*
-    Completely restart the dashboard
-    verification process.
-    */
-
     dashboardStarted =
       false;
 
@@ -4408,7 +4413,7 @@ async function checkRentalAgain(){
 
 
     alert(
-      "Could not check rental payment.\n\n" +
+      "ZYRE could not verify the rental.\n\n" +
       error.message
     );
 
@@ -4583,6 +4588,12 @@ setInterval(
 
     }catch(error){
 
+      /*
+      Do not silently unlock or change
+      the dashboard when verification
+      fails during the background check.
+      */
+
       console.log(
         "Periodic rental check failed:",
         error
@@ -4597,7 +4608,7 @@ setInterval(
 </script>
 
 
-<script src="app.js?v=6011"></script>
+<script src="app.js?v=6012"></script>
 
 </body>
 </html>
