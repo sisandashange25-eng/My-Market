@@ -1,33 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en">
+<head><meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 
-<meta charset="UTF-8">
+«»
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+<title>ZYRE Marketing | Seller Dashboard</title><meta
+name="description"
+content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications."
 
-<title>ZYRE Marketing | Seller Dashboard</title>
-
-<meta
-  name="description"
-  content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications."
->
+«»
 
 <meta
-  name="robots"
-  content="noindex,nofollow"
->
+name="robots"
+content="noindex,nofollow"
+
+«»
 
 <!-- =====================================================
      SUPABASE JAVASCRIPT LIBRARY
      REQUIRED FOR SELLER AUTHENTICATION
-===================================================== -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
+===================================================== --><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 
 *{
   box-sizing:border-box;
@@ -496,22 +489,9 @@ textarea{
 
 }
 
-</style>
-</head>
-
-<body>
-
-<header>
-
-<div class="header-inner">
-
-<div class="logo-title">
+</style></head><body><header><div class="header-inner"><div class="logo-title">
 🛍️ ZYRE Marketing Seller Dashboard
-</div>
-
-<div class="header-buttons">
-
-<button
+</div><div class="header-buttons"><button
 class="btn-white"
 onclick="goBackToStore()">
 ← Back to Store
@@ -523,48 +503,24 @@ onclick="logoutSeller()">
 Logout
 </button>
 
-</div>
-
-</div>
-
-</header>
-
-
-<div
+</div></div></header><div
 id="rentalLoading"
-class="loading">
-
-<strong>Checking Store Rental</strong>
+class="loading"><strong>Checking Store Rental</strong>
 
 <br><br>
 
 Please wait while ZYRE Marketing checks your current monthly store rental.
 
-</div>
-
-
-<div
+</div><div
 id="rentalLock"
-class="hidden">
-
-<main>
-
-<div class="lock-box">
-
-<h2>🔒 Store Temporarily Locked</h2>
-
-<p>
+class="hidden"><main><div class="lock-box"><h2>🔒 Store Temporarily Locked</h2><p>
 Your ZYRE Marketing store rental for this month
 has not been confirmed.
-</p>
-
-<p>
+</p><p>
 Pay the monthly rental of
 <strong>R100</strong>
 to unlock your seller dashboard.
-</p>
-
-<button
+</p><button
 class="btn-gold"
 onclick="payRental()">
 💳 Pay R100 Rental
@@ -578,134 +534,54 @@ onclick="checkRentalAgain()">
 🔄 Check Payment Again
 </button>
 
-</div>
-
-</main>
-
-</div>
-
-
-<div
+</div></main></div><div
 id="dashboard"
-class="hidden">
-
-<main>
-
-<section class="card welcome">
-
-<h1>
+class="hidden"><main><section class="card welcome"><h1>
 Welcome,
 <span id="sellerName">
 Seller
 </span>
-</h1>
-
-<p>
+</h1><p>
 Store:
 <strong id="sellerStoreName">
 ZYRE
 </strong>
-</p>
-
-<p>
+</p><p>
 Manage your products, orders,
 deliveries and store.
-</p>
-
-<span
+</p><span
 id="rentalPaidBadge"
 class="rental-paid">
 ✓ Rental Paid
 </span>
 
-</section>
-
-
-<section class="card">
-
-<h2>🔔 Notifications</h2>
-
-<div id="notificationsPreview">
-
-<div class="empty">
+</section><section class="card"><h2>🔔 Notifications</h2><div id="notificationsPreview"><div class="empty">
 No new notifications.
-</div>
-
-</div>
-
-</section>
-
-
-<section class="grid">
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div></section><section class="grid"><div class="stat"><div class="stat-label">
 Products
-</div>
-
-<div
+</div><div
 class="stat-number"
 id="productCount">
 0
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div><div class="stat"><div class="stat-label">
 Orders
-</div>
-
-<div
+</div><div
 class="stat-number"
 id="orderCount">
 0
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div><div class="stat"><div class="stat-label">
 Sales
-</div>
-
-<div
+</div><div
 class="stat-number"
 id="salesTotal">
 R0.00
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div><div class="stat"><div class="stat-label">
 Rental
-</div>
-
-<div
+</div><div
 class="stat-number"
 style="font-size:20px">
 PAID
-</div>
-
-</div>
-
-</section>
-
-
-<br>
-
-
-<div class="nav">
-
-<button
+</div></div></section><br><div class="nav"><button
 class="active"
 onclick="showPanel('overview',this)">
 📊 Overview
@@ -741,135 +617,56 @@ onclick="showPanel('sellerInfo',this)">
 👤 Seller Information
 </button>
 
-</div>
-
-
-<section
+</div><section
 id="overview"
-class="panel active">
-
-<div class="card">
-
-<h2>
+class="panel active"><div class="card"><h2>
 📊 Dashboard Overview
-</h2>
-
-<p>
+</h2><p>
 Welcome to your ZYRE Marketing
 seller control centre.
-</p>
-
-<p>
+</p><p>
 From here you can manage your products,
 customer orders, delivery information
 and store rental.
-</p>
-
-</div>
-
-
-<div class="grid">
-
-<div class="stat">
-
-<div class="stat-label">
+</p></div><div class="grid"><div class="stat"><div class="stat-label">
 Pending Orders
-</div>
-
-<div
+</div><div
 id="pendingCount"
 class="stat-number">
 0
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div><div class="stat"><div class="stat-label">
 Processing
-</div>
-
-<div
+</div><div
 id="processingCount"
 class="stat-number">
 0
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div><div class="stat"><div class="stat-label">
 Shipped
-</div>
-
-<div
+</div><div
 id="shippedCount"
 class="stat-number">
 0
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div><div class="stat"><div class="stat-label">
 Delivered
-</div>
-
-<div
+</div><div
 id="deliveredCount"
 class="stat-number">
 0
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section
+</div></div></div></section><section
 id="products"
-class="panel">
-
-<div class="card">
-
-<h2>
+class="panel"><div class="card"><h2>
 ➕ Add Product
-</h2>
-
-<form id="productForm">
-
-<div class="form-grid">
-
-<div class="form-group">
-
-<label>
+</h2><form id="productForm"><div class="form-grid"><div class="form-group"><label>
 Product Name
-</label>
-
-<input
+</label><input
 id="productName"
 type="text"
 required
 placeholder="Product name">
 
-</div>
-
-
-<div class="form-group">
-
-<label>
+</div><div class="form-group"><label>
 Price
-</label>
-
-<input
+</label><input
 id="productPrice"
 type="number"
 step="0.01"
@@ -877,72 +674,38 @@ min="0"
 required
 placeholder="299.00">
 
-</div>
-
-
-<div class="form-group">
-
-<label>
+</div><div class="form-group"><label>
 Stock
-</label>
-
-<input
+</label><input
 id="productStock"
 type="number"
 min="0"
 required
 placeholder="20">
 
-</div>
-
-
-<div class="form-group">
-
-<label>
+</div><div class="form-group"><label>
 Category
-</label>
-
-<select id="productCategory">
-
-<option value="Electronics">
+</label><select id="productCategory"><option value="Electronics">
 Electronics
-</option>
-
-<option value="Fashion">
+</option><option value="Fashion">
 Fashion
-</option>
-
-<option value="Home">
+</option><option value="Home">
 Home
-</option>
-
-<option value="Beauty">
+</option><option value="Beauty">
 Beauty
-</option>
-
-</select>
-
-</div>
-
-
-<div class="form-group full">
-
-<label>
+</option></select></div><div class="form-group full"><label>
 📷 Product Picture
-</label>
-
-<input
+</label><input
 id="productImageFile"
 type="file"
 accept="image/*"
 required
->
+
+«»
 
 <small>
 Choose a picture from your phone gallery.
-</small>
-
-<img
+</small><img
 id="photoPreview"
 class="photo-preview"
 alt="Product preview">
@@ -950,62 +713,24 @@ alt="Product preview">
 <div
 id="uploadStatus"
 class="upload-status">
-</div>
-
-</div>
-
-</div>
-
-<br>
-
-<button
+</div></div></div><br><button
 id="addProductButton"
 class="btn-black"
 type="submit">
 
 ➕ Add Product
 
-</button>
-
-</form>
-
-</div>
-
-
-<div class="card">
-
-<h2>
+</button></form></div><div class="card"><h2>
 🛍️ My Products
-</h2>
-
-<div
+</h2><div
 id="productsGrid"
-class="product-grid">
-
-<div class="empty">
+class="product-grid"><div class="empty">
 Loading products...
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section
+</div></div></div></section><section
 id="orders"
-class="panel">
-
-<div class="card">
-
-<h2>
+class="panel"><div class="card"><h2>
 📦 Customer Orders
-</h2>
-
-<div class="filters">
-
-<button
+</h2><div class="filters"><button
 class="active"
 onclick="setOrderFilter('all',this)">
 All
@@ -1031,90 +756,42 @@ onclick="setOrderFilter('delivered',this)">
 Delivered
 </button>
 
-</div>
-
-<div
+</div><div
 id="ordersList"
-class="order-list">
-
-<div class="empty">
+class="order-list"><div class="empty">
 Loading orders...
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section
+</div></div></div></section><section
 id="delivery"
-class="panel">
-
-<div class="card">
-
-<h2>
+class="panel"><div class="card"><h2>
 🚚 Delivery Management
-</h2>
-
-<p>
+</h2><p>
 Manage delivery information for
 your customer orders.
-</p>
-
-<div
+</p><div
 id="deliveryList"
-class="delivery-list">
-
-<div class="empty">
+class="delivery-list"><div class="empty">
 Loading delivery information...
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section
+</div></div></div></section><section
 id="rental"
-class="panel">
-
-<div class="card">
-
-<h2>
+class="panel"><div class="card"><h2>
 💳 Store Rental
-</h2>
-
-<div class="rental-box">
-
-<p>
+</h2><div class="rental-box"><p>
 Monthly store rental
-</p>
-
-<div class="rental-status">
+</p><div class="rental-status">
 R100 / month
-</div>
-
-<p>
+</div><p>
 Current status:
 <strong
 id="rentalStatusText">
 Checking...
 </strong>
-</p>
-
-<p>
+</p><p>
 Your store stays listed on
 ZYRE Marketing. If the monthly
 rental is not paid, the store is
 temporarily locked until payment
 is confirmed.
-</p>
-
-<button
+</p><button
 id="rentalPayButton"
 class="btn-gold"
 onclick="payRental()">
@@ -1127,114 +804,37 @@ onclick="checkRentalAgain()">
 🔄 Check Rental
 </button>
 
-</div>
-
-</div>
-
-</section>
-
-
-<section
+</div></div></section><section
 id="notifications"
-class="panel">
-
-<div class="card">
-
-<h2>
+class="panel"><div class="card"><h2>
 🔔 Notifications
-</h2>
-
-<div id="notificationsList">
-
-<div class="empty">
+</h2><div id="notificationsList"><div class="empty">
 Loading notifications...
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section
+</div></div></div></section><section
 id="sellerInfo"
-class="panel">
-
-<div class="card">
-
-<h2>
+class="panel"><div class="card"><h2>
 👤 Seller Information
-</h2>
-
-<div class="info-grid">
-
-<div class="info-box">
-
-<div class="info-label">
+</h2><div class="info-grid"><div class="info-box"><div class="info-label">
 Seller Name
-</div>
-
-<div
+</div><div
 id="sellerInfoName"
 class="info-value">
 —
-</div>
-
-</div>
-
-
-<div class="info-box">
-
-<div class="info-label">
+</div></div><div class="info-box"><div class="info-label">
 Store Name
-</div>
-
-<div
+</div><div
 id="sellerInfoStore"
 class="info-value">
 —
-</div>
-
-</div>
-
-
-<div class="info-box">
-
-<div class="info-label">
+</div></div><div class="info-box"><div class="info-label">
 Seller ID
-</div>
-
-<div
+</div><div
 id="sellerInfoId"
 class="info-value">
 —
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<div id="technicalArea">
-
-<div id="sellerId"></div>
+</div></div></div></div></section><div id="technicalArea"><div id="sellerId"></div>
 <div id="orderTable"></div>
-<div id="deliveryTable"></div>
-
-</div>
-
-
-</main>
-
-</div>
-
-
-<script>
+<div id="deliveryTable"></div></div></main></div><script>
 
 /* =====================================================
 ZYRE / SUPABASE CONFIGURATION
@@ -1274,10 +874,13 @@ let CURRENT_ORDER_FILTER = "all";
 
 
 /* =====================================================
-AUTHENTICATION
+SUPABASE CLIENT
 ===================================================== */
 
-async function refreshSellerAuthentication(){
+let SUPABASE_CLIENT = null;
+
+
+function createSupabaseClient(){
 
   if(
     !window.supabase ||
@@ -1286,17 +889,36 @@ async function refreshSellerAuthentication(){
   ){
 
     throw new Error(
-      "Supabase authentication library is not available."
+      "Supabase authentication library is not available. Please refresh the page."
     );
 
   }
 
 
+  if(!SUPABASE_CLIENT){
+
+    SUPABASE_CLIENT =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+  }
+
+
+  return SUPABASE_CLIENT;
+
+}
+
+
+/* =====================================================
+AUTHENTICATION
+===================================================== */
+
+async function refreshSellerAuthentication(){
+
   const client =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+    createSupabaseClient();
 
 
   const result =
@@ -2065,11 +1687,6 @@ async function checkRental(){
     subscriptions
   );
 
-
-  /*
-  An active subscription immediately
-  unlocks the seller dashboard.
-  */
 
   if(activeSubscription){
 
@@ -4422,10 +4039,7 @@ async function logoutSeller(){
     ){
 
       const client =
-        window.supabase.createClient(
-          SUPABASE_URL,
-          SUPABASE_KEY
-        );
+        createSupabaseClient();
 
 
       await client.auth.signOut();
@@ -4561,10 +4175,5 @@ setInterval(
   60000
 );
 
-</script>
-
-
-<script src="app.js?v=6012"></script>
-
-</body>
+</script><script src="app.js?v=6012"></script></body>
 </html>
