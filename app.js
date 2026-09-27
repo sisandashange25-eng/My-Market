@@ -3947,26 +3947,71 @@ async function saveZYREPushSubscription(
   subscription
 ) {
 
+  if (!subscription) {
+
+    throw new Error(
+      "No push subscription was provided."
+    );
+
+  }
+
+
+  const endpoint =
+    subscription.endpoint;
+
+  const subscriptionJson =
+    subscription.toJSON();
+
+
+  /* =====================================================
+  GET USER + PROFILE SAFELY
+  ===================================================== */
+
+  let user = null;
+  let profile = null;
+
+
   try {
 
-    const user =
+    user =
       await getZYRECurrentUser();
 
-    const profile =
-      await getZYRECustomerProfile();
+  } catch (error) {
 
-    const endpoint =
-      subscription.endpoint;
+    console.warn(
+      "Could not get current user for notifications:",
+      error
+    );
 
-    const subscriptionJson =
-      subscription.toJSON();
+  }
 
 
-    /* =====================================================
-    CUSTOMER NOTIFICATION SUBSCRIPTION
-    ===================================================== */
+  if (user) {
 
-    if (user) {
+    try {
+
+      profile =
+        await getZYRECustomerProfile();
+
+    } catch (error) {
+
+      console.warn(
+        "Could not get customer profile for notifications:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+  CUSTOMER NOTIFICATION SUBSCRIPTION
+  ===================================================== */
+
+  if (user) {
+
+    try {
 
       const customerData = {
 
@@ -3992,7 +4037,7 @@ async function saveZYREPushSubscription(
         await fetch(
 
           SUPABASE_URL +
-          "/rest/v1/notification_subscriptions",
+          "/rest/v1/notification_subscriptions?on_conflict=endpoint",
 
           {
 
@@ -4031,24 +4076,42 @@ async function saveZYREPushSubscription(
 
       if (!customerResponse.ok) {
 
-        throw new Error(
-          "Customer notification subscription could not be saved:\n\n" +
+        console.warn(
+          "Customer notification subscription could not be saved:",
           await customerResponse.text()
+        );
+
+      } else {
+
+        console.log(
+          "✅ ZYRE customer notification subscription saved."
         );
 
       }
 
+    } catch (customerError) {
 
-      console.log(
-        "✅ ZYRE customer notification subscription saved."
+      console.warn(
+        "Customer notification subscription save failed:",
+        customerError
       );
+
+      /*
+        IMPORTANT:
+        Customer subscription failure must NOT
+        break the existing seller notification system.
+      */
 
     }
 
+  }
 
-    /* =====================================================
-    KEEP EXISTING SELLER NOTIFICATIONS WORKING
-    ===================================================== */
+
+  /* =====================================================
+  KEEP EXISTING SELLER NOTIFICATIONS WORKING
+  ===================================================== */
+
+  try {
 
     const existingResponse =
       await fetch(
@@ -4088,137 +4151,140 @@ async function saveZYREPushSubscription(
         await existingResponse.text()
       );
 
-      return;
+    } else {
 
-    }
-
-
-    const existing =
-      await existingResponse.json();
+      const existing =
+        await existingResponse.json();
 
 
-    if (
-      Array.isArray(existing) &&
-      existing.length > 0
-    ) {
+      if (
+        Array.isArray(existing) &&
+        existing.length > 0
+      ) {
 
-      console.log(
-        "ZYRE seller push subscription already exists."
-      );
-
-      return;
-
-    }
-
-
-    const userId =
-      localStorage.getItem(
-        "zava_user_id"
-      );
-
-
-    const sellerId =
-      localStorage.getItem(
-        "zava_seller_id"
-      );
-
-
-    const sellerSubscriptionData = {
-
-      endpoint:
-        endpoint,
-
-      subscription:
-        subscriptionJson
-
-    };
-
-
-    if (userId) {
-
-      sellerSubscriptionData.user_id =
-        userId;
-
-    }
-
-
-    if (sellerId) {
-
-      sellerSubscriptionData.seller_id =
-        Number(
-          sellerId
+        console.log(
+          "ZYRE seller push subscription already exists."
         );
 
-    }
+      } else {
+
+        const userId =
+          localStorage.getItem(
+            "zava_user_id"
+          );
 
 
-    const saveResponse =
-      await fetch(
+        const sellerId =
+          localStorage.getItem(
+            "zava_seller_id"
+          );
 
-        SUPABASE_URL +
-        "/rest/v1/push_subscriptions",
 
-        {
+        const sellerSubscriptionData = {
 
-          method:
-            "POST",
+          endpoint:
+            endpoint,
 
-          headers: {
+          subscription:
+            subscriptionJson
 
-            "apikey":
-              SUPABASE_KEY,
+        };
 
-            "Authorization":
-              "Bearer " +
-              (
-                window.ZYRE_CURRENT_SESSION?.access_token ||
-                SUPABASE_KEY
-              ),
 
-            "Content-Type":
-              "application/json",
+        if (userId) {
 
-            "Prefer":
-              "return=minimal"
-
-          },
-
-          body:
-            JSON.stringify(
-              sellerSubscriptionData
-            )
+          sellerSubscriptionData.user_id =
+            userId;
 
         }
 
-      );
+
+        if (sellerId) {
+
+          sellerSubscriptionData.seller_id =
+            Number(
+              sellerId
+            );
+
+        }
 
 
-    if (!saveResponse.ok) {
+        const saveResponse =
+          await fetch(
 
-      console.warn(
-        "Existing seller push subscription could not be saved:",
-        await saveResponse.text()
-      );
+            SUPABASE_URL +
+            "/rest/v1/push_subscriptions",
 
-      return;
+            {
+
+              method:
+                "POST",
+
+              headers: {
+
+                "apikey":
+                  SUPABASE_KEY,
+
+                "Authorization":
+                  "Bearer " +
+                  (
+                    window.ZYRE_CURRENT_SESSION?.access_token ||
+                    SUPABASE_KEY
+                  ),
+
+                "Content-Type":
+                  "application/json",
+
+                "Prefer":
+                  "return=minimal"
+
+              },
+
+              body:
+                JSON.stringify(
+                  sellerSubscriptionData
+                )
+
+            }
+
+          );
+
+
+        if (!saveResponse.ok) {
+
+          console.warn(
+            "Existing seller push subscription could not be saved:",
+            await saveResponse.text()
+          );
+
+        } else {
+
+          console.log(
+            "ZYRE seller push subscription saved successfully."
+          );
+
+        }
+
+      }
 
     }
 
+  } catch (sellerError) {
 
-    console.log(
-      "ZYRE seller push subscription saved successfully."
+    console.warn(
+      "Existing seller notification save failed:",
+      sellerError
     );
-
-  } catch (error) {
-
-    console.error(
-      "ZYRE push subscription save error:",
-      error
-    );
-
-    throw error;
 
   }
+
+
+  /*
+    The subscription itself was successfully created,
+    so return it even if one database save had an issue.
+  */
+
+  return subscription;
 
 }
 
