@@ -575,7 +575,6 @@ class="hidden">
 
 <main>
 
-
 <section class="card welcome">
 
 <h1>
@@ -823,7 +822,6 @@ class="stat-number">
 id="products"
 class="panel">
 
-
 <div class="card">
 
 <h2>
@@ -832,9 +830,7 @@ class="panel">
 
 <form id="productForm">
 
-
 <div class="form-grid">
-
 
 <div class="form-group">
 
@@ -942,12 +938,9 @@ class="upload-status">
 
 </div>
 
-
 </div>
 
-
 <br>
-
 
 <button
 id="addProductButton"
@@ -1023,7 +1016,6 @@ Delivered
 </button>
 
 </div>
-
 
 <div
 id="ordersList"
@@ -1161,7 +1153,6 @@ class="panel">
 
 <div class="info-grid">
 
-
 <div class="info-box">
 
 <div class="info-label">
@@ -1206,7 +1197,6 @@ class="info-value">
 
 </div>
 
-
 </div>
 
 </div>
@@ -1239,9 +1229,6 @@ const SUPABASE_KEY =
 const RENTAL_PAYSTACK_URL =
 "https://gaccizzlwswwynattgda.supabase.co/functions/v1/rental-paystack";
 
-
-/* STORAGE BUCKET */
-
 const PRODUCT_IMAGE_BUCKET =
 "Product-images";
 
@@ -1254,7 +1241,6 @@ localStorage.getItem("zava_access_token");
 
 let SELLER_EMAIL =
 localStorage.getItem("zava_seller_email") || "";
-
 
 let PRODUCTS = [];
 let ORDERS = [];
@@ -1274,65 +1260,115 @@ async function refreshSellerAuthentication(){
   try{
 
     if(
-      window.supabase &&
-      typeof window.supabase.createClient ===
+      !window.supabase ||
+      typeof window.supabase.createClient !==
       "function"
     ){
 
-      const client =
-        window.supabase.createClient(
-          SUPABASE_URL,
-          SUPABASE_KEY
-        );
-
-      const result =
-        await client.auth.getSession();
-
-
-      if(
-        result &&
-        result.data &&
-        result.data.session
-      ){
-
-        SELLER_ACCESS_TOKEN =
-          result.data.session.access_token;
-
-
-        localStorage.setItem(
-          "zava_access_token",
-          SELLER_ACCESS_TOKEN
-        );
-
-
-        if(
-          result.data.session.user &&
-          result.data.session.user.email
-        ){
-
-          SELLER_EMAIL =
-            result.data.session.user.email;
-
-
-          localStorage.setItem(
-            "zava_seller_email",
-            SELLER_EMAIL
-          );
-
-        }
-
-      }
+      throw new Error(
+        "Supabase authentication library is not available."
+      );
 
     }
 
+
+    const client =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    const result =
+      await client.auth.getSession();
+
+
+    const session =
+      result &&
+      result.data
+        ? result.data.session
+        : null;
+
+
+    if(
+      !session ||
+      !session.access_token ||
+      !session.user
+    ){
+
+      SELLER_ACCESS_TOKEN = "";
+
+      localStorage.removeItem(
+        "zava_access_token"
+      );
+
+      throw new Error(
+        "Your seller login session has expired. Please log in again."
+      );
+
+    }
+
+
+    SELLER_ACCESS_TOKEN =
+      session.access_token;
+
+
+    localStorage.setItem(
+      "zava_access_token",
+      SELLER_ACCESS_TOKEN
+    );
+
+
+    if(
+      session.user.email
+    ){
+
+      SELLER_EMAIL =
+        session.user.email;
+
+
+      localStorage.setItem(
+        "zava_seller_email",
+        SELLER_EMAIL
+      );
+
+    }
+
+
+    return session;
+
   }catch(error){
 
-    console.log(
+    console.error(
       "Authentication refresh error:",
       error
     );
 
+    throw error;
+
   }
+
+}
+
+
+/* =========================
+REQUIRED AUTH TOKEN
+========================= */
+
+function getRequiredAccessToken(){
+
+  if(
+    !SELLER_ACCESS_TOKEN
+  ){
+
+    throw new Error(
+      "Your seller login session is missing. Please log in again."
+    );
+
+  }
+
+
+  return SELLER_ACCESS_TOKEN;
 
 }
 
@@ -1346,9 +1382,11 @@ async function supabaseRequest(
   options = {}
 ){
 
+  await refreshSellerAuthentication();
+
+
   const token =
-    SELLER_ACCESS_TOKEN ||
-    SUPABASE_KEY;
+    getRequiredAccessToken();
 
 
   const headers = {
@@ -1468,8 +1506,16 @@ async function uploadProductImage(file){
 
 
   const token =
-    SELLER_ACCESS_TOKEN ||
-    SUPABASE_KEY;
+    getRequiredAccessToken();
+
+
+  if(!SELLER_ID){
+
+    throw new Error(
+      "Seller ID was not found."
+    );
+
+  }
 
 
   const extension =
@@ -1654,7 +1700,10 @@ document
       }
 
 
-      if(!file.type.startsWith("image/")){
+      if(
+        !file.type ||
+        !file.type.startsWith("image/")
+      ){
 
         alert(
           "Please choose an image."
@@ -1942,6 +1991,24 @@ async function startDashboard(){
       "Dashboard startup error:",
       error
     );
+
+
+    if(
+      error.message &&
+      error.message.includes(
+        "session"
+      )
+    ){
+
+      alert(
+        error.message
+      );
+
+      logoutSeller();
+
+      return;
+
+    }
 
 
     showRentalLock();
@@ -2318,6 +2385,28 @@ document
       }
 
 
+      if(!Number.isFinite(price) || price < 0){
+
+        alert(
+          "Please enter a valid product price."
+        );
+
+        return;
+
+      }
+
+
+      if(!Number.isFinite(stock) || stock < 0){
+
+        alert(
+          "Please enter valid stock."
+        );
+
+        return;
+
+      }
+
+
       if(!imageFile){
 
         alert(
@@ -2330,6 +2419,18 @@ document
 
 
       try{
+
+        /*
+        IMPORTANT:
+        Refresh the real Supabase login session
+        before BOTH the image upload and product insert.
+        */
+
+        await refreshSellerAuthentication();
+
+
+        getRequiredAccessToken();
+
 
         if(button){
 
@@ -2367,6 +2468,18 @@ document
           button.textContent =
             "Saving product...";
         }
+
+
+        /*
+        Refresh once more immediately before
+        the database INSERT so the request uses
+        the current authenticated access token.
+        */
+
+        await refreshSellerAuthentication();
+
+
+        getRequiredAccessToken();
 
 
         await supabaseRequest(
@@ -2459,7 +2572,8 @@ document
         if(uploadStatus){
 
           uploadStatus.textContent =
-            "❌ Upload failed";
+            "❌ " +
+            error.message;
         }
 
       }finally{
@@ -3774,6 +3888,10 @@ async function payRental(){
     }
 
 
+    const token =
+      getRequiredAccessToken();
+
+
     const response =
       await fetch(
         RENTAL_PAYSTACK_URL,
@@ -3787,10 +3905,7 @@ async function payRental(){
 
             "Authorization":
               "Bearer " +
-              (
-                SELLER_ACCESS_TOKEN ||
-                SUPABASE_KEY
-              ),
+              token,
 
             "apikey":
               SUPABASE_KEY
@@ -4086,11 +4201,15 @@ PERIODIC RENTAL CHECK
 setInterval(
   async function(){
 
+    const dashboard =
+      document.getElementById(
+        "dashboard"
+      );
+
+
     if(
-      document
-        .getElementById("dashboard")
-        ?.classList
-        .contains("hidden")
+      !dashboard ||
+      dashboard.classList.contains("hidden")
     ){
 
       return;
