@@ -1,22 +1,113 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
+<!DOCTYPE html>
+<html lang="en">
 
-«»
+<head>
 
-<title>ZYRE Marketing | Seller Dashboard</title><meta
-name="description"
-content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications."
-
-«»
+<meta charset="UTF-8">
 
 <meta
-name="robots"
-content="noindex,nofollow"
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-«»
+<title>ZYRE Marketing | Seller Dashboard</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
+<meta
+  name="description"
+  content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications."
+>
+
+<meta
+  name="robots"
+  content="noindex,nofollow"
+>
+
+<!-- =====================================================
+     SUPABASE JAVASCRIPT LIBRARY
+     PRIMARY + FALLBACK CDN
+===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+window.ZYRE_SUPABASE_READY =
+  new Promise(function(resolve, reject){
+
+    function checkSupabase(){
+
+      if(
+        window.supabase &&
+        typeof window.supabase.createClient === "function"
+      ){
+
+        resolve(window.supabase);
+
+        return true;
+
+      }
+
+      return false;
+
+    }
+
+
+    if(checkSupabase()){
+
+      return;
+
+    }
+
+
+    var fallback =
+      document.createElement("script");
+
+
+    fallback.src =
+      "https://unpkg.com/@supabase/supabase-js@2";
+
+
+    fallback.onload =
+      function(){
+
+        if(checkSupabase()){
+
+          return;
+
+        }
+
+
+        reject(
+          new Error(
+            "Supabase authentication library could not be loaded."
+          )
+        );
+
+      };
+
+
+    fallback.onerror =
+      function(){
+
+        reject(
+          new Error(
+            "Supabase authentication library could not be loaded."
+          )
+        );
+
+      };
+
+
+    document.head.appendChild(
+      fallback
+    );
+
+  });
+
+</script>
+
+
+<style>
 
 *{
   box-sizing:border-box;
@@ -29,34 +120,10 @@ body{
   color:#111;
 }
 
-header#sellerHeader{
-  background:#111;
-  color:#fff;
-  padding:18px;
-  position:sticky;
-  top:0;
-  z-index:1000;
-}
 
-.header-inner{
-  max-width:1200px;
-  margin:auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-}
-
-.logo-title{
-  font-size:21px;
-  font-weight:800;
-}
-
-.header-buttons{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
+/* =====================================================
+   BUTTONS
+===================================================== */
 
 button,
 .btn{
@@ -97,11 +164,21 @@ button:disabled{
   cursor:not-allowed;
 }
 
+
+/* =====================================================
+   MAIN
+===================================================== */
+
 main{
   max-width:1200px;
   margin:auto;
   padding:20px;
 }
+
+
+/* =====================================================
+   CARDS
+===================================================== */
 
 .card{
   background:#fff;
@@ -110,6 +187,11 @@ main{
   margin-bottom:18px;
   box-shadow:0 2px 10px rgba(0,0,0,.06);
 }
+
+
+/* =====================================================
+   WELCOME
+===================================================== */
 
 .welcome{
   background:#111;
@@ -136,6 +218,11 @@ main{
   font-weight:700;
 }
 
+
+/* =====================================================
+   LOADING
+===================================================== */
+
 .loading{
   text-align:center;
   padding:60px 20px;
@@ -145,6 +232,11 @@ main{
 .hidden{
   display:none!important;
 }
+
+
+/* =====================================================
+   GRID
+===================================================== */
 
 .grid{
   display:grid;
@@ -170,6 +262,11 @@ main{
   font-size:14px;
 }
 
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
 .nav{
   display:flex;
   gap:8px;
@@ -187,6 +284,11 @@ main{
   color:#fff;
 }
 
+
+/* =====================================================
+   PANELS
+===================================================== */
+
 .panel{
   display:none;
 }
@@ -198,6 +300,11 @@ main{
 h2{
   margin-top:0;
 }
+
+
+/* =====================================================
+   FORMS
+===================================================== */
 
 .form-grid{
   display:grid;
@@ -240,6 +347,11 @@ textarea{
   resize:vertical;
 }
 
+
+/* =====================================================
+   PRODUCT IMAGE
+===================================================== */
+
 .photo-preview{
   width:100%;
   max-width:300px;
@@ -257,6 +369,11 @@ textarea{
   font-size:14px;
   font-weight:700;
 }
+
+
+/* =====================================================
+   PRODUCTS
+===================================================== */
 
 .product-grid{
   display:grid;
@@ -304,6 +421,11 @@ textarea{
   gap:7px;
   flex-wrap:wrap;
 }
+
+
+/* =====================================================
+   ORDERS
+===================================================== */
 
 .order-list,
 .delivery-list{
@@ -358,6 +480,11 @@ textarea{
   color:#fff;
 }
 
+
+/* =====================================================
+   FILTERS
+===================================================== */
+
 .filters{
   display:flex;
   gap:8px;
@@ -373,6 +500,11 @@ textarea{
   background:#111;
   color:#fff;
 }
+
+
+/* =====================================================
+   SELLER INFORMATION
+===================================================== */
 
 .info-grid{
   display:grid;
@@ -397,6 +529,11 @@ textarea{
   word-break:break-word;
 }
 
+
+/* =====================================================
+   RENTAL
+===================================================== */
+
 .rental-box{
   border:2px solid #111;
   border-radius:12px;
@@ -408,6 +545,11 @@ textarea{
   font-weight:800;
   margin:10px 0;
 }
+
+
+/* =====================================================
+   NOTIFICATIONS
+===================================================== */
 
 .notification{
   border:1px solid #ddd;
@@ -421,6 +563,11 @@ textarea{
   margin-bottom:5px;
 }
 
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
 .empty{
   padding:30px;
   text-align:center;
@@ -428,6 +575,11 @@ textarea{
   border:1px dashed #ccc;
   border-radius:10px;
 }
+
+
+/* =====================================================
+   LOCK
+===================================================== */
 
 .lock-box{
   background:#fff;
@@ -441,14 +593,19 @@ textarea{
   color:#c62828;
 }
 
+
+/* =====================================================
+   TECHNICAL AREA
+===================================================== */
+
 #technicalArea{
   display:none;
 }
 
-/* Prevent accidental duplicate seller headers */
-body > header:not(#sellerHeader){
-  display:none!important;
-}
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media(max-width:850px){
 
@@ -462,15 +619,11 @@ body > header:not(#sellerHeader){
 
 }
 
+
 @media(max-width:600px){
 
   main{
     padding:12px;
-  }
-
-  .header-inner{
-    align-items:flex-start;
-    flex-direction:column;
   }
 
   .grid,
@@ -490,186 +643,223 @@ body > header:not(#sellerHeader){
 
 }
 
-</style></head><body><header id="sellerHeader">  <div class="header-inner"><div class="logo-title">
-  🛍️ ZYRE Marketing Seller Dashboard
-</div>
+</style>
 
-<div class="header-buttons">
+</head>
 
-  <button
-    class="btn-white"
-    onclick="goBackToStore()"
-  >
-    ← Back to Store
-  </button>
 
-  <button
-    class="btn-danger"
-    onclick="logoutSeller()"
-  >
-    Logout
-  </button>
+<body>
 
-</div>
 
-  </div></header><div
+<!-- =====================================================
+     RENTAL CHECK LOADING
+===================================================== -->
+
+<div
   id="rentalLoading"
   class="loading"
-><strong>Checking Store Rental</strong>
+>
+
+<strong>
+Checking Store Rental
+</strong>
 
 <br><br>
 
 Please wait while ZYRE Marketing checks your current monthly store rental.
 
-</div><div
+</div>
+
+
+<!-- =====================================================
+     RENTAL LOCK
+===================================================== -->
+
+<div
   id="rentalLock"
   class="hidden"
->  <main><div class="lock-box">
+>
 
-  <h2>🔒 Store Temporarily Locked</h2>
+<main>
 
-  <p>
-    Your ZYRE Marketing store rental for this month
-    has not been confirmed.
-  </p>
+<div class="lock-box">
 
-  <p>
-    Pay the monthly rental of
-    <strong>R100</strong>
-    to unlock your seller dashboard.
-  </p>
+<h2>
+🔒 Store Temporarily Locked
+</h2>
 
-  <button
-    class="btn-gold"
-    onclick="payRental()"
-  >
-    💳 Pay R100 Rental
-  </button>
+<p>
+Your ZYRE Marketing store rental for this month
+has not been confirmed.
+</p>
 
-  <br><br>
+<p>
+Pay the monthly rental of
+<strong>R100</strong>
+to unlock your seller dashboard.
+</p>
 
-  <button
-    class="btn-black"
-    onclick="checkRentalAgain()"
-  >
-    🔄 Check Payment Again
-  </button>
+<button
+  class="btn-gold"
+  onclick="payRental()"
+>
+💳 Pay R100 Rental
+</button>
+
+<br><br>
+
+<button
+  class="btn-black"
+  onclick="checkRentalAgain()"
+>
+🔄 Check Payment Again
+</button>
 
 </div>
 
-  </main></div><div
+</main>
+
+</div>
+
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<div
   id="dashboard"
   class="hidden"
->  <main><section class="card welcome">
+>
 
-  <h1>
-    Welcome,
-    <span id="sellerName">
-      Seller
-    </span>
-  </h1>
+<main>
 
-  <p>
-    Store:
-    <strong id="sellerStoreName">
-      ZYRE
-    </strong>
-  </p>
 
-  <p>
-    Manage your products, orders,
-    deliveries and store.
-  </p>
+<!-- =====================================================
+     WELCOME
+===================================================== -->
 
-  <span
-    id="rentalPaidBadge"
-    class="rental-paid"
-  >
-    ✓ Rental Paid
-  </span>
+<section class="card welcome">
+
+<h1>
+Welcome,
+<span id="sellerName">
+Seller
+</span>
+</h1>
+
+<p>
+Store:
+<strong id="sellerStoreName">
+ZYRE
+</strong>
+</p>
+
+<p>
+Manage your products, orders,
+deliveries and store.
+</p>
+
+<span
+  id="rentalPaidBadge"
+  class="rental-paid"
+>
+✓ Rental Paid
+</span>
 
 </section>
 
+
+<!-- =====================================================
+     NOTIFICATION PREVIEW
+===================================================== -->
 
 <section class="card">
 
-  <h2>🔔 Notifications</h2>
+<h2>
+🔔 Notifications
+</h2>
 
-  <div id="notificationsPreview">
+<div id="notificationsPreview">
 
-    <div class="empty">
-      No new notifications.
-    </div>
+<div class="empty">
+No new notifications.
+</div>
 
-  </div>
+</div>
 
 </section>
 
 
+<!-- =====================================================
+     MAIN STATS
+===================================================== -->
+
 <section class="grid">
 
-  <div class="stat">
 
-    <div class="stat-label">
-      Products
-    </div>
+<div class="stat">
 
-    <div
-      class="stat-number"
-      id="productCount"
-    >
-      0
-    </div>
+<div class="stat-label">
+Products
+</div>
 
-  </div>
+<div
+  class="stat-number"
+  id="productCount"
+>
+0
+</div>
 
-
-  <div class="stat">
-
-    <div class="stat-label">
-      Orders
-    </div>
-
-    <div
-      class="stat-number"
-      id="orderCount"
-    >
-      0
-    </div>
-
-  </div>
+</div>
 
 
-  <div class="stat">
+<div class="stat">
 
-    <div class="stat-label">
-      Sales
-    </div>
+<div class="stat-label">
+Orders
+</div>
 
-    <div
-      class="stat-number"
-      id="salesTotal"
-    >
-      R0.00
-    </div>
+<div
+  class="stat-number"
+  id="orderCount"
+>
+0
+</div>
 
-  </div>
+</div>
 
 
-  <div class="stat">
+<div class="stat">
 
-    <div class="stat-label">
-      Rental
-    </div>
+<div class="stat-label">
+Sales
+</div>
 
-    <div
-      class="stat-number"
-      style="font-size:20px"
-    >
-      PAID
-    </div>
+<div
+  class="stat-number"
+  id="salesTotal"
+>
+R0.00
+</div>
 
-  </div>
+</div>
+
+
+<div class="stat">
+
+<div class="stat-label">
+Rental
+</div>
+
+<div
+  class="stat-number"
+  style="font-size:20px"
+>
+PAID
+</div>
+
+</div>
+
 
 </section>
 
@@ -677,583 +867,666 @@ Please wait while ZYRE Marketing checks your current monthly store rental.
 <br>
 
 
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
 <div class="nav">
 
-  <button
-    class="active"
-    onclick="showPanel('overview',this)"
-  >
-    📊 Overview
-  </button>
 
-  <button
-    onclick="showPanel('products',this)"
-  >
-    🛍️ Products
-  </button>
+<button
+  class="active"
+  onclick="showPanel('overview',this)"
+>
+📊 Overview
+</button>
 
-  <button
-    onclick="showPanel('orders',this)"
-  >
-    📦 Orders
-  </button>
 
-  <button
-    onclick="showPanel('delivery',this)"
-  >
-    🚚 Delivery
-  </button>
+<button
+  onclick="showPanel('products',this)"
+>
+🛍️ Products
+</button>
 
-  <button
-    onclick="showPanel('rental',this)"
-  >
-    💳 Store Rental
-  </button>
 
-  <button
-    onclick="showPanel('notifications',this)"
-  >
-    🔔 Notifications
-  </button>
+<button
+  onclick="showPanel('orders',this)"
+>
+📦 Orders
+</button>
 
-  <button
-    onclick="showPanel('sellerInfo',this)"
-  >
-    👤 Seller Information
-  </button>
+
+<button
+  onclick="showPanel('delivery',this)"
+>
+🚚 Delivery
+</button>
+
+
+<button
+  onclick="showPanel('rental',this)"
+>
+💳 Store Rental
+</button>
+
+
+<button
+  onclick="showPanel('notifications',this)"
+>
+🔔 Notifications
+</button>
+
+
+<button
+  onclick="showPanel('sellerInfo',this)"
+>
+👤 Seller Information
+</button>
+
 
 </div>
 
+
+<!-- =====================================================
+     OVERVIEW
+===================================================== -->
 
 <section
   id="overview"
   class="panel active"
 >
 
-  <div class="card">
+<div class="card">
 
-    <h2>
-      📊 Dashboard Overview
-    </h2>
+<h2>
+📊 Dashboard Overview
+</h2>
 
-    <p>
-      Welcome to your ZYRE Marketing
-      seller control centre.
-    </p>
+<p>
+Welcome to your ZYRE Marketing
+seller control centre.
+</p>
 
-    <p>
-      From here you can manage your products,
-      customer orders, delivery information
-      and store rental.
-    </p>
+<p>
+From here you can manage your products,
+customer orders, delivery information
+and store rental.
+</p>
 
-  </div>
-
-
-  <div class="grid">
-
-    <div class="stat">
-
-      <div class="stat-label">
-        Pending Orders
-      </div>
-
-      <div
-        id="pendingCount"
-        class="stat-number"
-      >
-        0
-      </div>
-
-    </div>
+</div>
 
 
-    <div class="stat">
-
-      <div class="stat-label">
-        Processing
-      </div>
-
-      <div
-        id="processingCount"
-        class="stat-number"
-      >
-        0
-      </div>
-
-    </div>
+<div class="grid">
 
 
-    <div class="stat">
+<div class="stat">
 
-      <div class="stat-label">
-        Shipped
-      </div>
+<div class="stat-label">
+Pending Orders
+</div>
 
-      <div
-        id="shippedCount"
-        class="stat-number"
-      >
-        0
-      </div>
+<div
+  id="pendingCount"
+  class="stat-number"
+>
+0
+</div>
 
-    </div>
+</div>
 
 
-    <div class="stat">
+<div class="stat">
 
-      <div class="stat-label">
-        Delivered
-      </div>
+<div class="stat-label">
+Processing
+</div>
 
-      <div
-        id="deliveredCount"
-        class="stat-number"
-      >
-        0
-      </div>
+<div
+  id="processingCount"
+  class="stat-number"
+>
+0
+</div>
 
-    </div>
+</div>
 
-  </div>
+
+<div class="stat">
+
+<div class="stat-label">
+Shipped
+</div>
+
+<div
+  id="shippedCount"
+  class="stat-number"
+>
+0
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-label">
+Delivered
+</div>
+
+<div
+  id="deliveredCount"
+  class="stat-number"
+>
+0
+</div>
+
+</div>
+
+
+</div>
 
 </section>
 
+
+<!-- =====================================================
+     PRODUCTS
+===================================================== -->
 
 <section
   id="products"
   class="panel"
 >
 
-  <div class="card">
 
-    <h2>
-      ➕ Add Product
-    </h2>
+<div class="card">
 
-    <form id="productForm">
-
-      <div class="form-grid">
-
-        <div class="form-group">
-
-          <label>
-            Product Name
-          </label>
-
-          <input
-            id="productName"
-            type="text"
-            required
-            placeholder="Product name"
-          >
-
-        </div>
+<h2>
+➕ Add Product
+</h2>
 
 
-        <div class="form-group">
-
-          <label>
-            Price
-          </label>
-
-          <input
-            id="productPrice"
-            type="number"
-            step="0.01"
-            min="0"
-            required
-            placeholder="299.00"
-          >
-
-        </div>
+<form id="productForm">
 
 
-        <div class="form-group">
-
-          <label>
-            Stock
-          </label>
-
-          <input
-            id="productStock"
-            type="number"
-            min="0"
-            required
-            placeholder="20"
-          >
-
-        </div>
+<div class="form-grid">
 
 
-        <div class="form-group">
+<div class="form-group">
 
-          <label>
-            Category
-          </label>
+<label>
+Product Name
+</label>
 
-          <select id="productCategory">
+<input
+  id="productName"
+  type="text"
+  required
+  placeholder="Product name"
+>
 
-            <option value="Electronics">
-              Electronics
-            </option>
-
-            <option value="Fashion">
-              Fashion
-            </option>
-
-            <option value="Home">
-              Home
-            </option>
-
-            <option value="Beauty">
-              Beauty
-            </option>
-
-          </select>
-
-        </div>
+</div>
 
 
-        <div class="form-group full">
+<div class="form-group">
 
-          <label>
-            📷 Product Picture
-          </label>
+<label>
+Price
+</label>
 
-          <input
-            id="productImageFile"
-            type="file"
-            accept="image/*"
-            required
-          >
+<input
+  id="productPrice"
+  type="number"
+  step="0.01"
+  min="0"
+  required
+  placeholder="299.00"
+>
 
-          <small>
-            Choose a picture from your phone gallery.
-          </small>
-
-          <img
-            id="photoPreview"
-            class="photo-preview"
-            alt="Product preview"
-          >
-
-          <div
-            id="uploadStatus"
-            class="upload-status"
-          ></div>
-
-        </div>
-
-      </div>
+</div>
 
 
-      <br>
+<div class="form-group">
+
+<label>
+Stock
+</label>
+
+<input
+  id="productStock"
+  type="number"
+  min="0"
+  required
+  placeholder="20"
+>
+
+</div>
 
 
-      <button
-        id="addProductButton"
-        class="btn-black"
-        type="submit"
-      >
-        ➕ Add Product
-      </button>
+<div class="form-group">
 
-    </form>
+<label>
+Category
+</label>
 
-  </div>
+<select id="productCategory">
+
+<option value="Electronics">
+Electronics
+</option>
+
+<option value="Fashion">
+Fashion
+</option>
+
+<option value="Home">
+Home
+</option>
+
+<option value="Beauty">
+Beauty
+</option>
+
+</select>
+
+</div>
 
 
-  <div class="card">
+<div class="form-group full">
 
-    <h2>
-      🛍️ My Products
-    </h2>
+<label>
+📷 Product Picture
+</label>
 
-    <div
-      id="productsGrid"
-      class="product-grid"
-    >
+<input
+  id="productImageFile"
+  type="file"
+  accept="image/*"
+  required
+>
 
-      <div class="empty">
-        Loading products...
-      </div>
+<small>
+Choose a picture from your phone gallery.
+</small>
 
-    </div>
 
-  </div>
+<img
+  id="photoPreview"
+  class="photo-preview"
+  alt="Product preview"
+>
+
+
+<div
+  id="uploadStatus"
+  class="upload-status"
+></div>
+
+</div>
+
+
+</div>
+
+
+<br>
+
+
+<button
+  id="addProductButton"
+  class="btn-black"
+  type="submit"
+>
+➕ Add Product
+</button>
+
+
+</form>
+
+</div>
+
+
+<div class="card">
+
+<h2>
+🛍️ My Products
+</h2>
+
+<div
+  id="productsGrid"
+  class="product-grid"
+>
+
+<div class="empty">
+Loading products...
+</div>
+
+</div>
+
+</div>
+
 
 </section>
 
+
+<!-- =====================================================
+     ORDERS
+===================================================== -->
 
 <section
   id="orders"
   class="panel"
 >
 
-  <div class="card">
+<div class="card">
 
-    <h2>
-      📦 Customer Orders
-    </h2>
-
-    <div class="filters">
-
-      <button
-        class="active"
-        onclick="setOrderFilter('all',this)"
-      >
-        All
-      </button>
-
-      <button
-        onclick="setOrderFilter('pending',this)"
-      >
-        Pending
-      </button>
-
-      <button
-        onclick="setOrderFilter('processing',this)"
-      >
-        Processing
-      </button>
-
-      <button
-        onclick="setOrderFilter('shipped',this)"
-      >
-        Shipped
-      </button>
-
-      <button
-        onclick="setOrderFilter('delivered',this)"
-      >
-        Delivered
-      </button>
-
-    </div>
+<h2>
+📦 Customer Orders
+</h2>
 
 
-    <div
-      id="ordersList"
-      class="order-list"
-    >
+<div class="filters">
 
-      <div class="empty">
-        Loading orders...
-      </div>
 
-    </div>
+<button
+  class="active"
+  onclick="setOrderFilter('all',this)"
+>
+All
+</button>
 
-  </div>
+
+<button
+  onclick="setOrderFilter('pending',this)"
+>
+Pending
+</button>
+
+
+<button
+  onclick="setOrderFilter('processing',this)"
+>
+Processing
+</button>
+
+
+<button
+  onclick="setOrderFilter('shipped',this)"
+>
+Shipped
+</button>
+
+
+<button
+  onclick="setOrderFilter('delivered',this)"
+>
+Delivered
+</button>
+
+
+</div>
+
+
+<div
+  id="ordersList"
+  class="order-list"
+>
+
+<div class="empty">
+Loading orders...
+</div>
+
+</div>
+
+</div>
 
 </section>
 
+
+<!-- =====================================================
+     DELIVERY
+===================================================== -->
 
 <section
   id="delivery"
   class="panel"
 >
 
-  <div class="card">
+<div class="card">
 
-    <h2>
-      🚚 Delivery Management
-    </h2>
+<h2>
+🚚 Delivery Management
+</h2>
 
-    <p>
-      Manage delivery information for
-      your customer orders.
-    </p>
+<p>
+Manage delivery information for
+your customer orders.
+</p>
 
-    <div
-      id="deliveryList"
-      class="delivery-list"
-    >
 
-      <div class="empty">
-        Loading delivery information...
-      </div>
+<div
+  id="deliveryList"
+  class="delivery-list"
+>
 
-    </div>
+<div class="empty">
+Loading delivery information...
+</div>
 
-  </div>
+</div>
+
+</div>
 
 </section>
 
+
+<!-- =====================================================
+     RENTAL
+===================================================== -->
 
 <section
   id="rental"
   class="panel"
 >
 
-  <div class="card">
+<div class="card">
 
-    <h2>
-      💳 Store Rental
-    </h2>
+<h2>
+💳 Store Rental
+</h2>
 
-    <div class="rental-box">
 
-      <p>
-        Monthly store rental
-      </p>
+<div class="rental-box">
 
-      <div class="rental-status">
-        R100 / month
-      </div>
+<p>
+Monthly store rental
+</p>
 
-      <p>
-        Current status:
-        <strong id="rentalStatusText">
-          Checking...
-        </strong>
-      </p>
 
-      <p>
-        Your store stays listed on
-        ZYRE Marketing. If the monthly
-        rental is not paid, the store is
-        temporarily locked until payment
-        is confirmed.
-      </p>
+<div class="rental-status">
+R100 / month
+</div>
 
-      <button
-        id="rentalPayButton"
-        class="btn-gold"
-        onclick="payRental()"
-      >
-        💳 Pay R100
-      </button>
 
-      <button
-        class="btn-black"
-        onclick="checkRentalAgain()"
-      >
-        🔄 Check Rental
-      </button>
+<p>
+Current status:
+<strong id="rentalStatusText">
+Checking...
+</strong>
+</p>
 
-    </div>
 
-  </div>
+<p>
+Your store stays listed on
+ZYRE Marketing. If the monthly
+rental is not paid, the store is
+temporarily locked until payment
+is confirmed.
+</p>
+
+
+<button
+  id="rentalPayButton"
+  class="btn-gold"
+  onclick="payRental()"
+>
+💳 Pay R100
+</button>
+
+
+<button
+  class="btn-black"
+  onclick="checkRentalAgain()"
+>
+🔄 Check Rental
+</button>
+
+
+</div>
+
+</div>
 
 </section>
 
+
+<!-- =====================================================
+     NOTIFICATIONS
+===================================================== -->
 
 <section
   id="notifications"
   class="panel"
 >
 
-  <div class="card">
+<div class="card">
 
-    <h2>
-      🔔 Notifications
-    </h2>
+<h2>
+🔔 Notifications
+</h2>
 
-    <div id="notificationsList">
 
-      <div class="empty">
-        Loading notifications...
-      </div>
+<div id="notificationsList">
 
-    </div>
+<div class="empty">
+Loading notifications...
+</div>
 
-  </div>
+</div>
+
+</div>
 
 </section>
 
+
+<!-- =====================================================
+     SELLER INFORMATION
+===================================================== -->
 
 <section
   id="sellerInfo"
   class="panel"
 >
 
-  <div class="card">
+<div class="card">
 
-    <h2>
-      👤 Seller Information
-    </h2>
-
-    <div class="info-grid">
-
-      <div class="info-box">
-
-        <div class="info-label">
-          Seller Name
-        </div>
-
-        <div
-          id="sellerInfoName"
-          class="info-value"
-        >
-          —
-        </div>
-
-      </div>
+<h2>
+👤 Seller Information
+</h2>
 
 
-      <div class="info-box">
-
-        <div class="info-label">
-          Store Name
-        </div>
-
-        <div
-          id="sellerInfoStore"
-          class="info-value"
-        >
-          —
-        </div>
-
-      </div>
+<div class="info-grid">
 
 
-      <div class="info-box">
+<div class="info-box">
 
-        <div class="info-label">
-          Seller ID
-        </div>
+<div class="info-label">
+Seller Name
+</div>
 
-        <div
-          id="sellerInfoId"
-          class="info-value"
-        >
-          —
-        </div>
+<div
+  id="sellerInfoName"
+  class="info-value"
+>
+—
+</div>
 
-      </div>
+</div>
 
-    </div>
 
-  </div>
+<div class="info-box">
+
+<div class="info-label">
+Store Name
+</div>
+
+<div
+  id="sellerInfoStore"
+  class="info-value"
+>
+—
+</div>
+
+</div>
+
+
+<div class="info-box">
+
+<div class="info-label">
+Seller ID
+</div>
+
+<div
+  id="sellerInfoId"
+  class="info-value"
+>
+—
+</div>
+
+</div>
+
+
+</div>
+
+</div>
 
 </section>
 
 
+<!-- =====================================================
+     TECHNICAL AREA
+===================================================== -->
+
 <div id="technicalArea">
 
-  <div id="sellerId"></div>
+<div id="sellerId"></div>
 
-  <div id="orderTable"></div>
+<div id="orderTable"></div>
 
-  <div id="deliveryTable"></div>
+<div id="deliveryTable"></div>
 
 </div>
 
-  </main></div><script>
+
+</main>
+
+</div>
+
+
+<script>
 
 /* =====================================================
-ZYRE / SUPABASE CONFIGURATION
+   ZYRE / SUPABASE CONFIGURATION
 ===================================================== */
 
 const SUPABASE_URL =
 "https://gaccizzlwswwynattgda.supabase.co";
 
+
 const SUPABASE_KEY =
 "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
+
 const RENTAL_PAYSTACK_URL =
 "https://gaccizzlwswwynattgda.supabase.co/functions/v1/rental-paystack";
+
 
 const PRODUCT_IMAGE_BUCKET =
 "Product-images";
@@ -1262,68 +1535,113 @@ const PRODUCT_IMAGE_BUCKET =
 let SELLER_ID =
 localStorage.getItem("zava_seller_id") || "";
 
+
 let SELLER_ACCESS_TOKEN =
 localStorage.getItem("zava_access_token") || "";
+
 
 let SELLER_EMAIL =
 localStorage.getItem("zava_seller_email") || "";
 
+
 let CURRENT_SELLER = null;
+
 
 let PRODUCTS = [];
 
+
 let ORDERS = [];
+
 
 let DELIVERY_DATA = [];
 
+
 let dashboardStarted = false;
+
 
 let CURRENT_ORDER_FILTER = "all";
 
 
+let ZYRE_SUPABASE_CLIENT = null;
+
+
 /* =====================================================
-CREATE SUPABASE CLIENT
+   CREATE SUPABASE CLIENT
 ===================================================== */
 
-function createSupabaseClient(){
+async function createSupabaseClient(){
 
-  if(
-    !window.supabase ||
-    typeof window.supabase.createClient !==
-    "function"
-  ){
+  if(ZYRE_SUPABASE_CLIENT){
+
+    return ZYRE_SUPABASE_CLIENT;
+
+  }
+
+
+  try{
+
+    await window.ZYRE_SUPABASE_READY;
+
+  }catch(error){
 
     throw new Error(
-      "Supabase authentication library is not available. Please refresh the page."
+      "Supabase authentication library could not be loaded. Please check your internet connection and refresh the page."
     );
 
   }
 
-  return window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+
+  if(
+    !window.supabase ||
+    typeof window.supabase.createClient !== "function"
+  ){
+
+    throw new Error(
+      "Supabase authentication library is not available."
+    );
+
+  }
+
+
+  ZYRE_SUPABASE_CLIENT =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY,
+      {
+        auth:{
+          autoRefreshToken:true,
+          persistSession:true,
+          detectSessionInUrl:true
+        }
+      }
+    );
+
+
+  return ZYRE_SUPABASE_CLIENT;
 
 }
 
 
 /* =====================================================
-AUTHENTICATION
+   AUTHENTICATION
 ===================================================== */
 
 async function refreshSellerAuthentication(){
 
   const client =
-    createSupabaseClient();
+    await createSupabaseClient();
+
 
   const result =
     await client.auth.getSession();
+
 
   const session =
     result &&
     result.data
       ? result.data.session
       : null;
+
 
   if(
     !session ||
@@ -1333,9 +1651,11 @@ async function refreshSellerAuthentication(){
 
     SELLER_ACCESS_TOKEN = "";
 
+
     localStorage.removeItem(
       "zava_access_token"
     );
+
 
     throw new Error(
       "Your seller login session has expired. Please log in again."
@@ -1343,18 +1663,22 @@ async function refreshSellerAuthentication(){
 
   }
 
+
   SELLER_ACCESS_TOKEN =
     session.access_token;
+
 
   localStorage.setItem(
     "zava_access_token",
     SELLER_ACCESS_TOKEN
   );
 
+
   if(session.user.email){
 
     SELLER_EMAIL =
       session.user.email;
+
 
     localStorage.setItem(
       "zava_seller_email",
@@ -1363,20 +1687,24 @@ async function refreshSellerAuthentication(){
 
   }
 
+
   return session;
 
 }
 
 
 /* =====================================================
-SELLER ACCOUNT RESOLUTION
-NO "name" COLUMN IS REQUESTED
+   SELLER ACCOUNT RESOLUTION
+
+   IMPORTANT:
+   sellers table does NOT contain "name".
 ===================================================== */
 
 async function resolveSellerFromAccount(){
 
   const session =
     await refreshSellerAuthentication();
+
 
   if(
     !session ||
@@ -1389,6 +1717,7 @@ async function resolveSellerFromAccount(){
     );
 
   }
+
 
   const userId =
     session.user.id;
@@ -1417,21 +1746,26 @@ async function resolveSellerFromAccount(){
   const seller =
     sellers[0];
 
+
   CURRENT_SELLER =
     seller;
 
+
   SELLER_ID =
     String(seller.id);
+
 
   localStorage.setItem(
     "zava_seller_id",
     SELLER_ID
   );
 
+
   if(seller.email){
 
     SELLER_EMAIL =
       seller.email;
+
 
     localStorage.setItem(
       "zava_seller_email",
@@ -1439,6 +1773,7 @@ async function resolveSellerFromAccount(){
     );
 
   }
+
 
   console.log(
     "ZYRE SELLER RESOLVED",
@@ -1451,18 +1786,20 @@ async function resolveSellerFromAccount(){
     }
   );
 
+
   return seller;
 
 }
 
 
 /* =====================================================
-REQUIRED AUTH TOKEN
+   REQUIRED AUTH TOKEN
 ===================================================== */
 
 async function getSellerAccessToken(){
 
   await refreshSellerAuthentication();
+
 
   if(!SELLER_ACCESS_TOKEN){
 
@@ -1472,13 +1809,14 @@ async function getSellerAccessToken(){
 
   }
 
+
   return SELLER_ACCESS_TOKEN;
 
 }
 
 
 /* =====================================================
-SUPABASE REQUEST
+   SUPABASE REQUEST
 ===================================================== */
 
 async function supabaseRequest(
@@ -1488,6 +1826,7 @@ async function supabaseRequest(
 
   const token =
     await getSellerAccessToken();
+
 
   const headers = {
 
@@ -1507,6 +1846,7 @@ async function supabaseRequest(
 
   };
 
+
   const response =
     await fetch(
       SUPABASE_URL +
@@ -1518,10 +1858,13 @@ async function supabaseRequest(
       }
     );
 
+
   const text =
     await response.text();
 
+
   let data = null;
+
 
   try{
 
@@ -1537,6 +1880,7 @@ async function supabaseRequest(
 
   }
 
+
   if(!response.ok){
 
     const errorMessage =
@@ -1549,6 +1893,7 @@ async function supabaseRequest(
             : "Supabase request failed"
         );
 
+
     console.error(
       "SUPABASE REQUEST FAILED",
       {
@@ -1558,11 +1903,13 @@ async function supabaseRequest(
       }
     );
 
+
     throw new Error(
       errorMessage
     );
 
   }
+
 
   return data;
 
@@ -1570,7 +1917,7 @@ async function supabaseRequest(
 
 
 /* =====================================================
-UPLOAD PRODUCT IMAGE
+   UPLOAD PRODUCT IMAGE
 ===================================================== */
 
 async function uploadProductImage(file){
@@ -1583,6 +1930,7 @@ async function uploadProductImage(file){
 
   }
 
+
   if(
     !file.type ||
     !file.type.startsWith("image/")
@@ -1593,6 +1941,7 @@ async function uploadProductImage(file){
     );
 
   }
+
 
   if(
     file.size >
@@ -1605,8 +1954,10 @@ async function uploadProductImage(file){
 
   }
 
+
   const token =
     await getSellerAccessToken();
+
 
   if(!SELLER_ID){
 
@@ -1614,12 +1965,14 @@ async function uploadProductImage(file){
 
   }
 
+
   const safeSellerId =
     String(SELLER_ID)
       .replace(
         /[^a-zA-Z0-9_-]/g,
         ""
       );
+
 
   const extension =
     (
@@ -1634,6 +1987,7 @@ async function uploadProductImage(file){
       ""
     );
 
+
   const fileName =
     safeSellerId +
     "_" +
@@ -1645,11 +1999,13 @@ async function uploadProductImage(file){
     "." +
     extension;
 
+
   const filePath =
     "seller-" +
     safeSellerId +
     "/" +
     fileName;
+
 
   const uploadUrl =
     SUPABASE_URL +
@@ -1657,6 +2013,7 @@ async function uploadProductImage(file){
     PRODUCT_IMAGE_BUCKET +
     "/" +
     filePath;
+
 
   const response =
     await fetch(
@@ -1685,10 +2042,13 @@ async function uploadProductImage(file){
       }
     );
 
+
   const responseText =
     await response.text();
 
+
   let responseData = null;
+
 
   try{
 
@@ -1703,6 +2063,7 @@ async function uploadProductImage(file){
       responseText;
 
   }
+
 
   if(!response.ok){
 
@@ -1719,6 +2080,7 @@ async function uploadProductImage(file){
 
   }
 
+
   return (
     SUPABASE_URL +
     "/storage/v1/object/public/" +
@@ -1731,7 +2093,7 @@ async function uploadProductImage(file){
 
 
 /* =====================================================
-PHOTO PREVIEW
+   PHOTO PREVIEW
 ===================================================== */
 
 document
@@ -1744,15 +2106,18 @@ document
         this.files &&
         this.files[0];
 
+
       const preview =
         document.getElementById(
           "photoPreview"
         );
 
+
       const status =
         document.getElementById(
           "uploadStatus"
         );
+
 
       if(!file){
 
@@ -1767,6 +2132,7 @@ document
 
         }
 
+
         if(status){
 
           status.textContent =
@@ -1774,9 +2140,11 @@ document
 
         }
 
+
         return;
 
       }
+
 
       if(
         !file.type ||
@@ -1787,15 +2155,19 @@ document
           "Please choose an image."
         );
 
+
         this.value =
           "";
+
 
         return;
 
       }
 
+
       const reader =
         new FileReader();
+
 
       reader.onload =
         function(event){
@@ -1805,6 +2177,7 @@ document
             preview.src =
               event.target.result;
 
+
             preview.style.display =
               "block";
 
@@ -1812,7 +2185,9 @@ document
 
         };
 
+
       reader.readAsDataURL(file);
+
 
       if(status){
 
@@ -1826,7 +2201,7 @@ document
 
 
 /* =====================================================
-CURRENT MONTH PAYMENT
+   CURRENT MONTH PAYMENT
 ===================================================== */
 
 function isPaidThisMonth(payment){
@@ -1837,6 +2212,7 @@ function isPaidThisMonth(payment){
 
   }
 
+
   const status =
     String(
       payment.status || ""
@@ -1844,15 +2220,18 @@ function isPaidThisMonth(payment){
     .trim()
     .toLowerCase();
 
+
   if(status !== "paid"){
 
     return false;
 
   }
 
+
   const dateValue =
     payment.paid_at ||
     payment.created_at;
+
 
   if(!dateValue){
 
@@ -1860,8 +2239,10 @@ function isPaidThisMonth(payment){
 
   }
 
+
   const paymentDate =
     new Date(dateValue);
+
 
   if(
     Number.isNaN(
@@ -1873,8 +2254,10 @@ function isPaidThisMonth(payment){
 
   }
 
+
   const now =
     new Date();
+
 
   return (
     paymentDate.getFullYear() ===
@@ -1888,7 +2271,7 @@ function isPaidThisMonth(payment){
 
 
 /* =====================================================
-ACTIVE SUBSCRIPTION
+   ACTIVE SUBSCRIPTION
 ===================================================== */
 
 function isActiveSubscription(subscription){
@@ -1899,6 +2282,7 @@ function isActiveSubscription(subscription){
 
   }
 
+
   const status =
     String(
       subscription.status || ""
@@ -1906,11 +2290,13 @@ function isActiveSubscription(subscription){
     .trim()
     .toLowerCase();
 
+
   if(status !== "active"){
 
     return false;
 
   }
+
 
   if(!subscription.expires_at){
 
@@ -1918,10 +2304,12 @@ function isActiveSubscription(subscription){
 
   }
 
+
   const expiry =
     new Date(
       subscription.expires_at
     );
+
 
   if(
     Number.isNaN(
@@ -1933,6 +2321,7 @@ function isActiveSubscription(subscription){
 
   }
 
+
   return (
     expiry.getTime() >
     Date.now()
@@ -1942,13 +2331,14 @@ function isActiveSubscription(subscription){
 
 
 /* =====================================================
-RENTAL CHECK
+   RENTAL CHECK
 ===================================================== */
 
 async function checkRental(){
 
   const seller =
     await resolveSellerFromAccount();
+
 
   if(
     !seller ||
@@ -1961,8 +2351,10 @@ async function checkRental(){
 
   }
 
+
   const sellerId =
     String(seller.id);
+
 
   console.log(
     "ZYRE RENTAL CHECK START",
@@ -1972,7 +2364,9 @@ async function checkRental(){
     }
   );
 
+
   let subscriptions = [];
+
 
   try{
 
@@ -1990,12 +2384,14 @@ async function checkRental(){
       error
     );
 
+
     throw new Error(
       "ZYRE could not read your store rental subscription. " +
       error.message
     );
 
   }
+
 
   const activeSubscription =
     Array.isArray(subscriptions) &&
@@ -2006,11 +2402,13 @@ async function checkRental(){
         )
     );
 
+
   console.log(
     "ZYRE ACTIVE SUBSCRIPTION:",
     activeSubscription,
     subscriptions
   );
+
 
   if(activeSubscription){
 
@@ -2018,11 +2416,14 @@ async function checkRental(){
       "ZYRE RENTAL UNLOCKED BY ACTIVE SUBSCRIPTION"
     );
 
+
     return true;
 
   }
 
+
   let payments = [];
+
 
   try{
 
@@ -2040,12 +2441,14 @@ async function checkRental(){
       error
     );
 
+
     throw new Error(
       "ZYRE could not read your rental payment record. " +
       error.message
     );
 
   }
+
 
   const paidThisMonth =
     Array.isArray(payments) &&
@@ -2054,11 +2457,13 @@ async function checkRental(){
         isPaidThisMonth(payment)
     );
 
+
   console.log(
     "ZYRE PAID THIS MONTH:",
     paidThisMonth,
     payments
   );
+
 
   if(paidThisMonth){
 
@@ -2066,9 +2471,11 @@ async function checkRental(){
       "ZYRE RENTAL UNLOCKED BY PAID RENTAL PAYMENT"
     );
 
+
     return true;
 
   }
+
 
   return false;
 
@@ -2076,7 +2483,7 @@ async function checkRental(){
 
 
 /* =====================================================
-SHOW DASHBOARD
+   SHOW DASHBOARD
 ===================================================== */
 
 function showDashboard(){
@@ -2086,10 +2493,12 @@ function showDashboard(){
     ?.classList
     .add("hidden");
 
+
   document
     .getElementById("rentalLock")
     ?.classList
     .add("hidden");
+
 
   document
     .getElementById("dashboard")
@@ -2100,7 +2509,7 @@ function showDashboard(){
 
 
 /* =====================================================
-SHOW LOCK
+   SHOW LOCK
 ===================================================== */
 
 function showRentalLock(){
@@ -2110,10 +2519,12 @@ function showRentalLock(){
     ?.classList
     .add("hidden");
 
+
   document
     .getElementById("dashboard")
     ?.classList
     .add("hidden");
+
 
   document
     .getElementById("rentalLock")
@@ -2124,7 +2535,7 @@ function showRentalLock(){
 
 
 /* =====================================================
-START DASHBOARD
+   START DASHBOARD
 ===================================================== */
 
 async function startDashboard(){
@@ -2135,30 +2546,37 @@ async function startDashboard(){
 
   }
 
+
   dashboardStarted =
     true;
+
 
   document
     .getElementById("rentalLoading")
     ?.classList
     .remove("hidden");
 
+
   document
     .getElementById("rentalLock")
     ?.classList
     .add("hidden");
+
 
   document
     .getElementById("dashboard")
     ?.classList
     .add("hidden");
 
+
   try{
 
     await refreshSellerAuthentication();
 
+
     const seller =
       await resolveSellerFromAccount();
+
 
     if(
       !seller ||
@@ -2171,8 +2589,10 @@ async function startDashboard(){
 
     }
 
+
     const rentalPaid =
       await checkRental();
+
 
     if(!rentalPaid){
 
@@ -2180,20 +2600,26 @@ async function startDashboard(){
         false
       );
 
+
       showRentalLock();
+
 
       dashboardStarted =
         false;
+
 
       return;
 
     }
 
+
     showDashboard();
+
 
     updateRentalDisplay(
       true
     );
+
 
     await loadSellerInformation();
 
@@ -2205,12 +2631,14 @@ async function startDashboard(){
 
     await loadNotifications();
 
+
   }catch(error){
 
     console.error(
       "Dashboard startup error:",
       error
     );
+
 
     if(
       error.message &&
@@ -2226,19 +2654,25 @@ async function startDashboard(){
         error.message
       );
 
+
       dashboardStarted =
         false;
 
+
       logoutSeller();
+
 
       return;
 
     }
 
+
     showRentalLock();
+
 
     dashboardStarted =
       false;
+
 
     alert(
       "ZYRE could not verify the rental.\n\n" +
@@ -2251,7 +2685,7 @@ async function startDashboard(){
 
 
 /* =====================================================
-SELLER INFORMATION
+   SELLER INFORMATION
 ===================================================== */
 
 async function loadSellerInformation(){
@@ -2260,10 +2694,11 @@ async function loadSellerInformation(){
 
     const sellers =
       await supabaseRequest(
-        "sellers?select=*&id=eq." +
+        "sellers?select=id,user_id,store_name,approved,status,full_name,email,phone,category&id=eq." +
         encodeURIComponent(SELLER_ID) +
         "&limit=1"
       );
+
 
     if(
       Array.isArray(sellers) &&
@@ -2273,34 +2708,41 @@ async function loadSellerInformation(){
       const seller =
         sellers[0];
 
+
       const name =
         seller.full_name ||
         SELLER_EMAIL ||
         "Seller";
 
+
       const storeName =
         seller.store_name ||
         "ZYRE";
+
 
       document
         .getElementById("sellerName")
         .textContent =
           name;
 
+
       document
         .getElementById("sellerStoreName")
         .textContent =
           storeName;
+
 
       document
         .getElementById("sellerInfoName")
         .textContent =
           name;
 
+
       document
         .getElementById("sellerInfoStore")
         .textContent =
           storeName;
+
 
       document
         .getElementById("sellerInfoId")
@@ -2322,7 +2764,7 @@ async function loadSellerInformation(){
 
 
 /* =====================================================
-RENTAL DISPLAY
+   RENTAL DISPLAY
 ===================================================== */
 
 function updateRentalDisplay(
@@ -2334,6 +2776,7 @@ function updateRentalDisplay(
       "rentalStatusText"
     );
 
+
   if(status){
 
     status.textContent =
@@ -2343,10 +2786,12 @@ function updateRentalDisplay(
 
   }
 
+
   const badge =
     document.getElementById(
       "rentalPaidBadge"
     );
+
 
   if(badge){
 
@@ -2357,10 +2802,12 @@ function updateRentalDisplay(
 
   }
 
+
   const button =
     document.getElementById(
       "rentalPayButton"
     );
+
 
   if(button){
 
@@ -2375,7 +2822,7 @@ function updateRentalDisplay(
 
 
 /* =====================================================
-PRODUCTS
+   PRODUCTS
 ===================================================== */
 
 async function loadProducts(){
@@ -2389,16 +2836,19 @@ async function loadProducts(){
         "&order=id.desc"
       );
 
+
     if(!Array.isArray(PRODUCTS)){
 
       PRODUCTS = [];
 
     }
 
+
     const count =
       document.getElementById(
         "productCount"
       );
+
 
     if(count){
 
@@ -2406,6 +2856,7 @@ async function loadProducts(){
         PRODUCTS.length;
 
     }
+
 
     renderProducts();
 
@@ -2416,7 +2867,9 @@ async function loadProducts(){
       error
     );
 
+
     PRODUCTS = [];
+
 
     renderProducts();
 
@@ -2426,7 +2879,7 @@ async function loadProducts(){
 
 
 /* =====================================================
-RENDER PRODUCTS
+   RENDER PRODUCTS
 ===================================================== */
 
 function renderProducts(){
@@ -2436,11 +2889,13 @@ function renderProducts(){
       "productsGrid"
     );
 
+
   if(!grid){
 
     return;
 
   }
+
 
   if(!PRODUCTS.length){
 
@@ -2451,9 +2906,11 @@ function renderProducts(){
       </div>
       `;
 
+
     return;
 
   }
+
 
   grid.innerHTML =
     PRODUCTS
@@ -2462,6 +2919,7 @@ function renderProducts(){
         const image =
           product.image_url ||
           "https://via.placeholder.com/600x400?text=ZYRE+Marketing";
+
 
         return `
 
@@ -2527,7 +2985,7 @@ function renderProducts(){
 
 
 /* =====================================================
-ADD PRODUCT
+   ADD PRODUCT
 ===================================================== */
 
 document
@@ -2538,11 +2996,13 @@ document
 
       event.preventDefault();
 
+
       const name =
         document
           .getElementById("productName")
           .value
           .trim();
+
 
       const price =
         Number(
@@ -2551,6 +3011,7 @@ document
             .value
         );
 
+
       const stock =
         Number(
           document
@@ -2558,25 +3019,30 @@ document
             .value
         );
 
+
       const category =
         document
           .getElementById("productCategory")
           .value;
+
 
       const imageFile =
         document
           .getElementById("productImageFile")
           .files[0];
 
+
       const button =
         document.getElementById(
           "addProductButton"
         );
 
+
       const uploadStatus =
         document.getElementById(
           "uploadStatus"
         );
+
 
       if(!name){
 
@@ -2584,9 +3050,11 @@ document
           "Please enter a product name."
         );
 
+
         return;
 
       }
+
 
       if(
         !Number.isFinite(price) ||
@@ -2597,9 +3065,11 @@ document
           "Please enter a valid product price."
         );
 
+
         return;
 
       }
+
 
       if(
         !Number.isFinite(stock) ||
@@ -2610,9 +3080,11 @@ document
           "Please enter valid stock."
         );
 
+
         return;
 
       }
+
 
       if(!imageFile){
 
@@ -2620,23 +3092,28 @@ document
           "Please choose a product picture from your phone."
         );
 
+
         return;
 
       }
 
+
       try{
 
         await resolveSellerFromAccount();
+
 
         if(button){
 
           button.disabled =
             true;
 
+
           button.textContent =
             "Uploading picture...";
 
         }
+
 
         if(uploadStatus){
 
@@ -2645,10 +3122,12 @@ document
 
         }
 
+
         const imageUrl =
           await uploadProductImage(
             imageFile
           );
+
 
         if(uploadStatus){
 
@@ -2657,6 +3136,7 @@ document
 
         }
 
+
         if(button){
 
           button.textContent =
@@ -2664,7 +3144,9 @@ document
 
         }
 
+
         await resolveSellerFromAccount();
+
 
         await supabaseRequest(
           "products",
@@ -2699,9 +3181,11 @@ document
           }
         );
 
+
         alert(
           "Product added successfully."
         );
+
 
         document
           .getElementById(
@@ -2709,21 +3193,25 @@ document
           )
           .reset();
 
+
         const preview =
           document.getElementById(
             "photoPreview"
           );
+
 
         if(preview){
 
           preview.style.display =
             "none";
 
+
           preview.removeAttribute(
             "src"
           );
 
         }
+
 
         if(uploadStatus){
 
@@ -2732,7 +3220,9 @@ document
 
         }
 
+
         await loadProducts();
+
 
       }catch(error){
 
@@ -2741,10 +3231,12 @@ document
           error
         );
 
+
         alert(
           "Product could not be added.\n\n" +
           error.message
         );
+
 
         if(uploadStatus){
 
@@ -2761,6 +3253,7 @@ document
           button.disabled =
             false;
 
+
           button.textContent =
             "➕ Add Product";
 
@@ -2773,7 +3266,7 @@ document
 
 
 /* =====================================================
-EDIT PRODUCT
+   EDIT PRODUCT
 ===================================================== */
 
 async function editProduct(id){
@@ -2785,11 +3278,13 @@ async function editProduct(id){
         Number(id)
     );
 
+
   if(!product){
 
     return;
 
   }
+
 
   const name =
     prompt(
@@ -2797,11 +3292,13 @@ async function editProduct(id){
       product.name || ""
     );
 
+
   if(name === null){
 
     return;
 
   }
+
 
   const price =
     prompt(
@@ -2809,11 +3306,13 @@ async function editProduct(id){
       product.price || ""
     );
 
+
   if(price === null){
 
     return;
 
   }
+
 
   const stock =
     prompt(
@@ -2821,11 +3320,13 @@ async function editProduct(id){
       product.stock || 0
     );
 
+
   if(stock === null){
 
     return;
 
   }
+
 
   try{
 
@@ -2856,11 +3357,14 @@ async function editProduct(id){
       }
     );
 
+
     alert(
       "Product updated."
     );
 
+
     await loadProducts();
+
 
   }catch(error){
 
@@ -2875,7 +3379,7 @@ async function editProduct(id){
 
 
 /* =====================================================
-DELETE PRODUCT
+   DELETE PRODUCT
 ===================================================== */
 
 async function deleteProduct(id){
@@ -2887,11 +3391,13 @@ async function deleteProduct(id){
         Number(id)
     );
 
+
   if(!product){
 
     return;
 
   }
+
 
   if(
     !confirm(
@@ -2905,6 +3411,7 @@ async function deleteProduct(id){
 
   }
 
+
   try{
 
     await supabaseRequest(
@@ -2915,11 +3422,14 @@ async function deleteProduct(id){
       }
     );
 
+
     alert(
       "Product deleted."
     );
 
+
     await loadProducts();
+
 
   }catch(error){
 
@@ -2934,7 +3444,7 @@ async function deleteProduct(id){
 
 
 /* =====================================================
-ORDERS
+   ORDERS
 ===================================================== */
 
 async function loadOrders(){
@@ -2945,13 +3455,17 @@ async function loadOrders(){
 
       ORDERS = [];
 
+
       renderOrders();
 
+
       updateOrderStats();
+
 
       return;
 
     }
+
 
     const productIds =
       PRODUCTS
@@ -2964,17 +3478,22 @@ async function loadOrders(){
             Number.isFinite(id)
         );
 
+
     if(!productIds.length){
 
       ORDERS = [];
 
+
       renderOrders();
 
+
       updateOrderStats();
+
 
       return;
 
     }
+
 
     const orderItems =
       await supabaseRequest(
@@ -2983,6 +3502,7 @@ async function loadOrders(){
         ")"
       );
 
+
     if(
       !Array.isArray(orderItems) ||
       !orderItems.length
@@ -2990,13 +3510,17 @@ async function loadOrders(){
 
       ORDERS = [];
 
+
       renderOrders();
 
+
       updateOrderStats();
+
 
       return;
 
     }
+
 
     const orderIds =
       [
@@ -3013,17 +3537,22 @@ async function loadOrders(){
         )
       ];
 
+
     if(!orderIds.length){
 
       ORDERS = [];
 
+
       renderOrders();
 
+
       updateOrderStats();
+
 
       return;
 
     }
+
 
     const orders =
       await supabaseRequest(
@@ -3032,7 +3561,9 @@ async function loadOrders(){
         ")&order=id.desc"
       );
 
+
     const productMap = {};
+
 
     PRODUCTS.forEach(
       product => {
@@ -3043,6 +3574,7 @@ async function loadOrders(){
 
       }
     );
+
 
     ORDERS =
       (
@@ -3059,7 +3591,9 @@ async function loadOrders(){
               Number(order.id)
           );
 
+
         let sellerTotal = 0;
+
 
         const sellerItems =
           items.map(item => {
@@ -3069,10 +3603,12 @@ async function loadOrders(){
                 Number(item.product_id)
               ];
 
+
             const quantity =
               Number(
                 item.quantity || 0
               );
+
 
             const price =
               Number(
@@ -3081,8 +3617,10 @@ async function loadOrders(){
                 0
               );
 
+
             sellerTotal +=
               price * quantity;
+
 
             return {
 
@@ -3099,6 +3637,7 @@ async function loadOrders(){
 
           });
 
+
         return {
 
           ...order,
@@ -3113,9 +3652,12 @@ async function loadOrders(){
 
       });
 
+
     renderOrders();
 
+
     updateOrderStats();
+
 
   }catch(error){
 
@@ -3124,9 +3666,12 @@ async function loadOrders(){
       error
     );
 
+
     ORDERS = [];
 
+
     renderOrders();
+
 
     updateOrderStats();
 
@@ -3136,7 +3681,7 @@ async function loadOrders(){
 
 
 /* =====================================================
-ORDER STATS
+   ORDER STATS
 ===================================================== */
 
 function updateOrderStats(){
@@ -3144,11 +3689,15 @@ function updateOrderStats(){
   const counts = {
 
     pending:0,
+
     processing:0,
+
     shipped:0,
+
     delivered:0
 
   };
+
 
   ORDERS.forEach(order => {
 
@@ -3158,6 +3707,7 @@ function updateOrderStats(){
         "pending"
       )
       .toLowerCase();
+
 
     if(
       Object.prototype.hasOwnProperty
@@ -3173,10 +3723,12 @@ function updateOrderStats(){
 
   });
 
+
   const pending =
     document.getElementById(
       "pendingCount"
     );
+
 
   if(pending){
 
@@ -3185,10 +3737,12 @@ function updateOrderStats(){
 
   }
 
+
   const processing =
     document.getElementById(
       "processingCount"
     );
+
 
   if(processing){
 
@@ -3197,10 +3751,12 @@ function updateOrderStats(){
 
   }
 
+
   const shipped =
     document.getElementById(
       "shippedCount"
     );
+
 
   if(shipped){
 
@@ -3209,10 +3765,12 @@ function updateOrderStats(){
 
   }
 
+
   const delivered =
     document.getElementById(
       "deliveredCount"
     );
+
 
   if(delivered){
 
@@ -3221,10 +3779,12 @@ function updateOrderStats(){
 
   }
 
+
   const orderCount =
     document.getElementById(
       "orderCount"
     );
+
 
   if(orderCount){
 
@@ -3233,7 +3793,9 @@ function updateOrderStats(){
 
   }
 
+
   let total = 0;
+
 
   ORDERS.forEach(order => {
 
@@ -3244,10 +3806,12 @@ function updateOrderStats(){
 
   });
 
+
   const sales =
     document.getElementById(
       "salesTotal"
     );
+
 
   if(sales){
 
@@ -3261,7 +3825,7 @@ function updateOrderStats(){
 
 
 /* =====================================================
-ORDER FILTER
+   ORDER FILTER
 ===================================================== */
 
 function setOrderFilter(
@@ -3271,6 +3835,7 @@ function setOrderFilter(
 
   CURRENT_ORDER_FILTER =
     filter;
+
 
   document
     .querySelectorAll(
@@ -3283,6 +3848,7 @@ function setOrderFilter(
         )
     );
 
+
   if(button){
 
     button.classList.add(
@@ -3291,13 +3857,14 @@ function setOrderFilter(
 
   }
 
+
   renderOrders();
 
 }
 
 
 /* =====================================================
-RENDER ORDERS
+   RENDER ORDERS
 ===================================================== */
 
 function renderOrders(){
@@ -3307,14 +3874,17 @@ function renderOrders(){
       "ordersList"
     );
 
+
   if(!list){
 
     return;
 
   }
 
+
   let filtered =
     ORDERS;
+
 
   if(
     CURRENT_ORDER_FILTER !==
@@ -3334,6 +3904,7 @@ function renderOrders(){
 
   }
 
+
   if(!filtered.length){
 
     list.innerHTML =
@@ -3343,9 +3914,11 @@ function renderOrders(){
       </div>
       `;
 
+
     return;
 
   }
+
 
   list.innerHTML =
     filtered
@@ -3358,9 +3931,11 @@ function renderOrders(){
           )
           .toLowerCase();
 
+
         const address =
           order.delivery_address ||
           "No delivery address provided";
+
 
         const items =
           Array.isArray(
@@ -3368,6 +3943,7 @@ function renderOrders(){
           )
             ? order.seller_items
             : [];
+
 
         const itemHtml =
           items.length
@@ -3388,6 +3964,7 @@ function renderOrders(){
                 )
                 .join("")
             : "Seller products";
+
 
         return `
 
@@ -3415,37 +3992,48 @@ function renderOrders(){
 
             </div>
 
+
             <span
               class="status ${escapeHtml(status)}"
             >
+
               ${escapeHtml(
                 status.toUpperCase()
               )}
+
             </span>
 
           </div>
 
+
           <hr>
+
 
           <strong>
             Products
           </strong>
 
+
           <div>
             ${itemHtml}
           </div>
 
+
           <br>
+
 
           <strong>
             Customer delivery address
           </strong>
 
+
           <div>
             ${escapeHtml(address)}
           </div>
 
+
           <br>
+
 
           <strong>
             Seller total:
@@ -3454,9 +4042,12 @@ function renderOrders(){
             ).toFixed(2)}
           </strong>
 
+
           <br><br>
 
+
           <div class="actions">
+
 
             <button
               class="btn-black"
@@ -3465,12 +4056,14 @@ function renderOrders(){
               Pending
             </button>
 
+
             <button
               class="btn-black"
               onclick="changeOrderStatus(${Number(order.id)},'processing')"
             >
               Processing
             </button>
+
 
             <button
               class="btn-black"
@@ -3479,6 +4072,7 @@ function renderOrders(){
               Shipped
             </button>
 
+
             <button
               class="btn-green"
               onclick="changeOrderStatus(${Number(order.id)},'delivered')"
@@ -3486,7 +4080,9 @@ function renderOrders(){
               Delivered
             </button>
 
+
           </div>
+
 
         </div>
 
@@ -3499,7 +4095,7 @@ function renderOrders(){
 
 
 /* =====================================================
-CHANGE ORDER STATUS
+   CHANGE ORDER STATUS
 ===================================================== */
 
 async function changeOrderStatus(
@@ -3527,19 +4123,24 @@ async function changeOrderStatus(
       }
     );
 
+
     alert(
       "Order status updated to " +
       status +
       "."
     );
 
+
     await loadOrders();
 
+
     await loadDelivery();
+
 
   }catch(error){
 
     console.error(error);
+
 
     alert(
       "Order status could not be updated.\n\n" +
@@ -3552,7 +4153,7 @@ async function changeOrderStatus(
 
 
 /* =====================================================
-DELIVERY
+   DELIVERY
 ===================================================== */
 
 async function loadDelivery(){
@@ -3563,11 +4164,14 @@ async function loadDelivery(){
 
       DELIVERY_DATA = [];
 
+
       renderDelivery();
+
 
       return;
 
     }
+
 
     const orderIds =
       ORDERS
@@ -3580,15 +4184,19 @@ async function loadDelivery(){
             Number.isFinite(id)
         );
 
+
     if(!orderIds.length){
 
       DELIVERY_DATA = [];
 
+
       renderDelivery();
+
 
       return;
 
     }
+
 
     try{
 
@@ -3606,9 +4214,11 @@ async function loadDelivery(){
         error
       );
 
+
       DELIVERY_DATA = [];
 
     }
+
 
     if(!Array.isArray(DELIVERY_DATA)){
 
@@ -3616,7 +4226,9 @@ async function loadDelivery(){
 
     }
 
+
     renderDelivery();
+
 
   }catch(error){
 
@@ -3625,7 +4237,9 @@ async function loadDelivery(){
       error
     );
 
+
     DELIVERY_DATA = [];
+
 
     renderDelivery();
 
@@ -3635,7 +4249,7 @@ async function loadDelivery(){
 
 
 /* =====================================================
-RENDER DELIVERY
+   RENDER DELIVERY
 ===================================================== */
 
 function renderDelivery(){
@@ -3645,11 +4259,13 @@ function renderDelivery(){
       "deliveryList"
     );
 
+
   if(!list){
 
     return;
 
   }
+
 
   if(!DELIVERY_DATA.length){
 
@@ -3662,9 +4278,11 @@ function renderDelivery(){
       </div>
       `;
 
+
     return;
 
   }
+
 
   list.innerHTML =
     DELIVERY_DATA
@@ -3685,6 +4303,7 @@ function renderDelivery(){
               )}
             </strong>
 
+
             <span class="status">
               ${escapeHtml(
                 delivery.status ||
@@ -3694,7 +4313,9 @@ function renderDelivery(){
 
           </div>
 
+
           <br>
+
 
           <div>
             Address:
@@ -3705,7 +4326,9 @@ function renderDelivery(){
             )}
           </div>
 
+
           <br>
+
 
           <button
             class="btn-black"
@@ -3713,6 +4336,7 @@ function renderDelivery(){
           >
             ✏ Update Delivery
           </button>
+
 
         </div>
 
@@ -3725,7 +4349,7 @@ function renderDelivery(){
 
 
 /* =====================================================
-EDIT DELIVERY
+   EDIT DELIVERY
 ===================================================== */
 
 async function editDelivery(id){
@@ -3737,11 +4361,13 @@ async function editDelivery(id){
         Number(id)
     );
 
+
   if(!delivery){
 
     return;
 
   }
+
 
   const status =
     prompt(
@@ -3750,11 +4376,13 @@ async function editDelivery(id){
       "Pending"
     );
 
+
   if(status === null){
 
     return;
 
   }
+
 
   try{
 
@@ -3779,11 +4407,14 @@ async function editDelivery(id){
       }
     );
 
+
     alert(
       "Delivery updated."
     );
 
+
     await loadDelivery();
+
 
   }catch(error){
 
@@ -3798,7 +4429,7 @@ async function editDelivery(id){
 
 
 /* =====================================================
-NOTIFICATIONS
+   NOTIFICATIONS
 ===================================================== */
 
 async function loadNotifications(){
@@ -3808,10 +4439,12 @@ async function loadNotifications(){
       "notificationsList"
     );
 
+
   const preview =
     document.getElementById(
       "notificationsPreview"
     );
+
 
   const html =
     `
@@ -3844,12 +4477,14 @@ async function loadNotifications(){
 
     `;
 
+
   if(list){
 
     list.innerHTML =
       html;
 
   }
+
 
   if(preview){
 
@@ -3862,7 +4497,7 @@ async function loadNotifications(){
 
 
 /* =====================================================
-NAVIGATION
+   NAVIGATION
 ===================================================== */
 
 function showPanel(
@@ -3881,10 +4516,12 @@ function showPanel(
         )
     );
 
+
   const panel =
     document.getElementById(
       panelId
     );
+
 
   if(panel){
 
@@ -3893,6 +4530,7 @@ function showPanel(
     );
 
   }
+
 
   document
     .querySelectorAll(
@@ -3904,6 +4542,7 @@ function showPanel(
           "active"
         )
     );
+
 
   if(button){
 
@@ -3917,7 +4556,7 @@ function showPanel(
 
 
 /* =====================================================
-RENTAL PAYMENT
+   RENTAL PAYMENT
 ===================================================== */
 
 async function payRental(){
@@ -3926,15 +4565,18 @@ async function payRental(){
 
     await resolveSellerFromAccount();
 
+
     if(!SELLER_ID){
 
       alert(
         "Seller ID not found."
       );
 
+
       return;
 
     }
+
 
     const email =
       SELLER_EMAIL ||
@@ -3942,29 +4584,35 @@ async function payRental(){
         "Enter your email address:"
       );
 
+
     if(!email){
 
       return;
 
     }
 
+
     const button =
       document.getElementById(
         "rentalPayButton"
       );
+
 
     if(button){
 
       button.disabled =
         true;
 
+
       button.textContent =
         "Opening payment...";
 
     }
 
+
     const token =
       await getSellerAccessToken();
+
 
     const response =
       await fetch(
@@ -4000,8 +4648,10 @@ async function payRental(){
         }
       );
 
+
     const data =
       await response.json();
+
 
     if(!response.ok){
 
@@ -4012,6 +4662,7 @@ async function payRental(){
 
     }
 
+
     if(
       data.authorization_url
     ){
@@ -4019,9 +4670,11 @@ async function payRental(){
       window.location.href =
         data.authorization_url;
 
+
       return;
 
     }
+
 
     if(
       data.data &&
@@ -4031,13 +4684,16 @@ async function payRental(){
       window.location.href =
         data.data.authorization_url;
 
+
       return;
 
     }
 
+
     throw new Error(
       "Paystack payment URL was not returned."
     );
+
 
   }catch(error){
 
@@ -4046,20 +4702,24 @@ async function payRental(){
       error
     );
 
+
     alert(
       "Rental payment could not be started.\n\n" +
       error.message
     );
+
 
     const button =
       document.getElementById(
         "rentalPayButton"
       );
 
+
     if(button){
 
       button.disabled =
         false;
+
 
       button.textContent =
         "💳 Pay R100";
@@ -4072,7 +4732,7 @@ async function payRental(){
 
 
 /* =====================================================
-CHECK RENTAL AGAIN
+   CHECK RENTAL AGAIN
 ===================================================== */
 
 async function checkRentalAgain(){
@@ -4082,23 +4742,28 @@ async function checkRentalAgain(){
       "#rentalLock button.btn-black"
     );
 
+
   if(button){
 
     button.disabled =
       true;
+
 
     button.textContent =
       "Checking...";
 
   }
 
+
   try{
 
     dashboardStarted =
       false;
 
+
     const paid =
       await checkRental();
+
 
     if(paid){
 
@@ -4106,10 +4771,13 @@ async function checkRentalAgain(){
         "✓ Rental payment confirmed. Your dashboard is unlocked."
       );
 
+
       dashboardStarted =
         false;
 
+
       await startDashboard();
+
 
     }else{
 
@@ -4119,12 +4787,14 @@ async function checkRentalAgain(){
 
     }
 
+
   }catch(error){
 
     console.error(
       "Check rental again error:",
       error
     );
+
 
     alert(
       "ZYRE could not verify the rental.\n\n" +
@@ -4133,10 +4803,12 @@ async function checkRentalAgain(){
 
   }
 
+
   if(button){
 
     button.disabled =
       false;
+
 
     button.textContent =
       "🔄 Check Payment Again";
@@ -4147,7 +4819,7 @@ async function checkRentalAgain(){
 
 
 /* =====================================================
-GO BACK
+   GO BACK
 ===================================================== */
 
 function goBackToStore(){
@@ -4159,7 +4831,7 @@ function goBackToStore(){
 
 
 /* =====================================================
-LOGOUT
+   LOGOUT
 ===================================================== */
 
 async function logoutSeller(){
@@ -4167,7 +4839,8 @@ async function logoutSeller(){
   try{
 
     const client =
-      createSupabaseClient();
+      await createSupabaseClient();
+
 
     await client.auth.signOut();
 
@@ -4180,17 +4853,21 @@ async function logoutSeller(){
 
   }
 
+
   localStorage.removeItem(
     "zava_seller_id"
   );
+
 
   localStorage.removeItem(
     "zava_access_token"
   );
 
+
   localStorage.removeItem(
     "zava_seller_email"
   );
+
 
   window.location.href =
     "auth.html";
@@ -4199,7 +4876,7 @@ async function logoutSeller(){
 
 
 /* =====================================================
-ESCAPE HTML
+   ESCAPE HTML
 ===================================================== */
 
 function escapeHtml(value){
@@ -4232,7 +4909,7 @@ function escapeHtml(value){
 
 
 /* =====================================================
-START
+   START
 ===================================================== */
 
 document.addEventListener(
@@ -4246,7 +4923,7 @@ document.addEventListener(
 
 
 /* =====================================================
-PERIODIC RENTAL CHECK
+   PERIODIC RENTAL CHECK
 ===================================================== */
 
 setInterval(
@@ -4256,6 +4933,7 @@ setInterval(
       document.getElementById(
         "dashboard"
       );
+
 
     if(
       !dashboard ||
@@ -4268,14 +4946,17 @@ setInterval(
 
     }
 
+
     try{
 
       const paid =
         await checkRental();
 
+
       if(!paid){
 
         showRentalLock();
+
 
         dashboardStarted =
           false;
@@ -4295,89 +4976,8 @@ setInterval(
   60000
 );
 
-
-/* =====================================================
-DUPLICATE HEADER PROTECTION
-===================================================== */
-
-function removeDuplicateSellerHeaders(){
-
-  const headers =
-    document.querySelectorAll(
-      "body > header"
-    );
-
-  headers.forEach(
-    header => {
-
-      if(
-        header.id !==
-        "sellerHeader"
-      ){
-
-        header.remove();
-
-      }
-
-    }
-  );
-
-}
+</script>
 
 
-/*
-Run once now.
-*/
-
-removeDuplicateSellerHeaders();
-
-
-/*
-Run again after app.js has loaded,
-in case another script creates a header.
-*/
-
-setTimeout(
-  removeDuplicateSellerHeaders,
-  500
-);
-
-setTimeout(
-  removeDuplicateSellerHeaders,
-  1500
-);
-
-</script><script src="app.js?v=6013"></script><script>
-
-/*
-Final duplicate-header check after app.js.
-*/
-
-setTimeout(
-  function(){
-
-    const headers =
-      document.querySelectorAll(
-        "body > header"
-      );
-
-    headers.forEach(
-      header => {
-
-        if(
-          header.id !==
-          "sellerHeader"
-        ){
-
-          header.remove();
-
-        }
-
-      }
-    );
-
-  },
-  2000
-);
-
-</script></body></html>
+</body>
+</html>
