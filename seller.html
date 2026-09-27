@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 
 <meta
@@ -12,7 +13,7 @@
 
 <meta
   name="description"
-  content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications."
+  content="ZYRE Marketing seller dashboard for managing products, orders, deliveries and store rental."
 >
 
 <meta
@@ -21,26 +22,48 @@
 >
 
 <style>
+
 *{
   box-sizing:border-box;
 }
 
+html,
 body{
   margin:0;
-  font-family:Arial,sans-serif;
+  padding:0;
+  font-family:Arial,Helvetica,sans-serif;
   background:#f5f5f5;
   color:#111;
 }
 
-button,
-input,
-select,
-textarea{
-  font:inherit;
+body{
+  min-height:100vh;
 }
 
 button{
+  font-family:inherit;
   cursor:pointer;
+}
+
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:15px;
+  box-sizing:border-box;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
 }
 
 header{
@@ -49,7 +72,7 @@ header{
   padding:18px;
   position:sticky;
   top:0;
-  z-index:100;
+  z-index:50;
   box-shadow:0 2px 10px rgba(0,0,0,.15);
 }
 
@@ -62,15 +85,21 @@ header{
   gap:15px;
 }
 
-header h1{
-  margin:0;
+.logo-title{
   font-size:21px;
+  font-weight:800;
 }
 
-.header-small{
+.logo-subtitle{
   font-size:12px;
-  color:#bbb;
-  margin-top:5px;
+  opacity:.7;
+  margin-top:3px;
+}
+
+.header-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
 }
 
 .container{
@@ -83,77 +112,20 @@ header h1{
   background:#fff;
   border-radius:14px;
   padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 2px 12px rgba(0,0,0,.06);
+  margin-bottom:18px;
+  box-shadow:0 2px 12px rgba(0,0,0,.07);
 }
 
-.card h2{
+.card h2,
+.card h3{
   margin-top:0;
-  font-size:20px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:20px;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:14px;
-}
-
-.stat{
-  background:#111;
-  color:#fff;
-  border-radius:14px;
-  padding:18px;
-}
-
-.stat-number{
-  font-size:28px;
-  font-weight:bold;
-  margin-top:6px;
-}
-
-.stat-label{
-  color:#ccc;
-  font-size:13px;
-}
-
-input,
-select,
-textarea{
-  width:100%;
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:9px;
-  background:#fff;
-  margin-top:6px;
-  margin-bottom:12px;
-}
-
-textarea{
-  min-height:90px;
-  resize:vertical;
-}
-
-label{
-  display:block;
-  font-weight:bold;
-  font-size:13px;
 }
 
 .btn{
   border:0;
   border-radius:9px;
-  padding:11px 16px;
-  font-weight:bold;
-  margin:3px;
-}
-
-.btn-dark{
+  padding:11px 15px;
+  font-weight:700;
   background:#111;
   color:#fff;
 }
@@ -163,58 +135,42 @@ label{
   color:#111;
 }
 
-.btn-danger{
-  background:#b00020;
-  color:#fff;
-}
-
 .btn-success{
-  background:#137333;
+  background:#16833b;
   color:#fff;
 }
 
-.btn-gold{
-  background:#c99a2e;
-  color:#111;
+.btn-danger{
+  background:#c62828;
+  color:#fff;
 }
 
-.btn:disabled{
-  opacity:.5;
-  cursor:not-allowed;
+.btn-warning{
+  background:#d99a00;
+  color:#fff;
 }
 
-.status{
-  padding:10px 12px;
-  border-radius:8px;
-  font-size:14px;
-  margin:10px 0;
+.btn-primary{
+  background:#111;
+  color:#fff;
 }
 
-.status.success{
-  background:#e8f5e9;
-  color:#176b2c;
+.small{
+  font-size:13px;
+  color:#666;
 }
 
-.status.warning{
-  background:#fff4d6;
-  color:#795600;
+.muted{
+  color:#777;
 }
 
-.status.error{
-  background:#ffe8e8;
-  color:#9d0000;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
 }
 
-.status.info{
-  background:#e8f0ff;
-  color:#16458a;
-}
-
-.hidden{
-  display:none !important;
-}
-
-.product-grid{
+.products-grid{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:15px;
@@ -223,7 +179,7 @@ label{
 .product-card{
   border:1px solid #eee;
   border-radius:12px;
-  overflow:hidden;
+  padding:14px;
   background:#fff;
 }
 
@@ -231,191 +187,209 @@ label{
   width:100%;
   height:180px;
   object-fit:cover;
+  border-radius:9px;
   background:#eee;
 }
 
-.product-body{
-  padding:14px;
+.product-image-placeholder{
+  width:100%;
+  height:180px;
+  border-radius:9px;
+  background:#eee;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#888;
 }
 
 .product-name{
-  font-weight:bold;
-  font-size:17px;
+  font-weight:800;
+  margin:10px 0 5px;
 }
 
 .price{
+  font-weight:800;
   font-size:18px;
-  font-weight:bold;
-  margin:8px 0;
 }
 
-.order-card{
-  border:1px solid #eee;
-  border-radius:12px;
-  padding:15px;
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.form-group{
   margin-bottom:12px;
 }
 
-.order-head{
+.form-group label{
+  display:block;
+  font-weight:700;
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+.order-card{
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:12px;
+  background:#fff;
+}
+
+.order-top{
   display:flex;
   justify-content:space-between;
   gap:10px;
   flex-wrap:wrap;
 }
 
-.order-id{
-  font-weight:bold;
+.order-number{
+  font-weight:800;
+  font-size:17px;
 }
 
-.badge{
+.status{
   display:inline-block;
-  padding:5px 9px;
+  padding:6px 10px;
   border-radius:20px;
   background:#eee;
   font-size:12px;
-  font-weight:bold;
+  font-weight:800;
 }
 
-.badge-paid{
-  background:#dff5e3;
-  color:#126521;
+.status-paid{
+  background:#dff5e5;
+  color:#166534;
 }
 
-.badge-pending{
-  background:#fff0c7;
-  color:#775500;
+.status-pending{
+  background:#fff3cd;
+  color:#795900;
 }
 
-.badge-processing{
-  background:#dcecff;
-  color:#174e91;
+.status-shipped{
+  background:#dbeafe;
+  color:#1e40af;
 }
 
-.badge-shipped{
-  background:#e6ddff;
-  color:#503294;
+.status-delivered{
+  background:#dcfce7;
+  color:#166534;
 }
 
-.badge-delivered{
-  background:#d9f4df;
-  color:#176b2c;
+.status-cancelled{
+  background:#fee2e2;
+  color:#991b1b;
 }
 
-.badge-cancelled{
-  background:#ffe0e0;
-  color:#990000;
+.order-items{
+  margin-top:12px;
+  padding:12px;
+  background:#f8f8f8;
+  border-radius:9px;
 }
 
 .delivery-box{
-  background:#f7f7f7;
-  padding:12px;
-  border-radius:9px;
-  margin-top:10px;
+  background:#f8f8f8;
+  padding:14px;
+  border-radius:10px;
+  margin-top:12px;
 }
 
-.empty{
-  padding:25px;
-  text-align:center;
+.notice{
+  padding:14px;
+  border-radius:10px;
+  margin-bottom:15px;
+}
+
+.notice-info{
+  background:#eaf3ff;
+  color:#164e86;
+}
+
+.notice-warning{
+  background:#fff4d6;
+  color:#735500;
+}
+
+.notice-success{
+  background:#e5f8eb;
+  color:#176b32;
+}
+
+.notice-danger{
+  background:#ffe7e7;
+  color:#8b1e1e;
+}
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+
+.stat{
+  background:#fff;
+  border-radius:12px;
+  padding:18px;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
+
+.stat-label{
   color:#777;
+  font-size:13px;
+}
+
+.stat-value{
+  font-size:25px;
+  font-weight:800;
+  margin-top:5px;
 }
 
 .auth-warning{
-  background:#fff0f0;
-  color:#9d0000;
-  padding:15px;
-  border-radius:10px;
-  margin-bottom:20px;
+  display:none;
 }
 
-.rental-active{
-  border:2px solid #137333;
-  background:#effbf1;
+#sellerDashboard{
+  display:none;
 }
 
-.rental-pending{
-  border:2px solid #c99a2e;
-  background:#fffaf0;
-}
+/* =========================================================
+   RENTAL LOADING
+   ========================================================= */
 
-.rental-lock{
+#rentalLoadingScreen{
   position:fixed;
   inset:0;
-  z-index:99999;
-  background:rgba(0,0,0,.78);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  overflow:auto;
-}
-
-.rental-lock-card{
-  width:100%;
-  max-width:520px;
   background:#fff;
-  border-radius:20px;
-  padding:30px;
-  text-align:center;
-  box-shadow:0 15px 50px rgba(0,0,0,.4);
-}
-
-.rental-lock-icon{
-  font-size:55px;
-  margin-bottom:10px;
-}
-
-.rental-lock-card h2{
-  margin:5px 0 12px;
-  font-size:27px;
-}
-
-.rental-price{
-  font-size:34px;
-  font-weight:bold;
-  margin:18px 0;
-}
-
-.rental-price span{
-  font-size:14px;
-  color:#777;
-  font-weight:normal;
-}
-
-.rental-note{
-  background:#fff4d6;
-  color:#765600;
-  border-radius:10px;
-  padding:13px;
-  margin:15px 0;
-  font-size:14px;
-  line-height:1.5;
-}
-
-.lock-loading{
-  position:fixed;
-  inset:0;
-  z-index:100000;
-  background:#111;
-  color:#fff;
+  z-index:99999;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:20px;
+  padding:25px;
 }
 
-.lock-loading-inner{
+.loading-box{
   max-width:420px;
 }
 
 .spinner{
-  width:42px;
-  height:42px;
-  border:4px solid #555;
-  border-top-color:#fff;
+  width:48px;
+  height:48px;
+  border:4px solid #ddd;
+  border-top-color:#111;
   border-radius:50%;
-  animation:spin 1s linear infinite;
-  margin:0 auto 18px;
+  animation:spin .8s linear infinite;
+  margin:0 auto 22px;
 }
 
 @keyframes spin{
@@ -424,9 +398,65 @@ label{
   }
 }
 
-footer{
+/* =========================================================
+   RENTAL LOCK
+   ========================================================= */
+
+#rentalLockScreen{
+  position:fixed;
+  inset:0;
+  background:#f5f5f5;
+  z-index:99998;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.rental-lock-card{
+  max-width:480px;
+  width:100%;
+  background:#fff;
+  border-radius:18px;
+  padding:30px;
   text-align:center;
+  box-shadow:0 5px 30px rgba(0,0,0,.12);
+}
+
+.rental-icon{
+  font-size:48px;
+  margin-bottom:10px;
+}
+
+.rental-price{
+  font-size:34px;
+  font-weight:900;
+  margin:15px 0;
+}
+
+.rental-lock-card h1{
+  margin:5px 0 10px;
+}
+
+.rental-lock-card p{
+  color:#666;
+  line-height:1.5;
+}
+
+.rental-buttons{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:20px;
+}
+
+.hidden{
+  display:none!important;
+}
+
+footer{
   padding:30px 20px;
+  text-align:center;
   color:#777;
   font-size:13px;
 }
@@ -437,17 +467,21 @@ footer{
     grid-template-columns:1fr;
   }
 
-  .stats{
+  .products-grid{
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
 
-  .product-grid{
+  .stat-grid{
     grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
   }
 
 }
 
-@media(max-width:500px){
+@media(max-width:520px){
 
   .container{
     padding:12px;
@@ -457,12 +491,17 @@ footer{
     padding:15px;
   }
 
-  .product-grid{
+  .products-grid{
     grid-template-columns:1fr;
   }
 
-  header h1{
-    font-size:17px;
+  .header-inner{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .stat-grid{
+    grid-template-columns:1fr 1fr;
   }
 
   .rental-lock-card{
@@ -470,26 +509,31 @@ footer{
   }
 
 }
+
 </style>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 
 <body>
 
-<!-- =====================================================
-     RENTAL CHECK LOADING
-===================================================== -->
+<!-- =======================================================
+     RENTAL CHECKING SCREEN
+     ======================================================= -->
 
-<div id="rentalLoadingScreen" class="lock-loading">
+<div id="rentalLoadingScreen">
 
-  <div class="lock-loading-inner">
+  <div class="loading-box">
 
     <div class="spinner"></div>
 
     <h2>Checking Store Rental</h2>
 
-    <p id="rentalLoadingText">
-      Please wait while ZYRE Marketing checks your
-      current monthly store rental.
+    <p>
+      Please wait while ZYRE Marketing checks
+      your current monthly store rental.
     </p>
 
   </div>
@@ -497,86 +541,68 @@ footer{
 </div>
 
 
-<!-- =====================================================
-     RENTAL LOCK
-===================================================== -->
+<!-- =======================================================
+     RENTAL LOCK SCREEN
+     ======================================================= -->
 
-<div id="rentalLockScreen" class="rental-lock hidden">
+<div id="rentalLockScreen">
 
   <div class="rental-lock-card">
 
-    <div class="rental-lock-icon">
-      🔒
-    </div>
+    <div class="rental-icon">⚠️</div>
 
-    <h2>Store Temporarily Locked</h2>
+    <h1>Monthly Rental Required</h1>
 
-    <p>
-      Your ZYRE Marketing store rental has not been
-      paid for the current calendar month.
+    <p id="rentalLockMessage">
+      Your ZYRE Marketing store rental for this
+      month has not been confirmed.
     </p>
 
     <div class="rental-price">
       R100
-      <span>/ month</span>
     </div>
 
-    <div class="rental-note">
+    <p>
+      Pay the monthly store rental to unlock
+      your seller dashboard.
+    </p>
 
-      ⚠️ Your store and products have
-      <strong>not</strong> been deleted.
+    <div class="rental-buttons">
 
-      <br><br>
+      <button
+        class="btn btn-primary"
+        type="button"
+        onclick="payMonthlyRental()"
+      >
+        💳 Pay R100 Monthly Rental
+      </button>
 
-      Once your R100 monthly rental payment is
-      confirmed as <strong>paid</strong>, your
-      seller dashboard can be unlocked again.
+      <button
+        class="btn btn-light"
+        type="button"
+        onclick="checkRentalAgain()"
+      >
+        🔄 Check Payment Again
+      </button>
+
+      <button
+        class="btn btn-light"
+        type="button"
+        onclick="window.location.href='index.html'"
+      >
+        ← Back to Marketplace
+      </button>
 
     </div>
-
-    <div id="rentalLockStatus" class="status warning">
-      Rental payment required.
-    </div>
-
-    <button
-      id="payRentalButton"
-      class="btn btn-gold"
-      type="button"
-      onclick="payMonthlyRental()"
-    >
-      💳 Pay R100 Monthly Rental
-    </button>
-
-    <br>
-
-    <button
-      class="btn btn-light"
-      type="button"
-      onclick="checkRentalAgain()"
-    >
-      🔄 Check Payment Again
-    </button>
-
-    <br>
-
-    <button
-      class="btn btn-dark"
-      type="button"
-      onclick="goToMarketplace()"
-    >
-      ← Back to Marketplace
-    </button>
 
   </div>
 
 </div>
 
 
-<!-- =====================================================
-     SELLER DASHBOARD
-===================================================== -->
-
-<div id="sellerDashboard">
+<!-- =======================================================
+     HEADER
+     ======================================================= -->
 
 <header>
 
@@ -584,451 +610,67 @@ footer{
 
     <div>
 
-      <h1>
+      <div class="logo-title">
         🛍️ ZYRE Marketing Seller Dashboard
-      </h1>
+      </div>
 
-      <div
-        id="headerSellerName"
-        class="header-small"
-      >
-        Loading seller...
+      <div class="logo-subtitle">
+        Manage your store, products, orders and deliveries
       </div>
 
     </div>
 
-    <button
-      class="btn btn-light"
-      type="button"
-      onclick="goToMarketplace()"
-    >
-      Marketplace
-    </button>
-
-  </div>
-
-</header>
-
-
-<main class="container">
-
-<div
-  id="authenticationWarning"
-  class="auth-warning hidden"
->
-</div>
-
-
-<!-- SELLER INFORMATION -->
-
-<div class="card">
-
-  <h2>🏢 Seller Account</h2>
-
-  <div id="sellerInfo">
-    Loading seller information...
-  </div>
-
-</div>
-
-
-<!-- RENTAL -->
-
-<div id="rentalCard" class="card">
-
-  <h2>💳 Monthly Store Rental</h2>
-
-  <div id="rentalStatusContent">
-    Checking rental payment...
-  </div>
-
-</div>
-
-
-<!-- NOTIFICATIONS -->
-
-<div class="card">
-
-  <h2>🔔 Seller Notifications</h2>
-
-  <p>
-    Receive notifications when customers place new orders.
-  </p>
-
-  <div
-    id="notificationStatus"
-    class="status info"
-  >
-    Checking notification status...
-  </div>
-
-  <button
-    id="sellerNotificationButton"
-    class="btn btn-dark"
-    type="button"
-    onclick="enableSellerNotifications()"
-  >
-    🔔 Enable Notifications
-  </button>
-
-</div>
-
-
-<!-- ORDER SUMMARY -->
-
-<div class="card">
-
-  <h2>📊 Order Summary</h2>
-
-  <div class="stats">
-
-    <div class="stat">
-      <div class="stat-label">
-        Total Orders
-      </div>
-
-      <div
-        id="statTotalOrders"
-        class="stat-number"
-      >
-        0
-      </div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">
-        Pending
-      </div>
-
-      <div
-        id="statPending"
-        class="stat-number"
-      >
-        0
-      </div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">
-        Processing
-      </div>
-
-      <div
-        id="statProcessing"
-        class="stat-number"
-      >
-        0
-      </div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">
-        Delivered
-      </div>
-
-      <div
-        id="statDelivered"
-        class="stat-number"
-      >
-        0
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ADD PRODUCT -->
-
-<div id="addProductCard" class="card">
-
-  <h2>➕ Add Product</h2>
-
-  <div
-    id="productMessage"
-    class="status hidden"
-  ></div>
-
-  <label>
-    Product Name
-
-    <input
-      id="productName"
-      type="text"
-      placeholder="Product name"
-    >
-  </label>
-
-  <label>
-    Description
-
-    <textarea
-      id="productDescription"
-      placeholder="Describe your product"
-    ></textarea>
-
-  </label>
-
-  <div class="grid">
-
-    <div>
-
-      <label>
-        Price (R)
-
-        <input
-          id="productPrice"
-          type="number"
-          min="0"
-          step="0.01"
-          placeholder="299"
-        >
-
-      </label>
-
-    </div>
-
-    <div>
-
-      <label>
-        Stock
-
-        <input
-          id="productStock"
-          type="number"
-          min="0"
-          step="1"
-          placeholder="20"
-        >
-
-      </label>
-
-    </div>
-
-  </div>
-
-  <label>
-    Category
-
-    <select id="productCategory">
-
-      <option value="Electronics">Electronics</option>
-      <option value="Fashion">Fashion</option>
-      <option value="Home">Home</option>
-      <option value="Beauty">Beauty</option>
-      <option value="Other">Other</option>
-
-    </select>
-
-  </label>
-
-  <label>
-    Product Image URL
-
-    <input
-      id="productImage"
-      type="url"
-      placeholder="https://..."
-    >
-
-  </label>
-
-  <button
-    class="btn btn-dark"
-    type="button"
-    onclick="addProduct()"
-  >
-    Add Product
-  </button>
-
-</div>
-
-
-<!-- EDIT PRODUCT -->
-
-<div
-  id="editProductCard"
-  class="card hidden"
->
-
-  <h2>✏️ Edit Product</h2>
-
-  <input
-    id="editProductId"
-    type="hidden"
-  >
-
-  <label>
-    Product Name
-
-    <input
-      id="editProductName"
-      type="text"
-    >
-  </label>
-
-  <label>
-    Description
-
-    <textarea
-      id="editProductDescription"
-    ></textarea>
-  </label>
-
-  <div class="grid">
-
-    <div>
-
-      <label>
-        Price
-
-        <input
-          id="editProductPrice"
-          type="number"
-          min="0"
-          step="0.01"
-        >
-
-      </label>
-
-    </div>
-
-    <div>
-
-      <label>
-        Stock
-
-        <input
-          id="editProductStock"
-          type="number"
-          min="0"
-          step="1"
-        >
-
-      </label>
-
-    </div>
-
-  </div>
-
-  <label>
-    Category
-
-    <select id="editProductCategory">
-
-      <option value="Electronics">Electronics</option>
-      <option value="Fashion">Fashion</option>
-      <option value="Home">Home</option>
-      <option value="Beauty">Beauty</option>
-      <option value="Other">Other</option>
-
-    </select>
-
-  </label>
-
-  <label>
-    Product Image URL
-
-    <input
-      id="editProductImage"
-      type="url"
-    >
-  </label>
-
-  <button
-    class="btn btn-success"
-    type="button"
-    onclick="saveProduct()"
-  >
-    Save Changes
-  </button>
-
-  <button
-    class="btn btn-light"
-    type="button"
-    onclick="cancelEditProduct()"
-  >
-    Cancel
-  </button>
-
-</div>
-
-
-<!-- PRODUCTS -->
-
-<div class="card">
-
-  <h2>🛍️ My Products</h2>
-
-  <div
-    id="productsMessage"
-    class="status hidden"
-  ></div>
-
-  <div
-    id="productsGrid"
-    class="product-grid"
-  >
-
-    <div class="empty">
-      Loading products...
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ORDERS -->
-
-<div class="card">
-
-  <h2>📦 Customer Orders</h2>
-
-  <div class="grid">
-
-    <div>
-
-      <label>
-        Filter Orders
-
-        <select
-          id="orderFilter"
-          onchange="renderOrders()"
-        >
-
-          <option value="all">All Orders</option>
-          <option value="Pending">Pending</option>
-          <option value="Processing">Processing</option>
-          <option value="Shipped">Shipped</option>
-          <option value="Delivered">Delivered</option>
-          <option value="Cancelled">Cancelled</option>
-
-        </select>
-
-      </label>
-
-    </div>
-
-    <div style="display:flex;align-items:end;">
+    <div class="header-actions">
 
       <button
         class="btn btn-light"
         type="button"
-        onclick="loadOrders(true)"
+        onclick="goBack()"
       >
-        🔄 Refresh Orders
+        ← Store
+      </button>
+
+      <button
+        class="btn btn-light"
+        type="button"
+        onclick="signOutSeller()"
+      >
+        Logout
       </button>
 
     </div>
 
   </div>
 
-  <div id="ordersGrid">
+</header>
 
-    <div class="empty">
-      Loading orders...
+
+<!-- =======================================================
+     AUTH WARNING
+     ======================================================= -->
+
+<div
+  id="authenticationWarning"
+  class="auth-warning"
+>
+
+  <div class="container">
+
+    <div class="notice notice-danger">
+
+      ⚠️ Seller authentication could not be confirmed.
+
+      <div class="actions">
+
+        <button
+          class="btn btn-danger"
+          onclick="window.location.href='auth.html'"
+        >
+          Login Again
+        </button>
+
+      </div>
+
     </div>
 
   </div>
@@ -1036,17 +678,367 @@ footer{
 </div>
 
 
-<!-- BACK -->
+<!-- =======================================================
+     MAIN DASHBOARD
+     ======================================================= -->
 
-<div class="card">
+<main
+  id="sellerDashboard"
+>
+
+<div class="container">
+
+
+<!-- =======================================================
+     STORE INFORMATION
+     ======================================================= -->
+
+<section class="card">
+
+  <h2>🏢 My Store</h2>
+
+  <div id="sellerInformation">
+
+    <div class="notice notice-info">
+      Loading store information...
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     NOTIFICATIONS
+     ======================================================= -->
+
+<section class="card">
+
+  <h2>🔔 Seller Notifications</h2>
+
+  <p class="small">
+    Receive notifications when customers place orders
+    or your store receives important updates.
+  </p>
+
+  <div
+    id="notificationStatus"
+    class="notice notice-info"
+  >
+    Checking notification status...
+  </div>
 
   <button
-    class="btn btn-dark"
+    id="sellerNotificationButton"
+    class="btn btn-primary"
     type="button"
-    onclick="goBack()"
+    onclick="enableSellerNotifications()"
   >
-    ← Back to Store
+    🔔 Enable Notifications
   </button>
+
+</section>
+
+
+<!-- =======================================================
+     OVERVIEW
+     ======================================================= -->
+
+<section>
+
+  <div class="stat-grid">
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Products
+      </div>
+
+      <div
+        id="statProducts"
+        class="stat-value"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Orders
+      </div>
+
+      <div
+        id="statOrders"
+        class="stat-value"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Delivered
+      </div>
+
+      <div
+        id="statDelivered"
+        class="stat-value"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Store Rental
+      </div>
+
+      <div
+        id="statRental"
+        class="stat-value"
+      >
+        R100
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<br>
+
+
+<!-- =======================================================
+     RENTAL
+     ======================================================= -->
+
+<section class="card">
+
+  <h2>🏪 Monthly Store Rental</h2>
+
+  <div id="rentalInformation">
+
+    <div class="notice notice-info">
+      Checking rental status...
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     ADD PRODUCT
+     ======================================================= -->
+
+<section class="card">
+
+  <h2>➕ Add Product</h2>
+
+  <p class="small">
+    Add a product to your ZYRE Marketing store.
+  </p>
+
+  <form
+    id="addProductForm"
+    onsubmit="event.preventDefault(); addProduct();"
+  >
+
+    <div class="form-grid">
+
+      <div class="form-group">
+
+        <label>
+          Product Name
+        </label>
+
+        <input
+          id="productName"
+          type="text"
+          placeholder="Example: ZYRE T-Shirt"
+          required
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Price
+        </label>
+
+        <input
+          id="productPrice"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="550"
+          required
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Stock
+        </label>
+
+        <input
+          id="productStock"
+          type="number"
+          min="0"
+          step="1"
+          placeholder="10"
+          required
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Category
+        </label>
+
+        <select id="productCategory">
+
+          <option value="Fashion">
+            Fashion
+          </option>
+
+          <option value="Electronics">
+            Electronics
+          </option>
+
+          <option value="Home">
+            Home
+          </option>
+
+          <option value="Beauty">
+            Beauty
+          </option>
+
+          <option value="Other">
+            Other
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        Description
+      </label>
+
+      <textarea
+        id="productDescription"
+        placeholder="Describe your product..."
+      ></textarea>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        Product Image URL
+      </label>
+
+      <input
+        id="productImage"
+        type="url"
+        placeholder="https://..."
+      >
+
+      <div class="small">
+        You can paste a public image URL.
+      </div>
+
+    </div>
+
+
+    <button
+      class="btn btn-primary"
+      type="submit"
+    >
+      ➕ Add Product
+    </button>
+
+  </form>
+
+</section>
+
+
+<!-- =======================================================
+     PRODUCTS
+     ======================================================= -->
+
+<section class="card">
+
+  <h2>🛍️ My Products</h2>
+
+  <div id="productsContainer">
+
+    <div class="notice notice-info">
+      Loading products...
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     ORDERS
+     ======================================================= -->
+
+<section class="card">
+
+  <h2>📦 Customer Orders</h2>
+
+  <div class="actions">
+
+    <button
+      class="btn btn-light"
+      onclick="loadOrders(true)"
+    >
+      🔄 Refresh Orders
+    </button>
+
+  </div>
+
+  <br>
+
+  <div id="ordersContainer">
+
+    <div class="notice notice-info">
+      Loading customer orders...
+    </div>
+
+  </div>
+
+</section>
+
 
 </div>
 
@@ -1054,28 +1046,22 @@ footer{
 
 
 <footer>
-  © 2026 ZYRE Marketing — Seller Centre
+  ZYRE Marketing © 2026
 </footer>
-
-</div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="./app.js"></script>
 
 
 <script>
 
 /* =========================================================
-   CONFIGURATION
-========================================================= */
+   SUPABASE CONFIG
+   ========================================================= */
 
 const SELLER_SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
 
 const SELLER_SUPABASE_KEY =
   "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+
 
 const SELLER_AUTH_CLIENT =
   window.supabase.createClient(
@@ -1084,117 +1070,77 @@ const SELLER_AUTH_CLIENT =
   );
 
 
-/*
-  IMPORTANT:
-  This is the confirmed ZYRE rental payment page.
-*/
+/* =========================================================
+   RENTAL PAYMENT URL
+   ========================================================= */
 
 const ZYRE_RENTAL_PAYMENT_URL =
   "https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNWDxuj63iqje/exec";
 
 
 /* =========================================================
-   VARIABLES
-========================================================= */
+   SELLER STATE
+   ========================================================= */
 
-let SELLER_ID = 0;
+let SELLER_ID =
+  Number(
+    localStorage.getItem(
+      "zava_seller_id"
+    )
+  );
+
+let SELLER_ACCESS_TOKEN =
+  localStorage.getItem(
+    "zava_access_token"
+  ) || "";
 
 let SELLER_SESSION = null;
 
-let SELLER_ACCESS_TOKEN = null;
+let RENTAL_ACCESS = false;
 
-let SELLER_DATA = null;
-
-let SELLER_RENTAL_ACCESS = false;
-
-let SELLER_RENTAL_PAYMENT = null;
-
-let SELLER_SUBSCRIPTION = null;
+let RENTAL_PAYMENT = null;
 
 let SELLER_PRODUCTS = [];
 
 let SELLER_ORDERS = [];
 
-let SELLER_DELIVERIES = [];
-
-let SELLER_PROFILES = [];
-
-let sellerAuthenticationReady = false;
-
 
 /* =========================================================
-   TIMEOUT HELPERS
-========================================================= */
+   HTML ESCAPE
+   ========================================================= */
 
-function withTimeout(
-  promise,
-  milliseconds,
-  message
-){
+function escapeHtml(value){
 
-  let timer;
-
-  const timeoutPromise =
-    new Promise(
-      (resolve,reject) => {
-
-        timer =
-          setTimeout(
-            () => {
-
-              reject(
-                new Error(message)
-              );
-
-            },
-            milliseconds
-          );
-
-      }
-    );
-
-
-  return Promise.race([
-    promise,
-    timeoutPromise
-  ]).finally(
-    () => {
-
-      clearTimeout(timer);
-
-    }
-  );
+  return String(
+    value ?? ""
+  )
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
 
 }
 
 
-/*
-  Fetch timeout.
+/* =========================================================
+   FETCH WITH REAL ABORT TIMEOUT
+   ========================================================= */
 
-  Unlike a normal Promise timeout,
-  this also aborts the actual network request.
-*/
-
-async function fetchWithTimeout(
+async function zyreFetchWithTimeout(
   url,
   options = {},
-  milliseconds = 8000
+  timeout = 7000
 ){
 
   const controller =
     new AbortController();
 
-
-  const timeout =
+  const timer =
     setTimeout(
-      () => {
-
-        controller.abort();
-
-      },
-      milliseconds
+      () => controller.abort(),
+      timeout
     );
-
 
   try{
 
@@ -1202,119 +1148,14 @@ async function fetchWithTimeout(
       url,
       {
         ...options,
-        signal:controller.signal
+        signal:
+          controller.signal
       }
     );
 
-  }catch(error){
-
-    if(error.name === "AbortError"){
-
-      throw new Error(
-        "Request timed out."
-      );
-
-    }
-
-    throw error;
-
   }finally{
 
-    clearTimeout(timeout);
-
-  }
-
-}
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function escapeHtml(value){
-
-  if(
-    value === null ||
-    value === undefined
-  ){
-
-    return "";
-
-  }
-
-
-  return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-function money(value){
-
-  return "R" +
-    Number(value || 0)
-      .toFixed(2);
-
-}
-
-
-function showMessage(
-  id,
-  message,
-  type="info"
-){
-
-  const element =
-    document.getElementById(id);
-
-
-  if(!element){
-    return;
-  }
-
-
-  element.className =
-    "status " + type;
-
-
-  element.textContent =
-    message;
-
-}
-
-
-function hideElement(id){
-
-  const element =
-    document.getElementById(id);
-
-
-  if(element){
-
-    element.classList.add(
-      "hidden"
-    );
-
-  }
-
-}
-
-
-function showElement(id){
-
-  const element =
-    document.getElementById(id);
-
-
-  if(element){
-
-    element.classList.remove(
-      "hidden"
-    );
+    clearTimeout(timer);
 
   }
 
@@ -1323,7 +1164,7 @@ function showElement(id){
 
 /* =========================================================
    HEADERS
-========================================================= */
+   ========================================================= */
 
 function getHeaders(){
 
@@ -1338,9 +1179,13 @@ function getHeaders(){
   };
 
 
-  if(SELLER_ACCESS_TOKEN){
+  if(
+    SELLER_ACCESS_TOKEN
+  ){
 
-    headers.Authorization =
+    headers[
+      "Authorization"
+    ] =
       "Bearer " +
       SELLER_ACCESS_TOKEN;
 
@@ -1354,100 +1199,92 @@ function getHeaders(){
 
 /* =========================================================
    AUTHENTICATION
-========================================================= */
+   ========================================================= */
 
 async function refreshSellerAuthentication(){
 
-  sellerAuthenticationReady =
-    false;
+  try{
 
-
-  /*
-    First recover the seller ID from localStorage.
-    This happens immediately.
-  */
-
-  const storedSellerId =
-    localStorage.getItem(
-      "zava_seller_id"
-    );
-
-
-  if(storedSellerId){
-
-    const numericId =
-      Number(storedSellerId);
+    const storedSeller =
+      Number(
+        localStorage.getItem(
+          "zava_seller_id"
+        )
+      );
 
 
     if(
-      Number.isFinite(numericId) &&
-      numericId > 0
+      storedSeller &&
+      storedSeller > 0
     ){
 
       SELLER_ID =
-        numericId;
+        storedSeller;
 
     }
 
-  }
+
+    const storedToken =
+      localStorage.getItem(
+        "zava_access_token"
+      );
 
 
-  /*
-    Recover access token.
-  */
+    if(
+      storedToken
+    ){
 
-  const storedToken =
-    localStorage.getItem(
-      "zava_access_token"
-    );
+      SELLER_ACCESS_TOKEN =
+        storedToken;
 
-
-  if(storedToken){
-
-    SELLER_ACCESS_TOKEN =
-      storedToken;
-
-  }
+    }
 
 
-  /*
-    Recover session from app.js if available.
-  */
+    /*
+       Try app.js session first.
+    */
 
-  if(
-    window.ZYRE_CURRENT_SESSION &&
-    window.ZYRE_CURRENT_SESSION.access_token
-  ){
+    if(
+      window.ZYRE_CURRENT_SESSION
+    ){
 
-    SELLER_SESSION =
-      window.ZYRE_CURRENT_SESSION;
+      SELLER_SESSION =
+        window.ZYRE_CURRENT_SESSION;
 
-    SELLER_ACCESS_TOKEN =
-      window.ZYRE_CURRENT_SESSION.access_token;
-
-  }
+    }
 
 
-  /*
-    Try ZYRE auth client.
-    Maximum wait: 4 seconds.
-  */
+    /*
+       Try page Supabase client.
+    */
 
-  if(!SELLER_SESSION){
+    if(
+      !SELLER_SESSION
+    ){
 
-    try{
-
-      if(
-        window.ZYRE_AUTH_CLIENT &&
-        window.ZYRE_AUTH_CLIENT.auth
-      ){
+      try{
 
         const result =
-          await withTimeout(
-            window.ZYRE_AUTH_CLIENT.auth.getSession(),
-            4000,
-            "Authentication request timed out."
-          );
+          await Promise.race([
+
+            SELLER_AUTH_CLIENT
+              .auth
+              .getSession(),
+
+            new Promise(
+              resolve =>
+                setTimeout(
+                  () =>
+                    resolve({
+                      data:{
+                        session:null
+                      }
+                    }),
+                  5000
+                )
+            )
+
+          ]);
 
 
         if(
@@ -1460,368 +1297,130 @@ async function refreshSellerAuthentication(){
             result.data.session;
 
           SELLER_ACCESS_TOKEN =
-            result.data.session.access_token ||
-            SELLER_ACCESS_TOKEN ||
-            null;
+            SELLER_SESSION.access_token;
+
+          localStorage.setItem(
+            "zava_access_token",
+            SELLER_ACCESS_TOKEN
+          );
 
         }
 
-      }
+      }catch(error){
 
-    }catch(error){
-
-      console.log(
-        "ZYRE auth unavailable:",
-        error
-      );
-
-    }
-
-  }
-
-
-  /*
-    Try this page's auth client.
-    Maximum wait: 4 seconds.
-  */
-
-  if(!SELLER_SESSION){
-
-    try{
-
-      const result =
-        await withTimeout(
-          SELLER_AUTH_CLIENT.auth.getSession(),
-          4000,
-          "Seller authentication timed out."
+        console.warn(
+          "Seller session lookup failed:",
+          error
         );
 
-
-      if(
-        result &&
-        result.data &&
-        result.data.session
-      ){
-
-        SELLER_SESSION =
-          result.data.session;
-
-        SELLER_ACCESS_TOKEN =
-          result.data.session.access_token ||
-          SELLER_ACCESS_TOKEN ||
-          null;
-
       }
-
-    }catch(error){
-
-      console.log(
-        "Seller auth unavailable:",
-        error
-      );
 
     }
 
-  }
+
+    /*
+       If token exists, seller ID is enough
+       for the rental REST check.
+    */
+
+    if(
+      SELLER_ID > 0 &&
+      SELLER_ACCESS_TOKEN
+    ){
+
+      return true;
+
+    }
 
 
-  /*
-    If we already have seller ID and token,
-    we can continue immediately.
-  */
+    /*
+       If session exists, find seller by user ID.
+    */
 
-  if(
-    SELLER_ID &&
-    SELLER_ACCESS_TOKEN
-  ){
-
-    sellerAuthenticationReady =
-      true;
-
-    return true;
-
-  }
-
-
-  /*
-    Try to recover seller ID from authenticated user.
-  */
-
-  if(
-    !SELLER_ID &&
-    SELLER_SESSION &&
-    SELLER_SESSION.user
-  ){
-
-    try{
+    if(
+      SELLER_SESSION &&
+      SELLER_SESSION.user
+    ){
 
       const userId =
         SELLER_SESSION.user.id;
 
 
-      const response =
-        await fetchWithTimeout(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/sellers" +
-          "?select=id" +
-          "&user_id=eq." +
-          encodeURIComponent(userId) +
-          "&limit=1",
-          {
-            headers:getHeaders()
-          },
-          5000
-        );
+      const url =
+        SELLER_SUPABASE_URL +
+        "/rest/v1/sellers" +
+        "?user_id=eq." +
+        encodeURIComponent(userId) +
+        "&select=id,store_name,approved,status" +
+        "&limit=1";
 
 
-      if(response.ok){
+      try{
 
-        const sellers =
-          await response.json();
+        const response =
+          await zyreFetchWithTimeout(
+            url,
+            {
+              method:"GET",
+              headers:getHeaders()
+            },
+            6000
+          );
 
 
         if(
-          Array.isArray(sellers) &&
-          sellers.length
+          response.ok
         ){
 
-          SELLER_ID =
-            Number(
-              sellers[0].id
+          const sellers =
+            await response.json();
+
+
+          if(
+            sellers &&
+            sellers.length
+          ){
+
+            SELLER_ID =
+              Number(
+                sellers[0].id
+              );
+
+
+            localStorage.setItem(
+              "zava_seller_id",
+              String(SELLER_ID)
             );
 
 
-          localStorage.setItem(
-            "zava_seller_id",
-            String(SELLER_ID)
-          );
+            return true;
+
+          }
 
         }
 
+      }catch(error){
+
+        console.warn(
+          "Seller lookup failed:",
+          error
+        );
+
       }
 
-    }catch(error){
-
-      console.log(
-        "Seller ID recovery failed:",
-        error
-      );
-
-    }
-
-  }
-
-
-  if(
-    SELLER_ID &&
-    SELLER_ACCESS_TOKEN
-  ){
-
-    sellerAuthenticationReady =
-      true;
-
-    return true;
-
-  }
-
-
-  /*
-    We still allow the seller page to identify
-    the seller if the ID exists but the token is
-    temporarily unavailable. Supabase requests will
-    still be protected by RLS.
-  */
-
-  if(SELLER_ID){
-
-    sellerAuthenticationReady =
-      true;
-
-    return true;
-
-  }
-
-
-  return false;
-
-}
-
-
-/* =========================================================
-   AUTH WARNING
-========================================================= */
-
-function showAuthenticationWarning(){
-
-  const warning =
-    document.getElementById(
-      "authenticationWarning"
-    );
-
-
-  if(!warning){
-    return;
-  }
-
-
-  if(!sellerAuthenticationReady){
-
-    warning.classList.remove(
-      "hidden"
-    );
-
-
-    warning.innerHTML =
-      "⚠️ Seller authentication could not be confirmed. " +
-      "<button class='btn btn-dark' onclick='goToMarketplace()'>" +
-      "Return to Marketplace" +
-      "</button>";
-
-  }else{
-
-    warning.classList.add(
-      "hidden"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   SELLER INFORMATION
-========================================================= */
-
-async function loadSellerInformation(){
-
-  if(!SELLER_ID){
-
-    return false;
-
-  }
-
-
-  try{
-
-    const response =
-      await fetchWithTimeout(
-        SELLER_SUPABASE_URL +
-        "/rest/v1/sellers" +
-        "?id=eq." +
-        encodeURIComponent(SELLER_ID) +
-        "&select=*",
-        {
-          headers:getHeaders()
-        },
-        6000
-      );
-
-
-    if(!response.ok){
-
-      throw new Error(
-        await response.text()
-      );
-
     }
 
 
-    const sellers =
-      await response.json();
-
-
-    if(
-      !Array.isArray(sellers) ||
-      !sellers.length
-    ){
-
-      document.getElementById(
-        "sellerInfo"
-      ).innerHTML =
-        "<div class='status error'>" +
-        "Seller account could not be found." +
-        "</div>";
-
-
-      return false;
-
-    }
-
-
-    SELLER_DATA =
-      sellers[0];
-
-
-    const storeName =
-      SELLER_DATA.store_name ||
-      "ZYRE Store";
-
-
-    document.getElementById(
-      "headerSellerName"
-    ).textContent =
-      storeName;
-
-
-    document.getElementById(
-      "sellerInfo"
-    ).innerHTML = `
-
-      <strong>Store:</strong>
-      ${escapeHtml(storeName)}
-
-      <br><br>
-
-      <strong>Seller ID:</strong>
-      ${escapeHtml(SELLER_DATA.id)}
-
-      <br><br>
-
-      <strong>Name:</strong>
-      ${escapeHtml(
-        SELLER_DATA.full_name ||
-        SELLER_DATA.name ||
-        "Not provided"
-      )}
-
-      <br><br>
-
-      <strong>Email:</strong>
-      ${escapeHtml(
-        SELLER_DATA.email ||
-        "Not provided"
-      )}
-
-      <br><br>
-
-      <strong>Phone:</strong>
-      ${escapeHtml(
-        SELLER_DATA.phone ||
-        "Not provided"
-      )}
-
-    `;
-
-
-    return true;
+    return (
+      SELLER_ID > 0
+    );
 
   }catch(error){
 
     console.error(
-      "Seller information error:",
+      "Authentication error:",
       error
     );
-
-
-    document.getElementById(
-      "sellerInfo"
-    ).innerHTML =
-
-      "<div class='status error'>" +
-      "Could not load seller information.<br><br>" +
-      escapeHtml(error.message) +
-      "</div>";
-
 
     return false;
 
@@ -1831,12 +1430,16 @@ async function loadSellerInformation(){
 
 
 /* =========================================================
-   CURRENT MONTH PAYMENT
-========================================================= */
+   CURRENT MONTH PAYMENT CHECK
+   ========================================================= */
 
-function isPaymentFromCurrentMonth(payment){
+function zyrePaymentIsCurrentMonth(
+  payment
+){
 
-  if(!payment){
+  if(
+    !payment
+  ){
 
     return false;
 
@@ -1846,7 +1449,9 @@ function isPaymentFromCurrentMonth(payment){
   if(
     String(
       payment.status || ""
-    ).toLowerCase() !== "paid"
+    ).toLowerCase()
+    !==
+    "paid"
   ){
 
     return false;
@@ -1854,25 +1459,29 @@ function isPaymentFromCurrentMonth(payment){
   }
 
 
-  const rawDate =
+  const paymentDate =
     payment.paid_at ||
     payment.created_at;
 
 
-  if(!rawDate){
+  if(
+    !paymentDate
+  ){
 
     return false;
 
   }
 
 
-  const paymentDate =
-    new Date(rawDate);
+  const date =
+    new Date(
+      paymentDate
+    );
 
 
   if(
-    Number.isNaN(
-      paymentDate.getTime()
+    isNaN(
+      date.getTime()
     )
   ){
 
@@ -1885,228 +1494,151 @@ function isPaymentFromCurrentMonth(payment){
     new Date();
 
 
-  const monthStart =
-    new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      1,
-      0,
-      0,
-      0,
-      0
-    );
-
-
-  const nextMonthStart =
-    new Date(
-      now.getFullYear(),
-      now.getMonth() + 1,
-      1,
-      0,
-      0,
-      0,
-      0
-    );
-
-
   return (
-    paymentDate >= monthStart &&
-    paymentDate < nextMonthStart
+    date.getFullYear()
+    ===
+    now.getFullYear()
+    &&
+    date.getMonth()
+    ===
+    now.getMonth()
   );
 
 }
 
 
 /* =========================================================
-   RENTAL ACCESS
-========================================================= */
+   FAST RENTAL CHECK
+   ========================================================= */
 
-async function getSellerRentalAccess(){
-
-  SELLER_RENTAL_ACCESS =
-    false;
-
-  SELLER_RENTAL_PAYMENT =
-    null;
-
-  SELLER_SUBSCRIPTION =
-    null;
-
-
-  if(!SELLER_ID){
-
-    return {
-
-      paid:false,
-
-      payment:null,
-
-      subscription:null,
-
-      error:new Error(
-        "Seller ID is missing."
-      )
-
-    };
-
-  }
-
+async function getSellerRentalAccessFast(){
 
   try{
 
-    /*
-      ONLY ONE IMPORTANT PAYMENT QUERY
-      is required to decide access.
-    */
-
-    const paymentUrl =
-      SELLER_SUPABASE_URL +
-      "/rest/v1/rental_payments" +
-      "?seller_id=eq." +
-      encodeURIComponent(SELLER_ID) +
-      "&status=eq.paid" +
-      "&select=id,seller_id,subscription_id,amount,status,payment_reference,payment_method,paid_at,created_at" +
-      "&order=id.desc" +
-      "&limit=20";
-
-
-    const paymentResponse =
-      await fetchWithTimeout(
-        paymentUrl,
-        {
-          headers:getHeaders()
-        },
-        8000
-      );
-
-
-    if(!paymentResponse.ok){
-
-      throw new Error(
-        "Rental payment query failed: " +
-        await paymentResponse.text()
-      );
-
-    }
-
-
-    const payments =
-      await paymentResponse.json();
-
-
-    if(!Array.isArray(payments)){
-
-      throw new Error(
-        "Invalid rental payment response."
-      );
-
-    }
-
-
-    const currentPayment =
-      payments.find(
-        payment =>
-          isPaymentFromCurrentMonth(
-            payment
-          )
-      );
-
-
-    /*
-      Subscription lookup is optional.
-      It can NEVER block the rental decision.
-    */
-
-    try{
-
-      const subscriptionResponse =
-        await fetchWithTimeout(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/store_subscriptions" +
-          "?seller_id=eq." +
-          encodeURIComponent(SELLER_ID) +
-          "&select=id,seller_id,rental_plan_id,status" +
-          "&order=id.desc" +
-          "&limit=1",
-          {
-            headers:getHeaders()
-          },
-          3000
-        );
-
-
-      if(subscriptionResponse.ok){
-
-        const subscriptions =
-          await subscriptionResponse.json();
-
-
-        if(
-          Array.isArray(subscriptions) &&
-          subscriptions.length
-        ){
-
-          SELLER_SUBSCRIPTION =
-            subscriptions[0];
-
-        }
-
-      }
-
-    }catch(subscriptionError){
-
-      console.log(
-        "Subscription lookup skipped:",
-        subscriptionError
-      );
-
-    }
-
-
-    if(currentPayment){
-
-      SELLER_RENTAL_ACCESS =
-        true;
-
-      SELLER_RENTAL_PAYMENT =
-        currentPayment;
-
+    if(
+      !SELLER_ID ||
+      SELLER_ID <= 0
+    ){
 
       return {
 
-        paid:true,
+        paid:false,
 
-        payment:currentPayment,
-
-        subscription:
-          SELLER_SUBSCRIPTION
+        reason:
+          "Seller ID is missing."
 
       };
 
     }
 
 
-    return {
+    const url =
+      SELLER_SUPABASE_URL +
+      "/rest/v1/rental_payments" +
+      "?seller_id=eq." +
+      encodeURIComponent(
+        SELLER_ID
+      ) +
+      "&status=eq.paid" +
+      "&select=id,seller_id,subscription_id,amount,status,payment_reference,payment_method,paid_at,created_at" +
+      "&order=id.desc" +
+      "&limit=20";
 
-      paid:false,
 
-      payment:null,
-
-      subscription:
-        SELLER_SUBSCRIPTION
-
-    };
-
-
-  }catch(error){
-
-    console.error(
-      "Rental access check failed:",
-      error
+    console.log(
+      "Checking rental for seller:",
+      SELLER_ID
     );
 
 
-    SELLER_RENTAL_ACCESS =
+    const response =
+      await zyreFetchWithTimeout(
+        url,
+        {
+          method:"GET",
+          headers:getHeaders()
+        },
+        7000
+      );
+
+
+    if(
+      !response.ok
+    ){
+
+      const errorText =
+        await response.text();
+
+
+      console.error(
+        "Rental check HTTP error:",
+        response.status,
+        errorText
+      );
+
+
+      return {
+
+        paid:false,
+
+        reason:
+          "Rental check failed: HTTP " +
+          response.status
+
+      };
+
+    }
+
+
+    const payments =
+      await response.json();
+
+
+    console.log(
+      "Rental payments:",
+      payments
+    );
+
+
+    const currentPayment =
+      Array.isArray(
+        payments
+      )
+      ?
+      payments.find(
+        zyrePaymentIsCurrentMonth
+      )
+      :
+      null;
+
+
+    if(
+      currentPayment
+    ){
+
+      RENTAL_PAYMENT =
+        currentPayment;
+
+      RENTAL_ACCESS =
+        true;
+
+
+      return {
+
+        paid:true,
+
+        payment:
+          currentPayment
+
+      };
+
+    }
+
+
+    RENTAL_PAYMENT =
+      null;
+
+    RENTAL_ACCESS =
       false;
 
 
@@ -2114,11 +1646,35 @@ async function getSellerRentalAccess(){
 
       paid:false,
 
-      payment:null,
+      reason:
+        "No paid rental was found for the current month."
 
-      subscription:null,
+    };
 
-      error:error
+  }catch(error){
+
+    console.error(
+      "Rental check error:",
+      error
+    );
+
+
+    RENTAL_ACCESS =
+      false;
+
+
+    return {
+
+      paid:false,
+
+      reason:
+        error &&
+        error.name ===
+        "AbortError"
+        ?
+        "Rental check timed out."
+        :
+        "Unable to verify rental payment."
 
     };
 
@@ -2128,229 +1684,115 @@ async function getSellerRentalAccess(){
 
 
 /* =========================================================
-   DISPLAY RENTAL
-========================================================= */
+   RENTAL INFORMATION
+   ========================================================= */
 
 async function loadRentalSubscription(){
 
-  const content =
+  const box =
     document.getElementById(
-      "rentalStatusContent"
+      "rentalInformation"
     );
 
 
-  const rentalCard =
-    document.getElementById(
-      "rentalCard"
-    );
-
-
-  if(!content){
-
-    return false;
-
+  if(!box){
+    return;
   }
 
 
-  content.innerHTML =
-    "Checking current-month rental payment...";
+  const result =
+    await getSellerRentalAccessFast();
 
 
-  let result;
-
-
-  try{
-
-    /*
-      Absolute protection:
-      this function cannot wait longer than 9 seconds.
-    */
-
-    result =
-      await withTimeout(
-        getSellerRentalAccess(),
-        9000,
-        "Rental verification timed out."
-      );
-
-  }catch(error){
-
-    console.error(
-      "Rental display check failed:",
-      error
-    );
-
-
-    SELLER_RENTAL_ACCESS =
-      false;
-
-
-    if(rentalCard){
-
-      rentalCard.className =
-        "card rental-pending";
-
-    }
-
-
-    content.innerHTML = `
-
-      <div class="status error">
-
-        ⚠️ Rental verification could not be completed.
-
-        <br><br>
-
-        Your seller dashboard remains locked
-        until the rental payment can be verified.
-
-        <br><br>
-
-        ${escapeHtml(error.message)}
-
-      </div>
-
-    `;
-
-
-    return false;
-
-  }
-
-
-  if(result.paid){
-
-    if(rentalCard){
-
-      rentalCard.className =
-        "card rental-active";
-
-    }
-
+  if(
+    result.paid
+  ){
 
     const payment =
       result.payment;
 
 
-    const paymentDate =
+    const paidDate =
       payment.paid_at ||
       payment.created_at;
 
 
-    content.innerHTML = `
+    box.innerHTML = `
 
-      <div class="status success">
+      <div class="notice notice-success">
 
-        ✅ <strong>Store Rental Paid</strong>
-
-        <br><br>
-
-        Your R100 rental payment for the
-        current calendar month has been confirmed.
+        <strong>✅ Rental Paid</strong>
 
         <br><br>
 
-        <strong>Amount:</strong>
-        ${money(payment.amount)}
+        Your R100 monthly store rental
+        is paid for this month.
 
-        <br>
+        <br><br>
 
-        <strong>Payment method:</strong>
+        Payment date:
         ${escapeHtml(
-          payment.payment_method ||
-          "Payment"
+          new Date(
+            paidDate
+          ).toLocaleString()
         )}
-
-        <br>
-
-        <strong>Payment reference:</strong>
-        ${escapeHtml(
-          payment.payment_reference ||
-          "Confirmed"
-        )}
-
-        <br>
-
-        <strong>Payment date:</strong>
-        ${
-          paymentDate
-            ? new Date(
-                paymentDate
-              ).toLocaleString()
-            : "Confirmed"
-        }
 
       </div>
 
     `;
 
-
-    return true;
-
-  }
-
-
-  if(rentalCard){
-
-    rentalCard.className =
-      "card rental-pending";
+    return;
 
   }
 
 
-  content.innerHTML = `
+  box.innerHTML = `
 
-    <div class="status warning">
+    <div class="notice notice-warning">
 
-      ⚠️ <strong>R100 monthly rental required</strong>
-
-      <br><br>
-
-      No confirmed paid rental payment was found
-      for the current calendar month.
+      <strong>⚠️ Rental Payment Required</strong>
 
       <br><br>
 
-      Your store and products remain saved,
-      but seller controls are locked until payment
-      is confirmed.
+      Your monthly ZYRE Marketing
+      store rental has not been confirmed
+      for the current month.
+
+      <br><br>
+
+      Amount due:
+      <strong>R100.00</strong>
+
+      <br><br>
+
+      <button
+        class="btn btn-warning"
+        onclick="payMonthlyRental()"
+      >
+        💳 Pay R100 Rental
+      </button>
 
     </div>
 
-    <button
-      class="btn btn-gold"
-      type="button"
-      onclick="payMonthlyRental()"
-    >
-      💳 Pay R100 Rental
-    </button>
-
-    <button
-      class="btn btn-light"
-      type="button"
-      onclick="checkRentalAgain()"
-    >
-      🔄 Check Again
-    </button>
-
   `;
-
-
-  return false;
 
 }
 
 
 /* =========================================================
-   PAYMENT PAGE
-========================================================= */
+   RENTAL PAYMENT
+   ========================================================= */
 
-function payMonthlyRental(){
+window.payMonthlyRental =
+function(){
 
-  if(!SELLER_ID){
+  if(
+    !SELLER_ID ||
+    SELLER_ID <= 0
+  ){
 
     alert(
-      "Seller ID could not be found. Please log in again."
+      "Seller account could not be found. Please log in again."
     );
 
     return;
@@ -2358,57 +1800,24 @@ function payMonthlyRental(){
   }
 
 
-  let subscriptionId =
-    "";
-
-
-  if(
-    SELLER_SUBSCRIPTION &&
-    SELLER_SUBSCRIPTION.id
-  ){
-
-    subscriptionId =
-      SELLER_SUBSCRIPTION.id;
-
-  }
-
-
   const params =
-    new URLSearchParams();
+    new URLSearchParams({
 
+      amount:
+        "100",
 
-  params.set(
-    "amount",
-    "100"
-  );
+      item_name:
+        "ZYRE Marketing Monthly Store Rental",
 
+      seller_id:
+        String(
+          SELLER_ID
+        ),
 
-  params.set(
-    "item_name",
-    "ZYRE Marketing Monthly Store Rental"
-  );
+      payment_type:
+        "rental"
 
-
-  if(subscriptionId){
-
-    params.set(
-      "rental_subscription_id",
-      String(subscriptionId)
-    );
-
-  }
-
-
-  params.set(
-    "seller_id",
-    String(SELLER_ID)
-  );
-
-
-  params.set(
-    "payment_type",
-    "rental"
-  );
+    });
 
 
   window.location.href =
@@ -2416,14 +1825,15 @@ function payMonthlyRental(){
     "?" +
     params.toString();
 
-}
+};
 
 
 /* =========================================================
    CHECK RENTAL AGAIN
-========================================================= */
+   ========================================================= */
 
-async function checkRentalAgain(){
+window.checkRentalAgain =
+async function(){
 
   const loading =
     document.getElementById(
@@ -2431,135 +1841,6 @@ async function checkRentalAgain(){
     );
 
 
-  const loadingText =
-    document.getElementById(
-      "rentalLoadingText"
-    );
-
-
-  const lock =
-    document.getElementById(
-      "rentalLockScreen"
-    );
-
-
-  loadingText.textContent =
-    "Checking your rental payment again...";
-
-
-  loading.classList.remove(
-    "hidden"
-  );
-
-
-  if(lock){
-
-    lock.classList.add(
-      "hidden"
-    );
-
-  }
-
-
-  try{
-
-    const paid =
-      await loadRentalSubscription();
-
-
-    if(paid){
-
-      SELLER_RENTAL_ACCESS =
-        true;
-
-
-      hideRentalLock();
-
-      enableSellerControls();
-
-
-      loadingText.textContent =
-        "Rental confirmed. Loading dashboard...";
-
-
-      await loadProducts();
-
-      await loadOrders(true);
-
-      await checkNotificationStatus();
-
-
-      return;
-
-    }
-
-
-    SELLER_RENTAL_ACCESS =
-      false;
-
-
-    showRentalLock();
-
-
-    const status =
-      document.getElementById(
-        "rentalLockStatus"
-      );
-
-
-    if(status){
-
-      status.textContent =
-        "R100 current-month rental payment is required.";
-
-    }
-
-
-  }catch(error){
-
-    console.error(
-      "Rental recheck error:",
-      error
-    );
-
-
-    SELLER_RENTAL_ACCESS =
-      false;
-
-
-    showRentalLock();
-
-
-    const status =
-      document.getElementById(
-        "rentalLockStatus"
-      );
-
-
-    if(status){
-
-      status.textContent =
-        "Rental verification failed. Your store remains locked. Please try again.";
-
-    }
-
-  }finally{
-
-    loading.classList.add(
-      "hidden"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   RENTAL LOCK
-========================================================= */
-
-function showRentalLock(){
-
   const lock =
     document.getElementById(
       "rentalLockScreen"
@@ -2567,234 +1848,363 @@ function showRentalLock(){
 
 
   if(lock){
+    lock.style.display =
+      "none";
+  }
 
-    lock.classList.remove(
-      "hidden"
-    );
+
+  if(loading){
+
+    loading.style.display =
+      "flex";
 
   }
 
 
-  disableSellerControls();
-
-}
-
-
-function hideRentalLock(){
-
-  const lock =
-    document.getElementById(
-      "rentalLockScreen"
-    );
+  const result =
+    await getSellerRentalAccessFast();
 
 
-  if(lock){
+  if(
+    result.paid
+  ){
 
-    lock.classList.add(
-      "hidden"
-    );
-
-  }
-
-}
+    zyreHideRentalLock();
 
 
-/* =========================================================
-   DISABLE CONTROLS
-========================================================= */
+    await loadSellerInformation();
 
-function disableSellerControls(){
+    await loadRentalSubscription();
 
-  const addCard =
-    document.getElementById(
-      "addProductCard"
-    );
+    await loadProducts();
 
+    await loadOrders(true);
 
-  const editCard =
-    document.getElementById(
-      "editProductCard"
-    );
-
-
-  if(addCard){
-
-    addCard.classList.add(
-      "hidden"
-    );
-
-  }
-
-
-  if(editCard){
-
-    editCard.classList.add(
-      "hidden"
-    );
-
-  }
-
-
-  document
-    .querySelectorAll("button")
-    .forEach(
-      button => {
-
-        const onclick =
-          button.getAttribute(
-            "onclick"
-          ) || "";
-
-
-        if(
-          onclick.includes(
-            "addProduct"
-          ) ||
-          onclick.includes(
-            "saveProduct"
-          ) ||
-          onclick.includes(
-            "deleteProduct"
-          ) ||
-          onclick.includes(
-            "updateOrderStatus"
-          ) ||
-          onclick.includes(
-            "saveDelivery"
-          )
-        ){
-
-          button.disabled =
-            true;
-
-        }
-
-      }
-    );
-
-}
-
-
-/* =========================================================
-   ENABLE CONTROLS
-========================================================= */
-
-function enableSellerControls(){
-
-  if(!SELLER_RENTAL_ACCESS){
+    checkNotificationStatus();
 
     return;
 
   }
 
 
-  const addCard =
+  zyreShowRentalLock(
+    result.reason
+  );
+
+};
+
+
+/* =========================================================
+   SHOW RENTAL LOCK
+   ========================================================= */
+
+function zyreShowRentalLock(
+  reason = ""
+){
+
+  const loading =
     document.getElementById(
-      "addProductCard"
+      "rentalLoadingScreen"
     );
 
 
-  if(addCard){
-
-    addCard.classList.remove(
-      "hidden"
+  const lock =
+    document.getElementById(
+      "rentalLockScreen"
     );
+
+
+  const dashboard =
+    document.getElementById(
+      "sellerDashboard"
+    );
+
+
+  if(loading){
+
+    loading.style.display =
+      "none";
 
   }
 
 
-  document
-    .querySelectorAll("button")
-    .forEach(
-      button => {
+  if(dashboard){
 
-        button.disabled =
-          false;
+    dashboard.style.display =
+      "none";
 
-      }
+  }
+
+
+  if(lock){
+
+    lock.style.display =
+      "flex";
+
+  }
+
+
+  const message =
+    document.getElementById(
+      "rentalLockMessage"
     );
+
+
+  if(message){
+
+    message.textContent =
+      "Your ZYRE Marketing store rental for this month has not been confirmed. Please pay R100 to unlock your seller dashboard.";
+
+  }
+
+
+  console.log(
+    "ZYRE store locked:",
+    reason
+  );
 
 }
 
 
 /* =========================================================
-   RENTAL SECURITY CHECK
-========================================================= */
+   HIDE RENTAL LOCK
+   ========================================================= */
+
+function zyreHideRentalLock(){
+
+  const loading =
+    document.getElementById(
+      "rentalLoadingScreen"
+    );
+
+
+  const lock =
+    document.getElementById(
+      "rentalLockScreen"
+    );
+
+
+  const dashboard =
+    document.getElementById(
+      "sellerDashboard"
+    );
+
+
+  if(loading){
+
+    loading.style.display =
+      "none";
+
+  }
+
+
+  if(lock){
+
+    lock.style.display =
+      "none";
+
+  }
+
+
+  if(dashboard){
+
+    dashboard.style.display =
+      "block";
+
+  }
+
+}
+
+
+/* =========================================================
+   RENTAL ACCESS BEFORE CHANGES
+   ========================================================= */
 
 async function ensureRentalAccess(){
 
+  const result =
+    await getSellerRentalAccessFast();
+
+
+  if(
+    !result.paid
+  ){
+
+    zyreShowRentalLock(
+      result.reason
+    );
+
+    alert(
+      "⚠️ Your monthly store rental has not been paid or confirmed for this month."
+    );
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+/* =========================================================
+   SELLER INFORMATION
+   ========================================================= */
+
+async function loadSellerInformation(){
+
+  const box =
+    document.getElementById(
+      "sellerInformation"
+    );
+
+
+  if(!box){
+    return;
+  }
+
+
   try{
 
-    const result =
-      await withTimeout(
-        getSellerRentalAccess(),
-        9000,
-        "Rental verification timed out."
+    const url =
+      SELLER_SUPABASE_URL +
+      "/rest/v1/sellers" +
+      "?id=eq." +
+      encodeURIComponent(
+        SELLER_ID
+      ) +
+      "&select=*";
+
+
+    const response =
+      await zyreFetchWithTimeout(
+        url,
+        {
+          headers:
+            getHeaders()
+        },
+        7000
       );
 
 
-    if(!result.paid){
+    if(
+      !response.ok
+    ){
 
-      showRentalLock();
-
-
-      const status =
-        document.getElementById(
-          "rentalLockStatus"
-        );
-
-
-      if(status){
-
-        status.textContent =
-          result.error
-            ? "Rental verification failed. Store remains locked."
-            : "R100 current-month rental payment is required.";
-
-      }
-
-
-      return false;
+      throw new Error(
+        "Seller request failed"
+      );
 
     }
 
 
-    SELLER_RENTAL_ACCESS =
-      true;
+    const sellers =
+      await response.json();
 
 
-    return true;
+    if(
+      !sellers.length
+    ){
+
+      box.innerHTML = `
+
+        <div class="notice notice-danger">
+          Seller account could not be found.
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    const seller =
+      sellers[0];
+
+
+    box.innerHTML = `
+
+      <div class="grid">
+
+        <div>
+
+          <strong>Store Name</strong>
+
+          <br>
+
+          ${escapeHtml(
+            seller.store_name ||
+            "ZYRE Store"
+          )}
+
+        </div>
+
+
+        <div>
+
+          <strong>Seller ID</strong>
+
+          <br>
+
+          ${escapeHtml(
+            seller.id
+          )}
+
+        </div>
+
+
+        <div>
+
+          <strong>Status</strong>
+
+          <br>
+
+          ${escapeHtml(
+            seller.status ||
+            "active"
+          )}
+
+        </div>
+
+
+        <div>
+
+          <strong>Approval</strong>
+
+          <br>
+
+          ${
+            seller.approved
+              ?
+              "✅ Approved"
+              :
+              "⏳ Pending"
+          }
+
+        </div>
+
+      </div>
+
+    `;
 
   }catch(error){
 
     console.error(
-      "Rental security check error:",
       error
     );
 
 
-    SELLER_RENTAL_ACCESS =
-      false;
+    box.innerHTML = `
 
+      <div class="notice notice-danger">
 
-    showRentalLock();
+        Could not load seller information.
 
+      </div>
 
-    const status =
-      document.getElementById(
-        "rentalLockStatus"
-      );
-
-
-    if(status){
-
-      status.textContent =
-        "Rental verification failed. Store remains locked.";
-
-    }
-
-
-    return false;
+    `;
 
   }
 
@@ -2803,11 +2213,13 @@ async function ensureRentalAccess(){
 
 /* =========================================================
    ADD PRODUCT
-========================================================= */
+   ========================================================= */
 
 async function addProduct(){
 
-  if(!(await ensureRentalAccess())){
+  if(
+    !(await ensureRentalAccess())
+  ){
 
     return;
 
@@ -2848,44 +2260,20 @@ async function addProduct(){
     ).value;
 
 
-  const imageUrl =
+  const image_url =
     document.getElementById(
       "productImage"
     ).value.trim();
 
 
-  if(!name){
-
-    alert(
-      "Please enter a product name."
-    );
-
-    return;
-
-  }
-
-
   if(
-    !Number.isFinite(price) ||
-    price < 0
-  ){
-
-    alert(
-      "Please enter a valid price."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    !Number.isFinite(stock) ||
+    !name ||
+    !price ||
     stock < 0
   ){
 
     alert(
-      "Please enter valid stock."
+      "Please complete the product name, price and stock."
     );
 
     return;
@@ -2895,17 +2283,12 @@ async function addProduct(){
 
   try{
 
-    showMessage(
-      "productMessage",
-      "Adding product...",
-      "info"
-    );
-
-
     const response =
-      await fetchWithTimeout(
+      await zyreFetchWithTimeout(
+
         SELLER_SUPABASE_URL +
         "/rest/v1/products",
+
         {
           method:"POST",
 
@@ -2936,7 +2319,7 @@ async function addProduct(){
               category,
 
             image_url:
-              imageUrl,
+              image_url,
 
             active:
               true
@@ -2944,61 +2327,51 @@ async function addProduct(){
           })
 
         },
+
         8000
+
       );
 
 
-    if(!response.ok){
+    if(
+      !response.ok
+    ){
+
+      const error =
+        await response.text();
+
 
       throw new Error(
-        await response.text()
+        error
       );
 
     }
 
 
-    document.getElementById(
-      "productName"
-    ).value = "";
-
-
-    document.getElementById(
-      "productDescription"
-    ).value = "";
-
-
-    document.getElementById(
-      "productPrice"
-    ).value = "";
-
-
-    document.getElementById(
-      "productStock"
-    ).value = "";
-
-
-    document.getElementById(
-      "productImage"
-    ).value = "";
-
-
-    showMessage(
-      "productMessage",
-      "Product added successfully.",
-      "success"
+    alert(
+      "✅ Product added successfully."
     );
+
+
+    document
+      .getElementById(
+        "addProductForm"
+      )
+      .reset();
 
 
     await loadProducts();
 
-
   }catch(error){
 
-    showMessage(
-      "productMessage",
-      "Could not add product: " +
-      error.message,
-      "error"
+    console.error(
+      error
+    );
+
+
+    alert(
+      "Product could not be added.\n\n" +
+      error.message
     );
 
   }
@@ -3008,35 +2381,48 @@ async function addProduct(){
 
 /* =========================================================
    LOAD PRODUCTS
-========================================================= */
+   ========================================================= */
 
 async function loadProducts(){
 
-  if(!SELLER_ID){
+  const container =
+    document.getElementById(
+      "productsContainer"
+    );
 
+
+  if(!container){
     return;
-
   }
 
 
   try{
 
+    const url =
+      SELLER_SUPABASE_URL +
+      "/rest/v1/products" +
+      "?seller_id=eq." +
+      encodeURIComponent(
+        SELLER_ID
+      ) +
+      "&select=*" +
+      "&order=id.desc";
+
+
     const response =
-      await fetchWithTimeout(
-        SELLER_SUPABASE_URL +
-        "/rest/v1/products" +
-        "?seller_id=eq." +
-        encodeURIComponent(SELLER_ID) +
-        "&select=*" +
-        "&order=id.desc",
+      await zyreFetchWithTimeout(
+        url,
         {
-          headers:getHeaders()
+          headers:
+            getHeaders()
         },
-        8000
+        7000
       );
 
 
-    if(!response.ok){
+    if(
+      !response.ok
+    ){
 
       throw new Error(
         await response.text()
@@ -3049,28 +2435,62 @@ async function loadProducts(){
       await response.json();
 
 
-    renderProducts();
+    document.getElementById(
+      "statProducts"
+    ).textContent =
+      SELLER_PRODUCTS.length;
 
+
+    if(
+      !SELLER_PRODUCTS.length
+    ){
+
+      container.innerHTML = `
+
+        <div class="notice notice-info">
+
+          You have no products yet.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    container.innerHTML = `
+
+      <div class="products-grid">
+
+        ${
+          SELLER_PRODUCTS
+            .map(
+              product =>
+                renderProductCard(
+                  product
+                )
+            )
+            .join("")
+        }
+
+      </div>
+
+    `;
 
   }catch(error){
 
     console.error(
-      "Products loading error:",
       error
     );
 
 
-    document.getElementById(
-      "productsGrid"
-    ).innerHTML = `
+    container.innerHTML = `
 
-      <div class="status error">
+      <div class="notice notice-danger">
 
         Could not load products.
-
-        <br><br>
-
-        ${escapeHtml(error.message)}
 
       </div>
 
@@ -3082,120 +2502,121 @@ async function loadProducts(){
 
 
 /* =========================================================
-   RENDER PRODUCTS
-========================================================= */
+   PRODUCT CARD
+   ========================================================= */
 
-function renderProducts(){
+function renderProductCard(
+  product
+){
 
-  const grid =
-    document.getElementById(
-      "productsGrid"
-    );
+  const image =
+    product.image_url;
 
 
-  if(
-    !SELLER_PRODUCTS.length
-  ){
+  return `
 
-    grid.innerHTML = `
+    <div class="product-card">
 
-      <div class="empty">
-        You have no products yet.
+      ${
+        image
+        ?
+        `
+          <img
+            class="product-image"
+            src="${escapeHtml(image)}"
+            alt="${escapeHtml(product.name)}"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+          >
+
+          <div
+            class="product-image-placeholder"
+            style="display:none"
+          >
+            No Image
+          </div>
+        `
+        :
+        `
+          <div class="product-image-placeholder">
+            No Image
+          </div>
+        `
+      }
+
+
+      <div class="product-name">
+
+        ${escapeHtml(
+          product.name
+        )}
+
       </div>
 
-    `;
 
-    return;
+      <div class="price">
 
-  }
+        R${Number(
+          product.price || 0
+        ).toFixed(2)}
 
-
-  grid.innerHTML =
-    SELLER_PRODUCTS
-      .map(
-        product => {
-
-          const image =
-            product.image_url ||
-            "https://via.placeholder.com/600x400?text=ZYRE+Marketing";
+      </div>
 
 
-          return `
+      <div class="small">
 
-            <div class="product-card">
+        Stock:
+        ${escapeHtml(
+          product.stock
+        )}
 
-              <img
-                class="product-image"
-                src="${escapeHtml(image)}"
-                alt="${escapeHtml(product.name)}"
-                onerror="this.src='https://via.placeholder.com/600x400?text=ZYRE+Marketing'"
-              >
+        <br>
 
-              <div class="product-body">
+        Category:
+        ${escapeHtml(
+          product.category ||
+          "Other"
+        )}
 
-                <div class="product-name">
-                  ${escapeHtml(product.name)}
-                </div>
+      </div>
 
-                <div class="price">
-                  ${money(product.price)}
-                </div>
 
-                <div>
-                  Stock:
-                  <strong>
-                    ${escapeHtml(product.stock)}
-                  </strong>
-                </div>
+      <div class="actions">
 
-                <div>
-                  Category:
-                  ${escapeHtml(
-                    product.category ||
-                    "Other"
-                  )}
-                </div>
+        <button
+          class="btn btn-light"
+          onclick="editProduct(${Number(product.id)})"
+        >
+          ✏️ Edit
+        </button>
 
-                <div style="margin-top:10px;">
 
-                  <button
-                    class="btn btn-dark"
-                    type="button"
-                    onclick="editProduct(${Number(product.id)})"
-                  >
-                    ✏️ Edit
-                  </button>
+        <button
+          class="btn btn-danger"
+          onclick="deleteProduct(${Number(product.id)})"
+        >
+          🗑️ Delete
+        </button>
 
-                  <button
-                    class="btn btn-danger"
-                    type="button"
-                    onclick="deleteProduct(${Number(product.id)})"
-                  >
-                    🗑️ Delete
-                  </button>
+      </div>
 
-                </div>
+    </div>
 
-              </div>
-
-            </div>
-
-          `;
-
-        }
-      )
-      .join("");
+  `;
 
 }
 
 
 /* =========================================================
    EDIT PRODUCT
-========================================================= */
+   ========================================================= */
 
-async function editProduct(productId){
+async function editProduct(
+  productId
+){
 
-  if(!(await ensureRentalAccess())){
+  if(
+    !(await ensureRentalAccess())
+  ){
 
     return;
 
@@ -3213,7 +2634,7 @@ async function editProduct(productId){
   if(!product){
 
     alert(
-      "Product could not be found."
+      "Product not found."
     );
 
     return;
@@ -3221,157 +2642,120 @@ async function editProduct(productId){
   }
 
 
-  document.getElementById(
-    "editProductId"
-  ).value =
-    product.id;
+  const name =
+    prompt(
+      "Product name:",
+      product.name || ""
+    );
 
 
-  document.getElementById(
-    "editProductName"
-  ).value =
-    product.name || "";
+  if(
+    name === null
+  ){
+
+    return;
+
+  }
 
 
-  document.getElementById(
-    "editProductDescription"
-  ).value =
-    product.description || "";
+  const price =
+    prompt(
+      "Price:",
+      product.price || ""
+    );
 
 
-  document.getElementById(
-    "editProductPrice"
-  ).value =
-    product.price || "";
+  if(
+    price === null
+  ){
+
+    return;
+
+  }
 
 
-  document.getElementById(
-    "editProductStock"
-  ).value =
-    product.stock || "";
+  const stock =
+    prompt(
+      "Stock:",
+      product.stock || "0"
+    );
 
 
-  document.getElementById(
-    "editProductCategory"
-  ).value =
-    product.category ||
-    "Other";
+  if(
+    stock === null
+  ){
+
+    return;
+
+  }
 
 
-  document.getElementById(
-    "editProductImage"
-  ).value =
-    product.image_url || "";
-
-
-  showElement(
-    "editProductCard"
+  await saveProduct(
+    productId,
+    {
+      name:name.trim(),
+      price:Number(price),
+      stock:Number(stock)
+    }
   );
-
-
-  document
-    .getElementById(
-      "editProductCard"
-    )
-    .scrollIntoView({
-      behavior:"smooth"
-    });
 
 }
 
 
 /* =========================================================
    SAVE PRODUCT
-========================================================= */
+   ========================================================= */
 
-async function saveProduct(){
+async function saveProduct(
+  productId,
+  data
+){
 
-  if(!(await ensureRentalAccess())){
-
-    return;
-
-  }
-
-
-  const productId =
-    document.getElementById(
-      "editProductId"
-    ).value;
-
-
-  if(!productId){
+  if(
+    !(await ensureRentalAccess())
+  ){
 
     return;
 
   }
-
-
-  const body = {
-
-    name:
-      document.getElementById(
-        "editProductName"
-      ).value.trim(),
-
-    description:
-      document.getElementById(
-        "editProductDescription"
-      ).value.trim(),
-
-    price:
-      Number(
-        document.getElementById(
-          "editProductPrice"
-        ).value
-      ),
-
-    stock:
-      Number(
-        document.getElementById(
-          "editProductStock"
-        ).value
-      ),
-
-    category:
-      document.getElementById(
-        "editProductCategory"
-      ).value,
-
-    image_url:
-      document.getElementById(
-        "editProductImage"
-      ).value.trim()
-
-  };
 
 
   try{
 
     const response =
-      await fetchWithTimeout(
+      await zyreFetchWithTimeout(
+
         SELLER_SUPABASE_URL +
         "/rest/v1/products" +
         "?id=eq." +
-        encodeURIComponent(productId) +
-        "&seller_id=eq." +
-        encodeURIComponent(SELLER_ID),
+        encodeURIComponent(
+          productId
+        ),
+
         {
           method:"PATCH",
 
           headers:{
             ...getHeaders(),
             "Prefer":
-              "return=representation"
+              "return=minimal"
           },
 
-          body:JSON.stringify(body)
+          body:
+            JSON.stringify(
+              data
+            )
 
         },
+
         8000
+
       );
 
 
-    if(!response.ok){
+    if(
+      !response.ok
+    ){
 
       throw new Error(
         await response.text()
@@ -3381,16 +2765,18 @@ async function saveProduct(){
 
 
     alert(
-      "Product updated successfully."
+      "✅ Product updated."
     );
 
 
-    cancelEditProduct();
-
     await loadProducts();
 
-
   }catch(error){
+
+    console.error(
+      error
+    );
+
 
     alert(
       "Product could not be updated.\n\n" +
@@ -3403,36 +2789,29 @@ async function saveProduct(){
 
 
 /* =========================================================
-   CANCEL EDIT
-========================================================= */
-
-function cancelEditProduct(){
-
-  hideElement(
-    "editProductCard"
-  );
-
-}
-
-
-/* =========================================================
    DELETE PRODUCT
-========================================================= */
+   ========================================================= */
 
-async function deleteProduct(productId){
+async function deleteProduct(
+  productId
+){
 
-  if(!(await ensureRentalAccess())){
+  if(
+    !(await ensureRentalAccess())
+  ){
 
     return;
 
   }
 
 
-  if(
-    !confirm(
+  const confirmed =
+    confirm(
       "Delete this product?"
-    )
-  ){
+    );
+
+
+  if(!confirmed){
 
     return;
 
@@ -3442,22 +2821,28 @@ async function deleteProduct(productId){
   try{
 
     const response =
-      await fetchWithTimeout(
+      await zyreFetchWithTimeout(
+
         SELLER_SUPABASE_URL +
         "/rest/v1/products" +
         "?id=eq." +
-        encodeURIComponent(productId) +
-        "&seller_id=eq." +
-        encodeURIComponent(SELLER_ID),
+        encodeURIComponent(
+          productId
+        ),
+
         {
           method:"DELETE",
           headers:getHeaders()
         },
+
         8000
+
       );
 
 
-    if(!response.ok){
+    if(
+      !response.ok
+    ){
 
       throw new Error(
         await response.text()
@@ -3473,8 +2858,12 @@ async function deleteProduct(productId){
 
     await loadProducts();
 
-
   }catch(error){
+
+    console.error(
+      error
+    );
+
 
     alert(
       "Product could not be deleted.\n\n" +
@@ -3487,278 +2876,222 @@ async function deleteProduct(productId){
 
 
 /* =========================================================
-   CUSTOMER PROFILES
-========================================================= */
-
-async function loadCustomerProfiles(){
-
-  try{
-
-    const response =
-      await fetchWithTimeout(
-        SELLER_SUPABASE_URL +
-        "/rest/v1/profiles" +
-        "?select=*",
-        {
-          headers:getHeaders()
-        },
-        7000
-      );
-
-
-    if(response.ok){
-
-      SELLER_PROFILES =
-        await response.json();
-
-    }else{
-
-      SELLER_PROFILES =
-        [];
-
-    }
-
-  }catch(error){
-
-    SELLER_PROFILES =
-      [];
-
-  }
-
-}
-
-
-/* =========================================================
-   DELIVERIES
-========================================================= */
-
-async function loadDeliveries(){
-
-  try{
-
-    const response =
-      await fetchWithTimeout(
-        SELLER_SUPABASE_URL +
-        "/rest/v1/deliveries" +
-        "?select=*",
-        {
-          headers:getHeaders()
-        },
-        7000
-      );
-
-
-    if(response.ok){
-
-      SELLER_DELIVERIES =
-        await response.json();
-
-    }else{
-
-      SELLER_DELIVERIES =
-        [];
-
-    }
-
-  }catch(error){
-
-    SELLER_DELIVERIES =
-      [];
-
-  }
-
-}
-
-
-/* =========================================================
-   PROFILE / DELIVERY HELPERS
-========================================================= */
-
-function getCustomerProfile(customerId){
-
-  if(!customerId){
-
-    return null;
-
-  }
-
-
-  return SELLER_PROFILES.find(
-    profile =>
-      String(profile.id) ===
-      String(customerId)
-  ) || null;
-
-}
-
-
-function getOrderDelivery(orderId){
-
-  return SELLER_DELIVERIES.find(
-    delivery =>
-      String(delivery.order_id) ===
-      String(orderId)
-  ) || null;
-
-}
-
-
-/* =========================================================
    LOAD ORDERS
-========================================================= */
+   ========================================================= */
 
 async function loadOrders(
-  showLoading=false
+  showLoading = false
 ){
 
-  if(!SELLER_ID){
+  const container =
+    document.getElementById(
+      "ordersContainer"
+    );
 
+
+  if(!container){
     return;
+  }
+
+
+  if(showLoading){
+
+    container.innerHTML = `
+
+      <div class="notice notice-info">
+        Loading orders...
+      </div>
+
+    `;
 
   }
 
 
   try{
 
-    if(showLoading){
+    /*
+       Get seller products first.
+    */
 
-      document.getElementById(
-        "ordersGrid"
-      ).innerHTML = `
-
-        <div class="empty">
-          Loading customer orders...
-        </div>
-
-      `;
-
-    }
-
-
-    await Promise.all([
-      loadCustomerProfiles(),
-      loadDeliveries()
-    ]);
+    const productUrl =
+      SELLER_SUPABASE_URL +
+      "/rest/v1/products" +
+      "?seller_id=eq." +
+      encodeURIComponent(
+        SELLER_ID
+      ) +
+      "&select=id,name,price";
 
 
-    const productsResponse =
-      await fetchWithTimeout(
-        SELLER_SUPABASE_URL +
-        "/rest/v1/products" +
-        "?seller_id=eq." +
-        encodeURIComponent(SELLER_ID) +
-        "&select=id,name,price,seller_id",
+    const productResponse =
+      await zyreFetchWithTimeout(
+        productUrl,
         {
-          headers:getHeaders()
+          headers:
+            getHeaders()
         },
         7000
       );
 
 
-    if(!productsResponse.ok){
+    if(
+      !productResponse.ok
+    ){
 
       throw new Error(
-        await productsResponse.text()
+        await productResponse.text()
       );
 
     }
 
 
-    const sellerProducts =
-      await productsResponse.json();
+    const products =
+      await productResponse.json();
 
 
     const sellerProductIds =
-      sellerProducts.map(
+      products.map(
         product =>
-          Number(product.id)
+          Number(
+            product.id
+          )
       );
 
 
-    if(!sellerProductIds.length){
+    if(
+      !sellerProductIds.length
+    ){
 
-      SELLER_ORDERS =
-        [];
+      SELLER_ORDERS = [];
 
-      renderOrders();
 
-      updateOrderStats();
+      document.getElementById(
+        "statOrders"
+      ).textContent = "0";
+
+
+      container.innerHTML = `
+
+        <div class="notice notice-info">
+
+          No customer orders for your products yet.
+
+        </div>
+
+      `;
 
       return;
 
     }
 
 
-    const orderItemsResponse =
-      await fetchWithTimeout(
-        SELLER_SUPABASE_URL +
-        "/rest/v1/order_items" +
-        "?product_id=in.(" +
-        sellerProductIds.join(",") +
-        ")" +
-        "&select=*",
+    /*
+       Get order items.
+    */
+
+    const itemUrl =
+      SELLER_SUPABASE_URL +
+      "/rest/v1/order_items" +
+      "?product_id=in.(" +
+      sellerProductIds.join(",") +
+      ")" +
+      "&select=*";
+
+
+    const itemResponse =
+      await zyreFetchWithTimeout(
+        itemUrl,
         {
-          headers:getHeaders()
+          headers:
+            getHeaders()
         },
         7000
       );
 
 
-    if(!orderItemsResponse.ok){
+    if(
+      !itemResponse.ok
+    ){
 
       throw new Error(
-        await orderItemsResponse.text()
+        await itemResponse.text()
       );
 
     }
 
 
     const orderItems =
-      await orderItemsResponse.json();
+      await itemResponse.json();
 
 
-    const sellerOrderIds =
+    const orderIds =
       [
         ...new Set(
           orderItems.map(
             item =>
-              Number(item.order_id)
+              Number(
+                item.order_id
+              )
           )
         )
       ];
 
 
-    if(!sellerOrderIds.length){
+    if(
+      !orderIds.length
+    ){
 
-      SELLER_ORDERS =
-        [];
+      SELLER_ORDERS = [];
 
-      renderOrders();
 
-      updateOrderStats();
+      document.getElementById(
+        "statOrders"
+      ).textContent = "0";
+
+
+      container.innerHTML = `
+
+        <div class="notice notice-info">
+
+          No customer orders for your products yet.
+
+        </div>
+
+      `;
 
       return;
 
     }
 
 
+    /*
+       Get orders.
+    */
+
+    const ordersUrl =
+      SELLER_SUPABASE_URL +
+      "/rest/v1/orders" +
+      "?id=in.(" +
+      orderIds.join(",") +
+      ")" +
+      "&select=*" +
+      "&order=id.desc";
+
+
     const ordersResponse =
-      await fetchWithTimeout(
-        SELLER_SUPABASE_URL +
-        "/rest/v1/orders" +
-        "?id=in.(" +
-        sellerOrderIds.join(",") +
-        ")" +
-        "&select=*" +
-        "&order=id.desc",
+      await zyreFetchWithTimeout(
+        ordersUrl,
         {
-          headers:getHeaders()
+          headers:
+            getHeaders()
         },
         7000
       );
 
 
-    if(!ordersResponse.ok){
+    if(
+      !ordersResponse.ok
+    ){
 
       throw new Error(
         await ordersResponse.text()
@@ -3778,58 +3111,97 @@ async function loadOrders(
           const items =
             orderItems.filter(
               item =>
-                Number(item.order_id) ===
-                Number(order.id)
+                Number(
+                  item.order_id
+                ) ===
+                Number(
+                  order.id
+                )
             );
 
 
           return {
-
             ...order,
-
             seller_items:
-              items,
-
-            customer_profile:
-              getCustomerProfile(
-                order.customer_id
-              ),
-
-            delivery:
-              getOrderDelivery(
-                order.id
-              )
-
+              items
           };
 
         }
       );
 
 
-    renderOrders();
+    document.getElementById(
+      "statOrders"
+    ).textContent =
+      SELLER_ORDERS.length;
 
-    updateOrderStats();
+
+    const deliveredCount =
+      SELLER_ORDERS.filter(
+        order =>
+          String(
+            order.status ||
+            ""
+          ).toLowerCase()
+          ===
+          "delivered"
+      ).length;
+
+
+    document.getElementById(
+      "statDelivered"
+    ).textContent =
+      deliveredCount;
+
+
+    if(
+      !SELLER_ORDERS.length
+    ){
+
+      container.innerHTML = `
+
+        <div class="notice notice-info">
+          No customer orders yet.
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    container.innerHTML =
+      SELLER_ORDERS
+        .map(
+          order =>
+            renderOrderCard(
+              order,
+              products
+            )
+        )
+        .join("");
 
 
   }catch(error){
 
     console.error(
-      "Load orders error:",
+      "Order loading error:",
       error
     );
 
 
-    document.getElementById(
-      "ordersGrid"
-    ).innerHTML = `
+    container.innerHTML = `
 
-      <div class="status error">
+      <div class="notice notice-danger">
 
         Could not load customer orders.
 
         <br><br>
 
-        ${escapeHtml(error.message)}
+        ${escapeHtml(
+          error.message
+        )}
 
       </div>
 
@@ -3841,83 +3213,241 @@ async function loadOrders(
 
 
 /* =========================================================
-   ORDER STATS
-========================================================= */
+   ORDER CARD
+   ========================================================= */
 
-function updateOrderStats(){
+function renderOrderCard(
+  order,
+  products
+){
 
-  const orders =
-    Array.isArray(SELLER_ORDERS)
-      ? SELLER_ORDERS
-      : [];
-
-
-  const countStatus =
-    status =>
-      orders.filter(
-        order =>
-          String(
-            order.status ||
-            "Pending"
-          ).toLowerCase() ===
-          status.toLowerCase()
-      ).length;
-
-
-  document.getElementById(
-    "statTotalOrders"
-  ).textContent =
-    orders.length;
-
-
-  document.getElementById(
-    "statPending"
-  ).textContent =
-    countStatus("Pending");
-
-
-  document.getElementById(
-    "statProcessing"
-  ).textContent =
-    countStatus("Processing");
-
-
-  document.getElementById(
-    "statDelivered"
-  ).textContent =
-    countStatus("Delivered");
-
-}
-
-
-/* =========================================================
-   ORDER BADGE
-========================================================= */
-
-function orderBadge(status){
-
-  const clean =
+  const status =
     String(
-      status ||
+      order.status ||
       "Pending"
     );
 
 
-  const className =
-    "badge-" +
-    clean
-      .toLowerCase()
-      .replace(
-        /\s+/g,
-        "-"
-      );
+  const statusClass =
+    status.toLowerCase()
+      .replace(/\s+/g,"-");
+
+
+  const itemsHtml =
+    (order.seller_items || [])
+      .map(
+        item => {
+
+          const product =
+            products.find(
+              p =>
+                Number(p.id) ===
+                Number(
+                  item.product_id
+                )
+            );
+
+
+          return `
+
+            <div>
+
+              <strong>
+                ${
+                  escapeHtml(
+                    product
+                      ?
+                      product.name
+                      :
+                      "Product"
+                  )
+                }
+              </strong>
+
+              ×
+              ${escapeHtml(
+                item.quantity
+              )}
+
+              — R
+              ${Number(
+                item.price || 0
+              ).toFixed(2)}
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
 
 
   return `
 
-    <span class="badge ${className}">
-      ${escapeHtml(clean)}
-    </span>
+    <div class="order-card">
+
+      <div class="order-top">
+
+        <div>
+
+          <div class="order-number">
+
+            Order #${escapeHtml(
+              order.id
+            )}
+
+          </div>
+
+          <div class="small">
+
+            ${
+              order.created_at
+              ?
+              new Date(
+                order.created_at
+              ).toLocaleString()
+              :
+              ""
+            }
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <span
+            class="status status-${escapeHtml(statusClass)}"
+          >
+
+            ${escapeHtml(status)}
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="order-items">
+
+        <strong>
+          Your products
+        </strong>
+
+        <br><br>
+
+        ${itemsHtml}
+
+      </div>
+
+
+      <div style="margin-top:12px">
+
+        <strong>
+          Customer:
+        </strong>
+
+        ${
+          escapeHtml(
+            order.customer_id ||
+            "Customer"
+          )
+        }
+
+      </div>
+
+
+      <div style="margin-top:8px">
+
+        <strong>
+          Delivery address:
+        </strong>
+
+        <br>
+
+        ${escapeHtml(
+          order.delivery_address ||
+          "Not provided"
+        )}
+
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          class="btn btn-light"
+          onclick="updateOrderStatus(${Number(order.id)},'Processing')"
+        >
+          Processing
+        </button>
+
+        <button
+          class="btn btn-light"
+          onclick="updateOrderStatus(${Number(order.id)},'Shipped')"
+        >
+          Shipped
+        </button>
+
+        <button
+          class="btn btn-success"
+          onclick="updateOrderStatus(${Number(order.id)},'Delivered')"
+        >
+          Delivered
+        </button>
+
+      </div>
+
+
+      <div class="delivery-box">
+
+        <strong>
+          🚚 Delivery Information
+        </strong>
+
+        <br><br>
+
+        <input
+          id="deliveryName-${Number(order.id)}"
+          placeholder="Delivery person name"
+        >
+
+        <br><br>
+
+        <input
+          id="deliveryPhone-${Number(order.id)}"
+          placeholder="Delivery person phone"
+        >
+
+        <br><br>
+
+        <input
+          id="tracking-${Number(order.id)}"
+          placeholder="Tracking number"
+        >
+
+        <br><br>
+
+        <input
+          id="estimated-${Number(order.id)}"
+          type="date"
+        >
+
+        <br><br>
+
+        <button
+          class="btn btn-primary"
+          onclick="saveDelivery(${Number(order.id)})"
+        >
+          💾 Save Delivery
+        </button>
+
+      </div>
+
+    </div>
 
   `;
 
@@ -3925,541 +3455,60 @@ function orderBadge(status){
 
 
 /* =========================================================
-   RENDER ORDERS
-========================================================= */
+   UPDATE ORDER STATUS
+   ========================================================= */
 
-function renderOrders(){
+async function updateOrderStatus(
+  orderId,
+  status
+){
 
-  const container =
-    document.getElementById(
-      "ordersGrid"
-    );
-
-
-  const filter =
-    document.getElementById(
-      "orderFilter"
-    ).value;
-
-
-  let orders =
-    Array.isArray(SELLER_ORDERS)
-      ? SELLER_ORDERS
-      : [];
-
-
-  if(filter !== "all"){
-
-    orders =
-      orders.filter(
-        order =>
-          String(
-            order.status ||
-            "Pending"
-          ).toLowerCase() ===
-          filter.toLowerCase()
-      );
-
-  }
-
-
-  if(!orders.length){
-
-    container.innerHTML = `
-
-      <div class="empty">
-        No orders found.
-      </div>
-
-    `;
+  if(
+    !(await ensureRentalAccess())
+  ){
 
     return;
 
   }
-
-
-  container.innerHTML =
-    orders.map(
-      order => {
-
-        const customer =
-          order.customer_profile;
-
-
-        const customerName =
-          customer?.full_name ||
-          "Customer";
-
-
-        const customerPhone =
-          customer?.phone ||
-          "Not provided";
-
-
-        const customerAddress =
-          order.delivery_address ||
-          customer?.address ||
-          "Not provided";
-
-
-        const delivery =
-          order.delivery;
-
-
-        const itemsHtml =
-          order.seller_items
-            .map(
-              item => {
-
-                const product =
-                  SELLER_PRODUCTS.find(
-                    p =>
-                      Number(p.id) ===
-                      Number(item.product_id)
-                  );
-
-
-                const productName =
-                  product?.name ||
-                  "Product #" +
-                  item.product_id;
-
-
-                return `
-
-                  <div>
-                    ${escapeHtml(productName)}
-                    ×
-                    ${escapeHtml(item.quantity)}
-                    —
-                    ${money(item.price)}
-                  </div>
-
-                `;
-
-              }
-            )
-            .join("");
-
-
-        const deliveryHtml =
-          delivery
-            ? `
-
-              <div class="delivery-box">
-
-                <strong>
-                  🚚 Delivery
-                </strong>
-
-                <br><br>
-
-                Person:
-                ${escapeHtml(
-                  delivery.delivery_person_name ||
-                  "Not assigned"
-                )}
-
-                <br>
-
-                Phone:
-                ${escapeHtml(
-                  delivery.delivery_person_phone ||
-                  "Not provided"
-                )}
-
-                <br>
-
-                Tracking:
-                ${escapeHtml(
-                  delivery.tracking_number ||
-                  "Not assigned"
-                )}
-
-                <br>
-
-                Estimated:
-                ${escapeHtml(
-                  delivery.estimated_delivery ||
-                  "Not provided"
-                )}
-
-                <br>
-
-                Status:
-                ${escapeHtml(
-                  delivery.status ||
-                  "Pending"
-                )}
-
-              </div>
-
-            `
-            : `
-
-              <div class="delivery-box">
-                No delivery details assigned yet.
-              </div>
-
-            `;
-
-
-        return `
-
-          <div class="order-card">
-
-            <div class="order-head">
-
-              <div>
-
-                <div class="order-id">
-                  Order #${escapeHtml(order.id)}
-                </div>
-
-                <small>
-                  ${
-                    order.created_at
-                      ? new Date(
-                          order.created_at
-                        ).toLocaleString()
-                      : ""
-                  }
-                </small>
-
-              </div>
-
-              <div>
-                ${orderBadge(order.status)}
-              </div>
-
-            </div>
-
-            <hr>
-
-            <strong>Customer</strong>
-
-            <br>
-
-            ${escapeHtml(customerName)}
-
-            <br>
-
-            📞
-            ${escapeHtml(customerPhone)}
-
-            <br>
-
-            📍
-            ${escapeHtml(customerAddress)}
-
-            <br><br>
-
-            <strong>Products</strong>
-
-            <div style="margin-top:7px;">
-              ${itemsHtml}
-            </div>
-
-            <br>
-
-            <strong>Order Total:</strong>
-            ${money(order.total)}
-
-            <br><br>
-
-            <label>
-
-              Update Order Status
-
-              <select id="status-${Number(order.id)}">
-
-                <option
-                  value="Pending"
-                  ${
-                    String(order.status)
-                      .toLowerCase()==="pending"
-                    ? "selected"
-                    : ""
-                  }
-                >
-                  Pending
-                </option>
-
-                <option
-                  value="Processing"
-                  ${
-                    String(order.status)
-                      .toLowerCase()==="processing"
-                    ? "selected"
-                    : ""
-                  }
-                >
-                  Processing
-                </option>
-
-                <option
-                  value="Shipped"
-                  ${
-                    String(order.status)
-                      .toLowerCase()==="shipped"
-                    ? "selected"
-                    : ""
-                  }
-                >
-                  Shipped
-                </option>
-
-                <option
-                  value="Delivered"
-                  ${
-                    String(order.status)
-                      .toLowerCase()==="delivered"
-                    ? "selected"
-                    : ""
-                  }
-                >
-                  Delivered
-                </option>
-
-                <option
-                  value="Cancelled"
-                  ${
-                    String(order.status)
-                      .toLowerCase()==="cancelled"
-                    ? "selected"
-                    : ""
-                  }
-                >
-                  Cancelled
-                </option>
-
-              </select>
-
-            </label>
-
-            <button
-              class="btn btn-dark"
-              type="button"
-              onclick="updateOrderStatus(${Number(order.id)})"
-            >
-              Update Status
-            </button>
-
-            <br><br>
-
-            <strong>
-              🚚 Delivery Assignment
-            </strong>
-
-            <div class="delivery-box">
-
-              <label>
-                Delivery Person
-
-                <input
-                  id="delivery-name-${Number(order.id)}"
-                  type="text"
-                  value="${escapeHtml(
-                    delivery?.delivery_person_name ||
-                    ""
-                  )}"
-                  placeholder="e.g. Thabo M"
-                >
-
-              </label>
-
-              <label>
-                Phone
-
-                <input
-                  id="delivery-phone-${Number(order.id)}"
-                  type="text"
-                  value="${escapeHtml(
-                    delivery?.delivery_person_phone ||
-                    ""
-                  )}"
-                  placeholder="e.g. 0812345678"
-                >
-
-              </label>
-
-              <label>
-                Tracking Number
-
-                <input
-                  id="delivery-tracking-${Number(order.id)}"
-                  type="text"
-                  value="${escapeHtml(
-                    delivery?.tracking_number ||
-                    ""
-                  )}"
-                  placeholder="e.g. ZYRE 002"
-                >
-
-              </label>
-
-              <label>
-                Estimated Delivery
-
-                <input
-                  id="delivery-date-${Number(order.id)}"
-                  type="date"
-                  value="${escapeHtml(
-                    delivery?.estimated_delivery ||
-                    ""
-                  )}"
-                >
-
-              </label>
-
-              <label>
-
-                Delivery Status
-
-                <select
-                  id="delivery-status-${Number(order.id)}"
-                >
-
-                  <option
-                    value="Pending"
-                    ${
-                      String(
-                        delivery?.status ||
-                        "Pending"
-                      ).toLowerCase()==="pending"
-                      ? "selected"
-                      : ""
-                    }
-                  >
-                    Pending
-                  </option>
-
-                  <option
-                    value="Processing"
-                    ${
-                      String(
-                        delivery?.status ||
-                        ""
-                      ).toLowerCase()==="processing"
-                      ? "selected"
-                      : ""
-                    }
-                  >
-                    Processing
-                  </option>
-
-                  <option
-                    value="Shipped"
-                    ${
-                      String(
-                        delivery?.status ||
-                        ""
-                      ).toLowerCase()==="shipped"
-                      ? "selected"
-                      : ""
-                    }
-                  >
-                    Shipped
-                  </option>
-
-                  <option
-                    value="Delivered"
-                    ${
-                      String(
-                        delivery?.status ||
-                        ""
-                      ).toLowerCase()==="delivered"
-                      ? "selected"
-                      : ""
-                    }
-                  >
-                    Delivered
-                  </option>
-
-                </select>
-
-              </label>
-
-              <button
-                class="btn btn-success"
-                type="button"
-                onclick="saveDelivery(${Number(order.id)})"
-              >
-                💾 Save Delivery
-              </button>
-
-            </div>
-
-            ${deliveryHtml}
-
-          </div>
-
-        `;
-
-      }
-    ).join("");
-
-}
-
-
-/* =========================================================
-   UPDATE ORDER
-========================================================= */
-
-async function updateOrderStatus(orderId){
-
-  if(!(await ensureRentalAccess())){
-
-    return;
-
-  }
-
-
-  const select =
-    document.getElementById(
-      "status-" +
-      orderId
-    );
-
-
-  if(!select){
-
-    return;
-
-  }
-
-
-  const status =
-    select.value;
 
 
   try{
 
     const response =
-      await fetchWithTimeout(
+      await zyreFetchWithTimeout(
+
         SELLER_SUPABASE_URL +
         "/rest/v1/orders" +
         "?id=eq." +
-        encodeURIComponent(orderId),
+        encodeURIComponent(
+          orderId
+        ),
+
         {
           method:"PATCH",
 
           headers:{
             ...getHeaders(),
             "Prefer":
-              "return=representation"
+              "return=minimal"
           },
 
-          body:JSON.stringify({
-            status:status
-          })
+          body:
+            JSON.stringify({
+              status:
+                status
+            })
 
         },
+
         8000
+
       );
 
 
-    if(!response.ok){
+    if(
+      !response.ok
+    ){
 
       throw new Error(
         await response.text()
@@ -4468,19 +3517,15 @@ async function updateOrderStatus(orderId){
     }
 
 
-    alert(
-      "Order #" +
-      orderId +
-      " updated to " +
-      status +
-      "."
-    );
-
-
-    await loadOrders(true);
+    await loadOrders(false);
 
 
   }catch(error){
+
+    console.error(
+      error
+    );
+
 
     alert(
       "Order status could not be updated.\n\n" +
@@ -4494,11 +3539,15 @@ async function updateOrderStatus(orderId){
 
 /* =========================================================
    SAVE DELIVERY
-========================================================= */
+   ========================================================= */
 
-async function saveDelivery(orderId){
+async function saveDelivery(
+  orderId
+){
 
-  if(!(await ensureRentalAccess())){
+  if(
+    !(await ensureRentalAccess())
+  ){
 
     return;
 
@@ -4507,51 +3556,93 @@ async function saveDelivery(orderId){
 
   const name =
     document.getElementById(
-      "delivery-name-" +
+      "deliveryName-" +
       orderId
     ).value.trim();
 
 
   const phone =
     document.getElementById(
-      "delivery-phone-" +
+      "deliveryPhone-" +
       orderId
     ).value.trim();
 
 
   const tracking =
     document.getElementById(
-      "delivery-tracking-" +
+      "tracking-" +
       orderId
     ).value.trim();
 
 
   const estimated =
     document.getElementById(
-      "delivery-date-" +
+      "estimated-" +
       orderId
     ).value;
 
 
-  const status =
-    document.getElementById(
-      "delivery-status-" +
-      orderId
-    ).value;
+  if(
+    !name ||
+    !phone ||
+    !tracking
+  ){
+
+    alert(
+      "Please enter the delivery person's name, phone and tracking number."
+    );
+
+    return;
+
+  }
 
 
   try{
 
-    const existing =
-      getOrderDelivery(
-        orderId
+    /*
+       Check whether delivery already exists.
+    */
+
+    const checkResponse =
+      await zyreFetchWithTimeout(
+
+        SELLER_SUPABASE_URL +
+        "/rest/v1/deliveries" +
+        "?order_id=eq." +
+        encodeURIComponent(
+          orderId
+        ) +
+        "&select=id",
+
+        {
+          headers:
+            getHeaders()
+        },
+
+        7000
+
       );
 
 
-    const body = {
+    if(
+      !checkResponse.ok
+    ){
+
+      throw new Error(
+        await checkResponse.text()
+      );
+
+    }
+
+
+    const existing =
+      await checkResponse.json();
+
+
+    const deliveryData = {
 
       order_id:
-        Number(orderId),
+        orderId,
 
       delivery_person_name:
         name,
@@ -4567,7 +3658,7 @@ async function saveDelivery(orderId){
         null,
 
       status:
-        status
+        "Assigned"
 
     };
 
@@ -4576,58 +3667,73 @@ async function saveDelivery(orderId){
 
 
     if(
-      existing &&
-      existing.id
+      existing.length
     ){
 
       response =
-        await fetchWithTimeout(
+        await zyreFetchWithTimeout(
+
           SELLER_SUPABASE_URL +
           "/rest/v1/deliveries" +
           "?id=eq." +
           encodeURIComponent(
-            existing.id
+            existing[0].id
           ),
+
           {
             method:"PATCH",
 
             headers:{
               ...getHeaders(),
               "Prefer":
-                "return=representation"
+                "return=minimal"
             },
 
-            body:JSON.stringify(body)
+            body:
+              JSON.stringify(
+                deliveryData
+              )
 
           },
+
           8000
+
         );
 
     }else{
 
       response =
-        await fetchWithTimeout(
+        await zyreFetchWithTimeout(
+
           SELLER_SUPABASE_URL +
           "/rest/v1/deliveries",
+
           {
             method:"POST",
 
             headers:{
               ...getHeaders(),
               "Prefer":
-                "return=representation"
+                "return=minimal"
             },
 
-            body:JSON.stringify(body)
+            body:
+              JSON.stringify(
+                deliveryData
+              )
 
           },
+
           8000
+
         );
 
     }
 
 
-    if(!response.ok){
+    if(
+      !response.ok
+    ){
 
       throw new Error(
         await response.text()
@@ -4637,16 +3743,16 @@ async function saveDelivery(orderId){
 
 
     alert(
-      "Delivery information saved."
+      "✅ Delivery information saved."
     );
 
 
-    await loadDeliveries();
-
-    await loadOrders(true);
-
-
   }catch(error){
+
+    console.error(
+      error
+    );
+
 
     alert(
       "Delivery information could not be saved.\n\n" +
@@ -4660,90 +3766,18 @@ async function saveDelivery(orderId){
 
 /* =========================================================
    NOTIFICATIONS
-========================================================= */
-
-async function enableSellerNotifications(){
-
-  try{
-
-    if(
-      typeof window.enableZYRENotifications ===
-      "function"
-    ){
-
-      await window.enableZYRENotifications();
-
-      await checkNotificationStatus();
-
-      return;
-
-    }
-
-
-    if(
-      !("Notification" in window)
-    ){
-
-      alert(
-        "This browser does not support notifications."
-      );
-
-      return;
-
-    }
-
-
-    const permission =
-      await Notification.requestPermission();
-
-
-    if(permission !== "granted"){
-
-      alert(
-        "Notification permission was not granted."
-      );
-
-      return;
-
-    }
-
-
-    alert(
-      "Notifications enabled."
-    );
-
-
-    await checkNotificationStatus();
-
-
-  }catch(error){
-
-    alert(
-      "Notification setup failed.\n\n" +
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   NOTIFICATION STATUS
-========================================================= */
+   ========================================================= */
 
 async function checkNotificationStatus(){
 
-  const element =
+  const box =
     document.getElementById(
       "notificationStatus"
     );
 
 
-  if(!element){
-
+  if(!box){
     return;
-
   }
 
 
@@ -4751,10 +3785,10 @@ async function checkNotificationStatus(){
     !("Notification" in window)
   ){
 
-    element.className =
-      "status warning";
+    box.className =
+      "notice notice-warning";
 
-    element.textContent =
+    box.textContent =
       "This browser does not support notifications.";
 
     return;
@@ -4767,30 +3801,111 @@ async function checkNotificationStatus(){
     "granted"
   ){
 
-    element.className =
-      "status success";
+    box.className =
+      "notice notice-success";
 
-    element.textContent =
-      "✅ Notifications are enabled on this device.";
+    box.textContent =
+      "✅ Notifications are enabled.";
 
-  }else if(
+    return;
+
+  }
+
+
+  if(
     Notification.permission ===
     "denied"
   ){
 
-    element.className =
-      "status error";
+    box.className =
+      "notice notice-danger";
 
-    element.textContent =
-      "Notifications are blocked in your browser settings.";
+    box.textContent =
+      "Notifications are blocked. Enable them in your browser settings.";
 
-  }else{
+    return;
 
-    element.className =
-      "status warning";
+  }
 
-    element.textContent =
-      "Notifications are not enabled yet.";
+
+  box.className =
+    "notice notice-info";
+
+  box.textContent =
+    "Notifications are not enabled yet.";
+
+}
+
+
+/* =========================================================
+   ENABLE SELLER NOTIFICATIONS
+   ========================================================= */
+
+async function enableSellerNotifications(){
+
+  try{
+
+    if(
+      typeof window.enableZYRENotifications ===
+      "function"
+    ){
+
+      await window.enableZYRENotifications();
+
+      checkNotificationStatus();
+
+      return;
+
+    }
+
+
+    if(
+      !("Notification" in window)
+    ){
+
+      alert(
+        "Notifications are not supported by this browser."
+      );
+
+      return;
+
+    }
+
+
+    const permission =
+      await Notification.requestPermission();
+
+
+    if(
+      permission ===
+      "granted"
+    ){
+
+      alert(
+        "✅ Notifications enabled."
+      );
+
+    }else{
+
+      alert(
+        "Notifications were not enabled."
+      );
+
+    }
+
+
+    checkNotificationStatus();
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+
+    alert(
+      "Notification setup failed."
+    );
 
   }
 
@@ -4798,10 +3913,10 @@ async function checkNotificationStatus(){
 
 
 /* =========================================================
-   NAVIGATION
-========================================================= */
+   GO BACK
+   ========================================================= */
 
-function goToMarketplace(){
+function goBack(){
 
   window.location.href =
     "index.html";
@@ -4809,28 +3924,45 @@ function goToMarketplace(){
 }
 
 
-function goBack(){
+/* =========================================================
+   LOGOUT
+   ========================================================= */
 
-  if(SELLER_ID){
+async function signOutSeller(){
 
-    window.location.href =
-      "store.html?seller_id=" +
-      encodeURIComponent(
-        SELLER_ID
-      );
+  try{
 
-  }else{
+    await SELLER_AUTH_CLIENT
+      .auth
+      .signOut();
 
-    goToMarketplace();
+  }catch(error){
+
+    console.warn(
+      error
+    );
 
   }
+
+
+  localStorage.removeItem(
+    "zava_access_token"
+  );
+
+  localStorage.removeItem(
+    "zava_seller_id"
+  );
+
+
+  window.location.href =
+    "auth.html";
 
 }
 
 
 /* =========================================================
-   START DASHBOARD
-========================================================= */
+   START SELLER DASHBOARD
+   ========================================================= */
 
 async function startSellerDashboard(){
 
@@ -4839,132 +3971,135 @@ async function startSellerDashboard(){
   );
 
 
-  const dashboard =
-    document.getElementById(
-      "sellerDashboard"
-    );
-
-
   const loading =
     document.getElementById(
       "rentalLoadingScreen"
     );
 
 
-  const loadingText =
+  const dashboard =
     document.getElementById(
-      "rentalLoadingText"
+      "sellerDashboard"
     );
 
 
-  dashboard.style.visibility =
-    "hidden";
+  const lock =
+    document.getElementById(
+      "rentalLockScreen"
+    );
 
 
-  loading.classList.remove(
-    "hidden"
-  );
+  if(dashboard){
+
+    dashboard.style.display =
+      "none";
+
+  }
+
+
+  if(lock){
+
+    lock.style.display =
+      "none";
+
+  }
+
+
+  if(loading){
+
+    loading.style.display =
+      "flex";
+
+  }
+
+
+  let finished = false;
 
 
   /*
-    SAFETY TIMER.
-
-    This guarantees the black loading screen
-    disappears even if an unexpected JavaScript
-    operation gets stuck.
+     HARD 10 SECOND SAFETY TIMER.
   */
 
-  let safetyTimerFinished =
-    false;
-
-
-  const absoluteSafetyTimer =
+  const safetyTimer =
     setTimeout(
       () => {
 
-        safetyTimerFinished =
-          true;
+        if(
+          finished
+        ){
 
-
-        console.warn(
-          "ZYRE rental startup safety timeout."
-        );
-
-
-        loading.classList.add(
-          "hidden"
-        );
-
-
-        dashboard.style.visibility =
-          "visible";
-
-
-        SELLER_RENTAL_ACCESS =
-          false;
-
-
-        showRentalLock();
-
-
-        const status =
-          document.getElementById(
-            "rentalLockStatus"
-          );
-
-
-        if(status){
-
-          status.textContent =
-            "Rental verification took too long. Please tap Check Payment Again.";
+          return;
 
         }
 
+
+        console.warn(
+          "ZYRE rental startup timeout."
+        );
+
+
+        finished = true;
+
+
+        zyreShowRentalLock(
+          "Startup timeout"
+        );
+
       },
-      12000
+      10000
     );
 
 
   try{
 
-    loadingText.textContent =
-      "Checking seller login...";
+    /*
+       Recover seller authentication.
+    */
+
+    await Promise.race([
+
+      refreshSellerAuthentication(),
+
+      new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            5000
+          )
+      )
+
+    ]);
 
 
     /*
-      Authentication has its own limits.
+       Rental check happens BEFORE
+       products/orders are loaded.
     */
 
-    const authenticated =
-      await refreshSellerAuthentication();
+    const rental =
+      await getSellerRentalAccessFast();
 
 
     console.log(
-      "ZYRE Seller authentication:",
-      authenticated
+      "ZYRE rental result:",
+      rental
     );
 
 
-    showAuthenticationWarning();
+    if(
+      !rental.paid
+    ){
+
+      finished = true;
+
+      clearTimeout(
+        safetyTimer
+      );
 
 
-    if(!authenticated){
-
-      showRentalLock();
-
-
-      const status =
-        document.getElementById(
-          "rentalLockStatus"
-        );
-
-
-      if(status){
-
-        status.textContent =
-          "Seller login could not be confirmed. Please return to the marketplace and log in again.";
-
-      }
+      zyreShowRentalLock(
+        rental.reason
+      );
 
 
       return;
@@ -4973,126 +4108,32 @@ async function startSellerDashboard(){
 
 
     /*
-      IMPORTANT:
-      Seller information is NOT allowed to block
-      rental verification anymore.
-
-      We start it in the background.
+       RENTAL IS PAID.
     */
 
-    loadSellerInformation()
-      .catch(
-        error =>
-          console.log(
-            "Background seller information error:",
-            error
-          )
-      );
+    finished = true;
+
+    clearTimeout(
+      safetyTimer
+    );
 
 
-    loadingText.textContent =
-      "Checking your current monthly rental...";
+    zyreHideRentalLock();
 
 
     /*
-      THIS IS THE MAIN FIX.
-
-      Rental verification has a hard 9.5 second limit.
+       Load normal dashboard.
     */
 
-    let rentalPaid = false;
+    await loadSellerInformation();
 
+    await loadRentalSubscription();
 
-    try{
+    await loadProducts();
 
-      rentalPaid =
-        await withTimeout(
-          loadRentalSubscription(),
-          9500,
-          "Rental verification timed out."
-        );
+    await loadOrders(true);
 
-    }catch(rentalError){
-
-      console.error(
-        "Rental verification timeout:",
-        rentalError
-      );
-
-
-      rentalPaid =
-        false;
-
-
-      SELLER_RENTAL_ACCESS =
-        false;
-
-
-      const status =
-        document.getElementById(
-          "rentalLockStatus"
-        );
-
-
-      if(status){
-
-        status.textContent =
-          "Rental verification timed out. Please tap Check Payment Again.";
-
-      }
-
-    }
-
-
-    /*
-      RENTAL NOT PAID
-    */
-
-    if(!rentalPaid){
-
-      SELLER_RENTAL_ACCESS =
-        false;
-
-
-      showRentalLock();
-
-
-      return;
-
-    }
-
-
-    /*
-      RENTAL PAID
-    */
-
-    SELLER_RENTAL_ACCESS =
-      true;
-
-
-    hideRentalLock();
-
-    enableSellerControls();
-
-
-    loadingText.textContent =
-      "Loading your products and orders...";
-
-
-    /*
-      These are now loaded AFTER the rental
-      decision has already been made.
-    */
-
-    await Promise.allSettled([
-
-      loadProducts(),
-
-      loadOrders(true),
-
-      checkNotificationStatus()
-
-    ]);
+    checkNotificationStatus();
 
 
     console.log(
@@ -5103,57 +4144,21 @@ async function startSellerDashboard(){
   }catch(error){
 
     console.error(
-      "ZYRE Seller Dashboard startup error:",
+      "ZYRE seller startup error:",
       error
     );
 
 
-    SELLER_RENTAL_ACCESS =
-      false;
-
-
-    showRentalLock();
-
-
-    const status =
-      document.getElementById(
-        "rentalLockStatus"
-      );
-
-
-    if(status){
-
-      status.textContent =
-        "⚠️ Rental verification could not be completed. Your store remains locked. Tap Check Payment Again.";
-
-    }
-
-
-  }finally{
+    finished = true;
 
     clearTimeout(
-      absoluteSafetyTimer
+      safetyTimer
     );
 
 
-    /*
-      ALWAYS remove the loading screen.
-    */
-
-    loading.classList.add(
-      "hidden"
+    zyreShowRentalLock(
+      "Unable to verify monthly rental."
     );
-
-
-    dashboard.style.visibility =
-      "visible";
-
-
-    if(safetyTimerFinished){
-
-      showRentalLock();
-
-    }
 
   }
 
@@ -5161,89 +4166,70 @@ async function startSellerDashboard(){
 
 
 /* =========================================================
-   AUTO REFRESH
-========================================================= */
+   AUTO RENTAL RECHECK
+   ========================================================= */
 
 setInterval(
   async function(){
 
+    const dashboard =
+      document.getElementById(
+        "sellerDashboard"
+      );
+
+
     if(
-      SELLER_RENTAL_ACCESS &&
-      sellerAuthenticationReady
+      !dashboard ||
+      dashboard.style.display ===
+      "none"
     ){
 
-      try{
+      return;
 
-        const rental =
-          await withTimeout(
-            getSellerRentalAccess(),
-            9000,
-            "Automatic rental check timed out."
-          );
+    }
 
 
-        if(!rental.paid){
-
-          SELLER_RENTAL_ACCESS =
-            false;
+    const result =
+      await getSellerRentalAccessFast();
 
 
-          showRentalLock();
+    if(
+      !result.paid
+    ){
 
-
-          await loadRentalSubscription();
-
-
-          return;
-
-        }
-
-
-        await loadOrders(false);
-
-
-      }catch(error){
-
-        console.log(
-          "Automatic rental check failed:",
-          error
-        );
-
-
-        SELLER_RENTAL_ACCESS =
-          false;
-
-
-        showRentalLock();
-
-
-        const status =
-          document.getElementById(
-            "rentalLockStatus"
-          );
-
-
-        if(status){
-
-          status.textContent =
-            "Rental verification could not be completed. Store remains locked.";
-
-        }
-
-      }
+      zyreShowRentalLock(
+        result.reason
+      );
 
     }
 
   },
-  10000
+  60000
 );
 
 
 /* =========================================================
    START
-========================================================= */
+   ========================================================= */
 
-startSellerDashboard();
+if(
+  document.readyState ===
+  "loading"
+){
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    startSellerDashboard,
+    {
+      once:true
+    }
+  );
+
+}else{
+
+  startSellerDashboard();
+
+}
 
 </script>
 
