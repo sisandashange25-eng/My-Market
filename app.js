@@ -26,6 +26,677 @@ let cart = [];
 
 
 /* =========================================================
+RENTAL SYSTEM
+ZYRE STORE RENTAL = R100 PER CALENDAR MONTH
+========================================================= */
+
+const ZYRE_RENTAL_PAYMENT_URL =
+"https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNDxuj63iqje/exec";
+
+const ZYRE_RENTAL_AMOUNT = 100;
+
+
+/* =========================================================
+RENTAL MONTH HELPERS
+========================================================= */
+
+/*
+  Returns the beginning of the current calendar month
+  using the browser's local timezone.
+
+  For your South African marketplace this means:
+
+  September 2026:
+  2026-09-01 00:00:00 +02:00
+
+  October 2026:
+  2026-10-01 00:00:00 +02:00
+*/
+
+function getZYRECurrentMonthRange() {
+
+  const now =
+    new Date();
+
+  const year =
+    now.getFullYear();
+
+  const month =
+    now.getMonth();
+
+  const nextMonthDate =
+    new Date(
+      year,
+      month + 1,
+      1,
+      0,
+      0,
+      0,
+      0
+    );
+
+  const monthStartDate =
+    new Date(
+      year,
+      month,
+      1,
+      0,
+      0,
+      0,
+      0
+    );
+
+
+  return {
+
+    start:
+      monthStartDate.toISOString(),
+
+    end:
+      nextMonthDate.toISOString(),
+
+    year:
+      year,
+
+    month:
+      month + 1
+
+  };
+
+}
+
+
+/* =========================================================
+GET SELLER SUBSCRIPTION
+========================================================= */
+
+async function getZYRESellerSubscription(
+  sellerId,
+  accessToken
+) {
+
+  if (!sellerId) {
+
+    return null;
+
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/store_subscriptions?seller_id=eq." +
+        encodeURIComponent(
+          sellerId
+        ) +
+        "&select=id,seller_id,rental_plan_id,status&order=id.desc&limit=1",
+
+        {
+
+          method:
+            "GET",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              (
+                accessToken ||
+                SUPABASE_KEY
+              )
+
+          }
+
+        }
+
+      );
+
+
+    if (!response.ok) {
+
+      console.warn(
+        "Could not load seller rental subscription:",
+        await response.text()
+      );
+
+      return null;
+
+    }
+
+
+    const subscriptions =
+      await response.json();
+
+
+    if (
+      !Array.isArray(
+        subscriptions
+      ) ||
+      !subscriptions.length
+    ) {
+
+      return null;
+
+    }
+
+
+    return subscriptions[0];
+
+  } catch (error) {
+
+    console.warn(
+      "Seller rental subscription error:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================================
+CHECK WHETHER SELLER PAID THIS MONTH
+========================================================= */
+
+/*
+  IMPORTANT:
+
+  A rental payment only unlocks a store when:
+
+  1. seller_id matches
+  2. status = paid
+  3. created_at belongs to the CURRENT calendar month
+
+  An old paid payment therefore cannot unlock the store
+  in a new month.
+*/
+
+async function getZYRESellerRentalAccess(
+  sellerId,
+  accessToken
+) {
+
+  const result = {
+
+    paid:
+      false,
+
+    sellerId:
+      sellerId,
+
+    payment:
+      null,
+
+    subscription:
+      null,
+
+    reason:
+      "Rental payment required.",
+
+    month:
+      null
+
+  };
+
+
+  if (!sellerId) {
+
+    result.reason =
+      "Seller ID is missing.";
+
+    return result;
+
+  }
+
+
+  const monthRange =
+    getZYRECurrentMonthRange();
+
+
+  result.month =
+    monthRange;
+
+
+  try {
+
+    /* =====================================================
+    LOAD SUBSCRIPTION
+    ===================================================== */
+
+    const subscription =
+      await getZYRESellerSubscription(
+        sellerId,
+        accessToken
+      );
+
+
+    result.subscription =
+      subscription;
+
+
+    /* =====================================================
+    FIND PAID PAYMENT IN CURRENT MONTH
+    ===================================================== */
+
+    const paymentResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/rental_payments?seller_id=eq." +
+        encodeURIComponent(
+          sellerId
+        ) +
+        "&status=eq.paid" +
+        "&created_at=gte." +
+        encodeURIComponent(
+          monthRange.start
+        ) +
+        "&created_at=lt." +
+        encodeURIComponent(
+          monthRange.end
+        ) +
+        "&select=id,seller_id,subscription_id,amount,status,payment_reference,payment_method,paid_at,created_at" +
+        "&order=created_at.desc&limit=1",
+
+        {
+
+          method:
+            "GET",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " +
+              (
+                accessToken ||
+                SUPABASE_KEY
+              )
+
+          }
+
+        }
+
+      );
+
+
+    if (!paymentResponse.ok) {
+
+      const errorText =
+        await paymentResponse.text();
+
+
+      console.error(
+        "Rental payment check failed:",
+        errorText
+      );
+
+
+      /*
+        FAIL CLOSED.
+
+        If we cannot verify payment,
+        the store is NOT considered paid.
+      */
+
+      result.paid =
+        false;
+
+      result.reason =
+        "Rental payment could not be verified.";
+
+      return result;
+
+    }
+
+
+    const payments =
+      await paymentResponse.json();
+
+
+    if (
+      !Array.isArray(
+        payments
+      ) ||
+      !payments.length
+    ) {
+
+      result.paid =
+        false;
+
+      result.reason =
+        "No paid R100 rental payment was found for the current month.";
+
+      return result;
+
+    }
+
+
+    const payment =
+      payments[0];
+
+
+    /*
+      Extra protection:
+      make sure the payment really says paid.
+    */
+
+    if (
+      String(
+        payment.status || ""
+      ).toLowerCase() !== "paid"
+    ) {
+
+      result.paid =
+        false;
+
+      result.reason =
+        "Rental payment is not confirmed.";
+
+      return result;
+
+    }
+
+
+    result.paid =
+      true;
+
+    result.payment =
+      payment;
+
+    result.reason =
+      "Rental paid for the current month.";
+
+    return result;
+
+  } catch (error) {
+
+    console.error(
+      "Rental access check failed:",
+      error
+    );
+
+
+    /*
+      FAIL CLOSED.
+      Never accidentally unlock a store because
+      the rental check failed.
+    */
+
+    result.paid =
+      false;
+
+    result.reason =
+      "Rental payment could not be verified.";
+
+    return result;
+
+  }
+
+}
+
+
+/* =========================================================
+BUILD RENTAL PAYMENT URL
+========================================================= */
+
+function buildZYRERentalPaymentUrl(
+  sellerId,
+  subscriptionId,
+  storeName
+) {
+
+  return (
+
+    ZYRE_RENTAL_PAYMENT_URL +
+
+    "?amount=" +
+    encodeURIComponent(
+      ZYRE_RENTAL_AMOUNT.toFixed(2)
+    ) +
+
+    "&item_name=" +
+    encodeURIComponent(
+      "ZYRE Store Rental - " +
+      (
+        storeName ||
+        "Store"
+      )
+    ) +
+
+    "&rental_subscription_id=" +
+    encodeURIComponent(
+      subscriptionId || ""
+    ) +
+
+    "&seller_id=" +
+    encodeURIComponent(
+      sellerId
+    ) +
+
+    "&payment_type=rental"
+
+  );
+
+}
+
+
+/* =========================================================
+GO TO RENTAL PAYMENT
+========================================================= */
+
+async function redirectSellerToRentalPayment(
+  sellerId,
+  storeName,
+  accessToken
+) {
+
+  try {
+
+    const subscription =
+      await getZYRESellerSubscription(
+        sellerId,
+        accessToken
+      );
+
+
+    const subscriptionId =
+      subscription?.id || "";
+
+
+    const paymentUrl =
+      buildZYRERentalPaymentUrl(
+        sellerId,
+        subscriptionId,
+        storeName
+      );
+
+
+    alert(
+
+      "⚠️ Monthly rental payment required.\n\n" +
+
+      "Your ZYRE Store rental for this month has not been paid.\n\n" +
+
+      "Amount due: R" +
+      ZYRE_RENTAL_AMOUNT.toFixed(2) +
+      "\n\n" +
+
+      "You will now be taken to the rental payment page."
+
+    );
+
+
+    window.location.href =
+      paymentUrl;
+
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "Could not redirect seller to rental payment:",
+      error
+    );
+
+
+    alert(
+      "Your monthly rental payment is required, but the payment page could not be opened.\n\n" +
+      error.message
+    );
+
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+CHECK CART SELLERS' RENTAL PAYMENTS
+========================================================= */
+
+/*
+  This checks every seller represented in the cart.
+
+  If even ONE seller has not paid the current month,
+  checkout is stopped.
+*/
+
+async function verifyCartSellerRentalAccess(
+  orderItems,
+  accessToken
+) {
+
+  const sellerIds = [
+    ...new Set(
+
+      orderItems
+
+        .map(item => {
+
+          const product =
+            products.find(
+              p =>
+                String(p.id) ===
+                String(item.product_id)
+            );
+
+
+          return product
+            ? Number(
+                product.seller_id
+              )
+            : null;
+
+        })
+
+        .filter(
+          sellerId =>
+            Number.isFinite(
+              sellerId
+            ) &&
+            sellerId > 0
+        )
+
+    )
+  ];
+
+
+  if (!sellerIds.length) {
+
+    return {
+
+      allowed:
+        true,
+
+      lockedSellers:
+        []
+
+    };
+
+  }
+
+
+  const lockedSellers = [];
+
+
+  for (
+    const sellerId
+    of sellerIds
+  ) {
+
+    const access =
+      await getZYRESellerRentalAccess(
+        sellerId,
+        accessToken
+      );
+
+
+    if (!access.paid) {
+
+      const sellerProducts =
+        products.filter(
+          product =>
+            Number(
+              product.seller_id
+            ) ===
+            Number(
+              sellerId
+            )
+        );
+
+
+      const sellerName =
+        sellerProducts.length
+          ? sellerProducts[0].seller
+          : "This store";
+
+
+      lockedSellers.push({
+
+        sellerId:
+          sellerId,
+
+        sellerName:
+          sellerName,
+
+        reason:
+          access.reason
+
+      });
+
+    }
+
+  }
+
+
+  return {
+
+    allowed:
+      lockedSellers.length === 0,
+
+    lockedSellers:
+      lockedSellers
+
+  };
+
+}
+
+
+/* =========================================================
 READ CART SAFELY
 ========================================================= */
 
@@ -1707,6 +2378,53 @@ async function checkout() {
 
 
     /* =====================================================
+    NEW:
+    VERIFY EVERY SELLER'S RENTAL PAYMENT
+    BEFORE ORDER CREATION
+    ===================================================== */
+
+    const rentalCheck =
+      await verifyCartSellerRentalAccess(
+        orderItems,
+        accessToken
+      );
+
+
+    if (!rentalCheck.allowed) {
+
+      const lockedStoreNames =
+        rentalCheck.lockedSellers
+          .map(
+            seller =>
+              seller.sellerName
+          )
+          .join(", ");
+
+
+      alert(
+
+        "⚠️ Store temporarily unavailable\n\n" +
+
+        (
+          lockedStoreNames ||
+          "One or more stores"
+        ) +
+
+        " has not paid the R" +
+        ZYRE_RENTAL_AMOUNT.toFixed(2) +
+        " rental for the current month.\n\n" +
+
+        "Your order cannot be placed from an unpaid store."
+
+      );
+
+
+      return;
+
+    }
+
+
+    /* =====================================================
     UPDATE CUSTOMER PROFILE
     ===================================================== */
 
@@ -2207,11 +2925,17 @@ async function sellerCentre() {
 
 
     const accessToken =
-      window.ZYRE_CURRENT_SESSION?.access_token ||
-      localStorage.getItem(
-        "zava_access_token"
-      ) ||
-      SUPABASE_KEY;
+      await getZYRESupabaseAccessToken();
+
+
+    if (!accessToken) {
+
+      window.location.href =
+        "seller-auth.html";
+
+      return;
+
+    }
 
 
     const sellerResponse =
@@ -2295,15 +3019,40 @@ async function sellerCentre() {
       );
 
 
-      if (accessToken) {
+      localStorage.setItem(
+        "zava_access_token",
+        accessToken
+      );
 
-        localStorage.setItem(
-          "zava_access_token",
+
+      /* =================================================
+      NEW:
+      CHECK CURRENT MONTH RENTAL
+      ================================================= */
+
+      const rentalAccess =
+        await getZYRESellerRentalAccess(
+          seller.id,
           accessToken
         );
 
+
+      if (!rentalAccess.paid) {
+
+        await redirectSellerToRentalPayment(
+          seller.id,
+          seller.store_name,
+          accessToken
+        );
+
+        return;
+
       }
 
+
+      /* =================================================
+      RENTAL PAID — OPEN DASHBOARD
+      ================================================= */
 
       window.location.href =
         "seller.html";
@@ -3070,33 +3819,11 @@ async function registerSeller() {
 
 
     const rentalPaymentUrl =
-
-      "https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNDxuj63iqje/exec" +
-
-      "?amount=" +
-      encodeURIComponent(
-        Number(
-          rentalPlan.monthly_price
-        ).toFixed(2)
-      ) +
-
-      "&item_name=" +
-      encodeURIComponent(
-        "ZYRE Store Rental - " +
+      buildZYRERentalPaymentUrl(
+        sellerId,
+        subscriptionId,
         storeName.trim()
-      ) +
-
-      "&rental_subscription_id=" +
-      encodeURIComponent(
-        subscriptionId
-      ) +
-
-      "&seller_id=" +
-      encodeURIComponent(
-        sellerId
-      ) +
-
-      "&payment_type=rental";
+      );
 
 
     alert(
@@ -3327,6 +4054,31 @@ async function sellerLogin() {
       "zava_seller_id",
       seller.id
     );
+
+
+    /* =====================================================
+    NEW:
+    CHECK CURRENT MONTH RENTAL BEFORE DASHBOARD
+    ===================================================== */
+
+    const rentalAccess =
+      await getZYRESellerRentalAccess(
+        seller.id,
+        accessToken
+      );
+
+
+    if (!rentalAccess.paid) {
+
+      await redirectSellerToRentalPayment(
+        seller.id,
+        seller.store_name,
+        accessToken
+      );
+
+      return;
+
+    }
 
 
     alert(
@@ -3964,10 +4716,6 @@ async function saveZYREPushSubscription(
     subscription.toJSON();
 
 
-  /* =====================================================
-  GET USER + PROFILE SAFELY
-  ===================================================== */
-
   let user = null;
   let profile = null;
 
@@ -4052,10 +4800,6 @@ async function saveZYREPushSubscription(
       };
 
 
-      /* =================================================
-      CHECK IF ENDPOINT ALREADY EXISTS
-      ================================================= */
-
       const existingNotificationResponse =
         await fetch(
 
@@ -4084,10 +4828,6 @@ async function saveZYREPushSubscription(
         const existingSubscriptions =
           await existingNotificationResponse.json();
 
-
-        /* ===============================================
-        EXISTING ENDPOINT — UPDATE IT
-        =============================================== */
 
         if (
           Array.isArray(
@@ -4156,13 +4896,7 @@ async function saveZYREPushSubscription(
 
           }
 
-        }
-
-        /* ===============================================
-        ENDPOINT DOES NOT EXIST — CREATE IT
-        =============================================== */
-
-        else {
+        } else {
 
           const createResponse =
             await fetch(
@@ -4208,15 +4942,6 @@ async function saveZYREPushSubscription(
               await createResponse.text();
 
 
-            /*
-              23505 means another request created
-              the same endpoint at almost exactly
-              the same time.
-
-              It is safe to ignore because the
-              subscription already exists.
-            */
-
             if (
               createError.includes(
                 '"code":"23505"'
@@ -4248,21 +4973,11 @@ async function saveZYREPushSubscription(
 
       } else {
 
-        /*
-          If the lookup itself fails, do NOT allow
-          this database problem to break browser
-          notifications or seller notifications.
-        */
-
         console.warn(
           "Could not check existing customer notification subscription:",
           await existingNotificationResponse.text()
         );
 
-
-        /*
-          Try an UPSERT as a second fallback.
-        */
 
         const upsertResponse =
           await fetch(
@@ -4339,16 +5054,6 @@ async function saveZYREPushSubscription(
 
     } catch (customerError) {
 
-      /*
-        IMPORTANT:
-        Customer notification database problems
-        must NEVER stop the browser push
-        subscription.
-
-        They must also NEVER break seller
-        notifications.
-      */
-
       console.warn(
         "Customer notification database save was skipped:",
         customerError
@@ -4360,7 +5065,7 @@ async function saveZYREPushSubscription(
 
 
   /* =====================================================
-  KEEP EXISTING SELLER NOTIFICATIONS WORKING
+  KEEP SELLER NOTIFICATIONS
   ===================================================== */
 
   try {
@@ -4530,13 +5235,6 @@ async function saveZYREPushSubscription(
 
   }
 
-
-  /*
-    The browser push subscription itself has
-    been successfully created or retrieved.
-
-    Database errors are intentionally non-blocking.
-  */
 
   return subscription;
 
