@@ -3,223 +3,302 @@
 
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>ZYRE Marketing | Order Tracking</title>
+<title>ZYRE Marketing | Order Tracking</title>
 
-  <meta
-    name="description"
-    content="Track your ZYRE Marketing order using your order number and phone number."
-  >
+<meta
+name="description"
+content="Track your ZYRE Marketing order."
+>
 
-  <meta
-    name="robots"
-    content="noindex, follow, noarchive, nosnippet"
-  >
+<meta
+name="robots"
+content="noindex, follow, noarchive, nosnippet"
+>
 
-  <style>
+<style>
 
-    * {
-      box-sizing: border-box;
-    }
+*{
+box-sizing:border-box;
+}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #111;
-    }
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f5f5f5;
+color:#111;
+}
 
-    header {
-      background: #111;
-      color: #fff;
-      padding: 24px 15px;
-      text-align: center;
-    }
+header{
+background:#111;
+color:#fff;
+padding:24px 15px;
+text-align:center;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-      letter-spacing: 1px;
-    }
+header h1{
+margin:0;
+font-size:28px;
+letter-spacing:1px;
+}
 
-    header p {
-      margin: 8px 0 0;
-      color: #ccc;
-    }
+header p{
+margin:8px 0 0;
+color:#ccc;
+}
 
-    main {
-      max-width: 650px;
-      margin: 30px auto;
-      padding: 15px;
-    }
+main{
+max-width:650px;
+margin:30px auto;
+padding:15px;
+}
 
-    .box {
-      background: #fff;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
+.box{
+background:#fff;
+padding:25px;
+border-radius:15px;
+box-shadow:0 4px 20px rgba(0,0,0,.08);
+}
 
-    h2 {
-      margin-top: 0;
-      font-size: 24px;
-    }
+h2{
+margin-top:0;
+font-size:24px;
+}
 
-    input {
-      width: 100%;
-      padding: 14px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-      outline: none;
-    }
+input{
+width:100%;
+padding:14px;
+margin:8px 0;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:16px;
+outline:none;
+}
 
-    input:focus {
-      border-color: #111;
-    }
+input:focus{
+border-color:#111;
+}
 
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 10px;
-      border: 0;
-      border-radius: 8px;
-      background: #111;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-    }
+button{
+width:100%;
+padding:14px;
+margin-top:10px;
+border:0;
+border-radius:8px;
+background:#111;
+color:#fff;
+font-size:16px;
+cursor:pointer;
+}
 
-    button:hover {
-      opacity: 0.9;
-    }
+button:hover{
+opacity:.9;
+}
 
-    #result {
-      margin-top: 25px;
-    }
+#result{
+margin-top:25px;
+}
 
-    .order {
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 20px;
-      background: #fafafa;
-    }
+.order{
+border:1px solid #ddd;
+border-radius:12px;
+padding:20px;
+background:#fafafa;
+}
 
-    .order h3 {
-      margin-top: 0;
-      font-size: 21px;
-    }
+.order h3{
+margin-top:0;
+font-size:21px;
+}
 
-    .status {
-      display: inline-block;
-      padding: 8px 15px;
-      border-radius: 20px;
-      background: #555;
-      color: #fff;
-      font-weight: bold;
-      margin: 8px 0 18px;
-      text-transform: capitalize;
-    }
+.status{
+display:inline-block;
+padding:8px 15px;
+border-radius:20px;
+background:#555;
+color:#fff;
+font-weight:bold;
+margin:8px 0 18px;
+text-transform:capitalize;
+}
 
-    .status.paid {
-      background: #198754;
-    }
+.status.paid,
+.status.delivered{
+background:#198754;
+}
 
-    .status.pending {
-      background: #d99a00;
-    }
+.status.pending{
+background:#d99a00;
+}
 
-    .status.processing {
-      background: #0069d9;
-    }
+.status.processing{
+background:#0069d9;
+}
 
-    .status.shipped {
-      background: #6f42c1;
-    }
+.status.shipped{
+background:#6f42c1;
+}
 
-    .status.delivered {
-      background: #198754;
-    }
+.details{
+line-height:1.9;
+}
 
-    .details {
-      line-height: 1.9;
-    }
 
-    .delivery-box {
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 12px;
-      background: #fff;
-      border: 1px solid #ddd;
-    }
+/* =========================
+ORDER TIMELINE
+========================= */
 
-    .delivery-box h4 {
-      margin: 0 0 15px;
-      font-size: 19px;
-    }
+.timeline{
+margin:25px 0;
+padding:20px;
+background:#fff;
+border:1px solid #ddd;
+border-radius:12px;
+}
 
-    .delivery-box div {
-      margin: 9px 0;
-      line-height: 1.5;
-    }
+.timeline h4{
+margin:0 0 20px;
+font-size:19px;
+}
 
-    .delivery-status {
-      display: inline-block;
-      padding: 8px 13px;
-      border-radius: 20px;
-      background: #198754;
-      color: #fff;
-      font-weight: bold;
-    }
+.timeline-step{
+display:flex;
+align-items:flex-start;
+position:relative;
+min-height:70px;
+}
 
-    .tracking-number {
-      font-weight: bold;
-      background: #f1f1f1;
-      padding: 5px 8px;
-      border-radius: 5px;
-    }
+.timeline-step:not(:last-child)::after{
+content:"";
+position:absolute;
+left:15px;
+top:32px;
+width:3px;
+height:45px;
+background:#ddd;
+}
 
-    .back {
-      margin-top: 20px;
-      background: #555;
-    }
+.timeline-step.completed:not(:last-child)::after{
+background:#198754;
+}
 
-    footer {
-      text-align: center;
-      padding: 25px;
-      color: #777;
-      font-size: 14px;
-    }
+.timeline-icon{
+width:32px;
+height:32px;
+border-radius:50%;
+background:#ddd;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:17px;
+z-index:2;
+flex-shrink:0;
+}
 
-    @media (max-width: 600px) {
+.timeline-step.completed .timeline-icon{
+background:#198754;
+color:#fff;
+}
 
-      main {
-        margin: 15px auto;
-        padding: 12px;
-      }
+.timeline-step.current .timeline-icon{
+background:#111;
+color:#fff;
+box-shadow:0 0 0 5px #ddd;
+}
 
-      .box {
-        padding: 20px;
-      }
+.timeline-text{
+padding-left:14px;
+padding-top:4px;
+}
 
-      header h1 {
-        font-size: 24px;
-      }
+.timeline-text strong{
+display:block;
+font-size:15px;
+}
 
-      h2 {
-        font-size: 21px;
-      }
+.timeline-text span{
+display:block;
+font-size:13px;
+color:#777;
+margin-top:3px;
+}
 
-    }
 
-  </style>
+/* =========================
+DELIVERY
+========================= */
+
+.delivery-box{
+margin-top:20px;
+padding:20px;
+border-radius:12px;
+background:#fff;
+border:1px solid #ddd;
+}
+
+.delivery-box h4{
+margin:0 0 15px;
+font-size:19px;
+}
+
+.delivery-box div{
+margin:9px 0;
+line-height:1.5;
+}
+
+.delivery-status{
+display:inline-block;
+padding:8px 13px;
+border-radius:20px;
+background:#198754;
+color:#fff;
+font-weight:bold;
+}
+
+.tracking-number{
+font-weight:bold;
+background:#f1f1f1;
+padding:5px 8px;
+border-radius:5px;
+}
+
+.back{
+margin-top:20px;
+background:#555;
+}
+
+footer{
+text-align:center;
+padding:25px;
+color:#777;
+font-size:14px;
+}
+
+@media(max-width:600px){
+
+main{
+margin:15px auto;
+padding:12px;
+}
+
+.box{
+padding:20px;
+}
+
+header h1{
+font-size:24px;
+}
+
+h2{
+font-size:21px;
+}
+
+}
+
+</style>
 
 </head>
 
@@ -229,63 +308,63 @@
 
 <header>
 
-  <h1>ZYRE Marketing</h1>
+<h1>ZYRE Marketing</h1>
 
-  <p>Track your order</p>
+<p>Track your order</p>
 
 </header>
 
 
 <main>
 
-  <div class="box">
+<div class="box">
 
-    <h2>📦 Track Order</h2>
+<h2>📦 Track Order</h2>
 
-    <p>
-      Enter your order number and phone number below.
-    </p>
-
-
-    <input
-      type="number"
-      id="orderNumber"
-      placeholder="Order number"
-    >
+<p>
+Enter your order number and phone number below.
+</p>
 
 
-    <input
-      type="tel"
-      id="phone"
-      placeholder="Phone number"
-    >
+<input
+type="number"
+id="orderNumber"
+placeholder="Order number"
+>
 
 
-    <button onclick="trackOrder()">
-      Track Order
-    </button>
+<input
+type="tel"
+id="phone"
+placeholder="Phone number"
+>
 
 
-    <div id="result"></div>
+<button onclick="trackOrder()">
+Track Order
+</button>
 
 
-    <button
-      class="back"
-      onclick="window.location.href='index.html'"
-    >
-      ← Back to ZYRE Marketing
-    </button>
+<div id="result"></div>
 
-  </div>
+
+<button
+class="back"
+onclick="window.location.href='index.html'"
+>
+← Back to ZYRE Marketing
+</button>
+
+</div>
 
 </main>
 
 
 <footer>
 
-  ZYRE Marketing<br>
+ZYRE Marketing<br>
 
-  Shop smart. Shop local.
+Shop smart. Shop local.
 
 </footer>
 
@@ -295,512 +374,663 @@
 
 
 const SUPABASE_URL =
-  "https://gaccizzlwswwynattgda.supabase.co";
+"https://gaccizzlwswwynattgda.supabase.co";
 
 
 const SUPABASE_KEY =
-  "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
+"sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
 
 
-async function trackOrder() {
+async function trackOrder(){
 
 
-  const orderNumber =
-    document.getElementById("orderNumber").value.trim();
+const orderNumber =
+document.getElementById("orderNumber").value.trim();
 
 
-  const phone =
-    document.getElementById("phone").value.trim();
+const phone =
+document.getElementById("phone").value.trim();
 
 
-  const result =
-    document.getElementById("result");
+const result =
+document.getElementById("result");
 
 
-  if (!orderNumber || !phone) {
+if(!orderNumber || !phone){
 
-    result.innerHTML =
-      "<p>Please enter your order number and phone number.</p>";
+result.innerHTML =
+"<p>Please enter your order number and phone number.</p>";
 
-    return;
+return;
 
-  }
+}
 
 
-  result.innerHTML =
-    "<p>Checking your order...</p>";
+result.innerHTML =
+"<p>Checking your order...</p>";
 
 
-  try {
+try{
 
 
-    /*
-    =====================================
-    FIND CUSTOMER ORDERS
-    =====================================
-    */
+/* =========================
+FIND CUSTOMER ORDERS
+========================= */
 
-    const response =
-      await fetch(
+const response =
+await fetch(
 
-        SUPABASE_URL +
-        "/rest/v1/rpc/get_orders_by_phone",
+SUPABASE_URL +
+"/rest/v1/rpc/get_orders_by_phone",
 
-        {
+{
 
-          method: "POST",
+method:"POST",
 
-          headers: {
+headers:{
 
-            "apikey":
-              SUPABASE_KEY,
+"apikey":SUPABASE_KEY,
 
-            "Authorization":
-              "Bearer " +
-              SUPABASE_KEY,
+"Authorization":
+"Bearer "+SUPABASE_KEY,
 
-            "Content-Type":
-              "application/json"
+"Content-Type":
+"application/json"
 
-          },
+},
 
-          body:
-            JSON.stringify({
+body:JSON.stringify({
 
-              user_phone:
-                phone
+user_phone:phone
 
-            })
+})
 
-        }
+}
 
-      );
+);
 
 
-    if (!response.ok) {
+if(!response.ok){
 
-      result.innerHTML =
-        "<p>Could not check your order.</p>";
+result.innerHTML =
+"<p>Could not check your order.</p>";
 
-      return;
+return;
 
-    }
+}
 
 
-    const orders =
-      await response.json();
+const orders =
+await response.json();
 
 
-    if (
-      !Array.isArray(orders) ||
-      !orders.length
-    ) {
+if(
+!Array.isArray(orders) ||
+!orders.length
+){
 
-      result.innerHTML =
-        "<p>No orders were found for that phone number.</p>";
+result.innerHTML =
+"<p>No orders were found for that phone number.</p>";
 
-      return;
+return;
 
-    }
+}
 
 
-    /*
-    =====================================
-    FIND REQUESTED ORDER
-    =====================================
-    */
+/* =========================
+FIND ORDER
+========================= */
 
-    const wantedId =
-      Number(orderNumber);
+const wantedId =
+Number(orderNumber);
 
 
-    const order =
-      orders.find(o => {
+const order =
+orders.find(o=>{
 
-        const id =
-          o.id ??
-          o.order_id ??
-          o.orderid;
+const id =
+o.id ??
+o.order_id ??
+o.orderid;
 
-        return Number(id) === wantedId;
+return Number(id) === wantedId;
 
-      });
+});
 
 
-    if (!order) {
+if(!order){
 
-      result.innerHTML =
-        "<p>Order #" +
-        orderNumber +
-        " was not found for that phone number.</p>";
+result.innerHTML =
+"<p>Order #"+
+orderNumber+
+" was not found for that phone number.</p>";
 
-      return;
+return;
 
-    }
+}
 
 
-    /*
-    =====================================
-    ORDER INFORMATION
-    =====================================
-    */
+/* =========================
+ORDER INFORMATION
+========================= */
 
-    const displayId =
-      order.id ??
-      order.order_id ??
-      order.orderid;
+const displayId =
+order.id ??
+order.order_id ??
+order.orderid;
 
 
-    const displayTotal =
-      order.total ??
-      order.order_total ??
-      order.amount ??
-      0;
+const displayTotal =
+order.total ??
+order.order_total ??
+order.amount ??
+0;
 
 
-    const displayStatus =
-      order.status ??
-      "Pending";
+const displayStatus =
+order.status ??
+"Pending";
 
 
-    const displayAddress =
-      order.delivery_address ??
-      order.deliveryaddress ??
-      "Not provided";
+const displayAddress =
+order.delivery_address ??
+order.deliveryaddress ??
+"Not provided";
 
 
-    const createdAt =
-      order.created_at ??
-      order.createdat ??
-      "";
+const createdAt =
+order.created_at ??
+order.createdat ??
+"";
 
 
-    let formattedDate =
-      "Not available";
+let formattedDate =
+"Not available";
 
 
-    if (createdAt) {
+if(createdAt){
 
-      const date =
-        new Date(createdAt);
+const date =
+new Date(createdAt);
 
-      if (!isNaN(date.getTime())) {
+if(!isNaN(date.getTime())){
 
-        formattedDate =
-          date.toLocaleString("en-ZA");
+formattedDate =
+date.toLocaleString("en-ZA");
 
-      }
+}
 
-    }
+}
 
 
-    /*
-    =====================================
-    GET DELIVERY INFORMATION
-    =====================================
-    */
+/* =========================
+NORMALIZE STATUS
+========================= */
 
-    let delivery = null;
+const currentStatus =
+String(displayStatus)
+.toLowerCase()
+.trim();
 
 
-    try {
+let statusLevel = 0;
 
-      const deliveryResponse =
-        await fetch(
 
-          SUPABASE_URL +
-          "/rest/v1/deliveries" +
-          "?order_id=eq." +
-          encodeURIComponent(displayId) +
-          "&select=*",
+if(
+currentStatus === "processing"
+){
 
-          {
+statusLevel = 1;
 
-            method: "GET",
+}
 
-            headers: {
 
-              "apikey":
-                SUPABASE_KEY,
+if(
+currentStatus === "shipped"
+){
 
-              "Authorization":
-                "Bearer " +
-                SUPABASE_KEY
+statusLevel = 2;
 
-            }
+}
 
-          }
 
-        );
+if(
+currentStatus === "delivered"
+){
 
+statusLevel = 3;
 
-      if (deliveryResponse.ok) {
+}
 
-        const deliveryData =
-          await deliveryResponse.json();
 
+/* =========================
+TIMELINE
+========================= */
 
-        if (
-          Array.isArray(deliveryData) &&
-          deliveryData.length
-        ) {
+const timelineHtml = `
 
-          delivery =
-            deliveryData[0];
+<div class="timeline">
 
-        }
+<h4>
+📍 Order Progress
+</h4>
 
-      }
 
-    } catch (deliveryError) {
+<div class="timeline-step completed">
 
-      console.log(
-        "Delivery information unavailable:",
-        deliveryError
-      );
+<div class="timeline-icon">
+🛒
+</div>
 
-    }
+<div class="timeline-text">
 
+<strong>
+Order Placed
+</strong>
 
-    /*
-    =====================================
-    DELIVERY INFORMATION
-    =====================================
-    */
+<span>
+Your order has been received.
+</span>
 
-    const deliveryStatus =
-      delivery?.status ??
-      delivery?.delivery_status ??
-      delivery?.deliveryStatus ??
-      null;
+</div>
 
+</div>
 
-    const deliveryPerson =
-      delivery?.delivery_person_name ??
-      delivery?.deliveryPersonName ??
-      delivery?.driver_name ??
-      delivery?.driverName ??
-      null;
 
 
-    const deliveryPhone =
-      delivery?.delivery_person_phone ??
-      delivery?.deliveryPersonPhone ??
-      delivery?.driver_phone ??
-      delivery?.driverPhone ??
-      null;
+<div class="timeline-step ${
+statusLevel >= 1 ? "completed" : ""
+} ${
+statusLevel === 1 ? "current" : ""
+}">
 
+<div class="timeline-icon">
+⚙️
+</div>
 
-    const trackingNumber =
-      delivery?.tracking_number ??
-      delivery?.trackingNumber ??
-      delivery?.tracking ??
-      null;
+<div class="timeline-text">
 
+<strong>
+Processing
+</strong>
 
-    const estimatedDelivery =
-      delivery?.estimated_delivery ??
-      delivery?.estimatedDelivery ??
-      null;
+<span>
+Your seller is preparing your order.
+</span>
 
+</div>
 
-    /*
-    =====================================
-    DELIVERY HTML
-    =====================================
-    */
+</div>
 
-    let deliveryHtml = "";
 
 
-    if (
-      deliveryStatus ||
-      deliveryPerson ||
-      deliveryPhone ||
-      trackingNumber ||
-      estimatedDelivery
-    ) {
+<div class="timeline-step ${
+statusLevel >= 2 ? "completed" : ""
+} ${
+statusLevel === 2 ? "current" : ""
+}">
 
+<div class="timeline-icon">
+🚚
+</div>
 
-      let formattedEstimated =
-        estimatedDelivery ||
-        "Not provided";
+<div class="timeline-text">
 
+<strong>
+Shipped
+</strong>
 
-      if (estimatedDelivery) {
+<span>
+Your order has been handed over for delivery.
+</span>
 
-        const estimatedDate =
-          new Date(estimatedDelivery);
+</div>
 
+</div>
 
-        if (
-          !isNaN(
-            estimatedDate.getTime()
-          )
-        ) {
 
-          formattedEstimated =
-            estimatedDate.toLocaleDateString(
-              "en-ZA"
-            );
 
-        }
+<div class="timeline-step ${
+statusLevel >= 3 ? "completed" : ""
+} ${
+statusLevel === 3 ? "current" : ""
+}">
 
-      }
+<div class="timeline-icon">
+🏠
+</div>
 
+<div class="timeline-text">
 
-      deliveryHtml = `
+<strong>
+Delivered
+</strong>
 
-        <div class="delivery-box">
+<span>
+Your order has been delivered.
+</span>
 
-          <h4>
-            🚚 Delivery Information
-          </h4>
+</div>
 
-          ${
-            deliveryStatus
-              ? `
-                <div>
-                  <span class="delivery-status">
-                    Status: ${deliveryStatus}
-                  </span>
-                </div>
-              `
-              : ""
-          }
+</div>
 
-          ${
-            deliveryPerson
-              ? `
-                <div>
-                  👤 <strong>Delivery Person:</strong>
-                  ${deliveryPerson}
-                </div>
-              `
-              : ""
-          }
+</div>
 
-          ${
-            deliveryPhone
-              ? `
-                <div>
-                  📞 <strong>Phone:</strong>
-                  ${deliveryPhone}
-                </div>
-              `
-              : ""
-          }
+`;
 
-          ${
-            trackingNumber
-              ? `
-                <div>
-                  🔢 <strong>Tracking Number:</strong>
-                  <span class="tracking-number">
-                    ${trackingNumber}
-                  </span>
-                </div>
-              `
-              : ""
-          }
 
-          ${
-            estimatedDelivery
-              ? `
-                <div>
-                  📅 <strong>Estimated Delivery:</strong>
-                  ${formattedEstimated}
-                </div>
-              `
-              : ""
-          }
+/* =========================
+GET DELIVERY
+========================= */
 
-        </div>
+let delivery = null;
 
-      `;
 
+try{
 
-    } else {
+const deliveryResponse =
+await fetch(
 
+SUPABASE_URL +
+"/rest/v1/deliveries" +
+"?order_id=eq."+
+encodeURIComponent(displayId)+
+"&select=*",
 
-      deliveryHtml = `
+{
 
-        <div class="delivery-box">
+method:"GET",
 
-          <h4>
-            🚚 Delivery Information
-          </h4>
+headers:{
 
-          <p>
-            Delivery has not been assigned yet.
-          </p>
+"apikey":SUPABASE_KEY,
 
-        </div>
+"Authorization":
+"Bearer "+SUPABASE_KEY
 
-      `;
+}
 
-    }
+}
 
+);
 
-    /*
-    =====================================
-    DISPLAY ORDER
-    =====================================
-    */
 
-    const statusClass =
-      String(displayStatus)
-        .toLowerCase()
-        .replace(/\s+/g, "-");
+if(deliveryResponse.ok){
 
+const deliveryData =
+await deliveryResponse.json();
 
-    result.innerHTML = `
 
-      <div class="order">
+if(
+Array.isArray(deliveryData) &&
+deliveryData.length
+){
 
-        <h3>
-          📦 Order #${displayId}
-        </h3>
+delivery =
+deliveryData[0];
 
-        <div class="status ${statusClass}">
-          ${displayStatus}
-        </div>
+}
 
-        <div class="details">
+}
 
-          <strong>💰 Total:</strong>
-          R${Number(displayTotal).toFixed(2)}
+}catch(deliveryError){
 
-          <br>
+console.log(
+"Delivery information unavailable:",
+deliveryError
+);
 
-          <strong>🏠 Delivery:</strong>
-          ${displayAddress}
+}
 
-          <br>
 
-          <strong>🕐 Ordered:</strong>
-          ${formattedDate}
+/* =========================
+DELIVERY FIELDS
+========================= */
 
-        </div>
+const deliveryStatus =
+delivery?.status ??
+delivery?.delivery_status ??
+delivery?.deliveryStatus ??
+null;
 
 
-        ${deliveryHtml}
+const deliveryPerson =
+delivery?.delivery_person_name ??
+delivery?.deliveryPersonName ??
+delivery?.driver_name ??
+delivery?.driverName ??
+null;
 
 
-      </div>
+const deliveryPhone =
+delivery?.delivery_person_phone ??
+delivery?.deliveryPersonPhone ??
+delivery?.driver_phone ??
+delivery?.driverPhone ??
+null;
 
-    `;
 
+const trackingNumber =
+delivery?.tracking_number ??
+delivery?.trackingNumber ??
+delivery?.tracking ??
+null;
 
-  } catch (error) {
 
-    console.error(error);
+const estimatedDelivery =
+delivery?.estimated_delivery ??
+delivery?.estimatedDelivery ??
+null;
 
-    result.innerHTML =
-      "<p>Something went wrong while checking your order.</p>";
 
-  }
+let deliveryHtml = "";
+
+
+if(
+deliveryStatus ||
+deliveryPerson ||
+deliveryPhone ||
+trackingNumber ||
+estimatedDelivery
+){
+
+
+let formattedEstimated =
+estimatedDelivery ||
+"Not provided";
+
+
+if(estimatedDelivery){
+
+const estimatedDate =
+new Date(estimatedDelivery);
+
+
+if(
+!isNaN(
+estimatedDate.getTime()
+)
+){
+
+formattedEstimated =
+estimatedDate.toLocaleDateString(
+"en-ZA"
+);
+
+}
+
+}
+
+
+deliveryHtml = `
+
+<div class="delivery-box">
+
+<h4>
+🚚 Delivery Information
+</h4>
+
+
+${
+deliveryStatus
+?
+`
+<div>
+<span class="delivery-status">
+Status: ${deliveryStatus}
+</span>
+</div>
+`
+:""
+}
+
+
+${
+deliveryPerson
+?
+`
+<div>
+👤 <strong>Delivery Person:</strong>
+${deliveryPerson}
+</div>
+`
+:""
+}
+
+
+${
+deliveryPhone
+?
+`
+<div>
+📞 <strong>Phone:</strong>
+${deliveryPhone}
+</div>
+`
+:""
+}
+
+
+${
+trackingNumber
+?
+`
+<div>
+🔢 <strong>Tracking Number:</strong>
+<span class="tracking-number">
+${trackingNumber}
+</span>
+</div>
+`
+:""
+}
+
+
+${
+estimatedDelivery
+?
+`
+<div>
+📅 <strong>Estimated Delivery:</strong>
+${formattedEstimated}
+</div>
+`
+:""
+}
+
+</div>
+
+`;
+
+
+}else{
+
+
+deliveryHtml = `
+
+<div class="delivery-box">
+
+<h4>
+🚚 Delivery Information
+</h4>
+
+<p>
+Delivery has not been assigned yet.
+</p>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================
+STATUS CLASS
+========================= */
+
+const statusClass =
+String(displayStatus)
+.toLowerCase()
+.replace(/\s+/g,"-");
+
+
+/* =========================
+DISPLAY EVERYTHING
+========================= */
+
+result.innerHTML = `
+
+<div class="order">
+
+<h3>
+📦 Order #${displayId}
+</h3>
+
+
+<div class="status ${statusClass}">
+${displayStatus}
+</div>
+
+
+<div class="details">
+
+<strong>💰 Total:</strong>
+R${Number(displayTotal).toFixed(2)}
+
+<br>
+
+<strong>🏠 Delivery:</strong>
+${displayAddress}
+
+<br>
+
+<strong>🕐 Ordered:</strong>
+${formattedDate}
+
+</div>
+
+
+${timelineHtml}
+
+
+${deliveryHtml}
+
+
+</div>
+
+`;
+
+
+}catch(error){
+
+console.error(error);
+
+result.innerHTML =
+"<p>Something went wrong while checking your order.</p>";
+
+}
 
 }
 
