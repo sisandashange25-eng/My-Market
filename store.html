@@ -510,6 +510,99 @@
       font-size: 14px;
     }
 
+    /* =========================
+       RENTAL LOCK
+    ========================= */
+
+    .rental-warning {
+      width: min(1200px, calc(100% - 36px));
+
+      margin: 24px auto 0;
+
+      padding: 22px 20px;
+
+      background: #fff8e5;
+
+      border: 1px solid #d4af37;
+
+      border-radius: 16px;
+
+      text-align: center;
+
+      color: #4a3b08;
+
+      box-shadow:
+        0 10px 30px rgba(0,0,0,.06);
+    }
+
+    .rental-warning-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .rental-warning-title {
+      margin: 0 0 8px;
+
+      font-size: 18px;
+      font-weight: 900;
+
+      color: #5b4700;
+    }
+
+    .rental-warning-text {
+      margin: 0;
+
+      font-size: 13px;
+
+      line-height: 1.6;
+    }
+
+    .rental-locked-section {
+      width: min(1200px, calc(100% - 36px));
+
+      margin: 35px auto 80px;
+
+      padding: 55px 20px;
+
+      text-align: center;
+
+      background: #ffffff;
+
+      border: 1px solid #e5e1d8;
+
+      border-radius: 18px;
+
+      box-shadow:
+        0 15px 40px rgba(0,0,0,.06);
+    }
+
+    .rental-locked-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .rental-locked-title {
+      margin: 0 0 10px;
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: 32px;
+
+      font-weight: 400;
+    }
+
+    .rental-locked-text {
+      max-width: 600px;
+
+      margin: 0 auto;
+
+      color: #777777;
+
+      font-size: 14px;
+
+      line-height: 1.7;
+    }
+
     .products-section {
       width: min(1200px, calc(100% - 36px));
 
@@ -857,6 +950,23 @@
         font-size: 30px;
       }
 
+      .rental-warning,
+      .rental-locked-section {
+        width: calc(100% - 28px);
+      }
+
+      .rental-warning {
+        padding: 18px 14px;
+      }
+
+      .rental-locked-section {
+        padding: 45px 16px;
+      }
+
+      .rental-locked-title {
+        font-size: 28px;
+      }
+
       .products-section {
         width: calc(100% - 28px);
 
@@ -1167,6 +1277,62 @@
 
     </section>
 
+
+    <!-- =========================
+         RENTAL WARNING
+    ========================= -->
+
+    <section
+      id="rentalWarning"
+      class="rental-warning"
+      style="display:none;"
+    >
+
+      <div class="rental-warning-icon">
+        ⚠️
+      </div>
+
+      <h2 class="rental-warning-title">
+        Store Temporarily Unavailable
+      </h2>
+
+      <p class="rental-warning-text">
+        This store is temporarily unavailable because the
+        seller's monthly rental payment has not been confirmed
+        for the current month.
+      </p>
+
+    </section>
+
+
+    <!-- =========================
+         LOCKED STORE MESSAGE
+    ========================= -->
+
+    <section
+      id="rentalLockedSection"
+      class="rental-locked-section"
+      style="display:none;"
+    >
+
+      <div class="rental-locked-icon">
+        🔒
+      </div>
+
+      <h2 class="rental-locked-title">
+        Store Temporarily Closed
+      </h2>
+
+      <p class="rental-locked-text">
+        This store remains listed on ZYRE Marketing, but
+        shopping is temporarily unavailable while the seller's
+        monthly rental payment is pending.
+        Please check back later.
+      </p>
+
+    </section>
+
+
     <section
       id="productsSection"
       class="products-section"
@@ -1250,6 +1416,13 @@
 
 
     window.storeProducts = [];
+
+    /*
+      Rental access is deliberately locked
+      until the current month's payment is confirmed.
+    */
+
+    window.storeRentalAccess = false;
 
 
     function escapeText(value) {
@@ -1636,9 +1809,345 @@
 
 
     /* =========================
+       RENTAL ACCESS CHECK
+    ========================= */
+
+    function getCurrentLocalMonthRange() {
+
+      const now =
+        new Date();
+
+
+      const start =
+        new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          1,
+          0,
+          0,
+          0,
+          0
+        );
+
+
+      const end =
+        new Date(
+          now.getFullYear(),
+          now.getMonth() + 1,
+          1,
+          0,
+          0,
+          0,
+          0
+        );
+
+
+      return {
+        start: start,
+        end: end
+      };
+
+    }
+
+
+    function rentalPaymentIsCurrent(
+      payment
+    ) {
+
+      if (!payment) {
+        return false;
+      }
+
+
+      if (
+        String(
+          payment.status || ""
+        ).toLowerCase() !== "paid"
+      ) {
+
+        return false;
+
+      }
+
+
+      const paymentDateValue =
+        payment.paid_at ||
+        payment.created_at ||
+        null;
+
+
+      if (!paymentDateValue) {
+        return false;
+      }
+
+
+      const paymentDate =
+        new Date(
+          paymentDateValue
+        );
+
+
+      if (
+        Number.isNaN(
+          paymentDate.getTime()
+        )
+      ) {
+
+        return false;
+
+      }
+
+
+      const range =
+        getCurrentLocalMonthRange();
+
+
+      return (
+        paymentDate >= range.start &&
+        paymentDate < range.end
+      );
+
+    }
+
+
+    async function getSellerRentalAccess(
+      sellerIdValue
+    ) {
+
+      /*
+        Fail closed.
+
+        If the rental table cannot be checked,
+        the store remains locked.
+      */
+
+      if (!sellerIdValue) {
+        return false;
+      }
+
+
+      try {
+
+        const rentalResponse =
+          await fetch(
+
+            `${SUPABASE_URL}/rest/v1/rental_payments?seller_id=eq.${encodeURIComponent(
+              sellerIdValue
+            )}&status=eq.paid&select=id,seller_id,subscription_id,amount,status,payment_reference,payment_method,paid_at,created_at&order=id.desc&limit=20`,
+
+            {
+
+              method:
+                "GET",
+
+              headers: {
+
+                apikey:
+                  SUPABASE_KEY,
+
+                Authorization:
+                  `Bearer ${SUPABASE_KEY}`,
+
+                Accept:
+                  "application/json"
+
+              }
+
+            }
+
+          );
+
+
+        if (!rentalResponse.ok) {
+
+          const errorText =
+            await rentalResponse.text();
+
+
+          console.error(
+            "Rental check failed:",
+            rentalResponse.status,
+            errorText
+          );
+
+
+          return false;
+
+        }
+
+
+        const payments =
+          await rentalResponse.json();
+
+
+        if (
+          !Array.isArray(payments)
+        ) {
+
+          return false;
+
+        }
+
+
+        return payments.some(
+          function(payment) {
+
+            return rentalPaymentIsCurrent(
+              payment
+            );
+
+          }
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Rental access error:",
+          error
+        );
+
+
+        return false;
+
+      }
+
+    }
+
+
+    function showRentalLockedState() {
+
+      window.storeRentalAccess =
+        false;
+
+
+      const warning =
+        document.getElementById(
+          "rentalWarning"
+        );
+
+
+      const lockedSection =
+        document.getElementById(
+          "rentalLockedSection"
+        );
+
+
+      const productsSection =
+        document.getElementById(
+          "productsSection"
+        );
+
+
+      const grid =
+        document.getElementById(
+          "productsGrid"
+        );
+
+
+      const countElement =
+        document.getElementById(
+          "catalogueCount"
+        );
+
+
+      if (warning) {
+
+        warning.style.display =
+          "block";
+
+      }
+
+
+      if (lockedSection) {
+
+        lockedSection.style.display =
+          "block";
+
+      }
+
+
+      if (productsSection) {
+
+        productsSection.style.display =
+          "none";
+
+      }
+
+
+      if (grid) {
+
+        grid.innerHTML =
+          "";
+
+      }
+
+
+      if (countElement) {
+
+        countElement.textContent =
+          "Store unavailable";
+
+      }
+
+
+      window.storeProducts =
+        [];
+
+    }
+
+
+    function showRentalOpenState() {
+
+      window.storeRentalAccess =
+        true;
+
+
+      const warning =
+        document.getElementById(
+          "rentalWarning"
+        );
+
+
+      const lockedSection =
+        document.getElementById(
+          "rentalLockedSection"
+        );
+
+
+      const productsSection =
+        document.getElementById(
+          "productsSection"
+        );
+
+
+      if (warning) {
+
+        warning.style.display =
+          "none";
+
+      }
+
+
+      if (lockedSection) {
+
+        lockedSection.style.display =
+          "none";
+
+      }
+
+
+      if (productsSection) {
+
+        productsSection.style.display =
+          "block";
+
+      }
+
+    }
+
+
+    /* =========================
        CART STORAGE
-       Add to Cart still uses
-       zyre_cart_v2.
     ========================= */
 
     function getCart() {
@@ -1772,6 +2281,25 @@
     function addStoreProduct(
       productId
     ) {
+
+      /*
+        Extra protection:
+        do not allow adding products if
+        rental access is not confirmed.
+      */
+
+      if (
+        window.storeRentalAccess !== true
+      ) {
+
+        alert(
+          "This store is temporarily unavailable because the seller's monthly rental payment has not been confirmed."
+        );
+
+        return;
+
+      }
+
 
       const product =
         window.storeProducts.find(
@@ -2021,6 +2549,21 @@
 
 
     function renderProducts() {
+
+      /*
+        Never render products while locked.
+      */
+
+      if (
+        window.storeRentalAccess !== true
+      ) {
+
+        showRentalLockedState();
+
+        return;
+
+      }
+
 
       const grid =
         document.getElementById(
@@ -2375,6 +2918,11 @@
 
       try {
 
+        /*
+          STEP 1
+          Load seller information.
+        */
+
         const sellerResponse =
           await fetch(
 
@@ -2460,6 +3008,47 @@
         );
 
 
+        /*
+          STEP 2
+          Check monthly rental BEFORE
+          loading products.
+        */
+
+        const rentalAccess =
+          await getSellerRentalAccess(
+            seller.id
+          );
+
+
+        if (!rentalAccess) {
+
+          console.warn(
+            "Store locked: current-month rental payment not confirmed."
+          );
+
+
+          showRentalLockedState();
+
+
+          return;
+
+        }
+
+
+        /*
+          STEP 3
+          Rental is paid/current.
+          Open the store.
+        */
+
+        showRentalOpenState();
+
+
+        /*
+          STEP 4
+          Load active products.
+        */
+
         const productsResponse =
           await fetch(
 
@@ -2518,24 +3107,31 @@
         );
 
 
-        grid.innerHTML = `
+        /*
+          Fail closed.
+        */
 
-          <div class="error-message">
+        showRentalLockedState();
 
-            <strong>
-              Store could not be loaded.
-            </strong>
 
-            <p>
-              ${escapeText(
-                error.message ||
-                "Please try again."
-              )}
-            </p>
+        const warning =
+          document.getElementById(
+            "rentalWarning"
+          );
 
-          </div>
 
-        `;
+        const warningText =
+          warning?.querySelector(
+            ".rental-warning-text"
+          );
+
+
+        if (warningText) {
+
+          warningText.textContent =
+            "This store is temporarily unavailable because its availability could not be verified. Please try again later.";
+
+        }
 
       }
 
