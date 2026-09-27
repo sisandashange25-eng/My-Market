@@ -1352,17 +1352,99 @@ async function refreshSellerAuthentication(){
 
 
 /* =========================
+GET CURRENT SELLER
+========================= */
+
+async function resolveSellerFromAccount(){
+
+  const session =
+    await refreshSellerAuthentication();
+
+
+  if(
+    !session ||
+    !session.user ||
+    !session.user.id
+  ){
+
+    throw new Error(
+      "Your seller account could not be verified."
+    );
+
+  }
+
+
+  const userId =
+    session.user.id;
+
+
+  const sellers =
+    await supabaseRequest(
+      "sellers?select=*&user_id=eq." +
+      encodeURIComponent(userId) +
+      "&limit=1"
+    );
+
+
+  if(
+    !Array.isArray(sellers) ||
+    !sellers.length
+  ){
+
+    throw new Error(
+      "Your seller account is not linked to a seller profile."
+    );
+
+  }
+
+
+  const seller =
+    sellers[0];
+
+
+  SELLER_ID =
+    String(seller.id);
+
+
+  localStorage.setItem(
+    "zava_seller_id",
+    SELLER_ID
+  );
+
+
+  if(seller.email){
+
+    SELLER_EMAIL =
+      seller.email;
+
+    localStorage.setItem(
+      "zava_seller_email",
+      SELLER_EMAIL
+    );
+
+  }
+
+
+  return seller;
+
+}
+
+
+/* =========================
 REQUIRED AUTH TOKEN
 ========================= */
 
-function getRequiredAccessToken(){
+async function getSellerAccessToken(){
+
+  await refreshSellerAuthentication();
+
 
   if(
     !SELLER_ACCESS_TOKEN
   ){
 
     throw new Error(
-      "Your seller login session is missing. Please log in again."
+      "Your seller login session has expired. Please log out and log in again."
     );
 
   }
@@ -1382,11 +1464,8 @@ async function supabaseRequest(
   options = {}
 ){
 
-  await refreshSellerAuthentication();
-
-
   const token =
-    getRequiredAccessToken();
+    await getSellerAccessToken();
 
 
   const headers = {
@@ -1502,11 +1581,15 @@ async function uploadProductImage(file){
   }
 
 
-  await refreshSellerAuthentication();
-
-
   const token =
-    getRequiredAccessToken();
+    await getSellerAccessToken();
+
+
+  if(!SELLER_ID){
+
+    await resolveSellerFromAccount();
+
+  }
 
 
   if(!SELLER_ID){
@@ -1807,6 +1890,62 @@ function isPaidThisMonth(payment){
 
 
 /* =========================
+ACTIVE SUBSCRIPTION CHECK
+========================= */
+
+function isActiveSubscription(subscription){
+
+  if(!subscription){
+
+    return false;
+
+  }
+
+
+  const status =
+    String(
+      subscription.status || ""
+    )
+    .toLowerCase();
+
+
+  if(status !== "active"){
+
+    return false;
+
+  }
+
+
+  if(!subscription.expires_at){
+
+    return true;
+
+  }
+
+
+  const expiry =
+    new Date(
+      subscription.expires_at
+    );
+
+
+  if(
+    Number.isNaN(
+      expiry.getTime()
+    )
+  ){
+
+    return false;
+
+  }
+
+
+  return expiry.getTime() > Date.now();
+
+}
+
+
+/* =========================
 RENTAL CHECK
 ========================= */
 
@@ -1814,41 +1953,152 @@ async function checkRental(){
 
   try{
 
-    await refreshSellerAuthentication();
+    /*
+    First make sure the logged-in
+    Supabase account is linked to
+    the correct seller record.
+    */
+
+    const seller =
+      await resolveSellerFromAccount();
 
 
-    if(!SELLER_ID){
-
-      throw new Error(
-        "Seller ID not found."
-      );
-
-    }
-
-
-    const payments =
-      await supabaseRequest(
-        "rental_payments?select=*&seller_id=eq." +
-        encodeURIComponent(SELLER_ID) +
-        "&order=id.desc"
-      );
-
-
-    if(!Array.isArray(payments)){
+    if(!seller){
 
       return false;
 
     }
 
 
-    const paid =
-      payments.some(
-        payment =>
-          isPaidThisMonth(payment)
+    /*
+    Seller must be approved.
+    */
+
+    if(
+      seller.approved !== true
+    ){
+
+      console.warn(
+        "Seller is not approved."
+      );
+
+      return false;
+
+    }
+
+
+    /*
+    Check the active subscription.
+    */
+
+    let subscriptions = [];
+
+
+    try{
+
+      subscriptions =
+        await supabaseRequest(
+          "store_subscriptions?select=*&seller_id=eq." +
+          encodeURIComponent(SELLER_ID) +
+          "&order=id.desc"
+        );
+
+    }catch(error){
+
+      console.warn(
+        "Subscription check failed:",
+        error
+      );
+
+      subscriptions = [];
+
+    }
+
+
+    const activeSubscription =
+      Array.isArray(subscriptions) &&
+      subscriptions.some(
+        subscription =>
+          isActiveSubscription(
+            subscription
+          )
       );
 
 
-    return paid;
+    /*
+    Also check the actual rental payment.
+    This is important because the successful
+    Paystack payment is already recorded as
+    status = paid.
+    */
+
+    let payments = [];
+
+
+    try{
+
+      payments =
+        await supabaseRequest(
+          "rental_payments?select=*&seller_id=eq." +
+          encodeURIComponent(SELLER_ID) +
+          "&order=id.desc"
+        );
+
+    }catch(error){
+
+      console.warn(
+        "Rental payment check failed:",
+        error
+      );
+
+      payments = [];
+
+    }
+
+
+    const paidThisMonth =
+      Array.isArray(payments) &&
+      payments.some(
+        payment =>
+          isPaidThisMonth(
+            payment
+          )
+      );
+
+
+    console.log(
+      "ZYRE RENTAL CHECK",
+      {
+        sellerId: SELLER_ID,
+        activeSubscription,
+        paidThisMonth,
+        subscriptions,
+        payments
+      }
+    );
+
+
+    /*
+    Either of these valid records can
+    unlock the dashboard:
+    
+    1. Active subscription that has not expired
+    OR
+    2. Paid rental payment during the
+       current month.
+    */
+
+    if(
+      activeSubscription ||
+      paidThisMonth
+    ){
+
+      return true;
+
+    }
+
+
+    return false;
 
   }catch(error){
 
@@ -1943,6 +2193,15 @@ async function startDashboard(){
     await refreshSellerAuthentication();
 
 
+    /*
+    Resolve seller from the logged-in
+    account instead of trusting an old
+    localStorage seller ID.
+    */
+
+    await resolveSellerFromAccount();
+
+
     if(!SELLER_ID){
 
       alert(
@@ -1995,8 +2254,10 @@ async function startDashboard(){
 
     if(
       error.message &&
-      error.message.includes(
-        "session"
+      (
+        error.message.includes("session") ||
+        error.message.includes("account") ||
+        error.message.includes("seller profile")
       )
     ){
 
@@ -2420,16 +2681,9 @@ document
 
       try{
 
-        /*
-        IMPORTANT:
-        Refresh the real Supabase login session
-        before BOTH the image upload and product insert.
-        */
-
         await refreshSellerAuthentication();
 
-
-        getRequiredAccessToken();
+        await resolveSellerFromAccount();
 
 
         if(button){
@@ -2470,16 +2724,9 @@ document
         }
 
 
-        /*
-        Refresh once more immediately before
-        the database INSERT so the request uses
-        the current authenticated access token.
-        */
-
         await refreshSellerAuthentication();
 
-
-        getRequiredAccessToken();
+        await resolveSellerFromAccount();
 
 
         await supabaseRequest(
@@ -3845,6 +4092,8 @@ async function payRental(){
 
     await refreshSellerAuthentication();
 
+    await resolveSellerFromAccount();
+
 
     if(!SELLER_ID){
 
@@ -3889,7 +4138,7 @@ async function payRental(){
 
 
     const token =
-      getRequiredAccessToken();
+      await getSellerAccessToken();
 
 
     const response =
@@ -4031,6 +4280,10 @@ async function checkRentalAgain(){
 
   try{
 
+    dashboardStarted =
+      false;
+
+
     const paid =
       await checkRental();
 
@@ -4040,10 +4293,6 @@ async function checkRentalAgain(){
       alert(
         "✓ Rental payment confirmed. Your dashboard is unlocked."
       );
-
-
-      dashboardStarted =
-        false;
 
 
       await startDashboard();
@@ -4059,6 +4308,12 @@ async function checkRentalAgain(){
 
 
   }catch(error){
+
+    console.error(
+      "Check rental again error:",
+      error
+    );
+
 
     alert(
       "Could not check rental payment.\n\n" +
