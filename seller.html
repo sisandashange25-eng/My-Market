@@ -1589,15 +1589,11 @@ return;
 }
 
 
-/*
-   Disable rental payment buttons while
-   Paystack checkout is being initialized.
-*/
-
 const buttons=
 document.querySelectorAll(
 ".primary-button,.form-button"
 );
+
 
 buttons.forEach(button=>{
 
@@ -1694,11 +1690,6 @@ data?.message ||
 }
 
 
-/*
-   Save reference in case the callback
-   needs to be checked again.
-*/
-
 if(data.reference){
 
 localStorage.setItem(
@@ -1708,13 +1699,6 @@ data.reference
 
 }
 
-
-/*
-   IMPORTANT:
-   This is the ONLY rental checkout redirect.
-   No PayFast.
-   No Google Apps Script.
-*/
 
 window.location.href=
 data.authorization_url;
@@ -1868,19 +1852,44 @@ window.location.search
 
 
 /*
-   Paystack normally returns "reference".
-   Support "trxref" too for compatibility.
+   Paystack normally returns "reference"
+   or "trxref".
+
+   If Paystack returns to seller.html
+   without either parameter, use the
+   reference saved before checkout.
 */
 
-const reference=
+const urlReference=
 params.get("reference") ||
 params.get("trxref");
 
+const savedReference=
+localStorage.getItem(
+"zyre_rental_reference"
+);
+
+const reference=
+urlReference ||
+savedReference;
+
+
+console.log(
+"ZYRE rental verification reference:",
+reference
+);
+
+
 if(!reference){
+
+console.log(
+"No Paystack rental reference found."
+);
 
 return false;
 
 }
+
 
 showMessage(
 "rentalMessage",
@@ -1903,11 +1912,34 @@ reference
 
 if(paid){
 
+localStorage.removeItem(
+"zyre_rental_reference"
+);
+
+
+if(urlReference){
+
 window.history.replaceState(
 {},
 document.title,
 window.location.pathname
 );
+
+}
+
+
+showMessage(
+"rentalMessage",
+"✅ Paystack payment confirmed. Your store is active.",
+"success"
+);
+
+showMessage(
+"rentalLockMessage",
+"✅ Payment confirmed. Your seller dashboard is unlocked.",
+"success"
+);
+
 
 return true;
 
@@ -1915,9 +1947,10 @@ return true;
 
 
 /*
-   Do not remove the reference if verification
-   failed. It may still be useful for
-   Check Payment Again.
+   Verification failed.
+
+   Keep the reference so the seller
+   can use Check Payment Again.
 */
 
 localStorage.setItem(
@@ -1925,11 +1958,19 @@ localStorage.setItem(
 reference
 );
 
+
 showMessage(
 "rentalLockMessage",
 "Payment was not confirmed yet. Please check again.",
 "error"
 );
+
+showMessage(
+"rentalMessage",
+"Payment was not confirmed yet. Please check again.",
+"error"
+);
+
 
 return false;
 
@@ -2067,7 +2108,8 @@ return;
 
 /*
    IMPORTANT:
-   Verify Paystack callback FIRST.
+   Verify Paystack callback or saved
+   reference FIRST.
 */
 
 const callbackPaid=
