@@ -2,23 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>ZYRE Marketing | Seller Dashboard</title>
 
-<meta
-  name="description"
-  content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications."
->
+<meta name="description"
+content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications.">
 
-<meta
-  name="robots"
-  content="noindex,nofollow"
->
+<meta name="robots" content="noindex,nofollow">
 
 <style>
 
@@ -235,9 +226,31 @@ select{
   background:#fff;
 }
 
+input[type="file"]{
+  padding:10px;
+}
+
 textarea{
   min-height:100px;
   resize:vertical;
+}
+
+.photo-preview{
+  width:100%;
+  max-width:300px;
+  height:200px;
+  object-fit:cover;
+  border-radius:10px;
+  border:1px solid #ddd;
+  margin-top:8px;
+  display:none;
+  background:#eee;
+}
+
+.upload-status{
+  margin-top:8px;
+  font-size:14px;
+  font-weight:700;
 }
 
 .product-grid{
@@ -473,772 +486,742 @@ textarea{
 <body>
 
 <header>
-  <div class="header-inner">
 
-    <div class="logo-title">
-      🛍️ ZYRE Marketing Seller Dashboard
-    </div>
+<div class="header-inner">
 
-    <div class="header-buttons">
+<div class="logo-title">
+🛍️ ZYRE Marketing Seller Dashboard
+</div>
 
-      <button
-        class="btn-white"
-        onclick="goBackToStore()"
-      >
-        ← Back to Store
-      </button>
+<div class="header-buttons">
 
-      <button
-        class="btn-danger"
-        onclick="logoutSeller()"
-      >
-        Logout
-      </button>
+<button
+class="btn-white"
+onclick="goBackToStore()">
+← Back to Store
+</button>
 
-    </div>
+<button
+class="btn-danger"
+onclick="logoutSeller()">
+Logout
+</button>
 
-  </div>
+</div>
+
+</div>
+
 </header>
 
 
 <div
-  id="rentalLoading"
-  class="loading"
->
-  <strong>Checking Store Rental</strong>
-  <br><br>
-  Please wait while ZYRE Marketing checks your current monthly store rental.
+id="rentalLoading"
+class="loading">
+
+<strong>Checking Store Rental</strong>
+
+<br><br>
+
+Please wait while ZYRE Marketing checks your current monthly store rental.
+
 </div>
 
 
 <div
-  id="rentalLock"
-  class="hidden"
->
-  <main>
-
-    <div class="lock-box">
-
-      <h2>🔒 Store Temporarily Locked</h2>
-
-      <p>
-        Your ZYRE Marketing store rental for this month
-        has not been confirmed.
-      </p>
-
-      <p>
-        Pay the monthly rental of
-        <strong>R100</strong>
-        to unlock your seller dashboard.
-      </p>
-
-      <button
-        class="btn-gold"
-        onclick="payRental()"
-      >
-        💳 Pay R100 Rental
-      </button>
-
-      <br><br>
-
-      <button
-        class="btn-black"
-        onclick="checkRentalAgain()"
-      >
-        🔄 Check Payment Again
-      </button>
-
-    </div>
-
-  </main>
-</div>
-
-
-<div
-  id="dashboard"
-  class="hidden"
->
+id="rentalLock"
+class="hidden">
 
 <main>
 
-  <!-- WELCOME -->
+<div class="lock-box">
 
-  <section class="card welcome">
+<h2>🔒 Store Temporarily Locked</h2>
 
-    <h1>
-      Welcome,
-      <span id="sellerName">
-        Seller
-      </span>
-    </h1>
+<p>
+Your ZYRE Marketing store rental for this month
+has not been confirmed.
+</p>
 
-    <p>
-      Store:
-      <strong id="sellerStoreName">
-        ZYRE
-      </strong>
-    </p>
+<p>
+Pay the monthly rental of
+<strong>R100</strong>
+to unlock your seller dashboard.
+</p>
 
-    <p>
-      Manage your products, orders,
-      deliveries and store.
-    </p>
+<button
+class="btn-gold"
+onclick="payRental()">
+💳 Pay R100 Rental
+</button>
 
-    <span
-      id="rentalPaidBadge"
-      class="rental-paid"
-    >
-      ✓ Rental Paid
-    </span>
+<br><br>
 
-  </section>
+<button
+class="btn-black"
+onclick="checkRentalAgain()">
+🔄 Check Payment Again
+</button>
 
+</div>
 
-  <!-- NOTIFICATIONS -->
+</main>
 
-  <section class="card">
+</div>
 
-    <h2>🔔 Notifications</h2>
 
-    <div id="notificationsPreview">
-      <div class="empty">
-        No new notifications.
-      </div>
-    </div>
+<div
+id="dashboard"
+class="hidden">
 
-  </section>
+<main>
 
 
-  <!-- STATS -->
+<section class="card welcome">
 
-  <section class="grid">
+<h1>
+Welcome,
+<span id="sellerName">
+Seller
+</span>
+</h1>
 
-    <div class="stat">
+<p>
+Store:
+<strong id="sellerStoreName">
+ZYRE
+</strong>
+</p>
 
-      <div class="stat-label">
-        Products
-      </div>
+<p>
+Manage your products, orders,
+deliveries and store.
+</p>
 
-      <div
-        class="stat-number"
-        id="productCount"
-      >
-        0
-      </div>
+<span
+id="rentalPaidBadge"
+class="rental-paid">
+✓ Rental Paid
+</span>
 
-    </div>
+</section>
 
 
-    <div class="stat">
+<section class="card">
 
-      <div class="stat-label">
-        Orders
-      </div>
+<h2>🔔 Notifications</h2>
 
-      <div
-        class="stat-number"
-        id="orderCount"
-      >
-        0
-      </div>
+<div id="notificationsPreview">
 
-    </div>
+<div class="empty">
+No new notifications.
+</div>
 
+</div>
 
-    <div class="stat">
+</section>
 
-      <div class="stat-label">
-        Sales
-      </div>
 
-      <div
-        class="stat-number"
-        id="salesTotal"
-      >
-        R0.00
-      </div>
+<section class="grid">
 
-    </div>
+<div class="stat">
 
+<div class="stat-label">
+Products
+</div>
 
-    <div class="stat">
+<div
+class="stat-number"
+id="productCount">
+0
+</div>
 
-      <div class="stat-label">
-        Rental
-      </div>
+</div>
 
-      <div
-        class="stat-number"
-        style="font-size:20px"
-      >
-        PAID
-      </div>
 
-    </div>
+<div class="stat">
 
-  </section>
+<div class="stat-label">
+Orders
+</div>
 
+<div
+class="stat-number"
+id="orderCount">
+0
+</div>
 
-  <br>
+</div>
 
 
-  <!-- NAVIGATION -->
+<div class="stat">
 
-  <div class="nav">
+<div class="stat-label">
+Sales
+</div>
 
-    <button
-      class="active"
-      onclick="showPanel('overview',this)"
-    >
-      📊 Overview
-    </button>
+<div
+class="stat-number"
+id="salesTotal">
+R0.00
+</div>
 
-    <button
-      onclick="showPanel('products',this)"
-    >
-      🛍️ Products
-    </button>
+</div>
 
-    <button
-      onclick="showPanel('orders',this)"
-    >
-      📦 Orders
-    </button>
 
-    <button
-      onclick="showPanel('delivery',this)"
-    >
-      🚚 Delivery
-    </button>
+<div class="stat">
 
-    <button
-      onclick="showPanel('rental',this)"
-    >
-      💳 Store Rental
-    </button>
+<div class="stat-label">
+Rental
+</div>
 
-    <button
-      onclick="showPanel('notifications',this)"
-    >
-      🔔 Notifications
-    </button>
+<div
+class="stat-number"
+style="font-size:20px">
+PAID
+</div>
 
-    <button
-      onclick="showPanel('sellerInfo',this)"
-    >
-      👤 Seller Information
-    </button>
+</div>
 
-  </div>
+</section>
 
 
-  <!-- OVERVIEW -->
+<br>
 
-  <section
-    id="overview"
-    class="panel active"
-  >
 
-    <div class="card">
+<div class="nav">
 
-      <h2>
-        📊 Dashboard Overview
-      </h2>
+<button
+class="active"
+onclick="showPanel('overview',this)">
+📊 Overview
+</button>
 
-      <p>
-        Welcome to your ZYRE Marketing
-        seller control centre.
-      </p>
+<button
+onclick="showPanel('products',this)">
+🛍️ Products
+</button>
 
-      <p>
-        From here you can manage your products,
-        customer orders, delivery information
-        and store rental.
-      </p>
+<button
+onclick="showPanel('orders',this)">
+📦 Orders
+</button>
 
-    </div>
+<button
+onclick="showPanel('delivery',this)">
+🚚 Delivery
+</button>
 
+<button
+onclick="showPanel('rental',this)">
+💳 Store Rental
+</button>
 
-    <div class="grid">
+<button
+onclick="showPanel('notifications',this)">
+🔔 Notifications
+</button>
 
-      <div class="stat">
+<button
+onclick="showPanel('sellerInfo',this)">
+👤 Seller Information
+</button>
 
-        <div class="stat-label">
-          Pending Orders
-        </div>
+</div>
 
-        <div
-          id="pendingCount"
-          class="stat-number"
-        >
-          0
-        </div>
 
-      </div>
+<section
+id="overview"
+class="panel active">
 
+<div class="card">
 
-      <div class="stat">
+<h2>
+📊 Dashboard Overview
+</h2>
 
-        <div class="stat-label">
-          Processing
-        </div>
+<p>
+Welcome to your ZYRE Marketing
+seller control centre.
+</p>
 
-        <div
-          id="processingCount"
-          class="stat-number"
-        >
-          0
-        </div>
+<p>
+From here you can manage your products,
+customer orders, delivery information
+and store rental.
+</p>
 
-      </div>
+</div>
 
 
-      <div class="stat">
+<div class="grid">
 
-        <div class="stat-label">
-          Shipped
-        </div>
+<div class="stat">
 
-        <div
-          id="shippedCount"
-          class="stat-number"
-        >
-          0
-        </div>
+<div class="stat-label">
+Pending Orders
+</div>
 
-      </div>
+<div
+id="pendingCount"
+class="stat-number">
+0
+</div>
 
+</div>
 
-      <div class="stat">
 
-        <div class="stat-label">
-          Delivered
-        </div>
+<div class="stat">
 
-        <div
-          id="deliveredCount"
-          class="stat-number"
-        >
-          0
-        </div>
+<div class="stat-label">
+Processing
+</div>
 
-      </div>
+<div
+id="processingCount"
+class="stat-number">
+0
+</div>
 
-    </div>
+</div>
 
-  </section>
 
+<div class="stat">
 
-  <!-- PRODUCTS -->
+<div class="stat-label">
+Shipped
+</div>
 
-  <section
-    id="products"
-    class="panel"
-  >
+<div
+id="shippedCount"
+class="stat-number">
+0
+</div>
 
-    <div class="card">
+</div>
 
-      <h2>
-        ➕ Add Product
-      </h2>
 
-      <form id="productForm">
+<div class="stat">
 
-        <div class="form-grid">
+<div class="stat-label">
+Delivered
+</div>
 
-          <div class="form-group">
+<div
+id="deliveredCount"
+class="stat-number">
+0
+</div>
 
-            <label>
-              Product Name
-            </label>
+</div>
 
-            <input
-              id="productName"
-              type="text"
-              required
-              placeholder="Product name"
-            >
+</div>
 
-          </div>
+</section>
 
 
-          <div class="form-group">
+<section
+id="products"
+class="panel">
 
-            <label>
-              Price
-            </label>
 
-            <input
-              id="productPrice"
-              type="number"
-              step="0.01"
-              min="0"
-              required
-              placeholder="299.00"
-            >
+<div class="card">
 
-          </div>
+<h2>
+➕ Add Product
+</h2>
 
+<form id="productForm">
 
-          <div class="form-group">
 
-            <label>
-              Stock
-            </label>
+<div class="form-grid">
 
-            <input
-              id="productStock"
-              type="number"
-              min="0"
-              required
-              placeholder="20"
-            >
 
-          </div>
+<div class="form-group">
 
+<label>
+Product Name
+</label>
 
-          <div class="form-group">
+<input
+id="productName"
+type="text"
+required
+placeholder="Product name">
 
-            <label>
-              Category
-            </label>
+</div>
 
-            <select id="productCategory">
 
-              <option value="Electronics">
-                Electronics
-              </option>
+<div class="form-group">
 
-              <option value="Fashion">
-                Fashion
-              </option>
+<label>
+Price
+</label>
 
-              <option value="Home">
-                Home
-              </option>
+<input
+id="productPrice"
+type="number"
+step="0.01"
+min="0"
+required
+placeholder="299.00">
 
-              <option value="Beauty">
-                Beauty
-              </option>
+</div>
 
-            </select>
 
-          </div>
+<div class="form-group">
 
+<label>
+Stock
+</label>
 
-          <div class="form-group full">
+<input
+id="productStock"
+type="number"
+min="0"
+required
+placeholder="20">
 
-            <label>
-              Product Image URL
-            </label>
+</div>
 
-            <input
-              id="productImage"
-              type="url"
-              placeholder="https://..."
-            >
 
-          </div>
+<div class="form-group">
 
-        </div>
+<label>
+Category
+</label>
 
-        <br>
+<select id="productCategory">
 
-        <button
-          class="btn-black"
-          type="submit"
-        >
-          ➕ Add Product
-        </button>
+<option value="Electronics">
+Electronics
+</option>
 
-      </form>
+<option value="Fashion">
+Fashion
+</option>
 
-    </div>
+<option value="Home">
+Home
+</option>
 
+<option value="Beauty">
+Beauty
+</option>
 
-    <div class="card">
+</select>
 
-      <h2>
-        🛍️ My Products
-      </h2>
+</div>
 
-      <div
-        id="productsGrid"
-        class="product-grid"
-      >
-        <div class="empty">
-          Loading products...
-        </div>
-      </div>
 
-    </div>
+<div class="form-group full">
 
-  </section>
+<label>
+📷 Product Picture
+</label>
 
+<input
+id="productImageFile"
+type="file"
+accept="image/*"
+required
+>
 
-  <!-- ORDERS -->
+<small>
+Choose a picture from your phone gallery.
+</small>
 
-  <section
-    id="orders"
-    class="panel"
-  >
+<img
+id="photoPreview"
+class="photo-preview"
+alt="Product preview">
 
-    <div class="card">
+<div
+id="uploadStatus"
+class="upload-status">
+</div>
 
-      <h2>
-        📦 Customer Orders
-      </h2>
+</div>
 
-      <div class="filters">
 
-        <button
-          class="active"
-          onclick="setOrderFilter('all',this)"
-        >
-          All
-        </button>
+</div>
 
-        <button
-          onclick="setOrderFilter('pending',this)"
-        >
-          Pending
-        </button>
 
-        <button
-          onclick="setOrderFilter('processing',this)"
-        >
-          Processing
-        </button>
+<br>
 
-        <button
-          onclick="setOrderFilter('shipped',this)"
-        >
-          Shipped
-        </button>
 
-        <button
-          onclick="setOrderFilter('delivered',this)"
-        >
-          Delivered
-        </button>
+<button
+id="addProductButton"
+class="btn-black"
+type="submit">
 
-      </div>
+➕ Add Product
 
+</button>
 
-      <div
-        id="ordersList"
-        class="order-list"
-      >
-        <div class="empty">
-          Loading orders...
-        </div>
-      </div>
+</form>
 
-    </div>
+</div>
 
-  </section>
 
+<div class="card">
 
-  <!-- DELIVERY -->
+<h2>
+🛍️ My Products
+</h2>
 
-  <section
-    id="delivery"
-    class="panel"
-  >
+<div
+id="productsGrid"
+class="product-grid">
 
-    <div class="card">
+<div class="empty">
+Loading products...
+</div>
 
-      <h2>
-        🚚 Delivery Management
-      </h2>
+</div>
 
-      <p>
-        Manage delivery information for
-        your customer orders.
-      </p>
+</div>
 
-      <div
-        id="deliveryList"
-        class="delivery-list"
-      >
-        <div class="empty">
-          Loading delivery information...
-        </div>
-      </div>
+</section>
 
-    </div>
 
-  </section>
+<section
+id="orders"
+class="panel">
 
+<div class="card">
 
-  <!-- RENTAL -->
+<h2>
+📦 Customer Orders
+</h2>
 
-  <section
-    id="rental"
-    class="panel"
-  >
+<div class="filters">
 
-    <div class="card">
+<button
+class="active"
+onclick="setOrderFilter('all',this)">
+All
+</button>
 
-      <h2>
-        💳 Store Rental
-      </h2>
+<button
+onclick="setOrderFilter('pending',this)">
+Pending
+</button>
 
-      <div class="rental-box">
+<button
+onclick="setOrderFilter('processing',this)">
+Processing
+</button>
 
-        <p>
-          Monthly store rental
-        </p>
+<button
+onclick="setOrderFilter('shipped',this)">
+Shipped
+</button>
 
-        <div class="rental-status">
-          R100 / month
-        </div>
+<button
+onclick="setOrderFilter('delivered',this)">
+Delivered
+</button>
 
-        <p>
-          Current status:
-          <strong
-            id="rentalStatusText"
-          >
-            Checking...
-          </strong>
-        </p>
+</div>
 
-        <p>
-          Your store stays listed on
-          ZYRE Marketing. If the monthly
-          rental is not paid, the store is
-          temporarily locked until payment
-          is confirmed.
-        </p>
 
-        <button
-          id="rentalPayButton"
-          class="btn-gold"
-          onclick="payRental()"
-        >
-          💳 Pay R100
-        </button>
+<div
+id="ordersList"
+class="order-list">
 
-        <button
-          class="btn-black"
-          onclick="checkRentalAgain()"
-        >
-          🔄 Check Rental
-        </button>
+<div class="empty">
+Loading orders...
+</div>
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-  </section>
+</section>
 
 
-  <!-- NOTIFICATIONS -->
+<section
+id="delivery"
+class="panel">
 
-  <section
-    id="notifications"
-    class="panel"
-  >
+<div class="card">
 
-    <div class="card">
+<h2>
+🚚 Delivery Management
+</h2>
 
-      <h2>
-        🔔 Notifications
-      </h2>
+<p>
+Manage delivery information for
+your customer orders.
+</p>
 
-      <div id="notificationsList">
+<div
+id="deliveryList"
+class="delivery-list">
 
-        <div class="empty">
-          Loading notifications...
-        </div>
+<div class="empty">
+Loading delivery information...
+</div>
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-  </section>
+</section>
 
 
-  <!-- SELLER INFO -->
+<section
+id="rental"
+class="panel">
 
-  <section
-    id="sellerInfo"
-    class="panel"
-  >
+<div class="card">
 
-    <div class="card">
+<h2>
+💳 Store Rental
+</h2>
 
-      <h2>
-        👤 Seller Information
-      </h2>
+<div class="rental-box">
 
-      <div class="info-grid">
+<p>
+Monthly store rental
+</p>
 
-        <div class="info-box">
+<div class="rental-status">
+R100 / month
+</div>
 
-          <div class="info-label">
-            Seller Name
-          </div>
+<p>
+Current status:
+<strong
+id="rentalStatusText">
+Checking...
+</strong>
+</p>
 
-          <div
-            id="sellerInfoName"
-            class="info-value"
-          >
-            —
-          </div>
+<p>
+Your store stays listed on
+ZYRE Marketing. If the monthly
+rental is not paid, the store is
+temporarily locked until payment
+is confirmed.
+</p>
 
-        </div>
+<button
+id="rentalPayButton"
+class="btn-gold"
+onclick="payRental()">
+💳 Pay R100
+</button>
 
+<button
+class="btn-black"
+onclick="checkRentalAgain()">
+🔄 Check Rental
+</button>
 
-        <div class="info-box">
+</div>
 
-          <div class="info-label">
-            Store Name
-          </div>
+</div>
 
-          <div
-            id="sellerInfoStore"
-            class="info-value"
-          >
-            —
-          </div>
+</section>
 
-        </div>
 
+<section
+id="notifications"
+class="panel">
 
-        <div class="info-box">
+<div class="card">
 
-          <div class="info-label">
-            Seller ID
-          </div>
+<h2>
+🔔 Notifications
+</h2>
 
-          <div
-            id="sellerInfoId"
-            class="info-value"
-          >
-            —
-          </div>
+<div id="notificationsList">
 
-        </div>
+<div class="empty">
+Loading notifications...
+</div>
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-  </section>
+</section>
 
 
-  <!-- TECHNICAL AREA -->
+<section
+id="sellerInfo"
+class="panel">
 
-  <div id="technicalArea">
+<div class="card">
 
-    <div id="sellerId"></div>
+<h2>
+👤 Seller Information
+</h2>
 
-    <div id="orderTable"></div>
+<div class="info-grid">
 
-    <div id="deliveryTable"></div>
 
-  </div>
+<div class="info-box">
+
+<div class="info-label">
+Seller Name
+</div>
+
+<div
+id="sellerInfoName"
+class="info-value">
+—
+</div>
+
+</div>
+
+
+<div class="info-box">
+
+<div class="info-label">
+Store Name
+</div>
+
+<div
+id="sellerInfoStore"
+class="info-value">
+—
+</div>
+
+</div>
+
+
+<div class="info-box">
+
+<div class="info-label">
+Seller ID
+</div>
+
+<div
+id="sellerInfoId"
+class="info-value">
+—
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<div id="technicalArea">
+
+<div id="sellerId"></div>
+<div id="orderTable"></div>
+<div id="deliveryTable"></div>
+
+</div>
+
 
 </main>
 
@@ -1255,6 +1238,12 @@ const SUPABASE_KEY =
 
 const RENTAL_PAYSTACK_URL =
 "https://gaccizzlwswwynattgda.supabase.co/functions/v1/rental-paystack";
+
+
+/* STORAGE BUCKET */
+
+const PRODUCT_IMAGE_BUCKET =
+"Product-images";
 
 
 let SELLER_ID =
@@ -1286,7 +1275,8 @@ async function refreshSellerAuthentication(){
 
     if(
       window.supabase &&
-      typeof window.supabase.createClient === "function"
+      typeof window.supabase.createClient ===
+      "function"
     ){
 
       const client =
@@ -1298,6 +1288,7 @@ async function refreshSellerAuthentication(){
       const result =
         await client.auth.getSession();
 
+
       if(
         result &&
         result.data &&
@@ -1307,10 +1298,12 @@ async function refreshSellerAuthentication(){
         SELLER_ACCESS_TOKEN =
           result.data.session.access_token;
 
+
         localStorage.setItem(
           "zava_access_token",
           SELLER_ACCESS_TOKEN
         );
+
 
         if(
           result.data.session.user &&
@@ -1319,6 +1312,7 @@ async function refreshSellerAuthentication(){
 
           SELLER_EMAIL =
             result.data.session.user.email;
+
 
           localStorage.setItem(
             "zava_seller_email",
@@ -1355,6 +1349,7 @@ async function supabaseRequest(
   const token =
     SELLER_ACCESS_TOKEN ||
     SUPABASE_KEY;
+
 
   const headers = {
 
@@ -1393,6 +1388,7 @@ async function supabaseRequest(
 
   let data = null;
 
+
   try{
 
     data =
@@ -1414,10 +1410,10 @@ async function supabaseRequest(
       data.message
         ? data.message
         : (
-            typeof data === "string"
-              ? data
-              : "Supabase request failed"
-          )
+          typeof data === "string"
+            ? data
+            : "Supabase request failed"
+        )
     );
 
   }
@@ -1426,6 +1422,283 @@ async function supabaseRequest(
   return data;
 
 }
+
+
+/* =========================
+UPLOAD PRODUCT IMAGE
+========================= */
+
+async function uploadProductImage(file){
+
+  if(!file){
+
+    throw new Error(
+      "Please choose a product picture."
+    );
+
+  }
+
+
+  if(
+    !file.type ||
+    !file.type.startsWith("image/")
+  ){
+
+    throw new Error(
+      "Please choose an image file."
+    );
+
+  }
+
+
+  const maxSize =
+    8 * 1024 * 1024;
+
+
+  if(file.size > maxSize){
+
+    throw new Error(
+      "The picture is too large. Please choose an image smaller than 8MB."
+    );
+
+  }
+
+
+  await refreshSellerAuthentication();
+
+
+  const token =
+    SELLER_ACCESS_TOKEN ||
+    SUPABASE_KEY;
+
+
+  const extension =
+    (
+      file.name
+        .split(".")
+        .pop() ||
+      "jpg"
+    )
+    .toLowerCase()
+    .replace(
+      /[^a-z0-9]/g,
+      ""
+    );
+
+
+  const safeSellerId =
+    String(
+      SELLER_ID
+    )
+    .replace(
+      /[^a-zA-Z0-9_-]/g,
+      ""
+    );
+
+
+  const fileName =
+    safeSellerId +
+    "_" +
+    Date.now() +
+    "_" +
+    Math.random()
+      .toString(36)
+      .substring(2,8) +
+    "." +
+    extension;
+
+
+  const filePath =
+    "seller-" +
+    safeSellerId +
+    "/" +
+    fileName;
+
+
+  const uploadUrl =
+    SUPABASE_URL +
+    "/storage/v1/object/" +
+    PRODUCT_IMAGE_BUCKET +
+    "/" +
+    filePath;
+
+
+  const response =
+    await fetch(
+      uploadUrl,
+      {
+        method:"POST",
+
+        headers:{
+
+          "Authorization":
+            "Bearer " + token,
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "x-upsert":
+            "false",
+
+          "Content-Type":
+            file.type
+
+        },
+
+        body:file
+
+      }
+    );
+
+
+  const responseText =
+    await response.text();
+
+
+  let responseData = null;
+
+
+  try{
+
+    responseData =
+      responseText
+        ? JSON.parse(responseText)
+        : null;
+
+  }catch{
+
+    responseData =
+      responseText;
+
+  }
+
+
+  if(!response.ok){
+
+    throw new Error(
+      responseData &&
+      responseData.message
+        ? responseData.message
+        : (
+          typeof responseData === "string"
+            ? responseData
+            : "Picture upload failed."
+        )
+    );
+
+  }
+
+
+  const publicUrl =
+    SUPABASE_URL +
+    "/storage/v1/object/public/" +
+    PRODUCT_IMAGE_BUCKET +
+    "/" +
+    filePath;
+
+
+  return publicUrl;
+
+}
+
+
+/* =========================
+PHOTO PREVIEW
+========================= */
+
+document
+  .getElementById("productImageFile")
+  ?.addEventListener(
+    "change",
+    function(){
+
+      const file =
+        this.files &&
+        this.files[0];
+
+
+      const preview =
+        document.getElementById(
+          "photoPreview"
+        );
+
+
+      const status =
+        document.getElementById(
+          "uploadStatus"
+        );
+
+
+      if(!file){
+
+        if(preview){
+
+          preview.style.display =
+            "none";
+
+          preview.removeAttribute(
+            "src"
+          );
+
+        }
+
+        if(status){
+
+          status.textContent =
+            "";
+
+        }
+
+        return;
+
+      }
+
+
+      if(!file.type.startsWith("image/")){
+
+        alert(
+          "Please choose an image."
+        );
+
+        this.value = "";
+
+        return;
+
+      }
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function(event){
+
+          if(preview){
+
+            preview.src =
+              event.target.result;
+
+            preview.style.display =
+              "block";
+
+          }
+
+        };
+
+
+      reader.readAsDataURL(file);
+
+
+      if(status){
+
+        status.textContent =
+          "✓ Picture selected";
+
+      }
+
+    }
+  );
 
 
 /* =========================
@@ -1442,8 +1715,11 @@ function isPaidThisMonth(payment){
 
 
   if(
-    String(payment.status || "")
-      .toLowerCase() !== "paid"
+    String(
+      payment.status || ""
+    )
+    .toLowerCase() !==
+    "paid"
   ){
 
     return false;
@@ -1472,10 +1748,10 @@ function isPaidThisMonth(payment){
 
   return (
     paymentDate.getFullYear() ===
-      now.getFullYear()
+    now.getFullYear()
     &&
     paymentDate.getMonth() ===
-      now.getMonth()
+    now.getMonth()
   );
 
 }
@@ -1509,9 +1785,7 @@ async function checkRental(){
       );
 
 
-    if(
-      !Array.isArray(payments)
-    ){
+    if(!Array.isArray(payments)){
 
       return false;
 
@@ -1552,10 +1826,12 @@ function showDashboard(){
     ?.classList
     .add("hidden");
 
+
   document
     .getElementById("rentalLock")
     ?.classList
     .add("hidden");
+
 
   document
     .getElementById("dashboard")
@@ -1576,10 +1852,12 @@ function showRentalLock(){
     ?.classList
     .add("hidden");
 
+
   document
     .getElementById("dashboard")
     ?.classList
     .add("hidden");
+
 
   document
     .getElementById("rentalLock")
@@ -1665,11 +1943,6 @@ async function startDashboard(){
       error
     );
 
-    /*
-      Fail closed:
-      if rental cannot be verified,
-      keep dashboard locked.
-    */
 
     showRentalLock();
 
@@ -1842,6 +2115,7 @@ async function loadProducts(){
         "productCount"
       );
 
+
     if(productCountElement){
 
       productCountElement.textContent =
@@ -1913,6 +2187,7 @@ function renderProducts(){
 
 
         return `
+
         <div class="product-card">
 
           <img
@@ -1925,31 +2200,36 @@ function renderProducts(){
           <div class="product-content">
 
             <div class="product-name">
-              ${escapeHtml(product.name || "Unnamed Product")}
+              ${escapeHtml(
+                product.name ||
+                "Unnamed Product"
+              )}
             </div>
 
             <div class="product-price">
-              R${Number(product.price || 0).toFixed(2)}
+              R${Number(
+                product.price || 0
+              ).toFixed(2)}
             </div>
 
             <div class="product-stock">
               Stock:
-              ${Number(product.stock || 0)}
+              ${Number(
+                product.stock || 0
+              )}
             </div>
 
             <div class="actions">
 
               <button
                 class="btn-black"
-                onclick="editProduct(${Number(product.id)})"
-              >
+                onclick="editProduct(${Number(product.id)})">
                 ✏ Edit
               </button>
 
               <button
                 class="btn-danger"
-                onclick="deleteProduct(${Number(product.id)})"
-              >
+                onclick="deleteProduct(${Number(product.id)})">
                 🗑 Delete
               </button>
 
@@ -1958,6 +2238,7 @@ function renderProducts(){
           </div>
 
         </div>
+
         `;
 
       })
@@ -2008,11 +2289,22 @@ document
           .value;
 
 
-      const image_url =
+      const imageFile =
         document
-          .getElementById("productImage")
-          .value
-          .trim();
+          .getElementById("productImageFile")
+          .files[0];
+
+
+      const button =
+        document.getElementById(
+          "addProductButton"
+        );
+
+
+      const uploadStatus =
+        document.getElementById(
+          "uploadStatus"
+        );
 
 
       if(!name){
@@ -2026,7 +2318,56 @@ document
       }
 
 
+      if(!imageFile){
+
+        alert(
+          "Please choose a product picture from your phone."
+        );
+
+        return;
+
+      }
+
+
       try{
+
+        if(button){
+
+          button.disabled =
+            true;
+
+          button.textContent =
+            "Uploading picture...";
+
+        }
+
+
+        if(uploadStatus){
+
+          uploadStatus.textContent =
+            "⏳ Uploading picture...";
+        }
+
+
+        const imageUrl =
+          await uploadProductImage(
+            imageFile
+          );
+
+
+        if(uploadStatus){
+
+          uploadStatus.textContent =
+            "✓ Picture uploaded";
+        }
+
+
+        if(button){
+
+          button.textContent =
+            "Saving product...";
+        }
+
 
         await supabaseRequest(
           "products",
@@ -2052,7 +2393,7 @@ document
               category,
 
               image_url:
-                image_url || null,
+                imageUrl,
 
               active:true
 
@@ -2072,17 +2413,66 @@ document
           .reset();
 
 
+        const preview =
+          document.getElementById(
+            "photoPreview"
+          );
+
+
+        if(preview){
+
+          preview.style.display =
+            "none";
+
+          preview.removeAttribute(
+            "src"
+          );
+
+        }
+
+
+        if(uploadStatus){
+
+          uploadStatus.textContent =
+            "";
+
+        }
+
+
         await loadProducts();
 
 
       }catch(error){
 
-        console.error(error);
+        console.error(
+          "Add product error:",
+          error
+        );
+
 
         alert(
           "Product could not be added.\n\n" +
           error.message
         );
+
+
+        if(uploadStatus){
+
+          uploadStatus.textContent =
+            "❌ Upload failed";
+        }
+
+      }finally{
+
+        if(button){
+
+          button.disabled =
+            false;
+
+          button.textContent =
+            "➕ Add Product";
+
+        }
 
       }
 
@@ -2168,11 +2558,14 @@ async function editProduct(id){
 
         body:JSON.stringify({
 
-          name:name.trim(),
+          name:
+            name.trim(),
 
-          price:Number(price),
+          price:
+            Number(price),
 
-          stock:Number(stock)
+          stock:
+            Number(stock)
 
         })
 
@@ -2376,6 +2769,7 @@ async function loadOrders(){
 
     const productMap = {};
 
+
     PRODUCTS.forEach(
       product => {
 
@@ -2475,6 +2869,7 @@ async function loadOrders(){
       error
     );
 
+
     ORDERS = [];
 
     renderOrders();
@@ -2535,6 +2930,7 @@ function updateOrderStats(){
       "pendingCount"
     );
 
+
   if(pending){
 
     pending.textContent =
@@ -2547,6 +2943,7 @@ function updateOrderStats(){
     document.getElementById(
       "processingCount"
     );
+
 
   if(processing){
 
@@ -2561,6 +2958,7 @@ function updateOrderStats(){
       "shippedCount"
     );
 
+
   if(shipped){
 
     shipped.textContent =
@@ -2573,6 +2971,7 @@ function updateOrderStats(){
     document.getElementById(
       "deliveredCount"
     );
+
 
   if(delivered){
 
@@ -2587,6 +2986,7 @@ function updateOrderStats(){
       "orderCount"
     );
 
+
   if(orderCount){
 
     orderCount.textContent =
@@ -2596,6 +2996,7 @@ function updateOrderStats(){
 
 
   let total = 0;
+
 
   ORDERS.forEach(order => {
 
@@ -2611,6 +3012,7 @@ function updateOrderStats(){
     document.getElementById(
       "salesTotal"
     );
+
 
   if(sales){
 
@@ -2765,6 +3167,7 @@ function renderOrders(){
 
 
         return `
+
         <div class="order-card">
 
           <div class="order-top">
@@ -2791,11 +3194,12 @@ function renderOrders(){
 
 
             <span
-              class="status ${escapeHtml(status)}"
-            >
+              class="status ${escapeHtml(status)}">
+
               ${escapeHtml(
                 status.toUpperCase()
               )}
+
             </span>
 
           </div>
@@ -2835,35 +3239,32 @@ function renderOrders(){
 
             <button
               class="btn-black"
-              onclick="changeOrderStatus(${Number(order.id)},'pending')"
-            >
+              onclick="changeOrderStatus(${Number(order.id)},'pending')">
               Pending
             </button>
 
             <button
               class="btn-black"
-              onclick="changeOrderStatus(${Number(order.id)},'processing')"
-            >
+              onclick="changeOrderStatus(${Number(order.id)},'processing')">
               Processing
             </button>
 
             <button
               class="btn-black"
-              onclick="changeOrderStatus(${Number(order.id)},'shipped')"
-            >
+              onclick="changeOrderStatus(${Number(order.id)},'shipped')">
               Shipped
             </button>
 
             <button
               class="btn-green"
-              onclick="changeOrderStatus(${Number(order.id)},'delivered')"
-            >
+              onclick="changeOrderStatus(${Number(order.id)},'delivered')">
               Delivered
             </button>
 
           </div>
 
         </div>
+
         `;
 
       })
@@ -2919,6 +3320,7 @@ async function changeOrderStatus(
   }catch(error){
 
     console.error(error);
+
 
     alert(
       "Order status could not be updated.\n\n" +
@@ -3010,6 +3412,7 @@ async function loadDelivery(){
       error
     );
 
+
     DELIVERY_DATA = [];
 
     renderDelivery();
@@ -3059,6 +3462,7 @@ function renderDelivery(){
       .map(delivery => {
 
         return `
+
         <div class="delivery-card">
 
           <div class="delivery-top">
@@ -3096,12 +3500,12 @@ function renderDelivery(){
 
           <button
             class="btn-black"
-            onclick="editDelivery(${Number(delivery.id)})"
-          >
+            onclick="editDelivery(${Number(delivery.id)})">
             ✏ Update Delivery
           </button>
 
         </div>
+
         `;
 
       })
@@ -3210,6 +3614,7 @@ async function loadNotifications(){
 
   const html =
     `
+
     <div class="notification">
 
       <strong>
@@ -3221,6 +3626,7 @@ async function loadNotifications(){
       </div>
 
     </div>
+
 
     <div class="notification">
 
@@ -3234,6 +3640,7 @@ async function loadNotifications(){
       </div>
 
     </div>
+
     `;
 
 
@@ -3358,7 +3765,8 @@ async function payRental(){
 
     if(button){
 
-      button.disabled = true;
+      button.disabled =
+        true;
 
       button.textContent =
         "Opening payment...";
@@ -3373,6 +3781,7 @@ async function payRental(){
           method:"POST",
 
           headers:{
+
             "Content-Type":
               "application/json",
 
@@ -3469,7 +3878,8 @@ async function payRental(){
 
     if(button){
 
-      button.disabled = false;
+      button.disabled =
+        false;
 
       button.textContent =
         "💳 Pay R100";
@@ -3495,7 +3905,8 @@ async function checkRentalAgain(){
 
   if(button){
 
-    button.disabled = true;
+    button.disabled =
+      true;
 
     button.textContent =
       "Checking...";
@@ -3516,9 +3927,12 @@ async function checkRentalAgain(){
       );
 
 
-      dashboardStarted = false;
+      dashboardStarted =
+        false;
+
 
       await startDashboard();
+
 
     }else{
 
@@ -3541,7 +3955,8 @@ async function checkRentalAgain(){
 
   if(button){
 
-    button.disabled = false;
+    button.disabled =
+      false;
 
     button.textContent =
       "🔄 Check Payment Again";
@@ -3574,7 +3989,7 @@ async function logoutSeller(){
     if(
       window.supabase &&
       typeof window.supabase.createClient ===
-        "function"
+      "function"
     ){
 
       const client =
@@ -3582,6 +3997,7 @@ async function logoutSeller(){
           SUPABASE_URL,
           SUPABASE_KEY
         );
+
 
       await client.auth.signOut();
 
