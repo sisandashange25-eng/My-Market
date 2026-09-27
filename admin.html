@@ -2005,8 +2005,14 @@ if(ordersData.length){
 
 try{
 
+/*
+FIXED:
+Actual table = order_items
+Actual column = product_id
+*/
+
 const items=await api(
-"/rest/v1/orders_items?select=order_id,products_id,quantity"
+"/rest/v1/order_items?select=order_id,product_id,quantity"
 );
 
 
@@ -2033,8 +2039,8 @@ const sellerOrderSets={};
 items.forEach(item=>{
 
 const productId=
-item.products_id ??
-item.Products_id;
+item.product_id ??
+item.Product_id;
 
 const orderId=
 item.order_id ??
@@ -2277,9 +2283,14 @@ String(p.id)
 (orderItemsData||[])
 .forEach(item=>{
 
+/*
+FIXED:
+Actual column = product_id
+*/
+
 const productId=
-item.products_id ??
-item.Products_id;
+item.product_id ??
+item.Product_id;
 
 const orderId=
 item.order_id ??
@@ -2493,9 +2504,14 @@ async function loadOrderItems(){
 
 try{
 
+/*
+FIXED:
+Actual table = order_items
+*/
+
 orderItemsData=
 await api(
-"/rest/v1/orders_items?select=*"
+"/rest/v1/order_items?select=*"
 )||[];
 
 }catch(e){
@@ -2552,9 +2568,14 @@ const storeOrderIds=new Set();
 (orderItemsData||[])
 .forEach(item=>{
 
+/*
+FIXED:
+Actual column = product_id
+*/
+
 const productId=
-item.products_id ??
-item.Products_id;
+item.product_id ??
+item.Product_id;
 
 const orderId=
 item.order_id ??
@@ -3033,9 +3054,14 @@ const sellerOrders=new Set();
 (orderItemsData||[])
 .forEach(item=>{
 
+/*
+FIXED:
+Actual column = product_id
+*/
+
 const productId=
-item.products_id ??
-item.Products_id;
+item.product_id ??
+item.Product_id;
 
 const orderId=
 item.order_id ??
