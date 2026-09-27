@@ -21,9 +21,6 @@
 
   <meta name="author" content="ZYRE Marketing">
 
-  <meta name="geo.region" content="ZA">
-  <meta name="geo.country" content="South Africa">
-
   <link
     rel="canonical"
     href="https://sisandashange25-eng.github.io/My-Market/store.html"
@@ -323,9 +320,7 @@
 
     .catalogue-bar {
       background: #ffffff;
-
       border-bottom: 1px solid #e4e1d9;
-
       padding: 15px 18px;
     }
 
@@ -509,10 +504,6 @@
 
       font-size: 14px;
     }
-
-    /* =========================
-       RENTAL LOCK
-    ========================= */
 
     .rental-warning {
       width: min(1200px, calc(100% - 36px));
@@ -1277,11 +1268,6 @@
 
     </section>
 
-
-    <!-- =========================
-         RENTAL WARNING
-    ========================= -->
-
     <section
       id="rentalWarning"
       class="rental-warning"
@@ -1303,11 +1289,6 @@
       </p>
 
     </section>
-
-
-    <!-- =========================
-         LOCKED STORE MESSAGE
-    ========================= -->
 
     <section
       id="rentalLockedSection"
@@ -1331,7 +1312,6 @@
       </p>
 
     </section>
-
 
     <section
       id="productsSection"
@@ -1400,27 +1380,18 @@
     const SUPABASE_KEY =
       "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
-
     const CART_STORAGE_KEY =
       "zyre_cart_v2";
-
 
     const params =
       new URLSearchParams(
         window.location.search
       );
 
-
     const sellerId =
       params.get("seller_id");
 
-
     window.storeProducts = [];
-
-    /*
-      Rental access is deliberately locked
-      until the current month's payment is confirmed.
-    */
 
     window.storeRentalAccess = false;
 
@@ -1467,11 +1438,9 @@
           "Are you sure you want to logout?"
         );
 
-
       if (!confirmed) {
         return;
       }
-
 
       try {
 
@@ -1479,7 +1448,6 @@
           localStorage.getItem(
             "zava_access_token"
           );
-
 
         if (accessToken) {
 
@@ -1490,7 +1458,6 @@
               "/auth/v1/logout",
               {
                 method: "POST",
-
                 headers: {
                   apikey: SUPABASE_KEY,
                   Authorization:
@@ -1511,31 +1478,12 @@
 
         }
 
-
-        localStorage.removeItem(
-          "zava_access_token"
-        );
-
-        localStorage.removeItem(
-          "zava_seller_id"
-        );
-
-        localStorage.removeItem(
-          "zava_user"
-        );
-
-        localStorage.removeItem(
-          "zava_profile"
-        );
-
-        localStorage.removeItem(
-          "zava_seller"
-        );
-
-        localStorage.removeItem(
-          "zava_role"
-        );
-
+        localStorage.removeItem("zava_access_token");
+        localStorage.removeItem("zava_seller_id");
+        localStorage.removeItem("zava_user");
+        localStorage.removeItem("zava_profile");
+        localStorage.removeItem("zava_seller");
+        localStorage.removeItem("zava_role");
 
         const menu =
           document.getElementById(
@@ -1547,16 +1495,13 @@
             "menuOverlay"
           );
 
-
         if (menu) {
           menu.classList.remove("open");
         }
 
-
         if (overlay) {
           overlay.classList.remove("open");
         }
-
 
         window.location.href =
           "auth.html";
@@ -1568,31 +1513,12 @@
           error
         );
 
-
-        localStorage.removeItem(
-          "zava_access_token"
-        );
-
-        localStorage.removeItem(
-          "zava_seller_id"
-        );
-
-        localStorage.removeItem(
-          "zava_user"
-        );
-
-        localStorage.removeItem(
-          "zava_profile"
-        );
-
-        localStorage.removeItem(
-          "zava_seller"
-        );
-
-        localStorage.removeItem(
-          "zava_role"
-        );
-
+        localStorage.removeItem("zava_access_token");
+        localStorage.removeItem("zava_seller_id");
+        localStorage.removeItem("zava_user");
+        localStorage.removeItem("zava_profile");
+        localStorage.removeItem("zava_seller");
+        localStorage.removeItem("zava_role");
 
         window.location.href =
           "auth.html";
@@ -1650,21 +1576,17 @@
         storeName ||
         "ZYRE Marketing Online Store";
 
-
       const safeDescription =
         storeDescription ||
         "Shop products from this ZYRE Marketing marketplace store.";
 
-
       document.title =
         `${safeName} | ZYRE Marketing`;
-
 
       const descriptionMeta =
         document.querySelector(
           'meta[name="description"]'
         );
-
 
       if (descriptionMeta) {
 
@@ -1675,12 +1597,10 @@
 
       }
 
-
       const canonical =
         document.querySelector(
           'link[rel="canonical"]'
         );
-
 
       if (canonical) {
 
@@ -1691,12 +1611,10 @@
 
       }
 
-
       const ogTitle =
         document.querySelector(
           'meta[property="og:title"]'
         );
-
 
       if (ogTitle) {
 
@@ -1707,12 +1625,10 @@
 
       }
 
-
       const ogDescription =
         document.querySelector(
           'meta[property="og:description"]'
         );
-
 
       if (ogDescription) {
 
@@ -1723,12 +1639,10 @@
 
       }
 
-
       const twitterTitle =
         document.querySelector(
           'meta[name="twitter:title"]'
         );
-
 
       if (twitterTitle) {
 
@@ -1739,12 +1653,10 @@
 
       }
 
-
       const twitterDescription =
         document.querySelector(
           'meta[name="twitter:description"]'
         );
-
 
       if (twitterDescription) {
 
@@ -1755,30 +1667,25 @@
 
       }
 
-
       const existingSchema =
         document.getElementById(
           "storeSchema"
         );
 
-
       if (existingSchema) {
         existingSchema.remove();
       }
-
 
       const schema =
         document.createElement(
           "script"
         );
 
-
       schema.id =
         "storeSchema";
 
       schema.type =
         "application/ld+json";
-
 
       schema.textContent =
         JSON.stringify({
@@ -1800,7 +1707,6 @@
 
         });
 
-
       document.head.appendChild(
         schema
       );
@@ -1808,15 +1714,14 @@
     }
 
 
-    /* =========================
-       RENTAL ACCESS CHECK
-    ========================= */
+    /* =====================================================
+       RENTAL ACCESS
+       ===================================================== */
 
     function getCurrentLocalMonthRange() {
 
       const now =
         new Date();
-
 
       const start =
         new Date(
@@ -1829,7 +1734,6 @@
           0
         );
 
-
       const end =
         new Date(
           now.getFullYear(),
@@ -1841,10 +1745,9 @@
           0
         );
 
-
       return {
-        start: start,
-        end: end
+        start,
+        end
       };
 
     }
@@ -1858,7 +1761,6 @@
         return false;
       }
 
-
       if (
         String(
           payment.status || ""
@@ -1869,23 +1771,19 @@
 
       }
 
-
       const paymentDateValue =
         payment.paid_at ||
         payment.created_at ||
         null;
 
-
       if (!paymentDateValue) {
         return false;
       }
-
 
       const paymentDate =
         new Date(
           paymentDateValue
         );
-
 
       if (
         Number.isNaN(
@@ -1897,10 +1795,8 @@
 
       }
 
-
       const range =
         getCurrentLocalMonthRange();
-
 
       return (
         paymentDate >= range.start &&
@@ -1910,75 +1806,55 @@
     }
 
 
-    async function getSellerRentalAccess(
+    async function checkPaidRentalPayment(
       sellerIdValue
     ) {
-
-      /*
-        Fail closed.
-
-        If the rental table cannot be checked,
-        the store remains locked.
-      */
 
       if (!sellerIdValue) {
         return false;
       }
 
-
       try {
 
-        const rentalResponse =
+        const url =
+          `${SUPABASE_URL}/rest/v1/rental_payments` +
+          `?seller_id=eq.${encodeURIComponent(
+            sellerIdValue
+          )}` +
+          `&status=eq.paid` +
+          `&select=id,seller_id,subscription_id,amount,status,payment_reference,payment_method,paid_at,created_at` +
+          `&order=id.desc` +
+          `&limit=20`;
+
+        const response =
           await fetch(
-
-            `${SUPABASE_URL}/rest/v1/rental_payments?seller_id=eq.${encodeURIComponent(
-              sellerIdValue
-            )}&status=eq.paid&select=id,seller_id,subscription_id,amount,status,payment_reference,payment_method,paid_at,created_at&order=id.desc&limit=20`,
-
+            url,
             {
-
-              method:
-                "GET",
+              method: "GET",
 
               headers: {
-
-                apikey:
-                  SUPABASE_KEY,
-
+                apikey: SUPABASE_KEY,
                 Authorization:
                   `Bearer ${SUPABASE_KEY}`,
-
                 Accept:
                   "application/json"
-
               }
-
             }
-
           );
 
+        if (!response.ok) {
 
-        if (!rentalResponse.ok) {
-
-          const errorText =
-            await rentalResponse.text();
-
-
-          console.error(
-            "Rental check failed:",
-            rentalResponse.status,
-            errorText
+          console.warn(
+            "Rental payment check returned:",
+            response.status
           );
-
 
           return false;
 
         }
 
-
         const payments =
-          await rentalResponse.json();
-
+          await response.json();
 
         if (
           !Array.isArray(payments)
@@ -1987,7 +1863,6 @@
           return false;
 
         }
-
 
         return payments.some(
           function(payment) {
@@ -2002,14 +1877,189 @@
       } catch (error) {
 
         console.error(
-          "Rental access error:",
+          "Paid rental check error:",
           error
         );
-
 
         return false;
 
       }
+
+    }
+
+
+    async function checkActiveSubscription(
+      sellerIdValue
+    ) {
+
+      if (!sellerIdValue) {
+        return false;
+      }
+
+      try {
+
+        const url =
+          `${SUPABASE_URL}/rest/v1/store_subscriptions` +
+          `?seller_id=eq.${encodeURIComponent(
+            sellerIdValue
+          )}` +
+          `&status=eq.active` +
+          `&select=id,seller_id,rental_plan_id,status,started_at,expires_at,created_at` +
+          `&order=id.desc` +
+          `&limit=10`;
+
+        const response =
+          await fetch(
+            url,
+            {
+              method: "GET",
+
+              headers: {
+                apikey: SUPABASE_KEY,
+                Accept:
+                  "application/json"
+              }
+            }
+          );
+
+        if (!response.ok) {
+
+          console.warn(
+            "Subscription check returned:",
+            response.status
+          );
+
+          return false;
+
+        }
+
+        const subscriptions =
+          await response.json();
+
+        if (
+          !Array.isArray(subscriptions)
+        ) {
+
+          return false;
+
+        }
+
+        const now =
+          new Date();
+
+        return subscriptions.some(
+          function(subscription) {
+
+            if (
+              String(
+                subscription.status || ""
+              ).toLowerCase() !== "active"
+            ) {
+
+              return false;
+
+            }
+
+            if (
+              !subscription.expires_at
+            ) {
+
+              return true;
+
+            }
+
+            const expires =
+              new Date(
+                subscription.expires_at
+              );
+
+            if (
+              Number.isNaN(
+                expires.getTime()
+              )
+            ) {
+
+              return false;
+
+            }
+
+            return expires >= now;
+
+          }
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Active subscription check error:",
+          error
+        );
+
+        return false;
+
+      }
+
+    }
+
+
+    async function getSellerRentalAccess(
+      sellerIdValue
+    ) {
+
+      if (!sellerIdValue) {
+        return false;
+      }
+
+      /*
+        The store is considered paid when either:
+
+        1. There is an active, non-expired subscription.
+
+        OR
+
+        2. There is a paid rental payment in the
+           current month.
+
+        This matches the actual ZYRE rental records.
+      */
+
+      const activeSubscription =
+        await checkActiveSubscription(
+          sellerIdValue
+        );
+
+      if (activeSubscription) {
+
+        console.log(
+          "ZYRE rental access granted by active subscription."
+        );
+
+        return true;
+
+      }
+
+
+      const currentMonthPayment =
+        await checkPaidRentalPayment(
+          sellerIdValue
+        );
+
+      if (currentMonthPayment) {
+
+        console.log(
+          "ZYRE rental access granted by current-month paid rental."
+        );
+
+        return true;
+
+      }
+
+
+      console.warn(
+        "ZYRE rental access could not be confirmed."
+      );
+
+      return false;
 
     }
 
@@ -2019,76 +2069,55 @@
       window.storeRentalAccess =
         false;
 
-
       const warning =
         document.getElementById(
           "rentalWarning"
         );
-
 
       const lockedSection =
         document.getElementById(
           "rentalLockedSection"
         );
 
-
       const productsSection =
         document.getElementById(
           "productsSection"
         );
-
 
       const grid =
         document.getElementById(
           "productsGrid"
         );
 
-
       const countElement =
         document.getElementById(
           "catalogueCount"
         );
 
-
       if (warning) {
-
         warning.style.display =
           "block";
-
       }
-
 
       if (lockedSection) {
-
         lockedSection.style.display =
           "block";
-
       }
-
 
       if (productsSection) {
-
         productsSection.style.display =
           "none";
-
       }
-
 
       if (grid) {
-
         grid.innerHTML =
           "";
-
       }
-
 
       if (countElement) {
-
         countElement.textContent =
           "Store unavailable";
-
       }
-
 
       window.storeProducts =
         [];
@@ -2101,54 +2130,42 @@
       window.storeRentalAccess =
         true;
 
-
       const warning =
         document.getElementById(
           "rentalWarning"
         );
-
 
       const lockedSection =
         document.getElementById(
           "rentalLockedSection"
         );
 
-
       const productsSection =
         document.getElementById(
           "productsSection"
         );
 
-
       if (warning) {
-
         warning.style.display =
           "none";
-
       }
-
 
       if (lockedSection) {
-
         lockedSection.style.display =
           "none";
-
       }
 
-
       if (productsSection) {
-
         productsSection.style.display =
           "block";
-
       }
 
     }
 
 
-    /* =========================
-       CART STORAGE
-    ========================= */
+    /* =====================================================
+       CART
+       ===================================================== */
 
     function getCart() {
 
@@ -2159,20 +2176,16 @@
             CART_STORAGE_KEY
           );
 
-
         if (!raw) {
           return [];
         }
 
-
         const parsed =
           JSON.parse(raw);
-
 
         if (!Array.isArray(parsed)) {
           return [];
         }
-
 
         return parsed
           .map(function(item) {
@@ -2188,7 +2201,6 @@
                 item.productId ??
                 null;
 
-
               if (
                 id === null ||
                 id === undefined ||
@@ -2198,7 +2210,6 @@
                 return null;
 
               }
-
 
               return {
 
@@ -2216,7 +2227,6 @@
 
             }
 
-
             if (
               item !== null &&
               item !== undefined &&
@@ -2232,7 +2242,6 @@
               };
 
             }
-
 
             return null;
 
@@ -2274,19 +2283,9 @@
     }
 
 
-    /* =========================
-       ADD PRODUCT TO CART
-    ========================= */
-
     function addStoreProduct(
       productId
     ) {
-
-      /*
-        Extra protection:
-        do not allow adding products if
-        rental access is not confirmed.
-      */
 
       if (
         window.storeRentalAccess !== true
@@ -2300,7 +2299,6 @@
 
       }
 
-
       const product =
         window.storeProducts.find(
           function(item) {
@@ -2313,7 +2311,6 @@
           }
         );
 
-
       if (!product) {
 
         alert(
@@ -2324,12 +2321,10 @@
 
       }
 
-
       const stock =
         Number(
           product.stock || 0
         );
-
 
       if (stock <= 0) {
 
@@ -2341,10 +2336,8 @@
 
       }
 
-
       const cart =
         getCart();
-
 
       const existingIndex =
         cart.findIndex(
@@ -2358,7 +2351,6 @@
           }
         );
 
-
       if (existingIndex >= 0) {
 
         const currentQty =
@@ -2369,7 +2361,6 @@
               1
             )
           );
-
 
         if (
           currentQty >= stock
@@ -2382,7 +2373,6 @@
           return;
 
         }
-
 
         cart[existingIndex].quantity =
           currentQty + 1;
@@ -2401,9 +2391,7 @@
 
       }
 
-
       saveCart(cart);
-
 
       alert(
         `${product.name || "Product"} added to cart.`
@@ -2421,11 +2409,9 @@
           "storeLogoWrap"
         );
 
-
       if (!wrap) {
         return;
       }
-
 
       if (
         !storeImageUrl ||
@@ -2446,12 +2432,10 @@
 
       }
 
-
       const imageUrl =
         String(
           storeImageUrl
         ).trim();
-
 
       wrap.innerHTML = `
 
@@ -2484,11 +2468,9 @@
           "categoryFilter"
         );
 
-
       if (!filter) {
         return;
       }
-
 
       const categories =
         [
@@ -2512,14 +2494,12 @@
         ]
         .sort();
 
-
       filter.innerHTML =
         `
           <option value="">
             All Categories
           </option>
         `;
-
 
       categories.forEach(
         function(category) {
@@ -2529,14 +2509,11 @@
               "option"
             );
 
-
           option.value =
             category;
 
-
           option.textContent =
             category;
-
 
           filter.appendChild(
             option
@@ -2550,10 +2527,6 @@
 
     function renderProducts() {
 
-      /*
-        Never render products while locked.
-      */
-
       if (
         window.storeRentalAccess !== true
       ) {
@@ -2564,23 +2537,19 @@
 
       }
 
-
       const grid =
         document.getElementById(
           "productsGrid"
         );
-
 
       const countElement =
         document.getElementById(
           "catalogueCount"
         );
 
-
       if (!grid) {
         return;
       }
-
 
       const search =
         (
@@ -2591,12 +2560,10 @@
         .trim()
         .toLowerCase();
 
-
       const category =
         document.getElementById(
           "categoryFilter"
         )?.value || "";
-
 
       const filtered =
         window.storeProducts.filter(
@@ -2608,30 +2575,25 @@
               )
               .toLowerCase();
 
-
             const description =
               String(
                 product.description || ""
               )
               .toLowerCase();
 
-
             const productCategory =
               String(
                 product.category || ""
               );
-
 
             const matchesSearch =
               !search ||
               name.includes(search) ||
               description.includes(search);
 
-
             const matchesCategory =
               !category ||
               productCategory === category;
-
 
             return (
               matchesSearch &&
@@ -2640,7 +2602,6 @@
 
           }
         );
-
 
       if (countElement) {
 
@@ -2652,7 +2613,6 @@
           }`;
 
       }
-
 
       if (!filtered.length) {
 
@@ -2676,7 +2636,6 @@
 
       }
 
-
       grid.innerHTML =
         filtered
           .map(
@@ -2687,13 +2646,11 @@
                   product.id
                 );
 
-
               const name =
                 escapeText(
                   product.name ||
                   "Product"
                 );
-
 
               const description =
                 escapeText(
@@ -2701,13 +2658,11 @@
                   "Quality product from this store."
                 );
 
-
               const category =
                 escapeText(
                   product.category ||
                   "General"
                 );
-
 
               const price =
                 Number(
@@ -2724,12 +2679,10 @@
                   }
                 );
 
-
               const stock =
                 Number(
                   product.stock || 0
                 );
-
 
               const image =
                 product.image_url
@@ -2737,7 +2690,6 @@
                       product.image_url
                     )
                   : "";
-
 
               const imageHTML =
                 image
@@ -2774,18 +2726,15 @@
 
                   `;
 
-
               const disabled =
                 stock <= 0
                   ? "disabled"
                   : "";
 
-
               const buttonText =
                 stock <= 0
                   ? "Out of Stock"
                   : "Add to Cart";
-
 
               return `
 
@@ -2801,7 +2750,6 @@
 
                   </div>
 
-
                   <div
                     class="product-content"
                   >
@@ -2812,20 +2760,17 @@
                       ${name}
                     </h3>
 
-
                     <p
                       class="product-description"
                     >
                       ${description}
                     </p>
 
-
                     <div
                       class="product-price"
                     >
                       R${price}
                     </div>
-
 
                     <div
                       class="product-stock"
@@ -2835,7 +2780,6 @@
                         ? ` • ${category}`
                         : ""}
                     </div>
-
 
                     <button
                       class="add-cart-button"
@@ -2861,6 +2805,10 @@
     }
 
 
+    /* =====================================================
+       LOAD STORE
+       ===================================================== */
+
     async function loadStore() {
 
       const nameElement =
@@ -2868,31 +2816,25 @@
           "storeName"
         );
 
-
       const descriptionElement =
         document.getElementById(
           "storeDescription"
         );
-
 
       const grid =
         document.getElementById(
           "productsGrid"
         );
 
-
       if (!sellerId) {
 
         nameElement.textContent =
           "ZYRE Marketing Marketplace";
 
-
         descriptionElement.textContent =
           "Browse stores and products on ZYRE Marketing.";
 
-
         displayStoreLogo(null);
-
 
         grid.innerHTML = `
 
@@ -2915,13 +2857,11 @@
 
       }
 
-
       try {
 
-        /*
-          STEP 1
-          Load seller information.
-        */
+        /* =========================
+           STEP 1 — SELLER
+        ========================= */
 
         const sellerResponse =
           await fetch(
@@ -2949,7 +2889,6 @@
 
           );
 
-
         if (!sellerResponse.ok) {
 
           throw new Error(
@@ -2958,10 +2897,8 @@
 
         }
 
-
         const sellers =
           await sellerResponse.json();
-
 
         if (
           !Array.isArray(sellers) ||
@@ -2974,33 +2911,26 @@
 
         }
 
-
         const seller =
           sellers[0];
-
 
         const storeName =
           seller.store_name ||
           "ZYRE Marketing Store";
 
-
         const storeDescription =
           seller.description ||
           "Quality products from this ZYRE Marketing seller.";
 
-
         nameElement.textContent =
           storeName;
-
 
         descriptionElement.textContent =
           storeDescription;
 
-
         displayStoreLogo(
           seller.store_image_url
         );
-
 
         updateStoreSEO(
           storeName,
@@ -3008,46 +2938,38 @@
         );
 
 
-        /*
-          STEP 2
-          Check monthly rental BEFORE
-          loading products.
-        */
+        /* =========================
+           STEP 2 — RENTAL
+        ========================= */
 
         const rentalAccess =
           await getSellerRentalAccess(
             seller.id
           );
 
-
         if (!rentalAccess) {
 
           console.warn(
-            "Store locked: current-month rental payment not confirmed."
+            "Store locked: rental could not be confirmed."
           );
 
-
           showRentalLockedState();
-
 
           return;
 
         }
 
 
-        /*
-          STEP 3
-          Rental is paid/current.
-          Open the store.
-        */
+        /* =========================
+           STEP 3 — OPEN STORE
+        ========================= */
 
         showRentalOpenState();
 
 
-        /*
-          STEP 4
-          Load active products.
-        */
+        /* =========================
+           STEP 4 — PRODUCTS
+        ========================= */
 
         const productsResponse =
           await fetch(
@@ -3075,7 +2997,6 @@
 
           );
 
-
         if (!productsResponse.ok) {
 
           throw new Error(
@@ -3084,16 +3005,13 @@
 
         }
 
-
         const products =
           await productsResponse.json();
-
 
         window.storeProducts =
           Array.isArray(products)
             ? products
             : [];
-
 
         setupCategories();
 
@@ -3106,25 +3024,17 @@
           error
         );
 
-
-        /*
-          Fail closed.
-        */
-
         showRentalLockedState();
-
 
         const warning =
           document.getElementById(
             "rentalWarning"
           );
 
-
         const warningText =
           warning?.querySelector(
             ".rental-warning-text"
           );
-
 
         if (warningText) {
 
@@ -3143,7 +3053,6 @@
         "productSearch"
       );
 
-
     if (productSearch) {
 
       productSearch.addEventListener(
@@ -3158,7 +3067,6 @@
       document.getElementById(
         "categoryFilter"
       );
-
 
     if (categoryFilter) {
 
