@@ -112,7 +112,7 @@
       padding: 10px 18px;
 
       display: grid;
-      grid-template-columns: 48px 1fr;
+      grid-template-columns: 48px 1fr auto;
       align-items: center;
       gap: 10px;
 
@@ -164,6 +164,49 @@
       color: #d4af37;
       letter-spacing: 4px;
       margin-top: 6px;
+    }
+
+    .cart-button {
+      min-width: 44px;
+      height: 44px;
+
+      padding: 0 12px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+
+      border-radius: 12px;
+
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+
+      color: #ffffff;
+
+      font-size: 18px;
+    }
+
+    .cart-button:hover {
+      background: rgba(212,175,55,.15);
+      border-color: #d4af37;
+    }
+
+    .cart-count {
+      min-width: 20px;
+      height: 20px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+
+      background: #d4af37;
+      color: #000000;
+
+      font-size: 10px;
+      font-weight: 900;
     }
 
     .store-menu {
@@ -569,6 +612,7 @@
 
     .rental-locked-icon {
       font-size: 48px;
+
       margin-bottom: 15px;
     }
 
@@ -619,6 +663,7 @@
       font-weight: 800;
 
       letter-spacing: 3px;
+
       text-transform: uppercase;
     }
 
@@ -636,7 +681,9 @@
 
     .catalogue-count {
       color: #777777;
+
       font-size: 12px;
+
       white-space: nowrap;
     }
 
@@ -773,6 +820,7 @@
 
     .add-cart-button:hover {
       background: #d4af37;
+
       color: #000000;
     }
 
@@ -875,7 +923,7 @@
 
       .store-header {
         grid-template-columns:
-          44px 1fr;
+          44px 1fr auto;
 
         min-height: 64px;
 
@@ -897,6 +945,13 @@
         height: 40px;
       }
 
+      .cart-button {
+        min-width: 40px;
+        height: 40px;
+
+        padding: 0 8px;
+      }
+
       .catalogue-bar {
         padding: 10px 12px;
       }
@@ -913,11 +968,13 @@
       .catalogue-category {
         width: 100%;
         height: 42px;
+
         margin-top: 8px;
       }
 
       .back-area {
         width: calc(100% - 28px);
+
         padding-top: 15px;
       }
 
@@ -1144,6 +1201,14 @@
 
       <button
         type="button"
+        onclick="openCartFromStore(); toggleStoreMenu();"
+      >
+        <span class="menu-icon">🛒</span>
+        <span>Cart</span>
+      </button>
+
+      <button
+        type="button"
         class="logout-menu-button"
         onclick="logoutFromMenu()"
       >
@@ -1192,6 +1257,22 @@
       </span>
 
     </a>
+
+    <button
+      id="storeCartButton"
+      class="cart-button"
+      type="button"
+      onclick="openCartFromStore()"
+      aria-label="Open cart"
+    >
+      🛒
+      <span
+        id="storeCartCount"
+        class="cart-count"
+      >
+        0
+      </span>
+    </button>
 
   </header>
 
@@ -1396,6 +1477,66 @@
     window.storeRentalAccess = false;
 
 
+    /* =====================================================
+       AUTHENTICATED HEADERS
+       ===================================================== */
+
+    function getAuthenticatedHeaders() {
+
+      const headers = {
+
+        apikey:
+          SUPABASE_KEY,
+
+        Accept:
+          "application/json"
+
+      };
+
+      let accessToken = "";
+
+      try {
+
+        accessToken =
+          localStorage.getItem(
+            "zava_access_token"
+          ) || "";
+
+      } catch (error) {
+
+        console.warn(
+          "Could not read access token:",
+          error
+        );
+
+      }
+
+      if (accessToken) {
+
+        headers.Authorization =
+          "Bearer " +
+          accessToken;
+
+      } else {
+
+        /*
+          Fallback for public Supabase requests.
+          Rental subscription access still requires
+          the authenticated user's token when RLS
+          requires authenticated access.
+        */
+
+        headers.Authorization =
+          "Bearer " +
+          SUPABASE_KEY;
+
+      }
+
+      return headers;
+
+    }
+
+
     function escapeText(value) {
 
       return String(value ?? "")
@@ -1458,8 +1599,11 @@
               "/auth/v1/logout",
               {
                 method: "POST",
+
                 headers: {
-                  apikey: SUPABASE_KEY,
+                  apikey:
+                    SUPABASE_KEY,
+
                   Authorization:
                     "Bearer " +
                     accessToken
@@ -1478,12 +1622,29 @@
 
         }
 
-        localStorage.removeItem("zava_access_token");
-        localStorage.removeItem("zava_seller_id");
-        localStorage.removeItem("zava_user");
-        localStorage.removeItem("zava_profile");
-        localStorage.removeItem("zava_seller");
-        localStorage.removeItem("zava_role");
+        localStorage.removeItem(
+          "zava_access_token"
+        );
+
+        localStorage.removeItem(
+          "zava_seller_id"
+        );
+
+        localStorage.removeItem(
+          "zava_user"
+        );
+
+        localStorage.removeItem(
+          "zava_profile"
+        );
+
+        localStorage.removeItem(
+          "zava_seller"
+        );
+
+        localStorage.removeItem(
+          "zava_role"
+        );
 
         const menu =
           document.getElementById(
@@ -1513,12 +1674,29 @@
           error
         );
 
-        localStorage.removeItem("zava_access_token");
-        localStorage.removeItem("zava_seller_id");
-        localStorage.removeItem("zava_user");
-        localStorage.removeItem("zava_profile");
-        localStorage.removeItem("zava_seller");
-        localStorage.removeItem("zava_role");
+        localStorage.removeItem(
+          "zava_access_token"
+        );
+
+        localStorage.removeItem(
+          "zava_seller_id"
+        );
+
+        localStorage.removeItem(
+          "zava_user"
+        );
+
+        localStorage.removeItem(
+          "zava_profile"
+        );
+
+        localStorage.removeItem(
+          "zava_seller"
+        );
+
+        localStorage.removeItem(
+          "zava_role"
+        );
 
         window.location.href =
           "auth.html";
@@ -1566,6 +1744,330 @@
 
     }
 
+
+    /* =====================================================
+       CART
+       ===================================================== */
+
+    function getCart() {
+
+      try {
+
+        const raw =
+          localStorage.getItem(
+            CART_STORAGE_KEY
+          );
+
+        if (!raw) {
+          return [];
+        }
+
+        const parsed =
+          JSON.parse(raw);
+
+        if (!Array.isArray(parsed)) {
+          return [];
+        }
+
+        return parsed
+          .map(function(item) {
+
+            if (
+              item &&
+              typeof item === "object"
+            ) {
+
+              const id =
+                item.id ??
+                item.product_id ??
+                item.productId ??
+                null;
+
+              if (
+                id === null ||
+                id === undefined ||
+                id === ""
+              ) {
+
+                return null;
+
+              }
+
+              return {
+
+                id: id,
+
+                quantity:
+                  Math.max(
+                    1,
+                    Number(
+                      item.quantity || 1
+                    )
+                  )
+
+              };
+
+            }
+
+            if (
+              item !== null &&
+              item !== undefined &&
+              item !== ""
+            ) {
+
+              return {
+
+                id: item,
+
+                quantity: 1
+
+              };
+
+            }
+
+            return null;
+
+          })
+          .filter(Boolean);
+
+      } catch (error) {
+
+        console.error(
+          "Cart read error:",
+          error
+        );
+
+        return [];
+
+      }
+
+    }
+
+
+    function updateStoreCartCount() {
+
+      const countElement =
+        document.getElementById(
+          "storeCartCount"
+        );
+
+      if (!countElement) {
+        return;
+      }
+
+      const cart =
+        getCart();
+
+      const count =
+        cart.reduce(
+          function(total, item) {
+
+            return (
+              total +
+              Math.max(
+                1,
+                Number(
+                  item.quantity || 1
+                )
+              )
+            );
+
+          },
+          0
+        );
+
+      countElement.textContent =
+        String(count);
+
+    }
+
+
+    function saveCart(cart) {
+
+      try {
+
+        localStorage.setItem(
+          CART_STORAGE_KEY,
+          JSON.stringify(cart)
+        );
+
+        updateStoreCartCount();
+
+      } catch (error) {
+
+        console.error(
+          "Cart save error:",
+          error
+        );
+
+      }
+
+    }
+
+
+    function openCartFromStore() {
+
+      /*
+        If app.js is already loaded and provides
+        the main ZYRE cart drawer, use it.
+      */
+
+      if (
+        typeof window.toggleCart ===
+        "function"
+      ) {
+
+        try {
+
+          window.toggleCart();
+
+          updateStoreCartCount();
+
+          return;
+
+        } catch (error) {
+
+          console.warn(
+            "Main cart could not be opened:",
+            error
+          );
+
+        }
+
+      }
+
+      /*
+        If the main marketplace cart is not loaded
+        on this page, send the customer to the
+        marketplace where the full cart system exists.
+      */
+
+      window.location.href =
+        "index.html";
+
+    }
+
+
+    function addStoreProduct(
+      productId
+    ) {
+
+      if (
+        window.storeRentalAccess !== true
+      ) {
+
+        alert(
+          "This store is temporarily unavailable because the seller's rental access could not be confirmed."
+        );
+
+        return;
+
+      }
+
+      const product =
+        window.storeProducts.find(
+          function(item) {
+
+            return (
+              String(item.id) ===
+              String(productId)
+            );
+
+          }
+        );
+
+      if (!product) {
+
+        alert(
+          "Product could not be found."
+        );
+
+        return;
+
+      }
+
+      const stock =
+        Number(
+          product.stock || 0
+        );
+
+      if (stock <= 0) {
+
+        alert(
+          "This product is out of stock."
+        );
+
+        return;
+
+      }
+
+      const cart =
+        getCart();
+
+      const existingIndex =
+        cart.findIndex(
+          function(item) {
+
+            return (
+              String(item.id) ===
+              String(product.id)
+            );
+
+          }
+        );
+
+      if (existingIndex >= 0) {
+
+        const currentQty =
+          Math.max(
+            1,
+            Number(
+              cart[existingIndex].quantity ||
+              1
+            )
+          );
+
+        if (
+          currentQty >= stock
+        ) {
+
+          alert(
+            "You cannot add more than the available stock."
+          );
+
+          return;
+
+        }
+
+        cart[existingIndex].quantity =
+          currentQty + 1;
+
+      } else {
+
+        cart.push({
+
+          id:
+            product.id,
+
+          quantity:
+            1
+
+        });
+
+      }
+
+      saveCart(cart);
+
+      alert(
+        `${product.name || "Product"} added to cart.`
+      );
+
+    }
+
+
+    /* =====================================================
+       STORE SEO
+       ===================================================== */
 
     function updateStoreSEO(
       storeName,
@@ -1715,6 +2217,71 @@
 
 
     /* =====================================================
+       STORE LOGO
+       ===================================================== */
+
+    function displayStoreLogo(
+      storeImageUrl
+    ) {
+
+      const wrap =
+        document.getElementById(
+          "storeLogoWrap"
+        );
+
+      if (!wrap) {
+        return;
+      }
+
+      if (
+        !storeImageUrl ||
+        !String(
+          storeImageUrl
+        ).trim()
+      ) {
+
+        wrap.innerHTML = `
+
+          <div class="store-logo-placeholder">
+            🏪
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+      const imageUrl =
+        String(
+          storeImageUrl
+        ).trim();
+
+      wrap.innerHTML = `
+
+        <img
+          class="store-logo"
+          src="${escapeText(imageUrl)}"
+          alt="Store logo"
+          onerror="
+            this.style.display='none';
+            this.nextElementSibling.style.display='flex';
+          "
+        >
+
+        <div
+          class="store-logo-placeholder"
+          style="display:none;"
+        >
+          🏪
+        </div>
+
+      `;
+
+    }
+
+
+    /* =====================================================
        RENTAL ACCESS
        ===================================================== */
 
@@ -1806,6 +2373,144 @@
     }
 
 
+    async function checkActiveSubscription(
+      sellerIdValue
+    ) {
+
+      if (!sellerIdValue) {
+        return false;
+      }
+
+      try {
+
+        const url =
+          `${SUPABASE_URL}/rest/v1/store_subscriptions` +
+          `?seller_id=eq.${encodeURIComponent(
+            sellerIdValue
+          )}` +
+          `&status=eq.active` +
+          `&select=id,seller_id,rental_plan_id,status,started_at,expires_at,created_at` +
+          `&order=id.desc` +
+          `&limit=20`;
+
+        const response =
+          await fetch(
+            url,
+            {
+              method:
+                "GET",
+
+              headers:
+                getAuthenticatedHeaders()
+            }
+          );
+
+        if (!response.ok) {
+
+          const errorText =
+            await response.text();
+
+          console.warn(
+            "Active subscription check returned:",
+            response.status,
+            errorText
+          );
+
+          return false;
+
+        }
+
+        const subscriptions =
+          await response.json();
+
+        if (
+          !Array.isArray(
+            subscriptions
+          )
+        ) {
+
+          return false;
+
+        }
+
+        const now =
+          new Date();
+
+        const active =
+          subscriptions.some(
+            function(subscription) {
+
+              if (
+                String(
+                  subscription.status || ""
+                ).toLowerCase() !== "active"
+              ) {
+
+                return false;
+
+              }
+
+              /*
+                A subscription without an expiry date
+                is treated as active.
+
+                A subscription with an expiry date must
+                not have expired yet.
+              */
+
+              if (
+                !subscription.expires_at
+              ) {
+
+                return true;
+
+              }
+
+              const expires =
+                new Date(
+                  subscription.expires_at
+                );
+
+              if (
+                Number.isNaN(
+                  expires.getTime()
+                )
+              ) {
+
+                return false;
+
+              }
+
+              return expires >= now;
+
+            }
+          );
+
+        if (active) {
+
+          console.log(
+            "ZYRE: active subscription confirmed for seller",
+            sellerIdValue
+          );
+
+        }
+
+        return active;
+
+      } catch (error) {
+
+        console.error(
+          "Active subscription check error:",
+          error
+        );
+
+        return false;
+
+      }
+
+    }
+
+
     async function checkPaidRentalPayment(
       sellerIdValue
     ) {
@@ -1830,23 +2535,23 @@
           await fetch(
             url,
             {
-              method: "GET",
+              method:
+                "GET",
 
-              headers: {
-                apikey: SUPABASE_KEY,
-                Authorization:
-                  `Bearer ${SUPABASE_KEY}`,
-                Accept:
-                  "application/json"
-              }
+              headers:
+                getAuthenticatedHeaders()
             }
           );
 
         if (!response.ok) {
 
+          const errorText =
+            await response.text();
+
           console.warn(
             "Rental payment check returned:",
-            response.status
+            response.status,
+            errorText
           );
 
           return false;
@@ -1857,141 +2562,41 @@
           await response.json();
 
         if (
-          !Array.isArray(payments)
+          !Array.isArray(
+            payments
+          )
         ) {
 
           return false;
 
         }
 
-        return payments.some(
-          function(payment) {
+        const current =
+          payments.some(
+            function(payment) {
 
-            return rentalPaymentIsCurrent(
-              payment
-            );
+              return rentalPaymentIsCurrent(
+                payment
+              );
 
-          }
-        );
+            }
+          );
+
+        if (current) {
+
+          console.log(
+            "ZYRE: current-month rental payment confirmed for seller",
+            sellerIdValue
+          );
+
+        }
+
+        return current;
 
       } catch (error) {
 
         console.error(
           "Paid rental check error:",
-          error
-        );
-
-        return false;
-
-      }
-
-    }
-
-
-    async function checkActiveSubscription(
-      sellerIdValue
-    ) {
-
-      if (!sellerIdValue) {
-        return false;
-      }
-
-      try {
-
-        const url =
-          `${SUPABASE_URL}/rest/v1/store_subscriptions` +
-          `?seller_id=eq.${encodeURIComponent(
-            sellerIdValue
-          )}` +
-          `&status=eq.active` +
-          `&select=id,seller_id,rental_plan_id,status,started_at,expires_at,created_at` +
-          `&order=id.desc` +
-          `&limit=10`;
-
-        const response =
-          await fetch(
-            url,
-            {
-              method: "GET",
-
-              headers: {
-                apikey: SUPABASE_KEY,
-                Accept:
-                  "application/json"
-              }
-            }
-          );
-
-        if (!response.ok) {
-
-          console.warn(
-            "Subscription check returned:",
-            response.status
-          );
-
-          return false;
-
-        }
-
-        const subscriptions =
-          await response.json();
-
-        if (
-          !Array.isArray(subscriptions)
-        ) {
-
-          return false;
-
-        }
-
-        const now =
-          new Date();
-
-        return subscriptions.some(
-          function(subscription) {
-
-            if (
-              String(
-                subscription.status || ""
-              ).toLowerCase() !== "active"
-            ) {
-
-              return false;
-
-            }
-
-            if (
-              !subscription.expires_at
-            ) {
-
-              return true;
-
-            }
-
-            const expires =
-              new Date(
-                subscription.expires_at
-              );
-
-            if (
-              Number.isNaN(
-                expires.getTime()
-              )
-            ) {
-
-              return false;
-
-            }
-
-            return expires >= now;
-
-          }
-        );
-
-      } catch (error) {
-
-        console.error(
-          "Active subscription check error:",
           error
         );
 
@@ -2011,16 +2616,22 @@
       }
 
       /*
-        The store is considered paid when either:
+        IMPORTANT:
 
-        1. There is an active, non-expired subscription.
+        The active store subscription is now the
+        PRIMARY rental-access check.
 
-        OR
+        This means an active subscription such as:
 
-        2. There is a paid rental payment in the
-           current month.
+        seller_id = 16
+        rental_plan_id = 1
+        status = active
+        expires_at = 2026-10-31
 
-        This matches the actual ZYRE rental records.
+        keeps the store open.
+
+        The current-month paid rental payment remains
+        as a fallback.
       */
 
       const activeSubscription =
@@ -2056,7 +2667,8 @@
 
 
       console.warn(
-        "ZYRE rental access could not be confirmed."
+        "ZYRE rental access could not be confirmed for seller:",
+        sellerIdValue
       );
 
       return false;
@@ -2095,28 +2707,38 @@
         );
 
       if (warning) {
+
         warning.style.display =
           "block";
+
       }
 
       if (lockedSection) {
+
         lockedSection.style.display =
           "block";
+
       }
 
       if (productsSection) {
+
         productsSection.style.display =
           "none";
+
       }
 
       if (grid) {
+
         grid.innerHTML =
           "";
+
       }
 
       if (countElement) {
+
         countElement.textContent =
           "Store unavailable";
+
       }
 
       window.storeProducts =
@@ -2146,320 +2768,32 @@
         );
 
       if (warning) {
+
         warning.style.display =
           "none";
+
       }
 
       if (lockedSection) {
+
         lockedSection.style.display =
           "none";
+
       }
 
       if (productsSection) {
+
         productsSection.style.display =
           "block";
+
       }
 
     }
 
 
     /* =====================================================
-       CART
+       CATEGORIES
        ===================================================== */
-
-    function getCart() {
-
-      try {
-
-        const raw =
-          localStorage.getItem(
-            CART_STORAGE_KEY
-          );
-
-        if (!raw) {
-          return [];
-        }
-
-        const parsed =
-          JSON.parse(raw);
-
-        if (!Array.isArray(parsed)) {
-          return [];
-        }
-
-        return parsed
-          .map(function(item) {
-
-            if (
-              item &&
-              typeof item === "object"
-            ) {
-
-              const id =
-                item.id ??
-                item.product_id ??
-                item.productId ??
-                null;
-
-              if (
-                id === null ||
-                id === undefined ||
-                id === ""
-              ) {
-
-                return null;
-
-              }
-
-              return {
-
-                id: id,
-
-                quantity:
-                  Math.max(
-                    1,
-                    Number(
-                      item.quantity || 1
-                    )
-                  )
-
-              };
-
-            }
-
-            if (
-              item !== null &&
-              item !== undefined &&
-              item !== ""
-            ) {
-
-              return {
-
-                id: item,
-
-                quantity: 1
-
-              };
-
-            }
-
-            return null;
-
-          })
-          .filter(Boolean);
-
-      } catch (error) {
-
-        console.error(
-          "Cart read error:",
-          error
-        );
-
-        return [];
-
-      }
-
-    }
-
-
-    function saveCart(cart) {
-
-      try {
-
-        localStorage.setItem(
-          CART_STORAGE_KEY,
-          JSON.stringify(cart)
-        );
-
-      } catch (error) {
-
-        console.error(
-          "Cart save error:",
-          error
-        );
-
-      }
-
-    }
-
-
-    function addStoreProduct(
-      productId
-    ) {
-
-      if (
-        window.storeRentalAccess !== true
-      ) {
-
-        alert(
-          "This store is temporarily unavailable because the seller's monthly rental payment has not been confirmed."
-        );
-
-        return;
-
-      }
-
-      const product =
-        window.storeProducts.find(
-          function(item) {
-
-            return (
-              String(item.id) ===
-              String(productId)
-            );
-
-          }
-        );
-
-      if (!product) {
-
-        alert(
-          "Product could not be found."
-        );
-
-        return;
-
-      }
-
-      const stock =
-        Number(
-          product.stock || 0
-        );
-
-      if (stock <= 0) {
-
-        alert(
-          "This product is out of stock."
-        );
-
-        return;
-
-      }
-
-      const cart =
-        getCart();
-
-      const existingIndex =
-        cart.findIndex(
-          function(item) {
-
-            return (
-              String(item.id) ===
-              String(product.id)
-            );
-
-          }
-        );
-
-      if (existingIndex >= 0) {
-
-        const currentQty =
-          Math.max(
-            1,
-            Number(
-              cart[existingIndex].quantity ||
-              1
-            )
-          );
-
-        if (
-          currentQty >= stock
-        ) {
-
-          alert(
-            "You cannot add more than the available stock."
-          );
-
-          return;
-
-        }
-
-        cart[existingIndex].quantity =
-          currentQty + 1;
-
-      } else {
-
-        cart.push({
-
-          id:
-            product.id,
-
-          quantity:
-            1
-
-        });
-
-      }
-
-      saveCart(cart);
-
-      alert(
-        `${product.name || "Product"} added to cart.`
-      );
-
-    }
-
-
-    function displayStoreLogo(
-      storeImageUrl
-    ) {
-
-      const wrap =
-        document.getElementById(
-          "storeLogoWrap"
-        );
-
-      if (!wrap) {
-        return;
-      }
-
-      if (
-        !storeImageUrl ||
-        !String(
-          storeImageUrl
-        ).trim()
-      ) {
-
-        wrap.innerHTML = `
-
-          <div class="store-logo-placeholder">
-            🏪
-          </div>
-
-        `;
-
-        return;
-
-      }
-
-      const imageUrl =
-        String(
-          storeImageUrl
-        ).trim();
-
-      wrap.innerHTML = `
-
-        <img
-          class="store-logo"
-          src="${escapeText(imageUrl)}"
-          alt="Store logo"
-          onerror="
-            this.style.display='none';
-            this.nextElementSibling.style.display='flex';
-          "
-        >
-
-        <div
-          class="store-logo-placeholder"
-          style="display:none;"
-        >
-          🏪
-        </div>
-
-      `;
-
-    }
-
 
     function setupCategories() {
 
@@ -2496,9 +2830,11 @@
 
       filter.innerHTML =
         `
+
           <option value="">
             All Categories
           </option>
+
         `;
 
       categories.forEach(
@@ -2524,6 +2860,10 @@
 
     }
 
+
+    /* =====================================================
+       RENDER PRODUCTS
+       ===================================================== */
 
     function renderProducts() {
 
@@ -2875,15 +3215,8 @@
               method:
                 "GET",
 
-              headers: {
-
-                apikey:
-                  SUPABASE_KEY,
-
-                Authorization:
-                  `Bearer ${SUPABASE_KEY}`
-
-              }
+              headers:
+                getAuthenticatedHeaders()
 
             }
 
@@ -2891,8 +3224,12 @@
 
         if (!sellerResponse.ok) {
 
+          const sellerError =
+            await sellerResponse.text();
+
           throw new Error(
-            "Could not load seller information."
+            "Could not load seller information. " +
+            sellerError
           );
 
         }
@@ -2901,7 +3238,9 @@
           await sellerResponse.json();
 
         if (
-          !Array.isArray(sellers) ||
+          !Array.isArray(
+            sellers
+          ) ||
           sellers.length === 0
         ) {
 
@@ -2983,15 +3322,8 @@
               method:
                 "GET",
 
-              headers: {
-
-                apikey:
-                  SUPABASE_KEY,
-
-                Authorization:
-                  `Bearer ${SUPABASE_KEY}`
-
-              }
+              headers:
+                getAuthenticatedHeaders()
 
             }
 
@@ -2999,8 +3331,12 @@
 
         if (!productsResponse.ok) {
 
+          const productError =
+            await productsResponse.text();
+
           throw new Error(
-            "Could not load store products."
+            "Could not load store products. " +
+            productError
           );
 
         }
@@ -3009,13 +3345,17 @@
           await productsResponse.json();
 
         window.storeProducts =
-          Array.isArray(products)
+          Array.isArray(
+            products
+          )
             ? products
             : [];
 
         setupCategories();
 
         renderProducts();
+
+        updateStoreCartCount();
 
       } catch (error) {
 
@@ -3048,6 +3388,10 @@
     }
 
 
+    /* =====================================================
+       SEARCH
+       ===================================================== */
+
     const productSearch =
       document.getElementById(
         "productSearch"
@@ -3077,6 +3421,12 @@
 
     }
 
+
+    /* =====================================================
+       START
+       ===================================================== */
+
+    updateStoreCartCount();
 
     loadStore();
 
