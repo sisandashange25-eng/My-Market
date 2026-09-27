@@ -3941,6 +3941,7 @@ function updateZYRENotificationButton(
 
 /* =========================================================
 SAVE PUSH SUBSCRIPTION
+FIXED DUPLICATE ENDPOINT VERSION
 ========================================================= */
 
 async function saveZYREPushSubscription(
@@ -4033,145 +4034,304 @@ async function saveZYREPushSubscription(
       };
 
 
-      /*
-        FIRST:
-        Try Supabase UPSERT using endpoint as
-        the conflict column.
-      */
+      const notificationHeaders = {
 
-      const customerResponse =
+        "apikey":
+          SUPABASE_KEY,
+
+        "Authorization":
+          "Bearer " +
+          (
+            window.ZYRE_CURRENT_SESSION?.access_token ||
+            SUPABASE_KEY
+          ),
+
+        "Content-Type":
+          "application/json"
+
+      };
+
+
+      /* =================================================
+      CHECK IF ENDPOINT ALREADY EXISTS
+      ================================================= */
+
+      const existingNotificationResponse =
         await fetch(
 
           SUPABASE_URL +
-          "/rest/v1/notification_subscriptions?on_conflict=endpoint",
+          "/rest/v1/notification_subscriptions?endpoint=eq." +
+          encodeURIComponent(endpoint) +
+          "&select=id",
 
           {
 
             method:
-              "POST",
+              "GET",
 
-            headers: {
-
-              "apikey":
-                SUPABASE_KEY,
-
-              "Authorization":
-                "Bearer " +
-                (
-                  window.ZYRE_CURRENT_SESSION?.access_token ||
-                  SUPABASE_KEY
-                ),
-
-              "Content-Type":
-                "application/json",
-
-              "Prefer":
-                "resolution=merge-duplicates,return=minimal"
-
-            },
-
-            body:
-              JSON.stringify(
-                customerData
-              )
+            headers:
+              notificationHeaders
 
           }
 
         );
 
 
-      if (customerResponse.ok) {
+      if (
+        existingNotificationResponse.ok
+      ) {
 
-        console.log(
-          "✅ ZYRE customer notification subscription saved."
-        );
+        const existingSubscriptions =
+          await existingNotificationResponse.json();
+
+
+        /* ===============================================
+        EXISTING ENDPOINT — UPDATE IT
+        =============================================== */
+
+        if (
+          Array.isArray(
+            existingSubscriptions
+          ) &&
+          existingSubscriptions.length > 0
+        ) {
+
+          const updateResponse =
+            await fetch(
+
+              SUPABASE_URL +
+              "/rest/v1/notification_subscriptions?endpoint=eq." +
+              encodeURIComponent(endpoint),
+
+              {
+
+                method:
+                  "PATCH",
+
+                headers: {
+
+                  ...notificationHeaders,
+
+                  "Prefer":
+                    "return=minimal"
+
+                },
+
+                body:
+                  JSON.stringify({
+
+                    user_id:
+                      user.id,
+
+                    phone:
+                      profile?.phone || null,
+
+                    p256dh:
+                      subscriptionJson.keys?.p256dh || "",
+
+                    auth:
+                      subscriptionJson.keys?.auth || ""
+
+                  })
+
+              }
+
+            );
+
+
+          if (
+            updateResponse.ok
+          ) {
+
+            console.log(
+              "✅ Existing ZYRE customer notification subscription updated."
+            );
+
+          } else {
+
+            console.warn(
+              "Could not update existing customer notification subscription:",
+              await updateResponse.text()
+            );
+
+          }
+
+        }
+
+        /* ===============================================
+        ENDPOINT DOES NOT EXIST — CREATE IT
+        =============================================== */
+
+        else {
+
+          const createResponse =
+            await fetch(
+
+              SUPABASE_URL +
+              "/rest/v1/notification_subscriptions",
+
+              {
+
+                method:
+                  "POST",
+
+                headers: {
+
+                  ...notificationHeaders,
+
+                  "Prefer":
+                    "return=minimal"
+
+                },
+
+                body:
+                  JSON.stringify(
+                    customerData
+                  )
+
+              }
+
+            );
+
+
+          if (
+            createResponse.ok
+          ) {
+
+            console.log(
+              "✅ New ZYRE customer notification subscription saved."
+            );
+
+          } else {
+
+            const createError =
+              await createResponse.text();
+
+
+            /*
+              23505 means another request created
+              the same endpoint at almost exactly
+              the same time.
+
+              It is safe to ignore because the
+              subscription already exists.
+            */
+
+            if (
+              createError.includes(
+                '"code":"23505"'
+              ) ||
+              createError.includes(
+                "duplicate key"
+              ) ||
+              createError.includes(
+                "notification_subscriptions_endpoint_key"
+              )
+            ) {
+
+              console.log(
+                "ℹ️ Customer notification subscription already exists."
+              );
+
+            } else {
+
+              console.warn(
+                "Customer notification subscription could not be created:",
+                createError
+              );
+
+            }
+
+          }
+
+        }
 
       } else {
 
-        const customerErrorText =
-          await customerResponse.text();
-
+        /*
+          If the lookup itself fails, do NOT allow
+          this database problem to break browser
+          notifications or seller notifications.
+        */
 
         console.warn(
-          "Customer notification subscription upsert returned an error:",
-          customerErrorText
+          "Could not check existing customer notification subscription:",
+          await existingNotificationResponse.text()
         );
 
 
         /*
-          FALLBACK:
-          If Supabase still reports that the endpoint
-          already exists, update the existing row.
+          Try an UPSERT as a second fallback.
         */
 
-        const updateResponse =
+        const upsertResponse =
           await fetch(
 
             SUPABASE_URL +
-            "/rest/v1/notification_subscriptions?endpoint=eq." +
-            encodeURIComponent(
-              endpoint
-            ),
+            "/rest/v1/notification_subscriptions?on_conflict=endpoint",
 
             {
 
               method:
-                "PATCH",
+                "POST",
 
               headers: {
 
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Authorization":
-                  "Bearer " +
-                  (
-                    window.ZYRE_CURRENT_SESSION?.access_token ||
-                    SUPABASE_KEY
-                  ),
-
-                "Content-Type":
-                  "application/json",
+                ...notificationHeaders,
 
                 "Prefer":
-                  "return=minimal"
+                  "resolution=merge-duplicates,return=minimal"
 
               },
 
               body:
-                JSON.stringify({
-
-                  user_id:
-                    user.id,
-
-                  phone:
-                    profile?.phone || null,
-
-                  p256dh:
-                    subscriptionJson.keys?.p256dh || "",
-
-                  auth:
-                    subscriptionJson.keys?.auth || ""
-
-                })
+                JSON.stringify(
+                  customerData
+                )
 
             }
 
           );
 
 
-        if (updateResponse.ok) {
+        if (
+          upsertResponse.ok
+        ) {
 
           console.log(
-            "✅ Existing ZYRE customer notification subscription updated."
+            "✅ ZYRE customer notification subscription saved with fallback upsert."
           );
 
         } else {
 
-          console.warn(
-            "Customer notification subscription update also failed:",
-            await updateResponse.text()
-          );
+          const upsertError =
+            await upsertResponse.text();
+
+
+          if (
+            upsertError.includes(
+              '"code":"23505"'
+            ) ||
+            upsertError.includes(
+              "duplicate key"
+            ) ||
+            upsertError.includes(
+              "notification_subscriptions_endpoint_key"
+            )
+          ) {
+
+            console.log(
+              "ℹ️ Customer notification subscription already exists."
+            );
+
+          } else {
+
+            console.warn(
+              "Customer notification subscription fallback failed:",
+              upsertError
+            );
+
+          }
 
         }
 
@@ -4181,13 +4341,16 @@ async function saveZYREPushSubscription(
 
       /*
         IMPORTANT:
-        Customer notification database problems must
-        NEVER stop the notification subscription itself
-        and must NEVER break seller notifications.
+        Customer notification database problems
+        must NEVER stop the browser push
+        subscription.
+
+        They must also NEVER break seller
+        notifications.
       */
 
       console.warn(
-        "Customer notification subscription save failed:",
+        "Customer notification database save was skipped:",
         customerError
       );
 
@@ -4369,11 +4532,10 @@ async function saveZYREPushSubscription(
 
 
   /*
-    The browser push subscription itself was
-    successfully created.
+    The browser push subscription itself has
+    been successfully created or retrieved.
 
-    Database problems above are intentionally
-    non-blocking.
+    Database errors are intentionally non-blocking.
   */
 
   return subscription;
