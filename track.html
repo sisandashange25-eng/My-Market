@@ -1,88 +1,89 @@
+<!DOCTYPE html><html lang="en"><head>  <meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 
-<!DOCTYPE html>
-<html lang="en">
+«»
 
-<head>
+  <title>ZYRE Marketing | Order Tracking</title><meta
+name="description"
+content="Track your ZYRE Marketing order using your order number and phone number."
 
-  <meta charset="UTF-8">
+«»
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta
+name="robots"
+content="noindex, follow, noarchive, nosnippet"
 
-  <title>ZYRE Marketing | Order Tracking</title>
+«»
 
-  <meta
-    name="description"
-    content="Track your ZYRE Marketing order using your order number and phone number."
-  >
+<meta
+name="googlebot"
+content="noindex, follow, noarchive, nosnippet"
 
-  <!-- Customer/order tracking pages should not appear in Google search -->
-  <meta
-    name="robots"
-    content="noindex, follow, noarchive, nosnippet"
-  >
+«»
 
-  <meta
-    name="googlebot"
-    content="noindex, follow, noarchive, nosnippet"
-  >
+<meta
+name="author"
+content="ZYRE Marketing"
 
-  <meta
-    name="author"
-    content="ZYRE Marketing"
-  >
+«»
 
   <link
     rel="canonical"
     href="https://sisandashange25-eng.github.io/My-Market/track.html"
-  >
+  ><meta
+property="og:title"
+content="ZYRE Marketing | Order Tracking"
 
-  <meta
-    property="og:title"
-    content="ZYRE Marketing | Order Tracking"
-  >
+«»
 
-  <meta
-    property="og:description"
-    content="Track your ZYRE Marketing order using your order number and phone number."
-  >
+<meta
+property="og:description"
+content="Track your ZYRE Marketing order using your order number and phone number."
 
-  <meta
-    property="og:type"
-    content="website"
-  >
+«»
 
-  <meta
-    property="og:url"
-    content="https://sisandashange25-eng.github.io/My-Market/track.html"
-  >
+<meta
+property="og:type"
+content="website"
 
-  <meta
-    property="og:image"
-    content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
-  >
+«»
 
-  <meta
-    name="twitter:card"
-    content="summary"
-  >
+<meta
+property="og:url"
+content="https://sisandashange25-eng.github.io/My-Market/track.html"
 
-  <meta
-    name="twitter:title"
-    content="ZYRE Marketing | Order Tracking"
-  >
+«»
 
-  <meta
-    name="twitter:description"
-    content="Track your ZYRE Marketing order using your order number and phone number."
-  >
+<meta
+property="og:image"
+content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
 
-  <meta
-    name="twitter:image"
-    content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
-  >
+«»
+
+<meta
+name="twitter:card"
+content="summary"
+
+«»
+
+<meta
+name="twitter:title"
+content="ZYRE Marketing | Order Tracking"
+
+«»
+
+<meta
+name="twitter:description"
+content="Track your ZYRE Marketing order using your order number and phone number."
+
+«»
+
+<meta
+name="twitter:image"
+content="https://sisandashange25-eng.github.io/My-Market/icon-512.png"
+
+«»
 
   <style>
 
@@ -200,6 +201,35 @@
       line-height: 1.7;
     }
 
+    .delivery-box {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 10px;
+      background: white;
+      border: 1px solid #ddd;
+    }
+
+    .delivery-box h4 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+
+    .delivery-status {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 18px;
+      background: #198754;
+      color: white;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .tracking-number {
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
     .back {
       margin-top: 20px;
       background: #555;
@@ -212,79 +242,47 @@
       font-size: 14px;
     }
 
-  </style>
+  </style></head><body><header>  <h1>ZYRE Marketing</h1>  <p>Track your order</p></header><main>  <div class="box"><h2>📦 Track Order</h2>
 
-</head>
-
-
-<body>
-
-
-<header>
-
-  <h1>ZYRE Marketing</h1>
-
-  <p>Track your order</p>
-
-</header>
+<p>
+  Enter your order number and phone number below.
+</p>
 
 
-<main>
-
-  <div class="box">
-
-    <h2>📦 Track Order</h2>
-
-    <p>
-      Enter your order number and phone number below.
-    </p>
+<input
+  type="number"
+  id="orderNumber"
+  placeholder="Order number"
+>
 
 
-    <input
-      type="number"
-      id="orderNumber"
-      placeholder="Order number"
-    >
+<input
+  type="tel"
+  id="phone"
+  placeholder="Phone number"
+>
 
 
-    <input
-      type="tel"
-      id="phone"
-      placeholder="Phone number"
-    >
+<button onclick="trackOrder()">
+  Track Order
+</button>
 
 
-    <button onclick="trackOrder()">
-      Track Order
-    </button>
+<div id="result"></div>
 
 
-    <div id="result"></div>
+<button
+  class="back"
+  onclick="window.location.href='index.html'"
+>
+  ← Back to ZYRE Marketing
+</button>
 
+  </div></main><footer>ZYRE Marketing<br>
 
-    <button
-      class="back"
-      onclick="window.location.href='index.html'"
-    >
-      ← Back to ZYRE Marketing
-    </button>
+Shop smart. Shop local.
 
-  </div>
-
-</main>
-
-
-<footer>
-
-  ZYRE Marketing<br>
-
-  Shop smart. Shop local.
-
-</footer>
-
-
-
-<script>
+</footer><script>
 
 
 const SUPABASE_URL =
@@ -484,6 +482,243 @@ async function trackOrder() {
         .replace(/\s+/g, "-");
 
 
+    /*
+      =====================================
+      GET DELIVERY INFORMATION
+      =====================================
+    */
+
+    let delivery = null;
+
+
+    try {
+
+      const deliveryResponse =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/deliveries" +
+          "?order_id=eq." +
+          encodeURIComponent(displayId) +
+          "&select=*",
+
+          {
+
+            method: "GET",
+
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                SUPABASE_KEY
+
+            }
+
+          }
+
+        );
+
+
+      if (deliveryResponse.ok) {
+
+        const deliveryData =
+          await deliveryResponse.json();
+
+
+        if (
+          Array.isArray(deliveryData) &&
+          deliveryData.length
+        ) {
+
+          delivery =
+            deliveryData[0];
+
+        }
+
+      }
+
+    } catch (deliveryError) {
+
+      console.log(
+        "Delivery information unavailable:",
+        deliveryError
+      );
+
+    }
+
+
+    /*
+      =====================================
+      DELIVERY FIELD SUPPORT
+      =====================================
+    */
+
+    const deliveryStatus =
+      delivery?.status ??
+      delivery?.delivery_status ??
+      delivery?.deliveryStatus ??
+      null;
+
+
+    const deliveryPerson =
+      delivery?.delivery_person_name ??
+      delivery?.deliveryPersonName ??
+      delivery?.driver_name ??
+      delivery?.driverName ??
+      null;
+
+
+    const deliveryPhone =
+      delivery?.delivery_person_phone ??
+      delivery?.deliveryPersonPhone ??
+      delivery?.driver_phone ??
+      delivery?.driverPhone ??
+      null;
+
+
+    const trackingNumber =
+      delivery?.tracking_number ??
+      delivery?.trackingNumber ??
+      delivery?.tracking ??
+      null;
+
+
+    const estimatedDelivery =
+      delivery?.estimated_delivery ??
+      delivery?.estimatedDelivery ??
+      null;
+
+
+    let deliveryHtml = "";
+
+
+    if (
+      deliveryStatus ||
+      deliveryPerson ||
+      deliveryPhone ||
+      trackingNumber ||
+      estimatedDelivery
+    ) {
+
+
+      let formattedEstimated =
+        estimatedDelivery ||
+        "Not provided";
+
+
+      if (estimatedDelivery) {
+
+        const estimatedDate =
+          new Date(estimatedDelivery);
+
+        if (
+          !isNaN(
+            estimatedDate.getTime()
+          )
+        ) {
+
+          formattedEstimated =
+            estimatedDate.toLocaleDateString(
+              "en-ZA"
+            );
+
+        }
+
+      }
+
+
+      deliveryHtml = `
+
+        <div class="delivery-box">
+
+          <h4>
+            🚚 Delivery Information
+          </h4>
+
+          ${
+            deliveryStatus
+              ? `
+                <div class="delivery-status">
+                  Status: ${deliveryStatus}
+                </div>
+              `
+              : ""
+          }
+
+          ${
+            deliveryPerson
+              ? `
+                <div>
+                  👤 <strong>Delivery Person:</strong>
+                  ${deliveryPerson}
+                </div>
+              `
+              : ""
+          }
+
+          ${
+            deliveryPhone
+              ? `
+                <div>
+                  📞 <strong>Phone:</strong>
+                  ${deliveryPhone}
+                </div>
+              `
+              : ""
+          }
+
+          ${
+            trackingNumber
+              ? `
+                <div>
+                  🔢 <strong>Tracking Number:</strong>
+                  <span class="tracking-number">
+                    ${trackingNumber}
+                  </span>
+                </div>
+              `
+              : ""
+          }
+
+          ${
+            estimatedDelivery
+              ? `
+                <div>
+                  📅 <strong>Estimated Delivery:</strong>
+                  ${formattedEstimated}
+                </div>
+              `
+              : ""
+          }
+
+        </div>
+
+      `;
+
+    } else {
+
+      deliveryHtml = `
+
+        <div class="delivery-box">
+
+          <h4>
+            🚚 Delivery Information
+          </h4>
+
+          <p>
+            Delivery has not been assigned yet.
+          </p>
+
+        </div>
+
+      `;
+
+    }
+
+
     result.innerHTML = `
 
       <div class="order">
@@ -513,12 +748,18 @@ async function trackOrder() {
 
         </div>
 
+
+        ${deliveryHtml}
+
+
       </div>
 
     `;
 
 
   } catch (error) {
+
+    console.error(error);
 
     result.innerHTML =
       "<p>Something went wrong while checking your order.</p>";
@@ -528,9 +769,4 @@ async function trackOrder() {
 }
 
 
-</script>
-
-
-</body>
-
-</html>
+</script></body></html>
