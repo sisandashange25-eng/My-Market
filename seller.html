@@ -6,552 +6,419 @@
 
 <title>ZYRE Marketing | Seller Dashboard</title>
 
-<meta
-  name="description"
-  content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications."
->
+<meta name="description"
+content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications.">
 
 <meta name="robots" content="noindex,nofollow">
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f5f5f5;
-  color:#111;
+margin:0;
+font-family:Arial,sans-serif;
+background:#f5f5f5;
+color:#111
 }
 
-button,
-input,
-select,
-textarea{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-.hidden{
-  display:none!important;
-}
-
-/* =========================
-   RENTAL LOADING
-========================= */
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
 
 #rentalLoading{
-  position:fixed;
-  inset:0;
-  z-index:99999;
-  background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
+position:fixed;
+inset:0;
+z-index:99999;
+background:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px
 }
 
 .loading-box{
-  width:min(450px,100%);
-  text-align:center;
-  background:#fff;
-  border-radius:18px;
-  padding:35px 25px;
-  box-shadow:0 5px 30px rgba(0,0,0,.08);
+width:min(450px,100%);
+text-align:center;
+background:#fff;
+border-radius:18px;
+padding:35px 25px;
+box-shadow:0 5px 30px rgba(0,0,0,.08)
 }
 
 .spinner{
-  width:45px;
-  height:45px;
-  border:4px solid #ddd;
-  border-top-color:#111;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-  margin:0 auto 20px;
+width:45px;
+height:45px;
+border:4px solid #ddd;
+border-top-color:#111;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:0 auto 20px
 }
 
 @keyframes spin{
-  to{
-    transform:rotate(360deg);
-  }
+to{transform:rotate(360deg)}
 }
 
-/* =========================
-   RENTAL LOCK
-========================= */
-
 #rentalLock{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:#f5f5f5;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+background:#f5f5f5
 }
 
 .lock-box{
-  width:min(520px,100%);
-  background:#fff;
-  border-radius:20px;
-  padding:35px 25px;
-  text-align:center;
-  box-shadow:0 8px 35px rgba(0,0,0,.08);
+width:min(520px,100%);
+background:#fff;
+border-radius:20px;
+padding:35px 25px;
+text-align:center;
+box-shadow:0 8px 35px rgba(0,0,0,.08)
 }
 
 .lock-icon{
-  font-size:48px;
-  margin-bottom:10px;
+font-size:48px;
+margin-bottom:10px
 }
 
 .lock-box h1{
-  margin:0 0 12px;
-  font-size:27px;
+margin:0 0 12px;
+font-size:27px
 }
 
 .lock-box p{
-  color:#555;
-  line-height:1.6;
+color:#555;
+line-height:1.6
 }
 
 .rental-price{
-  font-size:34px;
-  font-weight:800;
-  margin:22px 0;
+font-size:34px;
+font-weight:800;
+margin:22px 0
+}
+
+.primary-button,
+.secondary-button{
+width:100%;
+border-radius:10px;
+padding:15px;
+font-weight:700;
+margin-top:10px
 }
 
 .primary-button{
-  width:100%;
-  border:0;
-  border-radius:10px;
-  padding:15px;
-  background:#111;
-  color:#fff;
-  font-weight:700;
-  margin-top:10px;
+border:0;
+background:#111;
+color:#fff
 }
 
 .secondary-button{
-  width:100%;
-  border:1px solid #ddd;
-  border-radius:10px;
-  padding:14px;
-  background:#fff;
-  color:#111;
-  font-weight:700;
-  margin-top:10px;
+border:1px solid #ddd;
+background:#fff;
+color:#111
 }
 
-/* =========================
-   HEADER
-========================= */
-
 header{
-  background:#111;
-  color:#fff;
-  padding:17px 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  flex-wrap:wrap;
+background:#111;
+color:#fff;
+padding:17px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+flex-wrap:wrap
 }
 
 .logo-area h1{
-  margin:0;
-  font-size:22px;
+margin:0;
+font-size:22px
 }
 
-.logo-area small{
-  color:#ccc;
-}
+.logo-area small{color:#ccc}
 
 .header-actions{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  flex-wrap:wrap;
+display:flex;
+align-items:center;
+gap:8px;
+flex-wrap:wrap
 }
 
 .header-actions button{
-  border:0;
-  border-radius:8px;
-  padding:9px 13px;
-  font-weight:700;
+border:0;
+border-radius:8px;
+padding:9px 13px;
+font-weight:700
 }
 
 .store-button{
-  background:#fff;
-  color:#111;
+background:#fff;
+color:#111
 }
 
 .logout-button{
-  background:#ddd;
-  color:#111;
+background:#ddd;
+color:#111
 }
 
-/* =========================
-   MAIN
-========================= */
-
 main{
-  width:min(1200px,100%);
-  margin:auto;
-  padding:20px;
+width:min(1200px,100%);
+margin:auto;
+padding:20px
 }
 
 .welcome{
-  background:#fff;
-  border-radius:15px;
-  padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 3px 15px rgba(0,0,0,.06);
+background:#fff;
+border-radius:15px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 3px 15px rgba(0,0,0,.06)
 }
 
-.welcome h2{
-  margin:0 0 8px;
-}
-
+.welcome h2{margin:0 0 8px}
 .welcome p{
-  margin:5px 0;
-  color:#666;
+margin:5px 0;
+color:#666
 }
-
-/* =========================
-   NAVIGATION
-========================= */
 
 nav{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:20px;
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-bottom:20px
 }
 
 nav button{
-  border:1px solid #ddd;
-  background:#fff;
-  border-radius:9px;
-  padding:11px 14px;
-  font-weight:700;
+border:1px solid #ddd;
+background:#fff;
+border-radius:9px;
+padding:11px 14px;
+font-weight:700
 }
 
 nav button.active{
-  background:#111;
-  color:#fff;
-  border-color:#111;
+background:#111;
+color:#fff;
+border-color:#111
 }
 
-/* =========================
-   PANELS
-========================= */
-
-.panel{
-  display:none;
-}
-
-.panel.active{
-  display:block;
-}
+.panel{display:none}
+.panel.active{display:block}
 
 .card{
-  background:#fff;
-  border-radius:15px;
-  padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 3px 15px rgba(0,0,0,.06);
+background:#fff;
+border-radius:15px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 3px 15px rgba(0,0,0,.06)
 }
 
-.card h2,
-.card h3{
-  margin-top:0;
-}
-
-/* =========================
-   STATS
-========================= */
+.card h2,.card h3{margin-top:0}
 
 .stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-  margin-bottom:20px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:14px;
+margin-bottom:20px
 }
 
 .stat{
-  background:#fff;
-  border-radius:14px;
-  padding:18px;
-  box-shadow:0 3px 15px rgba(0,0,0,.06);
+background:#fff;
+border-radius:14px;
+padding:18px;
+box-shadow:0 3px 15px rgba(0,0,0,.06)
 }
 
 .stat-label{
-  color:#777;
-  font-size:13px;
+color:#777;
+font-size:13px
 }
 
 .stat-value{
-  font-size:25px;
-  font-weight:800;
-  margin-top:8px;
+font-size:25px;
+font-weight:800;
+margin-top:8px
 }
-
-/* =========================
-   FORMS
-========================= */
 
 .form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px
 }
 
-.field{
-  margin-bottom:14px;
-}
-
-.field.full{
-  grid-column:1/-1;
-}
+.field{margin-bottom:14px}
+.field.full{grid-column:1/-1}
 
 .field label{
-  display:block;
-  font-weight:700;
-  margin-bottom:6px;
+display:block;
+font-weight:700;
+margin-bottom:6px
 }
 
 .field input,
 .field select,
 .field textarea{
-  width:100%;
-  border:1px solid #ddd;
-  border-radius:9px;
-  padding:12px;
-  background:#fff;
+width:100%;
+border:1px solid #ddd;
+border-radius:9px;
+padding:12px;
+background:#fff
 }
 
 .field textarea{
-  min-height:100px;
-  resize:vertical;
+min-height:100px;
+resize:vertical
 }
 
 .form-button{
-  background:#111;
-  color:#fff;
-  border:0;
-  border-radius:9px;
-  padding:13px 18px;
-  font-weight:700;
+background:#111;
+color:#fff;
+border:0;
+border-radius:9px;
+padding:13px 18px;
+font-weight:700
 }
 
 .cancel-button{
-  background:#eee;
-  color:#111;
-  border:0;
-  border-radius:9px;
-  padding:13px 18px;
-  font-weight:700;
-  margin-left:8px;
+background:#eee;
+color:#111;
+border:0;
+border-radius:9px;
+padding:13px 18px;
+font-weight:700;
+margin-left:8px
 }
 
-/* =========================
-   TABLE
-========================= */
-
-.table-wrap{
-  overflow:auto;
-}
+.table-wrap{overflow:auto}
 
 table{
-  width:100%;
-  min-width:750px;
-  border-collapse:collapse;
+width:100%;
+min-width:750px;
+border-collapse:collapse
 }
 
-th,
-td{
-  text-align:left;
-  padding:11px;
-  border-bottom:1px solid #eee;
+th,td{
+text-align:left;
+padding:11px;
+border-bottom:1px solid #eee
 }
 
-th{
-  background:#fafafa;
-}
+th{background:#fafafa}
 
 .action-button{
-  border:0;
-  border-radius:7px;
-  padding:8px 10px;
-  font-size:13px;
-  font-weight:700;
-  margin:2px;
+border:0;
+border-radius:7px;
+padding:8px 10px;
+font-size:13px;
+font-weight:700;
+margin:2px
 }
 
-.edit-button{
-  background:#eee;
-}
+.edit-button{background:#eee}
 
 .delete-button{
-  background:#ffe7e7;
-  color:#a00000;
+background:#ffe7e7;
+color:#a00000
 }
 
 .status-button{
-  background:#111;
-  color:#fff;
+background:#111;
+color:#fff
 }
-
-/* =========================
-   DELIVERY
-========================= */
-
-.delivery-box{
-  background:#fafafa;
-  border:1px solid #eee;
-  border-radius:10px;
-  padding:14px;
-  margin-top:10px;
-}
-
-/* =========================
-   NOTIFICATION
-========================= */
 
 .notification-box{
-  background:#fff;
-  border:1px solid #eee;
-  border-radius:12px;
-  padding:18px;
+background:#fff;
+border:1px solid #eee;
+border-radius:12px;
+padding:18px
 }
 
 .notification-button{
-  background:#111;
-  color:#fff;
-  border:0;
-  border-radius:9px;
-  padding:13px 18px;
-  font-weight:700;
+background:#111;
+color:#fff;
+border:0;
+border-radius:9px;
+padding:13px 18px;
+font-weight:700
 }
 
-/* =========================
-   MESSAGES
-========================= */
-
 .message{
-  margin-top:12px;
-  padding:10px;
-  border-radius:8px;
-  display:none;
+margin-top:12px;
+padding:10px;
+border-radius:8px;
+display:none
 }
 
 .message.success{
-  display:block;
-  background:#e8f7ec;
-  color:#087f23;
+display:block;
+background:#e8f7ec;
+color:#087f23
 }
 
 .message.error{
-  display:block;
-  background:#fdeaea;
-  color:#a00000;
+display:block;
+background:#fdeaea;
+color:#a00000
 }
 
 .message.info{
-  display:block;
-  background:#eee;
-  color:#333;
+display:block;
+background:#eee;
+color:#333
 }
 
-/* =========================
-   RENTAL INFO
-========================= */
-
 .rental-status{
-  border-radius:12px;
-  padding:15px;
-  background:#f7f7f7;
-  border:1px solid #eee;
+border-radius:12px;
+padding:15px;
+background:#f7f7f7;
+border:1px solid #eee
 }
 
 .rental-paid{
-  color:#087f23;
-  font-weight:700;
+color:#087f23;
+font-weight:700
 }
 
 .rental-unpaid{
-  color:#a00000;
-  font-weight:700;
+color:#a00000;
+font-weight:700
 }
-
-/* =========================
-   FOOTER
-========================= */
 
 footer{
-  text-align:center;
-  padding:25px 15px;
-  color:#777;
+text-align:center;
+padding:25px 15px;
+color:#777
 }
 
-/* =========================
-   MOBILE
-========================= */
-
 @media(max-width:900px){
-
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
-
+.stats{grid-template-columns:repeat(2,1fr)}
 }
 
 @media(max-width:600px){
 
-  main{
-    padding:12px;
-  }
+main{padding:12px}
+header{padding:15px}
 
-  header{
-    padding:15px;
-  }
+.stats{grid-template-columns:1fr}
 
-  .stats{
-    grid-template-columns:1fr;
-  }
+.form-grid{grid-template-columns:1fr}
+.field.full{grid-column:auto}
 
-  .form-grid{
-    grid-template-columns:1fr;
-  }
+.header-actions{width:100%}
 
-  .field.full{
-    grid-column:auto;
-  }
+.header-actions button{flex:1}
 
-  .header-actions{
-    width:100%;
-  }
+nav{
+display:grid;
+grid-template-columns:1fr 1fr
+}
 
-  .header-actions button{
-    flex:1;
-  }
+nav button{width:100%}
 
-  nav{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-  }
-
-  nav button{
-    width:100%;
-  }
-
-  .cancel-button{
-    margin-left:0;
-    margin-top:8px;
-  }
+.cancel-button{
+margin-left:0;
+margin-top:8px
+}
 
 }
 </style>
@@ -559,712 +426,516 @@ footer{
 
 <body>
 
-<!-- =====================================================
-     RENTAL CHECKING
-===================================================== -->
-
 <div id="rentalLoading">
 
-  <div class="loading-box">
+<div class="loading-box">
 
-    <div class="spinner"></div>
+<div class="spinner"></div>
 
-    <h2>Checking Store Rental</h2>
+<h2>Checking Store Rental</h2>
 
-    <p>
-      Please wait while ZYRE Marketing checks
-      your current monthly store rental.
-    </p>
-
-  </div>
+<p>
+Please wait while ZYRE Marketing checks
+your current monthly store rental.
+</p>
 
 </div>
 
+</div>
 
-<!-- =====================================================
-     RENTAL LOCK
-===================================================== -->
 
 <div id="rentalLock" class="hidden">
 
-  <div class="lock-box">
+<div class="lock-box">
 
-    <div class="lock-icon">⚠️</div>
+<div class="lock-icon">⚠️</div>
 
-    <h1>Monthly Rental Required</h1>
+<h1>Monthly Rental Required</h1>
 
-    <p>
-      Your ZYRE Marketing store rental for this month
-      has not been confirmed.
-    </p>
+<p>
+Your ZYRE Marketing store rental for this month
+has not been confirmed.
+</p>
 
-    <p>
-      Please pay the monthly rental to unlock
-      your seller dashboard.
-    </p>
+<p>
+Please pay the monthly rental to unlock
+your seller dashboard.
+</p>
 
-    <div class="rental-price">
-      R100.00
-    </div>
+<div class="rental-price">R100.00</div>
 
-    <button
-      class="primary-button"
-      onclick="payMonthlyRental()"
-    >
-      💳 Pay the monthly store rental
-    </button>
+<button
+class="primary-button"
+onclick="payMonthlyRental()">
+💳 Pay the monthly store rental
+</button>
 
-    <button
-      class="secondary-button"
-      onclick="checkRentalAgain()"
-    >
-      🔄 Check Payment Again
-    </button>
+<button
+class="secondary-button"
+onclick="checkRentalAgain()">
+🔄 Check Payment Again
+</button>
 
-    <button
-      class="secondary-button"
-      onclick="goMarketplace()"
-    >
-      ← Back to Marketplace
-    </button>
-
-  </div>
+<button
+class="secondary-button"
+onclick="goMarketplace()">
+← Back to Marketplace
+</button>
 
 </div>
 
+</div>
 
-<!-- =====================================================
-     SELLER APPLICATION
-===================================================== -->
 
 <div id="sellerApp" class="hidden">
 
 <header>
 
-  <div class="logo-area">
-    <h1>🛍️ ZYRE Marketing</h1>
-    <small>Seller Dashboard</small>
-  </div>
+<div class="logo-area">
+<h1>🛍️ ZYRE Marketing</h1>
+<small>Seller Dashboard</small>
+</div>
 
-  <div class="header-actions">
+<div class="header-actions">
 
-    <button
-      class="store-button"
-      onclick="goMarketplace()"
-    >
-      ← Store
-    </button>
+<button
+class="store-button"
+onclick="goMarketplace()">
+← Store
+</button>
 
-    <button
-      class="logout-button"
-      onclick="logoutSeller()"
-    >
-      Logout
-    </button>
+<button
+class="logout-button"
+onclick="logoutSeller()">
+Logout
+</button>
 
-  </div>
+</div>
 
 </header>
 
 
 <main>
 
-  <!-- WELCOME -->
+<div class="welcome">
 
-  <div class="welcome">
+<h2>
+Welcome, <span id="sellerName">Seller</span>
+</h2>
 
-    <h2>
-      Welcome, <span id="sellerName">Seller</span>
-    </h2>
+<p>
+Manage your ZYRE Marketing store,
+products, orders and deliveries.
+</p>
 
-    <p>
-      Manage your ZYRE Marketing store,
-      products, orders and deliveries.
-    </p>
+<p>
+Store:
+<strong id="sellerStoreName">Loading...</strong>
+</p>
 
-    <p>
-      Store:
-      <strong id="sellerStoreName">Loading...</strong>
-    </p>
+</div>
 
-  </div>
 
+<div class="stats">
 
-  <!-- STATS -->
+<div class="stat">
+<div class="stat-label">🛍️ Products</div>
+<div class="stat-value" id="productCount">0</div>
+</div>
 
-  <div class="stats">
+<div class="stat">
+<div class="stat-label">📦 Orders</div>
+<div class="stat-value" id="orderCount">0</div>
+</div>
 
-    <div class="stat">
+<div class="stat">
+<div class="stat-label">💰 Sales</div>
+<div class="stat-value" id="salesTotal">R0.00</div>
+</div>
 
-      <div class="stat-label">
-        🛍️ Products
-      </div>
+<div class="stat">
+<div class="stat-label">🏪 Rental</div>
+<div class="stat-value" id="rentalStatus">Paid</div>
+</div>
 
-      <div
-        class="stat-value"
-        id="productCount"
-      >
-        0
-      </div>
+</div>
 
-    </div>
 
+<nav>
 
-    <div class="stat">
+<button class="active"
+onclick="showPanel('overview',this)">
+📊 Overview
+</button>
 
-      <div class="stat-label">
-        📦 Orders
-      </div>
+<button
+onclick="showPanel('products',this)">
+🛍️ Products
+</button>
 
-      <div
-        class="stat-value"
-        id="orderCount"
-      >
-        0
-      </div>
+<button
+onclick="showPanel('orders',this)">
+📦 Orders
+</button>
 
-    </div>
+<button
+onclick="showPanel('delivery',this)">
+🚚 Delivery
+</button>
 
+<button
+onclick="showPanel('rental',this)">
+💳 Rental
+</button>
 
-    <div class="stat">
+<button
+onclick="showPanel('notifications',this)">
+🔔 Notifications
+</button>
 
-      <div class="stat-label">
-        💰 Sales
-      </div>
+</nav>
 
-      <div
-        class="stat-value"
-        id="salesTotal"
-      >
-        R0.00
-      </div>
 
-    </div>
+<section id="overview" class="panel active">
 
+<div class="card">
 
-    <div class="stat">
+<h2>🏪 Store Overview</h2>
 
-      <div class="stat-label">
-        🏪 Rental
-      </div>
+<p>
+Your seller dashboard is active.
+</p>
 
-      <div
-        class="stat-value"
-        id="rentalStatus"
-      >
-        Paid
-      </div>
+<p>
+Products, customer orders and deliveries
+can be managed from this dashboard.
+</p>
 
-    </div>
+<div id="overviewMessage" class="message"></div>
 
-  </div>
+</div>
 
+</section>
 
-  <!-- NAVIGATION -->
 
-  <nav>
+<section id="products" class="panel">
 
-    <button
-      class="active"
-      onclick="showPanel('overview',this)"
-    >
-      📊 Overview
-    </button>
+<div class="card">
 
-    <button
-      onclick="showPanel('products',this)"
-    >
-      🛍️ Products
-    </button>
+<h2>🛍️ Add Product</h2>
 
-    <button
-      onclick="showPanel('orders',this)"
-    >
-      📦 Orders
-    </button>
+<form id="productForm" onsubmit="saveProduct(event)">
 
-    <button
-      onclick="showPanel('delivery',this)"
-    >
-      🚚 Delivery
-    </button>
+<input type="hidden" id="editProductId">
 
-    <button
-      onclick="showPanel('rental',this)"
-    >
-      💳 Rental
-    </button>
+<div class="form-grid">
 
-    <button
-      onclick="showPanel('notifications',this)"
-    >
-      🔔 Notifications
-    </button>
+<div class="field">
 
-  </nav>
+<label>Product name</label>
 
+<input
+id="productName"
+required
+placeholder="Product name">
 
-  <!-- ===================================================
-       OVERVIEW
-  ==================================================== -->
+</div>
 
-  <section
-    id="overview"
-    class="panel active"
-  >
+<div class="field">
 
-    <div class="card">
+<label>Price (R)</label>
 
-      <h2>🏪 Store Overview</h2>
+<input
+id="productPrice"
+type="number"
+min="0"
+step="0.01"
+required
+placeholder="299.00">
 
-      <p>
-        Your seller dashboard is active.
-      </p>
+</div>
 
-      <p>
-        Products, customer orders and deliveries
-        can be managed from this dashboard.
-      </p>
+<div class="field">
 
-      <div
-        id="overviewMessage"
-        class="message"
-      ></div>
+<label>Stock</label>
 
-    </div>
+<input
+id="productStock"
+type="number"
+min="0"
+step="1"
+required
+placeholder="20">
 
-  </section>
+</div>
 
+<div class="field">
 
-  <!-- ===================================================
-       PRODUCTS
-  ==================================================== -->
+<label>Category</label>
 
-  <section
-    id="products"
-    class="panel"
-  >
+<select id="productCategory" required>
 
-    <div class="card">
+<option value="">Select category</option>
+<option value="Electronics">Electronics</option>
+<option value="Fashion">Fashion</option>
+<option value="Home">Home</option>
+<option value="Beauty">Beauty</option>
+<option value="Other">Other</option>
 
-      <h2>🛍️ Add Product</h2>
+</select>
 
-      <form
-        id="productForm"
-        onsubmit="saveProduct(event)"
-      >
+</div>
 
-        <input
-          type="hidden"
-          id="editProductId"
-        >
+<div class="field full">
 
-        <div class="form-grid">
+<label>Description</label>
 
-          <div class="field">
+<textarea
+id="productDescription"
+placeholder="Describe your product"></textarea>
 
-            <label>
-              Product name
-            </label>
+</div>
 
-            <input
-              id="productName"
-              required
-              placeholder="Product name"
-            >
+<div class="field full">
 
-          </div>
+<label>Product image URL</label>
 
+<input
+id="productImage"
+type="url"
+placeholder="https://...">
 
-          <div class="field">
+</div>
 
-            <label>
-              Price (R)
-            </label>
+</div>
 
-            <input
-              id="productPrice"
-              type="number"
-              min="0"
-              step="0.01"
-              required
-              placeholder="299.00"
-            >
+<button
+class="form-button"
+type="submit"
+id="productSaveButton">
+➕ Add Product
+</button>
 
-          </div>
+<button
+class="cancel-button hidden"
+type="button"
+id="cancelEditButton"
+onclick="cancelEdit()">
+Cancel Edit
+</button>
 
+<div id="productMessage" class="message"></div>
 
-          <div class="field">
+</form>
 
-            <label>
-              Stock
-            </label>
+</div>
 
-            <input
-              id="productStock"
-              type="number"
-              min="0"
-              step="1"
-              required
-              placeholder="20"
-            >
 
-          </div>
+<div class="card">
 
+<h2>🛍️ My Products</h2>
 
-          <div class="field">
+<div class="table-wrap">
 
-            <label>
-              Category
-            </label>
+<table>
 
-            <select
-              id="productCategory"
-              required
-            >
+<thead>
 
-              <option value="">
-                Select category
-              </option>
+<tr>
+<th>ID</th>
+<th>Product</th>
+<th>Price</th>
+<th>Stock</th>
+<th>Category</th>
+<th>Active</th>
+<th>Actions</th>
+</tr>
 
-              <option value="Electronics">
-                Electronics
-              </option>
+</thead>
 
-              <option value="Fashion">
-                Fashion
-              </option>
+<tbody id="productsTable">
 
-              <option value="Home">
-                Home
-              </option>
+<tr>
+<td colspan="7">Loading products...</td>
+</tr>
 
-              <option value="Beauty">
-                Beauty
-              </option>
+</tbody>
 
-              <option value="Other">
-                Other
-              </option>
+</table>
 
-            </select>
+</div>
 
-          </div>
+</div>
 
+</section>
 
-          <div class="field full">
 
-            <label>
-              Description
-            </label>
+<section id="orders" class="panel">
 
-            <textarea
-              id="productDescription"
-              placeholder="Describe your product"
-            ></textarea>
+<div class="card">
 
-          </div>
+<h2>📦 Customer Orders</h2>
 
+<div class="table-wrap">
 
-          <div class="field full">
+<table>
 
-            <label>
-              Product image URL
-            </label>
+<thead>
 
-            <input
-              id="productImage"
-              type="url"
-              placeholder="https://..."
-            >
+<tr>
+<th>Order</th>
+<th>Total</th>
+<th>Status</th>
+<th>Delivery Address</th>
+<th>Created</th>
+<th>Action</th>
+</tr>
 
-          </div>
+</thead>
 
-        </div>
+<tbody id="ordersTable">
 
+<tr>
+<td colspan="6">Loading orders...</td>
+</tr>
 
-        <button
-          class="form-button"
-          type="submit"
-          id="productSaveButton"
-        >
-          ➕ Add Product
-        </button>
+</tbody>
 
-        <button
-          class="cancel-button hidden"
-          type="button"
-          id="cancelEditButton"
-          onclick="cancelEdit()"
-        >
-          Cancel Edit
-        </button>
+</table>
 
-        <div
-          id="productMessage"
-          class="message"
-        ></div>
+</div>
 
-      </form>
+</div>
 
-    </div>
+</section>
 
 
-    <div class="card">
+<section id="delivery" class="panel">
 
-      <h2>🛍️ My Products</h2>
+<div class="card">
 
-      <div class="table-wrap">
+<h2>🚚 Delivery Management</h2>
 
-        <table>
+<p>
+Select an order below to update its delivery information.
+</p>
 
-          <thead>
+<div class="table-wrap">
 
-            <tr>
+<table>
 
-              <th>ID</th>
-              <th>Product</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Category</th>
-              <th>Active</th>
-              <th>Actions</th>
+<thead>
 
-            </tr>
+<tr>
+<th>Order</th>
+<th>Status</th>
+<th>Delivery Person</th>
+<th>Phone</th>
+<th>Tracking</th>
+<th>Estimated</th>
+<th>Action</th>
+</tr>
 
-          </thead>
+</thead>
 
-          <tbody id="productsTable">
+<tbody id="deliveryTable">
 
-            <tr>
-              <td colspan="7">
-                Loading products...
-              </td>
-            </tr>
+<tr>
+<td colspan="7">
+Loading delivery information...
+</td>
+</tr>
 
-          </tbody>
+</tbody>
 
-        </table>
+</table>
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-  </section>
+</section>
 
 
-  <!-- ===================================================
-       ORDERS
-  ==================================================== -->
+<section id="rental" class="panel">
 
-  <section
-    id="orders"
-    class="panel"
-  >
+<div class="card">
 
-    <div class="card">
+<h2>💳 Monthly Store Rental</h2>
 
-      <h2>📦 Customer Orders</h2>
+<div class="rental-status">
 
-      <div class="table-wrap">
+<p>
+Monthly rental:
+<strong>R100.00</strong>
+</p>
 
-        <table>
+<p>
+Current status:
+<strong
+id="rentalPanelStatus"
+class="rental-paid">
+Paid
+</strong>
+</p>
 
-          <thead>
+<p>
+Your store remains available while
+the current month's rental is confirmed.
+</p>
 
-            <tr>
+</div>
 
-              <th>Order</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Delivery Address</th>
-              <th>Created</th>
-              <th>Action</th>
+<button
+class="form-button"
+onclick="payMonthlyRental()">
+💳 Pay / Renew R100 Monthly Rental
+</button>
 
-            </tr>
+<button
+class="cancel-button"
+onclick="checkRentalAgain()">
+🔄 Check Payment Again
+</button>
 
-          </thead>
+<div id="rentalMessage" class="message"></div>
 
-          <tbody id="ordersTable">
+</div>
 
-            <tr>
-              <td colspan="6">
-                Loading orders...
-              </td>
-            </tr>
+</section>
 
-          </tbody>
 
-        </table>
+<section id="notifications" class="panel">
 
-      </div>
+<div class="card">
 
-    </div>
+<h2>🔔 Seller Notifications</h2>
 
-  </section>
+<div class="notification-box">
 
+<p>
+Enable notifications so ZYRE Marketing
+can alert you about new customer orders.
+</p>
 
-  <!-- ===================================================
-       DELIVERY
-  ==================================================== -->
+<button
+class="notification-button"
+onclick="enableSellerNotifications()">
+🔔 Enable Notifications
+</button>
 
-  <section
-    id="delivery"
-    class="panel"
-  >
+<div id="notificationMessage" class="message"></div>
 
-    <div class="card">
+</div>
 
-      <h2>🚚 Delivery Management</h2>
+</div>
 
-      <p>
-        Select an order below to update its delivery information.
-      </p>
-
-      <div class="table-wrap">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>Order</th>
-              <th>Status</th>
-              <th>Delivery Person</th>
-              <th>Phone</th>
-              <th>Tracking</th>
-              <th>Estimated</th>
-              <th>Action</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody id="deliveryTable">
-
-            <tr>
-              <td colspan="7">
-                Loading delivery information...
-              </td>
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- ===================================================
-       RENTAL
-  ==================================================== -->
-
-  <section
-    id="rental"
-    class="panel"
-  >
-
-    <div class="card">
-
-      <h2>💳 Monthly Store Rental</h2>
-
-      <div class="rental-status">
-
-        <p>
-          Monthly rental:
-          <strong>R100.00</strong>
-        </p>
-
-        <p>
-          Current status:
-          <strong
-            id="rentalPanelStatus"
-            class="rental-paid"
-          >
-            Paid
-          </strong>
-        </p>
-
-        <p>
-          Your store remains available while
-          the current month's rental is confirmed.
-        </p>
-
-      </div>
-
-      <button
-        class="form-button"
-        onclick="payMonthlyRental()"
-      >
-        💳 Pay / Renew R100 Monthly Rental
-      </button>
-
-      <button
-        class="cancel-button"
-        onclick="checkRentalAgain()"
-      >
-        🔄 Check Payment Again
-      </button>
-
-      <div
-        id="rentalMessage"
-        class="message"
-      ></div>
-
-    </div>
-
-  </section>
-
-
-  <!-- ===================================================
-       NOTIFICATIONS
-  ==================================================== -->
-
-  <section
-    id="notifications"
-    class="panel"
-  >
-
-    <div class="card">
-
-      <h2>🔔 Seller Notifications</h2>
-
-      <div class="notification-box">
-
-        <p>
-          Enable notifications so ZYRE Marketing
-          can alert you about new customer orders.
-        </p>
-
-        <button
-          class="notification-button"
-          onclick="enableSellerNotifications()"
-        >
-          🔔 Enable Notifications
-        </button>
-
-        <div
-          id="notificationMessage"
-          class="message"
-        ></div>
-
-      </div>
-
-    </div>
-
-  </section>
-
+</section>
 
 </main>
 
-
 <footer>
-  ZYRE Marketing © 2026
+ZYRE Marketing © 2026
 </footer>
 
 </div>
@@ -1284,7 +955,7 @@ const SUPABASE_KEY =
 
 
 /* =====================================================
-   PAYSTACK RENTAL EDGE FUNCTION
+   NEW PAYSTACK RENTAL FUNCTION
 ===================================================== */
 
 const RENTAL_PAYSTACK_URL =
@@ -1319,81 +990,66 @@ let dashboardStarted = false;
 
 function escapeHTML(value){
 
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
 
 function money(value){
 
-  return "R" +
-    Number(value || 0).toLocaleString(
-      "en-ZA",
-      {
-        minimumFractionDigits:2,
-        maximumFractionDigits:2
-      }
-    );
+return "R" +
+Number(value || 0).toLocaleString(
+"en-ZA",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
 
 }
 
 
 function formatDate(value){
 
-  if(!value){
-    return "-";
-  }
+if(!value)return "-";
 
-  try{
-
-    return new Date(value).toLocaleString(
-      "en-ZA"
-    );
-
-  }catch(e){
-
-    return value;
-
-  }
+try{
+return new Date(value).toLocaleString("en-ZA");
+}catch(e){
+return value;
+}
 
 }
 
 
 function showMessage(id,text,type){
 
-  const el =
-    document.getElementById(id);
+const el=document.getElementById(id);
 
-  if(!el){
-    return;
-  }
+if(!el)return;
 
-  el.textContent = text;
+el.textContent=text;
 
-  el.className =
-    "message " +
-    (type || "info");
+el.className=
+"message " +
+(type || "info");
 
 }
 
 
 function clearMessage(id){
 
-  const el =
-    document.getElementById(id);
+const el=document.getElementById(id);
 
-  if(el){
-
-    el.textContent = "";
-
-    el.className = "message";
-
-  }
+if(el){
+el.textContent="";
+el.className="message";
+}
 
 }
 
@@ -1404,8 +1060,7 @@ function clearMessage(id){
 
 function goMarketplace(){
 
-  window.location.href =
-    "index.html";
+window.location.href="index.html";
 
 }
 
@@ -1416,90 +1071,69 @@ function goMarketplace(){
 
 async function refreshSellerAuthentication(){
 
-  if(
-    SELLER_ACCESS_TOKEN &&
-    SELLER_ID
-  ){
+if(SELLER_ACCESS_TOKEN && SELLER_ID){
+return true;
+}
 
-    return true;
+const refreshToken =
+localStorage.getItem("zava_refresh_token");
 
-  }
+if(!refreshToken){
+return false;
+}
 
-  const refreshToken =
-    localStorage.getItem(
-      "zava_refresh_token"
-    );
+try{
 
-  if(!refreshToken){
+const response =
+await fetch(
+SUPABASE_URL +
+"/auth/v1/token?grant_type=refresh_token",
+{
+method:"POST",
+headers:{
+"apikey":SUPABASE_KEY,
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+refresh_token:refreshToken
+})
+}
+);
 
-    return false;
+const data=await response.json();
 
-  }
+if(!response.ok || !data.access_token){
+return false;
+}
 
-  try{
+SELLER_ACCESS_TOKEN=data.access_token;
 
-    const response =
-      await fetch(
-        SUPABASE_URL +
-        "/auth/v1/token?grant_type=refresh_token",
-        {
-          method:"POST",
+localStorage.setItem(
+"zava_access_token",
+SELLER_ACCESS_TOKEN
+);
 
-          headers:{
-            "apikey":SUPABASE_KEY,
-            "Content-Type":
-              "application/json"
-          },
+if(data.refresh_token){
 
-          body:JSON.stringify({
-            refresh_token:refreshToken
-          })
-        }
-      );
+localStorage.setItem(
+"zava_refresh_token",
+data.refresh_token
+);
 
-    const data =
-      await response.json();
+}
 
-    if(
-      !response.ok ||
-      !data.access_token
-    ){
+return true;
 
-      return false;
+}catch(error){
 
-    }
+console.error(
+"Authentication refresh failed:",
+error
+);
 
-    SELLER_ACCESS_TOKEN =
-      data.access_token;
+return false;
 
-    localStorage.setItem(
-      "zava_access_token",
-      SELLER_ACCESS_TOKEN
-    );
-
-    if(
-      data.refresh_token
-    ){
-
-      localStorage.setItem(
-        "zava_refresh_token",
-        data.refresh_token
-      );
-
-    }
-
-    return true;
-
-  }catch(error){
-
-    console.error(
-      "Authentication refresh failed:",
-      error
-    );
-
-    return false;
-
-  }
+}
 
 }
 
@@ -1508,73 +1142,59 @@ async function refreshSellerAuthentication(){
    SUPABASE REST
 ===================================================== */
 
-async function supabaseRequest(
-  path,
-  options={}
-){
+async function supabaseRequest(path,options={}){
 
-  const token =
-    SELLER_ACCESS_TOKEN ||
-    SUPABASE_KEY;
+const token=
+SELLER_ACCESS_TOKEN ||
+SUPABASE_KEY;
 
-  const headers = {
+const headers={
 
-    "apikey":
-      SUPABASE_KEY,
+"apikey":SUPABASE_KEY,
 
-    "Authorization":
-      "Bearer " + token,
+"Authorization":
+"Bearer " + token,
 
-    "Content-Type":
-      "application/json",
+"Content-Type":
+"application/json",
 
-    ...(options.headers || {})
+...(options.headers || {})
 
-  };
+};
 
-  const response =
-    await fetch(
-      SUPABASE_URL + path,
-      {
-        ...options,
-        headers
-      }
-    );
+const response=
+await fetch(
+SUPABASE_URL + path,
+{
+...options,
+headers
+}
+);
 
-  const text =
-    await response.text();
+const text=await response.text();
 
-  let data = null;
+let data=null;
 
-  try{
+try{
+data=text ? JSON.parse(text) : null;
+}catch(e){
+data=text;
+}
 
-    data =
-      text
-      ? JSON.parse(text)
-      : null;
+if(!response.ok){
 
-  }catch(e){
+const message=
+data?.message ||
+data?.error_description ||
+data?.hint ||
+text ||
+"Supabase request failed.";
 
-    data = text;
+throw new Error(message);
 
-  }
+}
 
-  if(!response.ok){
-
-    const message =
-      data?.message ||
-      data?.error_description ||
-      data?.hint ||
-      text ||
-      "Supabase request failed.";
-
-    throw new Error(
-      message
-    );
-
-  }
-
-  return data;
+return data;
 
 }
 
@@ -1583,54 +1203,34 @@ async function supabaseRequest(
    RENTAL DATE CHECK
 ===================================================== */
 
-function isCurrentMonthRentalPaid(
-  payment
+function isCurrentMonthRentalPaid(payment){
+
+if(!payment)return false;
+
+if(
+String(payment.status || "").toLowerCase() !== "paid"
 ){
+return false;
+}
 
-  if(!payment){
-    return false;
-  }
+const paymentDate=
+payment.paid_at ||
+payment.created_at;
 
-  if(
-    String(payment.status || "")
-      .toLowerCase() !== "paid"
-  ){
+if(!paymentDate)return false;
 
-    return false;
+const date=new Date(paymentDate);
 
-  }
+if(Number.isNaN(date.getTime())){
+return false;
+}
 
-  const paymentDate =
-    payment.paid_at ||
-    payment.created_at;
+const now=new Date();
 
-  if(!paymentDate){
-    return false;
-  }
-
-  const date =
-    new Date(paymentDate);
-
-  if(
-    Number.isNaN(
-      date.getTime()
-    )
-  ){
-
-    return false;
-
-  }
-
-  const now =
-    new Date();
-
-  return (
-    date.getFullYear() ===
-      now.getFullYear()
-    &&
-    date.getMonth() ===
-      now.getMonth()
-  );
+return(
+date.getFullYear()===now.getFullYear() &&
+date.getMonth()===now.getMonth()
+);
 
 }
 
@@ -1641,169 +1241,62 @@ function isCurrentMonthRentalPaid(
 
 async function getSellerRentalAccessFast(){
 
-  if(!SELLER_ID){
+if(!SELLER_ID){
 
-    return {
-      paid:false,
-      reason:"Seller ID is missing."
-    };
-
-  }
-
-  const path =
-    "/rest/v1/rental_payments" +
-    "?seller_id=eq." +
-    encodeURIComponent(
-      SELLER_ID
-    ) +
-    "&status=eq.paid" +
-    "&select=id,seller_id,subscription_id,amount,status,payment_reference,payment_method,paid_at,created_at" +
-    "&order=id.desc" +
-    "&limit=20";
-
-  try{
-
-    const payments =
-      await supabaseRequest(
-        path
-      );
-
-    const paidThisMonth =
-      Array.isArray(payments) &&
-      payments.some(
-        isCurrentMonthRentalPaid
-      );
-
-    return {
-
-      paid:
-        paidThisMonth,
-
-      payments:
-        Array.isArray(payments)
-          ? payments
-          : []
-
-    };
-
-  }catch(error){
-
-    console.error(
-      "Rental check failed:",
-      error
-    );
-
-    return {
-
-      paid:false,
-
-      reason:
-        error.message ||
-        "Rental check failed."
-
-    };
-
-  }
+return{
+paid:false,
+reason:"Seller ID is missing."
+};
 
 }
 
+const path=
+"/rest/v1/rental_payments" +
+"?seller_id=eq." +
+encodeURIComponent(SELLER_ID) +
+"&status=eq.paid" +
+"&select=id,seller_id,subscription_id,amount,status,payment_reference,payment_method,paid_at,created_at" +
+"&order=id.desc" +
+"&limit=20";
 
-/* =====================================================
-   VERIFY PAYSTACK CALLBACK
-===================================================== */
+try{
 
-async function verifyRentalPaymentFromCallback(){
+const payments=
+await supabaseRequest(path);
 
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
+const paidThisMonth=
+Array.isArray(payments) &&
+payments.some(isCurrentMonthRentalPaid);
 
-  const reference =
-    params.get("reference");
+return{
 
-  if(!reference){
+paid:paidThisMonth,
 
-    return false;
+payments:
+Array.isArray(payments)
+? payments
+:[]
 
-  }
+};
 
-  try{
+}catch(error){
 
-    showMessage(
-      "rentalMessage",
-      "⏳ Verifying your Paystack rental payment...",
-      "info"
-    );
+console.error(
+"Rental check failed:",
+error
+);
 
+return{
 
-    const response =
-      await fetch(
-        RENTAL_PAYSTACK_URL,
-        {
-          method:"POST",
+paid:false,
 
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
+reason:
+error.message ||
+"Rental check failed."
 
-          body:
-            JSON.stringify({
-              action:"verify",
-              reference:
-                reference
-            })
-        }
-      );
+};
 
-
-    const data =
-      await response.json();
-
-
-    if(
-      response.ok &&
-      data.success &&
-      data.paid
-    ){
-
-      localStorage.removeItem(
-        "zyre_rental_reference"
-      );
-
-
-      window.history.replaceState(
-        {},
-        document.title,
-        window.location.pathname
-      );
-
-
-      return true;
-
-    }
-
-
-    console.error(
-      "Rental verification response:",
-      data
-    );
-
-
-    return false;
-
-
-  }catch(error){
-
-    console.error(
-      "Rental payment verification failed:",
-      error
-    );
-
-    return false;
-
-  }
+}
 
 }
 
@@ -1814,194 +1307,250 @@ async function verifyRentalPaymentFromCallback(){
 
 function showRentalLock(){
 
-  document
-    .getElementById(
-      "rentalLoading"
-    )
-    .classList.add("hidden");
+document
+.getElementById("rentalLoading")
+.classList.add("hidden");
 
-  document
-    .getElementById(
-      "sellerApp"
-    )
-    .classList.add("hidden");
+document
+.getElementById("sellerApp")
+.classList.add("hidden");
 
-  document
-    .getElementById(
-      "rentalLock"
-    )
-    .classList.remove("hidden");
+document
+.getElementById("rentalLock")
+.classList.remove("hidden");
 
 }
 
 
 function hideRentalLock(){
 
-  document
-    .getElementById(
-      "rentalLoading"
-    )
-    .classList.add("hidden");
+document
+.getElementById("rentalLoading")
+.classList.add("hidden");
 
-  document
-    .getElementById(
-      "rentalLock"
-    )
-    .classList.add("hidden");
+document
+.getElementById("rentalLock")
+.classList.add("hidden");
 
-  document
-    .getElementById(
-      "sellerApp"
-    )
-    .classList.remove("hidden");
+document
+.getElementById("sellerApp")
+.classList.remove("hidden");
 
 }
 
 
 /* =====================================================
-   PAY MONTHLY RENTAL WITH PAYSTACK
+   PAYSTACK RENTAL PAYMENT
 ===================================================== */
 
 async function payMonthlyRental(){
 
-  if(!SELLER_ID){
+if(!SELLER_ID){
 
-    alert(
-      "Seller ID could not be found. Please log in again."
-    );
+alert(
+"Seller ID could not be found. Please log in again."
+);
 
-    return;
+return;
 
-  }
+}
 
+if(!SELLER_EMAIL){
 
-  if(!SELLER_EMAIL){
+alert(
+"Seller email could not be found. Please log in again."
+);
 
-    alert(
-      "Seller email could not be found. Please log in again."
-    );
+return;
 
-    return;
+}
 
-  }
+const buttons=
+document.querySelectorAll(
+".primary-button,.form-button"
+);
 
+buttons.forEach(button=>{
+if(
+button.textContent.includes("Pay") ||
+button.textContent.includes("Renew")
+){
+button.disabled=true;
+}
+});
 
-  try{
+try{
 
-    const buttons =
-      document.querySelectorAll(
-        "#rentalLock .primary-button, #rental .form-button"
-      );
+showMessage(
+"rentalMessage",
+"⏳ Opening secure Paystack checkout...",
+"info"
+);
 
+const response=
+await fetch(
+RENTAL_PAYSTACK_URL,
+{
+method:"POST",
 
-    buttons.forEach(
-      button => {
+headers:{
+"Content-Type":"application/json"
+},
 
-        button.disabled = true;
+body:JSON.stringify({
 
-        button.textContent =
-          "⏳ Opening Paystack...";
+action:"initialize",
 
-      }
-    );
+seller_id:Number(SELLER_ID),
 
+email:SELLER_EMAIL
 
-    const response =
-      await fetch(
-        RENTAL_PAYSTACK_URL,
-        {
-          method:"POST",
+})
 
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
+}
+);
 
-          body:
-            JSON.stringify({
+const data=
+await response.json();
 
-              action:
-                "initialize",
+if(
+!response.ok ||
+!data.success ||
+!data.authorization_url
+){
 
-              seller_id:
-                Number(
-                  SELLER_ID
-                ),
+throw new Error(
+data.error ||
+"Paystack could not start the rental payment."
+);
 
-              email:
-                SELLER_EMAIL
+}
 
-            })
-        }
-      );
+if(data.reference){
 
+localStorage.setItem(
+"zyre_rental_reference",
+data.reference
+);
 
-    const data =
-      await response.json();
+}
 
+window.location.href=
+data.authorization_url;
 
-    if(
-      !response.ok ||
-      !data.success ||
-      !data.authorization_url
-    ){
+}catch(error){
 
-      throw new Error(
-        data.error ||
-        "Paystack could not start the rental payment."
-      );
+console.error(
+"Paystack rental initialization failed:",
+error
+);
 
-    }
+showMessage(
+"rentalMessage",
+"Could not open Paystack: " +
+error.message,
+"error"
+);
 
+buttons.forEach(button=>{
+button.disabled=false;
+});
 
-    if(data.reference){
+}
 
-      localStorage.setItem(
-        "zyre_rental_reference",
-        data.reference
-      );
-
-    }
-
-
-    window.location.href =
-      data.authorization_url;
-
-
-  }catch(error){
-
-    console.error(
-      "Paystack rental initialization failed:",
-      error
-    );
-
-
-    alert(
-      "Could not start the rental payment.\n\n" +
-      error.message
-    );
+}
 
 
-    const buttons =
-      document.querySelectorAll(
-        "#rentalLock .primary-button, #rental .form-button"
-      );
+/* =====================================================
+   VERIFY PAYSTACK CALLBACK
+===================================================== */
 
+async function verifyRentalPaymentFromCallback(){
 
-    buttons.forEach(
-      button => {
+const params=
+new URLSearchParams(
+window.location.search
+);
 
-        button.disabled = false;
+const reference=
+params.get("reference");
 
-        button.textContent =
-          button.closest("#rentalLock")
-            ? "💳 Pay the monthly store rental"
-            : "💳 Pay / Renew R100 Monthly Rental";
+if(!reference){
 
-      }
-    );
+return false;
 
-  }
+}
+
+showMessage(
+"rentalMessage",
+"⏳ Confirming your Paystack payment...",
+"info"
+);
+
+try{
+
+const response=
+await fetch(
+RENTAL_PAYSTACK_URL,
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+action:"verify",
+
+reference:reference
+
+})
+
+}
+);
+
+const data=
+await response.json();
+
+if(
+response.ok &&
+data.success &&
+data.paid
+){
+
+localStorage.removeItem(
+"zyre_rental_reference"
+);
+
+window.history.replaceState(
+{},
+document.title,
+window.location.pathname
+);
+
+return true;
+
+}
+
+console.error(
+"Paystack rental verification response:",
+data
+);
+
+return false;
+
+}catch(error){
+
+console.error(
+"Rental payment verification failed:",
+error
+);
+
+return false;
+
+}
 
 }
 
@@ -2012,48 +1561,41 @@ async function payMonthlyRental(){
 
 async function checkRentalAgain(){
 
-  showMessage(
-    "rentalMessage",
-    "Checking your rental payment...",
-    "info"
-  );
+showMessage(
+"rentalMessage",
+"Checking your rental payment...",
+"info"
+);
 
+const result=
+await getSellerRentalAccessFast();
 
-  const result =
-    await getSellerRentalAccessFast();
+if(result.paid){
 
+showMessage(
+"rentalMessage",
+"✅ Payment confirmed. Your seller dashboard is unlocked.",
+"success"
+);
 
-  if(result.paid){
+dashboardStarted=false;
 
-    showMessage(
-      "rentalMessage",
-      "✅ Payment confirmed. Your seller dashboard is unlocked.",
-      "success"
-    );
+setTimeout(
+()=>{
+startSellerDashboard();
+},
+700
+);
 
+}else{
 
-    dashboardStarted = false;
+showMessage(
+"rentalMessage",
+"No paid rental for the current month has been confirmed yet.",
+"error"
+);
 
-
-    setTimeout(
-      () => {
-
-        startSellerDashboard();
-
-      },
-      700
-    );
-
-
-  }else{
-
-    showMessage(
-      "rentalMessage",
-      "No paid rental for the current month has been confirmed yet.",
-      "error"
-    );
-
-  }
+}
 
 }
 
@@ -2064,149 +1606,120 @@ async function checkRentalAgain(){
 
 async function startSellerDashboard(){
 
-  if(dashboardStarted){
+if(dashboardStarted){
+return;
+}
 
-    return;
 
-  }
+/*
+   IMPORTANT:
+   Check Paystack callback BEFORE setting
+   dashboardStarted to true.
+*/
 
+await verifyRentalPaymentFromCallback();
 
-  /*
-     First check whether Paystack has returned
-     the seller to this page with a payment reference.
-  */
+dashboardStarted=true;
 
-  await verifyRentalPaymentFromCallback();
+const safetyTimer=
+setTimeout(
+()=>{
 
+if(
+document
+.getElementById("rentalLoading")
+.classList.contains("hidden")
+){
 
-  dashboardStarted = true;
+return;
 
+}
 
-  const safetyTimer =
-    setTimeout(
-      () => {
+showRentalLock();
 
-        if(
-          document
-            .getElementById(
-              "rentalLoading"
-            )
-            .classList.contains(
-              "hidden"
-            )
-        ){
+},
+10000
+);
 
-          return;
 
-        }
+try{
 
-        showRentalLock();
+const authenticated=
+await refreshSellerAuthentication();
 
-      },
-      10000
-    );
+if(!authenticated){
 
+clearTimeout(safetyTimer);
 
-  try{
+alert(
+"Your seller session has expired. Please log in again."
+);
 
-    const authenticated =
-      await refreshSellerAuthentication();
+window.location.href="auth.html";
 
+return;
 
-    if(!authenticated){
+}
 
-      clearTimeout(
-        safetyTimer
-      );
 
+if(!SELLER_ID){
 
-      alert(
-        "Your seller session has expired. Please log in again."
-      );
+clearTimeout(safetyTimer);
 
+alert(
+"Seller account information is missing."
+);
 
-      window.location.href =
-        "auth.html";
+window.location.href="index.html";
 
+return;
 
-      return;
+}
 
-    }
 
+const rental=
+await getSellerRentalAccessFast();
 
-    if(!SELLER_ID){
+clearTimeout(safetyTimer);
 
-      clearTimeout(
-        safetyTimer
-      );
 
+if(!rental.paid){
 
-      alert(
-        "Seller account information is missing."
-      );
+dashboardStarted=false;
 
+showRentalLock();
 
-      window.location.href =
-        "index.html";
+return;
 
+}
 
-      return;
 
-    }
+hideRentalLock();
 
+await loadSellerInformation();
 
-    const rental =
-      await getSellerRentalAccessFast();
+await loadProducts();
 
+await loadOrders();
 
-    clearTimeout(
-      safetyTimer
-    );
+await loadDelivery();
 
+updateRentalDisplay();
 
-    if(!rental.paid){
+}catch(error){
 
-      dashboardStarted = false;
+clearTimeout(safetyTimer);
 
-      showRentalLock();
+console.error(
+"Seller dashboard startup error:",
+error
+);
 
-      return;
+dashboardStarted=false;
 
-    }
+showRentalLock();
 
-
-    hideRentalLock();
-
-
-    await loadSellerInformation();
-
-    await loadProducts();
-
-    await loadOrders();
-
-    await loadDelivery();
-
-    updateRentalDisplay();
-
-
-  }catch(error){
-
-    clearTimeout(
-      safetyTimer
-    );
-
-
-    console.error(
-      "Seller dashboard startup error:",
-      error
-    );
-
-
-    dashboardStarted = false;
-
-    showRentalLock();
-
-  }
+}
 
 }
 
@@ -2217,59 +1730,44 @@ async function startSellerDashboard(){
 
 async function loadSellerInformation(){
 
-  const sellers =
-    await supabaseRequest(
-      "/rest/v1/sellers" +
-      "?id=eq." +
-      encodeURIComponent(
-        SELLER_ID
-      ) +
-      "&select=*"
-    );
+const sellers=
+await supabaseRequest(
+"/rest/v1/sellers" +
+"?id=eq." +
+encodeURIComponent(SELLER_ID) +
+"&select=*"
+);
 
+if(
+!Array.isArray(sellers) ||
+!sellers.length
+){
 
-  if(
-    !Array.isArray(sellers) ||
-    !sellers.length
-  ){
+throw new Error(
+"Seller account could not be found."
+);
 
-    throw new Error(
-      "Seller account could not be found."
-    );
+}
 
-  }
+const seller=sellers[0];
 
+const name=
+seller.full_name ||
+seller.name ||
+seller.store_name ||
+"Seller";
 
-  const seller =
-    sellers[0];
+const storeName=
+seller.store_name ||
+"ZYRE Marketing";
 
+document.getElementById(
+"sellerName"
+).textContent=name;
 
-  const name =
-    seller.full_name ||
-    seller.name ||
-    seller.store_name ||
-    "Seller";
-
-
-  const storeName =
-    seller.store_name ||
-    "ZYRE Marketing";
-
-
-  document
-    .getElementById(
-      "sellerName"
-    )
-    .textContent =
-      name;
-
-
-  document
-    .getElementById(
-      "sellerStoreName"
-    )
-    .textContent =
-      storeName;
+document.getElementById(
+"sellerStoreName"
+).textContent=storeName;
 
 }
 
@@ -2280,35 +1778,29 @@ async function loadSellerInformation(){
 
 function updateRentalDisplay(){
 
-  const stat =
-    document.getElementById(
-      "rentalStatus"
-    );
+const stat=
+document.getElementById(
+"rentalStatus"
+);
 
+const panel=
+document.getElementById(
+"rentalPanelStatus"
+);
 
-  const panel =
-    document.getElementById(
-      "rentalPanelStatus"
-    );
+if(stat){
 
+stat.textContent="Paid";
 
-  if(stat){
+}
 
-    stat.textContent =
-      "Paid";
+if(panel){
 
-  }
+panel.textContent="Paid";
 
+panel.className="rental-paid";
 
-  if(panel){
-
-    panel.textContent =
-      "Paid";
-
-    panel.className =
-      "rental-paid";
-
-  }
+}
 
 }
 
@@ -2317,57 +1809,32 @@ function updateRentalDisplay(){
    PANEL NAVIGATION
 ===================================================== */
 
-function showPanel(
-  id,
-  button
-){
+function showPanel(id,button){
 
-  document
-    .querySelectorAll(
-      ".panel"
-    )
-    .forEach(
-      panel =>
-        panel.classList.remove(
-          "active"
-        )
-    );
+document
+.querySelectorAll(".panel")
+.forEach(
+panel=>
+panel.classList.remove("active")
+);
 
+document
+.querySelectorAll("nav button")
+.forEach(
+btn=>
+btn.classList.remove("active")
+);
 
-  document
-    .querySelectorAll(
-      "nav button"
-    )
-    .forEach(
-      btn =>
-        btn.classList.remove(
-          "active"
-        )
-    );
+const panel=
+document.getElementById(id);
 
+if(panel){
+panel.classList.add("active");
+}
 
-  const panel =
-    document.getElementById(
-      id
-    );
-
-
-  if(panel){
-
-    panel.classList.add(
-      "active"
-    );
-
-  }
-
-
-  if(button){
-
-    button.classList.add(
-      "active"
-    );
-
-  }
+if(button){
+button.classList.add("active");
+}
 
 }
 
@@ -2378,20 +1845,18 @@ function showPanel(
 
 async function ensureRentalAccess(){
 
-  const result =
-    await getSellerRentalAccessFast();
+const result=
+await getSellerRentalAccessFast();
 
+if(!result.paid){
 
-  if(!result.paid){
+showRentalLock();
 
-    showRentalLock();
+return false;
 
-    return false;
+}
 
-  }
-
-
-  return true;
+return true;
 
 }
 
@@ -2402,133 +1867,106 @@ async function ensureRentalAccess(){
 
 async function loadProducts(){
 
-  try{
+try{
 
-    const products =
-      await supabaseRequest(
-        "/rest/v1/products" +
-        "?seller_id=eq." +
-        encodeURIComponent(
-          SELLER_ID
-        ) +
-        "&select=*" +
-        "&order=id.desc"
-      );
+const products=
+await supabaseRequest(
+"/rest/v1/products" +
+"?seller_id=eq." +
+encodeURIComponent(SELLER_ID) +
+"&select=*" +
+"&order=id.desc"
+);
 
+PRODUCTS=
+Array.isArray(products)
+? products
+:[];
 
-    PRODUCTS =
-      Array.isArray(products)
-        ? products
-        : [];
+renderProducts();
 
+document.getElementById(
+"productCount"
+).textContent=
+PRODUCTS.length;
 
-    renderProducts();
+}catch(error){
 
+console.error(
+"Products failed:",
+error
+);
 
-    document
-      .getElementById(
-        "productCount"
-      )
-      .textContent =
-        PRODUCTS.length;
+document.getElementById(
+"productsTable"
+).innerHTML=
+"<tr><td colspan='7'>Could not load products.</td></tr>";
 
-
-  }catch(error){
-
-    console.error(
-      "Products failed:",
-      error
-    );
-
-
-    document
-      .getElementById(
-        "productsTable"
-      )
-      .innerHTML =
-        "<tr><td colspan='7'>Could not load products.</td></tr>";
-
-  }
+}
 
 }
 
 
 function renderProducts(){
 
-  const table =
-    document.getElementById(
-      "productsTable"
-    );
+const table=
+document.getElementById(
+"productsTable"
+);
 
+if(!PRODUCTS.length){
 
-  if(!PRODUCTS.length){
+table.innerHTML=
+"<tr><td colspan='7'>No products found.</td></tr>";
 
-    table.innerHTML =
-      "<tr><td colspan='7'>No products found.</td></tr>";
+return;
 
-    return;
+}
 
-  }
+table.innerHTML=
+PRODUCTS.map(
+product=>`
 
+<tr>
 
-  table.innerHTML =
-    PRODUCTS.map(
-      product => {
+<td>${escapeHTML(product.id)}</td>
 
-        return `
+<td>${escapeHTML(product.name)}</td>
 
-          <tr>
+<td>${money(product.price)}</td>
 
-            <td>
-              ${escapeHTML(product.id)}
-            </td>
+<td>${escapeHTML(product.stock)}</td>
 
-            <td>
-              ${escapeHTML(product.name)}
-            </td>
+<td>${escapeHTML(product.category || "-")}</td>
 
-            <td>
-              ${money(product.price)}
-            </td>
+<td>
+${
+product.active===false
+?"No"
+:"Yes"
+}
+</td>
 
-            <td>
-              ${escapeHTML(product.stock)}
-            </td>
+<td>
 
-            <td>
-              ${escapeHTML(product.category || "-")}
-            </td>
+<button
+class="action-button edit-button"
+onclick="editProduct(${Number(product.id)})">
+Edit
+</button>
 
-            <td>
-              ${product.active === false
-                ? "No"
-                : "Yes"}
-            </td>
+<button
+class="action-button delete-button"
+onclick="deleteProduct(${Number(product.id)})">
+Delete
+</button>
 
-            <td>
+</td>
 
-              <button
-                class="action-button edit-button"
-                onclick="editProduct(${Number(product.id)})"
-              >
-                Edit
-              </button>
+</tr>
 
-              <button
-                class="action-button delete-button"
-                onclick="deleteProduct(${Number(product.id)})"
-              >
-                Delete
-              </button>
-
-            </td>
-
-          </tr>
-
-        `;
-
-      }
-    ).join("");
+`
+).join("");
 
 }
 
@@ -2539,214 +1977,158 @@ function renderProducts(){
 
 async function saveProduct(event){
 
-  event.preventDefault();
+event.preventDefault();
 
+if(!(await ensureRentalAccess())){
+return;
+}
 
-  if(
-    !(await ensureRentalAccess())
-  ){
+const productId=
+document.getElementById(
+"editProductId"
+).value;
 
-    return;
+const product={
 
-  }
+seller_id:Number(SELLER_ID),
 
+name:
+document.getElementById(
+"productName"
+).value.trim(),
 
-  const productId =
-    document
-      .getElementById(
-        "editProductId"
-      )
-      .value;
+description:
+document.getElementById(
+"productDescription"
+).value.trim(),
 
+price:
+Number(
+document.getElementById(
+"productPrice"
+).value
+),
 
-  const product = {
+stock:
+Number(
+document.getElementById(
+"productStock"
+).value
+),
 
-    seller_id:
-      Number(SELLER_ID),
+category:
+document.getElementById(
+"productCategory"
+).value,
 
-    name:
-      document
-        .getElementById(
-          "productName"
-        )
-        .value
-        .trim(),
+image_url:
+document.getElementById(
+"productImage"
+).value.trim(),
 
-    description:
-      document
-        .getElementById(
-          "productDescription"
-        )
-        .value
-        .trim(),
+active:true
 
-    price:
-      Number(
-        document
-          .getElementById(
-            "productPrice"
-          )
-          .value
-      ),
+};
 
-    stock:
-      Number(
-        document
-          .getElementById(
-            "productStock"
-          )
-          .value
-      ),
+if(!product.name || !product.category){
 
-    category:
-      document
-        .getElementById(
-          "productCategory"
-        )
-        .value,
+showMessage(
+"productMessage",
+"Please complete the required product fields.",
+"error"
+);
 
-    image_url:
-      document
-        .getElementById(
-          "productImage"
-        )
-        .value
-        .trim(),
+return;
 
-    active:true
+}
 
-  };
+try{
 
+const saveButton=
+document.getElementById(
+"productSaveButton"
+);
 
-  if(
-    !product.name ||
-    !product.category
-  ){
+saveButton.disabled=true;
 
-    showMessage(
-      "productMessage",
-      "Please complete the required product fields.",
-      "error"
-    );
+saveButton.textContent="Saving...";
 
+if(productId){
 
-    return;
+await supabaseRequest(
+"/rest/v1/products?id=eq." +
+encodeURIComponent(productId),
+{
+method:"PATCH",
 
-  }
+headers:{
+"Prefer":"return=minimal"
+},
 
+body:JSON.stringify(product)
+}
+);
 
-  try{
+showMessage(
+"productMessage",
+"✅ Product updated successfully.",
+"success"
+);
 
-    const saveButton =
-      document
-        .getElementById(
-          "productSaveButton"
-        );
+}else{
 
+await supabaseRequest(
+"/rest/v1/products",
+{
+method:"POST",
 
-    saveButton.disabled = true;
+headers:{
+"Prefer":"return=minimal"
+},
 
+body:JSON.stringify(product)
+}
+);
 
-    saveButton.textContent =
-      "Saving...";
+showMessage(
+"productMessage",
+"✅ Product added successfully.",
+"success"
+);
 
+}
 
-    if(productId){
+resetProductForm();
 
-      await supabaseRequest(
-        "/rest/v1/products?id=eq." +
-        encodeURIComponent(
-          productId
-        ),
-        {
-          method:"PATCH",
+await loadProducts();
 
-          headers:{
-            "Prefer":
-              "return=minimal"
-          },
+}catch(error){
 
-          body:
-            JSON.stringify(
-              product
-            )
-        }
-      );
+console.error(
+"Save product error:",
+error
+);
 
+showMessage(
+"productMessage",
+"Could not save product: " +
+error.message,
+"error"
+);
 
-      showMessage(
-        "productMessage",
-        "✅ Product updated successfully.",
-        "success"
-      );
+}finally{
 
+const saveButton=
+document.getElementById(
+"productSaveButton"
+);
 
-    }else{
+saveButton.disabled=false;
 
-      await supabaseRequest(
-        "/rest/v1/products",
-        {
-          method:"POST",
+saveButton.textContent=
+"➕ Add Product";
 
-          headers:{
-            "Prefer":
-              "return=minimal"
-          },
-
-          body:
-            JSON.stringify(
-              product
-            )
-        }
-      );
-
-
-      showMessage(
-        "productMessage",
-        "✅ Product added successfully.",
-        "success"
-      );
-
-    }
-
-
-    resetProductForm();
-
-    await loadProducts();
-
-
-  }catch(error){
-
-    console.error(
-      "Save product error:",
-      error
-    );
-
-
-    showMessage(
-      "productMessage",
-      "Could not save product: " +
-        error.message,
-      "error"
-    );
-
-
-  }finally{
-
-    const saveButton =
-      document
-        .getElementById(
-          "productSaveButton"
-        );
-
-
-    saveButton.disabled = false;
-
-
-    saveButton.textContent =
-      "➕ Add Product";
-
-  }
+}
 
 }
 
@@ -2757,104 +2139,69 @@ async function saveProduct(event){
 
 function editProduct(id){
 
-  const product =
-    PRODUCTS.find(
-      item =>
-        Number(item.id) ===
-        Number(id)
-    );
+const product=
+PRODUCTS.find(
+item=>
+Number(item.id)===Number(id)
+);
 
+if(!product)return;
 
-  if(!product){
-    return;
-  }
+document.getElementById(
+"editProductId"
+).value=product.id;
 
+document.getElementById(
+"productName"
+).value=product.name || "";
 
-  document
-    .getElementById(
-      "editProductId"
-    )
-    .value =
-      product.id;
+document.getElementById(
+"productDescription"
+).value=
+product.description || "";
 
+document.getElementById(
+"productPrice"
+).value=
+product.price || "";
 
-  document
-    .getElementById(
-      "productName"
-    )
-    .value =
-      product.name || "";
+document.getElementById(
+"productStock"
+).value=
+product.stock || 0;
 
+document.getElementById(
+"productCategory"
+).value=
+product.category || "";
 
-  document
-    .getElementById(
-      "productDescription"
-    )
-    .value =
-      product.description || "";
+document.getElementById(
+"productImage"
+).value=
+product.image_url || "";
 
+document.getElementById(
+"productSaveButton"
+).textContent=
+"💾 Update Product";
 
-  document
-    .getElementById(
-      "productPrice"
-    )
-    .value =
-      product.price || "";
+document.getElementById(
+"cancelEditButton"
+).classList.remove(
+"hidden"
+);
 
+showPanel(
+"products",
+document.querySelector(
+"nav button:nth-child(2)"
+)
+);
 
-  document
-    .getElementById(
-      "productStock"
-    )
-    .value =
-      product.stock || 0;
-
-
-  document
-    .getElementById(
-      "productCategory"
-    )
-    .value =
-      product.category || "";
-
-
-  document
-    .getElementById(
-      "productImage"
-    )
-    .value =
-      product.image_url || "";
-
-
-  document
-    .getElementById(
-      "productSaveButton"
-    )
-    .textContent =
-      "💾 Update Product";
-
-
-  document
-    .getElementById(
-      "cancelEditButton"
-    )
-    .classList.remove(
-      "hidden"
-    );
-
-
-  showPanel(
-    "products",
-    document.querySelector(
-      "nav button:nth-child(2)"
-    )
-  );
-
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
 
 }
 
@@ -2864,9 +2211,7 @@ function editProduct(id){
 ===================================================== */
 
 function cancelEdit(){
-
-  resetProductForm();
-
+resetProductForm();
 }
 
 
@@ -2876,35 +2221,24 @@ function cancelEdit(){
 
 function resetProductForm(){
 
-  document
-    .getElementById(
-      "productForm"
-    )
-    .reset();
+document.getElementById(
+"productForm"
+).reset();
 
+document.getElementById(
+"editProductId"
+).value="";
 
-  document
-    .getElementById(
-      "editProductId"
-    )
-    .value = "";
+document.getElementById(
+"productSaveButton"
+).textContent=
+"➕ Add Product";
 
-
-  document
-    .getElementById(
-      "productSaveButton"
-    )
-    .textContent =
-      "➕ Add Product";
-
-
-  document
-    .getElementById(
-      "cancelEditButton"
-    )
-    .classList.add(
-      "hidden"
-    );
+document.getElementById(
+"cancelEditButton"
+).classList.add(
+"hidden"
+);
 
 }
 
@@ -2915,74 +2249,53 @@ function resetProductForm(){
 
 async function deleteProduct(id){
 
-  if(
-    !(await ensureRentalAccess())
-  ){
+if(!(await ensureRentalAccess())){
+return;
+}
 
-    return;
+const product=
+PRODUCTS.find(
+item=>
+Number(item.id)===Number(id)
+);
 
-  }
+if(!product)return;
 
+if(!confirm(
+"Delete " + product.name + "?"
+)){
+return;
+}
 
-  const product =
-    PRODUCTS.find(
-      item =>
-        Number(item.id) ===
-        Number(id)
-    );
+try{
 
+await supabaseRequest(
+"/rest/v1/products?id=eq." +
+encodeURIComponent(id),
+{
+method:"DELETE"
+}
+);
 
-  if(!product){
-    return;
-  }
+alert(
+"Product deleted successfully."
+);
 
+await loadProducts();
 
-  if(
-    !confirm(
-      "Delete " +
-      product.name +
-      "?"
-    )
-  ){
+}catch(error){
 
-    return;
+console.error(
+"Delete product error:",
+error
+);
 
-  }
+alert(
+"Could not delete product:\n\n" +
+error.message
+);
 
-
-  try{
-
-    await supabaseRequest(
-      "/rest/v1/products?id=eq." +
-      encodeURIComponent(id),
-      {
-        method:"DELETE"
-      }
-    );
-
-
-    alert(
-      "Product deleted successfully."
-    );
-
-
-    await loadProducts();
-
-
-  }catch(error){
-
-    console.error(
-      "Delete product error:",
-      error
-    );
-
-
-    alert(
-      "Could not delete product:\n\n" +
-      error.message
-    );
-
-  }
+}
 
 }
 
@@ -2993,155 +2306,131 @@ async function deleteProduct(id){
 
 async function loadOrders(){
 
-  try{
+try{
 
-    const orderItems =
-      await supabaseRequest(
-        "/rest/v1/order_items" +
-        "?select=order_id,product_id,quantity,price" +
-        "&product_id=in.(" +
-        PRODUCTS
-          .map(
-            p =>
-              Number(p.id)
-          )
-          .filter(
-            id =>
-              Number.isFinite(id)
-          )
-          .join(",") +
-        ")"
-      );
+const productIds=
+PRODUCTS
+.map(p=>Number(p.id))
+.filter(id=>Number.isFinite(id));
 
+if(!productIds.length){
 
-    if(
-      !Array.isArray(orderItems) ||
-      !orderItems.length
-    ){
+ORDERS=[];
 
-      ORDERS = [];
+renderOrders();
 
-      renderOrders();
+updateOrderStats();
 
-      updateOrderStats();
+return;
 
-      return;
+}
 
-    }
+const orderItems=
+await supabaseRequest(
+"/rest/v1/order_items" +
+"?select=order_id,product_id,quantity,price" +
+"&product_id=in.(" +
+productIds.join(",") +
+")"
+);
 
+if(
+!Array.isArray(orderItems) ||
+!orderItems.length
+){
 
-    const orderIds =
-      [
-        ...new Set(
-          orderItems.map(
-            item =>
-              Number(
-                item.order_id
-              )
-          )
-        )
-      ];
+ORDERS=[];
 
+renderOrders();
 
-    if(!orderIds.length){
+updateOrderStats();
 
-      ORDERS = [];
+return;
 
-      renderOrders();
+}
 
-      updateOrderStats();
+const orderIds=[
+...new Set(
+orderItems.map(
+item=>Number(item.order_id)
+)
+)
+];
 
-      return;
+if(!orderIds.length){
 
-    }
+ORDERS=[];
 
+renderOrders();
 
-    const orders =
-      await supabaseRequest(
-        "/rest/v1/orders" +
-        "?id=in.(" +
-        orderIds.join(",") +
-        ")" +
-        "&select=*" +
-        "&order=id.desc"
-      );
+updateOrderStats();
 
+return;
 
-    ORDERS =
-      Array.isArray(orders)
-        ? orders
-        : [];
+}
 
+const orders=
+await supabaseRequest(
+"/rest/v1/orders" +
+"?id=in.(" +
+orderIds.join(",") +
+")" +
+"&select=*" +
+"&order=id.desc"
+);
 
-    ORDERS =
-      ORDERS.map(
-        order => {
+ORDERS=
+Array.isArray(orders)
+? orders
+:[];
 
-          const items =
-            orderItems.filter(
-              item =>
-                Number(
-                  item.order_id
-                ) ===
-                Number(
-                  order.id
-                )
-            );
+ORDERS=
+ORDERS.map(
+order=>{
 
+const items=
+orderItems.filter(
+item=>
+Number(item.order_id)===
+Number(order.id)
+);
 
-          const sellerTotal =
-            items.reduce(
-              (
-                total,
-                item
-              ) =>
-                total +
-                (
-                  Number(
-                    item.price
-                  ) *
-                  Number(
-                    item.quantity
-                  )
-                ),
-              0
-            );
+const sellerTotal=
+items.reduce(
+(total,item)=>
+total +
+(
+Number(item.price) *
+Number(item.quantity)
+),
+0
+);
 
+return{
+...order,
+seller_total:sellerTotal
+};
 
-          return {
+}
+);
 
-            ...order,
+renderOrders();
 
-            seller_total:
-              sellerTotal
+updateOrderStats();
 
-          };
+}catch(error){
 
-        }
-      );
+console.error(
+"Orders failed:",
+error
+);
 
+document.getElementById(
+"ordersTable"
+).innerHTML=
+"<tr><td colspan='6'>Could not load orders.</td></tr>";
 
-    renderOrders();
-
-    updateOrderStats();
-
-
-  }catch(error){
-
-    console.error(
-      "Orders failed:",
-      error
-    );
-
-
-    document
-      .getElementById(
-        "ordersTable"
-      )
-      .innerHTML =
-        "<tr><td colspan='6'>Could not load orders.</td></tr>";
-
-  }
+}
 
 }
 
@@ -3152,77 +2441,60 @@ async function loadOrders(){
 
 function renderOrders(){
 
-  const table =
-    document.getElementById(
-      "ordersTable"
-    );
+const table=
+document.getElementById(
+"ordersTable"
+);
 
+if(!ORDERS.length){
 
-  if(!ORDERS.length){
+table.innerHTML=
+"<tr><td colspan='6'>No customer orders found.</td></tr>";
 
-    table.innerHTML =
-      "<tr><td colspan='6'>No customer orders found.</td></tr>";
+return;
 
-    return;
+}
 
-  }
+table.innerHTML=
+ORDERS.map(
+order=>`
 
+<tr>
 
-  table.innerHTML =
-    ORDERS.map(
-      order => {
+<td>#${escapeHTML(order.id)}</td>
 
-        return `
+<td>${money(order.seller_total)}</td>
 
-          <tr>
+<td>
+${escapeHTML(
+order.status || "Pending"
+)}
+</td>
 
-            <td>
-              #${escapeHTML(order.id)}
-            </td>
+<td>
+${escapeHTML(
+order.delivery_address || "-"
+)}
+</td>
 
-            <td>
-              ${money(
-                order.seller_total
-              )}
-            </td>
+<td>
+${formatDate(order.created_at)}
+</td>
 
-            <td>
-              ${escapeHTML(
-                order.status ||
-                "Pending"
-              )}
-            </td>
+<td>
 
-            <td>
-              ${escapeHTML(
-                order.delivery_address ||
-                "-"
-              )}
-            </td>
+<button
+class="action-button status-button"
+onclick="updateOrderStatus(${Number(order.id)})">
+Update Status
+</button>
 
-            <td>
-              ${formatDate(
-                order.created_at
-              )}
-            </td>
+</td>
 
-            <td>
+</tr>
 
-              <button
-                class="action-button status-button"
-                onclick="updateOrderStatus(${Number(order.id)})"
-              >
-                Update Status
-              </button>
-
-            </td>
-
-          </tr>
-
-        `;
-
-      }
-    ).join("");
+`
+).join("");
 
 }
 
@@ -3233,35 +2505,23 @@ function renderOrders(){
 
 function updateOrderStats(){
 
-  document
-    .getElementById(
-      "orderCount"
-    )
-    .textContent =
-      ORDERS.length;
+document.getElementById(
+"orderCount"
+).textContent=
+ORDERS.length;
 
+const total=
+ORDERS.reduce(
+(sum,order)=>
+sum +
+Number(order.seller_total || 0),
+0
+);
 
-  const total =
-    ORDERS.reduce(
-      (
-        sum,
-        order
-      ) =>
-        sum +
-        Number(
-          order.seller_total ||
-          0
-        ),
-      0
-    );
-
-
-  document
-    .getElementById(
-      "salesTotal"
-    )
-    .textContent =
-      money(total);
+document.getElementById(
+"salesTotal"
+).textContent=
+money(total);
 
 }
 
@@ -3270,144 +2530,97 @@ function updateOrderStats(){
    UPDATE ORDER STATUS
 ===================================================== */
 
-async function updateOrderStatus(
-  orderId
-){
+async function updateOrderStatus(orderId){
 
-  if(
-    !(await ensureRentalAccess())
-  ){
+if(!(await ensureRentalAccess())){
+return;
+}
 
-    return;
+const order=
+ORDERS.find(
+item=>
+Number(item.id)===
+Number(orderId)
+);
 
-  }
+if(!order)return;
 
+const current=
+String(
+order.status || "Pending"
+).toLowerCase();
 
-  const order =
-    ORDERS.find(
-      item =>
-        Number(item.id) ===
-        Number(orderId)
-    );
+let nextStatus="Processing";
 
+if(current==="pending"){
+nextStatus="Processing";
+}else if(current==="processing"){
+nextStatus="Shipped";
+}else if(current==="shipped"){
+nextStatus="Delivered";
+}else if(current==="delivered"){
 
-  if(!order){
-    return;
-  }
+alert(
+"This order is already Delivered."
+);
 
+return;
 
-  const current =
-    String(
-      order.status ||
-      "Pending"
-    ).toLowerCase();
+}
 
+if(!confirm(
+"Change order #" +
+orderId +
+" from " +
+order.status +
+" to " +
+nextStatus +
+"?"
+)){
+return;
+}
 
-  let nextStatus =
-    "Processing";
+try{
 
+await supabaseRequest(
+"/rest/v1/orders?id=eq." +
+encodeURIComponent(orderId),
+{
+method:"PATCH",
 
-  if(
-    current === "pending"
-  ){
+headers:{
+"Prefer":"return=minimal"
+},
 
-    nextStatus =
-      "Processing";
+body:JSON.stringify({
+status:nextStatus
+})
+}
+);
 
-  }else if(
-    current === "processing"
-  ){
+alert(
+"Order updated to " +
+nextStatus +
+"."
+);
 
-    nextStatus =
-      "Shipped";
+await loadOrders();
 
-  }else if(
-    current === "shipped"
-  ){
+await loadDelivery();
 
-    nextStatus =
-      "Delivered";
+}catch(error){
 
-  }else if(
-    current === "delivered"
-  ){
+console.error(
+"Order status error:",
+error
+);
 
-    alert(
-      "This order is already Delivered."
-    );
+alert(
+"Could not update order:\n\n" +
+error.message
+);
 
-    return;
-
-  }
-
-
-  if(
-    !confirm(
-      "Change order #" +
-      orderId +
-      " from " +
-      order.status +
-      " to " +
-      nextStatus +
-      "?"
-    )
-  ){
-
-    return;
-
-  }
-
-
-  try{
-
-    await supabaseRequest(
-      "/rest/v1/orders?id=eq." +
-      encodeURIComponent(
-        orderId
-      ),
-      {
-        method:"PATCH",
-
-        headers:{
-          "Prefer":
-            "return=minimal"
-        },
-
-        body:
-          JSON.stringify({
-            status:
-              nextStatus
-          })
-      }
-    );
-
-
-    alert(
-      "Order updated to " +
-      nextStatus +
-      "."
-    );
-
-
-    await loadOrders();
-
-    await loadDelivery();
-
-
-  }catch(error){
-
-    console.error(
-      "Order status error:",
-      error
-    );
-
-
-    alert(
-      "Could not update order:\n\n" +
-      error.message
-    );
-
-  }
+}
 
 }
 
@@ -3418,66 +2631,53 @@ async function updateOrderStatus(
 
 async function loadDelivery(){
 
-  try{
+try{
 
-    const orderIds =
-      ORDERS.map(
-        order =>
-          Number(
-            order.id
-          )
-      );
+const orderIds=
+ORDERS.map(
+order=>Number(order.id)
+);
 
+if(!orderIds.length){
 
-    if(!orderIds.length){
+DELIVERY_DATA=[];
 
-      DELIVERY_DATA = [];
+renderDelivery();
 
-      renderDelivery();
+return;
 
-      return;
+}
 
-    }
+const deliveries=
+await supabaseRequest(
+"/rest/v1/deliveries" +
+"?order_id=in.(" +
+orderIds.join(",") +
+")" +
+"&select=*" +
+"&order=id.desc"
+);
 
+DELIVERY_DATA=
+Array.isArray(deliveries)
+? deliveries
+:[];
 
-    const deliveries =
-      await supabaseRequest(
-        "/rest/v1/deliveries" +
-        "?order_id=in.(" +
-        orderIds.join(",") +
-        ")" +
-        "&select=*" +
-        "&order=id.desc"
-      );
+renderDelivery();
 
+}catch(error){
 
-    DELIVERY_DATA =
-      Array.isArray(
-        deliveries
-      )
-        ? deliveries
-        : [];
+console.error(
+"Delivery load failed:",
+error
+);
 
+document.getElementById(
+"deliveryTable"
+).innerHTML=
+"<tr><td colspan='7'>Could not load delivery information.</td></tr>";
 
-    renderDelivery();
-
-
-  }catch(error){
-
-    console.error(
-      "Delivery load failed:",
-      error
-    );
-
-
-    document
-      .getElementById(
-        "deliveryTable"
-      )
-      .innerHTML =
-        "<tr><td colspan='7'>Could not load delivery information.</td></tr>";
-
-  }
+}
 
 }
 
@@ -3488,99 +2688,89 @@ async function loadDelivery(){
 
 function renderDelivery(){
 
-  const table =
-    document.getElementById(
-      "deliveryTable"
-    );
+const table=
+document.getElementById(
+"deliveryTable"
+);
 
+if(!ORDERS.length){
 
-  if(!ORDERS.length){
+table.innerHTML=
+"<tr><td colspan='7'>No orders available.</td></tr>";
 
-    table.innerHTML =
-      "<tr><td colspan='7'>No orders available.</td></tr>";
+return;
 
-    return;
+}
 
-  }
+table.innerHTML=
+ORDERS.map(
+order=>{
 
+const delivery=
+DELIVERY_DATA.find(
+item=>
+Number(item.order_id)===
+Number(order.id)
+);
 
-  table.innerHTML =
-    ORDERS.map(
-      order => {
+return`
 
-        const delivery =
-          DELIVERY_DATA.find(
-            item =>
-              Number(
-                item.order_id
-              ) ===
-              Number(
-                order.id
-              )
-          );
+<tr>
 
+<td>#${escapeHTML(order.id)}</td>
 
-        return `
+<td>
+${escapeHTML(
+delivery?.status ||
+order.status ||
+"Pending"
+)}
+</td>
 
-          <tr>
+<td>
+${escapeHTML(
+delivery?.delivery_person_name ||
+"-"
+)}
+</td>
 
-            <td>
-              #${escapeHTML(order.id)}
-            </td>
+<td>
+${escapeHTML(
+delivery?.delivery_person_phone ||
+"-"
+)}
+</td>
 
-            <td>
-              ${escapeHTML(
-                delivery?.status ||
-                order.status ||
-                "Pending"
-              )}
-            </td>
+<td>
+${escapeHTML(
+delivery?.tracking_number ||
+"-"
+)}
+</td>
 
-            <td>
-              ${escapeHTML(
-                delivery?.delivery_person_name ||
-                "-"
-              )}
-            </td>
+<td>
+${escapeHTML(
+delivery?.estimated_delivery ||
+"-"
+)}
+</td>
 
-            <td>
-              ${escapeHTML(
-                delivery?.delivery_person_phone ||
-                "-"
-              )}
-            </td>
+<td>
 
-            <td>
-              ${escapeHTML(
-                delivery?.tracking_number ||
-                "-"
-              )}
-            </td>
+<button
+class="action-button status-button"
+onclick="editDelivery(${Number(order.id)})">
+🚚 Manage
+</button>
 
-            <td>
-              ${escapeHTML(
-                delivery?.estimated_delivery ||
-                "-"
-              )}
-            </td>
+</td>
 
-            <td>
+</tr>
 
-              <button
-                class="action-button status-button"
-                onclick="editDelivery(${Number(order.id)})"
-              >
-                🚚 Manage
-              </button>
+`;
 
-            </td>
-
-          </tr>
-
-        `;
-
-      }
-    ).join("");
+}
+).join("");
 
 }
 
@@ -3589,186 +2779,129 @@ function renderDelivery(){
    EDIT DELIVERY
 ===================================================== */
 
-async function editDelivery(
-  orderId
-){
+async function editDelivery(orderId){
 
-  if(
-    !(await ensureRentalAccess())
-  ){
+if(!(await ensureRentalAccess())){
+return;
+}
 
-    return;
+const existing=
+DELIVERY_DATA.find(
+item=>
+Number(item.order_id)===
+Number(orderId)
+);
 
-  }
+const name=
+prompt(
+"Delivery person's name:",
+existing?.delivery_person_name || ""
+);
 
+if(name===null)return;
 
-  const existing =
-    DELIVERY_DATA.find(
-      item =>
-        Number(
-          item.order_id
-        ) ===
-        Number(orderId)
-    );
+const phone=
+prompt(
+"Delivery person's phone:",
+existing?.delivery_person_phone || ""
+);
 
+if(phone===null)return;
 
-  const name =
-    prompt(
-      "Delivery person's name:",
-      existing?.delivery_person_name ||
-      ""
-    );
+const tracking=
+prompt(
+"Tracking number:",
+existing?.tracking_number || ""
+);
 
+if(tracking===null)return;
 
-  if(name === null){
-    return;
-  }
+const estimated=
+prompt(
+"Estimated delivery date:",
+existing?.estimated_delivery || ""
+);
 
+if(estimated===null)return;
 
-  const phone =
-    prompt(
-      "Delivery person's phone:",
-      existing?.delivery_person_phone ||
-      ""
-    );
+const status=
+prompt(
+"Delivery status:",
+existing?.status || "Processing"
+);
 
+if(status===null)return;
 
-  if(phone === null){
-    return;
-  }
+const payload={
 
+order_id:Number(orderId),
 
-  const tracking =
-    prompt(
-      "Tracking number:",
-      existing?.tracking_number ||
-      ""
-    );
+delivery_person_name:name,
 
+delivery_person_phone:phone,
 
-  if(tracking === null){
-    return;
-  }
+tracking_number:tracking,
 
+estimated_delivery:estimated,
 
-  const estimated =
-    prompt(
-      "Estimated delivery date:",
-      existing?.estimated_delivery ||
-      ""
-    );
+status:status
 
+};
 
-  if(estimated === null){
-    return;
-  }
+try{
 
+if(existing){
 
-  const status =
-    prompt(
-      "Delivery status:",
-      existing?.status ||
-      "Processing"
-    );
+await supabaseRequest(
+"/rest/v1/deliveries?id=eq." +
+encodeURIComponent(existing.id),
+{
+method:"PATCH",
 
+headers:{
+"Prefer":"return=minimal"
+},
 
-  if(status === null){
-    return;
-  }
+body:JSON.stringify(payload)
+}
+);
 
+}else{
 
-  const payload = {
+await supabaseRequest(
+"/rest/v1/deliveries",
+{
+method:"POST",
 
-    order_id:
-      Number(orderId),
+headers:{
+"Prefer":"return=minimal"
+},
 
-    delivery_person_name:
-      name,
+body:JSON.stringify(payload)
+}
+);
 
-    delivery_person_phone:
-      phone,
+}
 
-    tracking_number:
-      tracking,
+alert(
+"Delivery information saved."
+);
 
-    estimated_delivery:
-      estimated,
+await loadDelivery();
 
-    status:
-      status
+}catch(error){
 
-  };
+console.error(
+"Delivery save error:",
+error
+);
 
+alert(
+"Could not save delivery information:\n\n" +
+error.message
+);
 
-  try{
-
-    if(existing){
-
-      await supabaseRequest(
-        "/rest/v1/deliveries?id=eq." +
-        encodeURIComponent(
-          existing.id
-        ),
-        {
-          method:"PATCH",
-
-          headers:{
-            "Prefer":
-              "return=minimal"
-          },
-
-          body:
-            JSON.stringify(
-              payload
-            )
-        }
-      );
-
-
-    }else{
-
-      await supabaseRequest(
-        "/rest/v1/deliveries",
-        {
-          method:"POST",
-
-          headers:{
-            "Prefer":
-              "return=minimal"
-          },
-
-          body:
-            JSON.stringify(
-              payload
-            )
-        }
-      );
-
-    }
-
-
-    alert(
-      "Delivery information saved."
-    );
-
-
-    await loadDelivery();
-
-
-  }catch(error){
-
-    console.error(
-      "Delivery save error:",
-      error
-    );
-
-
-    alert(
-      "Could not save delivery information:\n\n" +
-      error.message
-    );
-
-  }
+}
 
 }
 
@@ -3779,91 +2912,69 @@ async function editDelivery(
 
 async function enableSellerNotifications(){
 
-  const message =
-    document.getElementById(
-      "notificationMessage"
-    );
+if(!("Notification" in window)){
 
+showMessage(
+"notificationMessage",
+"This browser does not support notifications.",
+"error"
+);
 
-  if(
-    !("Notification" in window)
-  ){
+return;
 
-    showMessage(
-      "notificationMessage",
-      "This browser does not support notifications.",
-      "error"
-    );
+}
 
+try{
 
-    return;
+const permission=
+await Notification.requestPermission();
 
-  }
+if(permission!=="granted"){
 
+showMessage(
+"notificationMessage",
+"Notification permission was not granted.",
+"error"
+);
 
-  try{
+return;
 
-    const permission =
-      await Notification.requestPermission();
+}
 
+if(window.enableZYRENotifications){
 
-    if(
-      permission !== "granted"
-    ){
+await window.enableZYRENotifications();
 
-      showMessage(
-        "notificationMessage",
-        "Notification permission was not granted.",
-        "error"
-      );
+showMessage(
+"notificationMessage",
+"✅ Seller notifications enabled.",
+"success"
+);
 
+return;
 
-      return;
+}
 
-    }
+showMessage(
+"notificationMessage",
+"Browser notifications are enabled. The ZYRE notification system is still loading.",
+"info"
+);
 
+}catch(error){
 
-    if(
-      window.enableZYRENotifications
-    ){
+console.error(
+"Notification error:",
+error
+);
 
-      await window.enableZYRENotifications();
+showMessage(
+"notificationMessage",
+"Could not enable notifications.",
+"error"
+);
 
-
-      showMessage(
-        "notificationMessage",
-        "✅ Seller notifications enabled.",
-        "success"
-      );
-
-
-      return;
-
-    }
-
-
-    showMessage(
-      "notificationMessage",
-      "Browser notifications are enabled. The ZYRE notification system is still loading.",
-      "info"
-    );
-
-
-  }catch(error){
-
-    console.error(
-      "Notification error:",
-      error
-    );
-
-
-    showMessage(
-      "notificationMessage",
-      "Could not enable notifications.",
-      "error"
-    );
-
-  }
+}
 
 }
 
@@ -3874,33 +2985,31 @@ async function enableSellerNotifications(){
 
 function logoutSeller(){
 
-  localStorage.removeItem(
-    "zava_seller_id"
-  );
+localStorage.removeItem(
+"zava_seller_id"
+);
 
-  localStorage.removeItem(
-    "zava_access_token"
-  );
+localStorage.removeItem(
+"zava_access_token"
+);
 
-  localStorage.removeItem(
-    "zava_refresh_token"
-  );
+localStorage.removeItem(
+"zava_refresh_token"
+);
 
-  localStorage.removeItem(
-    "zava_seller_email"
-  );
+localStorage.removeItem(
+"zava_seller_email"
+);
 
-  localStorage.removeItem(
-    "zava_seller_store"
-  );
+localStorage.removeItem(
+"zava_seller_store"
+);
 
-  localStorage.removeItem(
-    "zyre_rental_reference"
-  );
+localStorage.removeItem(
+"zyre_rental_reference"
+);
 
-
-  window.location.href =
-    "auth.html";
+window.location.href="auth.html";
 
 }
 
@@ -3910,12 +3019,10 @@ function logoutSeller(){
 ===================================================== */
 
 document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-
-    startSellerDashboard();
-
-  }
+"DOMContentLoaded",
+()=>{
+startSellerDashboard();
+}
 );
 
 
@@ -3924,54 +3031,40 @@ document.addEventListener(
 ===================================================== */
 
 setInterval(
-  async () => {
+async()=>{
 
-    const sellerApp =
-      document.getElementById(
-        "sellerApp"
-      );
+const sellerApp=
+document.getElementById(
+"sellerApp"
+);
 
+if(!sellerApp){
+return;
+}
 
-    if(!sellerApp){
+if(
+sellerApp.classList.contains("hidden")
+){
+return;
+}
 
-      return;
+const rental=
+await getSellerRentalAccessFast();
 
-    }
+if(!rental.paid){
 
+dashboardStarted=false;
 
-    if(
-      sellerApp.classList.contains(
-        "hidden"
-      )
-    ){
+showRentalLock();
 
-      return;
+}
 
-    }
-
-
-    const rental =
-      await getSellerRentalAccessFast();
-
-
-    if(!rental.paid){
-
-      dashboardStarted = false;
-
-      showRentalLock();
-
-    }
-
-  },
-  60000
+},
+60000
 );
 
 </script>
 
-
-<!-- =====================================================
-     ZYRE APP.JS
-===================================================== -->
 
 <script src="app.js?v=5010"></script>
 
