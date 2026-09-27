@@ -1,6 +1,5 @@
 <!DOCTYPE html><html lang="en">
-<head>
-<meta charset="UTF-8"><meta
+<head><meta charset="UTF-8"><meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
 
@@ -80,8 +79,12 @@ body {
   color: white;
   padding: 10px 15px;
   border-radius: 9px;
-  text-decoration: none;
   font-size: 13px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background: rgba(255,255,255,.15);
 }
 
 .main {
@@ -236,7 +239,6 @@ select {
 .password-requirements strong {
   color: #333;
 }
-
 
 /* =========================
 STORE IMAGE
@@ -602,15 +604,16 @@ STORE IMAGE
 
 </div>
 
-  </div><a
-href="auth.html"
+  </div><button
+type="button"
 class="back-button"
+id="accountButton"
 
 «»
 
 ← Account
 
-  </a></header><main class="main">  <section class="intro"><h1>
+  </button></header><main class="main">  <section class="intro"><h1>
   Sell on ZYRE Marketing
 </h1>
 
@@ -634,12 +637,10 @@ class="back-button"
     for a ZYRE Marketing seller account.
   </p>
 
-
   <div
     id="registerMessage"
     class="message"
   ></div>
-
 
   <div class="application-notice">
 
@@ -653,13 +654,11 @@ class="back-button"
 
   </div>
 
-
   <form id="registerForm">
 
     <div class="form-section-title">
       👤 Personal information
     </div>
-
 
     <div class="form-group">
 
@@ -677,7 +676,6 @@ class="back-button"
 
     </div>
 
-
     <div class="form-group">
 
       <label for="registerEmail">
@@ -694,7 +692,6 @@ class="back-button"
 
     </div>
 
-
     <div class="form-group">
 
       <label for="registerPhone">
@@ -710,7 +707,6 @@ class="back-button"
       >
 
     </div>
-
 
     <div class="form-group">
 
@@ -736,7 +732,6 @@ class="back-button"
 
     </div>
 
-
     <div class="form-group">
 
       <label for="residentialAddress">
@@ -752,11 +747,9 @@ class="back-button"
 
     </div>
 
-
     <div class="form-section-title">
       🔐 Account security
     </div>
-
 
     <div class="form-group">
 
@@ -785,7 +778,6 @@ class="back-button"
 
       </div>
 
-
       <div class="password-requirements">
 
         <strong>Password must contain:</strong><br>
@@ -799,7 +791,6 @@ class="back-button"
       </div>
 
     </div>
-
 
     <div class="form-group">
 
@@ -830,11 +821,9 @@ class="back-button"
 
     </div>
 
-
     <div class="form-section-title">
       🏪 Store information
     </div>
-
 
     <div class="form-group">
 
@@ -851,7 +840,6 @@ class="back-button"
       >
 
     </div>
-
 
     <div class="form-group">
 
@@ -878,14 +866,12 @@ class="back-button"
 
         </div>
 
-
         <input
           type="file"
           id="storeImage"
           accept="image/*"
           required
         >
-
 
         <div class="store-image-note">
 
@@ -908,7 +894,6 @@ class="back-button"
 
     </div>
 
-
     <div class="form-group">
 
       <label for="businessAddress">
@@ -922,7 +907,6 @@ class="back-button"
       ></textarea>
 
     </div>
-
 
     <div class="form-group">
 
@@ -979,7 +963,6 @@ class="back-button"
 
     </div>
 
-
     <div class="form-group">
 
       <label for="storeDescription">
@@ -993,7 +976,6 @@ class="back-button"
       ></textarea>
 
     </div>
-
 
     <div class="checkbox-row">
 
@@ -1015,7 +997,6 @@ class="back-button"
 
     </div>
 
-
     <button
       type="submit"
       class="primary-button"
@@ -1025,7 +1006,6 @@ class="back-button"
     </button>
 
   </form>
-
 
   <div class="benefits">
 
@@ -1074,7 +1054,6 @@ class="back-button"
 
   </p>
 
-
   <div class="rental-price">
 
     <div class="rental-price-label">
@@ -1090,7 +1069,6 @@ class="back-button"
     </div>
 
   </div>
-
 
   <div class="rental-status">
 
@@ -1111,7 +1089,6 @@ class="back-button"
 
   </div>
 
-
   <button
     type="button"
     class="primary-button pending-button"
@@ -1120,15 +1097,13 @@ class="back-button"
     ⏳ PayFast Approval Pending
   </button>
 
-
   <button
     type="button"
     class="secondary-button"
-    onclick="returnToAccount()"
+    id="returnAccountButton"
   >
     Return to Account
   </button>
-
 
   <div class="rental-info">
 
@@ -1144,7 +1119,6 @@ class="back-button"
 
     </div>
 
-
     <div class="rental-info-row">
 
       <span>
@@ -1156,7 +1130,6 @@ class="back-button"
       </span>
 
     </div>
-
 
     <div class="rental-info-row">
 
@@ -1170,7 +1143,6 @@ class="back-button"
 
     </div>
 
-
     <div class="rental-info-row">
 
       <span>
@@ -1182,7 +1154,6 @@ class="back-button"
       </span>
 
     </div>
-
 
     <div class="rental-info-row">
 
@@ -1197,7 +1168,6 @@ class="back-button"
     </div>
 
   </div>
-
 
   <div
     id="rentalMessage"
@@ -1223,6 +1193,36 @@ const STORE_RENTAL_AMOUNT =
 
 const STORE_RENTAL_METHOD =
   "PayFast";
+
+
+/* =========================
+ACCOUNT NAVIGATION
+========================= */
+
+document
+  .getElementById("accountButton")
+  .addEventListener("click", function(event) {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    window.location.href =
+      "auth.html";
+
+  });
+
+
+document
+  .getElementById("returnAccountButton")
+  .addEventListener("click", function(event) {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    window.location.href =
+      "auth.html";
+
+  });
 
 
 /* =========================
@@ -2313,18 +2313,6 @@ function saveSellerSession(
     "zava_seller_email",
     email
   );
-
-}
-
-
-/* =========================
-RETURN TO ACCOUNT
-========================= */
-
-function returnToAccount() {
-
-  window.location.href =
-    "auth.html";
 
 }
 
