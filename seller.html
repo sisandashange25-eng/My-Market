@@ -1,5 +1,4 @@
-<!DOCTYPE html><html lang="en">
-<head><meta charset="UTF-8"><meta
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
 
@@ -17,9 +16,7 @@ content="noindex,nofollow"
 
 «»
 
-<!-- =====================================================
-     SUPABASE JAVASCRIPT LIBRARY
-===================================================== --><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 
 *{
   box-sizing:border-box;
@@ -32,7 +29,7 @@ body{
   color:#111;
 }
 
-header{
+header#sellerHeader{
   background:#111;
   color:#fff;
   padding:18px;
@@ -448,6 +445,11 @@ textarea{
   display:none;
 }
 
+/* Prevent accidental duplicate seller headers */
+body > header:not(#sellerHeader){
+  display:none!important;
+}
+
 @media(max-width:850px){
 
   .grid{
@@ -488,352 +490,757 @@ textarea{
 
 }
 
-</style></head><body><header><div class="header-inner"><div class="logo-title">
-🛍️ ZYRE Marketing Seller Dashboard
-</div><div class="header-buttons"><button
-class="btn-white"
-onclick="goBackToStore()">
-← Back to Store
-</button>
+</style></head><body><header id="sellerHeader">  <div class="header-inner"><div class="logo-title">
+  🛍️ ZYRE Marketing Seller Dashboard
+</div>
 
-<button
-class="btn-danger"
-onclick="logoutSeller()">
-Logout
-</button>
+<div class="header-buttons">
 
-</div></div></header><div
-id="rentalLoading"
-class="loading"><strong>Checking Store Rental</strong>
+  <button
+    class="btn-white"
+    onclick="goBackToStore()"
+  >
+    ← Back to Store
+  </button>
+
+  <button
+    class="btn-danger"
+    onclick="logoutSeller()"
+  >
+    Logout
+  </button>
+
+</div>
+
+  </div></header><div
+  id="rentalLoading"
+  class="loading"
+><strong>Checking Store Rental</strong>
 
 <br><br>
 
 Please wait while ZYRE Marketing checks your current monthly store rental.
 
 </div><div
-id="rentalLock"
-class="hidden"><main><div class="lock-box"><h2>🔒 Store Temporarily Locked</h2><p>
-Your ZYRE Marketing store rental for this month
-has not been confirmed.
-</p><p>
-Pay the monthly rental of
-<strong>R100</strong>
-to unlock your seller dashboard.
-</p><button
-class="btn-gold"
-onclick="payRental()">
-💳 Pay R100 Rental
-</button>
+  id="rentalLock"
+  class="hidden"
+>  <main><div class="lock-box">
 
-<br><br>
+  <h2>🔒 Store Temporarily Locked</h2>
 
-<button
-class="btn-black"
-onclick="checkRentalAgain()">
-🔄 Check Payment Again
-</button>
+  <p>
+    Your ZYRE Marketing store rental for this month
+    has not been confirmed.
+  </p>
 
-</div></main></div><div
-id="dashboard"
-class="hidden"><main><section class="card welcome"><h1>
-Welcome,
-<span id="sellerName">
-Seller
-</span>
-</h1><p>
-Store:
-<strong id="sellerStoreName">
-ZYRE
-</strong>
-</p><p>
-Manage your products, orders,
-deliveries and store.
-</p><span
-id="rentalPaidBadge"
-class="rental-paid">
-✓ Rental Paid
-</span>
+  <p>
+    Pay the monthly rental of
+    <strong>R100</strong>
+    to unlock your seller dashboard.
+  </p>
 
-</section><section class="card"><h2>🔔 Notifications</h2><div id="notificationsPreview"><div class="empty">
-No new notifications.
-</div></div></section><section class="grid"><div class="stat"><div class="stat-label">
-Products
-</div><div
-class="stat-number"
-id="productCount">
-0
-</div></div><div class="stat"><div class="stat-label">
-Orders
-</div><div
-class="stat-number"
-id="orderCount">
-0
-</div></div><div class="stat"><div class="stat-label">
-Sales
-</div><div
-class="stat-number"
-id="salesTotal">
-R0.00
-</div></div><div class="stat"><div class="stat-label">
-Rental
-</div><div
-class="stat-number"
-style="font-size:20px">
-PAID
-</div></div></section><br><div class="nav"><button
-class="active"
-onclick="showPanel('overview',this)">
-📊 Overview
-</button>
+  <button
+    class="btn-gold"
+    onclick="payRental()"
+  >
+    💳 Pay R100 Rental
+  </button>
 
-<button
-onclick="showPanel('products',this)">
-🛍️ Products
-</button>
+  <br><br>
 
-<button
-onclick="showPanel('orders',this)">
-📦 Orders
-</button>
+  <button
+    class="btn-black"
+    onclick="checkRentalAgain()"
+  >
+    🔄 Check Payment Again
+  </button>
 
-<button
-onclick="showPanel('delivery',this)">
-🚚 Delivery
-</button>
+</div>
 
-<button
-onclick="showPanel('rental',this)">
-💳 Store Rental
-</button>
+  </main></div><div
+  id="dashboard"
+  class="hidden"
+>  <main><section class="card welcome">
 
-<button
-onclick="showPanel('notifications',this)">
-🔔 Notifications
-</button>
+  <h1>
+    Welcome,
+    <span id="sellerName">
+      Seller
+    </span>
+  </h1>
 
-<button
-onclick="showPanel('sellerInfo',this)">
-👤 Seller Information
-</button>
+  <p>
+    Store:
+    <strong id="sellerStoreName">
+      ZYRE
+    </strong>
+  </p>
 
-</div><section
-id="overview"
-class="panel active"><div class="card"><h2>
-📊 Dashboard Overview
-</h2><p>
-Welcome to your ZYRE Marketing
-seller control centre.
-</p><p>
-From here you can manage your products,
-customer orders, delivery information
-and store rental.
-</p></div><div class="grid"><div class="stat"><div class="stat-label">
-Pending Orders
-</div><div
-id="pendingCount"
-class="stat-number">
-0
-</div></div><div class="stat"><div class="stat-label">
-Processing
-</div><div
-id="processingCount"
-class="stat-number">
-0
-</div></div><div class="stat"><div class="stat-label">
-Shipped
-</div><div
-id="shippedCount"
-class="stat-number">
-0
-</div></div><div class="stat"><div class="stat-label">
-Delivered
-</div><div
-id="deliveredCount"
-class="stat-number">
-0
-</div></div></div></section><section
-id="products"
-class="panel"><div class="card"><h2>
-➕ Add Product
-</h2><form id="productForm"><div class="form-grid"><div class="form-group"><label>
-Product Name
-</label><input
-id="productName"
-type="text"
-required
-placeholder="Product name">
+  <p>
+    Manage your products, orders,
+    deliveries and store.
+  </p>
 
-</div><div class="form-group"><label>
-Price
-</label><input
-id="productPrice"
-type="number"
-step="0.01"
-min="0"
-required
-placeholder="299.00">
+  <span
+    id="rentalPaidBadge"
+    class="rental-paid"
+  >
+    ✓ Rental Paid
+  </span>
 
-</div><div class="form-group"><label>
-Stock
-</label><input
-id="productStock"
-type="number"
-min="0"
-required
-placeholder="20">
+</section>
 
-</div><div class="form-group"><label>
-Category
-</label><select id="productCategory"><option value="Electronics">
-Electronics
-</option><option value="Fashion">
-Fashion
-</option><option value="Home">
-Home
-</option><option value="Beauty">
-Beauty
-</option></select></div><div class="form-group full"><label>
-📷 Product Picture
-</label><input
-id="productImageFile"
-type="file"
-accept="image/*"
-required
 
-«»
+<section class="card">
 
-<small>
-Choose a picture from your phone gallery.
-</small><img
-id="photoPreview"
-class="photo-preview"
-alt="Product preview">
+  <h2>🔔 Notifications</h2>
 
-<div
-id="uploadStatus"
-class="upload-status">
-</div></div></div><br><button
-id="addProductButton"
-class="btn-black"
-type="submit">
+  <div id="notificationsPreview">
 
-➕ Add Product
+    <div class="empty">
+      No new notifications.
+    </div>
 
-</button></form></div><div class="card"><h2>
-🛍️ My Products
-</h2><div
-id="productsGrid"
-class="product-grid"><div class="empty">
-Loading products...
-</div></div></div></section><section
-id="orders"
-class="panel"><div class="card"><h2>
-📦 Customer Orders
-</h2><div class="filters"><button
-class="active"
-onclick="setOrderFilter('all',this)">
-All
-</button>
+  </div>
 
-<button
-onclick="setOrderFilter('pending',this)">
-Pending
-</button>
+</section>
 
-<button
-onclick="setOrderFilter('processing',this)">
-Processing
-</button>
 
-<button
-onclick="setOrderFilter('shipped',this)">
-Shipped
-</button>
+<section class="grid">
 
-<button
-onclick="setOrderFilter('delivered',this)">
-Delivered
-</button>
+  <div class="stat">
 
-</div><div
-id="ordersList"
-class="order-list"><div class="empty">
-Loading orders...
-</div></div></div></section><section
-id="delivery"
-class="panel"><div class="card"><h2>
-🚚 Delivery Management
-</h2><p>
-Manage delivery information for
-your customer orders.
-</p><div
-id="deliveryList"
-class="delivery-list"><div class="empty">
-Loading delivery information...
-</div></div></div></section><section
-id="rental"
-class="panel"><div class="card"><h2>
-💳 Store Rental
-</h2><div class="rental-box"><p>
-Monthly store rental
-</p><div class="rental-status">
-R100 / month
-</div><p>
-Current status:
-<strong
-id="rentalStatusText">
-Checking...
-</strong>
-</p><p>
-Your store stays listed on
-ZYRE Marketing. If the monthly
-rental is not paid, the store is
-temporarily locked until payment
-is confirmed.
-</p><button
-id="rentalPayButton"
-class="btn-gold"
-onclick="payRental()">
-💳 Pay R100
-</button>
+    <div class="stat-label">
+      Products
+    </div>
 
-<button
-class="btn-black"
-onclick="checkRentalAgain()">
-🔄 Check Rental
-</button>
+    <div
+      class="stat-number"
+      id="productCount"
+    >
+      0
+    </div>
 
-</div></div></section><section
-id="notifications"
-class="panel"><div class="card"><h2>
-🔔 Notifications
-</h2><div id="notificationsList"><div class="empty">
-Loading notifications...
-</div></div></div></section><section
-id="sellerInfo"
-class="panel"><div class="card"><h2>
-👤 Seller Information
-</h2><div class="info-grid"><div class="info-box"><div class="info-label">
-Seller Name
-</div><div
-id="sellerInfoName"
-class="info-value">
-—
-</div></div><div class="info-box"><div class="info-label">
-Store Name
-</div><div
-id="sellerInfoStore"
-class="info-value">
-—
-</div></div><div class="info-box"><div class="info-label">
-Seller ID
-</div><div
-id="sellerInfoId"
-class="info-value">
-—
-</div></div></div></div></section><div id="technicalArea"><div id="sellerId"></div>
-<div id="orderTable"></div>
-<div id="deliveryTable"></div></div></main></div><script>
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-label">
+      Orders
+    </div>
+
+    <div
+      class="stat-number"
+      id="orderCount"
+    >
+      0
+    </div>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-label">
+      Sales
+    </div>
+
+    <div
+      class="stat-number"
+      id="salesTotal"
+    >
+      R0.00
+    </div>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-label">
+      Rental
+    </div>
+
+    <div
+      class="stat-number"
+      style="font-size:20px"
+    >
+      PAID
+    </div>
+
+  </div>
+
+</section>
+
+
+<br>
+
+
+<div class="nav">
+
+  <button
+    class="active"
+    onclick="showPanel('overview',this)"
+  >
+    📊 Overview
+  </button>
+
+  <button
+    onclick="showPanel('products',this)"
+  >
+    🛍️ Products
+  </button>
+
+  <button
+    onclick="showPanel('orders',this)"
+  >
+    📦 Orders
+  </button>
+
+  <button
+    onclick="showPanel('delivery',this)"
+  >
+    🚚 Delivery
+  </button>
+
+  <button
+    onclick="showPanel('rental',this)"
+  >
+    💳 Store Rental
+  </button>
+
+  <button
+    onclick="showPanel('notifications',this)"
+  >
+    🔔 Notifications
+  </button>
+
+  <button
+    onclick="showPanel('sellerInfo',this)"
+  >
+    👤 Seller Information
+  </button>
+
+</div>
+
+
+<section
+  id="overview"
+  class="panel active"
+>
+
+  <div class="card">
+
+    <h2>
+      📊 Dashboard Overview
+    </h2>
+
+    <p>
+      Welcome to your ZYRE Marketing
+      seller control centre.
+    </p>
+
+    <p>
+      From here you can manage your products,
+      customer orders, delivery information
+      and store rental.
+    </p>
+
+  </div>
+
+
+  <div class="grid">
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Pending Orders
+      </div>
+
+      <div
+        id="pendingCount"
+        class="stat-number"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Processing
+      </div>
+
+      <div
+        id="processingCount"
+        class="stat-number"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Shipped
+      </div>
+
+      <div
+        id="shippedCount"
+        class="stat-number"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Delivered
+      </div>
+
+      <div
+        id="deliveredCount"
+        class="stat-number"
+      >
+        0
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section
+  id="products"
+  class="panel"
+>
+
+  <div class="card">
+
+    <h2>
+      ➕ Add Product
+    </h2>
+
+    <form id="productForm">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+
+          <label>
+            Product Name
+          </label>
+
+          <input
+            id="productName"
+            type="text"
+            required
+            placeholder="Product name"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Price
+          </label>
+
+          <input
+            id="productPrice"
+            type="number"
+            step="0.01"
+            min="0"
+            required
+            placeholder="299.00"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Stock
+          </label>
+
+          <input
+            id="productStock"
+            type="number"
+            min="0"
+            required
+            placeholder="20"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Category
+          </label>
+
+          <select id="productCategory">
+
+            <option value="Electronics">
+              Electronics
+            </option>
+
+            <option value="Fashion">
+              Fashion
+            </option>
+
+            <option value="Home">
+              Home
+            </option>
+
+            <option value="Beauty">
+              Beauty
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group full">
+
+          <label>
+            📷 Product Picture
+          </label>
+
+          <input
+            id="productImageFile"
+            type="file"
+            accept="image/*"
+            required
+          >
+
+          <small>
+            Choose a picture from your phone gallery.
+          </small>
+
+          <img
+            id="photoPreview"
+            class="photo-preview"
+            alt="Product preview"
+          >
+
+          <div
+            id="uploadStatus"
+            class="upload-status"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <br>
+
+
+      <button
+        id="addProductButton"
+        class="btn-black"
+        type="submit"
+      >
+        ➕ Add Product
+      </button>
+
+    </form>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>
+      🛍️ My Products
+    </h2>
+
+    <div
+      id="productsGrid"
+      class="product-grid"
+    >
+
+      <div class="empty">
+        Loading products...
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section
+  id="orders"
+  class="panel"
+>
+
+  <div class="card">
+
+    <h2>
+      📦 Customer Orders
+    </h2>
+
+    <div class="filters">
+
+      <button
+        class="active"
+        onclick="setOrderFilter('all',this)"
+      >
+        All
+      </button>
+
+      <button
+        onclick="setOrderFilter('pending',this)"
+      >
+        Pending
+      </button>
+
+      <button
+        onclick="setOrderFilter('processing',this)"
+      >
+        Processing
+      </button>
+
+      <button
+        onclick="setOrderFilter('shipped',this)"
+      >
+        Shipped
+      </button>
+
+      <button
+        onclick="setOrderFilter('delivered',this)"
+      >
+        Delivered
+      </button>
+
+    </div>
+
+
+    <div
+      id="ordersList"
+      class="order-list"
+    >
+
+      <div class="empty">
+        Loading orders...
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section
+  id="delivery"
+  class="panel"
+>
+
+  <div class="card">
+
+    <h2>
+      🚚 Delivery Management
+    </h2>
+
+    <p>
+      Manage delivery information for
+      your customer orders.
+    </p>
+
+    <div
+      id="deliveryList"
+      class="delivery-list"
+    >
+
+      <div class="empty">
+        Loading delivery information...
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section
+  id="rental"
+  class="panel"
+>
+
+  <div class="card">
+
+    <h2>
+      💳 Store Rental
+    </h2>
+
+    <div class="rental-box">
+
+      <p>
+        Monthly store rental
+      </p>
+
+      <div class="rental-status">
+        R100 / month
+      </div>
+
+      <p>
+        Current status:
+        <strong id="rentalStatusText">
+          Checking...
+        </strong>
+      </p>
+
+      <p>
+        Your store stays listed on
+        ZYRE Marketing. If the monthly
+        rental is not paid, the store is
+        temporarily locked until payment
+        is confirmed.
+      </p>
+
+      <button
+        id="rentalPayButton"
+        class="btn-gold"
+        onclick="payRental()"
+      >
+        💳 Pay R100
+      </button>
+
+      <button
+        class="btn-black"
+        onclick="checkRentalAgain()"
+      >
+        🔄 Check Rental
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section
+  id="notifications"
+  class="panel"
+>
+
+  <div class="card">
+
+    <h2>
+      🔔 Notifications
+    </h2>
+
+    <div id="notificationsList">
+
+      <div class="empty">
+        Loading notifications...
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section
+  id="sellerInfo"
+  class="panel"
+>
+
+  <div class="card">
+
+    <h2>
+      👤 Seller Information
+    </h2>
+
+    <div class="info-grid">
+
+      <div class="info-box">
+
+        <div class="info-label">
+          Seller Name
+        </div>
+
+        <div
+          id="sellerInfoName"
+          class="info-value"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="info-box">
+
+        <div class="info-label">
+          Store Name
+        </div>
+
+        <div
+          id="sellerInfoStore"
+          class="info-value"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="info-box">
+
+        <div class="info-label">
+          Seller ID
+        </div>
+
+        <div
+          id="sellerInfoId"
+          class="info-value"
+        >
+          —
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<div id="technicalArea">
+
+  <div id="sellerId"></div>
+
+  <div id="orderTable"></div>
+
+  <div id="deliveryTable"></div>
+
+</div>
+
+  </main></div><script>
 
 /* =====================================================
 ZYRE / SUPABASE CONFIGURATION
@@ -864,7 +1271,9 @@ localStorage.getItem("zava_seller_email") || "";
 let CURRENT_SELLER = null;
 
 let PRODUCTS = [];
+
 let ORDERS = [];
+
 let DELIVERY_DATA = [];
 
 let dashboardStarted = false;
@@ -907,17 +1316,14 @@ async function refreshSellerAuthentication(){
   const client =
     createSupabaseClient();
 
-
   const result =
     await client.auth.getSession();
-
 
   const session =
     result &&
     result.data
       ? result.data.session
       : null;
-
 
   if(
     !session ||
@@ -937,16 +1343,13 @@ async function refreshSellerAuthentication(){
 
   }
 
-
   SELLER_ACCESS_TOKEN =
     session.access_token;
-
 
   localStorage.setItem(
     "zava_access_token",
     SELLER_ACCESS_TOKEN
   );
-
 
   if(session.user.email){
 
@@ -960,7 +1363,6 @@ async function refreshSellerAuthentication(){
 
   }
 
-
   return session;
 
 }
@@ -968,16 +1370,13 @@ async function refreshSellerAuthentication(){
 
 /* =====================================================
 SELLER ACCOUNT RESOLUTION
-IMPORTANT:
-The sellers table does NOT contain a "name"
-column. Do not request it.
+NO "name" COLUMN IS REQUESTED
 ===================================================== */
 
 async function resolveSellerFromAccount(){
 
   const session =
     await refreshSellerAuthentication();
-
 
   if(
     !session ||
@@ -991,18 +1390,9 @@ async function resolveSellerFromAccount(){
 
   }
 
-
   const userId =
     session.user.id;
 
-
-  /*
-  FIXED:
-
-  Removed "name" from the SELECT list.
-
-  Your sellers table uses full_name.
-  */
 
   const sellers =
     await supabaseRequest(
@@ -1027,20 +1417,16 @@ async function resolveSellerFromAccount(){
   const seller =
     sellers[0];
 
-
   CURRENT_SELLER =
     seller;
 
-
   SELLER_ID =
     String(seller.id);
-
 
   localStorage.setItem(
     "zava_seller_id",
     SELLER_ID
   );
-
 
   if(seller.email){
 
@@ -1054,7 +1440,6 @@ async function resolveSellerFromAccount(){
 
   }
 
-
   console.log(
     "ZYRE SELLER RESOLVED",
     {
@@ -1065,7 +1450,6 @@ async function resolveSellerFromAccount(){
       status:seller.status
     }
   );
-
 
   return seller;
 
@@ -1080,7 +1464,6 @@ async function getSellerAccessToken(){
 
   await refreshSellerAuthentication();
 
-
   if(!SELLER_ACCESS_TOKEN){
 
     throw new Error(
@@ -1088,7 +1471,6 @@ async function getSellerAccessToken(){
     );
 
   }
-
 
   return SELLER_ACCESS_TOKEN;
 
@@ -1106,7 +1488,6 @@ async function supabaseRequest(
 
   const token =
     await getSellerAccessToken();
-
 
   const headers = {
 
@@ -1126,7 +1507,6 @@ async function supabaseRequest(
 
   };
 
-
   const response =
     await fetch(
       SUPABASE_URL +
@@ -1138,13 +1518,10 @@ async function supabaseRequest(
       }
     );
 
-
   const text =
     await response.text();
 
-
   let data = null;
-
 
   try{
 
@@ -1160,7 +1537,6 @@ async function supabaseRequest(
 
   }
 
-
   if(!response.ok){
 
     const errorMessage =
@@ -1173,7 +1549,6 @@ async function supabaseRequest(
             : "Supabase request failed"
         );
 
-
     console.error(
       "SUPABASE REQUEST FAILED",
       {
@@ -1183,13 +1558,11 @@ async function supabaseRequest(
       }
     );
 
-
     throw new Error(
       errorMessage
     );
 
   }
-
 
   return data;
 
@@ -1210,7 +1583,6 @@ async function uploadProductImage(file){
 
   }
 
-
   if(
     !file.type ||
     !file.type.startsWith("image/")
@@ -1221,7 +1593,6 @@ async function uploadProductImage(file){
     );
 
   }
-
 
   if(
     file.size >
@@ -1234,10 +1605,8 @@ async function uploadProductImage(file){
 
   }
 
-
   const token =
     await getSellerAccessToken();
-
 
   if(!SELLER_ID){
 
@@ -1245,14 +1614,12 @@ async function uploadProductImage(file){
 
   }
 
-
   const safeSellerId =
     String(SELLER_ID)
       .replace(
         /[^a-zA-Z0-9_-]/g,
         ""
       );
-
 
   const extension =
     (
@@ -1267,7 +1634,6 @@ async function uploadProductImage(file){
       ""
     );
 
-
   const fileName =
     safeSellerId +
     "_" +
@@ -1279,13 +1645,11 @@ async function uploadProductImage(file){
     "." +
     extension;
 
-
   const filePath =
     "seller-" +
     safeSellerId +
     "/" +
     fileName;
-
 
   const uploadUrl =
     SUPABASE_URL +
@@ -1293,7 +1657,6 @@ async function uploadProductImage(file){
     PRODUCT_IMAGE_BUCKET +
     "/" +
     filePath;
-
 
   const response =
     await fetch(
@@ -1322,13 +1685,10 @@ async function uploadProductImage(file){
       }
     );
 
-
   const responseText =
     await response.text();
 
-
   let responseData = null;
-
 
   try{
 
@@ -1344,7 +1704,6 @@ async function uploadProductImage(file){
 
   }
 
-
   if(!response.ok){
 
     throw new Error(
@@ -1359,7 +1718,6 @@ async function uploadProductImage(file){
     );
 
   }
-
 
   return (
     SUPABASE_URL +
@@ -1396,7 +1754,6 @@ document
           "uploadStatus"
         );
 
-
       if(!file){
 
         if(preview){
@@ -1421,7 +1778,6 @@ document
 
       }
 
-
       if(
         !file.type ||
         !file.type.startsWith("image/")
@@ -1438,10 +1794,8 @@ document
 
       }
 
-
       const reader =
         new FileReader();
-
 
       reader.onload =
         function(event){
@@ -1458,9 +1812,7 @@ document
 
         };
 
-
       reader.readAsDataURL(file);
-
 
       if(status){
 
@@ -1485,7 +1837,6 @@ function isPaidThisMonth(payment){
 
   }
 
-
   const status =
     String(
       payment.status || ""
@@ -1493,18 +1844,15 @@ function isPaidThisMonth(payment){
     .trim()
     .toLowerCase();
 
-
   if(status !== "paid"){
 
     return false;
 
   }
 
-
   const dateValue =
     payment.paid_at ||
     payment.created_at;
-
 
   if(!dateValue){
 
@@ -1512,10 +1860,8 @@ function isPaidThisMonth(payment){
 
   }
 
-
   const paymentDate =
     new Date(dateValue);
-
 
   if(
     Number.isNaN(
@@ -1527,10 +1873,8 @@ function isPaidThisMonth(payment){
 
   }
 
-
   const now =
     new Date();
-
 
   return (
     paymentDate.getFullYear() ===
@@ -1555,7 +1899,6 @@ function isActiveSubscription(subscription){
 
   }
 
-
   const status =
     String(
       subscription.status || ""
@@ -1563,13 +1906,11 @@ function isActiveSubscription(subscription){
     .trim()
     .toLowerCase();
 
-
   if(status !== "active"){
 
     return false;
 
   }
-
 
   if(!subscription.expires_at){
 
@@ -1577,12 +1918,10 @@ function isActiveSubscription(subscription){
 
   }
 
-
   const expiry =
     new Date(
       subscription.expires_at
     );
-
 
   if(
     Number.isNaN(
@@ -1593,7 +1932,6 @@ function isActiveSubscription(subscription){
     return false;
 
   }
-
 
   return (
     expiry.getTime() >
@@ -1612,7 +1950,6 @@ async function checkRental(){
   const seller =
     await resolveSellerFromAccount();
 
-
   if(
     !seller ||
     !seller.id
@@ -1624,10 +1961,8 @@ async function checkRental(){
 
   }
 
-
   const sellerId =
     String(seller.id);
-
 
   console.log(
     "ZYRE RENTAL CHECK START",
@@ -1637,9 +1972,7 @@ async function checkRental(){
     }
   );
 
-
   let subscriptions = [];
-
 
   try{
 
@@ -1664,7 +1997,6 @@ async function checkRental(){
 
   }
 
-
   const activeSubscription =
     Array.isArray(subscriptions) &&
     subscriptions.some(
@@ -1674,13 +2006,11 @@ async function checkRental(){
         )
     );
 
-
   console.log(
     "ZYRE ACTIVE SUBSCRIPTION:",
     activeSubscription,
     subscriptions
   );
-
 
   if(activeSubscription){
 
@@ -1692,9 +2022,7 @@ async function checkRental(){
 
   }
 
-
   let payments = [];
-
 
   try{
 
@@ -1719,7 +2047,6 @@ async function checkRental(){
 
   }
 
-
   const paidThisMonth =
     Array.isArray(payments) &&
     payments.some(
@@ -1727,13 +2054,11 @@ async function checkRental(){
         isPaidThisMonth(payment)
     );
 
-
   console.log(
     "ZYRE PAID THIS MONTH:",
     paidThisMonth,
     payments
   );
-
 
   if(paidThisMonth){
 
@@ -1744,7 +2069,6 @@ async function checkRental(){
     return true;
 
   }
-
 
   return false;
 
@@ -1811,37 +2135,30 @@ async function startDashboard(){
 
   }
 
-
   dashboardStarted =
     true;
-
 
   document
     .getElementById("rentalLoading")
     ?.classList
     .remove("hidden");
 
-
   document
     .getElementById("rentalLock")
     ?.classList
     .add("hidden");
-
 
   document
     .getElementById("dashboard")
     ?.classList
     .add("hidden");
 
-
   try{
 
     await refreshSellerAuthentication();
 
-
     const seller =
       await resolveSellerFromAccount();
-
 
     if(
       !seller ||
@@ -1854,10 +2171,8 @@ async function startDashboard(){
 
     }
 
-
     const rentalPaid =
       await checkRental();
-
 
     if(!rentalPaid){
 
@@ -1874,14 +2189,11 @@ async function startDashboard(){
 
     }
 
-
     showDashboard();
-
 
     updateRentalDisplay(
       true
     );
-
 
     await loadSellerInformation();
 
@@ -1893,14 +2205,12 @@ async function startDashboard(){
 
     await loadNotifications();
 
-
   }catch(error){
 
     console.error(
       "Dashboard startup error:",
       error
     );
-
 
     if(
       error.message &&
@@ -1924,7 +2234,6 @@ async function startDashboard(){
       return;
 
     }
-
 
     showRentalLock();
 
@@ -1956,7 +2265,6 @@ async function loadSellerInformation(){
         "&limit=1"
       );
 
-
     if(
       Array.isArray(sellers) &&
       sellers.length
@@ -1965,41 +2273,34 @@ async function loadSellerInformation(){
       const seller =
         sellers[0];
 
-
       const name =
         seller.full_name ||
         SELLER_EMAIL ||
         "Seller";
 
-
       const storeName =
         seller.store_name ||
         "ZYRE";
-
 
       document
         .getElementById("sellerName")
         .textContent =
           name;
 
-
       document
         .getElementById("sellerStoreName")
         .textContent =
           storeName;
-
 
       document
         .getElementById("sellerInfoName")
         .textContent =
           name;
 
-
       document
         .getElementById("sellerInfoStore")
         .textContent =
           storeName;
-
 
       document
         .getElementById("sellerInfoId")
@@ -2033,7 +2334,6 @@ function updateRentalDisplay(
       "rentalStatusText"
     );
 
-
   if(status){
 
     status.textContent =
@@ -2043,12 +2343,10 @@ function updateRentalDisplay(
 
   }
 
-
   const badge =
     document.getElementById(
       "rentalPaidBadge"
     );
-
 
   if(badge){
 
@@ -2059,12 +2357,10 @@ function updateRentalDisplay(
 
   }
 
-
   const button =
     document.getElementById(
       "rentalPayButton"
     );
-
 
   if(button){
 
@@ -2093,19 +2389,16 @@ async function loadProducts(){
         "&order=id.desc"
       );
 
-
     if(!Array.isArray(PRODUCTS)){
 
       PRODUCTS = [];
 
     }
 
-
     const count =
       document.getElementById(
         "productCount"
       );
-
 
     if(count){
 
@@ -2113,7 +2406,6 @@ async function loadProducts(){
         PRODUCTS.length;
 
     }
-
 
     renderProducts();
 
@@ -2144,13 +2436,11 @@ function renderProducts(){
       "productsGrid"
     );
 
-
   if(!grid){
 
     return;
 
   }
-
 
   if(!PRODUCTS.length){
 
@@ -2165,7 +2455,6 @@ function renderProducts(){
 
   }
 
-
   grid.innerHTML =
     PRODUCTS
       .map(product => {
@@ -2173,7 +2462,6 @@ function renderProducts(){
         const image =
           product.image_url ||
           "https://via.placeholder.com/600x400?text=ZYRE+Marketing";
-
 
         return `
 
@@ -2212,13 +2500,15 @@ function renderProducts(){
 
               <button
                 class="btn-black"
-                onclick="editProduct(${Number(product.id)})">
+                onclick="editProduct(${Number(product.id)})"
+              >
                 ✏ Edit
               </button>
 
               <button
                 class="btn-danger"
-                onclick="deleteProduct(${Number(product.id)})">
+                onclick="deleteProduct(${Number(product.id)})"
+              >
                 🗑 Delete
               </button>
 
@@ -2248,13 +2538,11 @@ document
 
       event.preventDefault();
 
-
       const name =
         document
           .getElementById("productName")
           .value
           .trim();
-
 
       const price =
         Number(
@@ -2263,7 +2551,6 @@ document
             .value
         );
 
-
       const stock =
         Number(
           document
@@ -2271,30 +2558,25 @@ document
             .value
         );
 
-
       const category =
         document
           .getElementById("productCategory")
           .value;
-
 
       const imageFile =
         document
           .getElementById("productImageFile")
           .files[0];
 
-
       const button =
         document.getElementById(
           "addProductButton"
         );
 
-
       const uploadStatus =
         document.getElementById(
           "uploadStatus"
         );
-
 
       if(!name){
 
@@ -2305,7 +2587,6 @@ document
         return;
 
       }
-
 
       if(
         !Number.isFinite(price) ||
@@ -2320,7 +2601,6 @@ document
 
       }
 
-
       if(
         !Number.isFinite(stock) ||
         stock < 0
@@ -2334,7 +2614,6 @@ document
 
       }
 
-
       if(!imageFile){
 
         alert(
@@ -2345,11 +2624,9 @@ document
 
       }
 
-
       try{
 
         await resolveSellerFromAccount();
-
 
         if(button){
 
@@ -2361,7 +2638,6 @@ document
 
         }
 
-
         if(uploadStatus){
 
           uploadStatus.textContent =
@@ -2369,12 +2645,10 @@ document
 
         }
 
-
         const imageUrl =
           await uploadProductImage(
             imageFile
           );
-
 
         if(uploadStatus){
 
@@ -2383,7 +2657,6 @@ document
 
         }
 
-
         if(button){
 
           button.textContent =
@@ -2391,9 +2664,7 @@ document
 
         }
 
-
         await resolveSellerFromAccount();
-
 
         await supabaseRequest(
           "products",
@@ -2428,11 +2699,9 @@ document
           }
         );
 
-
         alert(
           "Product added successfully."
         );
-
 
         document
           .getElementById(
@@ -2440,12 +2709,10 @@ document
           )
           .reset();
 
-
         const preview =
           document.getElementById(
             "photoPreview"
           );
-
 
         if(preview){
 
@@ -2458,7 +2725,6 @@ document
 
         }
 
-
         if(uploadStatus){
 
           uploadStatus.textContent =
@@ -2466,9 +2732,7 @@ document
 
         }
 
-
         await loadProducts();
-
 
       }catch(error){
 
@@ -2477,12 +2741,10 @@ document
           error
         );
 
-
         alert(
           "Product could not be added.\n\n" +
           error.message
         );
-
 
         if(uploadStatus){
 
@@ -2523,13 +2785,11 @@ async function editProduct(id){
         Number(id)
     );
 
-
   if(!product){
 
     return;
 
   }
-
 
   const name =
     prompt(
@@ -2537,13 +2797,11 @@ async function editProduct(id){
       product.name || ""
     );
 
-
   if(name === null){
 
     return;
 
   }
-
 
   const price =
     prompt(
@@ -2551,13 +2809,11 @@ async function editProduct(id){
       product.price || ""
     );
 
-
   if(price === null){
 
     return;
 
   }
-
 
   const stock =
     prompt(
@@ -2565,13 +2821,11 @@ async function editProduct(id){
       product.stock || 0
     );
 
-
   if(stock === null){
 
     return;
 
   }
-
 
   try{
 
@@ -2602,14 +2856,11 @@ async function editProduct(id){
       }
     );
 
-
     alert(
       "Product updated."
     );
 
-
     await loadProducts();
-
 
   }catch(error){
 
@@ -2636,13 +2887,11 @@ async function deleteProduct(id){
         Number(id)
     );
 
-
   if(!product){
 
     return;
 
   }
-
 
   if(
     !confirm(
@@ -2656,7 +2905,6 @@ async function deleteProduct(id){
 
   }
 
-
   try{
 
     await supabaseRequest(
@@ -2667,14 +2915,11 @@ async function deleteProduct(id){
       }
     );
 
-
     alert(
       "Product deleted."
     );
 
-
     await loadProducts();
-
 
   }catch(error){
 
@@ -2708,7 +2953,6 @@ async function loadOrders(){
 
     }
 
-
     const productIds =
       PRODUCTS
         .map(
@@ -2719,7 +2963,6 @@ async function loadOrders(){
           id =>
             Number.isFinite(id)
         );
-
 
     if(!productIds.length){
 
@@ -2733,14 +2976,12 @@ async function loadOrders(){
 
     }
 
-
     const orderItems =
       await supabaseRequest(
         "order_items?select=*&product_id=in.(" +
         productIds.join(",") +
         ")"
       );
-
 
     if(
       !Array.isArray(orderItems) ||
@@ -2757,7 +2998,6 @@ async function loadOrders(){
 
     }
 
-
     const orderIds =
       [
         ...new Set(
@@ -2773,7 +3013,6 @@ async function loadOrders(){
         )
       ];
 
-
     if(!orderIds.length){
 
       ORDERS = [];
@@ -2786,7 +3025,6 @@ async function loadOrders(){
 
     }
 
-
     const orders =
       await supabaseRequest(
         "orders?select=*&id=in.(" +
@@ -2794,9 +3032,7 @@ async function loadOrders(){
         ")&order=id.desc"
       );
 
-
     const productMap = {};
-
 
     PRODUCTS.forEach(
       product => {
@@ -2807,7 +3043,6 @@ async function loadOrders(){
 
       }
     );
-
 
     ORDERS =
       (
@@ -2824,9 +3059,7 @@ async function loadOrders(){
               Number(order.id)
           );
 
-
         let sellerTotal = 0;
-
 
         const sellerItems =
           items.map(item => {
@@ -2836,12 +3069,10 @@ async function loadOrders(){
                 Number(item.product_id)
               ];
 
-
             const quantity =
               Number(
                 item.quantity || 0
               );
-
 
             const price =
               Number(
@@ -2850,10 +3081,8 @@ async function loadOrders(){
                 0
               );
 
-
             sellerTotal +=
               price * quantity;
-
 
             return {
 
@@ -2870,7 +3099,6 @@ async function loadOrders(){
 
           });
 
-
         return {
 
           ...order,
@@ -2885,11 +3113,9 @@ async function loadOrders(){
 
       });
 
-
     renderOrders();
 
     updateOrderStats();
-
 
   }catch(error){
 
@@ -2897,7 +3123,6 @@ async function loadOrders(){
       "Orders error:",
       error
     );
-
 
     ORDERS = [];
 
@@ -2925,7 +3150,6 @@ function updateOrderStats(){
 
   };
 
-
   ORDERS.forEach(order => {
 
     const status =
@@ -2934,7 +3158,6 @@ function updateOrderStats(){
         "pending"
       )
       .toLowerCase();
-
 
     if(
       Object.prototype.hasOwnProperty
@@ -2950,12 +3173,10 @@ function updateOrderStats(){
 
   });
 
-
   const pending =
     document.getElementById(
       "pendingCount"
     );
-
 
   if(pending){
 
@@ -2964,12 +3185,10 @@ function updateOrderStats(){
 
   }
 
-
   const processing =
     document.getElementById(
       "processingCount"
     );
-
 
   if(processing){
 
@@ -2978,12 +3197,10 @@ function updateOrderStats(){
 
   }
 
-
   const shipped =
     document.getElementById(
       "shippedCount"
     );
-
 
   if(shipped){
 
@@ -2992,12 +3209,10 @@ function updateOrderStats(){
 
   }
 
-
   const delivered =
     document.getElementById(
       "deliveredCount"
     );
-
 
   if(delivered){
 
@@ -3006,12 +3221,10 @@ function updateOrderStats(){
 
   }
 
-
   const orderCount =
     document.getElementById(
       "orderCount"
     );
-
 
   if(orderCount){
 
@@ -3020,9 +3233,7 @@ function updateOrderStats(){
 
   }
 
-
   let total = 0;
-
 
   ORDERS.forEach(order => {
 
@@ -3033,12 +3244,10 @@ function updateOrderStats(){
 
   });
 
-
   const sales =
     document.getElementById(
       "salesTotal"
     );
-
 
   if(sales){
 
@@ -3063,7 +3272,6 @@ function setOrderFilter(
   CURRENT_ORDER_FILTER =
     filter;
 
-
   document
     .querySelectorAll(
       ".filters button"
@@ -3075,7 +3283,6 @@ function setOrderFilter(
         )
     );
 
-
   if(button){
 
     button.classList.add(
@@ -3083,7 +3290,6 @@ function setOrderFilter(
     );
 
   }
-
 
   renderOrders();
 
@@ -3101,17 +3307,14 @@ function renderOrders(){
       "ordersList"
     );
 
-
   if(!list){
 
     return;
 
   }
 
-
   let filtered =
     ORDERS;
-
 
   if(
     CURRENT_ORDER_FILTER !==
@@ -3131,7 +3334,6 @@ function renderOrders(){
 
   }
 
-
   if(!filtered.length){
 
     list.innerHTML =
@@ -3145,7 +3347,6 @@ function renderOrders(){
 
   }
 
-
   list.innerHTML =
     filtered
       .map(order => {
@@ -3157,11 +3358,9 @@ function renderOrders(){
           )
           .toLowerCase();
 
-
         const address =
           order.delivery_address ||
           "No delivery address provided";
-
 
         const items =
           Array.isArray(
@@ -3169,7 +3368,6 @@ function renderOrders(){
           )
             ? order.seller_items
             : [];
-
 
         const itemHtml =
           items.length
@@ -3190,7 +3388,6 @@ function renderOrders(){
                 )
                 .join("")
             : "Seller products";
-
 
         return `
 
@@ -3218,14 +3415,12 @@ function renderOrders(){
 
             </div>
 
-
             <span
-              class="status ${escapeHtml(status)}">
-
+              class="status ${escapeHtml(status)}"
+            >
               ${escapeHtml(
                 status.toUpperCase()
               )}
-
             </span>
 
           </div>
@@ -3265,25 +3460,29 @@ function renderOrders(){
 
             <button
               class="btn-black"
-              onclick="changeOrderStatus(${Number(order.id)},'pending')">
+              onclick="changeOrderStatus(${Number(order.id)},'pending')"
+            >
               Pending
             </button>
 
             <button
               class="btn-black"
-              onclick="changeOrderStatus(${Number(order.id)},'processing')">
+              onclick="changeOrderStatus(${Number(order.id)},'processing')"
+            >
               Processing
             </button>
 
             <button
               class="btn-black"
-              onclick="changeOrderStatus(${Number(order.id)},'shipped')">
+              onclick="changeOrderStatus(${Number(order.id)},'shipped')"
+            >
               Shipped
             </button>
 
             <button
               class="btn-green"
-              onclick="changeOrderStatus(${Number(order.id)},'delivered')">
+              onclick="changeOrderStatus(${Number(order.id)},'delivered')"
+            >
               Delivered
             </button>
 
@@ -3328,23 +3527,19 @@ async function changeOrderStatus(
       }
     );
 
-
     alert(
       "Order status updated to " +
       status +
       "."
     );
 
-
     await loadOrders();
 
     await loadDelivery();
 
-
   }catch(error){
 
     console.error(error);
-
 
     alert(
       "Order status could not be updated.\n\n" +
@@ -3374,7 +3569,6 @@ async function loadDelivery(){
 
     }
 
-
     const orderIds =
       ORDERS
         .map(
@@ -3386,7 +3580,6 @@ async function loadDelivery(){
             Number.isFinite(id)
         );
 
-
     if(!orderIds.length){
 
       DELIVERY_DATA = [];
@@ -3396,7 +3589,6 @@ async function loadDelivery(){
       return;
 
     }
-
 
     try{
 
@@ -3418,16 +3610,13 @@ async function loadDelivery(){
 
     }
 
-
     if(!Array.isArray(DELIVERY_DATA)){
 
       DELIVERY_DATA = [];
 
     }
 
-
     renderDelivery();
-
 
   }catch(error){
 
@@ -3435,7 +3624,6 @@ async function loadDelivery(){
       "Delivery error:",
       error
     );
-
 
     DELIVERY_DATA = [];
 
@@ -3457,13 +3645,11 @@ function renderDelivery(){
       "deliveryList"
     );
 
-
   if(!list){
 
     return;
 
   }
-
 
   if(!DELIVERY_DATA.length){
 
@@ -3479,7 +3665,6 @@ function renderDelivery(){
     return;
 
   }
-
 
   list.innerHTML =
     DELIVERY_DATA
@@ -3524,7 +3709,8 @@ function renderDelivery(){
 
           <button
             class="btn-black"
-            onclick="editDelivery(${Number(delivery.id)})">
+            onclick="editDelivery(${Number(delivery.id)})"
+          >
             ✏ Update Delivery
           </button>
 
@@ -3551,13 +3737,11 @@ async function editDelivery(id){
         Number(id)
     );
 
-
   if(!delivery){
 
     return;
 
   }
-
 
   const status =
     prompt(
@@ -3566,13 +3750,11 @@ async function editDelivery(id){
       "Pending"
     );
 
-
   if(status === null){
 
     return;
 
   }
-
 
   try{
 
@@ -3597,14 +3779,11 @@ async function editDelivery(id){
       }
     );
 
-
     alert(
       "Delivery updated."
     );
 
-
     await loadDelivery();
-
 
   }catch(error){
 
@@ -3629,12 +3808,10 @@ async function loadNotifications(){
       "notificationsList"
     );
 
-
   const preview =
     document.getElementById(
       "notificationsPreview"
     );
-
 
   const html =
     `
@@ -3667,14 +3844,12 @@ async function loadNotifications(){
 
     `;
 
-
   if(list){
 
     list.innerHTML =
       html;
 
   }
-
 
   if(preview){
 
@@ -3706,12 +3881,10 @@ function showPanel(
         )
     );
 
-
   const panel =
     document.getElementById(
       panelId
     );
-
 
   if(panel){
 
@@ -3720,7 +3893,6 @@ function showPanel(
     );
 
   }
-
 
   document
     .querySelectorAll(
@@ -3732,7 +3904,6 @@ function showPanel(
           "active"
         )
     );
-
 
   if(button){
 
@@ -3755,7 +3926,6 @@ async function payRental(){
 
     await resolveSellerFromAccount();
 
-
     if(!SELLER_ID){
 
       alert(
@@ -3766,13 +3936,11 @@ async function payRental(){
 
     }
 
-
     const email =
       SELLER_EMAIL ||
       prompt(
         "Enter your email address:"
       );
-
 
     if(!email){
 
@@ -3780,12 +3948,10 @@ async function payRental(){
 
     }
 
-
     const button =
       document.getElementById(
         "rentalPayButton"
       );
-
 
     if(button){
 
@@ -3797,10 +3963,8 @@ async function payRental(){
 
     }
 
-
     const token =
       await getSellerAccessToken();
-
 
     const response =
       await fetch(
@@ -3836,10 +4000,8 @@ async function payRental(){
         }
       );
 
-
     const data =
       await response.json();
-
 
     if(!response.ok){
 
@@ -3849,7 +4011,6 @@ async function payRental(){
       );
 
     }
-
 
     if(
       data.authorization_url
@@ -3861,7 +4022,6 @@ async function payRental(){
       return;
 
     }
-
 
     if(
       data.data &&
@@ -3875,11 +4035,9 @@ async function payRental(){
 
     }
 
-
     throw new Error(
       "Paystack payment URL was not returned."
     );
-
 
   }catch(error){
 
@@ -3888,18 +4046,15 @@ async function payRental(){
       error
     );
 
-
     alert(
       "Rental payment could not be started.\n\n" +
       error.message
     );
 
-
     const button =
       document.getElementById(
         "rentalPayButton"
       );
-
 
     if(button){
 
@@ -3927,7 +4082,6 @@ async function checkRentalAgain(){
       "#rentalLock button.btn-black"
     );
 
-
   if(button){
 
     button.disabled =
@@ -3938,16 +4092,13 @@ async function checkRentalAgain(){
 
   }
 
-
   try{
 
     dashboardStarted =
       false;
 
-
     const paid =
       await checkRental();
-
 
     if(paid){
 
@@ -3955,13 +4106,10 @@ async function checkRentalAgain(){
         "✓ Rental payment confirmed. Your dashboard is unlocked."
       );
 
-
       dashboardStarted =
         false;
 
-
       await startDashboard();
-
 
     }else{
 
@@ -3971,7 +4119,6 @@ async function checkRentalAgain(){
 
     }
 
-
   }catch(error){
 
     console.error(
@@ -3979,14 +4126,12 @@ async function checkRentalAgain(){
       error
     );
 
-
     alert(
       "ZYRE could not verify the rental.\n\n" +
       error.message
     );
 
   }
-
 
   if(button){
 
@@ -4035,7 +4180,6 @@ async function logoutSeller(){
 
   }
 
-
   localStorage.removeItem(
     "zava_seller_id"
   );
@@ -4047,7 +4191,6 @@ async function logoutSeller(){
   localStorage.removeItem(
     "zava_seller_email"
   );
-
 
   window.location.href =
     "auth.html";
@@ -4114,7 +4257,6 @@ setInterval(
         "dashboard"
       );
 
-
     if(
       !dashboard ||
       dashboard.classList.contains(
@@ -4126,12 +4268,10 @@ setInterval(
 
     }
 
-
     try{
 
       const paid =
         await checkRental();
-
 
       if(!paid){
 
@@ -4155,5 +4295,89 @@ setInterval(
   60000
 );
 
-</script><script src="app.js?v=6012"></script></body>
-</html>
+
+/* =====================================================
+DUPLICATE HEADER PROTECTION
+===================================================== */
+
+function removeDuplicateSellerHeaders(){
+
+  const headers =
+    document.querySelectorAll(
+      "body > header"
+    );
+
+  headers.forEach(
+    header => {
+
+      if(
+        header.id !==
+        "sellerHeader"
+      ){
+
+        header.remove();
+
+      }
+
+    }
+  );
+
+}
+
+
+/*
+Run once now.
+*/
+
+removeDuplicateSellerHeaders();
+
+
+/*
+Run again after app.js has loaded,
+in case another script creates a header.
+*/
+
+setTimeout(
+  removeDuplicateSellerHeaders,
+  500
+);
+
+setTimeout(
+  removeDuplicateSellerHeaders,
+  1500
+);
+
+</script><script src="app.js?v=6013"></script><script>
+
+/*
+Final duplicate-header check after app.js.
+*/
+
+setTimeout(
+  function(){
+
+    const headers =
+      document.querySelectorAll(
+        "body > header"
+      );
+
+    headers.forEach(
+      header => {
+
+        if(
+          header.id !==
+          "sellerHeader"
+        ){
+
+          header.remove();
+
+        }
+
+      }
+    );
+
+  },
+  2000
+);
+
+</script></body></html>
