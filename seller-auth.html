@@ -1,21 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
+«»
 
 <meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+name="theme-color"
+content="#111111"
 
-<meta
-  name="theme-color"
-  content="#111111"
->
+«»
 
-<title>Seller Account | ZYRE Marketing</title>
-
-<style>
+<title>Seller Account | ZYRE Marketing</title><style>
 
 * {
   box-sizing: border-box;
@@ -586,675 +583,634 @@ STORE IMAGE
 
 }
 
-</style>
-</head>
+</style></head><body><header class="header">  <div class="brand"><img
+  src="icon-192.png"
+  class="logo"
+  alt="ZYRE Marketing"
+  onerror="this.style.display='none'"
+>
 
-<body>
+<div class="brand-text">
 
-<header class="header">
+  <div class="brand-name">
+    ZYRE
+  </div>
 
-  <div class="brand">
+  <div class="brand-subtitle">
+    MARKETING • SELLER CENTRE
+  </div>
 
-    <img
-      src="icon-192.png"
-      class="logo"
-      alt="ZYRE Marketing"
-      onerror="this.style.display='none'"
+</div>
+
+  </div><a
+href="auth.html"
+class="back-button"
+
+«»
+
+← Account
+
+  </a></header><main class="main">  <section class="intro"><h1>
+  Sell on ZYRE Marketing
+</h1>
+
+<p>
+  Apply to become a ZYRE Marketing seller.
+  Your application will be reviewed before
+  your seller store is activated.
+</p>
+
+  </section>  <section
+    class="auth-grid"
+    id="authArea"
+  ><div class="card">
+
+  <h2>
+    Seller application
+  </h2>
+
+  <p class="card-description">
+    Complete your details below to apply
+    for a ZYRE Marketing seller account.
+  </p>
+
+
+  <div
+    id="registerMessage"
+    class="message"
+  ></div>
+
+
+  <div class="application-notice">
+
+    <strong>Application process:</strong><br>
+
+    Submit your details → your application
+    becomes <strong>Seller Pending</strong> →
+    ZYRE Marketing reviews your application →
+    approved sellers receive access to the
+    Seller Centre.
+
+  </div>
+
+
+  <form id="registerForm">
+
+    <div class="form-section-title">
+      👤 Personal information
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="registerName">
+        Full legal name
+      </label>
+
+      <input
+        type="text"
+        id="registerName"
+        placeholder="Your full legal name"
+        autocomplete="name"
+        required
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="registerEmail">
+        Email address
+      </label>
+
+      <input
+        type="email"
+        id="registerEmail"
+        placeholder="you@example.com"
+        autocomplete="email"
+        required
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="registerPhone">
+        Phone number
+      </label>
+
+      <input
+        type="tel"
+        id="registerPhone"
+        placeholder="e.g. 081 234 5678"
+        autocomplete="tel"
+        required
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="idNumber">
+        South African ID number
+      </label>
+
+      <input
+        type="text"
+        id="idNumber"
+        placeholder="13-digit South African ID number"
+        inputmode="numeric"
+        autocomplete="off"
+        maxlength="13"
+        minlength="13"
+        required
+      >
+
+      <div class="field-help">
+        Enter your 13-digit South African ID number.
+        This information is used for seller verification.
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="residentialAddress">
+        Residential address
+      </label>
+
+      <textarea
+        id="residentialAddress"
+        placeholder="Enter your residential address"
+        autocomplete="street-address"
+        required
+      ></textarea>
+
+    </div>
+
+
+    <div class="form-section-title">
+      🔐 Account security
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="registerPassword">
+        Strong password
+      </label>
+
+      <div class="password-wrap">
+
+        <input
+          type="password"
+          id="registerPassword"
+          placeholder="Create a strong password"
+          autocomplete="new-password"
+          minlength="8"
+          required
+        >
+
+        <button
+          type="button"
+          class="password-toggle"
+          onclick="togglePassword('registerPassword', this)"
+        >
+          Show
+        </button>
+
+      </div>
+
+
+      <div class="password-requirements">
+
+        <strong>Password must contain:</strong><br>
+
+        • At least 8 characters<br>
+        • At least one uppercase letter<br>
+        • At least one lowercase letter<br>
+        • At least one number<br>
+        • At least one special character
+
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="confirmPassword">
+        Confirm password
+      </label>
+
+      <div class="password-wrap">
+
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Enter your password again"
+          autocomplete="new-password"
+          minlength="8"
+          required
+        >
+
+        <button
+          type="button"
+          class="password-toggle"
+          onclick="togglePassword('confirmPassword', this)"
+        >
+          Show
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-section-title">
+      🏪 Store information
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="storeName">
+        Store name
+      </label>
+
+      <input
+        type="text"
+        id="storeName"
+        placeholder="Example: Sisanda Fashion"
+        autocomplete="organization"
+        required
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="storeImage">
+        Store picture / logo
+      </label>
+
+      <div class="store-image-upload">
+
+        <div class="store-image-preview-wrap">
+
+          <div
+            class="store-image-placeholder"
+            id="storeImagePlaceholder"
+          >
+            Store picture
+          </div>
+
+          <img
+            id="storeImagePreview"
+            class="store-image-preview"
+            alt="Store picture preview"
+          >
+
+        </div>
+
+
+        <input
+          type="file"
+          id="storeImage"
+          accept="image/*"
+          required
+        >
+
+
+        <div class="store-image-note">
+
+          Choose any picture or logo that represents
+          your store.
+
+          <br>
+
+          Maximum file size:
+          <strong>5 MB</strong>.
+
+          <br>
+
+          This picture will appear as a
+          <strong>circle</strong> on the ZYRE marketplace.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="businessAddress">
+        Store / business address
+      </label>
+
+      <textarea
+        id="businessAddress"
+        placeholder="Enter your store or business address"
+        required
+      ></textarea>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="storeCategory">
+        Store category
+      </label>
+
+      <select
+        id="storeCategory"
+        required
+      >
+
+        <option value="">
+          Select a category
+        </option>
+
+        <option value="Electronics">
+          Electronics
+        </option>
+
+        <option value="Fashion">
+          Fashion
+        </option>
+
+        <option value="Home">
+          Home
+        </option>
+
+        <option value="Beauty">
+          Beauty
+        </option>
+
+        <option value="Food">
+          Food
+        </option>
+
+        <option value="Health">
+          Health
+        </option>
+
+        <option value="Automotive">
+          Automotive
+        </option>
+
+        <option value="Services">
+          Services
+        </option>
+
+        <option value="Other">
+          Other
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="storeDescription">
+        Store description
+      </label>
+
+      <textarea
+        id="storeDescription"
+        placeholder="Tell customers what your store sells..."
+        required
+      ></textarea>
+
+    </div>
+
+
+    <div class="checkbox-row">
+
+      <input
+        type="checkbox"
+        id="terms"
+        required
+      >
+
+      <label for="terms">
+
+        I confirm that the information I have
+        provided is accurate and I agree to the
+        ZYRE Marketing seller terms. I understand
+        that my application must be reviewed and
+        approved before I can manage a seller store.
+
+      </label>
+
+    </div>
+
+
+    <button
+      type="submit"
+      class="primary-button"
+      id="registerButton"
     >
+      Submit Seller Application
+    </button>
 
-    <div class="brand-text">
+  </form>
 
-      <div class="brand-name">
-        ZYRE
-      </div>
 
-      <div class="brand-subtitle">
-        MARKETING • SELLER CENTRE
-      </div>
+  <div class="benefits">
+
+    <h3>
+      Approved seller accounts include
+    </h3>
+
+    <div class="benefit">
+      <span class="benefit-icon">🏪</span>
+      <span>Your own marketplace store</span>
+    </div>
+
+    <div class="benefit">
+      <span class="benefit-icon">📦</span>
+      <span>Product and inventory management</span>
+    </div>
+
+    <div class="benefit">
+      <span class="benefit-icon">🛍️</span>
+      <span>Access to ZYRE customers</span>
+    </div>
+
+    <div class="benefit">
+      <span class="benefit-icon">💰</span>
+      <span>Seller earnings and payout management</span>
+    </div>
+
+  </div>
+
+</div>
+
+  </section>  <section
+    class="rental-section"
+    id="rentalSection"
+  ><div class="rental-card">
+
+  <h2>
+    Seller Application Submitted
+  </h2>
+
+  <p class="rental-intro">
+
+    Your seller application has been registered.
+    Your account is currently waiting for
+    ZYRE Marketing review and approval.
+
+  </p>
+
+
+  <div class="rental-price">
+
+    <div class="rental-price-label">
+      Monthly store rental
+    </div>
+
+    <div class="rental-price-value">
+      R100
+    </div>
+
+    <div class="rental-price-period">
+      per month
+    </div>
+
+  </div>
+
+
+  <div class="rental-status">
+
+    <span class="rental-status-icon">
+      ⏳
+    </span>
+
+    <span>
+
+      <strong>Seller Pending</strong><br>
+
+      Your seller application is waiting for
+      ZYRE Marketing approval. You cannot access
+      the Seller Centre until your application
+      has been approved.
+
+    </span>
+
+  </div>
+
+
+  <button
+    type="button"
+    class="primary-button pending-button"
+    disabled
+  >
+    ⏳ PayFast Approval Pending
+  </button>
+
+
+  <button
+    type="button"
+    class="secondary-button"
+    onclick="returnToAccount()"
+  >
+    Return to Account
+  </button>
+
+
+  <div class="rental-info">
+
+    <div class="rental-info-row">
+
+      <span>
+        Store
+      </span>
+
+      <span id="rentalStoreName">
+        —
+      </span>
+
+    </div>
+
+
+    <div class="rental-info-row">
+
+      <span>
+        Application status
+      </span>
+
+      <span>
+        Seller Pending
+      </span>
+
+    </div>
+
+
+    <div class="rental-info-row">
+
+      <span>
+        Rental amount
+      </span>
+
+      <span>
+        R100 / month
+      </span>
+
+    </div>
+
+
+    <div class="rental-info-row">
+
+      <span>
+        Payment status
+      </span>
+
+      <span id="rentalPaymentStatus">
+        Pending
+      </span>
+
+    </div>
+
+
+    <div class="rental-info-row">
+
+      <span>
+        Seller approval
+      </span>
+
+      <span>
+        Waiting for owner approval
+      </span>
 
     </div>
 
   </div>
 
-  <a
-    href="auth.html"
-    class="back-button"
-  >
-    ← Account
-  </a>
 
-</header>
+  <div
+    id="rentalMessage"
+    class="message"
+    style="margin-top:20px;"
+  ></div>
 
+</div>
 
-<main class="main">
+  </section></main><footer class="footer">© 2026 ZYRE Marketing.
+All rights reserved.
 
-  <section class="intro">
-
-    <h1>
-      Sell on ZYRE Marketing
-    </h1>
-
-    <p>
-      Apply to become a ZYRE Marketing seller.
-      Your application will be reviewed before
-      your seller store is activated.
-    </p>
-
-  </section>
-
-
-  <section
-    class="auth-grid"
-    id="authArea"
-  >
-
-    <div class="card">
-
-      <h2>
-        Seller application
-      </h2>
-
-      <p class="card-description">
-        Complete your details below to apply
-        for a ZYRE Marketing seller account.
-      </p>
-
-
-      <div
-        id="registerMessage"
-        class="message"
-      ></div>
-
-
-      <div class="application-notice">
-
-        <strong>Application process:</strong><br>
-
-        Submit your details → your application
-        becomes <strong>Seller Pending</strong> →
-        ZYRE Marketing reviews your application →
-        approved sellers receive access to the
-        Seller Centre.
-
-      </div>
-
-
-      <form id="registerForm">
-
-        <div class="form-section-title">
-          👤 Personal information
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="registerName">
-            Full legal name
-          </label>
-
-          <input
-            type="text"
-            id="registerName"
-            placeholder="Your full legal name"
-            autocomplete="name"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="registerEmail">
-            Email address
-          </label>
-
-          <input
-            type="email"
-            id="registerEmail"
-            placeholder="you@example.com"
-            autocomplete="email"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="registerPhone">
-            Phone number
-          </label>
-
-          <input
-            type="tel"
-            id="registerPhone"
-            placeholder="e.g. 081 234 5678"
-            autocomplete="tel"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="idNumber">
-            South African ID number
-          </label>
-
-          <input
-            type="text"
-            id="idNumber"
-            placeholder="13-digit South African ID number"
-            inputmode="numeric"
-            autocomplete="off"
-            maxlength="13"
-            minlength="13"
-            required
-          >
-
-          <div class="field-help">
-            Enter your 13-digit South African ID number.
-            This information is used for seller verification.
-          </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="residentialAddress">
-            Residential address
-          </label>
-
-          <textarea
-            id="residentialAddress"
-            placeholder="Enter your residential address"
-            autocomplete="street-address"
-            required
-          ></textarea>
-
-        </div>
-
-
-        <div class="form-section-title">
-          🔐 Account security
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="registerPassword">
-            Strong password
-          </label>
-
-          <div class="password-wrap">
-
-            <input
-              type="password"
-              id="registerPassword"
-              placeholder="Create a strong password"
-              autocomplete="new-password"
-              minlength="8"
-              required
-            >
-
-            <button
-              type="button"
-              class="password-toggle"
-              onclick="togglePassword('registerPassword', this)"
-            >
-              Show
-            </button>
-
-          </div>
-
-
-          <div class="password-requirements">
-
-            <strong>Password must contain:</strong><br>
-
-            • At least 8 characters<br>
-            • At least one uppercase letter<br>
-            • At least one lowercase letter<br>
-            • At least one number<br>
-            • At least one special character
-
-          </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="confirmPassword">
-            Confirm password
-          </label>
-
-          <div class="password-wrap">
-
-            <input
-              type="password"
-              id="confirmPassword"
-              placeholder="Enter your password again"
-              autocomplete="new-password"
-              minlength="8"
-              required
-            >
-
-            <button
-              type="button"
-              class="password-toggle"
-              onclick="togglePassword('confirmPassword', this)"
-            >
-              Show
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div class="form-section-title">
-          🏪 Store information
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="storeName">
-            Store name
-          </label>
-
-          <input
-            type="text"
-            id="storeName"
-            placeholder="Example: Sisanda Fashion"
-            autocomplete="organization"
-            required
-          >
-
-        </div>
-
-
-        <!-- =========================
-        STORE IMAGE
-        ========================= -->
-
-        <div class="form-group">
-
-          <label for="storeImage">
-            Store picture / logo
-          </label>
-
-          <div class="store-image-upload">
-
-            <div class="store-image-preview-wrap">
-
-              <div
-                class="store-image-placeholder"
-                id="storeImagePlaceholder"
-              >
-                Store picture
-              </div>
-
-              <img
-                id="storeImagePreview"
-                class="store-image-preview"
-                alt="Store picture preview"
-              >
-
-            </div>
-
-
-            <input
-              type="file"
-              id="storeImage"
-              accept="image/*"
-              required
-            >
-
-
-            <div class="store-image-note">
-
-              Choose any picture or logo that represents
-              your store.
-
-              <br>
-
-              Maximum file size:
-              <strong>5 MB</strong>.
-
-              <br>
-
-              This picture will appear as a
-              <strong>circle</strong> on the ZYRE marketplace.
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="businessAddress">
-            Store / business address
-          </label>
-
-          <textarea
-            id="businessAddress"
-            placeholder="Enter your store or business address"
-            required
-          ></textarea>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="storeCategory">
-            Store category
-          </label>
-
-          <select
-            id="storeCategory"
-            required
-          >
-
-            <option value="">
-              Select a category
-            </option>
-
-            <option value="Electronics">
-              Electronics
-            </option>
-
-            <option value="Fashion">
-              Fashion
-            </option>
-
-            <option value="Home">
-              Home
-            </option>
-
-            <option value="Beauty">
-              Beauty
-            </option>
-
-            <option value="Food">
-              Food
-            </option>
-
-            <option value="Health">
-              Health
-            </option>
-
-            <option value="Automotive">
-              Automotive
-            </option>
-
-            <option value="Services">
-              Services
-            </option>
-
-            <option value="Other">
-              Other
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="storeDescription">
-            Store description
-          </label>
-
-          <textarea
-            id="storeDescription"
-            placeholder="Tell customers what your store sells..."
-            required
-          ></textarea>
-
-        </div>
-
-
-        <div class="checkbox-row">
-
-          <input
-            type="checkbox"
-            id="terms"
-            required
-          >
-
-          <label for="terms">
-
-            I confirm that the information I have
-            provided is accurate and I agree to the
-            ZYRE Marketing seller terms. I understand
-            that my application must be reviewed and
-            approved before I can manage a seller store.
-
-          </label>
-
-        </div>
-
-
-        <button
-          type="submit"
-          class="primary-button"
-          id="registerButton"
-        >
-          Submit Seller Application
-        </button>
-
-      </form>
-
-
-      <div class="benefits">
-
-        <h3>
-          Approved seller accounts include
-        </h3>
-
-        <div class="benefit">
-          <span class="benefit-icon">🏪</span>
-          <span>Your own marketplace store</span>
-        </div>
-
-        <div class="benefit">
-          <span class="benefit-icon">📦</span>
-          <span>Product and inventory management</span>
-        </div>
-
-        <div class="benefit">
-          <span class="benefit-icon">🛍️</span>
-          <span>Access to ZYRE customers</span>
-        </div>
-
-        <div class="benefit">
-          <span class="benefit-icon">💰</span>
-          <span>Seller earnings and payout management</span>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <section
-    class="rental-section"
-    id="rentalSection"
-  >
-
-    <div class="rental-card">
-
-      <h2>
-        Seller Application Submitted
-      </h2>
-
-      <p class="rental-intro">
-
-        Your seller application has been registered.
-        Your account is currently waiting for
-        ZYRE Marketing review and approval.
-
-      </p>
-
-
-      <div class="rental-price">
-
-        <div class="rental-price-label">
-          Monthly store rental
-        </div>
-
-        <div class="rental-price-value">
-          R100
-        </div>
-
-        <div class="rental-price-period">
-          per month
-        </div>
-
-      </div>
-
-
-      <div class="rental-status">
-
-        <span class="rental-status-icon">
-          ⏳
-        </span>
-
-        <span>
-
-          <strong>Seller Pending</strong><br>
-
-          Your seller application is waiting for
-          ZYRE Marketing approval. You cannot access
-          the Seller Centre until your application
-          has been approved.
-
-        </span>
-
-      </div>
-
-
-      <button
-        type="button"
-        class="primary-button pending-button"
-        disabled
-      >
-        ⏳ PayFast Approval Pending
-      </button>
-
-
-      <button
-        type="button"
-        class="secondary-button"
-        onclick="returnToAccount()"
-      >
-        Return to Account
-      </button>
-
-
-      <div class="rental-info">
-
-        <div class="rental-info-row">
-
-          <span>
-            Store
-          </span>
-
-          <span id="rentalStoreName">
-            —
-          </span>
-
-        </div>
-
-
-        <div class="rental-info-row">
-
-          <span>
-            Application status
-          </span>
-
-          <span>
-            Seller Pending
-          </span>
-
-        </div>
-
-
-        <div class="rental-info-row">
-
-          <span>
-            Rental amount
-          </span>
-
-          <span>
-            R100 / month
-          </span>
-
-        </div>
-
-
-        <div class="rental-info-row">
-
-          <span>
-            Payment status
-          </span>
-
-          <span id="rentalPaymentStatus">
-            Pending
-          </span>
-
-        </div>
-
-
-        <div class="rental-info-row">
-
-          <span>
-            Seller approval
-          </span>
-
-          <span>
-            Waiting for owner approval
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div
-        id="rentalMessage"
-        class="message"
-        style="margin-top:20px;"
-      ></div>
-
-    </div>
-
-  </section>
-
-</main>
-
-
-<footer class="footer">
-
-  © 2026 ZYRE Marketing.
-  All rights reserved.
-
-</footer>
-
-
-<script>
+</footer><script>
 
 const SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
@@ -1616,6 +1572,83 @@ async function getCurrentSession() {
 
 
 /* =========================
+ENSURE PROFILE EXISTS
+========================= */
+
+async function ensureSellerProfile(
+  userId,
+  accessToken,
+  fullName,
+  phone,
+  residentialAddress
+) {
+
+  const profileResponse =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/profiles",
+
+      {
+
+        method:
+          "POST",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            accessToken,
+
+          "Content-Type":
+            "application/json",
+
+          "Prefer":
+            "resolution=merge-duplicates,return=minimal"
+
+        },
+
+        body:
+          JSON.stringify({
+
+            id:
+              userId,
+
+            full_name:
+              fullName,
+
+            phone:
+              phone,
+
+            address:
+              residentialAddress,
+
+            role:
+              "customer"
+
+          })
+
+      }
+
+    );
+
+
+  if (!profileResponse.ok) {
+
+    throw new Error(
+      "Your account was created, but your ZYRE profile could not be prepared.\n\n" +
+      await profileResponse.text()
+    );
+
+  }
+
+}
+
+
+/* =========================
 CREATE SELLER STORE
 ========================= */
 
@@ -1919,12 +1952,6 @@ async function uploadStoreImage(
     "." +
     extension;
 
-
-  /*
-  IMPORTANT:
-  Store pictures go into the
-  store-images bucket.
-  */
 
   const uploadResponse =
     await fetch(
@@ -2680,7 +2707,10 @@ document
                         fullName,
 
                       phone:
-                        phone
+                        phone,
+
+                      role:
+                        "customer"
 
                     }
 
@@ -2711,10 +2741,6 @@ document
 
           }
 
-
-          /* =========================
-          NEW ACCOUNT CREATED
-          ========================= */
 
           if (
             signupResponse.ok
@@ -2752,10 +2778,6 @@ document
             }
 
           }
-
-          /* =========================
-          EMAIL ALREADY EXISTS
-          ========================= */
 
           else {
 
@@ -2830,6 +2852,23 @@ document
           );
 
         }
+
+
+        /* =========================
+        ENSURE PROFILE EXISTS
+        ========================= */
+
+        button.textContent =
+          "Preparing your ZYRE profile...";
+
+
+        await ensureSellerProfile(
+          userId,
+          accessToken,
+          fullName,
+          phone,
+          residentialAddress
+        );
 
 
         /* =========================
@@ -3012,7 +3051,5 @@ document
     }
   );
 
-</script>
-
-</body>
+</script></body>
 </html>
