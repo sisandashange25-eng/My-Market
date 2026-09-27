@@ -1511,24 +1511,21 @@
 
       }
 
+      /*
+        IMPORTANT FIX:
+
+        Only use the real logged-in access token
+        as the Authorization bearer token.
+
+        DO NOT use the publishable key as the
+        Authorization bearer token.
+      */
+
       if (accessToken) {
 
         headers.Authorization =
           "Bearer " +
           accessToken;
-
-      } else {
-
-        /*
-          Fallback for public Supabase requests.
-          Rental subscription access still requires
-          the authenticated user's token when RLS
-          requires authenticated access.
-        */
-
-        headers.Authorization =
-          "Bearer " +
-          SUPABASE_KEY;
 
       }
 
@@ -1907,11 +1904,6 @@
 
     function openCartFromStore() {
 
-      /*
-        If app.js is already loaded and provides
-        the main ZYRE cart drawer, use it.
-      */
-
       if (
         typeof window.toggleCart ===
         "function"
@@ -1935,12 +1927,6 @@
         }
 
       }
-
-      /*
-        If the main marketplace cart is not loaded
-        on this page, send the customer to the
-        marketplace where the full cart system exists.
-      */
 
       window.location.href =
         "index.html";
@@ -2450,14 +2436,6 @@
 
               }
 
-              /*
-                A subscription without an expiry date
-                is treated as active.
-
-                A subscription with an expiry date must
-                not have expired yet.
-              */
-
               if (
                 !subscription.expires_at
               ) {
@@ -2616,22 +2594,17 @@
       }
 
       /*
-        IMPORTANT:
+        PRIMARY CHECK:
+        Active store subscription.
 
-        The active store subscription is now the
-        PRIMARY rental-access check.
-
-        This means an active subscription such as:
+        Your existing subscription is:
 
         seller_id = 16
         rental_plan_id = 1
         status = active
         expires_at = 2026-10-31
 
-        keeps the store open.
-
-        The current-month paid rental payment remains
-        as a fallback.
+        Therefore it should keep the store open.
       */
 
       const activeSubscription =
@@ -2649,6 +2622,11 @@
 
       }
 
+
+      /*
+        FALLBACK:
+        Current-month paid rental payment.
+      */
 
       const currentMonthPayment =
         await checkPaidRentalPayment(
@@ -3364,7 +3342,16 @@
           error
         );
 
-        showRentalLockedState();
+        /*
+          IMPORTANT:
+
+          A technical loading error should NOT
+          tell the customer that the rental is
+          unpaid.
+
+          We leave the rental message only when
+          the rental check itself returns false.
+        */
 
         const warning =
           document.getElementById(
@@ -3379,7 +3366,58 @@
         if (warningText) {
 
           warningText.textContent =
-            "This store is temporarily unavailable because its availability could not be verified. Please try again later.";
+            "The store could not be loaded right now. Please refresh the page and try again.";
+
+        }
+
+        if (warning) {
+
+          warning.style.display =
+            "block";
+
+        }
+
+        const lockedSection =
+          document.getElementById(
+            "rentalLockedSection"
+          );
+
+        if (lockedSection) {
+
+          lockedSection.style.display =
+            "none";
+
+        }
+
+        const productsSection =
+          document.getElementById(
+            "productsSection"
+          );
+
+        if (productsSection) {
+
+          productsSection.style.display =
+            "block";
+
+        }
+
+        if (grid) {
+
+          grid.innerHTML = `
+
+            <div class="error-message">
+
+              <strong>
+                Store could not be loaded.
+              </strong>
+
+              <p>
+                Please refresh the page and try again.
+              </p>
+
+            </div>
+
+          `;
 
         }
 
