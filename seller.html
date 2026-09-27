@@ -1,15 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
 <title>ZYRE Marketing | Seller Dashboard</title>
 
-<meta name="description"
-content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications.">
+<meta
+  name="description"
+  content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications."
+>
 
-<meta name="robots" content="noindex,nofollow">
+<meta
+  name="robots"
+  content="noindex,nofollow"
+>
+
+<!-- =====================================================
+     SUPABASE JAVASCRIPT LIBRARY
+     REQUIRED FOR SELLER AUTHENTICATION
+===================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -1220,6 +1236,10 @@ class="info-value">
 
 <script>
 
+/* =====================================================
+ZYRE / SUPABASE CONFIGURATION
+===================================================== */
+
 const SUPABASE_URL =
 "https://gaccizzlwswwynattgda.supabase.co";
 
@@ -1253,9 +1273,9 @@ let dashboardStarted = false;
 let CURRENT_ORDER_FILTER = "all";
 
 
-/* =========================
+/* =====================================================
 AUTHENTICATION
-========================= */
+===================================================== */
 
 async function refreshSellerAuthentication(){
 
@@ -1337,9 +1357,9 @@ async function refreshSellerAuthentication(){
 }
 
 
-/* =========================
+/* =====================================================
 SELLER ACCOUNT RESOLUTION
-========================= */
+===================================================== */
 
 async function resolveSellerFromAccount(){
 
@@ -1363,16 +1383,6 @@ async function resolveSellerFromAccount(){
   const userId =
     session.user.id;
 
-
-  /*
-  IMPORTANT:
-
-  The seller ID stored in localStorage
-  is NOT trusted.
-
-  The seller is always resolved from
-  the authenticated Supabase user ID.
-  */
 
   const sellers =
     await supabaseRequest(
@@ -1442,9 +1452,9 @@ async function resolveSellerFromAccount(){
 }
 
 
-/* =========================
+/* =====================================================
 REQUIRED AUTH TOKEN
-========================= */
+===================================================== */
 
 async function getSellerAccessToken(){
 
@@ -1465,9 +1475,9 @@ async function getSellerAccessToken(){
 }
 
 
-/* =========================
+/* =====================================================
 SUPABASE REQUEST
-========================= */
+===================================================== */
 
 async function supabaseRequest(
   path,
@@ -1566,9 +1576,9 @@ async function supabaseRequest(
 }
 
 
-/* =========================
+/* =====================================================
 UPLOAD PRODUCT IMAGE
-========================= */
+===================================================== */
 
 async function uploadProductImage(file){
 
@@ -1742,9 +1752,9 @@ async function uploadProductImage(file){
 }
 
 
-/* =========================
+/* =====================================================
 PHOTO PREVIEW
-========================= */
+===================================================== */
 
 document
   .getElementById("productImageFile")
@@ -1843,9 +1853,9 @@ document
   );
 
 
-/* =========================
+/* =====================================================
 CURRENT MONTH PAYMENT
-========================= */
+===================================================== */
 
 function isPaidThisMonth(payment){
 
@@ -1913,9 +1923,9 @@ function isPaidThisMonth(payment){
 }
 
 
-/* =========================
+/* =====================================================
 ACTIVE SUBSCRIPTION
-========================= */
+===================================================== */
 
 function isActiveSubscription(subscription){
 
@@ -1973,23 +1983,11 @@ function isActiveSubscription(subscription){
 }
 
 
-/* =========================
+/* =====================================================
 RENTAL CHECK
-========================= */
+===================================================== */
 
 async function checkRental(){
-
-  /*
-  IMPORTANT:
-
-  Do NOT silently convert database
-  errors into "not paid".
-
-  If Supabase refuses the query,
-  we want to know that rather than
-  displaying a misleading payment
-  message.
-  */
 
   const seller =
     await resolveSellerFromAccount();
@@ -2020,11 +2018,9 @@ async function checkRental(){
   );
 
 
-  /*
-  =========================
-  CHECK ACTIVE SUBSCRIPTION
-  =========================
-  */
+  /* ===================================================
+     CHECK ACTIVE SUBSCRIPTION
+  =================================================== */
 
   let subscriptions = [];
 
@@ -2044,12 +2040,6 @@ async function checkRental(){
       "STORE SUBSCRIPTION CHECK FAILED:",
       error
     );
-
-    /*
-    We do not pretend the seller is
-    unpaid when the database rejected
-    the query.
-    */
 
     throw new Error(
       "ZYRE could not read your store rental subscription. " +
@@ -2077,15 +2067,8 @@ async function checkRental(){
 
 
   /*
-  If the subscription is active,
-  unlock immediately.
-
-  Your database currently contains:
-
-  seller_id = 16
-  rental_plan_id = 1
-  status = active
-  expires_at = 2026-10-31
+  An active subscription immediately
+  unlocks the seller dashboard.
   */
 
   if(activeSubscription){
@@ -2099,11 +2082,9 @@ async function checkRental(){
   }
 
 
-  /*
-  =========================
-  CHECK PAID RENTAL PAYMENT
-  =========================
-  */
+  /* ===================================================
+     CHECK PAID RENTAL PAYMENT
+  =================================================== */
 
   let payments = [];
 
@@ -2136,9 +2117,7 @@ async function checkRental(){
     Array.isArray(payments) &&
     payments.some(
       payment =>
-        isPaidThisMonth(
-          payment
-        )
+        isPaidThisMonth(payment)
     );
 
 
@@ -2160,19 +2139,14 @@ async function checkRental(){
   }
 
 
-  console.log(
-    "ZYRE RENTAL NOT CONFIRMED"
-  );
-
-
   return false;
 
 }
 
 
-/* =========================
+/* =====================================================
 SHOW DASHBOARD
-========================= */
+===================================================== */
 
 function showDashboard(){
 
@@ -2194,9 +2168,9 @@ function showDashboard(){
 }
 
 
-/* =========================
+/* =====================================================
 SHOW LOCK
-========================= */
+===================================================== */
 
 function showRentalLock(){
 
@@ -2218,9 +2192,9 @@ function showRentalLock(){
 }
 
 
-/* =========================
+/* =====================================================
 START DASHBOARD
-========================= */
+===================================================== */
 
 async function startDashboard(){
 
@@ -2321,11 +2295,6 @@ async function startDashboard(){
     );
 
 
-    /*
-    Authentication problems require
-    logging in again.
-    */
-
     if(
       error.message &&
       (
@@ -2350,14 +2319,6 @@ async function startDashboard(){
     }
 
 
-    /*
-    Database/rental errors remain
-    locked for security.
-
-    The error is displayed so we
-    know the actual problem.
-    */
-
     showRentalLock();
 
     dashboardStarted =
@@ -2373,9 +2334,9 @@ async function startDashboard(){
 }
 
 
-/* =========================
+/* =====================================================
 SELLER INFORMATION
-========================= */
+===================================================== */
 
 async function loadSellerInformation(){
 
@@ -2453,9 +2414,9 @@ async function loadSellerInformation(){
 }
 
 
-/* =========================
+/* =====================================================
 RENTAL DISPLAY
-========================= */
+===================================================== */
 
 function updateRentalDisplay(
   isPaid
@@ -2511,9 +2472,9 @@ function updateRentalDisplay(
 }
 
 
-/* =========================
+/* =====================================================
 PRODUCTS
-========================= */
+===================================================== */
 
 async function loadProducts(){
 
@@ -2566,9 +2527,9 @@ async function loadProducts(){
 }
 
 
-/* =========================
+/* =====================================================
 RENDER PRODUCTS
-========================= */
+===================================================== */
 
 function renderProducts(){
 
@@ -2669,9 +2630,9 @@ function renderProducts(){
 }
 
 
-/* =========================
+/* =====================================================
 ADD PRODUCT
-========================= */
+===================================================== */
 
 document
   .getElementById("productForm")
@@ -2943,9 +2904,9 @@ document
   );
 
 
-/* =========================
+/* =====================================================
 EDIT PRODUCT
-========================= */
+===================================================== */
 
 async function editProduct(id){
 
@@ -3056,9 +3017,9 @@ async function editProduct(id){
 }
 
 
-/* =========================
+/* =====================================================
 DELETE PRODUCT
-========================= */
+===================================================== */
 
 async function deleteProduct(id){
 
@@ -3121,9 +3082,9 @@ async function deleteProduct(id){
 }
 
 
-/* =========================
+/* =====================================================
 ORDERS
-========================= */
+===================================================== */
 
 async function loadOrders(){
 
@@ -3343,9 +3304,9 @@ async function loadOrders(){
 }
 
 
-/* =========================
+/* =====================================================
 ORDER STATS
-========================= */
+===================================================== */
 
 function updateOrderStats(){
 
@@ -3484,9 +3445,9 @@ function updateOrderStats(){
 }
 
 
-/* =========================
+/* =====================================================
 ORDER FILTER
-========================= */
+===================================================== */
 
 function setOrderFilter(
   filter,
@@ -3523,9 +3484,9 @@ function setOrderFilter(
 }
 
 
-/* =========================
+/* =====================================================
 RENDER ORDERS
-========================= */
+===================================================== */
 
 function renderOrders(){
 
@@ -3732,9 +3693,9 @@ function renderOrders(){
 }
 
 
-/* =========================
+/* =====================================================
 CHANGE ORDER STATUS
-========================= */
+===================================================== */
 
 async function changeOrderStatus(
   orderId,
@@ -3789,9 +3750,9 @@ async function changeOrderStatus(
 }
 
 
-/* =========================
+/* =====================================================
 DELIVERY
-========================= */
+===================================================== */
 
 async function loadDelivery(){
 
@@ -3879,9 +3840,9 @@ async function loadDelivery(){
 }
 
 
-/* =========================
+/* =====================================================
 RENDER DELIVERY
-========================= */
+===================================================== */
 
 function renderDelivery(){
 
@@ -3971,9 +3932,9 @@ function renderDelivery(){
 }
 
 
-/* =========================
+/* =====================================================
 EDIT DELIVERY
-========================= */
+===================================================== */
 
 async function editDelivery(id){
 
@@ -4051,9 +4012,9 @@ async function editDelivery(id){
 }
 
 
-/* =========================
+/* =====================================================
 NOTIFICATIONS
-========================= */
+===================================================== */
 
 async function loadNotifications(){
 
@@ -4119,9 +4080,9 @@ async function loadNotifications(){
 }
 
 
-/* =========================
+/* =====================================================
 NAVIGATION
-========================= */
+===================================================== */
 
 function showPanel(
   panelId,
@@ -4178,9 +4139,9 @@ function showPanel(
 }
 
 
-/* =========================
+/* =====================================================
 RENTAL PAYMENT
-========================= */
+===================================================== */
 
 async function payRental(){
 
@@ -4349,9 +4310,9 @@ async function payRental(){
 }
 
 
-/* =========================
+/* =====================================================
 CHECK RENTAL AGAIN
-========================= */
+===================================================== */
 
 async function checkRentalAgain(){
 
@@ -4368,6 +4329,7 @@ async function checkRentalAgain(){
 
     button.textContent =
       "Checking...";
+
   }
 
 
@@ -4433,9 +4395,9 @@ async function checkRentalAgain(){
 }
 
 
-/* =========================
+/* =====================================================
 GO BACK
-========================= */
+===================================================== */
 
 function goBackToStore(){
 
@@ -4445,9 +4407,9 @@ function goBackToStore(){
 }
 
 
-/* =========================
+/* =====================================================
 LOGOUT
-========================= */
+===================================================== */
 
 async function logoutSeller(){
 
@@ -4499,9 +4461,9 @@ async function logoutSeller(){
 }
 
 
-/* =========================
+/* =====================================================
 ESCAPE HTML
-========================= */
+===================================================== */
 
 function escapeHtml(value){
 
@@ -4532,9 +4494,9 @@ function escapeHtml(value){
 }
 
 
-/* =========================
+/* =====================================================
 START
-========================= */
+===================================================== */
 
 document.addEventListener(
   "DOMContentLoaded",
@@ -4546,9 +4508,9 @@ document.addEventListener(
 );
 
 
-/* =========================
+/* =====================================================
 PERIODIC RENTAL CHECK
-========================= */
+===================================================== */
 
 setInterval(
   async function(){
@@ -4587,12 +4549,6 @@ setInterval(
       }
 
     }catch(error){
-
-      /*
-      Do not silently unlock or change
-      the dashboard when verification
-      fails during the background check.
-      */
 
       console.log(
         "Periodic rental check failed:",
