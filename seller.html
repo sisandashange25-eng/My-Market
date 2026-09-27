@@ -475,7 +475,9 @@ footer{
 
 <body>
 
-<!-- RENTAL CHECK LOADING -->
+<!-- =====================================================
+     RENTAL CHECK LOADING
+===================================================== -->
 
 <div id="rentalLoadingScreen" class="lock-loading">
 
@@ -495,7 +497,9 @@ footer{
 </div>
 
 
-<!-- RENTAL LOCK -->
+<!-- =====================================================
+     RENTAL LOCK
+===================================================== -->
 
 <div id="rentalLockScreen" class="rental-lock hidden">
 
@@ -568,7 +572,9 @@ footer{
 </div>
 
 
-<!-- SELLER DASHBOARD -->
+<!-- =====================================================
+     SELLER DASHBOARD
+===================================================== -->
 
 <div id="sellerDashboard">
 
@@ -860,7 +866,6 @@ footer{
       id="editProductName"
       type="text"
     >
-
   </label>
 
   <label>
@@ -869,7 +874,6 @@ footer{
     <textarea
       id="editProductDescription"
     ></textarea>
-
   </label>
 
   <div class="grid">
@@ -930,7 +934,6 @@ footer{
       id="editProductImage"
       type="url"
     >
-
   </label>
 
   <button
@@ -967,9 +970,11 @@ footer{
     id="productsGrid"
     class="product-grid"
   >
+
     <div class="empty">
       Loading products...
     </div>
+
   </div>
 
 </div>
@@ -1079,8 +1084,13 @@ const SELLER_AUTH_CLIENT =
   );
 
 
+/*
+  IMPORTANT:
+  This is the confirmed ZYRE rental payment page.
+*/
+
 const ZYRE_RENTAL_PAYMENT_URL =
-  "https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNNDxuj63iqje/exec";
+  "https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNWDxuj63iqje/exec";
 
 
 /* =========================================================
@@ -1088,52 +1098,131 @@ const ZYRE_RENTAL_PAYMENT_URL =
 ========================================================= */
 
 let SELLER_ID = 0;
+
 let SELLER_SESSION = null;
+
 let SELLER_ACCESS_TOKEN = null;
+
 let SELLER_DATA = null;
 
 let SELLER_RENTAL_ACCESS = false;
+
 let SELLER_RENTAL_PAYMENT = null;
+
 let SELLER_SUBSCRIPTION = null;
 
 let SELLER_PRODUCTS = [];
+
 let SELLER_ORDERS = [];
+
 let SELLER_DELIVERIES = [];
+
 let SELLER_PROFILES = [];
 
 let sellerAuthenticationReady = false;
 
 
 /* =========================================================
-   TIMEOUT HELPER
+   TIMEOUT HELPERS
 ========================================================= */
 
-function withTimeout(promise, milliseconds, message){
+function withTimeout(
+  promise,
+  milliseconds,
+  message
+){
 
   let timer;
 
-  const timeout =
-    new Promise((resolve,reject) => {
+  const timeoutPromise =
+    new Promise(
+      (resolve,reject) => {
 
-      timer =
-        setTimeout(
-          () => {
-            reject(
-              new Error(message)
-            );
-          },
-          milliseconds
-        );
+        timer =
+          setTimeout(
+            () => {
 
-    });
+              reject(
+                new Error(message)
+              );
+
+            },
+            milliseconds
+          );
+
+      }
+    );
 
 
   return Promise.race([
     promise,
-    timeout
+    timeoutPromise
   ]).finally(
-    () => clearTimeout(timer)
+    () => {
+
+      clearTimeout(timer);
+
+    }
   );
+
+}
+
+
+/*
+  Fetch timeout.
+
+  Unlike a normal Promise timeout,
+  this also aborts the actual network request.
+*/
+
+async function fetchWithTimeout(
+  url,
+  options = {},
+  milliseconds = 8000
+){
+
+  const controller =
+    new AbortController();
+
+
+  const timeout =
+    setTimeout(
+      () => {
+
+        controller.abort();
+
+      },
+      milliseconds
+    );
+
+
+  try{
+
+    return await fetch(
+      url,
+      {
+        ...options,
+        signal:controller.signal
+      }
+    );
+
+  }catch(error){
+
+    if(error.name === "AbortError"){
+
+      throw new Error(
+        "Request timed out."
+      );
+
+    }
+
+    throw error;
+
+  }finally{
+
+    clearTimeout(timeout);
+
+  }
 
 }
 
@@ -1144,9 +1233,15 @@ function withTimeout(promise, milliseconds, message){
 
 function escapeHtml(value){
 
-  if(value === null || value === undefined){
+  if(
+    value === null ||
+    value === undefined
+  ){
+
     return "";
+
   }
+
 
   return String(value)
     .replace(/&/g,"&amp;")
@@ -1154,28 +1249,37 @@ function escapeHtml(value){
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
+
 }
 
 
 function money(value){
 
   return "R" +
-    Number(value || 0).toFixed(2);
+    Number(value || 0)
+      .toFixed(2);
 
 }
 
 
-function showMessage(id,message,type="info"){
+function showMessage(
+  id,
+  message,
+  type="info"
+){
 
   const element =
     document.getElementById(id);
+
 
   if(!element){
     return;
   }
 
+
   element.className =
     "status " + type;
+
 
   element.textContent =
     message;
@@ -1188,8 +1292,13 @@ function hideElement(id){
   const element =
     document.getElementById(id);
 
+
   if(element){
-    element.classList.add("hidden");
+
+    element.classList.add(
+      "hidden"
+    );
+
   }
 
 }
@@ -1200,8 +1309,13 @@ function showElement(id){
   const element =
     document.getElementById(id);
 
+
   if(element){
-    element.classList.remove("hidden");
+
+    element.classList.remove(
+      "hidden"
+    );
+
   }
 
 }
@@ -1244,12 +1358,13 @@ function getHeaders(){
 
 async function refreshSellerAuthentication(){
 
-  sellerAuthenticationReady = false;
+  sellerAuthenticationReady =
+    false;
+
 
   /*
-    Recover seller ID immediately from localStorage.
-    This avoids waiting for Supabase just to know
-    which seller account is being opened.
+    First recover the seller ID from localStorage.
+    This happens immediately.
   */
 
   const storedSellerId =
@@ -1262,6 +1377,7 @@ async function refreshSellerAuthentication(){
 
     const numericId =
       Number(storedSellerId);
+
 
     if(
       Number.isFinite(numericId) &&
@@ -1277,7 +1393,7 @@ async function refreshSellerAuthentication(){
 
 
   /*
-    Recover stored access token.
+    Recover access token.
   */
 
   const storedToken =
@@ -1295,7 +1411,7 @@ async function refreshSellerAuthentication(){
 
 
   /*
-    Try existing ZYRE session first.
+    Recover session from app.js if available.
   */
 
   if(
@@ -1313,8 +1429,8 @@ async function refreshSellerAuthentication(){
 
 
   /*
-    Try the already-created ZYRE auth client,
-    but NEVER allow it to hang.
+    Try ZYRE auth client.
+    Maximum wait: 4 seconds.
   */
 
   if(!SELLER_SESSION){
@@ -1329,7 +1445,7 @@ async function refreshSellerAuthentication(){
         const result =
           await withTimeout(
             window.ZYRE_AUTH_CLIENT.auth.getSession(),
-            5000,
+            4000,
             "Authentication request timed out."
           );
 
@@ -1344,7 +1460,9 @@ async function refreshSellerAuthentication(){
             result.data.session;
 
           SELLER_ACCESS_TOKEN =
-            result.data.session.access_token || null;
+            result.data.session.access_token ||
+            SELLER_ACCESS_TOKEN ||
+            null;
 
         }
 
@@ -1353,7 +1471,7 @@ async function refreshSellerAuthentication(){
     }catch(error){
 
       console.log(
-        "ZYRE auth session unavailable:",
+        "ZYRE auth unavailable:",
         error
       );
 
@@ -1363,7 +1481,8 @@ async function refreshSellerAuthentication(){
 
 
   /*
-    Try this page's Supabase client.
+    Try this page's auth client.
+    Maximum wait: 4 seconds.
   */
 
   if(!SELLER_SESSION){
@@ -1373,7 +1492,7 @@ async function refreshSellerAuthentication(){
       const result =
         await withTimeout(
           SELLER_AUTH_CLIENT.auth.getSession(),
-          5000,
+          4000,
           "Seller authentication timed out."
         );
 
@@ -1388,14 +1507,16 @@ async function refreshSellerAuthentication(){
           result.data.session;
 
         SELLER_ACCESS_TOKEN =
-          result.data.session.access_token || null;
+          result.data.session.access_token ||
+          SELLER_ACCESS_TOKEN ||
+          null;
 
       }
 
     }catch(error){
 
       console.log(
-        "Seller Supabase session unavailable:",
+        "Seller auth unavailable:",
         error
       );
 
@@ -1405,9 +1526,8 @@ async function refreshSellerAuthentication(){
 
 
   /*
-    If seller ID is already stored, we can continue.
-    This is important because the previous version
-    could get stuck waiting for authentication.
+    If we already have seller ID and token,
+    we can continue immediately.
   */
 
   if(
@@ -1424,8 +1544,7 @@ async function refreshSellerAuthentication(){
 
 
   /*
-    Attempt seller ID recovery from authenticated
-    Supabase user if needed.
+    Try to recover seller ID from authenticated user.
   */
 
   if(
@@ -1441,20 +1560,17 @@ async function refreshSellerAuthentication(){
 
 
       const response =
-        await withTimeout(
-          fetch(
-            SELLER_SUPABASE_URL +
-            "/rest/v1/sellers" +
-            "?select=id" +
-            "&user_id=eq." +
-            encodeURIComponent(userId) +
-            "&limit=1",
-            {
-              headers:getHeaders()
-            }
-          ),
-          6000,
-          "Seller account lookup timed out."
+        await fetchWithTimeout(
+          SELLER_SUPABASE_URL +
+          "/rest/v1/sellers" +
+          "?select=id" +
+          "&user_id=eq." +
+          encodeURIComponent(userId) +
+          "&limit=1",
+          {
+            headers:getHeaders()
+          },
+          5000
         );
 
 
@@ -1509,8 +1625,22 @@ async function refreshSellerAuthentication(){
   }
 
 
-  sellerAuthenticationReady =
-    false;
+  /*
+    We still allow the seller page to identify
+    the seller if the ID exists but the token is
+    temporarily unavailable. Supabase requests will
+    still be protected by RLS.
+  */
+
+  if(SELLER_ID){
+
+    sellerAuthenticationReady =
+      true;
+
+    return true;
+
+  }
+
 
   return false;
 
@@ -1565,26 +1695,25 @@ function showAuthenticationWarning(){
 async function loadSellerInformation(){
 
   if(!SELLER_ID){
+
     return false;
+
   }
 
 
   try{
 
     const response =
-      await withTimeout(
-        fetch(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/sellers" +
-          "?id=eq." +
-          encodeURIComponent(SELLER_ID) +
-          "&select=*",
-          {
-            headers:getHeaders()
-          }
-        ),
-        7000,
-        "Seller information request timed out."
+      await fetchWithTimeout(
+        SELLER_SUPABASE_URL +
+        "/rest/v1/sellers" +
+        "?id=eq." +
+        encodeURIComponent(SELLER_ID) +
+        "&select=*",
+        {
+          headers:getHeaders()
+        },
+        6000
       );
 
 
@@ -1612,6 +1741,7 @@ async function loadSellerInformation(){
         "<div class='status error'>" +
         "Seller account could not be found." +
         "</div>";
+
 
       return false;
 
@@ -1707,13 +1837,16 @@ async function loadSellerInformation(){
 function isPaymentFromCurrentMonth(payment){
 
   if(!payment){
+
     return false;
+
   }
 
 
   if(
-    String(payment.status || "")
-      .toLowerCase() !== "paid"
+    String(
+      payment.status || ""
+    ).toLowerCase() !== "paid"
   ){
 
     return false;
@@ -1727,7 +1860,9 @@ function isPaymentFromCurrentMonth(payment){
 
 
   if(!rawDate){
+
     return false;
+
   }
 
 
@@ -1801,12 +1936,17 @@ async function getSellerRentalAccess(){
   if(!SELLER_ID){
 
     return {
+
       paid:false,
+
       payment:null,
+
       subscription:null,
+
       error:new Error(
         "Seller ID is missing."
       )
+
     };
 
   }
@@ -1815,8 +1955,8 @@ async function getSellerRentalAccess(){
   try{
 
     /*
-      IMPORTANT:
-      The rental query now has a hard timeout.
+      ONLY ONE IMPORTANT PAYMENT QUERY
+      is required to decide access.
     */
 
     const paymentUrl =
@@ -1831,15 +1971,12 @@ async function getSellerRentalAccess(){
 
 
     const paymentResponse =
-      await withTimeout(
-        fetch(
-          paymentUrl,
-          {
-            headers:getHeaders()
-          }
-        ),
-        8000,
-        "Rental payment check timed out."
+      await fetchWithTimeout(
+        paymentUrl,
+        {
+          headers:getHeaders()
+        },
+        8000
       );
 
 
@@ -1876,28 +2013,25 @@ async function getSellerRentalAccess(){
 
 
     /*
-      Subscription is optional.
-      If it fails, payment checking still works.
+      Subscription lookup is optional.
+      It can NEVER block the rental decision.
     */
 
     try{
 
       const subscriptionResponse =
-        await withTimeout(
-          fetch(
-            SELLER_SUPABASE_URL +
-            "/rest/v1/store_subscriptions" +
-            "?seller_id=eq." +
-            encodeURIComponent(SELLER_ID) +
-            "&select=id,seller_id,rental_plan_id,status" +
-            "&order=id.desc" +
-            "&limit=1",
-            {
-              headers:getHeaders()
-            }
-          ),
-          5000,
-          "Subscription lookup timed out."
+        await fetchWithTimeout(
+          SELLER_SUPABASE_URL +
+          "/rest/v1/store_subscriptions" +
+          "?seller_id=eq." +
+          encodeURIComponent(SELLER_ID) +
+          "&select=id,seller_id,rental_plan_id,status" +
+          "&order=id.desc" +
+          "&limit=1",
+          {
+            headers:getHeaders()
+          },
+          3000
         );
 
 
@@ -1922,7 +2056,7 @@ async function getSellerRentalAccess(){
     }catch(subscriptionError){
 
       console.log(
-        "Subscription lookup unavailable:",
+        "Subscription lookup skipped:",
         subscriptionError
       );
 
@@ -1939,18 +2073,28 @@ async function getSellerRentalAccess(){
 
 
       return {
+
         paid:true,
+
         payment:currentPayment,
-        subscription:SELLER_SUBSCRIPTION
+
+        subscription:
+          SELLER_SUBSCRIPTION
+
       };
 
     }
 
 
     return {
+
       paid:false,
+
       payment:null,
-      subscription:SELLER_SUBSCRIPTION
+
+      subscription:
+        SELLER_SUBSCRIPTION
+
     };
 
 
@@ -1967,10 +2111,15 @@ async function getSellerRentalAccess(){
 
 
     return {
+
       paid:false,
+
       payment:null,
+
       subscription:null,
+
       error:error
+
     };
 
   }
@@ -1997,7 +2146,9 @@ async function loadRentalSubscription(){
 
 
   if(!content){
+
     return false;
+
   }
 
 
@@ -2005,14 +2156,76 @@ async function loadRentalSubscription(){
     "Checking current-month rental payment...";
 
 
-  const result =
-    await getSellerRentalAccess();
+  let result;
+
+
+  try{
+
+    /*
+      Absolute protection:
+      this function cannot wait longer than 9 seconds.
+    */
+
+    result =
+      await withTimeout(
+        getSellerRentalAccess(),
+        9000,
+        "Rental verification timed out."
+      );
+
+  }catch(error){
+
+    console.error(
+      "Rental display check failed:",
+      error
+    );
+
+
+    SELLER_RENTAL_ACCESS =
+      false;
+
+
+    if(rentalCard){
+
+      rentalCard.className =
+        "card rental-pending";
+
+    }
+
+
+    content.innerHTML = `
+
+      <div class="status error">
+
+        ⚠️ Rental verification could not be completed.
+
+        <br><br>
+
+        Your seller dashboard remains locked
+        until the rental payment can be verified.
+
+        <br><br>
+
+        ${escapeHtml(error.message)}
+
+      </div>
+
+    `;
+
+
+    return false;
+
+  }
 
 
   if(result.paid){
 
-    rentalCard.className =
-      "card rental-active";
+    if(rentalCard){
+
+      rentalCard.className =
+        "card rental-active";
+
+    }
 
 
     const payment =
@@ -2061,7 +2274,9 @@ async function loadRentalSubscription(){
         <strong>Payment date:</strong>
         ${
           paymentDate
-            ? new Date(paymentDate).toLocaleString()
+            ? new Date(
+                paymentDate
+              ).toLocaleString()
             : "Confirmed"
         }
 
@@ -2075,8 +2290,12 @@ async function loadRentalSubscription(){
   }
 
 
-  rentalCard.className =
-    "card rental-pending";
+  if(rentalCard){
+
+    rentalCard.className =
+      "card rental-pending";
+
+  }
 
 
   content.innerHTML = `
@@ -2139,7 +2358,8 @@ function payMonthlyRental(){
   }
 
 
-  let subscriptionId = "";
+  let subscriptionId =
+    "";
 
 
   if(
@@ -2173,7 +2393,7 @@ function payMonthlyRental(){
 
     params.set(
       "rental_subscription_id",
-      subscriptionId
+      String(subscriptionId)
     );
 
   }
@@ -2200,7 +2420,7 @@ function payMonthlyRental(){
 
 
 /* =========================================================
-   CHECK AGAIN
+   CHECK RENTAL AGAIN
 ========================================================= */
 
 async function checkRentalAgain(){
@@ -2217,6 +2437,12 @@ async function checkRentalAgain(){
     );
 
 
+  const lock =
+    document.getElementById(
+      "rentalLockScreen"
+    );
+
+
   loadingText.textContent =
     "Checking your rental payment again...";
 
@@ -2224,6 +2450,15 @@ async function checkRentalAgain(){
   loading.classList.remove(
     "hidden"
   );
+
+
+  if(lock){
+
+    lock.classList.add(
+      "hidden"
+    );
+
+  }
 
 
   try{
@@ -2234,9 +2469,18 @@ async function checkRentalAgain(){
 
     if(paid){
 
+      SELLER_RENTAL_ACCESS =
+        true;
+
+
       hideRentalLock();
 
       enableSellerControls();
+
+
+      loadingText.textContent =
+        "Rental confirmed. Loading dashboard...";
+
 
       await loadProducts();
 
@@ -2244,12 +2488,32 @@ async function checkRentalAgain(){
 
       await checkNotificationStatus();
 
+
       return;
 
     }
 
 
+    SELLER_RENTAL_ACCESS =
+      false;
+
+
     showRentalLock();
+
+
+    const status =
+      document.getElementById(
+        "rentalLockStatus"
+      );
+
+
+    if(status){
+
+      status.textContent =
+        "R100 current-month rental payment is required.";
+
+    }
+
 
   }catch(error){
 
@@ -2258,12 +2522,26 @@ async function checkRentalAgain(){
       error
     );
 
+
+    SELLER_RENTAL_ACCESS =
+      false;
+
+
     showRentalLock();
 
-    document.getElementById(
-      "rentalLockStatus"
-    ).textContent =
-      "Rental verification could not be completed. The store remains locked.";
+
+    const status =
+      document.getElementById(
+        "rentalLockStatus"
+      );
+
+
+    if(status){
+
+      status.textContent =
+        "Rental verification failed. Your store remains locked. Please try again.";
+
+    }
 
   }finally{
 
@@ -2340,12 +2618,20 @@ function disableSellerControls(){
 
 
   if(addCard){
-    addCard.classList.add("hidden");
+
+    addCard.classList.add(
+      "hidden"
+    );
+
   }
 
 
   if(editCard){
-    editCard.classList.add("hidden");
+
+    editCard.classList.add(
+      "hidden"
+    );
+
   }
 
 
@@ -2355,15 +2641,27 @@ function disableSellerControls(){
       button => {
 
         const onclick =
-          button.getAttribute("onclick") || "";
+          button.getAttribute(
+            "onclick"
+          ) || "";
 
 
         if(
-          onclick.includes("addProduct") ||
-          onclick.includes("saveProduct") ||
-          onclick.includes("deleteProduct") ||
-          onclick.includes("updateOrderStatus") ||
-          onclick.includes("saveDelivery")
+          onclick.includes(
+            "addProduct"
+          ) ||
+          onclick.includes(
+            "saveProduct"
+          ) ||
+          onclick.includes(
+            "deleteProduct"
+          ) ||
+          onclick.includes(
+            "updateOrderStatus"
+          ) ||
+          onclick.includes(
+            "saveDelivery"
+          )
         ){
 
           button.disabled =
@@ -2384,7 +2682,9 @@ function disableSellerControls(){
 function enableSellerControls(){
 
   if(!SELLER_RENTAL_ACCESS){
+
     return;
+
   }
 
 
@@ -2423,11 +2723,59 @@ function enableSellerControls(){
 
 async function ensureRentalAccess(){
 
-  const result =
-    await getSellerRentalAccess();
+  try{
+
+    const result =
+      await withTimeout(
+        getSellerRentalAccess(),
+        9000,
+        "Rental verification timed out."
+      );
 
 
-  if(!result.paid){
+    if(!result.paid){
+
+      showRentalLock();
+
+
+      const status =
+        document.getElementById(
+          "rentalLockStatus"
+        );
+
+
+      if(status){
+
+        status.textContent =
+          result.error
+            ? "Rental verification failed. Store remains locked."
+            : "R100 current-month rental payment is required.";
+
+      }
+
+
+      return false;
+
+    }
+
+
+    SELLER_RENTAL_ACCESS =
+      true;
+
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "Rental security check error:",
+      error
+    );
+
+
+    SELLER_RENTAL_ACCESS =
+      false;
+
 
     showRentalLock();
 
@@ -2441,9 +2789,7 @@ async function ensureRentalAccess(){
     if(status){
 
       status.textContent =
-        result.error
-          ? "Rental verification failed. Store remains locked."
-          : "R100 current-month rental payment is required.";
+        "Rental verification failed. Store remains locked.";
 
     }
 
@@ -2451,13 +2797,6 @@ async function ensureRentalAccess(){
     return false;
 
   }
-
-
-  SELLER_RENTAL_ACCESS =
-    true;
-
-
-  return true;
 
 }
 
@@ -2469,7 +2808,9 @@ async function ensureRentalAccess(){
 async function addProduct(){
 
   if(!(await ensureRentalAccess())){
+
     return;
+
   }
 
 
@@ -2562,50 +2903,48 @@ async function addProduct(){
 
 
     const response =
-      await withTimeout(
-        fetch(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/products",
-          {
-            method:"POST",
+      await fetchWithTimeout(
+        SELLER_SUPABASE_URL +
+        "/rest/v1/products",
+        {
+          method:"POST",
 
-            headers:{
-              ...getHeaders(),
-              "Prefer":"return=representation"
-            },
+          headers:{
+            ...getHeaders(),
+            "Prefer":
+              "return=representation"
+          },
 
-            body:JSON.stringify({
+          body:JSON.stringify({
 
-              seller_id:
-                SELLER_ID,
+            seller_id:
+              SELLER_ID,
 
-              name:
-                name,
+            name:
+              name,
 
-              description:
-                description,
+            description:
+              description,
 
-              price:
-                price,
+            price:
+              price,
 
-              stock:
-                stock,
+            stock:
+              stock,
 
-              category:
-                category,
+            category:
+              category,
 
-              image_url:
-                imageUrl,
+            image_url:
+              imageUrl,
 
-              active:
-                true
+            active:
+              true
 
-            })
+          })
 
-          }
-        ),
-        8000,
-        "Adding product timed out."
+        },
+        8000
       );
 
 
@@ -2674,27 +3013,26 @@ async function addProduct(){
 async function loadProducts(){
 
   if(!SELLER_ID){
+
     return;
+
   }
 
 
   try{
 
     const response =
-      await withTimeout(
-        fetch(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/products" +
-          "?seller_id=eq." +
-          encodeURIComponent(SELLER_ID) +
-          "&select=*" +
-          "&order=id.desc",
-          {
-            headers:getHeaders()
-          }
-        ),
-        8000,
-        "Products request timed out."
+      await fetchWithTimeout(
+        SELLER_SUPABASE_URL +
+        "/rest/v1/products" +
+        "?seller_id=eq." +
+        encodeURIComponent(SELLER_ID) +
+        "&select=*" +
+        "&order=id.desc",
+        {
+          headers:getHeaders()
+        },
+        8000
       );
 
 
@@ -2812,7 +3150,10 @@ function renderProducts(){
 
                 <div>
                   Category:
-                  ${escapeHtml(product.category || "Other")}
+                  ${escapeHtml(
+                    product.category ||
+                    "Other"
+                  )}
                 </div>
 
                 <div style="margin-top:10px;">
@@ -2855,7 +3196,9 @@ function renderProducts(){
 async function editProduct(productId){
 
   if(!(await ensureRentalAccess())){
+
     return;
+
   }
 
 
@@ -2911,7 +3254,8 @@ async function editProduct(productId){
   document.getElementById(
     "editProductCategory"
   ).value =
-    product.category || "Other";
+    product.category ||
+    "Other";
 
 
   document.getElementById(
@@ -2943,7 +3287,9 @@ async function editProduct(productId){
 async function saveProduct(){
 
   if(!(await ensureRentalAccess())){
+
     return;
+
   }
 
 
@@ -2954,7 +3300,9 @@ async function saveProduct(){
 
 
   if(!productId){
+
     return;
+
   }
 
 
@@ -3000,28 +3348,26 @@ async function saveProduct(){
   try{
 
     const response =
-      await withTimeout(
-        fetch(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/products" +
-          "?id=eq." +
-          encodeURIComponent(productId) +
-          "&seller_id=eq." +
-          encodeURIComponent(SELLER_ID),
-          {
-            method:"PATCH",
+      await fetchWithTimeout(
+        SELLER_SUPABASE_URL +
+        "/rest/v1/products" +
+        "?id=eq." +
+        encodeURIComponent(productId) +
+        "&seller_id=eq." +
+        encodeURIComponent(SELLER_ID),
+        {
+          method:"PATCH",
 
-            headers:{
-              ...getHeaders(),
-              "Prefer":"return=representation"
-            },
+          headers:{
+            ...getHeaders(),
+            "Prefer":
+              "return=representation"
+          },
 
-            body:JSON.stringify(body)
+          body:JSON.stringify(body)
 
-          }
-        ),
-        8000,
-        "Product update timed out."
+        },
+        8000
       );
 
 
@@ -3076,7 +3422,9 @@ function cancelEditProduct(){
 async function deleteProduct(productId){
 
   if(!(await ensureRentalAccess())){
+
     return;
+
   }
 
 
@@ -3094,21 +3442,18 @@ async function deleteProduct(productId){
   try{
 
     const response =
-      await withTimeout(
-        fetch(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/products" +
-          "?id=eq." +
-          encodeURIComponent(productId) +
-          "&seller_id=eq." +
-          encodeURIComponent(SELLER_ID),
-          {
-            method:"DELETE",
-            headers:getHeaders()
-          }
-        ),
-        8000,
-        "Product deletion timed out."
+      await fetchWithTimeout(
+        SELLER_SUPABASE_URL +
+        "/rest/v1/products" +
+        "?id=eq." +
+        encodeURIComponent(productId) +
+        "&seller_id=eq." +
+        encodeURIComponent(SELLER_ID),
+        {
+          method:"DELETE",
+          headers:getHeaders()
+        },
+        8000
       );
 
 
@@ -3150,17 +3495,14 @@ async function loadCustomerProfiles(){
   try{
 
     const response =
-      await withTimeout(
-        fetch(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/profiles" +
-          "?select=*",
-          {
-            headers:getHeaders()
-          }
-        ),
-        7000,
-        "Customer profiles request timed out."
+      await fetchWithTimeout(
+        SELLER_SUPABASE_URL +
+        "/rest/v1/profiles" +
+        "?select=*",
+        {
+          headers:getHeaders()
+        },
+        7000
       );
 
 
@@ -3171,13 +3513,15 @@ async function loadCustomerProfiles(){
 
     }else{
 
-      SELLER_PROFILES = [];
+      SELLER_PROFILES =
+        [];
 
     }
 
   }catch(error){
 
-    SELLER_PROFILES = [];
+    SELLER_PROFILES =
+      [];
 
   }
 
@@ -3193,17 +3537,14 @@ async function loadDeliveries(){
   try{
 
     const response =
-      await withTimeout(
-        fetch(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/deliveries" +
-          "?select=*",
-          {
-            headers:getHeaders()
-          }
-        ),
-        7000,
-        "Deliveries request timed out."
+      await fetchWithTimeout(
+        SELLER_SUPABASE_URL +
+        "/rest/v1/deliveries" +
+        "?select=*",
+        {
+          headers:getHeaders()
+        },
+        7000
       );
 
 
@@ -3214,13 +3555,15 @@ async function loadDeliveries(){
 
     }else{
 
-      SELLER_DELIVERIES = [];
+      SELLER_DELIVERIES =
+        [];
 
     }
 
   }catch(error){
 
-    SELLER_DELIVERIES = [];
+    SELLER_DELIVERIES =
+      [];
 
   }
 
@@ -3234,7 +3577,9 @@ async function loadDeliveries(){
 function getCustomerProfile(customerId){
 
   if(!customerId){
+
     return null;
+
   }
 
 
@@ -3262,10 +3607,14 @@ function getOrderDelivery(orderId){
    LOAD ORDERS
 ========================================================= */
 
-async function loadOrders(showLoading=false){
+async function loadOrders(
+  showLoading=false
+){
 
   if(!SELLER_ID){
+
     return;
+
   }
 
 
@@ -3293,19 +3642,16 @@ async function loadOrders(showLoading=false){
 
 
     const productsResponse =
-      await withTimeout(
-        fetch(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/products" +
-          "?seller_id=eq." +
-          encodeURIComponent(SELLER_ID) +
-          "&select=id,name,price,seller_id",
-          {
-            headers:getHeaders()
-          }
-        ),
-        7000,
-        "Seller products request timed out."
+      await fetchWithTimeout(
+        SELLER_SUPABASE_URL +
+        "/rest/v1/products" +
+        "?seller_id=eq." +
+        encodeURIComponent(SELLER_ID) +
+        "&select=id,name,price,seller_id",
+        {
+          headers:getHeaders()
+        },
+        7000
       );
 
 
@@ -3331,7 +3677,8 @@ async function loadOrders(showLoading=false){
 
     if(!sellerProductIds.length){
 
-      SELLER_ORDERS = [];
+      SELLER_ORDERS =
+        [];
 
       renderOrders();
 
@@ -3343,20 +3690,17 @@ async function loadOrders(showLoading=false){
 
 
     const orderItemsResponse =
-      await withTimeout(
-        fetch(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/order_items" +
-          "?product_id=in.(" +
-          sellerProductIds.join(",") +
-          ")" +
-          "&select=*",
-          {
-            headers:getHeaders()
-          }
-        ),
-        7000,
-        "Order items request timed out."
+      await fetchWithTimeout(
+        SELLER_SUPABASE_URL +
+        "/rest/v1/order_items" +
+        "?product_id=in.(" +
+        sellerProductIds.join(",") +
+        ")" +
+        "&select=*",
+        {
+          headers:getHeaders()
+        },
+        7000
       );
 
 
@@ -3386,7 +3730,8 @@ async function loadOrders(showLoading=false){
 
     if(!sellerOrderIds.length){
 
-      SELLER_ORDERS = [];
+      SELLER_ORDERS =
+        [];
 
       renderOrders();
 
@@ -3398,21 +3743,18 @@ async function loadOrders(showLoading=false){
 
 
     const ordersResponse =
-      await withTimeout(
-        fetch(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/orders" +
-          "?id=in.(" +
-          sellerOrderIds.join(",") +
-          ")" +
-          "&select=*" +
-          "&order=id.desc",
-          {
-            headers:getHeaders()
-          }
-        ),
-        7000,
-        "Orders request timed out."
+      await fetchWithTimeout(
+        SELLER_SUPABASE_URL +
+        "/rest/v1/orders" +
+        "?id=in.(" +
+        sellerOrderIds.join(",") +
+        ")" +
+        "&select=*" +
+        "&order=id.desc",
+        {
+          headers:getHeaders()
+        },
+        7000
       );
 
 
@@ -3515,7 +3857,8 @@ function updateOrderStats(){
       orders.filter(
         order =>
           String(
-            order.status || "Pending"
+            order.status ||
+            "Pending"
           ).toLowerCase() ===
           status.toLowerCase()
       ).length;
@@ -3554,14 +3897,20 @@ function updateOrderStats(){
 function orderBadge(status){
 
   const clean =
-    String(status || "Pending");
+    String(
+      status ||
+      "Pending"
+    );
 
 
   const className =
     "badge-" +
     clean
       .toLowerCase()
-      .replace(/\s+/g,"-");
+      .replace(
+        /\s+/g,
+        "-"
+      );
 
 
   return `
@@ -3605,7 +3954,8 @@ function renderOrders(){
       orders.filter(
         order =>
           String(
-            order.status || "Pending"
+            order.status ||
+            "Pending"
           ).toLowerCase() ===
           filter.toLowerCase()
       );
@@ -3825,35 +4175,60 @@ function renderOrders(){
 
                 <option
                   value="Pending"
-                  ${String(order.status).toLowerCase()==="pending" ? "selected" : ""}
+                  ${
+                    String(order.status)
+                      .toLowerCase()==="pending"
+                    ? "selected"
+                    : ""
+                  }
                 >
                   Pending
                 </option>
 
                 <option
                   value="Processing"
-                  ${String(order.status).toLowerCase()==="processing" ? "selected" : ""}
+                  ${
+                    String(order.status)
+                      .toLowerCase()==="processing"
+                    ? "selected"
+                    : ""
+                  }
                 >
                   Processing
                 </option>
 
                 <option
                   value="Shipped"
-                  ${String(order.status).toLowerCase()==="shipped" ? "selected" : ""}
+                  ${
+                    String(order.status)
+                      .toLowerCase()==="shipped"
+                    ? "selected"
+                    : ""
+                  }
                 >
                   Shipped
                 </option>
 
                 <option
                   value="Delivered"
-                  ${String(order.status).toLowerCase()==="delivered" ? "selected" : ""}
+                  ${
+                    String(order.status)
+                      .toLowerCase()==="delivered"
+                    ? "selected"
+                    : ""
+                  }
                 >
                   Delivered
                 </option>
 
                 <option
                   value="Cancelled"
-                  ${String(order.status).toLowerCase()==="cancelled" ? "selected" : ""}
+                  ${
+                    String(order.status)
+                      .toLowerCase()==="cancelled"
+                    ? "selected"
+                    : ""
+                  }
                 >
                   Cancelled
                 </option>
@@ -3885,7 +4260,8 @@ function renderOrders(){
                   id="delivery-name-${Number(order.id)}"
                   type="text"
                   value="${escapeHtml(
-                    delivery?.delivery_person_name || ""
+                    delivery?.delivery_person_name ||
+                    ""
                   )}"
                   placeholder="e.g. Thabo M"
                 >
@@ -3899,7 +4275,8 @@ function renderOrders(){
                   id="delivery-phone-${Number(order.id)}"
                   type="text"
                   value="${escapeHtml(
-                    delivery?.delivery_person_phone || ""
+                    delivery?.delivery_person_phone ||
+                    ""
                   )}"
                   placeholder="e.g. 0812345678"
                 >
@@ -3913,7 +4290,8 @@ function renderOrders(){
                   id="delivery-tracking-${Number(order.id)}"
                   type="text"
                   value="${escapeHtml(
-                    delivery?.tracking_number || ""
+                    delivery?.tracking_number ||
+                    ""
                   )}"
                   placeholder="e.g. ZYRE 002"
                 >
@@ -3927,7 +4305,8 @@ function renderOrders(){
                   id="delivery-date-${Number(order.id)}"
                   type="date"
                   value="${escapeHtml(
-                    delivery?.estimated_delivery || ""
+                    delivery?.estimated_delivery ||
+                    ""
                   )}"
                 >
 
@@ -3943,28 +4322,56 @@ function renderOrders(){
 
                   <option
                     value="Pending"
-                    ${String(delivery?.status || "Pending").toLowerCase()==="pending" ? "selected" : ""}
+                    ${
+                      String(
+                        delivery?.status ||
+                        "Pending"
+                      ).toLowerCase()==="pending"
+                      ? "selected"
+                      : ""
+                    }
                   >
                     Pending
                   </option>
 
                   <option
                     value="Processing"
-                    ${String(delivery?.status || "").toLowerCase()==="processing" ? "selected" : ""}
+                    ${
+                      String(
+                        delivery?.status ||
+                        ""
+                      ).toLowerCase()==="processing"
+                      ? "selected"
+                      : ""
+                    }
                   >
                     Processing
                   </option>
 
                   <option
                     value="Shipped"
-                    ${String(delivery?.status || "").toLowerCase()==="shipped" ? "selected" : ""}
+                    ${
+                      String(
+                        delivery?.status ||
+                        ""
+                      ).toLowerCase()==="shipped"
+                      ? "selected"
+                      : ""
+                    }
                   >
                     Shipped
                   </option>
 
                   <option
                     value="Delivered"
-                    ${String(delivery?.status || "").toLowerCase()==="delivered" ? "selected" : ""}
+                    ${
+                      String(
+                        delivery?.status ||
+                        ""
+                      ).toLowerCase()==="delivered"
+                      ? "selected"
+                      : ""
+                    }
                   >
                     Delivered
                   </option>
@@ -4002,18 +4409,23 @@ function renderOrders(){
 async function updateOrderStatus(orderId){
 
   if(!(await ensureRentalAccess())){
+
     return;
+
   }
 
 
   const select =
     document.getElementById(
-      "status-" + orderId
+      "status-" +
+      orderId
     );
 
 
   if(!select){
+
     return;
+
   }
 
 
@@ -4024,28 +4436,26 @@ async function updateOrderStatus(orderId){
   try{
 
     const response =
-      await withTimeout(
-        fetch(
-          SELLER_SUPABASE_URL +
-          "/rest/v1/orders" +
-          "?id=eq." +
-          encodeURIComponent(orderId),
-          {
-            method:"PATCH",
+      await fetchWithTimeout(
+        SELLER_SUPABASE_URL +
+        "/rest/v1/orders" +
+        "?id=eq." +
+        encodeURIComponent(orderId),
+        {
+          method:"PATCH",
 
-            headers:{
-              ...getHeaders(),
-              "Prefer":"return=representation"
-            },
+          headers:{
+            ...getHeaders(),
+            "Prefer":
+              "return=representation"
+          },
 
-            body:JSON.stringify({
-              status:status
-            })
+          body:JSON.stringify({
+            status:status
+          })
 
-          }
-        ),
-        8000,
-        "Order update timed out."
+        },
+        8000
       );
 
 
@@ -4089,44 +4499,53 @@ async function updateOrderStatus(orderId){
 async function saveDelivery(orderId){
 
   if(!(await ensureRentalAccess())){
+
     return;
+
   }
 
 
   const name =
     document.getElementById(
-      "delivery-name-" + orderId
+      "delivery-name-" +
+      orderId
     ).value.trim();
 
 
   const phone =
     document.getElementById(
-      "delivery-phone-" + orderId
+      "delivery-phone-" +
+      orderId
     ).value.trim();
 
 
   const tracking =
     document.getElementById(
-      "delivery-tracking-" + orderId
+      "delivery-tracking-" +
+      orderId
     ).value.trim();
 
 
   const estimated =
     document.getElementById(
-      "delivery-date-" + orderId
+      "delivery-date-" +
+      orderId
     ).value;
 
 
   const status =
     document.getElementById(
-      "delivery-status-" + orderId
+      "delivery-status-" +
+      orderId
     ).value;
 
 
   try{
 
     const existing =
-      getOrderDelivery(orderId);
+      getOrderDelivery(
+        orderId
+      );
 
 
     const body = {
@@ -4144,7 +4563,8 @@ async function saveDelivery(orderId){
         tracking,
 
       estimated_delivery:
-        estimated || null,
+        estimated ||
+        null,
 
       status:
         status
@@ -4155,52 +4575,53 @@ async function saveDelivery(orderId){
     let response;
 
 
-    if(existing && existing.id){
+    if(
+      existing &&
+      existing.id
+    ){
 
       response =
-        await withTimeout(
-          fetch(
-            SELLER_SUPABASE_URL +
-            "/rest/v1/deliveries" +
-            "?id=eq." +
-            encodeURIComponent(existing.id),
-            {
-              method:"PATCH",
-
-              headers:{
-                ...getHeaders(),
-                "Prefer":"return=representation"
-              },
-
-              body:JSON.stringify(body)
-
-            }
+        await fetchWithTimeout(
+          SELLER_SUPABASE_URL +
+          "/rest/v1/deliveries" +
+          "?id=eq." +
+          encodeURIComponent(
+            existing.id
           ),
-          8000,
-          "Delivery update timed out."
+          {
+            method:"PATCH",
+
+            headers:{
+              ...getHeaders(),
+              "Prefer":
+                "return=representation"
+            },
+
+            body:JSON.stringify(body)
+
+          },
+          8000
         );
 
     }else{
 
       response =
-        await withTimeout(
-          fetch(
-            SELLER_SUPABASE_URL +
-            "/rest/v1/deliveries",
-            {
-              method:"POST",
+        await fetchWithTimeout(
+          SELLER_SUPABASE_URL +
+          "/rest/v1/deliveries",
+          {
+            method:"POST",
 
-              headers:{
-                ...getHeaders(),
-                "Prefer":"return=representation"
-              },
+            headers:{
+              ...getHeaders(),
+              "Prefer":
+                "return=representation"
+            },
 
-              body:JSON.stringify(body)
+            body:JSON.stringify(body)
 
-            }
-          ),
-          8000,
-          "Delivery creation timed out."
+          },
+          8000
         );
 
     }
@@ -4259,7 +4680,9 @@ async function enableSellerNotifications(){
     }
 
 
-    if(!("Notification" in window)){
+    if(
+      !("Notification" in window)
+    ){
 
       alert(
         "This browser does not support notifications."
@@ -4318,11 +4741,15 @@ async function checkNotificationStatus(){
 
 
   if(!element){
+
     return;
+
   }
 
 
-  if(!("Notification" in window)){
+  if(
+    !("Notification" in window)
+  ){
 
     element.className =
       "status warning";
@@ -4335,7 +4762,10 @@ async function checkNotificationStatus(){
   }
 
 
-  if(Notification.permission === "granted"){
+  if(
+    Notification.permission ===
+    "granted"
+  ){
 
     element.className =
       "status success";
@@ -4344,7 +4774,8 @@ async function checkNotificationStatus(){
       "✅ Notifications are enabled on this device.";
 
   }else if(
-    Notification.permission === "denied"
+    Notification.permission ===
+    "denied"
   ){
 
     element.className =
@@ -4436,15 +4867,24 @@ async function startSellerDashboard(){
 
 
   /*
-    HARD SAFETY TIMER.
+    SAFETY TIMER.
 
-    Even if something unexpected happens,
-    the loading screen cannot remain forever.
+    This guarantees the black loading screen
+    disappears even if an unexpected JavaScript
+    operation gets stuck.
   */
+
+  let safetyTimerFinished =
+    false;
+
 
   const absoluteSafetyTimer =
     setTimeout(
       () => {
+
+        safetyTimerFinished =
+          true;
+
 
         console.warn(
           "ZYRE rental startup safety timeout."
@@ -4458,6 +4898,10 @@ async function startSellerDashboard(){
 
         dashboard.style.visibility =
           "visible";
+
+
+        SELLER_RENTAL_ACCESS =
+          false;
 
 
         showRentalLock();
@@ -4488,7 +4932,7 @@ async function startSellerDashboard(){
 
 
     /*
-      Authentication itself is protected by timeouts.
+      Authentication has its own limits.
     */
 
     const authenticated =
@@ -4509,21 +4953,41 @@ async function startSellerDashboard(){
       showRentalLock();
 
 
-      document.getElementById(
-        "rentalLockStatus"
-      ).textContent =
-        "Seller login could not be confirmed. Please return to the marketplace and log in again.";
+      const status =
+        document.getElementById(
+          "rentalLockStatus"
+        );
+
+
+      if(status){
+
+        status.textContent =
+          "Seller login could not be confirmed. Please return to the marketplace and log in again.";
+
+      }
+
 
       return;
 
     }
 
 
-    loadingText.textContent =
-      "Loading your seller account...";
+    /*
+      IMPORTANT:
+      Seller information is NOT allowed to block
+      rental verification anymore.
 
+      We start it in the background.
+    */
 
-    await loadSellerInformation();
+    loadSellerInformation()
+      .catch(
+        error =>
+          console.log(
+            "Background seller information error:",
+            error
+          )
+      );
 
 
     loadingText.textContent =
@@ -4531,20 +4995,67 @@ async function startSellerDashboard(){
 
 
     /*
-      Rental check is protected by its own timeout.
+      THIS IS THE MAIN FIX.
+
+      Rental verification has a hard 9.5 second limit.
     */
 
-    const rentalPaid =
-      await withTimeout(
-        loadRentalSubscription(),
-        9500,
-        "Rental verification timed out."
+    let rentalPaid = false;
+
+
+    try{
+
+      rentalPaid =
+        await withTimeout(
+          loadRentalSubscription(),
+          9500,
+          "Rental verification timed out."
+        );
+
+    }catch(rentalError){
+
+      console.error(
+        "Rental verification timeout:",
+        rentalError
       );
 
 
+      rentalPaid =
+        false;
+
+
+      SELLER_RENTAL_ACCESS =
+        false;
+
+
+      const status =
+        document.getElementById(
+          "rentalLockStatus"
+        );
+
+
+      if(status){
+
+        status.textContent =
+          "Rental verification timed out. Please tap Check Payment Again.";
+
+      }
+
+    }
+
+
+    /*
+      RENTAL NOT PAID
+    */
+
     if(!rentalPaid){
 
+      SELLER_RENTAL_ACCESS =
+        false;
+
+
       showRentalLock();
+
 
       return;
 
@@ -4552,8 +5063,7 @@ async function startSellerDashboard(){
 
 
     /*
-      Rental paid.
-      Unlock dashboard.
+      RENTAL PAID
     */
 
     SELLER_RENTAL_ACCESS =
@@ -4569,11 +5079,20 @@ async function startSellerDashboard(){
       "Loading your products and orders...";
 
 
-    await loadProducts();
+    /*
+      These are now loaded AFTER the rental
+      decision has already been made.
+    */
 
-    await loadOrders(true);
+    await Promise.allSettled([
 
-    await checkNotificationStatus();
+      loadProducts(),
+
+      loadOrders(true),
+
+      checkNotificationStatus()
+
+    ]);
 
 
     console.log(
@@ -4589,13 +5108,25 @@ async function startSellerDashboard(){
     );
 
 
+    SELLER_RENTAL_ACCESS =
+      false;
+
+
     showRentalLock();
 
 
-    document.getElementById(
-      "rentalLockStatus"
-    ).textContent =
-      "⚠️ Rental verification could not be completed. Your store remains locked for safety. Tap Check Payment Again.";
+    const status =
+      document.getElementById(
+        "rentalLockStatus"
+      );
+
+
+    if(status){
+
+      status.textContent =
+        "⚠️ Rental verification could not be completed. Your store remains locked. Tap Check Payment Again.";
+
+    }
 
 
   }finally{
@@ -4605,6 +5136,10 @@ async function startSellerDashboard(){
     );
 
 
+    /*
+      ALWAYS remove the loading screen.
+    */
+
     loading.classList.add(
       "hidden"
     );
@@ -4612,6 +5147,13 @@ async function startSellerDashboard(){
 
     dashboard.style.visibility =
       "visible";
+
+
+    if(safetyTimerFinished){
+
+      showRentalLock();
+
+    }
 
   }
 
@@ -4633,7 +5175,11 @@ setInterval(
       try{
 
         const rental =
-          await getSellerRentalAccess();
+          await withTimeout(
+            getSellerRentalAccess(),
+            9000,
+            "Automatic rental check timed out."
+          );
 
 
         if(!rental.paid){
@@ -4641,9 +5187,12 @@ setInterval(
           SELLER_RENTAL_ACCESS =
             false;
 
+
           showRentalLock();
 
+
           await loadRentalSubscription();
+
 
           return;
 
@@ -4652,6 +5201,7 @@ setInterval(
 
         await loadOrders(false);
 
+
       }catch(error){
 
         console.log(
@@ -4659,10 +5209,26 @@ setInterval(
           error
         );
 
+
         SELLER_RENTAL_ACCESS =
           false;
 
+
         showRentalLock();
+
+
+        const status =
+          document.getElementById(
+            "rentalLockStatus"
+          );
+
+
+        if(status){
+
+          status.textContent =
+            "Rental verification could not be completed. Store remains locked.";
+
+        }
 
       }
 
