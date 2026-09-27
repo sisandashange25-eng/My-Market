@@ -4033,6 +4033,12 @@ async function saveZYREPushSubscription(
       };
 
 
+      /*
+        FIRST:
+        Try Supabase UPSERT using endpoint as
+        the conflict column.
+      */
+
       const customerResponse =
         await fetch(
 
@@ -4074,33 +4080,116 @@ async function saveZYREPushSubscription(
         );
 
 
-      if (!customerResponse.ok) {
-
-        console.warn(
-          "Customer notification subscription could not be saved:",
-          await customerResponse.text()
-        );
-
-      } else {
+      if (customerResponse.ok) {
 
         console.log(
           "✅ ZYRE customer notification subscription saved."
         );
 
+      } else {
+
+        const customerErrorText =
+          await customerResponse.text();
+
+
+        console.warn(
+          "Customer notification subscription upsert returned an error:",
+          customerErrorText
+        );
+
+
+        /*
+          FALLBACK:
+          If Supabase still reports that the endpoint
+          already exists, update the existing row.
+        */
+
+        const updateResponse =
+          await fetch(
+
+            SUPABASE_URL +
+            "/rest/v1/notification_subscriptions?endpoint=eq." +
+            encodeURIComponent(
+              endpoint
+            ),
+
+            {
+
+              method:
+                "PATCH",
+
+              headers: {
+
+                "apikey":
+                  SUPABASE_KEY,
+
+                "Authorization":
+                  "Bearer " +
+                  (
+                    window.ZYRE_CURRENT_SESSION?.access_token ||
+                    SUPABASE_KEY
+                  ),
+
+                "Content-Type":
+                  "application/json",
+
+                "Prefer":
+                  "return=minimal"
+
+              },
+
+              body:
+                JSON.stringify({
+
+                  user_id:
+                    user.id,
+
+                  phone:
+                    profile?.phone || null,
+
+                  p256dh:
+                    subscriptionJson.keys?.p256dh || "",
+
+                  auth:
+                    subscriptionJson.keys?.auth || ""
+
+                })
+
+            }
+
+          );
+
+
+        if (updateResponse.ok) {
+
+          console.log(
+            "✅ Existing ZYRE customer notification subscription updated."
+          );
+
+        } else {
+
+          console.warn(
+            "Customer notification subscription update also failed:",
+            await updateResponse.text()
+          );
+
+        }
+
       }
 
     } catch (customerError) {
+
+      /*
+        IMPORTANT:
+        Customer notification database problems must
+        NEVER stop the notification subscription itself
+        and must NEVER break seller notifications.
+      */
 
       console.warn(
         "Customer notification subscription save failed:",
         customerError
       );
-
-      /*
-        IMPORTANT:
-        Customer subscription failure must NOT
-        break the existing seller notification system.
-      */
 
     }
 
@@ -4280,8 +4369,11 @@ async function saveZYREPushSubscription(
 
 
   /*
-    The subscription itself was successfully created,
-    so return it even if one database save had an issue.
+    The browser push subscription itself was
+    successfully created.
+
+    Database problems above are intentionally
+    non-blocking.
   */
 
   return subscription;
