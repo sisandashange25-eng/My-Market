@@ -28,10 +28,16 @@ let cart = [];
 /* =========================================================
 RENTAL SYSTEM
 ZYRE STORE RENTAL = R100 PER CALENDAR MONTH
+
+IMPORTANT:
+PAYSTACK IS NOW USED FOR SELLER RENTAL PAYMENTS.
+
+The old Google Apps Script / PayFast rental system
+has been completely removed from this file.
 ========================================================= */
 
-const ZYRE_RENTAL_PAYMENT_URL =
-"https://script.google.com/macros/s/AKfycby9wxW_NnME16qSiZrCOC4onVG7vkqxohfw1LABcn-9IaAE-57-7jqNwNDxuj63iqje/exec";
+const ZYRE_RENTAL_PAYSTACK_URL =
+"https://gaccizzlwswwynattgda.supabase.co/functions/v1/rental-paystack";
 
 const ZYRE_RENTAL_AMOUNT = 100;
 
@@ -39,19 +45,6 @@ const ZYRE_RENTAL_AMOUNT = 100;
 /* =========================================================
 RENTAL MONTH HELPERS
 ========================================================= */
-
-/*
-  Returns the beginning of the current calendar month
-  using the browser's local timezone.
-
-  For your South African marketplace this means:
-
-  September 2026:
-  2026-09-01 00:00:00 +02:00
-
-  October 2026:
-  2026-10-01 00:00:00 +02:00
-*/
 
 function getZYRECurrentMonthRange() {
 
@@ -86,7 +79,6 @@ function getZYRECurrentMonthRange() {
       0
     );
 
-
   return {
 
     start:
@@ -120,7 +112,6 @@ async function getZYRESellerSubscription(
     return null;
 
   }
-
 
   try {
 
@@ -157,7 +148,6 @@ async function getZYRESellerSubscription(
 
       );
 
-
     if (!response.ok) {
 
       console.warn(
@@ -169,10 +159,8 @@ async function getZYRESellerSubscription(
 
     }
 
-
     const subscriptions =
       await response.json();
-
 
     if (
       !Array.isArray(
@@ -184,7 +172,6 @@ async function getZYRESellerSubscription(
       return null;
 
     }
-
 
     return subscriptions[0];
 
@@ -205,19 +192,6 @@ async function getZYRESellerSubscription(
 /* =========================================================
 CHECK WHETHER SELLER PAID THIS MONTH
 ========================================================= */
-
-/*
-  IMPORTANT:
-
-  A rental payment only unlocks a store when:
-
-  1. seller_id matches
-  2. status = paid
-  3. created_at belongs to the CURRENT calendar month
-
-  An old paid payment therefore cannot unlock the store
-  in a new month.
-*/
 
 async function getZYRESellerRentalAccess(
   sellerId,
@@ -246,7 +220,6 @@ async function getZYRESellerRentalAccess(
 
   };
 
-
   if (!sellerId) {
 
     result.reason =
@@ -256,14 +229,11 @@ async function getZYRESellerRentalAccess(
 
   }
 
-
   const monthRange =
     getZYRECurrentMonthRange();
 
-
   result.month =
     monthRange;
-
 
   try {
 
@@ -276,7 +246,6 @@ async function getZYRESellerRentalAccess(
         sellerId,
         accessToken
       );
-
 
     result.subscription =
       subscription;
@@ -329,25 +298,15 @@ async function getZYRESellerRentalAccess(
 
       );
 
-
     if (!paymentResponse.ok) {
 
       const errorText =
         await paymentResponse.text();
 
-
       console.error(
         "Rental payment check failed:",
         errorText
       );
-
-
-      /*
-        FAIL CLOSED.
-
-        If we cannot verify payment,
-        the store is NOT considered paid.
-      */
 
       result.paid =
         false;
@@ -359,10 +318,8 @@ async function getZYRESellerRentalAccess(
 
     }
 
-
     const payments =
       await paymentResponse.json();
-
 
     if (
       !Array.isArray(
@@ -381,15 +338,8 @@ async function getZYRESellerRentalAccess(
 
     }
 
-
     const payment =
       payments[0];
-
-
-    /*
-      Extra protection:
-      make sure the payment really says paid.
-    */
 
     if (
       String(
@@ -406,7 +356,6 @@ async function getZYRESellerRentalAccess(
       return result;
 
     }
-
 
     result.paid =
       true;
@@ -426,13 +375,6 @@ async function getZYRESellerRentalAccess(
       error
     );
 
-
-    /*
-      FAIL CLOSED.
-      Never accidentally unlock a store because
-      the rental check failed.
-    */
-
     result.paid =
       false;
 
@@ -447,79 +389,239 @@ async function getZYRESellerRentalAccess(
 
 
 /* =========================================================
-BUILD RENTAL PAYMENT URL
+INITIALIZE SELLER RENTAL WITH PAYSTACK
+
+This replaces the old PayFast URL redirect.
 ========================================================= */
 
-function buildZYRERentalPaymentUrl(
+async function initializeZYRERentalPaystack(
   sellerId,
-  subscriptionId,
-  storeName
+  email
 ) {
 
-  return (
+  if (!sellerId) {
 
-    ZYRE_RENTAL_PAYMENT_URL +
+    throw new Error(
+      "Seller ID is missing."
+    );
 
-    "?amount=" +
-    encodeURIComponent(
-      ZYRE_RENTAL_AMOUNT.toFixed(2)
-    ) +
+  }
 
-    "&item_name=" +
-    encodeURIComponent(
-      "ZYRE Store Rental - " +
-      (
-        storeName ||
-        "Store"
-      )
-    ) +
+  if (
+    !email ||
+    !String(email).trim()
+  ) {
 
-    "&rental_subscription_id=" +
-    encodeURIComponent(
-      subscriptionId || ""
-    ) +
+    throw new Error(
+      "Seller email is missing."
+    );
 
-    "&seller_id=" +
-    encodeURIComponent(
-      sellerId
-    ) +
+  }
 
-    "&payment_type=rental"
+  const response =
+    await fetch(
 
-  );
+      ZYRE_RENTAL_PAYSTACK_URL,
+
+      {
+
+        method:
+          "POST",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Content-Type":
+            "application/json"
+
+        },
+
+        body:
+          JSON.stringify({
+
+            action:
+              "initialize",
+
+            seller_id:
+              Number(sellerId),
+
+            email:
+              String(email).trim()
+
+          })
+
+        }
+
+      );
+
+  const text =
+    await response.text();
+
+  let data = null;
+
+  try {
+
+    data =
+      JSON.parse(
+        text
+      );
+
+  } catch (error) {
+
+    console.error(
+      "Rental Paystack response was not JSON:",
+      text
+    );
+
+  }
+
+  if (
+    !response.ok
+  ) {
+
+    throw new Error(
+
+      data?.error ||
+      data?.message ||
+      text ||
+      "Paystack rental initialization failed."
+
+    );
+
+  }
+
+  if (
+    !data ||
+    !data.success ||
+    !data.authorization_url
+  ) {
+
+    throw new Error(
+
+      data?.error ||
+      "Paystack did not return a rental payment page."
+
+    );
+
+  }
+
+  if (
+    data.reference
+  ) {
+
+    localStorage.setItem(
+      "zyre_rental_reference",
+      data.reference
+    );
+
+  }
+
+  return data;
 
 }
 
 
 /* =========================================================
 GO TO RENTAL PAYMENT
+
+PAYSTACK ONLY
 ========================================================= */
 
 async function redirectSellerToRentalPayment(
   sellerId,
   storeName,
-  accessToken
+  accessToken,
+  sellerEmail
 ) {
 
   try {
 
-    const subscription =
-      await getZYRESellerSubscription(
-        sellerId,
-        accessToken
+    let email =
+      sellerEmail ||
+      localStorage.getItem(
+        "zava_seller_email"
+      ) ||
+      "";
+
+    if (!email) {
+
+      const sellerResponse =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/sellers?id=eq." +
+          encodeURIComponent(
+            sellerId
+          ) +
+          "&select=id,email,store_name",
+
+          {
+
+            method:
+              "GET",
+
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                (
+                  accessToken ||
+                  SUPABASE_KEY
+                )
+
+            }
+
+          }
+
+        );
+
+      if (
+        sellerResponse.ok
+      ) {
+
+        const sellers =
+          await sellerResponse.json();
+
+        if (
+          Array.isArray(sellers) &&
+          sellers.length
+        ) {
+
+          email =
+            sellers[0].email ||
+            "";
+
+        }
+
+      }
+
+    }
+
+    if (
+      !email ||
+      !String(email).trim()
+    ) {
+
+      alert(
+
+        "Your monthly rental payment is required, but your seller email could not be found.\n\n" +
+        "Please log in again."
+
       );
 
+      return false;
 
-    const subscriptionId =
-      subscription?.id || "";
+    }
 
-
-    const paymentUrl =
-      buildZYRERentalPaymentUrl(
-        sellerId,
-        subscriptionId,
-        storeName
-      );
+    localStorage.setItem(
+      "zava_seller_email",
+      String(email).trim()
+    );
 
 
     alert(
@@ -532,30 +634,36 @@ async function redirectSellerToRentalPayment(
       ZYRE_RENTAL_AMOUNT.toFixed(2) +
       "\n\n" +
 
-      "You will now be taken to the rental payment page."
+      "You will now be taken to secure Paystack checkout."
 
     );
 
 
-    window.location.href =
-      paymentUrl;
+    const paymentData =
+      await initializeZYRERentalPaystack(
+        sellerId,
+        email
+      );
 
+
+    window.location.href =
+      paymentData.authorization_url;
 
     return true;
 
   } catch (error) {
 
     console.error(
-      "Could not redirect seller to rental payment:",
+      "Could not open Paystack rental payment:",
       error
     );
 
-
     alert(
-      "Your monthly rental payment is required, but the payment page could not be opened.\n\n" +
-      error.message
-    );
 
+      "Your monthly rental payment is required, but Paystack could not be opened.\n\n" +
+      error.message
+
+    );
 
     return false;
 
@@ -565,15 +673,161 @@ async function redirectSellerToRentalPayment(
 
 
 /* =========================================================
-CHECK CART SELLERS' RENTAL PAYMENTS
+VERIFY RENTAL PAYMENT FROM PAYSTACK CALLBACK
+
+This is also available to seller.html if needed.
 ========================================================= */
 
-/*
-  This checks every seller represented in the cart.
+async function verifyZYRERentalPayment(
+  reference
+) {
 
-  If even ONE seller has not paid the current month,
-  checkout is stopped.
-*/
+  if (
+    !reference
+  ) {
+
+    return {
+
+      success:
+        false,
+
+      paid:
+        false,
+
+      error:
+        "Payment reference is missing."
+
+    };
+
+  }
+
+  try {
+
+    const response =
+      await fetch(
+
+        ZYRE_RENTAL_PAYSTACK_URL,
+
+        {
+
+          method:
+            "POST",
+
+          headers: {
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              action:
+                "verify",
+
+              reference:
+                reference
+
+            })
+
+          }
+
+        );
+
+    const text =
+      await response.text();
+
+    let data = null;
+
+    try {
+
+      data =
+        JSON.parse(
+          text
+        );
+
+    } catch (error) {
+
+      console.error(
+        "Rental verification response was not JSON:",
+        text
+      );
+
+    }
+
+    if (
+      response.ok &&
+      data?.success &&
+      data?.paid
+    ) {
+
+      localStorage.removeItem(
+        "zyre_rental_reference"
+      );
+
+      return {
+
+        success:
+          true,
+
+        paid:
+          true,
+
+        data:
+          data
+
+      };
+
+    }
+
+    return {
+
+      success:
+        false,
+
+      paid:
+        false,
+
+      error:
+        data?.error ||
+        data?.message ||
+        text ||
+        "Rental payment could not be verified."
+
+    };
+
+  } catch (error) {
+
+    console.error(
+      "Rental payment verification failed:",
+      error
+    );
+
+    return {
+
+      success:
+        false,
+
+      paid:
+        false,
+
+      error:
+        error.message
+
+    };
+
+  }
+
+}
+
+
+/* =========================================================
+CHECK CART SELLERS' RENTAL PAYMENTS
+========================================================= */
 
 async function verifyCartSellerRentalAccess(
   orderItems,
@@ -593,7 +847,6 @@ async function verifyCartSellerRentalAccess(
                 String(p.id) ===
                 String(item.product_id)
             );
-
 
           return product
             ? Number(
@@ -724,11 +977,13 @@ function readCartStorage() {
 
   }
 
+
   if (!Array.isArray(raw)) {
 
     raw = [];
 
   }
+
 
   const cleanedCart =
     raw
@@ -952,7 +1207,8 @@ async function getZYRECustomerProfile() {
 
         {
 
-          method: "GET",
+          method:
+            "GET",
 
           headers: {
 
@@ -2378,9 +2634,7 @@ async function checkout() {
 
 
     /* =====================================================
-    NEW:
     VERIFY EVERY SELLER'S RENTAL PAYMENT
-    BEFORE ORDER CREATION
     ===================================================== */
 
     const rentalCheck =
@@ -2721,7 +2975,7 @@ async function checkout() {
 
 
     /* =====================================================
-    INITIALIZE PAYSTACK PAYMENT
+    INITIALIZE CUSTOMER PAYSTACK PAYMENT
     ===================================================== */
 
     console.log(
@@ -2944,7 +3198,7 @@ async function sellerCentre() {
         SUPABASE_URL +
         "/rest/v1/sellers?user_id=eq." +
         encodeURIComponent(user.id) +
-        "&select=id,store_name,approved,status",
+        "&select=id,store_name,approved,status,email",
 
         {
 
@@ -3018,15 +3272,25 @@ async function sellerCentre() {
         user.id
       );
 
-
       localStorage.setItem(
         "zava_access_token",
         accessToken
       );
 
 
+      if (
+        seller.email
+      ) {
+
+        localStorage.setItem(
+          "zava_seller_email",
+          seller.email
+        );
+
+      }
+
+
       /* =================================================
-      NEW:
       CHECK CURRENT MONTH RENTAL
       ================================================= */
 
@@ -3042,7 +3306,8 @@ async function sellerCentre() {
         await redirectSellerToRentalPayment(
           seller.id,
           seller.store_name,
-          accessToken
+          accessToken,
+          seller.email
         );
 
         return;
@@ -3160,6 +3425,10 @@ async function registerSeller() {
     let accessToken =
       SUPABASE_KEY;
 
+
+    /* =====================================================
+    CREATE / LOGIN AUTH ACCOUNT
+    ===================================================== */
 
     const signupResponse =
       await fetch(
@@ -3321,6 +3590,10 @@ async function registerSeller() {
     }
 
 
+    /* =====================================================
+    CREATE / UPDATE PROFILE
+    ===================================================== */
+
     const profileResponse =
       await fetch(
 
@@ -3383,13 +3656,17 @@ async function registerSeller() {
     }
 
 
+    /* =====================================================
+    CHECK EXISTING SELLER
+    ===================================================== */
+
     const existingSellerResponse =
       await fetch(
 
         SUPABASE_URL +
         "/rest/v1/sellers?user_id=eq." +
         userId +
-        "&select=id,store_name,approved",
+        "&select=id,store_name,approved,email",
 
         {
 
@@ -3429,6 +3706,10 @@ async function registerSeller() {
 
     }
 
+
+    /* =====================================================
+    CREATE SELLER
+    ===================================================== */
 
     if (!sellerId) {
 
@@ -3480,9 +3761,9 @@ async function registerSeller() {
 
               })
 
-          }
+            }
 
-        );
+          );
 
 
       if (!sellerResponse.ok) {
@@ -3506,6 +3787,10 @@ async function registerSeller() {
 
     }
 
+
+    /* =====================================================
+    FIND RENTAL PLAN
+    ===================================================== */
 
     const planResponse =
       await fetch(
@@ -3562,13 +3847,17 @@ async function registerSeller() {
       plans[0];
 
 
+    /* =====================================================
+    FIND OR CREATE SUBSCRIPTION
+    ===================================================== */
+
     const existingSubscriptionResponse =
       await fetch(
 
         SUPABASE_URL +
         "/rest/v1/store_subscriptions?seller_id=eq." +
         sellerId +
-        "&select=id,rental_plan_id,status",
+        "&select=id,rental_plan_id,status&order=id.desc&limit=1",
 
         {
 
@@ -3680,119 +3969,9 @@ async function registerSeller() {
     }
 
 
-    const existingPaymentResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/rental_payments?subscription_id=eq." +
-        subscriptionId +
-        "&select=id,status",
-
-        {
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              accessToken
-
-          }
-
-        }
-
-      );
-
-
-    let paymentExists = false;
-
-
-    if (
-      existingPaymentResponse.ok
-    ) {
-
-      const payments =
-        await existingPaymentResponse.json();
-
-
-      paymentExists =
-        payments.length > 0;
-
-    }
-
-
-    if (!paymentExists) {
-
-      const paymentResponse =
-        await fetch(
-
-          SUPABASE_URL +
-          "/rest/v1/rental_payments",
-
-          {
-
-            method:
-              "POST",
-
-            headers: {
-
-              "apikey":
-                SUPABASE_KEY,
-
-              "Authorization":
-                "Bearer " +
-                accessToken,
-
-              "Content-Type":
-                "application/json",
-
-              "Prefer":
-                "return=representation"
-
-            },
-
-            body:
-              JSON.stringify({
-
-                seller_id:
-                  sellerId,
-
-                subscription_id:
-                  subscriptionId,
-
-                amount:
-                  Number(
-                    rentalPlan.monthly_price
-                  ),
-
-                status:
-                  "pending",
-
-                payment_method:
-                  "pending"
-
-              })
-
-          }
-
-        );
-
-
-      if (!paymentResponse.ok) {
-
-        alert(
-          "Store and subscription were created, but the rental payment record could not be created.\n\n" +
-          await paymentResponse.text()
-        );
-
-        return;
-
-      }
-
-    }
-
+    /* =====================================================
+    SAVE SELLER LOGIN INFORMATION
+    ===================================================== */
 
     localStorage.setItem(
       "zava_seller_id",
@@ -3818,12 +3997,17 @@ async function registerSeller() {
     );
 
 
-    const rentalPaymentUrl =
-      buildZYRERentalPaymentUrl(
-        sellerId,
-        subscriptionId,
-        storeName.trim()
-      );
+    /* =====================================================
+    IMPORTANT:
+
+    DO NOT CREATE A PENDING rental_payments ROW HERE.
+
+    The rental-paystack Edge Function creates the payment
+    record securely when Paystack checkout is initialized.
+
+    This prevents duplicate pending rental payments and
+    avoids frontend RLS problems.
+    ===================================================== */
 
 
     alert(
@@ -3837,20 +4021,51 @@ async function registerSeller() {
 
       "ZYRE Store rental: R" +
       Number(
-        rentalPlan.monthly_price
+        rentalPlan.monthly_price || ZYRE_RENTAL_AMOUNT
       ).toFixed(2) +
       " per month\n\n" +
 
-      "Next: You will be taken to PayFast Sandbox to complete the R100 rental payment."
+      "Next: You will be taken to secure Paystack checkout."
 
     );
 
 
+    /* =====================================================
+    START PAYSTACK RENTAL PAYMENT
+    ===================================================== */
+
+    const rentalPayment =
+      await initializeZYRERentalPaystack(
+        sellerId,
+        email.trim()
+      );
+
+
+    if (
+      !rentalPayment ||
+      !rentalPayment.authorization_url
+    ) {
+
+      alert(
+        "The store was created, but Paystack did not return a payment page."
+      );
+
+      return;
+
+    }
+
+
     window.location.href =
-      rentalPaymentUrl;
+      rentalPayment.authorization_url;
 
 
   } catch (error) {
+
+    console.error(
+      "Seller registration failed:",
+      error
+    );
+
 
     alert(
       "Store registration failed:\n\n" +
@@ -3974,7 +4189,7 @@ async function sellerLogin() {
         SUPABASE_URL +
         "/rest/v1/sellers?user_id=eq." +
         userId +
-        "&select=id,store_name,approved",
+        "&select=id,store_name,approved,status,email",
 
         {
 
@@ -4026,7 +4241,8 @@ async function sellerLogin() {
 
 
     if (
-      seller.approved !== true
+      seller.approved !== true &&
+      seller.status !== "seller_approved"
     ) {
 
       alert(
@@ -4056,8 +4272,16 @@ async function sellerLogin() {
     );
 
 
+    localStorage.setItem(
+      "zava_seller_email",
+      (
+        seller.email ||
+        email.trim()
+      )
+    );
+
+
     /* =====================================================
-    NEW:
     CHECK CURRENT MONTH RENTAL BEFORE DASHBOARD
     ===================================================== */
 
@@ -4073,7 +4297,9 @@ async function sellerLogin() {
       await redirectSellerToRentalPayment(
         seller.id,
         seller.store_name,
-        accessToken
+        accessToken,
+        seller.email ||
+        email.trim()
       );
 
       return;
@@ -4693,7 +4919,6 @@ function updateZYRENotificationButton(
 
 /* =========================================================
 SAVE PUSH SUBSCRIPTION
-FIXED DUPLICATE ENDPOINT VERSION
 ========================================================= */
 
 async function saveZYREPushSubscription(
@@ -5042,7 +5267,7 @@ async function saveZYREPushSubscription(
           } else {
 
             console.warn(
-              "Customer notification subscription fallback failed:",
+              "ZYRE customer notification subscription fallback failed:",
               upsertError
             );
 
@@ -5653,6 +5878,23 @@ async function() {
   }
 
 };
+
+
+/* =========================================================
+MAKE IMPORTANT FUNCTIONS AVAILABLE GLOBALLY
+========================================================= */
+
+window.getZYRESellerRentalAccess =
+getZYRESellerRentalAccess;
+
+window.initializeZYRERentalPaystack =
+initializeZYRERentalPaystack;
+
+window.verifyZYRERentalPayment =
+verifyZYRERentalPayment;
+
+window.redirectSellerToRentalPayment =
+redirectSellerToRentalPayment;
 
 
 /* =========================================================
