@@ -1,1679 +1,1870 @@
-<!DOCTYPE html>  <html lang="en">    <head>        <meta charset="UTF-8">      
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>ZYRE Marketing | Account</title>  <meta    
-name="description"    
-content="Create or sign in to your ZYRE Marketing customer or seller account."  >     <style>      
-    * {      
-      box-sizing: border-box;      
-    }      
-      
-    body {      
-      margin: 0;      
-      min-height: 100vh;      
-      font-family: Arial, sans-serif;      
-      background: #050505;      
-      color: #fff;      
-      display: flex;      
-      justify-content: center;      
-      align-items: center;      
-      padding: 20px;      
-    }      
-      
-    .container {      
-      width: 100%;      
-      max-width: 440px;      
-    }      
-      
-    .logo {      
-      text-align: center;      
-      margin-bottom: 25px;      
-    }      
-      
-    .logo h1 {      
-      margin: 0;      
-      font-size: 34px;      
-      letter-spacing: 4px;      
-    }      
-      
-    .logo p {      
-      margin: 8px 0 0;      
-      color: #aaa;      
-      font-size: 14px;      
-    }      
-      
-    .card {      
-      background: #111;      
-      border: 1px solid #292929;      
-      border-radius: 18px;      
-      padding: 24px;      
-      box-shadow: 0 10px 35px rgba(0,0,0,.45);      
-    }      
-      
-    .account-choice {      
-      margin-bottom: 22px;      
-    }      
-      
-    .choice-title {      
-      font-size: 14px;      
-      color: #aaa;      
-      margin-bottom: 10px;      
-    }      
-      
-    .choice-buttons {      
-      display: flex;      
-      gap: 8px;      
-    }      
-      
-    .choice-btn {      
-      flex: 1;      
-      padding: 13px 10px;      
-      border: 1px solid #333;      
-      border-radius: 10px;      
-      background: #181818;      
-      color: #aaa;      
-      font-weight: bold;      
-      cursor: pointer;      
-      font-size: 14px;      
-    }      
-      
-    .choice-btn.active {      
-      background: #fff;      
-      color: #000;      
-      border-color: #fff;      
-    }      
-      
-    .tabs {      
-      display: flex;      
-      gap: 8px;      
-      margin-bottom: 22px;      
-    }      
-      
-    .tab {      
-      flex: 1;      
-      padding: 13px;      
-      border: 1px solid #333;      
-      border-radius: 10px;      
-      background: #181818;      
-      color: #aaa;      
-      font-weight: bold;      
-      cursor: pointer;      
-    }      
-      
-    .tab.active {      
-      background: #fff;      
-      color: #000;      
-    }      
-      
-    h2 {      
-      margin-top: 0;      
-      margin-bottom: 8px;      
-    }      
-      
-    .subtitle {      
-      color: #aaa;      
-      font-size: 14px;      
-      margin-bottom: 20px;      
-      line-height: 1.5;      
-    }      
-      
-    label {      
-      display: block;      
-      margin: 15px 0 7px;      
-      font-size: 14px;      
-      color: #ddd;      
-    }      
-      
-    input,      
-    textarea {      
-      width: 100%;      
-      padding: 14px;      
-      border-radius: 10px;      
-      border: 1px solid #333;      
-      background: #181818;      
-      color: #fff;      
-      font-size: 15px;      
-      outline: none;      
-    }      
-      
-    input:focus,      
-    textarea:focus {      
-      border-color: #777;      
-    }      
-      
-    textarea {      
-      min-height: 90px;      
-      resize: vertical;      
-    }      
-      
-    .password-help {      
-      color: #888;      
-      font-size: 12px;      
-      margin-top: 6px;      
-      line-height: 1.4;      
-    }      
-      
-    .main-btn {      
-      width: 100%;      
-      margin-top: 22px;      
-      padding: 15px;      
-      border: 0;      
-      border-radius: 10px;      
-      background: #fff;      
-      color: #000;      
-      font-size: 16px;      
-      font-weight: bold;      
-      cursor: pointer;      
-    }      
-      
-    .main-btn:disabled {      
-      opacity: .6;      
-      cursor: wait;      
-    }      
-      
-    .message {      
-      display: none;      
-      margin-top: 16px;      
-      padding: 12px;      
-      border-radius: 10px;      
-      font-size: 14px;      
-      line-height: 1.5;      
-      white-space: pre-line;      
-    }      
-      
-    .message.error {      
-      display: block;      
-      background: #351414;      
-      color: #ffb5b5;      
-      border: 1px solid #672525;      
-    }      
-      
-    .message.success {      
-      display: block;      
-      background: #12351e;      
-      color: #b7f5c5;      
-      border: 1px solid #246b38;      
-    }      
-      
-    .message.info {      
-      display: block;      
-      background: #171f2f;      
-      color: #c5d5ff;      
-      border: 1px solid #30436d;      
-    }      
-      
-    .seller-note {      
-      margin-top: 20px;      
-      padding: 13px;      
-      border-radius: 10px;      
-      background: #181818;      
-      border: 1px solid #292929;      
-      color: #aaa;      
-      font-size: 13px;      
-      line-height: 1.5;      
-    }      
-      
-    .seller-note strong {      
-      color: #fff;      
-    }      
-      
-    .seller-link {      
-      display: inline-block;      
-      margin-top: 9px;      
-      color: #fff;      
-      font-weight: bold;      
-      text-decoration: underline;      
-      cursor: pointer;      
-    }      
-      
-    .hidden {      
-      display: none;      
-    }      
-  </style>  </head>  <body>    <div class="container">  <div class="logo">      <h1>ZYRE</h1>        <p>Marketing • Online Marketplace</p>      
-</div>    <div class="card">      <!-- ACCOUNT TYPE -->      <div class="account-choice">    <div class="choice-title">      
-  Choose how you want to use ZYRE Marketing      
-</div>      <div class="choice-buttons">      <button
-type="button"
-class="choice-btn active"
-id="customerChoice"
-onclick="selectAccountType('customer')"
-
-> 
-
-👤 Customer
-
-  </button>      <button
-type="button"
-class="choice-btn"
-id="sellerChoice"
-onclick="selectAccountType('seller')"
-
-> 
-
-🏪 Seller
-
-  </button>      </div>    </div>      <!-- CUSTOMER ACCOUNT AREA -->      <div id="customerArea">    <div class="tabs">      <button
-type="button"
-class="tab active"
-id="loginTab"
-onclick="showLogin()"
-
-> 
-
-Sign In
-
-  </button>      <button
-type="button"
-class="tab"
-id="signupTab"
-onclick="showSignup()"
-
-> 
-
-Create Account
-
-  </button>      </div>      <!-- CUSTOMER LOGIN -->      <div id="loginSection">        <h2>Welcome back</h2>        <div class="subtitle">      
-    Sign in to your ZYRE Marketing customer account to continue      
-    shopping.      
-  </div>        <form id="loginForm">      <label for="loginEmail">      
-  Customer email address      
-</label>      
-
-<input      
-  type="email"      
-  id="loginEmail"      
-  placeholder="you@example.com"      
-  autocomplete="email"      
-  required      
->      
-
-<label for="loginPassword">      
-  Password      
-</label>      
-
-<input      
-  type="password"      
-  id="loginPassword"      
-  placeholder="Your password"      
-  autocomplete="current-password"      
-  required      
->      
-
-<button      
-  type="submit"      
-  class="main-btn"      
-  id="loginButton"      
->      
-  Sign In as Customer      
-</button>
-
-  </form>      </div>      <!-- CUSTOMER CREATE ACCOUNT -->      <div id="signupSection" class="hidden">        <h2>Create your customer account</h2>        <div class="subtitle">      
-    Create your ZYRE Marketing customer account. Your delivery      
-    information will be saved so you don't have to enter it every      
-    time.      
-  </div>        <form id="signupForm">      <label for="fullName">      
-  Full name      
-</label>      
-
-<input      
-  type="text"      
-  id="fullName"      
-  placeholder="Your full name"      
-  autocomplete="name"      
-  required      
->      
-
-<label for="signupEmail">      
-  Email address      
-</label>      
-
-<input      
-  type="email"      
-  id="signupEmail"      
-  placeholder="you@example.com"      
-  autocomplete="email"      
-  required      
->      
-
-<label for="phone">      
-  Phone number      
-</label>      
-
-<input      
-  type="tel"      
-  id="phone"      
-  placeholder="e.g. 0812345678"      
-  autocomplete="tel"      
-  required      
->      
-
-<label for="address">      
-  Physical / delivery address      
-</label>      
-
-<textarea      
-  id="address"      
-  placeholder="House/flat number, street, suburb, city, province"      
-  autocomplete="street-address"      
-  required      
-></textarea>      
-
-<label for="signupPassword">      
-  Create password      
-</label>      
-
-<input      
-  type="password"      
-  id="signupPassword"      
-  placeholder="Create a strong password"      
-  autocomplete="new-password"      
-  required      
->      
-
-<div class="password-help">      
-  Use at least 8 characters with uppercase and lowercase letters,      
-  a number and a special character.      
-</div>      
-
-<label for="confirmPassword">      
-  Confirm password      
-</label>      
-
-<input      
-  type="password"      
-  id="confirmPassword"      
-  placeholder="Enter your password again"      
-  autocomplete="new-password"      
-  required      
->      
-
-<button      
-  type="submit"      
-  class="main-btn"      
-  id="signupButton"      
->      
-  Create Customer Account      
-</button>
-
-  </form>      </div>    </div>      <!-- SELLER ACCOUNT AREA -->      <div id="sellerArea" class="hidden">    <h2>Seller account</h2>      <div class="subtitle">      
-  Sellers must register with their real personal and business      
-  information before they can access the Seller Centre.      
-</div>      <button
-type="button"
-class="main-btn"
-onclick="openSellerRegistration()"
-
-> 
-
-Create Seller Account
-</button>
-
-<div class="seller-note">      <strong>Already registered as a seller?</strong><br>
-
-Sign in below using the same email address and password you
-registered with.
-
-</div>      <form id="sellerLoginForm">        <label for="sellerLoginEmail">      
-    Seller email address      
-  </label>      <input
-type="email"
-id="sellerLoginEmail"
-placeholder="seller@example.com"
-autocomplete="email"
-required
-
-> 
-
-  <label for="sellerLoginPassword">      
-    Seller password      
-  </label>      <input
-type="password"
-id="sellerLoginPassword"
-placeholder="Your seller password"
-autocomplete="current-password"
-required
-
-> 
-
-<button
-type="submit"
-class="main-btn"
-id="sellerLoginButton"
-
-> 
-
-Sign In as Seller
-
-  </button>      </form>    </div>      <div id="message" class="message"></div>    </div>    </div>    <!-- SUPABASE -->    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>    <script>    const SUPABASE_URL =      
-  "https://gaccizzlwswwynattgda.supabase.co";      const SUPABASE_KEY =
-"sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
-
-const supabaseClient =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
-let selectedAccountType = "customer";
-
-const customerArea =
-document.getElementById("customerArea");
-
-const sellerArea =
-document.getElementById("sellerArea");
-
-const customerChoice =
-document.getElementById("customerChoice");
-
-const sellerChoice =
-document.getElementById("sellerChoice");
-
-const loginSection =
-document.getElementById("loginSection");
-
-const signupSection =
-document.getElementById("signupSection");
-
-const loginTab =
-document.getElementById("loginTab");
-
-const signupTab =
-document.getElementById("signupTab");
-
-const message =
-document.getElementById("message");
-
-function showMessage(text, type) {
-
-message.textContent = text;
-
-message.className =
-"message " + type;
-}
-
-function clearMessage() {
-
-message.textContent = "";
-
-message.className = "message";
-}
-
-/*
-CUSTOMER / SELLER SELECTION
-*/
-
-function selectAccountType(type) {
-
-clearMessage();
-
-selectedAccountType = type;
-
-if (type === "customer") {
-
-customerArea.classList.remove("hidden");      
-
-sellerArea.classList.add("hidden");      
-
-customerChoice.classList.add("active");      
-
-sellerChoice.classList.remove("active");      
-
-showLogin();      
-
-return;
-
-}
-
-customerArea.classList.add("hidden");
-
-sellerArea.classList.remove("hidden");
-
-customerChoice.classList.remove("active");
-
-sellerChoice.classList.add("active");
-
-}
-
-/*
-CUSTOMER LOGIN / SIGNUP TABS
-*/
-
-function showLogin() {
-
-clearMessage();
-
-loginSection.classList.remove("hidden");
-
-signupSection.classList.add("hidden");
-
-loginTab.classList.add("active");
-
-signupTab.classList.remove("active");
-
-}
-
-function showSignup() {
-
-clearMessage();
-
-loginSection.classList.add("hidden");
-
-signupSection.classList.remove("hidden");
-
-loginTab.classList.remove("active");
-
-signupTab.classList.add("active");
-
-}
-
-/*
-OPEN SELLER REGISTRATION
-*/
-
-function openSellerRegistration() {
-
-window.location.href =
-"seller-auth.html";
-
-}
-
-/*
-STRONG PASSWORD
-*/
-
-function strongPassword(password) {
-
-return (
-password.length >= 8 &&
-/[A-Z]/.test(password) &&
-/[a-z]/.test(password) &&
-/[0-9]/.test(password) &&
-/[^A-Za-z0-9]/.test(password)
-);
-
-}
-
-/*
-CLEAR SELLER SESSION STORAGE
-*/
-
-function clearSellerStorage() {
-
-localStorage.removeItem(
-"zava_access_token"
-);
-
-localStorage.removeItem(
-"zava_user_id"
-);
-
-localStorage.removeItem(
-"zava_seller_id"
-);
-
-localStorage.removeItem(
-"zava_seller_email"
-);
-
-}
-
-/*
-CUSTOMER LOGIN VALIDATION
-*/
-
-async function validateCustomerAccount(
-session
-) {
-
-const {
-data: profile,
-error: profileError
-} =
-await supabaseClient
-.from("profiles")
-.select(
-"id, role, full_name"
-)
-.eq(
-"id",
-session.user.id
-)
-.maybeSingle();
-
-if (profileError) {
-
-throw new Error(      
-  profileError.message ||      
-  "Could not verify the account type."      
-);
-
-}
-
-if (
-profile &&
-(
-profile.role === "seller_pending" ||
-profile.role === "seller_approved" ||
-profile.role === "seller"
-)
-) {
-
-throw new Error(      
-  "This is a Seller account. Please choose Seller and use Seller Login."      
-);
-
-}
-
-if (
-profile &&
-(
-profile.role === "admin" ||
-profile.role === "owner"
-)
-) {
-
-throw new Error(      
-  "This account is an Owner account. Please use the private Owner Centre."      
-);
-
-}
-
-const {
-data: seller,
-error: sellerError
-} =
-await supabaseClient
-.from("sellers")
-.select(
-"id, user_id, store_name, approved, status"
-)
-.eq(
-"user_id",
-session.user.id
-)
-.maybeSingle();
-
-if (sellerError) {
-
-throw new Error(      
-  sellerError.message ||      
-  "Could not verify whether this is a seller account."      
-);
-
-}
-
-if (seller) {
-
-throw new Error(      
-  "This is already a Seller account" +      
-  (      
-    seller.store_name      
-      ? " for \"" +      
-        seller.store_name +      
-        "\"."      
-      : "."      
-  ) +      
-  "\n\nPlease choose Seller and use Seller Login."      
-);
-
-}
-
-if (
-profile &&
-profile.role &&
-profile.role !== "customer"
-) {
-
-throw new Error(      
-  "This account is not registered as a Customer account."      
-);
-
-}
-
-if (!profile) {
-
-throw new Error(      
-  "This account does not have a customer profile. Please choose the correct account type."      
-);
-
-}
-
-return true;
-
-}
-
-/*
-SELLER LOGIN VALIDATION
-*/
-
-async function getSellerAccount(
-session
-) {
-
-const userId =
-session.user.id;
-
-const userEmail =
-(
-session.user.email ||
-""
-)
-.trim()
-.toLowerCase();
-
-/*
-FIRST:
-Try seller lookup by authenticated
-Supabase user ID.
-*/
-
-let {
-data: seller,
-error: sellerError
-} =
-await supabaseClient
-.from("sellers")
-.select(
-"id, user_id, store_name, approved, status, email"
-)
-.eq(
-"user_id",
-userId
-)
-.maybeSingle();
-
-if (sellerError) {
-
-throw new Error(      
-  sellerError.message ||      
-  "Could not check your seller application."      
-);
-
-}
-
-/*
-SECOND:
-If no seller was found by user_id,
-check the seller email.
-*/
-
-if (
-!seller &&
-userEmail
-) {
-
-const emailLookup =      
-  await supabaseClient      
-    .from("sellers")      
-    .select(      
-      "id, user_id, store_name, approved, status, email"      
-    )      
-    .ilike(      
-      "email",      
-      userEmail      
-    )      
-    .limit(1);      
-
-
-if (emailLookup.error) {      
-
-  throw new Error(      
-    emailLookup.error.message ||      
-    "Could not check your seller email."      
-  );      
-
-}      
-
-
-if (      
-  Array.isArray(      
-    emailLookup.data      
-  ) &&      
-  emailLookup.data.length > 0      
-) {      
-
-  seller =      
-    emailLookup.data[0];      
-
-}
-
-}
-
-/*
-If a seller record exists, this is
-definitely being handled as a seller.
-*/
-
-if (seller) {
-
-const {      
-  data: profile,      
-  error: profileError      
-} =      
-  await supabaseClient      
-    .from("profiles")      
-    .select(      
-      "id, role, full_name"      
-    )      
-    .eq(      
-      "id",      
-      userId      
-    )      
-    .maybeSingle();      
-
-
-if (profileError) {      
-
-  throw new Error(      
-    profileError.message ||      
-    "Could not read your seller profile."      
-  );      
-
-}      
-
-
-if (      
-  profile &&      
-  (      
-    profile.role === "admin" ||      
-    profile.role === "owner"      
-  )      
-) {      
-
-  throw new Error(      
-    "This is an Owner account. Please use the private Owner Centre."      
-  );      
-
-}      
-
-
-return {      
-  seller,      
-  profile      
-};
-
-}
-
-/*
-NO SELLER RECORD FOUND.
-*/
-
-const {
-data: profile,
-error: profileError
-} =
-await supabaseClient
-.from("profiles")
-.select(
-"id, role, full_name"
-)
-.eq(
-"id",
-userId
-)
-.maybeSingle();
-
-if (profileError) {
-
-throw new Error(      
-  profileError.message ||      
-  "Could not verify the account type."      
-);
-
-}
-
-if (
-profile &&
-(
-profile.role === "admin" ||
-profile.role === "owner"
-)
-) {
-
-throw new Error(      
-  "This is an Owner account. Please use the private Owner Centre."      
-);
-
-}
-
-if (
-profile &&
-profile.role === "customer"
-) {
-
-throw new Error(      
-  "This is a Customer account. Customer accounts cannot sign in through Seller Login."      
-);
-
-}
-
-throw new Error(
-"This account is not registered as a Seller.\n\nIf you want to become a seller, please create a separate Seller account first."
-);
-
-}
-
-/*
-CUSTOMER REDIRECT
-*/
-
-async function redirectCustomerAfterLogin() {
-
-try {
-
-const {      
-  data: {      
-    session      
-  }      
-} =      
-  await supabaseClient.auth.getSession();      
-
-
-if (!session) {      
-
-  throw new Error(      
-    "Your login session is not ready. Please try again."      
-  );      
-
-}      
-
-
-await validateCustomerAccount(      
-  session      
-);      
-
-
-window.location.replace(      
-  "index.html"      
-);
-
-} catch (error) {
-
-console.error(      
-  "Customer redirect error:",      
-  error      
-);      
-
-
-await supabaseClient.auth.signOut();      
-
-
-clearSellerStorage();      
-
-
-showMessage(      
-  error.message ||      
-  "This account cannot be used as a Customer.",      
-  "error"      
-);
-
-}
-
-}
-
-/*
-CUSTOMER CREATE ACCOUNT
-*/
-
-document
-.getElementById("signupForm")
-.addEventListener(
-"submit",
-async function(event) {
-
-event.preventDefault();      
-
-  clearMessage();      
-
-
-  const fullName =      
-    document      
-      .getElementById("fullName")      
-      .value      
-      .trim();      
-
-
-  const email =      
-    document      
-      .getElementById("signupEmail")      
-      .value      
-      .trim()      
-      .toLowerCase();      
-
-
-  const phone =      
-    document      
-      .getElementById("phone")      
-      .value      
-      .trim();      
-
-
-  const address =      
-    document      
-      .getElementById("address")      
-      .value      
-      .trim();      
-
-
-  const password =      
-    document      
-      .getElementById("signupPassword")      
-      .value;      
-
-
-  const confirmPassword =      
-    document      
-      .getElementById("confirmPassword")      
-      .value;      
-
-
-  const button =      
-    document.getElementById(      
-      "signupButton"      
-    );      
-
-
-  if (!strongPassword(password)) {      
-
-    showMessage(      
-      "Password must be at least 8 characters and contain uppercase and lowercase letters, a number and a special character.",      
-      "error"      
-    );      
-
-    return;      
-
-  }      
-
-
-  if (password !== confirmPassword) {      
-
-    showMessage(      
-      "The passwords do not match.",      
-      "error"      
-    );      
-
-    return;      
-
-  }      
-
-
-  button.disabled = true;      
-
-  button.textContent =      
-    "Creating account...";      
-
-
-  try {      
-
-    const {      
-      data: existingSeller,      
-      error: sellerCheckError      
-    } =      
-      await supabaseClient      
-        .from("sellers")      
-        .select(      
-          "id, email, store_name"      
-        )      
-        .ilike(      
-          "email",      
-          email      
-        )      
-        .limit(1);      
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>ZYRE Marketing | Account</title><meta
+name="description"
+content="Create or sign in to your ZYRE Marketing customer or seller account."
+
+«»
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #050505;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .logo h1 {
+      margin: 0;
+      font-size: 34px;
+      letter-spacing: 4px;
+    }
+
+    .logo p {
+      margin: 8px 0 0;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .card {
+      background: #111;
+      border: 1px solid #292929;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 10px 35px rgba(0,0,0,.45);
+    }
+
+    .account-choice {
+      margin-bottom: 22px;
+    }
+
+    .choice-title {
+      font-size: 14px;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+
+    .choice-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .choice-btn {
+      flex: 1;
+      padding: 13px 10px;
+      border: 1px solid #333;
+      border-radius: 10px;
+      background: #181818;
+      color: #aaa;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .choice-btn.active {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 13px;
+      border: 1px solid #333;
+      border-radius: 10px;
+      background: #181818;
+      color: #aaa;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      background: #fff;
+      color: #000;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #aaa;
+      font-size: 14px;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      background: #181818;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #777;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .password-help {
+      color: #888;
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .main-btn {
+      width: 100%;
+      margin-top: 22px;
+      padding: 15px;
+      border: 0;
+      border-radius: 10px;
+      background: #fff;
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .main-btn:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .message {
+      display: none;
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    .message.error {
+      display: block;
+      background: #351414;
+      color: #ffb5b5;
+      border: 1px solid #672525;
+    }
+
+    .message.success {
+      display: block;
+      background: #12351e;
+      color: #b7f5c5;
+      border: 1px solid #246b38;
+    }
+
+    .message.info {
+      display: block;
+      background: #171f2f;
+      color: #c5d5ff;
+      border: 1px solid #30436d;
+    }
+
+    .seller-note {
+      margin-top: 20px;
+      padding: 13px;
+      border-radius: 10px;
+      background: #181818;
+      border: 1px solid #292929;
+      color: #aaa;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .seller-note strong {
+      color: #fff;
+    }
+
+    .seller-link {
+      display: inline-block;
+      margin-top: 9px;
+      color: #fff;
+      font-weight: bold;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* CONTINUE SELLER APPLICATION */
+
+    .continue-application {
+      margin-top: 16px;
+      padding: 13px;
+      border-radius: 10px;
+      background: #181818;
+      border: 1px solid #292929;
+    }
+
+    .continue-application p {
+      margin: 0 0 10px;
+      color: #aaa;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .continue-btn {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #444;
+      border-radius: 10px;
+      background: #fff;
+      color: #000;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .continue-btn:hover {
+      opacity: .9;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style></head><body>  <div class="container"><div class="logo">
+
+  <h1>ZYRE</h1>
+
+  <p>Marketing • Online Marketplace</p>
+
+</div>
+
+<div class="card">
+
+  <!-- ACCOUNT TYPE -->
+
+  <div class="account-choice">
+
+    <div class="choice-title">
+      Choose how you want to use ZYRE Marketing
+    </div>
+
+    <div class="choice-buttons">
+
+      <button
+        type="button"
+        class="choice-btn active"
+        id="customerChoice"
+        onclick="selectAccountType('customer')"
+      >
+        👤 Customer
+      </button>
+
+      <button
+        type="button"
+        class="choice-btn"
+        id="sellerChoice"
+        onclick="selectAccountType('seller')"
+      >
+        🏪 Seller
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- CUSTOMER ACCOUNT AREA -->
+
+  <div id="customerArea">
+
+    <div class="tabs">
+
+      <button
+        type="button"
+        class="tab active"
+        id="loginTab"
+        onclick="showLogin()"
+      >
+        Sign In
+      </button>
+
+      <button
+        type="button"
+        class="tab"
+        id="signupTab"
+        onclick="showSignup()"
+      >
+        Create Account
+      </button>
+
+    </div>
+
+
+    <!-- CUSTOMER LOGIN -->
+
+    <div id="loginSection">
+
+      <h2>Welcome back</h2>
+
+      <div class="subtitle">
+        Sign in to your ZYRE Marketing customer account to continue
+        shopping.
+      </div>
+
+      <form id="loginForm">
+
+        <label for="loginEmail">
+          Customer email address
+        </label>
+
+        <input
+          type="email"
+          id="loginEmail"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        >
+
+        <label for="loginPassword">
+          Password
+        </label>
+
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Your password"
+          autocomplete="current-password"
+          required
+        >
+
+        <button
+          type="submit"
+          class="main-btn"
+          id="loginButton"
+        >
+          Sign In as Customer
+        </button>
+
+      </form>
+
+    </div>
+
+
+    <!-- CUSTOMER CREATE ACCOUNT -->
+
+    <div id="signupSection" class="hidden">
+
+      <h2>Create your customer account</h2>
+
+      <div class="subtitle">
+        Create your ZYRE Marketing customer account. Your delivery
+        information will be saved so you don't have to enter it every
+        time.
+      </div>
+
+      <form id="signupForm">
+
+        <label for="fullName">
+          Full name
+        </label>
+
+        <input
+          type="text"
+          id="fullName"
+          placeholder="Your full name"
+          autocomplete="name"
+          required
+        >
+
+        <label for="signupEmail">
+          Email address
+        </label>
+
+        <input
+          type="email"
+          id="signupEmail"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        >
+
+        <label for="phone">
+          Phone number
+        </label>
+
+        <input
+          type="tel"
+          id="phone"
+          placeholder="e.g. 0812345678"
+          autocomplete="tel"
+          required
+        >
+
+        <label for="address">
+          Physical / delivery address
+        </label>
+
+        <textarea
+          id="address"
+          placeholder="House/flat number, street, suburb, city, province"
+          autocomplete="street-address"
+          required
+        ></textarea>
+
+        <label for="signupPassword">
+          Create password
+        </label>
+
+        <input
+          type="password"
+          id="signupPassword"
+          placeholder="Create a strong password"
+          autocomplete="new-password"
+          required
+        >
+
+        <div class="password-help">
+          Use at least 8 characters with uppercase and lowercase letters,
+          a number and a special character.
+        </div>
+
+        <label for="confirmPassword">
+          Confirm password
+        </label>
+
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Enter your password again"
+          autocomplete="new-password"
+          required
+        >
+
+        <button
+          type="submit"
+          class="main-btn"
+          id="signupButton"
+        >
+          Create Customer Account
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- SELLER ACCOUNT AREA -->
+
+  <div id="sellerArea" class="hidden">
+
+    <h2>Seller account</h2>
+
+    <div class="subtitle">
+      Sellers must register with their real personal and business
+      information before they can access the Seller Centre.
+    </div>
+
+    <button
+      type="button"
+      class="main-btn"
+      onclick="openSellerRegistration()"
+    >
+      Create Seller Account
+    </button>
+
+    <div class="seller-note">
+
+      <strong>Already registered as a seller?</strong><br>
+
+      Sign in below using the same email address and password you
+      registered with.
+
+    </div>
+
+
+    <!-- CONTINUE SELLER APPLICATION -->
+
+    <div class="continue-application">
+
+      <p>
+        Already started a seller application?
+        Continue your application, identity verification
+        and payment process.
+      </p>
+
+      <button
+        type="button"
+        class="continue-btn"
+        onclick="continueSellerApplication()"
+      >
+        🔐 Continue Seller Application
+      </button>
+
+    </div>
+
+
+    <form id="sellerLoginForm">
+
+      <label for="sellerLoginEmail">
+        Seller email address
+      </label>
+
+      <input
+        type="email"
+        id="sellerLoginEmail"
+        placeholder="seller@example.com"
+        autocomplete="email"
+        required
+      >
+
+      <label for="sellerLoginPassword">
+        Seller password
+      </label>
+
+      <input
+        type="password"
+        id="sellerLoginPassword"
+        placeholder="Your seller password"
+        autocomplete="current-password"
+        required
+      >
 
+      <button
+        type="submit"
+        class="main-btn"
+        id="sellerLoginButton"
+      >
+        Sign In as Seller
+      </button>
 
-    if (sellerCheckError) {      
+    </form>
 
-      console.error(      
-        "Seller email check error:",      
-        sellerCheckError      
-      );      
+  </div>
 
-    }      
 
+  <div id="message" class="message"></div>
 
-    if (      
-      Array.isArray(existingSeller) &&      
-      existingSeller.length      
-    ) {      
+</div>
 
-      throw new Error(      
-        "This email address is already registered as a Seller account.\n\nPlease use Seller Login instead."      
-      );      
+  </div>  <!-- SUPABASE -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script>
 
-    }      
+    const SUPABASE_URL =
+      "https://gaccizzlwswwynattgda.supabase.co";
 
+    const SUPABASE_KEY =
+      "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
-    const {      
-      data,      
-      error      
-    } =      
-      await supabaseClient.auth.signUp({      
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
 
-        email: email,      
 
-        password: password,      
+    let selectedAccountType = "customer";
 
-        options: {      
 
-          data: {      
+    const customerArea =
+      document.getElementById("customerArea");
 
-            full_name: fullName,      
+    const sellerArea =
+      document.getElementById("sellerArea");
 
-            phone: phone,      
+    const customerChoice =
+      document.getElementById("customerChoice");
 
-            role: "customer"      
+    const sellerChoice =
+      document.getElementById("sellerChoice");
 
-          }      
+    const loginSection =
+      document.getElementById("loginSection");
 
-        }      
+    const signupSection =
+      document.getElementById("signupSection");
 
-      });      
+    const loginTab =
+      document.getElementById("loginTab");
 
+    const signupTab =
+      document.getElementById("signupTab");
 
-    if (error) {      
+    const message =
+      document.getElementById("message");
 
-      throw error;      
 
-    }      
+    function showMessage(text, type) {
 
+      message.textContent = text;
 
-    if (!data.user) {      
+      message.className =
+        "message " + type;
 
-      throw new Error(      
-        "The account could not be created."      
-      );      
+    }
 
-    }      
 
+    function clearMessage() {
 
-    const {      
-      error: profileError      
-    } =      
-      await supabaseClient      
-        .from("profiles")      
-        .upsert({      
+      message.textContent = "";
 
-          id: data.user.id,      
+      message.className = "message";
 
-          full_name: fullName,      
+    }
 
-          phone: phone,      
 
-          address: address,      
+    /*
+      CUSTOMER / SELLER SELECTION
+    */
 
-          role: "customer"      
+    function selectAccountType(type) {
 
-        });      
+      clearMessage();
 
+      selectedAccountType = type;
 
-    if (profileError) {      
 
-      throw profileError;      
+      if (type === "customer") {
 
-    }      
+        customerArea.classList.remove("hidden");
 
+        sellerArea.classList.add("hidden");
 
-    if (!data.session) {      
+        customerChoice.classList.add("active");
 
-      showMessage(      
-        "Account created successfully. Please check your email and confirm your account, then sign in as Customer.",      
-        "success"      
-      );      
+        sellerChoice.classList.remove("active");
 
+        showLogin();
 
-      document      
-        .getElementById(      
-          "loginEmail"      
-        )      
-        .value = email;      
+        return;
+      }
 
 
-      showLogin();      
+      customerArea.classList.add("hidden");
 
-      return;      
+      sellerArea.classList.remove("hidden");
 
-    }      
+      customerChoice.classList.remove("active");
 
+      sellerChoice.classList.add("active");
 
-    showMessage(      
-      "Customer account created successfully. Opening ZYRE Marketing...",      
-      "success"      
-    );      
+    }
 
 
-    setTimeout(      
-      redirectCustomerAfterLogin,      
-      500      
-    );      
+    /*
+      CUSTOMER LOGIN / SIGNUP TABS
+    */
 
+    function showLogin() {
 
-  } catch (error) {      
+      clearMessage();
 
-    console.error(      
-      "Customer account creation error:",      
-      error      
-    );      
+      loginSection.classList.remove("hidden");
 
+      signupSection.classList.add("hidden");
 
-    showMessage(      
-      error.message ||      
-      "Could not create your customer account.",      
-      "error"      
-    );      
+      loginTab.classList.add("active");
 
+      signupTab.classList.remove("active");
 
-  } finally {      
+    }
 
-    button.disabled = false;      
 
-    button.textContent =      
-      "Create Customer Account";      
+    function showSignup() {
 
-  }      
+      clearMessage();
 
-}
+      loginSection.classList.add("hidden");
 
-);
+      signupSection.classList.remove("hidden");
 
-/*
-CUSTOMER LOGIN
-*/
+      loginTab.classList.remove("active");
 
-document
-.getElementById("loginForm")
-.addEventListener(
-"submit",
-async function(event) {
+      signupTab.classList.add("active");
 
-event.preventDefault();      
+    }
 
-  clearMessage();      
 
+    /*
+      OPEN SELLER REGISTRATION
+    */
 
-  const email =      
-    document      
-      .getElementById("loginEmail")      
-      .value      
-      .trim()      
-      .toLowerCase();      
+    function openSellerRegistration() {
 
+      window.location.href =
+        "seller-auth.html";
 
-  const password =      
-    document      
-      .getElementById("loginPassword")      
-      .value;      
+    }
 
 
-  const button =      
-    document.getElementById(      
-      "loginButton"      
-    );      
+    /*
+      CONTINUE SELLER APPLICATION
+    */
 
+    function continueSellerApplication() {
 
-  button.disabled = true;      
+      window.location.href =
+        "seller-auth.html";
 
-  button.textContent =      
-    "Signing in...";      
+    }
 
 
-  try {      
+    /*
+      STRONG PASSWORD
+    */
 
-    const {      
-      data,      
-      error      
-    } =      
-      await supabaseClient.auth      
-        .signInWithPassword({      
+    function strongPassword(password) {
 
-          email: email,      
+      return (
+        password.length >= 8 &&
+        /[A-Z]/.test(password) &&
+        /[a-z]/.test(password) &&
+        /[0-9]/.test(password) &&
+        /[^A-Za-z0-9]/.test(password)
+      );
 
-          password: password      
+    }
 
-        });      
 
+    /*
+      CLEAR SELLER SESSION STORAGE
+    */
 
-    if (error) {      
+    function clearSellerStorage() {
 
-      throw error;      
+      localStorage.removeItem(
+        "zava_access_token"
+      );
 
-    }      
+      localStorage.removeItem(
+        "zava_user_id"
+      );
 
+      localStorage.removeItem(
+        "zava_seller_id"
+      );
 
-    if (      
-      !data ||      
-      !data.session      
-    ) {      
+      localStorage.removeItem(
+        "zava_seller_email"
+      );
 
-      throw new Error(      
-        "Login succeeded but no session was created."      
-      );      
+    }
 
-    }      
 
+    /*
+      CUSTOMER LOGIN VALIDATION
+    */
 
-    await validateCustomerAccount(      
-      data.session      
-    );      
+    async function validateCustomerAccount(
+      session
+    ) {
 
+      const {
+        data: profile,
+        error: profileError
+      } =
+        await supabaseClient
+          .from("profiles")
+          .select(
+            "id, role, full_name"
+          )
+          .eq(
+            "id",
+            session.user.id
+          )
+          .maybeSingle();
 
-    showMessage(      
-      "Customer signed in successfully. Opening ZYRE Marketing...",      
-      "success"      
-    );      
 
+      if (profileError) {
 
-    setTimeout(      
-      function() {      
+        throw new Error(
+          profileError.message ||
+          "Could not verify the account type."
+        );
 
-        window.location.replace(      
-          "index.html"      
-        );      
+      }
 
-      },      
-      500      
-    );      
 
+      if (
+        profile &&
+        (
+          profile.role === "seller_pending" ||
+          profile.role === "seller_approved" ||
+          profile.role === "seller"
+        )
+      ) {
 
-  } catch (error) {      
+        throw new Error(
+          "This is a Seller account. Please choose Seller and use Seller Login."
+        );
 
-    console.error(      
-      "Customer login error:",      
-      error      
-    );      
+      }
 
 
-    try {      
+      if (
+        profile &&
+        (
+          profile.role === "admin" ||
+          profile.role === "owner"
+        )
+      ) {
 
-      await supabaseClient.auth.signOut();      
+        throw new Error(
+          "This account is an Owner account. Please use the private Owner Centre."
+        );
 
-    } catch (signOutError) {      
+      }
 
-      console.error(      
-        "Customer sign-out error:",      
-        signOutError      
-      );      
 
-    }      
+      const {
+        data: seller,
+        error: sellerError
+      } =
+        await supabaseClient
+          .from("sellers")
+          .select(
+            "id, user_id, store_name, approved, status"
+          )
+          .eq(
+            "user_id",
+            session.user.id
+          )
+          .maybeSingle();
 
 
-    clearSellerStorage();      
+      if (sellerError) {
 
+        throw new Error(
+          sellerError.message ||
+          "Could not verify whether this is a seller account."
+        );
 
-    showMessage(      
-      error.message ||      
-      "This account cannot sign in as Customer.",      
-      "error"      
-    );      
+      }
 
 
-    button.disabled = false;      
+      if (seller) {
 
-    button.textContent =      
-      "Sign In as Customer";      
+        throw new Error(
+          "This is already a Seller account" +
+          (
+            seller.store_name
+              ? " for \"" +
+                seller.store_name +
+                "\"."
+              : "."
+          ) +
+          "\n\nPlease choose Seller and use Seller Login."
+        );
 
-  }      
+      }
 
-}
 
-);
+      if (
+        profile &&
+        profile.role &&
+        profile.role !== "customer"
+      ) {
 
-/*
-SELLER LOGIN
-*/
+        throw new Error(
+          "This account is not registered as a Customer account."
+        );
 
-document
-.getElementById("sellerLoginForm")
-.addEventListener(
-"submit",
-async function(event) {
+      }
 
-event.preventDefault();      
 
-  clearMessage();      
+      if (!profile) {
 
+        throw new Error(
+          "This account does not have a customer profile. Please choose the correct account type."
+        );
 
-  const email =      
-    document      
-      .getElementById(      
-        "sellerLoginEmail"      
-      )      
-      .value      
-      .trim()      
-      .toLowerCase();      
+      }
 
 
-  const password =      
-    document      
-      .getElementById(      
-        "sellerLoginPassword"      
-      )      
-      .value;      
+      return true;
 
+    }
 
-  const button =      
-    document.getElementById(      
-      "sellerLoginButton"      
-    );      
 
+    /*
+      SELLER LOGIN VALIDATION
+    */
 
-  button.disabled = true;      
+    async function getSellerAccount(
+      session
+    ) {
 
-  button.textContent =      
-    "Signing in...";      
+      const userId =
+        session.user.id;
 
+      const userEmail =
+        (
+          session.user.email ||
+          ""
+        )
+        .trim()
+        .toLowerCase();
 
-  try {      
 
-    const {      
-      data,      
-      error      
-    } =      
-      await supabaseClient.auth      
-        .signInWithPassword({      
+      /*
+        FIRST:
+        Try seller lookup by authenticated
+        Supabase user ID.
+      */
 
-          email: email,      
+      let {
+        data: seller,
+        error: sellerError
+      } =
+        await supabaseClient
+          .from("sellers")
+          .select(
+            "id, user_id, store_name, approved, status, email"
+          )
+          .eq(
+            "user_id",
+            userId
+          )
+          .maybeSingle();
 
-          password: password      
 
-        });      
+      if (sellerError) {
 
+        throw new Error(
+          sellerError.message ||
+          "Could not check your seller application."
+        );
 
-    if (error) {      
+      }
 
-      throw error;      
 
-    }      
+      /*
+        SECOND:
+        If no seller was found by user_id,
+        check the seller email.
+      */
 
+      if (
+        !seller &&
+        userEmail
+      ) {
 
-    if (      
-      !data ||      
-      !data.session ||      
-      !data.user      
-    ) {      
+        const emailLookup =
+          await supabaseClient
+            .from("sellers")
+            .select(
+              "id, user_id, store_name, approved, status, email"
+            )
+            .ilike(
+              "email",
+              userEmail
+            )
+            .limit(1);
 
-      throw new Error(      
-        "Login succeeded but no seller session was created."      
-      );      
 
-    }      
+        if (emailLookup.error) {
 
+          throw new Error(
+            emailLookup.error.message ||
+            "Could not check your seller email."
+          );
 
-    const {      
-      seller      
-    } =      
-      await getSellerAccount(      
-        data.session      
-      );      
+        }
 
 
-    /*      
-      APPROVED SELLER      
+        if (
+          Array.isArray(
+            emailLookup.data
+          ) &&
+          emailLookup.data.length > 0
+        ) {
 
-      IMPORTANT:      
-      Approved sellers now go directly      
-      to the main marketplace.      
+          seller =
+            emailLookup.data[0];
 
-      They can still access Seller      
-      Dashboard from the marketplace      
-      after logging in.      
-    */      
+        }
 
-    const approved =      
-      seller.approved === true;      
+      }
 
-    const approvedStatus =      
-      seller.status ===      
-      "seller_approved";      
 
+      /*
+        If a seller record exists, this is
+        definitely being handled as a seller.
+      */
 
-    if (      
-      approved ||      
-      approvedStatus      
-    ) {      
+      if (seller) {
 
-      localStorage.setItem(      
-        "zava_seller_id",      
-        String(seller.id)      
-      );      
+        const {
+          data: profile,
+          error: profileError
+        } =
+          await supabaseClient
+            .from("profiles")
+            .select(
+              "id, role, full_name"
+            )
+            .eq(
+              "id",
+              userId
+            )
+            .maybeSingle();
 
-      localStorage.setItem(      
-        "zava_user_id",      
-        String(data.user.id)      
-      );      
 
-      localStorage.setItem(      
-        "zava_seller_email",      
-        email      
-      );      
+        if (profileError) {
 
-      localStorage.setItem(      
-        "zava_access_token",      
-        data.session.access_token      
-      );      
+          throw new Error(
+            profileError.message ||
+            "Could not read your seller profile."
+          );
 
+        }
 
-      showMessage(      
-        "Seller account approved. Opening ZYRE Marketing marketplace...",      
-        "success"      
-      );      
 
+        if (
+          profile &&
+          (
+            profile.role === "admin" ||
+            profile.role === "owner"
+          )
+        ) {
 
-      setTimeout(      
-        function() {      
+          throw new Error(
+            "This is an Owner account. Please use the private Owner Centre."
+          );
 
-          /*      
-            APPROVED SELLER      
-            → MARKETPLACE      
-          */      
+        }
 
-          window.location.replace(      
-            "index.html"      
-          );      
 
-        },      
-        700      
-      );      
+        return {
+          seller,
+          profile
+        };
 
+      }
 
-      return;      
 
-    }      
+      /*
+        NO SELLER RECORD FOUND.
+      */
 
+      const {
+        data: profile,
+        error: profileError
+      } =
+        await supabaseClient
+          .from("profiles")
+          .select(
+            "id, role, full_name"
+          )
+          .eq(
+            "id",
+            userId
+          )
+          .maybeSingle();
 
-    /*      
-      PENDING SELLER      
-    */      
 
-    localStorage.setItem(      
-      "zava_seller_id",      
-      String(seller.id)      
-    );      
+      if (profileError) {
 
-    localStorage.setItem(      
-      "zava_user_id",      
-      String(data.user.id)      
-    );      
+        throw new Error(
+          profileError.message ||
+          "Could not verify the account type."
+        );
 
-    localStorage.setItem(      
-      "zava_seller_email",      
-      email      
-    );      
+      }
 
-    localStorage.setItem(      
-      "zava_access_token",      
-      data.session.access_token      
-    );      
 
+      if (
+        profile &&
+        (
+          profile.role === "admin" ||
+          profile.role === "owner"
+        )
+      ) {
 
-    showMessage(      
-      "Your Seller account is signed in, but your Seller application is still pending approval.\n\nStore: " +      
-      (      
-        seller.store_name ||      
-        "Your Store"      
-      ) +      
-      "\n\nYou cannot access the Seller Centre until ZYRE Marketing approves your application.",      
-      "info"      
-    );      
+        throw new Error(
+          "This is an Owner account. Please use the private Owner Centre."
+        );
 
+      }
 
-    button.disabled = false;      
 
-    button.textContent =      
-      "Sign In as Seller";      
+      if (
+        profile &&
+        profile.role === "customer"
+      ) {
 
+        throw new Error(
+          "This is a Customer account. Customer accounts cannot sign in through Seller Login."
+        );
 
-  } catch (error) {      
+      }
 
-    console.error(      
-      "Seller login error:",      
-      error      
-    );      
 
+      throw new Error(
+        "This account is not registered as a Seller.\n\nIf you want to become a seller, please create a separate Seller account first."
+      );
 
-    try {      
+    }
 
-      await supabaseClient.auth.signOut();      
 
-    } catch (signOutError) {      
+    /*
+      CUSTOMER REDIRECT
+    */
 
-      console.error(      
-        "Seller sign-out error:",      
-        signOutError      
-      );      
+    async function redirectCustomerAfterLogin() {
 
-    }      
+      try {
 
+        const {
+          data: {
+            session
+          }
+        } =
+          await supabaseClient.auth.getSession();
 
-    clearSellerStorage();      
 
+        if (!session) {
 
-    showMessage(      
-      error.message ||      
-      "This account cannot sign in as Seller.",      
-      "error"      
-    );      
+          throw new Error(
+            "Your login session is not ready. Please try again."
+          );
 
+        }
 
-    button.disabled = false;      
 
-    button.textContent =      
-      "Sign In as Seller";      
+        await validateCustomerAccount(
+          session
+        );
 
-  }      
 
-}
+        window.location.replace(
+          "index.html"
+        );
 
-);
 
-/*
-IMPORTANT:
+      } catch (error) {
 
-There is intentionally NO automatic
-getSession() redirect when auth.html
-first opens.
+        console.error(
+          "Customer redirect error:",
+          error
+        );
 
-The selected login type must be
-validated before any redirect.
-*/
 
-</script>  </body>
+        await supabaseClient.auth.signOut();
 
-</html>
+
+        clearSellerStorage();
+
+
+        showMessage(
+          error.message ||
+          "This account cannot be used as a Customer.",
+          "error"
+        );
+
+      }
+
+    }
+
+
+    /*
+      CUSTOMER CREATE ACCOUNT
+    */
+
+    document
+      .getElementById("signupForm")
+      .addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+          clearMessage();
+
+
+          const fullName =
+            document
+              .getElementById("fullName")
+              .value
+              .trim();
+
+
+          const email =
+            document
+              .getElementById("signupEmail")
+              .value
+              .trim()
+              .toLowerCase();
+
+
+          const phone =
+            document
+              .getElementById("phone")
+              .value
+              .trim();
+
+
+          const address =
+            document
+              .getElementById("address")
+              .value
+              .trim();
+
+
+          const password =
+            document
+              .getElementById("signupPassword")
+              .value;
+
+
+          const confirmPassword =
+            document
+              .getElementById("confirmPassword")
+              .value;
+
+
+          const button =
+            document.getElementById(
+              "signupButton"
+            );
+
+
+          if (!strongPassword(password)) {
+
+            showMessage(
+              "Password must be at least 8 characters and contain uppercase and lowercase letters, a number and a special character.",
+              "error"
+            );
+
+            return;
+
+          }
+
+
+          if (password !== confirmPassword) {
+
+            showMessage(
+              "The passwords do not match.",
+              "error"
+            );
+
+            return;
+
+          }
+
+
+          button.disabled = true;
+
+          button.textContent =
+            "Creating account...";
+
+
+          try {
+
+            const {
+              data: existingSeller,
+              error: sellerCheckError
+            } =
+              await supabaseClient
+                .from("sellers")
+                .select(
+                  "id, email, store_name"
+                )
+                .ilike(
+                  "email",
+                  email
+                )
+                .limit(1);
+
+
+            if (sellerCheckError) {
+
+              console.error(
+                "Seller email check error:",
+                sellerCheckError
+              );
+
+            }
+
+
+            if (
+              Array.isArray(existingSeller) &&
+              existingSeller.length
+            ) {
+
+              throw new Error(
+                "This email address is already registered as a Seller account.\n\nPlease use Seller Login instead."
+              );
+
+            }
+
+
+            const {
+              data,
+              error
+            } =
+              await supabaseClient.auth.signUp({
+
+                email: email,
+
+                password: password,
+
+                options: {
+
+                  data: {
+
+                    full_name: fullName,
+
+                    phone: phone,
+
+                    role: "customer"
+
+                  }
+
+                }
+
+              });
+
+
+            if (error) {
+
+              throw error;
+
+            }
+
+
+            if (!data.user) {
+
+              throw new Error(
+                "The account could not be created."
+              );
+
+            }
+
+
+            const {
+              error: profileError
+            } =
+              await supabaseClient
+                .from("profiles")
+                .upsert({
+
+                  id: data.user.id,
+
+                  full_name: fullName,
+
+                  phone: phone,
+
+                  address: address,
+
+                  role: "customer"
+
+                });
+
+
+            if (profileError) {
+
+              throw profileError;
+
+            }
+
+
+            if (!data.session) {
+
+              showMessage(
+                "Account created successfully. Please check your email and confirm your account, then sign in as Customer.",
+                "success"
+              );
+
+
+              document
+                .getElementById(
+                  "loginEmail"
+                )
+                .value = email;
+
+
+              showLogin();
+
+              return;
+
+            }
+
+
+            showMessage(
+              "Customer account created successfully. Opening ZYRE Marketing...",
+              "success"
+            );
+
+
+            setTimeout(
+              redirectCustomerAfterLogin,
+              500
+            );
+
+
+          } catch (error) {
+
+            console.error(
+              "Customer account creation error:",
+              error
+            );
+
+
+            showMessage(
+              error.message ||
+              "Could not create your customer account.",
+              "error"
+            );
+
+
+          } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+              "Create Customer Account";
+
+          }
+
+        }
+      );
+
+
+    /*
+      CUSTOMER LOGIN
+    */
+
+    document
+      .getElementById("loginForm")
+      .addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+          clearMessage();
+
+
+          const email =
+            document
+              .getElementById("loginEmail")
+              .value
+              .trim()
+              .toLowerCase();
+
+
+          const password =
+            document
+              .getElementById("loginPassword")
+              .value;
+
+
+          const button =
+            document.getElementById(
+              "loginButton"
+            );
+
+
+          button.disabled = true;
+
+          button.textContent =
+            "Signing in...";
+
+
+          try {
+
+            const {
+              data,
+              error
+            } =
+              await supabaseClient.auth
+                .signInWithPassword({
+
+                  email: email,
+
+                  password: password
+
+                });
+
+
+            if (error) {
+
+              throw error;
+
+            }
+
+
+            if (
+              !data ||
+              !data.session
+            ) {
+
+              throw new Error(
+                "Login succeeded but no session was created."
+              );
+
+            }
+
+
+            await validateCustomerAccount(
+              data.session
+            );
+
+
+            showMessage(
+              "Customer signed in successfully. Opening ZYRE Marketing...",
+              "success"
+            );
+
+
+            setTimeout(
+              function() {
+
+                window.location.replace(
+                  "index.html"
+                );
+
+              },
+              500
+            );
+
+
+          } catch (error) {
+
+            console.error(
+              "Customer login error:",
+              error
+            );
+
+
+            try {
+
+              await supabaseClient.auth.signOut();
+
+            } catch (signOutError) {
+
+              console.error(
+                "Customer sign-out error:",
+                signOutError
+              );
+
+            }
+
+
+            clearSellerStorage();
+
+
+            showMessage(
+              error.message ||
+              "This account cannot sign in as Customer.",
+              "error"
+            );
+
+
+            button.disabled = false;
+
+            button.textContent =
+              "Sign In as Customer";
+
+          }
+
+        }
+      );
+
+
+    /*
+      SELLER LOGIN
+    */
+
+    document
+      .getElementById("sellerLoginForm")
+      .addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+          clearMessage();
+
+
+          const email =
+            document
+              .getElementById(
+                "sellerLoginEmail"
+              )
+              .value
+              .trim()
+              .toLowerCase();
+
+
+          const password =
+            document
+              .getElementById(
+                "sellerLoginPassword"
+              )
+              .value;
+
+
+          const button =
+            document.getElementById(
+              "sellerLoginButton"
+            );
+
+
+          button.disabled = true;
+
+          button.textContent =
+            "Signing in...";
+
+
+          try {
+
+            const {
+              data,
+              error
+            } =
+              await supabaseClient.auth
+                .signInWithPassword({
+
+                  email: email,
+
+                  password: password
+
+                });
+
+
+            if (error) {
+
+              throw error;
+
+            }
+
+
+            if (
+              !data ||
+              !data.session ||
+              !data.user
+            ) {
+
+              throw new Error(
+                "Login succeeded but no seller session was created."
+              );
+
+            }
+
+
+            const {
+              seller
+            } =
+              await getSellerAccount(
+                data.session
+              );
+
+
+            /*
+              APPROVED SELLER
+
+              IMPORTANT:
+              Approved sellers now go directly
+              to the main marketplace.
+
+              They can still access Seller
+              Dashboard from the marketplace
+              after logging in.
+            */
+
+            const approved =
+              seller.approved === true;
+
+            const approvedStatus =
+              seller.status ===
+              "seller_approved";
+
+
+            if (
+              approved ||
+              approvedStatus
+            ) {
+
+              localStorage.setItem(
+                "zava_seller_id",
+                String(seller.id)
+              );
+
+              localStorage.setItem(
+                "zava_user_id",
+                String(data.user.id)
+              );
+
+              localStorage.setItem(
+                "zava_seller_email",
+                email
+              );
+
+              localStorage.setItem(
+                "zava_access_token",
+                data.session.access_token
+              );
+
+
+              showMessage(
+                "Seller account approved. Opening ZYRE Marketing marketplace...",
+                "success"
+              );
+
+
+              setTimeout(
+                function() {
+
+                  /*
+                    APPROVED SELLER
+                    → MARKETPLACE
+                  */
+
+                  window.location.replace(
+                    "index.html"
+                  );
+
+                },
+                700
+              );
+
+
+              return;
+
+            }
+
+
+            /*
+              PENDING SELLER
+            */
+
+            localStorage.setItem(
+              "zava_seller_id",
+              String(seller.id)
+            );
+
+            localStorage.setItem(
+              "zava_user_id",
+              String(data.user.id)
+            );
+
+            localStorage.setItem(
+              "zava_seller_email",
+              email
+            );
+
+            localStorage.setItem(
+              "zava_access_token",
+              data.session.access_token
+            );
+
+
+            showMessage(
+              "Your Seller account is signed in, but your Seller application is still pending approval.\n\nStore: " +
+              (
+                seller.store_name ||
+                "Your Store"
+              ) +
+              "\n\nYou cannot access the Seller Centre until ZYRE Marketing approves your application.",
+              "info"
+            );
+
+
+            button.disabled = false;
+
+            button.textContent =
+              "Sign In as Seller";
+
+
+          } catch (error) {
+
+            console.error(
+              "Seller login error:",
+              error
+            );
+
+
+            try {
+
+              await supabaseClient.auth.signOut();
+
+            } catch (signOutError) {
+
+              console.error(
+                "Seller sign-out error:",
+                signOutError
+              );
+
+            }
+
+
+            clearSellerStorage();
+
+
+            showMessage(
+              error.message ||
+              "This account cannot sign in as Seller.",
+              "error"
+            );
+
+
+            button.disabled = false;
+
+            button.textContent =
+              "Sign In as Seller";
+
+          }
+
+        }
+      );
+
+
+    /*
+      IMPORTANT:
+
+      There is intentionally NO automatic
+      getSession() redirect when auth.html
+      first opens.
+
+      The selected login type must be
+      validated before any redirect.
+    */
+
+  </script> </body> </html>
