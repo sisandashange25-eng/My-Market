@@ -1838,260 +1838,327 @@ setTimeout(
               data,
               error
             } =
-              await supabaseClient.auth
-                .signInWithPassword({
+            await supabaseClient.auth
+.signInWithPassword({
 
-                  email: email,
+email: email,  
 
-                  password: password
+              password: password  
 
-                });
+            });  
 
-            if (error) {
+        if (error) {  
 
-              throw error;
+          throw error;  
 
-            }
+        }  
 
-            if (
-              !data ||
-              !data.session ||
-              !data.user
-            ) {
+        if (  
+          !data ||  
+          !data.session  
+        ) {  
 
-              throw new Error(
-                "Login succeeded but no seller session was created."
-              );
+          throw new Error(  
+            "Login succeeded but no session was created."  
+          );  
 
-            }
+        }  
 
-            const {
-              seller
-            } =
-              await getSellerAccount(
-                data.session
-              );
+        await validateCustomerAccount(  
+          data.session  
+        );  
 
-            /*
-              APPROVED SELLER
+        showMessage(  
+          "Customer signed in successfully. Opening ZYRE Marketing...",  
+          "success"  
+        );  
 
-              IMPORTANT:
-              Approved sellers normally go directly
-              to the main marketplace.
+        setTimeout(  
+          function() {  
 
-              When Continue Seller Application is
-              being used, return to the seller
-              application instead.
-            */
+            window.location.replace(  
+              "index.html"  
+            );  
 
-            const approved =
-              seller.approved === true;
+          },  
+          500  
+        );  
 
-            const approvedStatus =
-              seller.status ===
-              "seller_approved";
+      } catch (error) {  
 
-            if (
-              approved ||
-              approvedStatus
-            ) {
+        console.error(  
+          "Customer login error:",  
+          error  
+        );  
 
-              localStorage.setItem(
-                "zava_seller_id",
-                String(seller.id)
-              );
+        try {  
 
-              localStorage.setItem(
-                "zava_user_id",
-                String(data.user.id)
-              );
+          await supabaseClient.auth.signOut();  
 
-              localStorage.setItem(
-                "zava_seller_email",
-                email
-              );
+        } catch (signOutError) {  
 
-              localStorage.setItem(
-                "zava_access_token",
-                data.session.access_token
-              );
+          console.error(  
+            "Customer sign-out error:",  
+            signOutError  
+          );  
 
+        }  
 
-              const continueMode =
-                new URLSearchParams(
-                  window.location.search
-                ).get("continue");
+        clearSellerStorage();  
 
+        showMessage(  
+          error.message ||  
+          "This account cannot sign in as Customer.",  
+          "error"  
+        );  
 
-              if (
-                continueMode === "1"
-              ) {
+        button.disabled = false;  
 
-                showMessage(
-                  "Seller account signed in. Opening your seller application...",
-                  "success"
-                );
+        button.textContent =  
+          "Sign In as Customer";  
 
-                setTimeout(
-                  function() {
+      }  
 
-                    window.location.replace(
-                      "seller-auth.html?continue=1"
-                    );
+    }  
 
-                  },
-                  700
-                );
+  );  
 
-                return;
+/*  
+SELLER LOGIN  
+*/  
 
-              }
+document  
+  .getElementById("sellerLoginForm")  
+  .addEventListener(  
+    "submit",  
+    async function(event) {  
 
+      event.preventDefault();  
 
-              showMessage(
-                "Seller account approved. Opening ZYRE Marketing marketplace...",
-                "success"
-              );
+      clearMessage();  
 
-              setTimeout(
-                function() {
+      const email =  
+        document  
+          .getElementById(  
+            "sellerLoginEmail"  
+          )  
+          .value  
+          .trim()  
+          .toLowerCase();  
+
+      const password =  
+        document  
+          .getElementById(  
+            "sellerLoginPassword"  
+          )  
+          .value;  
+
+      const button =  
+        document.getElementById(  
+          "sellerLoginButton"  
+        );  
+
+      button.disabled = true;  
+
+      button.textContent =  
+        "Signing in...";  
+
+      try {  
+
+        const {  
+          data,  
+          error  
+        } =  
+          await supabaseClient.auth  
+            .signInWithPassword({  
+
+              email: email,  
 
-                  /*
-                    APPROVED SELLER
-                    → MARKETPLACE
-                  */
+              password: password  
+
+            });  
 
-                  window.location.replace(
-                    "index.html"
-                  );
+        if (error) {  
+
+          throw error;  
 
-                },
-                700
-              );
+        }  
+
+        if (  
+          !data ||  
+          !data.session ||  
+          !data.user  
+        ) {  
+
+          throw new Error(  
+            "Login succeeded but no seller session was created."  
+          );  
+
+        }  
+
+        const {  
+          seller  
+        } =  
+          await getSellerAccount(  
+            data.session  
+          );  
+
+        /*  
+          APPROVED SELLER  
+
+          IMPORTANT:  
+          Approved sellers now go directly  
+          to the main marketplace.  
+
+          They can still access Seller  
+          Dashboard from the marketplace  
+          after logging in.  
+        */  
+
+        const approved =  
+          seller.approved === true;  
+
+        const approvedStatus =  
+          seller.status ===  
+          "seller_approved";  
+
+        if (  
+          approved ||  
+          approvedStatus  
+        ) {  
 
-              return;
+          localStorage.setItem(  
+            "zava_seller_id",  
+            String(seller.id)  
+          );  
 
-            }
+          localStorage.setItem(  
+            "zava_user_id",  
+            String(data.user.id)  
+          );  
 
-            /*
-              PENDING SELLER
-            */
+          localStorage.setItem(  
+            "zava_seller_email",  
+            email  
+          );  
 
-            localStorage.setItem(
-              "zava_seller_id",
-              String(seller.id)
-            );
+          localStorage.setItem(  
+            "zava_access_token",  
+            data.session.access_token  
+          );  
 
-            localStorage.setItem(
-              "zava_user_id",
-              String(data.user.id)
-            );
+          showMessage(  
+            "Seller account approved. Opening ZYRE Marketing marketplace...",  
+            "success"  
+          );  
 
-            localStorage.setItem(
-              "zava_seller_email",
-              email
-            );
+          setTimeout(  
+            function() {  
 
-            localStorage.setItem(
-              "zava_access_token",
-              data.session.access_token
-            );
+              /*  
+                APPROVED SELLER  
+                → MARKETPLACE  
+              */  
 
+              window.location.replace(  
+                "index.html"  
+              );  
 
-            const continueMode =
-              new URLSearchParams(
-                window.location.search
-              ).get("continue");
+            },  
+            700  
+          );  
 
+          return;  
 
-            if (
-              continueMode === "1"
-            ) {
+        }  
 
-              showMessage(
-                "Seller account signed in. Opening your seller application...",
-                "success"
-              );
+        /*  
+          PENDING SELLER  
+        */  
 
-              setTimeout(
-                function() {
+        localStorage.setItem(  
+          "zava_seller_id",  
+          String(seller.id)  
+        );  
 
-                  window.location.replace(
-                    "seller-auth.html?continue=1"
-                  );
+        localStorage.setItem(  
+          "zava_user_id",  
+          String(data.user.id)  
+        );  
 
-                },
-                700
-              );
+        localStorage.setItem(  
+          "zava_seller_email",  
+          email  
+        );  
 
-              return;
+        localStorage.setItem(  
+          "zava_access_token",  
+          data.session.access_token  
+        );  
 
-            }
+        showMessage(  
+          "Your Seller account is signed in, but your Seller application is still pending approval.\n\nStore: " +  
+          (  
+            seller.store_name ||  
+            "Your Store"  
+          ) +  
+          "\n\nYou cannot access the Seller Centre until ZYRE Marketing approves your application.",  
+          "info"  
+        );  
 
+        button.disabled = false;  
 
-            showMessage(
-              "Your Seller account is signed in, but your Seller application is still pending approval.\n\nStore: " +
-              (
-                seller.store_name ||
-                "Your Store"
-              ) +
-              "\n\nYou cannot access the Seller Centre until ZYRE Marketing approves your application.",
-              "info"
-            );
+        button.textContent =  
+          "Sign In as Seller";  
 
-            button.disabled = false;
+      } catch (error) {  
 
-            button.textContent =
-              "Sign In as Seller";
+        console.error(  
+          "Seller login error:",  
+          error  
+        );  
 
-          } catch (error) {
+        try {  
 
-            console.error(
-              "Seller login error:",
-              error
-            );
+          await supabaseClient.auth.signOut();  
 
-            try {
+        } catch (signOutError) {  
 
-              await supabaseClient.auth.signOut();
+          console.error(  
+            "Seller sign-out error:",  
+            signOutError  
+          );  
 
-            } catch (signOutError) {
+        }  
 
-              console.error(
-                "Seller sign-out error:",
-                signOutError
-              );
+        clearSellerStorage();  
 
-            }
+        showMessage(  
+          error.message ||  
+          "This account cannot sign in as Seller.",  
+          "error"  
+        );  
 
-            clearSellerStorage();
+        button.disabled = false;  
 
-            showMessage(
-              error.message ||
-              "This account cannot sign in as Seller.",
-              "error"
-            );
+        button.textContent =  
+          "Sign In as Seller";  
 
-            button.disabled = false;
+      }  
 
-            button.textContent =
-              "Sign In as Seller";
+    }  
 
-          }
+  );  
 
-        }
+/*  
+IMPORTANT:  
 
-      );
+There is intentionally NO automatic  
+getSession() redirect when auth.html  
+first opens.  
 
-    /*
-    IMPORTANT:
+The selected login type must be  
+validated before any redirect.  
+*/
 
-    There is intentionally NO automatic
-    getSession() redirect when auth.html
-    first opens.
-
-    The selected login type must be
-    validated before any redirect.
-    */
-
-  </script></body></html>
+</script></body></html>
