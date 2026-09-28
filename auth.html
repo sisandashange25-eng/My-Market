@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html><html lang="en">
+<head>
   <meta charset="UTF-8"><meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
@@ -18,18 +19,11 @@ content="noindex,nofollow"
 «»
 
   <link rel="stylesheet" href="style.css">
-</head><body class="zyre-auth-page">  <!-- =====================================================
-       HEADER
-       ===================================================== -->  <header class="auth-header"><div class="auth-brand">
-
-  <div class="auth-brand-main">
-    ZYRE
-  </div>
-
+</head><body class="zyre-auth-page">  <header class="auth-header"><div class="auth-brand">
+  <div class="auth-brand-main">ZYRE</div>
   <div class="auth-brand-sub">
     MARKETING • ONLINE MARKETPLACE
   </div>
-
 </div>
 
 <button
@@ -40,17 +34,13 @@ content="noindex,nofollow"
   ← Marketplace
 </button>
 
-  </header>  <!-- =====================================================
-       MAIN ACCOUNT AREA
-       ===================================================== -->  <main class="auth-main"><div class="auth-heading">
+  </header>  <main class="auth-main"><div class="auth-heading">
 
   <div class="auth-eyebrow">
     ZYRE MARKETING ACCOUNT
   </div>
 
-  <h1>
-    Your ZYRE Account
-  </h1>
+  <h1>Your ZYRE Account</h1>
 
   <p>
     Choose how you want to use ZYRE Marketing.
@@ -60,8 +50,6 @@ content="noindex,nofollow"
 
 
 <section class="auth-card">
-
-  <!-- CUSTOMER / SELLER -->
 
   <div class="auth-choice">
 
@@ -86,8 +74,6 @@ content="noindex,nofollow"
   </div>
 
 
-  <!-- SIGN IN / CREATE ACCOUNT -->
-
   <div class="auth-tabs">
 
     <button
@@ -111,26 +97,18 @@ content="noindex,nofollow"
   </div>
 
 
-  <!-- MESSAGE -->
-
   <div
     id="authMessage"
     class="auth-message"
   ></div>
 
 
-  <!-- =================================================
-       CUSTOMER SIGN IN
-       ================================================= -->
-
   <div
     id="customerSigninPanel"
     class="auth-panel"
   >
 
-    <h2>
-      Welcome back
-    </h2>
+    <h2>Welcome back</h2>
 
     <p class="subtitle">
       Sign in to your ZYRE Marketing customer account
@@ -185,18 +163,12 @@ content="noindex,nofollow"
   </div>
 
 
-  <!-- =================================================
-       CUSTOMER CREATE ACCOUNT
-       ================================================= -->
-
   <div
     id="customerCreatePanel"
     class="auth-panel hidden"
   >
 
-    <h2>
-      Create your customer account
-    </h2>
+    <h2>Create your customer account</h2>
 
     <p class="subtitle">
       Create your ZYRE Marketing customer account.
@@ -328,18 +300,12 @@ content="noindex,nofollow"
   </div>
 
 
-  <!-- =================================================
-       SELLER SIGN IN
-       ================================================= -->
-
   <div
     id="sellerSigninPanel"
     class="auth-panel hidden"
   >
 
-    <h2>
-      Seller account
-    </h2>
+    <h2>Seller account</h2>
 
     <p class="subtitle">
       Sellers must register with their real personal
@@ -417,9 +383,7 @@ content="noindex,nofollow"
 
     <div class="seller-continue-box">
 
-      <h3>
-        New seller?
-      </h3>
+      <h3>New seller?</h3>
 
       <p>
         Start your seller application with your
@@ -439,18 +403,12 @@ content="noindex,nofollow"
   </div>
 
 
-  <!-- =================================================
-       SELLER CREATE
-       ================================================= -->
-
   <div
     id="sellerCreatePanel"
     class="auth-panel hidden"
   >
 
-    <h2>
-      Become a ZYRE seller
-    </h2>
+    <h2>Become a ZYRE seller</h2>
 
     <p class="subtitle">
       Complete the seller application before accessing
@@ -460,9 +418,7 @@ content="noindex,nofollow"
 
     <div class="seller-continue-box">
 
-      <h3>
-        Seller Application
-      </h3>
+      <h3>Seller Application</h3>
 
       <p>
         You will provide your legal name, SA ID number,
@@ -496,13 +452,7 @@ content="noindex,nofollow"
 
 </section>
 
-  </main>  <!-- =====================================================
-       SUPABASE
-       ===================================================== -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script>
-
-    /* =====================================================
-       SUPABASE
-       ===================================================== */
+  </main>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script>
 
     const SUPABASE_URL =
       "https://gaccizzlwswwynattgda.supabase.co";
@@ -517,18 +467,9 @@ content="noindex,nofollow"
       );
 
 
-    /* =====================================================
-       STATE
-       ===================================================== */
-
     let accountType = "customer";
-
     let authPanel = "signin";
 
-
-    /* =====================================================
-       STORAGE
-       ===================================================== */
 
     const ACCESS_TOKEN_KEY =
       "zava_access_token";
@@ -543,96 +484,61 @@ content="noindex,nofollow"
       "zava_seller_email";
 
 
-    /* =====================================================
-       HELPER
-       ===================================================== */
-
     function $(id) {
       return document.getElementById(id);
     }
 
 
-    function showMessage(
-      message,
-      type = ""
-    ) {
+    function showMessage(message, type = "") {
 
-      const box =
-        $("authMessage");
+      const box = $("authMessage");
 
-      if (!box) {
-        return;
-      }
+      if (!box) return;
 
-      box.textContent =
-        message;
+      box.textContent = message;
 
       box.className =
         "auth-message show" +
-        (type
-          ? " " + type
-          : "");
+        (type ? " " + type : "");
 
     }
 
 
     function clearMessage() {
 
-      const box =
-        $("authMessage");
+      const box = $("authMessage");
 
-      if (!box) {
-        return;
-      }
+      if (!box) return;
 
-      box.textContent =
-        "";
+      box.textContent = "";
 
-      box.className =
-        "auth-message";
+      box.className = "auth-message";
 
     }
 
 
-    function setLoading(
-      button,
-      text
-    ) {
+    function setLoading(button, text) {
 
       if (!button) {
         return function(){};
       }
 
-      const original =
-        button.textContent;
+      const original = button.textContent;
 
-      button.disabled =
-        true;
-
-      button.textContent =
-        text;
+      button.disabled = true;
+      button.textContent = text;
 
       return function() {
-
-        button.disabled =
-          false;
-
-        button.textContent =
-          original;
-
+        button.disabled = false;
+        button.textContent = original;
       };
 
     }
 
 
-    /* =====================================================
-       NAVIGATION
-       ===================================================== */
-
     function goHome() {
 
-      window.location.href =
-        "index.html";
+      window.location.href = "index.html";
 
     }
 
@@ -663,19 +569,11 @@ content="noindex,nofollow"
     }
 
 
-    /* =====================================================
-       ACCOUNT TYPE
-       ===================================================== */
+    function chooseAccountType(type) {
 
-    function chooseAccountType(
-      type
-    ) {
-
-      accountType =
-        type;
+      accountType = type;
 
       clearMessage();
-
 
       $("customerChoice")
         ?.classList.toggle(
@@ -683,41 +581,28 @@ content="noindex,nofollow"
           type === "customer"
         );
 
-
       $("sellerChoice")
         ?.classList.toggle(
           "active",
           type === "seller"
         );
 
-
-      showAuthPanel(
-        authPanel
-      );
+      showAuthPanel(authPanel);
 
     }
 
 
-    /* =====================================================
-       AUTH PANEL
-       ===================================================== */
+    function showAuthPanel(panel) {
 
-    function showAuthPanel(
-      panel
-    ) {
-
-      authPanel =
-        panel;
+      authPanel = panel;
 
       clearMessage();
-
 
       $("signInTab")
         ?.classList.toggle(
           "active",
           panel === "signin"
         );
-
 
       $("createTab")
         ?.classList.toggle(
@@ -785,14 +670,7 @@ content="noindex,nofollow"
     }
 
 
-    /* =====================================================
-       SAVE SESSION
-       ===================================================== */
-
-    function saveSession(
-      session,
-      user
-    ) {
+    function saveSession(session, user) {
 
       if (
         session &&
@@ -835,10 +713,6 @@ content="noindex,nofollow"
     }
 
 
-    /* =====================================================
-       CUSTOMER PROFILE
-       ===================================================== */
-
     async function saveCustomerProfile(
       user,
       fullName,
@@ -846,27 +720,16 @@ content="noindex,nofollow"
       address
     ) {
 
-      const {
-        error
-      } =
+      const { error } =
         await supabaseClient
           .from("profiles")
           .upsert(
             {
               id: user.id,
-
-              full_name:
-                fullName.trim(),
-
-              phone:
-                phone.trim(),
-
-              address:
-                address.trim(),
-
-              role:
-                "customer"
-
+              full_name: fullName.trim(),
+              phone: phone.trim(),
+              address: address.trim(),
+              role: "customer"
             },
             {
               onConflict: "id"
@@ -890,10 +753,6 @@ content="noindex,nofollow"
     }
 
 
-    /* =====================================================
-       CUSTOMER SIGN IN
-       ===================================================== */
-
     $("customerSigninForm")
       ?.addEventListener(
         "submit",
@@ -914,10 +773,7 @@ content="noindex,nofollow"
               .value;
 
 
-          if (
-            !email ||
-            !password
-          ) {
+          if (!email || !password) {
 
             showMessage(
               "Please enter your email and password.",
@@ -934,7 +790,6 @@ content="noindex,nofollow"
               "button[type='submit']"
             );
 
-
           const restore =
             setLoading(
               button,
@@ -944,22 +799,15 @@ content="noindex,nofollow"
 
           try {
 
-            const {
-              data,
-              error
-            } =
+            const { data, error } =
               await supabaseClient.auth
-                .signInWithPassword(
-                  {
-                    email,
-                    password
-                  }
-                );
+                .signInWithPassword({
+                  email,
+                  password
+                });
 
 
-            if (error) {
-              throw error;
-            }
+            if (error) throw error;
 
 
             if (
@@ -1027,10 +875,6 @@ content="noindex,nofollow"
       );
 
 
-    /* =====================================================
-       CUSTOMER CREATE ACCOUNT
-       ===================================================== */
-
     $("customerCreateForm")
       ?.addEventListener(
         "submit",
@@ -1089,9 +933,7 @@ content="noindex,nofollow"
           }
 
 
-          if (
-            password.length < 8
-          ) {
+          if (password.length < 8) {
 
             showMessage(
               "Your password must contain at least 8 characters.",
@@ -1103,10 +945,7 @@ content="noindex,nofollow"
           }
 
 
-          if (
-            password !==
-            confirmPassword
-          ) {
+          if (password !== confirmPassword) {
 
             showMessage(
               "The passwords do not match.",
@@ -1123,7 +962,6 @@ content="noindex,nofollow"
               "button[type='submit']"
             );
 
-
           const restore =
             setLoading(
               button,
@@ -1133,43 +971,25 @@ content="noindex,nofollow"
 
           try {
 
-            const {
-              data,
-              error
-            } =
+            const { data, error } =
               await supabaseClient.auth
-                .signUp(
-                  {
-                    email,
-                    password,
+                .signUp({
+                  email,
+                  password,
 
-                    options: {
-
-                      data: {
-
-                        full_name:
-                          fullName,
-
-                        phone:
-                          phone,
-
-                        address:
-                          address,
-
-                        role:
-                          "customer"
-
-                      }
-
+                  options: {
+                    data: {
+                      full_name: fullName,
+                      phone: phone,
+                      address: address,
+                      role: "customer"
                     }
-
                   }
-                );
+
+                });
 
 
-            if (error) {
-              throw error;
-            }
+            if (error) throw error;
 
 
             if (!data.user) {
@@ -1230,14 +1050,11 @@ content="noindex,nofollow"
             );
 
 
-            showAuthPanel(
-              "signin"
-            );
+            showAuthPanel("signin");
 
 
             $("customerSigninEmail")
-              .value =
-              email;
+              .value = email;
 
           }
           catch (error) {
@@ -1264,10 +1081,6 @@ content="noindex,nofollow"
       );
 
 
-    /* =====================================================
-       SELLER SIGN IN
-       ===================================================== */
-
     $("sellerSigninForm")
       ?.addEventListener(
         "submit",
@@ -1288,10 +1101,7 @@ content="noindex,nofollow"
               .value;
 
 
-          if (
-            !email ||
-            !password
-          ) {
+          if (!email || !password) {
 
             showMessage(
               "Please enter your seller email and password.",
@@ -1308,7 +1118,6 @@ content="noindex,nofollow"
               "button[type='submit']"
             );
 
-
           const restore =
             setLoading(
               button,
@@ -1318,22 +1127,15 @@ content="noindex,nofollow"
 
           try {
 
-            const {
-              data,
-              error
-            } =
+            const { data, error } =
               await supabaseClient.auth
-                .signInWithPassword(
-                  {
-                    email,
-                    password
-                  }
-                );
+                .signInWithPassword({
+                  email,
+                  password
+                });
 
 
-            if (error) {
-              throw error;
-            }
+            if (error) throw error;
 
 
             if (
@@ -1498,15 +1300,8 @@ content="noindex,nofollow"
       );
 
 
-    /* =====================================================
-       AUTH STATE
-       ===================================================== */
-
     supabaseClient.auth.onAuthStateChange(
-      function(
-        event,
-        session
-      ) {
+      function(event, session) {
 
         if (
           session &&
@@ -1524,18 +1319,11 @@ content="noindex,nofollow"
     );
 
 
-    /* =====================================================
-       EXISTING SESSION
-       ===================================================== */
-
     async function checkExistingSession() {
 
       try {
 
-        const {
-          data,
-          error
-        } =
+        const { data, error } =
           await supabaseClient.auth
             .getSession();
 
@@ -1577,28 +1365,18 @@ content="noindex,nofollow"
     }
 
 
-    /* =====================================================
-       START
-       ===================================================== */
-
     document.addEventListener(
       "DOMContentLoaded",
       function() {
 
-        chooseAccountType(
-          "customer"
-        );
+        chooseAccountType("customer");
 
-        showAuthPanel(
-          "signin"
-        );
+        showAuthPanel("signin");
 
         checkExistingSession();
 
       }
     );
 
-  </script>
-
-</body>
+  </script></body>
 </html>
