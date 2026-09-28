@@ -1,4880 +1,4707 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>  <html lang="en">  <head>  <meta charset="UTF-8">  <meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 
-<head>
-
-<meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+> 
 
 <meta
-  name="theme-color"
-  content="#111111"
->
-
-<title>Seller Account | ZYRE Marketing</title>
-
-<style>
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-  background:
-    linear-gradient(
-      135deg,
-      #080808,
-      #171717,
-      #050505
-    );
-  color: #111;
-  min-height: 100vh;
-}
-
-.header {
-  width: 100%;
-  padding: 18px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: white;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  object-fit: cover;
-  background: #222;
-}
-
-.brand-text {
-  line-height: 1.1;
-}
-
-.brand-name {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: 2px;
-}
-
-.brand-subtitle {
-  font-size: 11px;
-  opacity: .65;
-  margin-top: 4px;
-}
-
-.back-button {
-  border: 1px solid rgba(255,255,255,.25);
-  background: rgba(255,255,255,.08);
-  color: white;
-  padding: 10px 15px;
-  border-radius: 9px;
-  text-decoration: none;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.main {
-  width: 100%;
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.intro {
-  text-align: center;
-  color: white;
-  margin: 15px 0 30px;
-}
-
-.intro h1 {
-  margin: 0;
-  font-size: 32px;
-  letter-spacing: 1px;
-}
-
-.intro p {
-  margin: 10px auto 0;
-  max-width: 700px;
-  color: #bdbdbd;
-  line-height: 1.6;
-  font-size: 15px;
-}
-
-.auth-grid {
-  display: grid;
-  grid-template-columns:
-    minmax(0, 1fr);
-  gap: 22px;
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.card {
-  background: white;
-  border-radius: 18px;
-  padding: 28px;
-  box-shadow:
-    0 20px 60px
-    rgba(0,0,0,.35);
-}
-
-.card h2 {
-  margin: 0 0 8px;
-  font-size: 24px;
-}
-
-.card-description {
-  margin: 0 0 24px;
-  color: #666;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.form-section-title {
-  margin: 25px 0 15px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
-  font-size: 16px;
-  font-weight: 800;
-  color: #111;
-}
-
-.form-group {
-  margin-bottom: 17px;
-}
-
-label {
-  display: block;
-  margin-bottom: 7px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #222;
-}
-
-input,
-textarea,
-select {
-  width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 13px 14px;
-  font-size: 15px;
-  outline: none;
-  background: #fafafa;
-  transition: .2s;
-  font-family: inherit;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: #111;
-  background: white;
-  box-shadow:
-    0 0 0 3px
-    rgba(0,0,0,.06);
-}
-
-textarea {
-  min-height: 90px;
-  resize: vertical;
-}
-
-select {
-  appearance: auto;
-}
-
-.field-help {
-  margin-top: 6px;
-  color: #777;
-  font-size: 11px;
-  line-height: 1.4;
-}
-
-.password-wrap {
-  position: relative;
-}
-
-.password-wrap input {
-  padding-right: 82px;
-}
-
-.password-toggle {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 0;
-  background: transparent;
-  color: #555;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.password-requirements {
-  margin-top: 8px;
-  padding: 10px 12px;
-  border-radius: 9px;
-  background: #f7f7f7;
-  color: #666;
-  font-size: 11px;
-  line-height: 1.6;
-}
-
-.password-requirements strong {
-  color: #333;
-}
-
-
-/* =========================
-STORE IMAGE
-========================= */
-
-.store-image-upload {
-  border: 1px solid #e2e2e2;
-  border-radius: 14px;
-  padding: 18px;
-  background: #fafafa;
-}
-
-.store-image-preview-wrap {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-
-.store-image-preview {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #f0f0f0;
-  background: #eeeeee;
-  display: none;
-}
-
-.store-image-placeholder {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: #eeeeee;
-  border: 4px solid #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: #777;
-  font-size: 12px;
-  line-height: 1.3;
-  padding: 15px;
-}
-
-.store-image-upload input[type="file"] {
-  padding: 10px;
-  background: white;
-  border: 1px solid #ddd;
-}
-
-.store-image-note {
-  margin-top: 8px;
-  color: #777;
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-
-/* =========================
-BUTTONS
-========================= */
-
-.primary-button {
-  width: 100%;
-  border: 0;
-  border-radius: 11px;
-  padding: 14px;
-  background: #111;
-  color: white;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.primary-button:hover {
-  background: #2a2a2a;
-}
-
-.primary-button:disabled {
-  opacity: .6;
-  cursor: not-allowed;
-}
-
-.secondary-button {
-  width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 11px;
-  padding: 13px;
-  background: white;
-  color: #111;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.secondary-button:hover {
-  background: #f5f5f5;
-}
-
-.checkbox-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  margin: 18px 0;
-}
-
-.checkbox-row input {
-  width: auto;
-  margin-top: 3px;
-}
-
-.checkbox-row label {
-  margin: 0;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #555;
-}
-
-
-/* =========================
-MESSAGES
-========================= */
-
-.message {
-  display: none;
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 18px;
-  font-size: 13px;
-  line-height: 1.5;
-  white-space: pre-line;
-}
-
-.message.error {
-  display: block;
-  background: #fff0f0;
-  border: 1px solid #ffcaca;
-  color: #a00000;
-}
-
-.message.success {
-  display: block;
-  background: #effff4;
-  border: 1px solid #b9edc8;
-  color: #176b31;
-}
-
-.message.info {
-  display: block;
-  background: #f1f5ff;
-  border: 1px solid #cbd7ff;
-  color: #27458f;
-}
-
-
-/* =========================
-APPLICATION NOTICE
-========================= */
-
-.application-notice {
-  background: #f7f7f7;
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  padding: 14px;
-  margin: 18px 0;
-  font-size: 12px;
-  line-height: 1.6;
-  color: #555;
-}
-
-.application-notice strong {
-  color: #111;
-}
-
-
-/* =========================
-IDENTITY VERIFICATION
-========================= */
-
-.verification-section {
-  display: none;
-  margin-top: 22px;
-  padding: 18px;
-  border-radius: 14px;
-  background: #f7f7f7;
-  border: 1px solid #e3e3e3;
-}
-
-.verification-section.visible {
-  display: block;
-}
-
-.verification-title {
-  margin: 0 0 7px;
-  font-size: 17px;
-  font-weight: 800;
-}
-
-.verification-description {
-  margin: 0 0 15px;
-  color: #666;
-  font-size: 13px;
-  line-height: 1.55;
-}
-
-.verify-button {
-  width: 100%;
-  border: 0;
-  border-radius: 11px;
-  padding: 14px;
-  background: #111;
-  color: white;
-  font-size: 15px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.verify-button:hover {
-  background: #2a2a2a;
-}
-
-.verify-button:disabled {
-  opacity: .55;
-  cursor: not-allowed;
-}
-
-.verification-note {
-  margin-top: 10px;
-  color: #777;
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-
-/* =========================
-RENTAL SECTION
-========================= */
-
-.rental-section {
-  display: none;
-  margin-top: 25px;
-}
-
-.rental-card {
-  background: white;
-  border-radius: 18px;
-  padding: 30px;
-  box-shadow:
-    0 20px 60px
-    rgba(0,0,0,.35);
-  max-width: 680px;
-  margin: 0 auto;
-}
-
-.rental-card h2 {
-  margin: 0 0 8px;
-  font-size: 26px;
-}
-
-.rental-intro {
-  color: #666;
-  font-size: 14px;
-  line-height: 1.6;
-  margin-bottom: 25px;
-}
-
-.rental-price {
-  border: 1px solid #e4e4e4;
-  border-radius: 15px;
-  padding: 22px;
-  margin-bottom: 20px;
-  background: #fafafa;
-}
-
-.rental-price-label {
-  color: #666;
-  font-size: 13px;
-  margin-bottom: 7px;
-}
-
-.rental-price-value {
-  font-size: 34px;
-  font-weight: 800;
-}
-
-.rental-price-period {
-  color: #777;
-  font-size: 13px;
-  margin-top: 5px;
-}
-
-.rental-status {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  border-radius: 12px;
-  padding: 14px;
-  background: #fff8e8;
-  border: 1px solid #f1d99b;
-  color: #775400;
-  font-size: 13px;
-  line-height: 1.5;
-  margin-bottom: 20px;
-}
-
-.rental-status-icon {
-  font-size: 21px;
-}
-
-.rental-info {
-  border-top: 1px solid #eee;
-  padding-top: 20px;
-  margin-top: 20px;
-}
-
-.rental-info-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 9px 0;
-  font-size: 13px;
-}
-
-.rental-info-row span:first-child {
-  color: #777;
-}
-
-.rental-info-row span:last-child {
-  font-weight: 700;
-  text-align: right;
-}
-
-.pending-button {
-  background: #111;
-  cursor: pointer;
-}
-
-.pending-button:hover {
-  background: #2a2a2a;
-}
-
-.pending-button:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-}
-
-
-/* =========================
-BENEFITS
-========================= */
-
-.benefits {
-  margin-top: 30px;
-  padding-top: 22px;
-  border-top: 1px solid #eee;
-}
-
-.benefits h3 {
-  margin: 0 0 14px;
-  font-size: 15px;
-}
-
-.benefit {
-  display: flex;
-  gap: 10px;
-  margin: 11px 0;
-  color: #555;
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-.benefit-icon {
-  font-size: 16px;
-}
-
-.footer {
-  text-align: center;
-  color: #888;
-  padding: 30px 20px;
-  font-size: 12px;
-}
-
-
-@media (max-width: 760px) {
-
-  .header {
-    padding: 14px;
-  }
-
-  .brand-name {
-    font-size: 17px;
-  }
-
-  .brand-subtitle {
-    font-size: 9px;
-  }
-
-  .back-button {
-    padding: 8px 10px;
-    font-size: 11px;
-  }
-
-  .main {
-    padding: 12px;
-  }
-
-  .intro h1 {
-    font-size: 26px;
-  }
-
-  .intro p {
-    font-size: 13px;
-  }
-
-  .card {
-    padding: 22px 18px;
-    border-radius: 15px;
-  }
-
-  .rental-card {
-    padding: 22px 18px;
-  }
-
-  .rental-price-value {
-    font-size: 30px;
-  }
-
-  .rental-info-row {
-    align-items: flex-start;
-  }
-
-}
-
-</style>
-
-</head>
-
-
-<body>
-
-
-<header class="header">
-
-  <div class="brand">
-
-    <img
-      src="icon-192.png"
-      class="logo"
-      alt="ZYRE Marketing"
-      onerror="this.style.display='none'"
-    >
-
-    <div class="brand-text">
-
-      <div class="brand-name">
-        ZYRE
-      </div>
-
-      <div class="brand-subtitle">
-        MARKETING • SELLER CENTRE
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <button
-    type="button"
-    class="back-button"
-    id="accountButton"
-  >
-    ← Account
-  </button>
-
-</header>
-
-
-<main class="main">
-
-
-  <section class="intro">
-
-    <h1>
-      Sell on ZYRE Marketing
-    </h1>
-
-    <p>
-      Apply to become a ZYRE Marketing seller.
-      Your identity and application will be
-      reviewed before your seller store is activated.
-    </p>
-
-  </section>
-
-
-  <!-- =========================
-  APPLICATION AREA
-  ========================= -->
-
-  <section
-    class="auth-grid"
-    id="authArea"
-  >
-
-    <div class="card">
-
-      <h2>
-        Seller application
-      </h2>
-
-      <p class="card-description">
-        Complete your details below to apply
-        for a ZYRE Marketing seller account.
-      </p>
-
-
-      <div
-        id="registerMessage"
-        class="message"
-      ></div>
-
-
-      <div class="application-notice">
-
-        <strong>Secure application process:</strong><br>
-
-        Create or sign in to your ZYRE account →
-        submit your seller information →
-        private identity verification →
-        ZYRE Marketing review →
-        seller approval →
-        R100 monthly rental payment →
-        Seller Centre access.
-
-        <br><br>
-
-        Your ID number and residential address
-        are stored privately in the seller
-        verification system. They are not displayed
-        to customers.
-
-        <br><br>
-
-        <strong>Important:</strong>
-        entering a valid 13-digit ID format does
-        not by itself confirm that the identity
-        belongs to you. Identity verification is
-        handled separately by ZYRE Marketing.
-
-      </div>
-
-
-      <form id="registerForm">
-
-
-        <div class="form-section-title">
-          👤 Personal information
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="registerName">
-            Full legal name
-          </label>
-
-          <input
-            type="text"
-            id="registerName"
-            placeholder="Your full legal name"
-            autocomplete="name"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="registerEmail">
-            Email address
-          </label>
-
-          <input
-            type="email"
-            id="registerEmail"
-            placeholder="you@example.com"
-            autocomplete="email"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="registerPhone">
-            Phone number
-          </label>
-
-          <input
-            type="tel"
-            id="registerPhone"
-            placeholder="e.g. 081 234 5678"
-            autocomplete="tel"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="idNumber">
-            South African ID number
-          </label>
-
-          <input
-            type="text"
-            id="idNumber"
-            placeholder="13-digit South African ID number"
-            inputmode="numeric"
-            autocomplete="off"
-            maxlength="13"
-            minlength="13"
-            required
-          >
-
-          <div class="field-help">
-            Your ID number is collected for seller
-            identity verification and marketplace
-            security. It is not displayed publicly.
-          </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="residentialAddress">
-            Residential address
-          </label>
-
-          <textarea
-            id="residentialAddress"
-            placeholder="Enter your residential address"
-            autocomplete="street-address"
-            required
-          ></textarea>
-
-          <div class="field-help">
-            This information is private and is used
-            for seller verification and marketplace
-            security.
-          </div>
-
-        </div>
-
-
-        <div class="form-section-title">
-          🔐 Account security
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="registerPassword">
-            Strong password
-          </label>
-
-          <div class="password-wrap">
-
-            <input
-              type="password"
-              id="registerPassword"
-              placeholder="Create a strong password"
-              autocomplete="new-password"
-              minlength="8"
-              required
-            >
-
-            <button
-              type="button"
-              class="password-toggle"
-              onclick="togglePassword('registerPassword', this)"
-            >
-              Show
-            </button>
-
-          </div>
-
-
-          <div class="password-requirements">
-
-            <strong>Password must contain:</strong><br>
-
-            • At least 8 characters<br>
-            • At least one uppercase letter<br>
-            • At least one lowercase letter<br>
-            • At least one number<br>
-            • At least one special character
-
-          </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="confirmPassword">
-            Confirm password
-          </label>
-
-          <div class="password-wrap">
-
-            <input
-              type="password"
-              id="confirmPassword"
-              placeholder="Enter your password again"
-              autocomplete="new-password"
-              minlength="8"
-              required
-            >
-
-            <button
-              type="button"
-              class="password-toggle"
-              onclick="togglePassword('confirmPassword', this)"
-            >
-              Show
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div class="form-section-title">
-          🏪 Store information
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="storeName">
-            Store name
-          </label>
-
-          <input
-            type="text"
-            id="storeName"
-            placeholder="Example: Sisanda Fashion"
-            autocomplete="organization"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="storeImage">
-            Store picture / logo
-          </label>
-
-          <div class="store-image-upload">
-
-            <div class="store-image-preview-wrap">
-
-              <div
-                class="store-image-placeholder"
-                id="storeImagePlaceholder"
-              >
-                Store picture
-              </div>
-
-              <img
-                id="storeImagePreview"
-                class="store-image-preview"
-                alt="Store picture preview"
-              >
-
-            </div>
-
-
-            <input
-              type="file"
-              id="storeImage"
-              accept="image/*"
-              required
-            >
-
-
-            <div class="store-image-note">
-
-              Choose any picture or logo that represents
-              your store.
-
-              <br>
-
-              Maximum file size:
-              <strong>5 MB</strong>.
-
-              <br>
-
-              This picture will appear as a
-              <strong>circle</strong> on the ZYRE marketplace.
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="businessAddress">
-            Store / business address
-          </label>
-
-          <textarea
-            id="businessAddress"
-            placeholder="Enter your store or business address"
-            required
-          ></textarea>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="storeCategory">
-            Store category
-          </label>
-
-          <select
-            id="storeCategory"
-            required
-          >
-
-            <option value="">
-              Select a category
-            </option>
-
-            <option value="Electronics">
-              Electronics
-            </option>
-
-            <option value="Fashion">
-              Fashion
-            </option>
-
-            <option value="Home">
-              Home
-            </option>
-
-            <option value="Beauty">
-              Beauty
-            </option>
-
-            <option value="Food">
-              Food
-            </option>
-
-            <option value="Health">
-              Health
-            </option>
-
-            <option value="Automotive">
-              Automotive
-            </option>
-
-            <option value="Services">
-              Services
-            </option>
-
-            <option value="Other">
-              Other
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="storeDescription">
-            Store description
-          </label>
-
-          <textarea
-            id="storeDescription"
-            placeholder="Tell customers what your store sells..."
-            required
-          ></textarea>
-
-        </div>
-
-
-        <div class="checkbox-row">
-
-          <input
-            type="checkbox"
-            id="terms"
-            required
-          >
-
-          <label for="terms">
-
-            I confirm that the information I have
-            provided is accurate and I agree to the
-            ZYRE Marketing seller terms. I understand
-            that my application must be reviewed and
-            approved before I can manage a seller store.
-
-          </label>
-
-        </div>
-
-
-        <button
-          type="submit"
-          class="primary-button"
-          id="registerButton"
-        >
-          Submit Seller Application
-        </button>
-
-      </form>
-
-
-      <div class="benefits">
-
-        <h3>
-          Approved seller accounts include
-        </h3>
-
-        <div class="benefit">
-          <span class="benefit-icon">🏪</span>
-          <span>Your own marketplace store</span>
-        </div>
-
-        <div class="benefit">
-          <span class="benefit-icon">📦</span>
-          <span>Product and inventory management</span>
-        </div>
-
-        <div class="benefit">
-          <span class="benefit-icon">🛍️</span>
-          <span>Access to ZYRE customers</span>
-        </div>
-
-        <div class="benefit">
-          <span class="benefit-icon">💰</span>
-          <span>Seller earnings and payout management</span>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-  SELLER STATUS / RENTAL AREA
-  ========================= -->
-
-  <section
-    class="rental-section"
-    id="rentalSection"
-  >
-
-    <div class="rental-card">
-
-      <h2 id="rentalTitle">
-        Seller Application Status
-      </h2>
-
-      <p
-        class="rental-intro"
-        id="rentalIntro"
-      >
-        Your seller application has been registered.
-      </p>
-
-
-      <div class="rental-price">
-
-        <div class="rental-price-label">
-          Monthly store rental
-        </div>
-
-        <div class="rental-price-value">
-          R100
-        </div>
-
-        <div class="rental-price-period">
-          per month
-        </div>
-
-      </div>
-
-
-      <div
-        class="rental-status"
-        id="rentalStatusBox"
-      >
-
-        <span
-          class="rental-status-icon"
-          id="rentalStatusIcon"
-        >
-          ⏳
-        </span>
-
-        <span id="rentalStatusText">
-
-          <strong>Seller Pending</strong><br>
-
-          Your application is waiting for
-          ZYRE Marketing review.
-
-        </span>
-
-      </div>
-
-
-      <div
-        class="verification-section"
-        id="verificationSection"
-      >
-
-        <h3 class="verification-title">
-          🔐 Verify your identity
-        </h3>
-
-        <p class="verification-description">
-          Complete your identity verification securely
-          through Didit. You will be guided through the
-          ID document and liveness verification process.
-        </p>
-
-        <button
-          type="button"
-          class="verify-button"
-          id="diditVerifyButton"
-        >
-          🔐 Verify Identity
-        </button>
-
-        <div
-          class="verification-note"
-          id="verificationNote"
-        >
-          Your verification is handled through Didit's
-          secure verification interface.
-        </div>
-
-      </div>
-
-
-      <button
-        type="button"
-        class="primary-button pending-button"
-        id="paystackRentalButton"
-        disabled
-      >
-        🔒 Pay R100 after approval
-      </button>
-
-
-      <button
-        type="button"
-        class="secondary-button"
-        onclick="returnToAccount()"
-      >
-        Return to Account
-      </button>
-
-
-      <div class="rental-info">
-
-        <div class="rental-info-row">
-
-          <span>
-            Store
-          </span>
-
-          <span id="rentalStoreName">
-            —
-          </span>
-
-        </div>
-
-
-        <div class="rental-info-row">
-
-          <span>
-            Application status
-          </span>
-
-          <span id="rentalApplicationStatus">
-            Seller Pending
-          </span>
-
-        </div>
-
-
-        <div class="rental-info-row">
-
-          <span>
-            Identity verification
-          </span>
-
-          <span id="rentalVerificationStatus">
-            Pending
-          </span>
-
-        </div>
-
-
-        <div class="rental-info-row">
-
-          <span>
-            Rental amount
-          </span>
-
-          <span>
-            R100 / month
-          </span>
-
-        </div>
-
-
-        <div class="rental-info-row">
-
-          <span>
-            Payment status
-          </span>
-
-          <span id="rentalPaymentStatus">
-            Waiting for approval
-          </span>
-
-        </div>
-
-
-        <div class="rental-info-row">
-
-          <span>
-            Seller Centre
-          </span>
-
-          <span id="rentalSellerCentreStatus">
-            Locked
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div
-        id="rentalMessage"
-        class="message"
-        style="margin-top:20px;"
-      ></div>
-
-    </div>
-
-  </section>
-
-</main>
-
-
-<footer class="footer">
-  © 2026 ZYRE Marketing.
-  All rights reserved.
-</footer>
-
-
-<script>
-
-const SUPABASE_URL =
-  "https://gaccizzlwswwynattgda.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
-
-const STORE_RENTAL_AMOUNT =
-  100;
-
-const STORE_RENTAL_METHOD =
-  "Paystack";
-
-const RENTAL_PAYSTACK_FUNCTION =
-  SUPABASE_URL +
-  "/functions/v1/rental-paystack";
-
-const DIDIT_CREATE_SESSION_FUNCTION =
-  SUPABASE_URL +
-  "/functions/v1/didit-create-session";
-
-
-/* =========================
-ACCOUNT BUTTON
-========================= */
-
-document
-  .getElementById("accountButton")
-  ?.addEventListener(
-    "click",
-    () => {
-
-      window.location.href =
-        "auth.html";
-
-    }
-  );
-
-
-/* =========================
-MESSAGES
-========================= */
-
-function showMessage(
-  elementId,
-  message,
-  type
-) {
-
-  const element =
-    document.getElementById(elementId);
-
-  if (!element) return;
-
-  element.className =
-    "message " + type;
-
-  element.textContent =
-    message;
-
-}
-
-
-function clearMessage(
-  elementId
-) {
-
-  const element =
-    document.getElementById(elementId);
-
-  if (!element) return;
-
-  element.className =
-    "message";
-
-  element.textContent =
-    "";
-
-}
-
-
-/* =========================
-SAFE FETCH
-========================= */
-
-async function safeFetch(
-  url,
-  options,
-  operationName
-) {
-
-  try {
-
-    return await fetch(
-      url,
-      options
-    );
-
-  } catch (error) {
-
-    console.error(
-      operationName +
-      " network error:",
-      error
-    );
-
-    throw new Error(
-      operationName +
-      " could not connect to ZYRE's secure server.\n\n" +
-      "Please check your internet connection and try again.\n\n" +
-      "Technical error: " +
-      (error?.message || "Failed to fetch")
-    );
-
-  }
-
-}
-
-
-/* =========================
-PASSWORD
-========================= */
-
-function togglePassword(
-  inputId,
-  button
-) {
-
-  const input =
-    document.getElementById(inputId);
-
-  if (!input) return;
-
-  if (
-    input.type === "password"
-  ) {
-
-    input.type =
-      "text";
-
-    button.textContent =
-      "Hide";
-
-  } else {
-
-    input.type =
-      "password";
-
-    button.textContent =
-      "Show";
-
-  }
-
-}
-
-
-function isStrongPassword(
-  password
-) {
-
-  return (
-    password.length >= 8 &&
-    /[A-Z]/.test(password) &&
-    /[a-z]/.test(password) &&
-    /[0-9]/.test(password) &&
-    /[^A-Za-z0-9]/.test(password)
-  );
-
-}
-
-
-/* =========================
-STORE IMAGE PREVIEW
-========================= */
-
-document
-  .getElementById("storeImage")
-  ?.addEventListener(
-    "change",
-    function() {
-
-      const file =
-        this.files?.[0];
-
-      const preview =
-        document.getElementById(
-          "storeImagePreview"
-        );
-
-      const placeholder =
-        document.getElementById(
-          "storeImagePlaceholder"
-        );
-
-
-      if (!file) {
-
-        if (preview) {
-
-          preview.style.display =
-            "none";
-
-          preview.removeAttribute(
-            "src"
-          );
-
-        }
-
-        if (placeholder) {
-
-          placeholder.style.display =
-            "flex";
-
-        }
-
-        return;
-
-      }
-
-
-      if (
-        !file.type.startsWith(
-          "image/"
-        )
-      ) {
-
-        this.value = "";
-
-        showMessage(
-          "registerMessage",
-          "Please choose an image file for your store picture.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (
-        file.size >
-        5 * 1024 * 1024
-      ) {
-
-        this.value = "";
-
-        showMessage(
-          "registerMessage",
-          "Please choose a store picture smaller than 5 MB.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      clearMessage(
-        "registerMessage"
-      );
-
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload =
-        function(event) {
-
-          if (preview) {
-
-            preview.src =
-              event.target.result;
-
-            preview.style.display =
-              "block";
-
-          }
-
-          if (placeholder) {
-
-            placeholder.style.display =
-              "none";
-
-          }
-
-        };
-
-
-      reader.readAsDataURL(
-        file
-      );
-
-    }
-  );
-
-
-/* =========================
-GET CURRENT SUPABASE SESSION
-========================= */
-
-async function getCurrentSession() {
-
-  /*
-   * FIRST:
-   * Use the existing ZYRE session created
-   * by auth.html.
-   *
-   * auth.html stores the access token in:
-   *
-   * zava_access_token
-   *
-   * and the user ID in:
-   *
-   * zava_user_id
-   *
-   * This allows "Continue Seller Application"
-   * to resume an existing seller application.
-   */
-
-  let accessToken =
-    localStorage.getItem(
-      "zava_access_token"
-    );
-
-  let storedUserId =
-    localStorage.getItem(
-      "zava_user_id"
-    );
-
-
-  if (
-    accessToken &&
-    storedUserId
-  ) {
-
-    try {
-
-      const response =
-        await safeFetch(
-          SUPABASE_URL +
-          "/auth/v1/user",
-          {
-
-            headers: {
-
-              "apikey":
-                SUPABASE_KEY,
-
-              "Authorization":
-                "Bearer " +
-                accessToken
-
-            }
-
-          },
-          "Account session check"
-        );
-
-
-      if (response.ok) {
-
-        const user =
-          await response.json();
-
-
-        if (
-          user?.id
-        ) {
-
-          return {
-
-            accessToken:
-              accessToken,
-
-            userId:
-              user.id,
-
-            email:
-              user.email || ""
-
-          };
-
-        }
-
-      }
-
-
-      /*
-       * Existing stored session is no longer valid.
-       * Remove only the session identifiers.
-       */
-
-      localStorage.removeItem(
-        "zava_access_token"
-      );
-
-      localStorage.removeItem(
-        "zava_user_id"
-      );
-
-    } catch (error) {
-
-      console.warn(
-        "Could not validate the existing ZYRE session.",
-        error
-      );
-
-    }
-
-  }
-
-
-  /*
-   * SECOND:
-   * Fallback to the native Supabase
-   * localStorage session.
-   */
-
-  let storedSession =
-    null;
-
-  try {
-
-    for (
-      const key of Object.keys(localStorage)
-    ) {
-
-      if (
-        key.startsWith("sb-") &&
-        key.endsWith("-auth-token")
-      ) {
-
-        const raw =
-          localStorage.getItem(key);
-
-        if (!raw) continue;
-
-
-        const parsed =
-          JSON.parse(raw);
-
-
-        if (
-          parsed &&
-          parsed.access_token &&
-          parsed.user
-        ) {
-
-          storedSession = {
-
-            access_token:
-              parsed.access_token,
-
-            user:
-              parsed.user
-
-          };
-
-          break;
-
-        }
-
-      }
-
-    }
-
-  } catch (error) {
-
-    console.warn(
-      "Could not read existing Supabase session.",
-      error
-    );
-
-  }
-
-
-  if (!storedSession) {
-
-    return null;
-
-  }
-
-
-  const response =
-    await safeFetch(
-      SUPABASE_URL +
-      "/auth/v1/user",
-      {
-
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            storedSession.access_token
-
-        }
-
-      },
-      "Account session check"
-    );
-
-
-  if (!response.ok) {
-
-    console.warn(
-      "Supabase session is no longer valid:",
-      response.status,
-      await response.text()
-    );
-
-    return null;
-
-  }
-
-
-  const user =
-    await response.json();
-
-
-  if (!user?.id) {
-
-    return null;
-
-  }
-
-
-  return {
-
-    accessToken:
-      storedSession.access_token,
-
-    userId:
-      user.id,
-
-    email:
-      user.email || ""
-
-  };
-
-}
-
-
-/* =========================
-ENSURE PROFILE
-========================= */
-
-async function ensureSellerProfile(
-  userId,
-  accessToken,
-  fullName,
-  phone
-) {
-
-  const profileResponse =
-    await safeFetch(
-
-      SUPABASE_URL +
-      "/rest/v1/profiles",
-
-      {
-
-        method:
-          "POST",
-
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            accessToken,
-
-          "Content-Type":
-            "application/json",
-
-          "Prefer":
-            "resolution=merge-duplicates,return=minimal"
-
-        },
-
-        body:
-          JSON.stringify({
-
-            id:
-              userId,
-
-            full_name:
-              fullName,
-
-            phone:
-              phone
-
-          })
-
-        },
-
-      "ZYRE profile preparation"
-
-    );
-
-
-  if (!profileResponse.ok) {
-
-    const errorText =
-      await profileResponse.text();
-
-    throw new Error(
-      "Your account was created, but your ZYRE profile could not be prepared.\n\n" +
-      "Server response (" +
-      profileResponse.status +
-      "):\n" +
-      errorText
-    );
-
-  }
-
-}
-
-
-/* =========================
-FIND EXISTING SELLER
-========================= */
-
-async function findExistingSeller(
-  userId,
-  accessToken
-) {
-
-  const response =
-    await safeFetch(
-
-      SUPABASE_URL +
-      "/rest/v1/sellers?user_id=eq." +
-      encodeURIComponent(userId) +
-      "&select=id,store_name,approved,email,status,store_image_url&order=id.desc&limit=1",
-
-      {
-
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            accessToken
-
-        }
-
-      },
-
-      "Seller application check"
-
-    );
-
-
-  if (!response.ok) {
-
-    const errorText =
-      await response.text();
-
-    throw new Error(
-      "We could not check your seller application.\n\n" +
-      "Server response (" +
-      response.status +
-      "):\n" +
-      errorText
-    );
-
-  }
-
-
-  const sellers =
-    await response.json();
-
-
-  if (
-    !Array.isArray(sellers) ||
-    sellers.length === 0
-  ) {
-
-    return null;
-
-  }
-
-
-  return sellers[0];
-
-}
-
-
-/* =========================
-SECURE SELLER APPLICATION RPC
-========================= */
-
-async function submitSellerApplication(
-  accessToken,
-  fullName,
-  email,
-  phone,
-  idNumber,
-  residentialAddress,
-  storeName,
-  businessAddress,
-  category,
-  description
-) {
-
-  const response =
-    await safeFetch(
-
-      SUPABASE_URL +
-      "/rest/v1/rpc/submit_seller_application",
-
-      {
-
-        method:
-          "POST",
-
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            accessToken,
-
-          "Content-Type":
-            "application/json",
-
-          "Accept":
-            "application/json"
-
-        },
-
-        body:
-          JSON.stringify({
-
-            p_full_name:
-              fullName,
-
-            p_email:
-              email,
-
-            p_phone:
-              phone,
-
-            p_id_number:
-              idNumber,
-
-            p_residential_address:
-              residentialAddress,
-
-            p_store_name:
-              storeName,
-
-            p_business_address:
-              businessAddress,
-
-            p_category:
-              category,
-
-            p_description:
-              description
-
-          })
-
-      },
-
-      "Seller application submission"
-
-    );
-
-
-  const responseText =
-    await response.text();
-
-
-  let data =
-    null;
-
-
-  try {
-
-    data =
-      responseText
-        ? JSON.parse(responseText)
-        : null;
-
-  } catch {
-
-    data =
-      null;
-
-  }
-
-
-  if (!response.ok) {
-
-    console.error(
-      "Seller application RPC failed:",
-      {
-        status:
-          response.status,
-
-        response:
-          data ||
-          responseText
-      }
-    );
-
-
-    throw new Error(
-
-      data?.message ||
-      data?.error ||
-      data?.details ||
-      data?.hint ||
-      responseText ||
-      (
-        "Seller application could not be submitted. " +
-        "Server returned HTTP " +
-        response.status +
-        "."
-      )
-
-    );
-
-  }
-
-
-  const result =
-    Array.isArray(data)
-      ? data[0]
-      : data;
-
-
-  if (
-    !result ||
-    !result.seller_id
-  ) {
-
-    throw new Error(
-      "The seller application was processed, but no seller ID was returned."
-    );
-
-  }
-
-
-  return result;
-
-}
-
-
-/* =========================
-UPLOAD STORE IMAGE
-========================= */
-
-async function uploadStoreImage(
-  file,
-  userId,
-  sellerId,
-  accessToken
-) {
-
-  if (!file) {
-
-    throw new Error(
-      "Please choose a store picture before submitting your seller application."
-    );
-
-  }
-
-
-  if (
-    !file.type.startsWith("image/")
-  ) {
-
-    throw new Error(
-      "The store picture must be an image file."
-    );
-
-  }
-
-
-  if (
-    file.size >
-    5 * 1024 * 1024
-  ) {
-
-    throw new Error(
-      "The store picture must be smaller than 5 MB."
-    );
-
-  }
-
-
-  let extension =
-    "jpg";
-
-
-  if (
-    file.type ===
-    "image/png"
-  ) {
-
-    extension =
-      "png";
-
-  } else if (
-    file.type ===
-    "image/webp"
-  ) {
-
-    extension =
-      "webp";
-
-  } else if (
-    file.type ===
-    "image/gif"
-  ) {
-
-    extension =
-      "gif";
-
-  }
-
-
-  const filePath =
-    "stores/" +
-    userId +
-    "-" +
-    sellerId +
-    "-" +
-    Date.now() +
-    "." +
-    extension;
-
-
-  const uploadResponse =
-    await safeFetch(
-
-      SUPABASE_URL +
-      "/storage/v1/object/store-images/" +
-      filePath,
-
-      {
-
-        method:
-          "POST",
-
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            accessToken,
-
-          "Content-Type":
-            file.type,
-
-          "x-upsert":
-            "true"
-
-        },
-
-        body:
-          file
-
-      },
-
-      "Store picture upload"
-
-    );
-
-
-  if (!uploadResponse.ok) {
-
-    const errorText =
-      await uploadResponse.text();
-
-    throw new Error(
-      "Your seller application was created, but the store picture could not be uploaded.\n\n" +
-      "Server response (" +
-      uploadResponse.status +
-      "):\n" +
-      errorText
-    );
-
-  }
-
-
-  const publicUrl =
-    SUPABASE_URL +
-    "/storage/v1/object/public/store-images/" +
-    filePath;
-
-
-  const updateResponse =
-    await safeFetch(
-
-      SUPABASE_URL +
-      "/rest/v1/sellers?id=eq." +
-      encodeURIComponent(sellerId),
-
-      {
-
-        method:
-          "PATCH",
-
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            accessToken,
-
-          "Content-Type":
-            "application/json",
-
-          "Prefer":
-            "return=minimal"
-
-        },
-
-        body:
-          JSON.stringify({
-
-            store_image_url:
-              publicUrl
-
-          })
-
-      },
-
-      "Seller store picture update"
-
-    );
-
-
-  if (!updateResponse.ok) {
-
-    const errorText =
-      await updateResponse.text();
-
-    throw new Error(
-      "The store picture was uploaded, but the seller profile could not be updated.\n\n" +
-      "Server response (" +
-      updateResponse.status +
-      "):\n" +
-      errorText
-    );
-
-  }
-
-
-  return publicUrl;
-
-}
-
-
-/* =========================
-GET VERIFICATION STATUS
-========================= */
-
-async function getVerificationStatus(
-  sellerId,
-  accessToken
-) {
-
-  const response =
-    await safeFetch(
-
-      SUPABASE_URL +
-      "/rest/v1/seller_verification?seller_id=eq." +
-      encodeURIComponent(sellerId) +
-      "&select=id,id_verification_status,reviewed_at,verification_provider,verification_reference&order=id.desc&limit=1",
-
-      {
-
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            accessToken
-
-        }
-
-      },
-
-      "Identity verification status check"
-
-    );
-
-
-  if (!response.ok) {
-
-    console.warn(
-      "Could not read identity verification status:",
-      response.status,
-      await response.text()
-    );
-
-    return null;
-
-  }
-
-
-  const data =
-    await response.json();
-
-
-  return data?.[0] || null;
-
-}
-
-
-/* =========================
-DIDIT CREATE SESSION
-========================= */
-
-async function createDiditSession(
-  sellerId,
-  accessToken
-) {
-
-  const response =
-    await safeFetch(
-
-      DIDIT_CREATE_SESSION_FUNCTION,
-
-      {
-
-        method:
-          "POST",
-
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            accessToken,
-
-          "Content-Type":
-            "application/json",
-
-          "Accept":
-            "application/json"
-
-        },
-
-        body:
-          JSON.stringify({
-
-            seller_id:
-              Number(sellerId)
-
-          })
-
-      },
-
-      "Didit identity verification"
-
-    );
-
-
-  const text =
-    await response.text();
-
-
-  let data =
-    {};
-
-  try {
-
-    data =
-      text
-        ? JSON.parse(text)
-        : {};
-
-  } catch {
-
-    data =
-      {};
-
-  }
-
-
-  if (!response.ok) {
-
-    console.error(
-      "Didit session error:",
-      response.status,
-      data
-    );
-
-    throw new Error(
-
-      data?.error ||
-      data?.message ||
-      data?.details ||
-      text ||
-      (
-        "Didit identity verification could not be started. " +
-        "The secure verification service returned HTTP " +
-        response.status +
-        "."
-      )
-
-    );
-
-  }
-
-
-  if (
-    data?.already_verified
-  ) {
-
-    return data;
-
-  }
-
-
-  if (
-    !data?.verification_url
-  ) {
-
-    console.error(
-      "Didit response did not contain verification_url:",
-      data
-    );
-
-    throw new Error(
-      "Didit responded successfully, but no verification link was returned."
-    );
-
-  }
-
-
-  return data;
-
-}
-
-
-/* =========================
-START DIDIT VERIFICATION
-========================= */
-
-async function startDiditVerification() {
-
-  clearMessage(
-    "rentalMessage"
-  );
-
-
-  const button =
-    document.getElementById(
-      "diditVerifyButton"
-    );
-
-
-  if (!button) return;
-
-
-  const session =
-    await getCurrentSession();
-
-
-  if (!session) {
-
-    showMessage(
-      "rentalMessage",
-      "Please sign in to your ZYRE account before starting identity verification.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  const sellerId =
-    localStorage.getItem(
-      "zava_seller_id"
-    );
-
-
-  if (!sellerId) {
-
-    showMessage(
-      "rentalMessage",
-      "Your seller account could not be identified. Please return to Account and sign in again.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  button.disabled =
-    true;
-
-  button.textContent =
-    "Starting secure verification...";
-
-
-  try {
-
-    const seller =
-      await findExistingSeller(
-        session.userId,
-        session.accessToken
-      );
-
-
-    if (!seller) {
-
-      throw new Error(
-        "Your seller application could not be found."
-      );
-
-    }
-
-
-    if (
-      String(seller.id) !==
-      String(sellerId)
-    ) {
-
-      throw new Error(
-        "The seller session does not match your signed-in account."
-      );
-
-    }
-
-
-    const verification =
-      await getVerificationStatus(
-        seller.id,
-        session.accessToken
-      );
-
-
-    const verificationState =
-      String(
-        verification?.id_verification_status ||
-        "pending"
-      ).toLowerCase();
-
-
-    if (
-      verificationState ===
-        "verified" ||
-      verificationState ===
-        "approved"
-    ) {
-
-      showMessage(
-        "rentalMessage",
-        "Your identity is already verified. No new Didit session is required.",
-        "success"
-      );
-
-
-      button.disabled =
-        true;
-
-      button.textContent =
-        "✓ Identity Verified";
-
-
-      return;
-
-    }
-
-
-    const didit =
-      await createDiditSession(
-        seller.id,
-        session.accessToken
-      );
-
-
-    if (
-      didit?.already_verified
-    ) {
-
-      showMessage(
-        "rentalMessage",
-        "Your identity is already verified.",
-        "success"
-      );
-
-
-      button.disabled =
-        true;
-
-      button.textContent =
-        "✓ Identity Verified";
-
-
-      return;
-
-    }
-
-
-    showMessage(
-      "rentalMessage",
-      "Your secure Didit verification session is ready. Opening the identity verification page...",
-      "info"
-    );
-
-
-    window.location.href =
-      didit.verification_url;
-
-  } catch (error) {
-
-    console.error(
-      "Didit verification error:",
-      error
-    );
-
-
-    button.disabled =
-      false;
-
-    button.textContent =
-      "🔐 Verify Identity";
-
-
-    showMessage(
-      "rentalMessage",
-      error.message ||
-      "Identity verification could not be started. Please try again.",
-      "error"
-    );
-
-  }
-
-}
-
-
-/* =========================
-INITIALIZE PAYSTACK RENTAL
-========================= */
-
-async function initializePaystackRental(
-  sellerId,
-  email,
-  accessToken
-) {
-
-  const response =
-    await safeFetch(
-
-      RENTAL_PAYSTACK_FUNCTION,
-
-      {
-
-        method:
-          "POST",
-
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " +
-            accessToken,
-
-          "Content-Type":
-            "application/json",
-
-          "Accept":
-            "application/json"
-
-        },
-
-        body:
-          JSON.stringify({
-
-            action:
-              "initialize",
-
-            seller_id:
-              Number(sellerId),
-
-            email:
-              email
-
-          })
-
-      },
-
-      "Paystack rental payment"
-
-    );
-
-
-  const text =
-    await response.text();
-
-
-  let data =
-    {};
-
-
-  try {
-
-    data =
-      text
-        ? JSON.parse(text)
-        : {};
-
-  } catch {
-
-    data =
-      {};
-
-  }
-
-
-  if (!response.ok) {
-
-    throw new Error(
-      data.message ||
-      data.error ||
-      text ||
-      "Paystack rental payment could not be initialized."
-    );
-
-  }
-
-
-  if (
-    !data.authorization_url
-  ) {
-
-    throw new Error(
-      "Paystack was reached, but no payment authorization URL was returned."
-    );
-
-  }
-
-
-  return data;
-
-}
-
-
-/* =========================
-SHOW APPLICATION STATUS
-========================= */
-
-function showApplicationStatus(
-  seller,
-  verificationStatus
-) {
-
-  const authArea =
-    document.getElementById(
-      "authArea"
-    );
-
-  const rentalSection =
-    document.getElementById(
-      "rentalSection"
-    );
-
-
-  if (authArea) {
-
-    authArea.style.display =
-      "none";
-
-  }
-
-
-  if (rentalSection) {
-
-    rentalSection.style.display =
-      "block";
-
-  }
-
-
-  const storeName =
-    document.getElementById(
-      "rentalStoreName"
-    );
-
-  const applicationStatus =
-    document.getElementById(
-      "rentalApplicationStatus"
-    );
-
-  const verification =
-    document.getElementById(
-      "rentalVerificationStatus"
-    );
-
-  const paymentStatus =
-    document.getElementById(
-      "rentalPaymentStatus"
-    );
-
-  const sellerCentre =
-    document.getElementById(
-      "rentalSellerCentreStatus"
-    );
-
-  const title =
-    document.getElementById(
-      "rentalTitle"
-    );
-
-  const intro =
-    document.getElementById(
-      "rentalIntro"
-    );
-
-  const statusText =
-    document.getElementById(
-      "rentalStatusText"
-    );
-
-  const statusIcon =
-    document.getElementById(
-      "rentalStatusIcon"
-    );
-
-  const payButton =
-    document.getElementById(
-      "paystackRentalButton"
-    );
-
-  const verificationSection =
-    document.getElementById(
-      "verificationSection"
-    );
-
-  const diditButton =
-    document.getElementById(
-      "diditVerifyButton"
-    );
-
-  const verificationNote =
-    document.getElementById(
-      "verificationNote"
-    );
-
-
-  if (storeName) {
-
-    storeName.textContent =
-      seller?.store_name ||
-      "Your Store";
-
-  }
-
-
-  const sellerApproved =
-    seller?.approved === true ||
-    seller?.status ===
-      "seller_approved";
-
-
-  const sellerRejected =
-    seller?.status ===
-      "seller_rejected";
-
-
-  const sellerSuspended =
-    seller?.status ===
-      "seller_suspended";
-
-
-  const verificationState =
-    String(
-      verificationStatus?.id_verification_status ||
-      "pending"
-    ).toLowerCase();
-
-
-  const identityVerified =
-    verificationState ===
-      "verified" ||
-    verificationState ===
-      "approved";
-
-
-  const verificationInReview =
-    verificationState ===
-      "under_review" ||
-    verificationState ===
-      "in_review" ||
-    verificationState ===
-      "started" ||
-    verificationState ===
-      "processing";
-
-
-  if (verification) {
-
-    if (identityVerified) {
-
-      verification.textContent =
-        "Verified";
-
-    } else if (verificationInReview) {
-
-      verification.textContent =
-        "Under Review";
-
-    } else if (
-      verificationState ===
-      "declined"
-    ) {
-
-      verification.textContent =
-        "Declined";
-
-    } else if (
-      verificationState ===
-      "resubmitted"
-    ) {
-
-      verification.textContent =
-        "Resubmitted";
-
-    } else {
-
-      verification.textContent =
-        "Pending";
-
-    }
-
-  }
-
-
-  const needsIdentityVerification =
-    !identityVerified &&
-    !sellerRejected &&
-    !sellerSuspended;
-
-
-  if (
-    verificationSection
-  ) {
-
-    verificationSection.classList.toggle(
-      "visible",
-      needsIdentityVerification
-    );
-
-  }
-
-
-  if (
-    diditButton
-  ) {
-
-    if (
-      identityVerified
-    ) {
-
-      diditButton.disabled =
-        true;
-
-      diditButton.textContent =
-        "✓ Identity Verified";
-
-      if (verificationNote) {
-
-        verificationNote.textContent =
-          "Your identity verification has been completed.";
-
-      }
-
-    } else if (
-      verificationInReview
-    ) {
-
-      diditButton.disabled =
-        true;
-
-      diditButton.textContent =
-        "⏳ Verification Under Review";
-
-      if (verificationNote) {
-
-        verificationNote.textContent =
-          "Your verification is being processed. Please wait for the verification result before starting another session.";
-
-      }
-
-    } else if (
-      verificationState ===
-      "declined"
-    ) {
-
-      diditButton.disabled =
-        false;
-
-      diditButton.textContent =
-        "↻ Retry Identity Verification";
-
-      if (verificationNote) {
-
-        verificationNote.textContent =
-          "The previous verification was not approved. You may start a new verification attempt.";
-
-      }
-
-    } else {
-
-      diditButton.disabled =
-        false;
-
-      diditButton.textContent =
-        "🔐 Verify Identity";
-
-      if (verificationNote) {
-
-        verificationNote.textContent =
-          "Complete the secure Didit identity verification before your seller application can be approved.";
-
-      }
-
-    }
-
-  }
-
-
-  const readyForPayment =
-    sellerApproved &&
-    identityVerified;
-
-
-  if (sellerApproved && !identityVerified) {
-
-    if (title) {
-
-      title.textContent =
-        "Seller Approval Recorded";
-
-    }
-
-
-    if (intro) {
-
-      intro.textContent =
-        "Your seller application has been approved, but identity verification must be completed before the R100 monthly rental payment becomes available.";
-
-    }
-
-
-    if (applicationStatus) {
-
-      applicationStatus.textContent =
-        "Seller Approved";
-
-    }
-
-
-    if (statusIcon) {
-
-      statusIcon.textContent =
-        "⏳";
-
-    }
-
-
-    if (statusText) {
-
-      statusText.innerHTML =
-        "<strong>Identity verification required</strong><br>" +
-        "Complete the secure Didit identity verification below before payment can be made.";
-
-    }
-
-
-    if (paymentStatus) {
-
-      paymentStatus.textContent =
-        "Waiting for verification";
-
-    }
-
-
-    if (sellerCentre) {
-
-      sellerCentre.textContent =
-        "Locked";
-
-    }
-
-
-    if (payButton) {
-
-      payButton.disabled =
-        true;
-
-      payButton.textContent =
-        "🔒 Payment after verification";
-
-    }
-
-  } else if (readyForPayment) {
-
-    if (title) {
-
-      title.textContent =
-        "Seller Approved";
-
-    }
-
-
-    if (intro) {
-
-      intro.textContent =
-        "Your seller application and identity verification have been approved by ZYRE Marketing. Complete the R100 monthly store rental payment to continue.";
-
-    }
-
-
-    if (applicationStatus) {
-
-      applicationStatus.textContent =
-        "Seller Approved";
-
-    }
-
-
-    if (statusIcon) {
-
-      statusIcon.textContent =
-        "✓";
-
-    }
-
-
-    if (statusText) {
-
-      statusText.innerHTML =
-        "<strong>Seller Approved & Identity Verified</strong><br>" +
-        "Your R100 monthly store rental payment is now available.";
-
-    }
-
-
-    if (paymentStatus) {
-
-      paymentStatus.textContent =
-        "Ready for payment";
-
-    }
-
-
-    if (sellerCentre) {
-
-      sellerCentre.textContent =
-        "Locked until payment";
-
-    }
-
-
-    if (payButton) {
-
-      payButton.disabled =
-        false;
-
-      payButton.textContent =
-        "💳 Pay R100 with Paystack";
-
-    }
-
-  } else if (sellerRejected) {
-
-    if (title) {
-
-      title.textContent =
-        "Seller Application Review";
-
-    }
-
-
-    if (intro) {
-
-      intro.textContent =
-        "Your seller application was not approved. Please contact ZYRE Marketing if you need further information.";
-
-    }
-
-
-    if (applicationStatus) {
-
-      applicationStatus.textContent =
-        "Seller Rejected";
-
-    }
-
-
-    if (statusIcon) {
-
-      statusIcon.textContent =
-        "⚠";
-
-    }
-
-
-    if (statusText) {
-
-      statusText.innerHTML =
-        "<strong>Application not approved</strong><br>" +
-        "Your seller application is not currently approved for seller access.";
-
-    }
-
-
-    if (paymentStatus) {
-
-      paymentStatus.textContent =
-        "Unavailable";
-
-    }
-
-
-    if (sellerCentre) {
-
-      sellerCentre.textContent =
-        "Locked";
-
-    }
-
-
-    if (payButton) {
-
-      payButton.disabled =
-        true;
-
-      payButton.textContent =
-        "🔒 Payment unavailable";
-
-    }
-
-  } else if (sellerSuspended) {
-
-    if (title) {
-
-      title.textContent =
-        "Seller Account Suspended";
-
-    }
-
-
-    if (intro) {
-
-      intro.textContent =
-        "Your seller account is currently suspended. Please contact ZYRE Marketing for assistance.";
-
-    }
-
-
-    if (applicationStatus) {
-
-      applicationStatus.textContent =
-        "Suspended";
-
-    }
-
-
-    if (statusIcon) {
-
-      statusIcon.textContent =
-        "⚠";
-
-    }
-
-
-    if (statusText) {
-
-      statusText.innerHTML =
-        "<strong>Seller account suspended</strong><br>" +
-        "Seller access and rental payment are currently unavailable.";
-
-    }
-
-
-    if (paymentStatus) {
-
-      paymentStatus.textContent =
-        "Unavailable";
-
-    }
-
-
-    if (sellerCentre) {
-
-      sellerCentre.textContent =
-        "Locked";
-
-    }
-
-
-    if (payButton) {
-
-      payButton.disabled =
-        true;
-
-      payButton.textContent =
-        "🔒 Payment unavailable";
-
-    }
-
-  } else {
-
-    if (title) {
-
-      title.textContent =
-        "Seller Application Submitted";
-
-    }
-
-
-    if (intro) {
-
-      intro.textContent =
-        "Your seller application has been registered and is waiting for ZYRE Marketing verification and approval.";
-
-    }
-
-
-    if (applicationStatus) {
-
-      applicationStatus.textContent =
-        "Seller Pending";
-
-    }
-
-
-    if (statusIcon) {
-
-      statusIcon.textContent =
-        verificationInReview
-          ? "⏳"
-          : "🔐";
-
-    }
-
-
-    if (statusText) {
-
-      if (
-        verificationState ===
-          "declined" ||
-        verificationState ===
-          "rejected"
-      ) {
-
-        statusText.innerHTML =
-          "<strong>Verification requires attention</strong><br>" +
-          "Your previous identity verification was not approved. You may retry the secure verification.";
-
-      } else if (
-        verificationInReview
-      ) {
-
-        statusText.innerHTML =
-          "<strong>Identity Under Review</strong><br>" +
-          "Your identity verification is being processed. ZYRE Marketing can review your seller application after the verification result is available.";
-
-      } else {
-
-        statusText.innerHTML =
-          "<strong>Seller Pending</strong><br>" +
-          "Complete identity verification below so ZYRE Marketing can review your seller application.";
-
-      }
-
-    }
-
-
-    if (paymentStatus) {
-
-      paymentStatus.textContent =
-        "Waiting for approval";
-
-    }
-
-
-    if (sellerCentre) {
-
-      sellerCentre.textContent =
-        "Locked";
-
-    }
-
-
-    if (payButton) {
-
-      payButton.disabled =
-        true;
-
-      payButton.textContent =
-        "🔒 Pay R100 after approval";
-
-    }
-
-  }
-
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-
-}
-
-
-/* =========================
-SAVE SELLER SESSION
-========================= */
-
-function saveSellerSession(
-  accessToken,
-  userId,
-  sellerId,
-  email
-) {
-
-  /*
-   * Only session identifiers are stored.
-   *
-   * NEVER store:
-   * - ID number
-   * - Residential address
-   * - Identity documents
-   */
-
-  localStorage.setItem(
-    "zava_access_token",
-    accessToken
-  );
-
-  localStorage.setItem(
-    "zava_user_id",
-    userId
-  );
-
-  localStorage.setItem(
-    "zava_seller_id",
-    sellerId
-  );
-
-  localStorage.setItem(
-    "zava_seller_email",
-    email
-  );
-
-}
-
-
-/* =========================
-RETURN TO ACCOUNT
-========================= */
-
-function returnToAccount() {
-
-  window.location.href =
-    "auth.html";
-
-}
-
-
-/* =========================
-DIDIT BUTTON
-========================= */
-
-document
-  .getElementById(
-    "diditVerifyButton"
-  )
-  ?.addEventListener(
-    "click",
-    async function() {
-
-      try {
-
-        await startDiditVerification();
-
-      } catch (error) {
-
-        console.error(
-          "Unexpected Didit button error:",
-          error
-        );
-
-        showMessage(
-          "rentalMessage",
-          error.message ||
-          "Identity verification could not be started.",
-          "error"
-        );
-
-      }
-
-    }
-  );
-
-
-/* =========================
-PAYSTACK BUTTON
-========================= */
-
-let currentPaystackAuthorizationUrl =
-  null;
-
-
-document
-  .getElementById(
-    "paystackRentalButton"
-  )
-  ?.addEventListener(
-    "click",
-    async function() {
-
-      if (
-        currentPaystackAuthorizationUrl
-      ) {
-
-        window.location.href =
-          currentPaystackAuthorizationUrl;
-
-        return;
-
-      }
-
-
-      try {
-
-        const session =
-          await getCurrentSession();
-
-
-        if (!session) {
-
-          showMessage(
-            "rentalMessage",
-            "Please sign in to your ZYRE account before making the seller rental payment.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        const sellerId =
-          localStorage.getItem(
-            "zava_seller_id"
-          );
-
-
-        if (!sellerId) {
-
-          showMessage(
-            "rentalMessage",
-            "Your seller account could not be identified. Please return to Account and sign in again.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        const seller =
-          await findExistingSeller(
-            session.userId,
-            session.accessToken
-          );
-
-
-        if (!seller) {
-
-          showMessage(
-            "rentalMessage",
-            "Your seller application could not be found.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        const verification =
-          await getVerificationStatus(
-            seller.id,
-            session.accessToken
-          );
-
-
-        const approved =
-          seller.approved === true ||
-          seller.status ===
-            "seller_approved";
-
-
-        const verificationState =
-          String(
-            verification?.id_verification_status ||
-            "pending"
-          ).toLowerCase();
-
-
-        const identityVerified =
-          verificationState ===
-            "verified" ||
-          verificationState ===
-            "approved";
-
-
-        if (!approved) {
-
-          showMessage(
-            "rentalMessage",
-            "Your seller application has not been approved yet. The R100 payment becomes available only after ZYRE Marketing approval.",
-            "info"
-          );
-
-          return;
-
-        }
-
-
-        if (!identityVerified) {
-
-          showMessage(
-            "rentalMessage",
-            "Your seller application cannot proceed to payment until identity verification has been completed.",
-            "info"
-          );
-
-          return;
-
-        }
-
-
-        const button =
-          document.getElementById(
-            "paystackRentalButton"
-          );
-
-
-        button.disabled =
-          true;
-
-        button.textContent =
-          "Preparing Paystack payment...";
-
-
-        const paystackData =
-          await initializePaystackRental(
-            seller.id,
-            session.email,
-            session.accessToken
-          );
-
-
-        currentPaystackAuthorizationUrl =
-          paystackData.authorization_url;
-
-
-        window.location.href =
-          paystackData.authorization_url;
-
-      } catch (error) {
-
-        console.error(
-          "Paystack rental error:",
-          error
-        );
-
-
-        const button =
-          document.getElementById(
-            "paystackRentalButton"
-          );
-
-
-        button.disabled =
-          false;
-
-        button.textContent =
-          "💳 Pay R100 with Paystack";
-
-
-        showMessage(
-          "rentalMessage",
-          error.message ||
-          "Paystack payment could not be prepared.",
-          "error"
-        );
-
-      }
-
-    }
-  );
-
-
-/* =========================
-REGISTER
-========================= */
-
-document
-  .getElementById("registerForm")
-  ?.addEventListener(
-    "submit",
-    async function(event) {
-
-      event.preventDefault();
-
-
-      clearMessage(
-        "registerMessage"
-      );
-
-      clearMessage(
-        "rentalMessage"
-      );
-
-
-      const button =
-        document.getElementById(
-          "registerButton"
-        );
-
-
-      const fullName =
-        document
-          .getElementById(
-            "registerName"
-          )
-          .value
-          .trim();
-
-
-      const email =
-        document
-          .getElementById(
-            "registerEmail"
-          )
-          .value
-          .trim()
-          .toLowerCase();
-
-
-      const phone =
-        document
-          .getElementById(
-            "registerPhone"
-          )
-          .value
-          .trim();
-
-
-      const idNumber =
-        document
-          .getElementById(
-            "idNumber"
-          )
-          .value
-          .trim();
-
-
-      const residentialAddress =
-        document
-          .getElementById(
-            "residentialAddress"
-          )
-          .value
-          .trim();
-
-
-      const password =
-        document
-          .getElementById(
-            "registerPassword"
-          )
-          .value;
-
-
-      const confirmPassword =
-        document
-          .getElementById(
-            "confirmPassword"
-          )
-          .value;
-
-
-      const storeName =
-        document
-          .getElementById(
-            "storeName"
-          )
-          .value
-          .trim();
-
-
-      const businessAddress =
-        document
-          .getElementById(
-            "businessAddress"
-          )
-          .value
-          .trim();
-
-
-      const category =
-        document
-          .getElementById(
-            "storeCategory"
-          )
-          .value;
-
-
-      const description =
-        document
-          .getElementById(
-            "storeDescription"
-          )
-          .value
-          .trim();
-
-
-      const storeImageInput =
-        document.getElementById(
-          "storeImage"
-        );
-
-
-      const storeImageFile =
-        storeImageInput?.files?.[0] ||
-        null;
-
-
-      /* =========================
-      CLIENT-SIDE VALIDATION
-      ========================= */
-
-      if (!fullName) {
-
-        showMessage(
-          "registerMessage",
-          "Please enter your full legal name.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (!email) {
-
-        showMessage(
-          "registerMessage",
-          "Please enter your email address.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (!phone) {
-
-        showMessage(
-          "registerMessage",
-          "Please enter your phone number.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (
-        !/^\d{13}$/.test(
-          idNumber
-        )
-      ) {
-
-        showMessage(
-          "registerMessage",
-          "Your South African ID number must contain exactly 13 digits.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (!residentialAddress) {
-
-        showMessage(
-          "registerMessage",
-          "Please enter your residential address.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (
-        !isStrongPassword(
-          password
-        )
-      ) {
-
-        showMessage(
-          "registerMessage",
-          "Your password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (
-        password !==
-        confirmPassword
-      ) {
-
-        showMessage(
-          "registerMessage",
-          "The passwords do not match.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (!storeName) {
-
-        showMessage(
-          "registerMessage",
-          "Please enter your store name.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (!storeImageFile) {
-
-        showMessage(
-          "registerMessage",
-          "Please choose a store picture or logo. Every ZYRE Marketing store must have a store picture.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (!businessAddress) {
-
-        showMessage(
-          "registerMessage",
-          "Please enter your store or business address.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (!category) {
-
-        showMessage(
-          "registerMessage",
-          "Please select a store category.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (!description) {
-
-        showMessage(
-          "registerMessage",
-          "Please enter a description for your store.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (
-        !document
-          .getElementById("terms")
-          .checked
-      ) {
-
-        showMessage(
-          "registerMessage",
-          "Please accept the seller terms before submitting your seller application.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      button.disabled =
-        true;
-
-      button.textContent =
-        "Checking account...";
-
-
-      try {
-
-        let accessToken =
-          null;
-
-        let userId =
-          null;
-
-        let accountEmail =
-          email;
-
-
-        /* =========================
-        CHECK CURRENT SESSION
-        ========================= */
-
-        const currentSession =
-          await getCurrentSession();
-
-
-        if (currentSession) {
-
-          accessToken =
-            currentSession.accessToken;
-
-          userId =
-            currentSession.userId;
-
-          accountEmail =
-            currentSession.email ||
-            email;
-
-        }
-
-
-        /* =========================
-        CREATE ACCOUNT IF NEEDED
-        ========================= */
-
-        if (
-          !accessToken ||
-          !userId
-        ) {
-
-          button.textContent =
-            "Creating seller account...";
-
-
-          const signupResponse =
-            await safeFetch(
-
-              SUPABASE_URL +
-              "/auth/v1/signup",
-
-              {
-
-                method:
-                  "POST",
-
-                headers: {
-
-                  "apikey":
-                    SUPABASE_KEY,
-
-                  "Content-Type":
-                    "application/json",
-
-                  "Accept":
-                    "application/json"
-
-                },
-
-                body:
-                  JSON.stringify({
-
-                    email:
-                      email,
-
-                    password:
-                      password,
-
-                    data: {
-
-                      full_name:
-                        fullName,
-
-                      phone:
-                        phone,
-
-                      role:
-                        "customer"
-
-                    }
-
-                  })
-
-              },
-
-              "ZYRE account creation"
-
-            );
-
-
-          const signupText =
-            await signupResponse.text();
-
-
-          let signupData =
-            {};
-
-
-          try {
-
-            signupData =
-              signupText
-                ? JSON.parse(
-                    signupText
-                  )
-                : {};
-
-          } catch {
-
-            signupData =
-              {};
-
-          }
-
-
-          if (
-            signupResponse.ok
-          ) {
-
-            userId =
-              signupData.user?.id ||
-              signupData.id ||
-              null;
-
-            accessToken =
-              signupData.access_token ||
-              null;
-
-
-            if (!userId) {
-
-              throw new Error(
-                "Your account was created, but Supabase did not return the user ID."
-              );
-
-            }
-
-
-            if (!accessToken) {
-
-              showMessage(
-                "registerMessage",
-                "Your seller account has been created.\n\nPlease confirm your email address first. Then return to the main ZYRE Account page, sign in, and return here to complete your seller application.",
-                "success"
-              );
-
-              return;
-
-            }
-
-          } else {
-
-            const combinedError =
-              (
-                signupData.msg ||
-                signupData.message ||
-                signupData.error_description ||
-                signupData.error ||
-                signupText ||
-                ""
-              ).toLowerCase();
-
-
-            const alreadyRegistered =
-              combinedError.includes(
-                "already registered"
-              ) ||
-              combinedError.includes(
-                "already exists"
-              ) ||
-              combinedError.includes(
-                "user already"
-              ) ||
-              combinedError.includes(
-                "email already"
-              );
-
-
-            if (
-              alreadyRegistered
-            ) {
-
-              showMessage(
-                "registerMessage",
-                "This email address already has a ZYRE account.\n\nPlease go back to Account and sign in using the existing account password. After signing in, return here to complete the seller application.",
-                "info"
-              );
-
-              return;
-
-            }
-
-
-            throw new Error(
-              signupData.msg ||
-              signupData.message ||
-              signupData.error_description ||
-              signupData.error ||
-              signupText ||
-              (
-                "The seller account could not be created. " +
-                "Supabase returned HTTP " +
-                signupResponse.status +
-                "."
-              )
-            );
-
-          }
-
-        }
-
-
-        /* =========================
-        VERIFY ACCOUNT EMAIL
-        ========================= */
-
-        if (
-          accountEmail &&
-          email &&
-          accountEmail.toLowerCase() !==
-            email.toLowerCase()
-        ) {
-
-          throw new Error(
-            "The signed-in ZYRE account uses a different email address.\n\nPlease use the email address belonging to your signed-in account."
-          );
-
-        }
-
-
-        if (
-          !accessToken ||
-          !userId
-        ) {
-
-          throw new Error(
-            "A valid signed-in ZYRE session is required before the seller application can be submitted."
-          );
-
-        }
-
-
-        /* =========================
-        PREPARE PROFILE
-        ========================= */
-
-        button.textContent =
-          "Preparing your ZYRE profile...";
-
-
-        await ensureSellerProfile(
-          userId,
-          accessToken,
-          fullName,
-          phone
-        );
-
-
-        /* =========================
-        CHECK EXISTING SELLER
-        ========================= */
-
-        button.textContent =
-          "Checking seller application...";
-
-
-        const existingSeller =
-          await findExistingSeller(
-            userId,
-            accessToken
-          );
-
-
-        if (existingSeller) {
-
-          if (
-            !existingSeller.store_image_url &&
-            storeImageFile
-          ) {
-
-            button.textContent =
-              "Uploading missing store picture...";
-
-
-            try {
-
-              await uploadStoreImage(
-                storeImageFile,
-                userId,
-                existingSeller.id,
-                accessToken
-              );
-
-            } catch (imageError) {
-
-              console.error(
-                "Existing seller image upload error:",
-                imageError
-              );
-
-
-              showMessage(
-                "registerMessage",
-                imageError.message ||
-                "The existing seller application was found, but the store picture could not be uploaded.",
-                "error"
-              );
-
-              return;
-
-            }
-
-          }
-
-
-          saveSellerSession(
-            accessToken,
-            userId,
-            existingSeller.id,
-            accountEmail ||
-            email
-          );
-
-
-          const verification =
-            await getVerificationStatus(
-              existingSeller.id,
-              accessToken
-            );
-
-
-          showApplicationStatus(
-            existingSeller,
-            verification
-          );
-
-
-          showMessage(
-            "rentalMessage",
-            "Your seller application already exists. We have not created a duplicate application.",
-            "info"
-          );
-
-
-          return;
-
-        }
-
-
-        /* =========================
-        SECURE APPLICATION SUBMISSION
-        ========================= */
-
-        button.textContent =
-          "Securing seller application...";
-
-
-        const application =
-          await submitSellerApplication(
-            accessToken,
-            fullName,
-            accountEmail ||
-            email,
-            phone,
-            idNumber,
-            residentialAddress,
-            storeName,
-            businessAddress,
-            category,
-            description
-          );
-
-
-        const sellerId =
-          application.seller_id;
-
-
-        /* =========================
-        STORE IMAGE
-        ========================= */
-
-        button.textContent =
-          "Uploading store picture...";
-
-
-        await uploadStoreImage(
-          storeImageFile,
-          userId,
-          sellerId,
-          accessToken
-        );
-
-
-        /* =========================
-        SAVE SELLER SESSION
-        ========================= */
-
-        saveSellerSession(
-          accessToken,
-          userId,
-          sellerId,
-          accountEmail ||
-          email
-        );
-
-
-        /* =========================
-        SHOW PENDING STATUS
-        ========================= */
-
-        const createdSeller = {
-
-          id:
-            sellerId,
-
-          store_name:
-            application.store_name ||
-            storeName,
-
-          approved:
-            application.approved === true,
-
-          status:
-            application.seller_status ||
-            "seller_pending"
-
-        };
-
-
-        const verificationStatus = {
-
-          id_verification_status:
-            application.verification_status ||
-            "pending"
-
-        };
-
-
-        showApplicationStatus(
-          createdSeller,
-          verificationStatus
-        );
-
-
-        showMessage(
-          "rentalMessage",
-          "Your seller application has been submitted successfully.\n\nYour identity information has been stored privately for verification.\n\nComplete the secure Didit identity verification above so ZYRE Marketing can review your application.\n\nYour Seller Centre remains locked until approval and payment are completed.",
-          "success"
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "Seller registration error:",
-          error
-        );
-
-
-        showMessage(
-          "registerMessage",
-          error.message ||
-          "Registration failed.",
-          "error"
-        );
-
-
-      } finally {
-
-        const authArea =
-          document.getElementById(
-            "authArea"
-          );
-
-
-        if (
-          authArea &&
-          authArea.style.display !==
-            "none"
-        ) {
-
-          button.disabled =
-            false;
-
-          button.textContent =
-            "Submit Seller Application";
-
-        }
-
-      }
-
-    }
-  );
-
-
-/* =========================
-LOAD EXISTING SELLER ON PAGE
-========================= */
-
-async function loadExistingSellerPage() {
-
-  try {
-
-    const session =
-      await getCurrentSession();
-
-
-    if (!session) {
-
-      return;
-
-    }
-
-
-    const seller =
-      await findExistingSeller(
-        session.userId,
-        session.accessToken
-      );
-
-
-    if (!seller) {
-
-      return;
-
-    }
-
-
-    saveSellerSession(
-      session.accessToken,
-      session.userId,
-      seller.id,
-      session.email
-    );
-
-
-    const verification =
-      await getVerificationStatus(
-        seller.id,
-        session.accessToken
-      );
-
-
-    showApplicationStatus(
-      seller,
-      verification
-    );
-
-  } catch (error) {
-
-    console.error(
-      "Could not load seller application:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================
-START
-========================= */
-
-loadExistingSellerPage();
-
-</script>
-
-</body>
-
-</html>
+name="theme-color"
+content="#111111"
+
+> 
+
+<title>Seller Account | ZYRE Marketing</title>  <style>  
+  
+* {  
+  box-sizing: border-box;  
+}  
+  
+body {  
+  margin: 0;  
+  font-family:  
+    Arial,  
+    Helvetica,  
+    sans-serif;  
+  background:  
+    linear-gradient(  
+      135deg,  
+      #080808,  
+      #171717,  
+      #050505  
+    );  
+  color: #111;  
+  min-height: 100vh;  
+}  
+  
+.header {  
+  width: 100%;  
+  padding: 18px 20px;  
+  display: flex;  
+  align-items: center;  
+  justify-content: space-between;  
+  color: white;  
+}  
+  
+.brand {  
+  display: flex;  
+  align-items: center;  
+  gap: 12px;  
+}  
+  
+.logo {  
+  width: 44px;  
+  height: 44px;  
+  border-radius: 10px;  
+  object-fit: cover;  
+  background: #222;  
+}  
+  
+.brand-text {  
+  line-height: 1.1;  
+}  
+  
+.brand-name {  
+  font-size: 20px;  
+  font-weight: 800;  
+  letter-spacing: 2px;  
+}  
+  
+.brand-subtitle {  
+  font-size: 11px;  
+  opacity: .65;  
+  margin-top: 4px;  
+}  
+  
+.back-button {  
+  border: 1px solid rgba(255,255,255,.25);  
+  background: rgba(255,255,255,.08);  
+  color: white;  
+  padding: 10px 15px;  
+  border-radius: 9px;  
+  text-decoration: none;  
+  font-size: 13px;  
+  cursor: pointer;  
+}  
+  
+.main {  
+  width: 100%;  
+  max-width: 1080px;  
+  margin: 0 auto;  
+  padding: 20px;  
+}  
+  
+.intro {  
+  text-align: center;  
+  color: white;  
+  margin: 15px 0 30px;  
+}  
+  
+.intro h1 {  
+  margin: 0;  
+  font-size: 32px;  
+  letter-spacing: 1px;  
+}  
+  
+.intro p {  
+  margin: 10px auto 0;  
+  max-width: 700px;  
+  color: #bdbdbd;  
+  line-height: 1.6;  
+  font-size: 15px;  
+}  
+  
+.auth-grid {  
+  display: grid;  
+  grid-template-columns:  
+    minmax(0, 1fr);  
+  gap: 22px;  
+  max-width: 700px;  
+  margin: 0 auto;  
+}  
+  
+.card {  
+  background: white;  
+  border-radius: 18px;  
+  padding: 28px;  
+  box-shadow:  
+    0 20px 60px  
+    rgba(0,0,0,.35);  
+}  
+  
+.card h2 {  
+  margin: 0 0 8px;  
+  font-size: 24px;  
+}  
+  
+.card-description {  
+  margin: 0 0 24px;  
+  color: #666;  
+  font-size: 14px;  
+  line-height: 1.5;  
+}  
+  
+.form-section-title {  
+  margin: 25px 0 15px;  
+  padding-top: 20px;  
+  border-top: 1px solid #eee;  
+  font-size: 16px;  
+  font-weight: 800;  
+  color: #111;  
+}  
+  
+.form-group {  
+  margin-bottom: 17px;  
+}  
+  
+label {  
+  display: block;  
+  margin-bottom: 7px;  
+  font-size: 13px;  
+  font-weight: 700;  
+  color: #222;  
+}  
+  
+input,  
+textarea,  
+select {  
+  width: 100%;  
+  border: 1px solid #ddd;  
+  border-radius: 10px;  
+  padding: 13px 14px;  
+  font-size: 15px;  
+  outline: none;  
+  background: #fafafa;  
+  transition: .2s;  
+  font-family: inherit;  
+}  
+  
+input:focus,  
+textarea:focus,  
+select:focus {  
+  border-color: #111;  
+  background: white;  
+  box-shadow:  
+    0 0 0 3px  
+    rgba(0,0,0,.06);  
+}  
+  
+textarea {  
+  min-height: 90px;  
+  resize: vertical;  
+}  
+  
+select {  
+  appearance: auto;  
+}  
+  
+.field-help {  
+  margin-top: 6px;  
+  color: #777;  
+  font-size: 11px;  
+  line-height: 1.4;  
+}  
+  
+.password-wrap {  
+  position: relative;  
+}  
+  
+.password-wrap input {  
+  padding-right: 82px;  
+}  
+  
+.password-toggle {  
+  position: absolute;  
+  right: 8px;  
+  top: 50%;  
+  transform: translateY(-50%);  
+  border: 0;  
+  background: transparent;  
+  color: #555;  
+  font-size: 12px;  
+  font-weight: 700;  
+  cursor: pointer;  
+}  
+  
+.password-requirements {  
+  margin-top: 8px;  
+  padding: 10px 12px;  
+  border-radius: 9px;  
+  background: #f7f7f7;  
+  color: #666;  
+  font-size: 11px;  
+  line-height: 1.6;  
+}  
+  
+.password-requirements strong {  
+  color: #333;  
+}  
+  
+  
+/* =========================  
+STORE IMAGE  
+========================= */  
+  
+.store-image-upload {  
+  border: 1px solid #e2e2e2;  
+  border-radius: 14px;  
+  padding: 18px;  
+  background: #fafafa;  
+}  
+  
+.store-image-preview-wrap {  
+  display: flex;  
+  justify-content: center;  
+  margin-bottom: 16px;  
+}  
+  
+.store-image-preview {  
+  width: 120px;  
+  height: 120px;  
+  border-radius: 50%;  
+  object-fit: cover;  
+  border: 4px solid #f0f0f0;  
+  background: #eeeeee;  
+  display: none;  
+}  
+  
+.store-image-placeholder {  
+  width: 120px;  
+  height: 120px;  
+  border-radius: 50%;  
+  background: #eeeeee;  
+  border: 4px solid #f0f0f0;  
+  display: flex;  
+  align-items: center;  
+  justify-content: center;  
+  text-align: center;  
+  color: #777;  
+  font-size: 12px;  
+  line-height: 1.3;  
+  padding: 15px;  
+}  
+  
+.store-image-upload input[type="file"] {  
+  padding: 10px;  
+  background: white;  
+  border: 1px solid #ddd;  
+}  
+  
+.store-image-note {  
+  margin-top: 8px;  
+  color: #777;  
+  font-size: 11px;  
+  line-height: 1.5;  
+}  
+  
+  
+/* =========================  
+BUTTONS  
+========================= */  
+  
+.primary-button {  
+  width: 100%;  
+  border: 0;  
+  border-radius: 11px;  
+  padding: 14px;  
+  background: #111;  
+  color: white;  
+  font-size: 15px;  
+  font-weight: 700;  
+  cursor: pointer;  
+  transition: .2s;  
+}  
+  
+.primary-button:hover {  
+  background: #2a2a2a;  
+}  
+  
+.primary-button:disabled {  
+  opacity: .6;  
+  cursor: not-allowed;  
+}  
+  
+.secondary-button {  
+  width: 100%;  
+  border: 1px solid #ddd;  
+  border-radius: 11px;  
+  padding: 13px;  
+  background: white;  
+  color: #111;  
+  font-size: 14px;  
+  font-weight: 700;  
+  cursor: pointer;  
+  margin-top: 10px;  
+}  
+  
+.secondary-button:hover {  
+  background: #f5f5f5;  
+}  
+  
+.checkbox-row {  
+  display: flex;  
+  align-items: flex-start;  
+  gap: 9px;  
+  margin: 18px 0;  
+}  
+  
+.checkbox-row input {  
+  width: auto;  
+  margin-top: 3px;  
+}  
+  
+.checkbox-row label {  
+  margin: 0;  
+  font-size: 12px;  
+  font-weight: 400;  
+  line-height: 1.5;  
+  color: #555;  
+}  
+  
+  
+/* =========================  
+MESSAGES  
+========================= */  
+  
+.message {  
+  display: none;  
+  border-radius: 10px;  
+  padding: 12px;  
+  margin-bottom: 18px;  
+  font-size: 13px;  
+  line-height: 1.5;  
+  white-space: pre-line;  
+}  
+  
+.message.error {  
+  display: block;  
+  background: #fff0f0;  
+  border: 1px solid #ffcaca;  
+  color: #a00000;  
+}  
+  
+.message.success {  
+  display: block;  
+  background: #effff4;  
+  border: 1px solid #b9edc8;  
+  color: #176b31;  
+}  
+  
+.message.info {  
+  display: block;  
+  background: #f1f5ff;  
+  border: 1px solid #cbd7ff;  
+  color: #27458f;  
+}  
+  
+  
+/* =========================  
+APPLICATION NOTICE  
+========================= */  
+  
+.application-notice {  
+  background: #f7f7f7;  
+  border: 1px solid #e5e5e5;  
+  border-radius: 12px;  
+  padding: 14px;  
+  margin: 18px 0;  
+  font-size: 12px;  
+  line-height: 1.6;  
+  color: #555;  
+}  
+  
+.application-notice strong {  
+  color: #111;  
+}  
+  
+  
+/* =========================  
+IDENTITY VERIFICATION  
+========================= */  
+  
+.verification-section {  
+  display: none;  
+  margin-top: 22px;  
+  padding: 18px;  
+  border-radius: 14px;  
+  background: #f7f7f7;  
+  border: 1px solid #e3e3e3;  
+}  
+  
+.verification-section.visible {  
+  display: block;  
+}  
+  
+.verification-title {  
+  margin: 0 0 7px;  
+  font-size: 17px;  
+  font-weight: 800;  
+}  
+  
+.verification-description {  
+  margin: 0 0 15px;  
+  color: #666;  
+  font-size: 13px;  
+  line-height: 1.55;  
+}  
+  
+.verify-button {  
+  width: 100%;  
+  border: 0;  
+  border-radius: 11px;  
+  padding: 14px;  
+  background: #111;  
+  color: white;  
+  font-size: 15px;  
+  font-weight: 800;  
+  cursor: pointer;  
+  transition: .2s;  
+}  
+  
+.verify-button:hover {  
+  background: #2a2a2a;  
+}  
+  
+.verify-button:disabled {  
+  opacity: .55;  
+  cursor: not-allowed;  
+}  
+  
+.verification-note {  
+  margin-top: 10px;  
+  color: #777;  
+  font-size: 11px;  
+  line-height: 1.5;  
+}  
+  
+  
+/* =========================  
+RENTAL SECTION  
+========================= */  
+  
+.rental-section {  
+  display: none;  
+  margin-top: 25px;  
+}  
+  
+.rental-card {  
+  background: white;  
+  border-radius: 18px;  
+  padding: 30px;  
+  box-shadow:  
+    0 20px 60px  
+    rgba(0,0,0,.35);  
+  max-width: 680px;  
+  margin: 0 auto;  
+}  
+  
+.rental-card h2 {  
+  margin: 0 0 8px;  
+  font-size: 26px;  
+}  
+  
+.rental-intro {  
+  color: #666;  
+  font-size: 14px;  
+  line-height: 1.6;  
+  margin-bottom: 25px;  
+}  
+  
+.rental-price {  
+  border: 1px solid #e4e4e4;  
+  border-radius: 15px;  
+  padding: 22px;  
+  margin-bottom: 20px;  
+  background: #fafafa;  
+}  
+  
+.rental-price-label {  
+  color: #666;  
+  font-size: 13px;  
+  margin-bottom: 7px;  
+}  
+  
+.rental-price-value {  
+  font-size: 34px;  
+  font-weight: 800;  
+}  
+  
+.rental-price-period {  
+  color: #777;  
+  font-size: 13px;  
+  margin-top: 5px;  
+}  
+  
+.rental-status {  
+  display: flex;  
+  align-items: flex-start;  
+  gap: 10px;  
+  border-radius: 12px;  
+  padding: 14px;  
+  background: #fff8e8;  
+  border: 1px solid #f1d99b;  
+  color: #775400;  
+  font-size: 13px;  
+  line-height: 1.5;  
+  margin-bottom: 20px;  
+}  
+  
+.rental-status-icon {  
+  font-size: 21px;  
+}  
+  
+.rental-info {  
+  border-top: 1px solid #eee;  
+  padding-top: 20px;  
+  margin-top: 20px;  
+}  
+  
+.rental-info-row {  
+  display: flex;  
+  justify-content: space-between;  
+  gap: 15px;  
+  padding: 9px 0;  
+  font-size: 13px;  
+}  
+  
+.rental-info-row span:first-child {  
+  color: #777;  
+}  
+  
+.rental-info-row span:last-child {  
+  font-weight: 700;  
+  text-align: right;  
+}  
+  
+.pending-button {  
+  background: #111;  
+  cursor: pointer;  
+}  
+  
+.pending-button:hover {  
+  background: #2a2a2a;  
+}  
+  
+.pending-button:disabled {  
+  opacity: .5;  
+  cursor: not-allowed;  
+}  
+  
+  
+/* =========================  
+BENEFITS  
+========================= */  
+  
+.benefits {  
+  margin-top: 30px;  
+  padding-top: 22px;  
+  border-top: 1px solid #eee;  
+}  
+  
+.benefits h3 {  
+  margin: 0 0 14px;  
+  font-size: 15px;  
+}  
+  
+.benefit {  
+  display: flex;  
+  gap: 10px;  
+  margin: 11px 0;  
+  color: #555;  
+  font-size: 13px;  
+  line-height: 1.4;  
+}  
+  
+.benefit-icon {  
+  font-size: 16px;  
+}  
+  
+.footer {  
+  text-align: center;  
+  color: #888;  
+  padding: 30px 20px;  
+  font-size: 12px;  
+}  
+  
+  
+@media (max-width: 760px) {  
+  
+  .header {  
+    padding: 14px;  
+  }  
+  
+  .brand-name {  
+    font-size: 17px;  
+  }  
+  
+  .brand-subtitle {  
+    font-size: 9px;  
+  }  
+  
+  .back-button {  
+    padding: 8px 10px;  
+    font-size: 11px;  
+  }  
+  
+  .main {  
+    padding: 12px;  
+  }  
+  
+  .intro h1 {  
+    font-size: 26px;  
+  }  
+  
+  .intro p {  
+    font-size: 13px;  
+  }  
+  
+  .card {  
+    padding: 22px 18px;  
+    border-radius: 15px;  
+  }  
+  
+  .rental-card {  
+    padding: 22px 18px;  
+  }  
+  
+  .rental-price-value {  
+    font-size: 30px;  
+  }  
+  
+  .rental-info-row {  
+    align-items: flex-start;  
+  }  
+  
+}  
+  
+</style>  </head>  <body>  <header class="header">    <div class="brand">  <img  
+  src="icon-192.png"  
+  class="logo"  
+  alt="ZYRE Marketing"  
+  onerror="this.style.display='none'"  
+>  
+
+<div class="brand-text">  
+
+  <div class="brand-name">  
+    ZYRE  
+  </div>  
+
+  <div class="brand-subtitle">  
+    MARKETING • SELLER CENTRE  
+  </div>  
+
+</div>
+
+  </div>  <button
+type="button"
+class="back-button"
+id="accountButton"
+
+> 
+
+← Account
+
+  </button>  </header>  <main class="main">    <section class="intro">  <h1>  
+  Sell on ZYRE Marketing  
+</h1>  
+
+<p>  
+  Apply to become a ZYRE Marketing seller.  
+  Your identity and application will be  
+  reviewed before your seller store is activated.  
+</p>
+
+  </section>    <!-- =========================  
+  APPLICATION AREA  
+  ========================= -->    <section  
+    class="auth-grid"  
+    id="authArea"  
+  >  <div class="card">  
+
+  <h2>  
+    Seller application  
+  </h2>  
+
+  <p class="card-description">  
+    Complete your details below to apply  
+    for a ZYRE Marketing seller account.  
+  </p>  
+
+
+  <div  
+    id="registerMessage"  
+    class="message"  
+  ></div>  
+
+
+  <div class="application-notice">  
+
+    <strong>Secure application process:</strong><br>  
+
+    Create or sign in to your ZYRE account →  
+    submit your seller information →  
+    private identity verification →  
+    ZYRE Marketing review →  
+    seller approval →  
+    R100 monthly rental payment →  
+    Seller Centre access.  
+
+    <br><br>  
+
+    Your ID number and residential address  
+    are stored privately in the seller  
+    verification system. They are not displayed  
+    to customers.  
+
+    <br><br>  
+
+    <strong>Important:</strong>  
+    entering a valid 13-digit ID format does  
+    not by itself confirm that the identity  
+    belongs to you. Identity verification is  
+    handled separately by ZYRE Marketing.  
+
+  </div>  
+
+
+  <form id="registerForm">  
+
+
+    <div class="form-section-title">  
+      👤 Personal information  
+    </div>  
+
+
+    <div class="form-group">  
+
+      <label for="registerName">  
+        Full legal name  
+      </label>  
+
+      <input  
+        type="text"  
+        id="registerName"  
+        placeholder="Your full legal name"  
+        autocomplete="name"  
+        required  
+      >  
+
+    </div>  
+
+
+    <div class="form-group">  
+
+      <label for="registerEmail">  
+        Email address  
+      </label>  
+
+      <input  
+        type="email"  
+        id="registerEmail"  
+        placeholder="you@example.com"  
+        autocomplete="email"  
+        required  
+      >  
+
+    </div>  
+
+
+    <div class="form-group">  
+
+      <label for="registerPhone">  
+        Phone number  
+      </label>  
+
+      <input  
+        type="tel"  
+        id="registerPhone"  
+        placeholder="e.g. 081 234 5678"  
+        autocomplete="tel"  
+        required  
+      >  
+
+    </div>  
+
+
+    <div class="form-group">  
+
+      <label for="idNumber">  
+        South African ID number  
+      </label>  
+
+      <input  
+        type="text"  
+        id="idNumber"  
+        placeholder="13-digit South African ID number"  
+        inputmode="numeric"  
+        autocomplete="off"  
+        maxlength="13"  
+        minlength="13"  
+        required  
+      >  
+
+      <div class="field-help">  
+        Your ID number is collected for seller  
+        identity verification and marketplace  
+        security. It is not displayed publicly.  
+      </div>  
+
+    </div>  
+
+
+    <div class="form-group">  
+
+      <label for="residentialAddress">  
+        Residential address  
+      </label>  
+
+      <textarea  
+        id="residentialAddress"  
+        placeholder="Enter your residential address"  
+        autocomplete="street-address"  
+        required  
+      ></textarea>  
+
+      <div class="field-help">  
+        This information is private and is used  
+        for seller verification and marketplace  
+        security.  
+      </div>  
+
+    </div>  
+
+
+    <div class="form-section-title">  
+      🔐 Account security  
+    </div>  
+
+
+    <div class="form-group">  
+
+      <label for="registerPassword">  
+        Strong password  
+      </label>  
+
+      <div class="password-wrap">  
+
+        <input  
+          type="password"  
+          id="registerPassword"  
+          placeholder="Create a strong password"  
+          autocomplete="new-password"  
+          minlength="8"  
+          required  
+        >  
+
+        <button  
+          type="button"  
+          class="password-toggle"  
+          onclick="togglePassword('registerPassword', this)"  
+        >  
+          Show  
+        </button>  
+
+      </div>  
+
+
+      <div class="password-requirements">  
+
+        <strong>Password must contain:</strong><br>  
+
+        • At least 8 characters<br>  
+        • At least one uppercase letter<br>  
+        • At least one lowercase letter<br>  
+        • At least one number<br>  
+        • At least one special character  
+
+      </div>  
+
+    </div>  
+
+
+    <div class="form-group">  
+
+      <label for="confirmPassword">  
+        Confirm password  
+      </label>  
+
+      <div class="password-wrap">  
+
+        <input  
+          type="password"  
+          id="confirmPassword"  
+          placeholder="Enter your password again"  
+          autocomplete="new-password"  
+          minlength="8"  
+          required  
+        >  
+
+        <button  
+          type="button"  
+          class="password-toggle"  
+          onclick="togglePassword('confirmPassword', this)"  
+        >  
+          Show  
+        </button>  
+
+      </div>  
+
+    </div>  
+
+
+    <div class="form-section-title">  
+      🏪 Store information  
+    </div>  
+
+
+    <div class="form-group">  
+
+      <label for="storeName">  
+        Store name  
+      </label>  
+
+      <input  
+        type="text"  
+        id="storeName"  
+        placeholder="Example: Sisanda Fashion"  
+        autocomplete="organization"  
+        required  
+      >  
+
+    </div>  
+
+
+    <div class="form-group">  
+
+      <label for="storeImage">  
+        Store picture / logo  
+      </label>  
+
+      <div class="store-image-upload">  
+
+        <div class="store-image-preview-wrap">  
+
+          <div  
+            class="store-image-placeholder"  
+            id="storeImagePlaceholder"  
+          >  
+            Store picture  
+          </div>  
+
+          <img  
+            id="storeImagePreview"  
+            class="store-image-preview"  
+            alt="Store picture preview"  
+          >  
+
+        </div>  
+
+
+        <input  
+          type="file"  
+          id="storeImage"  
+          accept="image/*"  
+          required  
+        >  
+
+
+        <div class="store-image-note">  
+
+          Choose any picture or logo that represents  
+          your store.  
+
+          <br>  
+
+          Maximum file size:  
+          <strong>5 MB</strong>.  
+
+          <br>  
+
+          This picture will appear as a  
+          <strong>circle</strong> on the ZYRE marketplace.  
+
+        </div>  
+
+      </div>  
+
+    </div>  
+
+
+    <div class="form-group">  
+
+      <label for="businessAddress">  
+        Store / business address  
+      </label>  
+
+      <textarea  
+        id="businessAddress"  
+        placeholder="Enter your store or business address"  
+        required  
+      ></textarea>  
+
+    </div>  
+
+
+    <div class="form-group">  
+
+      <label for="storeCategory">  
+        Store category  
+      </label>  
+
+      <select  
+        id="storeCategory"  
+        required  
+      >  
+
+        <option value="">  
+          Select a category  
+        </option>  
+
+        <option value="Electronics">  
+          Electronics  
+        </option>  
+
+        <option value="Fashion">  
+          Fashion  
+        </option>  
+
+        <option value="Home">  
+          Home  
+        </option>  
+
+        <option value="Beauty">  
+          Beauty  
+        </option>  
+
+        <option value="Food">  
+          Food  
+        </option>  
+
+        <option value="Health">  
+          Health  
+        </option>  
+
+        <option value="Automotive">  
+          Automotive  
+        </option>  
+
+        <option value="Services">  
+          Services  
+        </option>  
+
+        <option value="Other">  
+          Other  
+        </option>  
+
+      </select>  
+
+    </div>  
+
+
+    <div class="form-group">  
+
+      <label for="storeDescription">  
+        Store description  
+      </label>  
+
+      <textarea  
+        id="storeDescription"  
+        placeholder="Tell customers what your store sells..."  
+        required  
+      ></textarea>  
+
+    </div>  
+
+
+    <div class="checkbox-row">  
+
+      <input  
+        type="checkbox"  
+        id="terms"  
+        required  
+      >  
+
+      <label for="terms">  
+
+        I confirm that the information I have  
+        provided is accurate and I agree to the  
+        ZYRE Marketing seller terms. I understand  
+        that my application must be reviewed and  
+        approved before I can manage a seller store.  
+
+      </label>  
+
+    </div>  
+
+
+    <button  
+      type="submit"  
+      class="primary-button"  
+      id="registerButton"  
+    >  
+      Submit Seller Application  
+    </button>  
+
+  </form>  
+
+
+  <div class="benefits">  
+
+    <h3>  
+      Approved seller accounts include  
+    </h3>  
+
+    <div class="benefit">  
+      <span class="benefit-icon">🏪</span>  
+      <span>Your own marketplace store</span>  
+    </div>  
+
+    <div class="benefit">  
+      <span class="benefit-icon">📦</span>  
+      <span>Product and inventory management</span>  
+    </div>  
+
+    <div class="benefit">  
+      <span class="benefit-icon">🛍️</span>  
+      <span>Access to ZYRE customers</span>  
+    </div>  
+
+    <div class="benefit">  
+      <span class="benefit-icon">💰</span>  
+      <span>Seller earnings and payout management</span>  
+    </div>  
+
+  </div>  
+
+</div>
+
+  </section>    <!-- =========================  
+  SELLER STATUS / RENTAL AREA  
+  ========================= -->    <section  
+    class="rental-section"  
+    id="rentalSection"  
+  >  <div class="rental-card">  
+
+  <h2 id="rentalTitle">  
+    Seller Application Status  
+  </h2>  
+
+  <p  
+    class="rental-intro"  
+    id="rentalIntro"  
+  >  
+    Your seller application has been registered.  
+  </p>  
+
+
+  <div class="rental-price">  
+
+    <div class="rental-price-label">  
+      Monthly store rental  
+    </div>  
+
+    <div class="rental-price-value">  
+      R100  
+    </div>  
+
+    <div class="rental-price-period">  
+      per month  
+    </div>  
+
+  </div>  
+
+
+  <div  
+    class="rental-status"  
+    id="rentalStatusBox"  
+  >  
+
+    <span  
+      class="rental-status-icon"  
+      id="rentalStatusIcon"  
+    >  
+      ⏳  
+    </span>  
+
+    <span id="rentalStatusText">  
+
+      <strong>Seller Pending</strong><br>  
+
+      Your application is waiting for  
+      ZYRE Marketing review.  
+
+    </span>  
+
+  </div>  
+
+
+  <div  
+    class="verification-section"  
+    id="verificationSection"  
+  >  
+
+    <h3 class="verification-title">  
+      🔐 Verify your identity  
+    </h3>  
+
+    <p class="verification-description">  
+      Complete your identity verification securely  
+      through Didit. You will be guided through the  
+      ID document and liveness verification process.  
+    </p>  
+
+    <button  
+      type="button"  
+      class="verify-button"  
+      id="diditVerifyButton"  
+    >  
+      🔐 Verify Identity  
+    </button>  
+
+    <div  
+      class="verification-note"  
+      id="verificationNote"  
+    >  
+      Your verification is handled through Didit's  
+      secure verification interface.  
+    </div>  
+
+  </div>  
+
+
+  <button  
+    type="button"  
+    class="primary-button pending-button"  
+    id="paystackRentalButton"  
+    disabled  
+  >  
+    🔒 Pay R100 after approval  
+  </button>  
+
+
+  <button  
+    type="button"  
+    class="secondary-button"  
+    onclick="returnToAccount()"  
+  >  
+    Return to Account  
+  </button>  
+
+
+  <div class="rental-info">  
+
+    <div class="rental-info-row">  
+
+      <span>  
+        Store  
+      </span>  
+
+      <span id="rentalStoreName">  
+        —  
+      </span>  
+
+    </div>  
+
+
+    <div class="rental-info-row">  
+
+      <span>  
+        Application status  
+      </span>  
+
+      <span id="rentalApplicationStatus">  
+        Seller Pending  
+      </span>  
+
+    </div>  
+
+
+    <div class="rental-info-row">  
+
+      <span>  
+        Identity verification  
+      </span>  
+
+      <span id="rentalVerificationStatus">  
+        Pending  
+      </span>  
+
+    </div>  
+
+
+    <div class="rental-info-row">  
+
+      <span>  
+        Rental amount  
+      </span>  
+
+      <span>  
+        R100 / month  
+      </span>  
+
+    </div>  
+
+
+    <div class="rental-info-row">  
+
+      <span>  
+        Payment status  
+      </span>  
+
+      <span id="rentalPaymentStatus">  
+        Waiting for approval  
+      </span>  
+
+    </div>  
+
+
+    <div class="rental-info-row">  
+
+      <span>  
+        Seller Centre  
+      </span>  
+
+      <span id="rentalSellerCentreStatus">  
+        Locked  
+      </span>  
+
+    </div>  
+
+  </div>  
+
+
+  <div  
+    id="rentalMessage"  
+    class="message"  
+    style="margin-top:20px;"  
+  ></div>  
+
+</div>
+
+  </section>  </main>  <footer class="footer">  
+  © 2026 ZYRE Marketing.  
+  All rights reserved.  
+</footer>  <script>  
+  
+const SUPABASE_URL =  
+  "https://gaccizzlwswwynattgda.supabase.co";  
+  
+const SUPABASE_KEY =  
+  "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";  
+  
+const STORE_RENTAL_AMOUNT =  
+  100;  
+  
+const STORE_RENTAL_METHOD =  
+  "Paystack";  
+  
+const RENTAL_PAYSTACK_FUNCTION =  
+  SUPABASE_URL +  
+  "/functions/v1/rental-paystack";  
+  
+const DIDIT_CREATE_SESSION_FUNCTION =  
+  SUPABASE_URL +  
+  "/functions/v1/didit-create-session";  
+  
+  
+/* =========================  
+ACCOUNT BUTTON  
+========================= */  
+  
+document  
+  .getElementById("accountButton")  
+  ?.addEventListener(  
+    "click",  
+    () => {  
+  
+      window.location.href =  
+        "auth.html";  
+  
+    }  
+  );  
+  
+  
+/* =========================  
+MESSAGES  
+========================= */  
+  
+function showMessage(  
+  elementId,  
+  message,  
+  type  
+) {  
+  
+  const element =  
+    document.getElementById(elementId);  
+  
+  if (!element) return;  
+  
+  element.className =  
+    "message " + type;  
+  
+  element.textContent =  
+    message;  
+  
+}  
+  
+  
+function clearMessage(  
+  elementId  
+) {  
+  
+  const element =  
+    document.getElementById(elementId);  
+  
+  if (!element) return;  
+  
+  element.className =  
+    "message";  
+  
+  element.textContent =  
+    "";  
+  
+}  
+  
+  
+/* =========================  
+SAFE FETCH  
+========================= */  
+  
+async function safeFetch(  
+  url,  
+  options,  
+  operationName  
+) {  
+  
+  try {  
+  
+    return await fetch(  
+      url,  
+      options  
+    );  
+  
+  } catch (error) {  
+  
+    console.error(  
+      operationName +  
+      " network error:",  
+      error  
+    );  
+  
+    throw new Error(  
+      operationName +  
+      " could not connect to ZYRE's secure server.\n\n" +  
+      "Please check your internet connection and try again.\n\n" +  
+      "Technical error: " +  
+      (error?.message || "Failed to fetch")  
+    );  
+  
+  }  
+  
+}  
+  
+  
+/* =========================  
+PASSWORD  
+========================= */  
+  
+function togglePassword(  
+  inputId,  
+  button  
+) {  
+  
+  const input =  
+    document.getElementById(inputId);  
+  
+  if (!input) return;  
+  
+  if (  
+    input.type === "password"  
+  ) {  
+  
+    input.type =  
+      "text";  
+  
+    button.textContent =  
+      "Hide";  
+  
+  } else {  
+  
+    input.type =  
+      "password";  
+  
+    button.textContent =  
+      "Show";  
+  
+  }  
+  
+}  
+  
+  
+function isStrongPassword(  
+  password  
+) {  
+  
+  return (  
+    password.length >= 8 &&  
+    /[A-Z]/.test(password) &&  
+    /[a-z]/.test(password) &&  
+    /[0-9]/.test(password) &&  
+    /[^A-Za-z0-9]/.test(password)  
+  );  
+  
+}  
+  
+  
+/* =========================  
+STORE IMAGE PREVIEW  
+========================= */  
+  
+document  
+  .getElementById("storeImage")  
+  ?.addEventListener(  
+    "change",  
+    function() {  
+  
+      const file =  
+        this.files?.[0];  
+  
+      const preview =  
+        document.getElementById(  
+          "storeImagePreview"  
+        );  
+  
+      const placeholder =  
+        document.getElementById(  
+          "storeImagePlaceholder"  
+        );  
+  
+  
+      if (!file) {  
+  
+        if (preview) {  
+  
+          preview.style.display =  
+            "none";  
+  
+          preview.removeAttribute(  
+            "src"  
+          );  
+  
+        }  
+  
+        if (placeholder) {  
+  
+          placeholder.style.display =  
+            "flex";  
+  
+        }  
+  
+        return;  
+  
+      }  
+  
+  
+      if (  
+        !file.type.startsWith(  
+          "image/"  
+        )  
+      ) {  
+  
+        this.value = "";  
+  
+        showMessage(  
+          "registerMessage",  
+          "Please choose an image file for your store picture.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (  
+        file.size >  
+        5 * 1024 * 1024  
+      ) {  
+  
+        this.value = "";  
+  
+        showMessage(  
+          "registerMessage",  
+          "Please choose a store picture smaller than 5 MB.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      clearMessage(  
+        "registerMessage"  
+      );  
+  
+  
+      const reader =  
+        new FileReader();  
+  
+  
+      reader.onload =  
+        function(event) {  
+  
+          if (preview) {  
+  
+            preview.src =  
+              event.target.result;  
+  
+            preview.style.display =  
+              "block";  
+  
+          }  
+  
+          if (placeholder) {  
+  
+            placeholder.style.display =  
+              "none";  
+  
+          }  
+  
+        };  
+  
+  
+      reader.readAsDataURL(  
+        file  
+      );  
+  
+    }  
+  );  
+  
+  
+/* =========================  
+GET CURRENT SUPABASE SESSION  
+========================= */  
+  
+async function getCurrentSession() {  
+  
+  let storedSession =  
+    null;  
+  
+  try {  
+  
+    for (  
+      const key of Object.keys(localStorage)  
+    ) {  
+  
+      if (  
+        key.startsWith("sb-") &&  
+        key.endsWith("-auth-token")  
+      ) {  
+  
+        const raw =  
+          localStorage.getItem(key);  
+  
+        if (!raw) continue;  
+  
+        const parsed =  
+          JSON.parse(raw);  
+  
+        if (  
+          parsed &&  
+          parsed.access_token &&  
+          parsed.user  
+        ) {  
+  
+          storedSession = {  
+  
+            access_token:  
+              parsed.access_token,  
+  
+            user:  
+              parsed.user  
+  
+          };  
+  
+          break;  
+  
+        }  
+  
+      }  
+  
+    }  
+  
+  } catch (error) {  
+  
+    console.warn(  
+      "Could not read existing Supabase session.",  
+      error  
+    );  
+  
+  }  
+  
+  
+  if (!storedSession) {  
+  
+    return null;  
+  
+  }  
+  
+  
+  const response =  
+    await safeFetch(  
+      SUPABASE_URL +  
+      "/auth/v1/user",  
+      {  
+  
+        headers: {  
+  
+          "apikey":  
+            SUPABASE_KEY,  
+  
+          "Authorization":  
+            "Bearer " +  
+            storedSession.access_token  
+  
+        }  
+  
+      },  
+      "Account session check"  
+    );  
+  
+  
+  if (!response.ok) {  
+  
+    console.warn(  
+      "Supabase session is no longer valid:",  
+      response.status,  
+      await response.text()  
+    );  
+  
+    return null;  
+  
+  }  
+  
+  
+  const user =  
+    await response.json();  
+  
+  
+  if (!user?.id) {  
+  
+    return null;  
+  
+  }  
+  
+  
+  return {  
+  
+    accessToken:  
+      storedSession.access_token,  
+  
+    userId:  
+      user.id,  
+  
+    email:  
+      user.email || ""  
+  
+  };  
+  
+}  
+  
+  
+/* =========================  
+ENSURE PROFILE  
+========================= */  
+  
+async function ensureSellerProfile(  
+  userId,  
+  accessToken,  
+  fullName,  
+  phone  
+) {  
+  
+  const profileResponse =  
+    await safeFetch(  
+  
+      SUPABASE_URL +  
+      "/rest/v1/profiles",  
+  
+      {  
+  
+        method:  
+          "POST",  
+  
+        headers: {  
+  
+          "apikey":  
+            SUPABASE_KEY,  
+  
+          "Authorization":  
+            "Bearer " +  
+            accessToken,  
+  
+          "Content-Type":  
+            "application/json",  
+  
+          "Prefer":  
+            "resolution=merge-duplicates,return=minimal"  
+  
+        },  
+  
+        body:  
+          JSON.stringify({  
+  
+            id:  
+              userId,  
+  
+            full_name:  
+              fullName,  
+  
+            phone:  
+              phone  
+  
+          })  
+  
+        },  
+  
+      "ZYRE profile preparation"  
+  
+    );  
+  
+  
+  if (!profileResponse.ok) {  
+  
+    const errorText =  
+      await profileResponse.text();  
+  
+    throw new Error(  
+      "Your account was created, but your ZYRE profile could not be prepared.\n\n" +  
+      "Server response (" +  
+      profileResponse.status +  
+      "):\n" +  
+      errorText  
+    );  
+  
+  }  
+  
+}  
+  
+  
+/* =========================  
+FIND EXISTING SELLER  
+========================= */  
+  
+async function findExistingSeller(  
+  userId,  
+  accessToken  
+) {  
+  
+  const response =  
+    await safeFetch(  
+  
+      SUPABASE_URL +  
+      "/rest/v1/sellers?user_id=eq." +  
+      encodeURIComponent(userId) +  
+      "&select=id,store_name,approved,email,status,store_image_url&order=id.desc&limit=1",  
+  
+      {  
+  
+        headers: {  
+  
+          "apikey":  
+            SUPABASE_KEY,  
+  
+          "Authorization":  
+            "Bearer " +  
+            accessToken  
+  
+        }  
+  
+      },  
+  
+      "Seller application check"  
+  
+    );  
+  
+  
+  if (!response.ok) {  
+  
+    const errorText =  
+      await response.text();  
+  
+    throw new Error(  
+      "We could not check your seller application.\n\n" +  
+      "Server response (" +  
+      response.status +  
+      "):\n" +  
+      errorText  
+    );  
+  
+  }  
+  
+  
+  const sellers =  
+    await response.json();  
+  
+  
+  if (  
+    !Array.isArray(sellers) ||  
+    sellers.length === 0  
+  ) {  
+  
+    return null;  
+  
+  }  
+  
+  
+  return sellers[0];  
+  
+}  
+  
+  
+/* =========================  
+SECURE SELLER APPLICATION RPC  
+========================= */  
+  
+async function submitSellerApplication(  
+  accessToken,  
+  fullName,  
+  email,  
+  phone,  
+  idNumber,  
+  residentialAddress,  
+  storeName,  
+  businessAddress,  
+  category,  
+  description  
+) {  
+  
+  const response =  
+    await safeFetch(  
+  
+      SUPABASE_URL +  
+      "/rest/v1/rpc/submit_seller_application",  
+  
+      {  
+  
+        method:  
+          "POST",  
+  
+        headers: {  
+  
+          "apikey":  
+            SUPABASE_KEY,  
+  
+          "Authorization":  
+            "Bearer " +  
+            accessToken,  
+  
+          "Content-Type":  
+            "application/json",  
+  
+          "Accept":  
+            "application/json"  
+  
+        },  
+  
+        body:  
+          JSON.stringify({  
+  
+            p_full_name:  
+              fullName,  
+  
+            p_email:  
+              email,  
+  
+            p_phone:  
+              phone,  
+  
+            p_id_number:  
+              idNumber,  
+  
+            p_residential_address:  
+              residentialAddress,  
+  
+            p_store_name:  
+              storeName,  
+  
+            p_business_address:  
+              businessAddress,  
+  
+            p_category:  
+              category,  
+  
+            p_description:  
+              description  
+  
+          })  
+  
+      },  
+  
+      "Seller application submission"  
+  
+    );  
+  
+  
+  const responseText =  
+    await response.text();  
+  
+  
+  let data =  
+    null;  
+  
+  
+  try {  
+  
+    data =  
+      responseText  
+        ? JSON.parse(responseText)  
+        : null;  
+  
+  } catch {  
+  
+    data =  
+      null;  
+  
+  }  
+  
+  
+  if (!response.ok) {  
+  
+    console.error(  
+      "Seller application RPC failed:",  
+      {  
+        status:  
+          response.status,  
+  
+        response:  
+          data ||  
+          responseText  
+      }  
+    );  
+  
+  
+    throw new Error(  
+  
+      data?.message ||  
+      data?.error ||  
+      data?.details ||  
+      data?.hint ||  
+      responseText ||  
+      (  
+        "Seller application could not be submitted. " +  
+        "Server returned HTTP " +  
+        response.status +  
+        "."  
+      )  
+  
+    );  
+  
+  }  
+  
+  
+  const result =  
+    Array.isArray(data)  
+      ? data[0]  
+      : data;  
+  
+  
+  if (  
+    !result ||  
+    !result.seller_id  
+  ) {  
+  
+    throw new Error(  
+      "The seller application was processed, but no seller ID was returned."  
+    );  
+  
+  }  
+  
+  
+  return result;  
+  
+}  
+  
+  
+/* =========================  
+UPLOAD STORE IMAGE  
+========================= */  
+  
+async function uploadStoreImage(  
+  file,  
+  userId,  
+  sellerId,  
+  accessToken  
+) {  
+  
+  if (!file) {  
+  
+    throw new Error(  
+      "Please choose a store picture before submitting your seller application."  
+    );  
+  
+  }  
+  
+  
+  if (  
+    !file.type.startsWith("image/")  
+  ) {  
+  
+    throw new Error(  
+      "The store picture must be an image file."  
+    );  
+  
+  }  
+  
+  
+  if (  
+    file.size >  
+    5 * 1024 * 1024  
+  ) {  
+  
+    throw new Error(  
+      "The store picture must be smaller than 5 MB."  
+    );  
+  
+  }  
+  
+  
+  let extension =  
+    "jpg";  
+  
+  
+  if (  
+    file.type ===  
+    "image/png"  
+  ) {  
+  
+    extension =  
+      "png";  
+  
+  } else if (  
+    file.type ===  
+    "image/webp"  
+  ) {  
+  
+    extension =  
+      "webp";  
+  
+  } else if (  
+    file.type ===  
+    "image/gif"  
+  ) {  
+  
+    extension =  
+      "gif";  
+  
+  }  
+  
+  
+  const filePath =  
+    "stores/" +  
+    userId +  
+    "-" +  
+    sellerId +  
+    "-" +  
+    Date.now() +  
+    "." +  
+    extension;  
+  
+  
+  const uploadResponse =  
+    await safeFetch(  
+  
+      SUPABASE_URL +  
+      "/storage/v1/object/store-images/" +  
+      filePath,  
+  
+      {  
+  
+        method:  
+          "POST",  
+  
+        headers: {  
+  
+          "apikey":  
+            SUPABASE_KEY,  
+  
+          "Authorization":  
+            "Bearer " +  
+            accessToken,  
+  
+          "Content-Type":  
+            file.type,  
+  
+          "x-upsert":  
+            "true"  
+  
+        },  
+  
+        body:  
+          file  
+  
+      },  
+  
+      "Store picture upload"  
+  
+    );  
+  
+  
+  if (!uploadResponse.ok) {  
+  
+    const errorText =  
+      await uploadResponse.text();  
+  
+    throw new Error(  
+      "Your seller application was created, but the store picture could not be uploaded.\n\n" +  
+      "Server response (" +  
+      uploadResponse.status +  
+      "):\n" +  
+      errorText  
+    );  
+  
+  }  
+  
+  
+  const publicUrl =  
+    SUPABASE_URL +  
+    "/storage/v1/object/public/store-images/" +  
+    filePath;  
+  
+  
+  const updateResponse =  
+    await safeFetch(  
+  
+      SUPABASE_URL +  
+      "/rest/v1/sellers?id=eq." +  
+      encodeURIComponent(sellerId),  
+  
+      {  
+  
+        method:  
+          "PATCH",  
+  
+        headers: {  
+  
+          "apikey":  
+            SUPABASE_KEY,  
+  
+          "Authorization":  
+            "Bearer " +  
+            accessToken,  
+  
+          "Content-Type":  
+            "application/json",  
+  
+          "Prefer":  
+            "return=minimal"  
+  
+        },  
+  
+        body:  
+          JSON.stringify({  
+  
+            store_image_url:  
+              publicUrl  
+  
+          })  
+  
+      },  
+  
+      "Seller store picture update"  
+  
+    );  
+  
+  
+  if (!updateResponse.ok) {  
+  
+    const errorText =  
+      await updateResponse.text();  
+  
+    throw new Error(  
+      "The store picture was uploaded, but the seller profile could not be updated.\n\n" +  
+      "Server response (" +  
+      updateResponse.status +  
+      "):\n" +  
+      errorText  
+    );  
+  
+  }  
+  
+  
+  return publicUrl;  
+  
+}  
+  
+  
+/* =========================  
+GET VERIFICATION STATUS  
+========================= */  
+  
+async function getVerificationStatus(  
+  sellerId,  
+  accessToken  
+) {  
+  
+  const response =  
+    await safeFetch(  
+  
+      SUPABASE_URL +  
+      "/rest/v1/seller_verification?seller_id=eq." +  
+      encodeURIComponent(sellerId) +  
+      "&select=id,id_verification_status,reviewed_at,verification_provider,verification_reference&order=id.desc&limit=1",  
+  
+      {  
+  
+        headers: {  
+  
+          "apikey":  
+            SUPABASE_KEY,  
+  
+          "Authorization":  
+            "Bearer " +  
+            accessToken  
+  
+        }  
+  
+      },  
+  
+      "Identity verification status check"  
+  
+    );  
+  
+  
+  if (!response.ok) {  
+  
+    console.warn(  
+      "Could not read identity verification status:",  
+      response.status,  
+      await response.text()  
+    );  
+  
+    return null;  
+  
+  }  
+  
+  
+  const data =  
+    await response.json();  
+  
+  
+  return data?.[0] || null;  
+  
+}  
+  
+  
+/* =========================  
+DIDIT CREATE SESSION  
+========================= */  
+  
+async function createDiditSession(  
+  sellerId,  
+  accessToken  
+) {  
+  
+  const response =  
+    await safeFetch(  
+  
+      DIDIT_CREATE_SESSION_FUNCTION,  
+  
+      {  
+  
+        method:  
+          "POST",  
+  
+        headers: {  
+  
+          "apikey":  
+            SUPABASE_KEY,  
+  
+          "Authorization":  
+            "Bearer " +  
+            accessToken,  
+  
+          "Content-Type":  
+            "application/json",  
+  
+          "Accept":  
+            "application/json"  
+  
+        },  
+  
+        body:  
+          JSON.stringify({  
+  
+            seller_id:  
+              Number(sellerId)  
+  
+          })  
+  
+      },  
+  
+      "Didit identity verification"  
+  
+    );  
+  
+  
+  const text =  
+    await response.text();  
+  
+  
+  let data =  
+    {};  
+  
+  try {  
+  
+    data =  
+      text  
+        ? JSON.parse(text)  
+        : {};  
+  
+  } catch {  
+  
+    data =  
+      {};  
+  
+  }  
+  
+  
+  if (!response.ok) {  
+  
+    console.error(  
+      "Didit session error:",  
+      response.status,  
+      data  
+    );  
+  
+    throw new Error(  
+  
+      data?.error ||  
+      data?.message ||  
+      data?.details ||  
+      text ||  
+      (  
+        "Didit identity verification could not be started. " +  
+        "The secure verification service returned HTTP " +  
+        response.status +  
+        "."  
+      )  
+  
+    );  
+  
+  }  
+  
+  
+  if (  
+    data?.already_verified  
+  ) {  
+  
+    return data;  
+  
+  }  
+  
+  
+  if (  
+    !data?.verification_url  
+  ) {  
+  
+    console.error(  
+      "Didit response did not contain verification_url:",  
+      data  
+    );  
+  
+    throw new Error(  
+      "Didit responded successfully, but no verification link was returned."  
+    );  
+  
+  }  
+  
+  
+  return data;  
+  
+}  
+  
+  
+/* =========================  
+START DIDIT VERIFICATION  
+========================= */  
+  
+async function startDiditVerification() {  
+  
+  clearMessage(  
+    "rentalMessage"  
+  );  
+  
+  
+  const button =  
+    document.getElementById(  
+      "diditVerifyButton"  
+    );  
+  
+  
+  if (!button) return;  
+  
+  
+  const session =  
+    await getCurrentSession();  
+  
+  
+  if (!session) {  
+  
+    showMessage(  
+      "rentalMessage",  
+      "Please sign in to your ZYRE account before starting identity verification.",  
+      "error"  
+    );  
+  
+    return;  
+  
+  }  
+  
+  
+  const sellerId =  
+    localStorage.getItem(  
+      "zava_seller_id"  
+    );  
+  
+  
+  if (!sellerId) {  
+  
+    showMessage(  
+      "rentalMessage",  
+      "Your seller account could not be identified. Please return to Account and sign in again.",  
+      "error"  
+    );  
+  
+    return;  
+  
+  }  
+  
+  
+  button.disabled =  
+    true;  
+  
+  button.textContent =  
+    "Starting secure verification...";  
+  
+  
+  try {  
+  
+    const seller =  
+      await findExistingSeller(  
+        session.userId,  
+        session.accessToken  
+      );  
+  
+  
+    if (!seller) {  
+  
+      throw new Error(  
+        "Your seller application could not be found."  
+      );  
+  
+    }  
+  
+  
+    if (  
+      String(seller.id) !==  
+      String(sellerId)  
+    ) {  
+  
+      throw new Error(  
+        "The seller session does not match your signed-in account."  
+      );  
+  
+    }  
+  
+  
+    const verification =  
+      await getVerificationStatus(  
+        seller.id,  
+        session.accessToken  
+      );  
+  
+  
+    const verificationState =  
+      String(  
+        verification?.id_verification_status ||  
+        "pending"  
+      ).toLowerCase();  
+  
+  
+    if (  
+      verificationState ===  
+        "verified" ||  
+      verificationState ===  
+        "approved"  
+    ) {  
+  
+      showMessage(  
+        "rentalMessage",  
+        "Your identity is already verified. No new Didit session is required.",  
+        "success"  
+      );  
+  
+  
+      button.disabled =  
+        true;  
+  
+      button.textContent =  
+        "✓ Identity Verified";  
+  
+  
+      return;  
+  
+    }  
+  
+  
+    const didit =  
+      await createDiditSession(  
+        seller.id,  
+        session.accessToken  
+      );  
+  
+  
+    if (  
+      didit?.already_verified  
+    ) {  
+  
+      showMessage(  
+        "rentalMessage",  
+        "Your identity is already verified.",  
+        "success"  
+      );  
+  
+  
+      button.disabled =  
+        true;  
+  
+      button.textContent =  
+        "✓ Identity Verified";  
+  
+  
+      return;  
+  
+    }  
+  
+  
+    showMessage(  
+      "rentalMessage",  
+      "Your secure Didit verification session is ready. Opening the identity verification page...",  
+      "info"  
+    );  
+  
+  
+    window.location.href =  
+      didit.verification_url;  
+  
+  } catch (error) {  
+  
+    console.error(  
+      "Didit verification error:",  
+      error  
+    );  
+  
+  
+    button.disabled =  
+      false;  
+  
+    button.textContent =  
+      "🔐 Verify Identity";  
+  
+  
+    showMessage(  
+      "rentalMessage",  
+      error.message ||  
+      "Identity verification could not be started. Please try again.",  
+      "error"  
+    );  
+  
+  }  
+  
+}  
+  
+  
+/* =========================  
+INITIALIZE PAYSTACK RENTAL  
+========================= */  
+  
+async function initializePaystackRental(  
+  sellerId,  
+  email,  
+  accessToken  
+) {  
+  
+  const response =  
+    await safeFetch(  
+  
+      RENTAL_PAYSTACK_FUNCTION,  
+  
+      {  
+  
+        method:  
+          "POST",  
+  
+        headers: {  
+  
+          "apikey":  
+            SUPABASE_KEY,  
+  
+          "Authorization":  
+            "Bearer " +  
+            accessToken,  
+  
+          "Content-Type":  
+            "application/json",  
+  
+          "Accept":  
+            "application/json"  
+  
+        },  
+  
+        body:  
+          JSON.stringify({  
+  
+            action:  
+              "initialize",  
+  
+            seller_id:  
+              Number(sellerId),  
+  
+            email:  
+              email  
+  
+          })  
+  
+      },  
+  
+      "Paystack rental payment"  
+  
+    );  
+  
+  
+  const text =  
+    await response.text();  
+  
+  
+  let data =  
+    {};  
+  
+  
+  try {  
+  
+    data =  
+      text  
+        ? JSON.parse(text)  
+        : {};  
+  
+  } catch {  
+  
+    data =  
+      {};  
+  
+  }  
+  
+  
+  if (!response.ok) {  
+  
+    throw new Error(  
+      data.message ||  
+      data.error ||  
+      text ||  
+      "Paystack rental payment could not be initialized."  
+    );  
+  
+  }  
+  
+  
+  if (  
+    !data.authorization_url  
+  ) {  
+  
+    throw new Error(  
+      "Paystack was reached, but no payment authorization URL was returned."  
+    );  
+  
+  }  
+  
+  
+  return data;  
+  
+}  
+  
+  
+/* =========================  
+SHOW APPLICATION STATUS  
+========================= */  
+  
+function showApplicationStatus(  
+  seller,  
+  verificationStatus  
+) {  
+  
+  const authArea =  
+    document.getElementById(  
+      "authArea"  
+    );  
+  
+  const rentalSection =  
+    document.getElementById(  
+      "rentalSection"  
+    );  
+  
+  
+  if (authArea) {  
+  
+    authArea.style.display =  
+      "none";  
+  
+  }  
+  
+  
+  if (rentalSection) {  
+  
+    rentalSection.style.display =  
+      "block";  
+  
+  }  
+  
+  
+  const storeName =  
+    document.getElementById(  
+      "rentalStoreName"  
+    );  
+  
+  const applicationStatus =  
+    document.getElementById(  
+      "rentalApplicationStatus"  
+    );  
+  
+  const verification =  
+    document.getElementById(  
+      "rentalVerificationStatus"  
+    );  
+  
+  const paymentStatus =  
+    document.getElementById(  
+      "rentalPaymentStatus"  
+    );  
+  
+  const sellerCentre =  
+    document.getElementById(  
+      "rentalSellerCentreStatus"  
+    );  
+  
+  const title =  
+    document.getElementById(  
+      "rentalTitle"  
+    );  
+  
+  const intro =  
+    document.getElementById(  
+      "rentalIntro"  
+    );  
+  
+  const statusText =  
+    document.getElementById(  
+      "rentalStatusText"  
+    );  
+  
+  const statusIcon =  
+    document.getElementById(  
+      "rentalStatusIcon"  
+    );  
+  
+  const payButton =  
+    document.getElementById(  
+      "paystackRentalButton"  
+    );  
+  
+  const verificationSection =  
+    document.getElementById(  
+      "verificationSection"  
+    );  
+  
+  const diditButton =  
+    document.getElementById(  
+      "diditVerifyButton"  
+    );  
+  
+  const verificationNote =  
+    document.getElementById(  
+      "verificationNote"  
+    );  
+  
+  
+  if (storeName) {  
+  
+    storeName.textContent =  
+      seller?.store_name ||  
+      "Your Store";  
+  
+  }  
+  
+  
+  const sellerApproved =  
+    seller?.approved === true ||  
+    seller?.status ===  
+      "seller_approved";  
+  
+  
+  const sellerRejected =  
+    seller?.status ===  
+      "seller_rejected";  
+  
+  
+  const sellerSuspended =  
+    seller?.status ===  
+      "seller_suspended";  
+  
+  
+  const verificationState =  
+    String(  
+      verificationStatus?.id_verification_status ||  
+      "pending"  
+    ).toLowerCase();  
+  
+  
+  const identityVerified =  
+    verificationState ===  
+      "verified" ||  
+    verificationState ===  
+      "approved";  
+  
+  
+  const verificationInReview =  
+    verificationState ===  
+      "under_review" ||  
+    verificationState ===  
+      "in_review" ||  
+    verificationState ===  
+      "started" ||  
+    verificationState ===  
+      "processing";  
+  
+  
+  if (verification) {  
+  
+    if (identityVerified) {  
+  
+      verification.textContent =  
+        "Verified";  
+  
+    } else if (verificationInReview) {  
+  
+      verification.textContent =  
+        "Under Review";  
+  
+    } else if (  
+      verificationState ===  
+      "declined"  
+    ) {  
+  
+      verification.textContent =  
+        "Declined";  
+  
+    } else if (  
+      verificationState ===  
+      "resubmitted"  
+    ) {  
+  
+      verification.textContent =  
+        "Resubmitted";  
+  
+    } else {  
+  
+      verification.textContent =  
+        "Pending";  
+  
+    }  
+  
+  }  
+  
+  
+  const needsIdentityVerification =  
+    !identityVerified &&  
+    !sellerRejected &&  
+    !sellerSuspended;  
+  
+  
+  if (  
+    verificationSection  
+  ) {  
+  
+    verificationSection.classList.toggle(  
+      "visible",  
+      needsIdentityVerification  
+    );  
+  
+  }  
+  
+  
+  if (  
+    diditButton  
+  ) {  
+  
+    if (  
+      identityVerified  
+    ) {  
+  
+      diditButton.disabled =  
+        true;  
+  
+      diditButton.textContent =  
+        "✓ Identity Verified";  
+  
+      if (verificationNote) {  
+  
+        verificationNote.textContent =  
+          "Your identity verification has been completed.";  
+  
+      }  
+  
+    } else if (  
+      verificationInReview  
+    ) {  
+  
+      diditButton.disabled =  
+        true;  
+  
+      diditButton.textContent =  
+        "⏳ Verification Under Review";  
+  
+      if (verificationNote) {  
+  
+        verificationNote.textContent =  
+          "Your verification is being processed. Please wait for the verification result before starting another session.";  
+  
+      }  
+  
+    } else if (  
+      verificationState ===  
+      "declined"  
+    ) {  
+  
+      diditButton.disabled =  
+        false;  
+  
+      diditButton.textContent =  
+        "↻ Retry Identity Verification";  
+  
+      if (verificationNote) {  
+  
+        verificationNote.textContent =  
+          "The previous verification was not approved. You may start a new verification attempt.";  
+  
+      }  
+  
+    } else {  
+  
+      diditButton.disabled =  
+        false;  
+  
+      diditButton.textContent =  
+        "🔐 Verify Identity";  
+  
+      if (verificationNote) {  
+  
+        verificationNote.textContent =  
+          "Complete the secure Didit identity verification before your seller application can be approved.";  
+  
+      }  
+  
+    }  
+  
+  }  
+  
+  
+  const readyForPayment =  
+    sellerApproved &&  
+    identityVerified;  
+  
+  
+  if (sellerApproved && !identityVerified) {  
+  
+    if (title) {  
+  
+      title.textContent =  
+        "Seller Approval Recorded";  
+  
+    }  
+  
+  
+    if (intro) {  
+  
+      intro.textContent =  
+        "Your seller application has been approved, but identity verification must be completed before the R100 monthly rental payment becomes available.";  
+  
+    }  
+  
+  
+    if (applicationStatus) {  
+  
+      applicationStatus.textContent =  
+        "Seller Approved";  
+  
+    }  
+  
+  
+    if (statusIcon) {  
+  
+      statusIcon.textContent =  
+        "⏳";  
+  
+    }  
+  
+  
+    if (statusText) {  
+  
+      statusText.innerHTML =  
+        "<strong>Identity verification required</strong><br>" +  
+        "Complete the secure Didit identity verification below before payment can be made.";  
+  
+    }  
+  
+  
+    if (paymentStatus) {  
+  
+      paymentStatus.textContent =  
+        "Waiting for verification";  
+  
+    }  
+  
+  
+    if (sellerCentre) {  
+  
+      sellerCentre.textContent =  
+        "Locked";  
+  
+    }  
+  
+  
+    if (payButton) {  
+  
+      payButton.disabled =  
+        true;  
+  
+      payButton.textContent =  
+        "🔒 Payment after verification";  
+  
+    }  
+  
+  } else if (readyForPayment) {  
+  
+    if (title) {  
+  
+      title.textContent =  
+        "Seller Approved";  
+  
+    }  
+  
+  
+    if (intro) {  
+  
+      intro.textContent =  
+        "Your seller application and identity verification have been approved by ZYRE Marketing. Complete the R100 monthly store rental payment to continue.";  
+  
+    }  
+  
+  
+    if (applicationStatus) {  
+  
+      applicationStatus.textContent =  
+        "Seller Approved";  
+  
+    }  
+  
+  
+    if (statusIcon) {  
+  
+      statusIcon.textContent =  
+        "✓";  
+  
+    }  
+  
+  
+    if (statusText) {  
+  
+      statusText.innerHTML =  
+        "<strong>Seller Approved & Identity Verified</strong><br>" +  
+        "Your R100 monthly store rental payment is now available.";  
+  
+    }  
+  
+  
+    if (paymentStatus) {  
+  
+      paymentStatus.textContent =  
+        "Ready for payment";  
+  
+    }  
+  
+  
+    if (sellerCentre) {  
+  
+      sellerCentre.textContent =  
+        "Locked until payment";  
+  
+    }  
+  
+  
+    if (payButton) {  
+  
+      payButton.disabled =  
+        false;  
+  
+      payButton.textContent =  
+        "💳 Pay R100 with Paystack";  
+  
+    }  
+  
+  } else if (sellerRejected) {  
+  
+    if (title) {  
+  
+      title.textContent =  
+        "Seller Application Review";  
+  
+    }  
+  
+  
+    if (intro) {  
+  
+      intro.textContent =  
+        "Your seller application was not approved. Please contact ZYRE Marketing if you need further information.";  
+  
+    }  
+  
+  
+    if (applicationStatus) {  
+  
+      applicationStatus.textContent =  
+        "Seller Rejected";  
+  
+    }  
+  
+  
+    if (statusIcon) {  
+  
+      statusIcon.textContent =  
+        "⚠";  
+  
+    }  
+  
+  
+    if (statusText) {  
+  
+      statusText.innerHTML =  
+        "<strong>Application not approved</strong><br>" +  
+        "Your seller application is not currently approved for seller access.";  
+  
+    }  
+  
+  
+    if (paymentStatus) {  
+  
+      paymentStatus.textContent =  
+        "Unavailable";  
+  
+    }  
+  
+  
+    if (sellerCentre) {  
+  
+      sellerCentre.textContent =  
+        "Locked";  
+  
+    }  
+  
+  
+    if (payButton) {  
+  
+      payButton.disabled =  
+        true;  
+  
+      payButton.textContent =  
+        "🔒 Payment unavailable";  
+  
+    }  
+  
+  } else if (sellerSuspended) {  
+  
+    if (title) {  
+  
+      title.textContent =  
+        "Seller Account Suspended";  
+  
+    }  
+  
+  
+    if (intro) {  
+  
+      intro.textContent =  
+        "Your seller account is currently suspended. Please contact ZYRE Marketing for assistance.";  
+  
+    }  
+  
+  
+    if (applicationStatus) {  
+  
+      applicationStatus.textContent =  
+        "Suspended";  
+  
+    }  
+  
+  
+    if (statusIcon) {  
+  
+      statusIcon.textContent =  
+        "⚠";  
+  
+    }  
+  
+  
+    if (statusText) {  
+  
+      statusText.innerHTML =  
+        "<strong>Seller account suspended</strong><br>" +  
+        "Seller access and rental payment are currently unavailable.";  
+  
+    }  
+  
+  
+    if (paymentStatus) {  
+  
+      paymentStatus.textContent =  
+        "Unavailable";  
+  
+    }  
+  
+  
+    if (sellerCentre) {  
+  
+      sellerCentre.textContent =  
+        "Locked";  
+  
+    }  
+  
+  
+    if (payButton) {  
+  
+      payButton.disabled =  
+        true;  
+  
+      payButton.textContent =  
+        "🔒 Payment unavailable";  
+  
+    }  
+  
+  } else {  
+  
+    if (title) {  
+  
+      title.textContent =  
+        "Seller Application Submitted";  
+  
+    }  
+  
+  
+    if (intro) {  
+  
+      intro.textContent =  
+        "Your seller application has been registered and is waiting for ZYRE Marketing verification and approval.";  
+  
+    }  
+  
+  
+    if (applicationStatus) {  
+  
+      applicationStatus.textContent =  
+        "Seller Pending";  
+  
+    }  
+  
+  
+    if (statusIcon) {  
+  
+      statusIcon.textContent =  
+        verificationInReview  
+          ? "⏳"  
+          : "🔐";  
+  
+    }  
+  
+  
+    if (statusText) {  
+  
+      if (  
+        verificationState ===  
+          "declined" ||  
+        verificationState ===  
+          "rejected"  
+      ) {  
+  
+        statusText.innerHTML =  
+          "<strong>Verification requires attention</strong><br>" +  
+          "Your previous identity verification was not approved. You may retry the secure verification.";  
+  
+      } else if (  
+        verificationInReview  
+      ) {  
+  
+        statusText.innerHTML =  
+          "<strong>Identity Under Review</strong><br>" +  
+          "Your identity verification is being processed. ZYRE Marketing can review your seller application after the verification result is available.";  
+  
+      } else {  
+  
+        statusText.innerHTML =  
+          "<strong>Seller Pending</strong><br>" +  
+          "Complete identity verification below so ZYRE Marketing can review your seller application.";  
+  
+      }  
+  
+    }  
+  
+  
+    if (paymentStatus) {  
+  
+      paymentStatus.textContent =  
+        "Waiting for approval";  
+  
+    }  
+  
+  
+    if (sellerCentre) {  
+  
+      sellerCentre.textContent =  
+        "Locked";  
+  
+    }  
+  
+  
+    if (payButton) {  
+  
+      payButton.disabled =  
+        true;  
+  
+      payButton.textContent =  
+        "🔒 Pay R100 after approval";  
+  
+    }  
+  
+  }  
+  
+  
+  window.scrollTo({  
+    top: 0,  
+    behavior: "smooth"  
+  });  
+  
+}  
+  
+  
+/* =========================  
+SAVE SELLER SESSION  
+========================= */  
+  
+function saveSellerSession(  
+  accessToken,  
+  userId,  
+  sellerId,  
+  email  
+) {  
+  
+  /*  
+   * Only session identifiers are stored.  
+   *  
+   * NEVER store:  
+   * - ID number  
+   * - Residential address  
+   * - Identity documents  
+   */  
+  
+  localStorage.setItem(  
+    "zava_access_token",  
+    accessToken  
+  );  
+  
+  localStorage.setItem(  
+    "zava_user_id",  
+    userId  
+  );  
+  
+  localStorage.setItem(  
+    "zava_seller_id",  
+    sellerId  
+  );  
+  
+  localStorage.setItem(  
+    "zava_seller_email",  
+    email  
+  );  
+  
+}  
+  
+  
+/* =========================  
+RETURN TO ACCOUNT  
+========================= */  
+  
+function returnToAccount() {  
+  
+  window.location.href =  
+    "auth.html";  
+  
+}  
+  
+  
+/* =========================  
+DIDIT BUTTON  
+========================= */  
+  
+document  
+  .getElementById(  
+    "diditVerifyButton"  
+  )  
+  ?.addEventListener(  
+    "click",  
+    async function() {  
+  
+      try {  
+  
+        await startDiditVerification();  
+  
+      } catch (error) {  
+  
+        console.error(  
+          "Unexpected Didit button error:",  
+          error  
+        );  
+  
+        showMessage(  
+          "rentalMessage",  
+          error.message ||  
+          "Identity verification could not be started.",  
+          "error"  
+        );  
+  
+      }  
+  
+    }  
+  );  
+  
+  
+/* =========================  
+PAYSTACK BUTTON  
+========================= */  
+  
+let currentPaystackAuthorizationUrl =  
+  null;  
+  
+  
+document  
+  .getElementById(  
+    "paystackRentalButton"  
+  )  
+  ?.addEventListener(  
+    "click",  
+    async function() {  
+  
+      if (  
+        currentPaystackAuthorizationUrl  
+      ) {  
+  
+        window.location.href =  
+          currentPaystackAuthorizationUrl;  
+  
+        return;  
+  
+      }  
+  
+  
+      try {  
+  
+        const session =  
+          await getCurrentSession();  
+  
+  
+        if (!session) {  
+  
+          showMessage(  
+            "rentalMessage",  
+            "Please sign in to your ZYRE account before making the seller rental payment.",  
+            "error"  
+          );  
+  
+          return;  
+  
+        }  
+  
+  
+        const sellerId =  
+          localStorage.getItem(  
+            "zava_seller_id"  
+          );  
+  
+  
+        if (!sellerId) {  
+  
+          showMessage(  
+            "rentalMessage",  
+            "Your seller account could not be identified. Please return to Account and sign in again.",  
+            "error"  
+          );  
+  
+          return;  
+  
+        }  
+  
+  
+        const seller =  
+          await findExistingSeller(  
+            session.userId,  
+            session.accessToken  
+          );  
+  
+  
+        if (!seller) {  
+  
+          showMessage(  
+            "rentalMessage",  
+            "Your seller application could not be found.",  
+            "error"  
+          );  
+  
+          return;  
+  
+        }  
+  
+  
+        const verification =  
+          await getVerificationStatus(  
+            seller.id,  
+            session.accessToken  
+          );  
+  
+  
+        const approved =  
+          seller.approved === true ||  
+          seller.status ===  
+            "seller_approved";  
+  
+  
+        const verificationState =  
+          String(  
+            verification?.id_verification_status ||  
+            "pending"  
+          ).toLowerCase();  
+  
+  
+        const identityVerified =  
+          verificationState ===  
+            "verified" ||  
+          verificationState ===  
+            "approved";  
+  
+  
+        if (!approved) {  
+  
+          showMessage(  
+            "rentalMessage",  
+            "Your seller application has not been approved yet. The R100 payment becomes available only after ZYRE Marketing approval.",  
+            "info"  
+          );  
+  
+          return;  
+  
+        }  
+  
+  
+        if (!identityVerified) {  
+  
+          showMessage(  
+            "rentalMessage",  
+            "Your seller application cannot proceed to payment until identity verification has been completed.",  
+            "info"  
+          );  
+  
+          return;  
+  
+        }  
+  
+  
+        const button =  
+          document.getElementById(  
+            "paystackRentalButton"  
+          );  
+  
+  
+        button.disabled =  
+          true;  
+  
+        button.textContent =  
+          "Preparing Paystack payment...";  
+  
+  
+        const paystackData =  
+          await initializePaystackRental(  
+            seller.id,  
+            session.email,  
+            session.accessToken  
+          );  
+  
+  
+        currentPaystackAuthorizationUrl =  
+          paystackData.authorization_url;  
+  
+  
+        window.location.href =  
+          paystackData.authorization_url;  
+  
+      } catch (error) {  
+  
+        console.error(  
+          "Paystack rental error:",  
+          error  
+        );  
+  
+  
+        const button =  
+          document.getElementById(  
+            "paystackRentalButton"  
+          );  
+  
+  
+        button.disabled =  
+          false;  
+  
+        button.textContent =  
+          "💳 Pay R100 with Paystack";  
+  
+  
+        showMessage(  
+          "rentalMessage",  
+          error.message ||  
+          "Paystack payment could not be prepared.",  
+          "error"  
+        );  
+  
+      }  
+  
+    }  
+  );  
+  
+  
+/* =========================  
+REGISTER  
+========================= */  
+  
+document  
+  .getElementById("registerForm")  
+  ?.addEventListener(  
+    "submit",  
+    async function(event) {  
+  
+      event.preventDefault();  
+  
+  
+      clearMessage(  
+        "registerMessage"  
+      );  
+  
+      clearMessage(  
+        "rentalMessage"  
+      );  
+  
+  
+      const button =  
+        document.getElementById(  
+          "registerButton"  
+        );  
+  
+  
+      const fullName =  
+        document  
+          .getElementById(  
+            "registerName"  
+          )  
+          .value  
+          .trim();  
+  
+  
+      const email =  
+        document  
+          .getElementById(  
+            "registerEmail"  
+          )  
+          .value  
+          .trim()  
+          .toLowerCase();  
+  
+  
+      const phone =  
+        document  
+          .getElementById(  
+            "registerPhone"  
+          )  
+          .value  
+          .trim();  
+  
+  
+      const idNumber =  
+        document  
+          .getElementById(  
+            "idNumber"  
+          )  
+          .value  
+          .trim();  
+  
+  
+      const residentialAddress =  
+        document  
+          .getElementById(  
+            "residentialAddress"  
+          )  
+          .value  
+          .trim();  
+  
+  
+      const password =  
+        document  
+          .getElementById(  
+            "registerPassword"  
+          )  
+          .value;  
+  
+  
+      const confirmPassword =  
+        document  
+          .getElementById(  
+            "confirmPassword"  
+          )  
+          .value;  
+  
+  
+      const storeName =  
+        document  
+          .getElementById(  
+            "storeName"  
+          )  
+          .value  
+          .trim();  
+  
+  
+      const businessAddress =  
+        document  
+          .getElementById(  
+            "businessAddress"  
+          )  
+          .value  
+          .trim();  
+  
+  
+      const category =  
+        document  
+          .getElementById(  
+            "storeCategory"  
+          )  
+          .value;  
+  
+  
+      const description =  
+        document  
+          .getElementById(  
+            "storeDescription"  
+          )  
+          .value  
+          .trim();  
+  
+  
+      const storeImageInput =  
+        document.getElementById(  
+          "storeImage"  
+        );  
+  
+  
+      const storeImageFile =  
+        storeImageInput?.files?.[0] ||  
+        null;  
+  
+  
+      /* =========================  
+      CLIENT-SIDE VALIDATION  
+      ========================= */  
+  
+      if (!fullName) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "Please enter your full legal name.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (!email) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "Please enter your email address.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (!phone) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "Please enter your phone number.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (  
+        !/^\d{13}$/.test(  
+          idNumber  
+        )  
+      ) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "Your South African ID number must contain exactly 13 digits.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (!residentialAddress) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "Please enter your residential address.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (  
+        !isStrongPassword(  
+          password  
+        )  
+      ) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "Your password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (  
+        password !==  
+        confirmPassword  
+      ) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "The passwords do not match.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (!storeName) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "Please enter your store name.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (!storeImageFile) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "Please choose a store picture or logo. Every ZYRE Marketing store must have a store picture.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (!businessAddress) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "Please enter your store or business address.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (!category) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "Please select a store category.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (!description) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "Please enter a description for your store.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      if (  
+        !document  
+          .getElementById("terms")  
+          .checked  
+      ) {  
+  
+        showMessage(  
+          "registerMessage",  
+          "Please accept the seller terms before submitting your seller application.",  
+          "error"  
+        );  
+  
+        return;  
+  
+      }  
+  
+  
+      button.disabled =  
+        true;  
+  
+      button.textContent =  
+        "Checking account...";  
+  
+  
+      try {  
+  
+        let accessToken =  
+          null;  
+  
+        let userId =  
+          null;  
+  
+        let accountEmail =  
+          email;  
+  
+  
+        /* =========================  
+        CHECK CURRENT SESSION  
+        ========================= */  
+  
+        const currentSession =  
+          await getCurrentSession();  
+  
+  
+        if (currentSession) {  
+  
+          accessToken =  
+            currentSession.accessToken;  
+  
+          userId =  
+            currentSession.userId;  
+  
+          accountEmail =  
+            currentSession.email ||  
+            email;  
+  
+        }  
+  
+  
+        /* =========================  
+        CREATE ACCOUNT IF NEEDED  
+        ========================= */  
+  
+        if (  
+          !accessToken ||  
+          !userId  
+        ) {  
+  
+          button.textContent =  
+            "Creating seller account...";  
+  
+  
+          const signupResponse =  
+            await safeFetch(  
+  
+              SUPABASE_URL +  
+              "/auth/v1/signup",  
+  
+              {  
+  
+                method:  
+                  "POST",  
+  
+                headers: {  
+  
+                  "apikey":  
+                    SUPABASE_KEY,  
+  
+                  "Content-Type":  
+                    "application/json",  
+  
+                  "Accept":  
+                    "application/json"  
+  
+                },  
+  
+                body:  
+                  JSON.stringify({  
+  
+                    email:  
+                      email,  
+  
+                    password:  
+                      password,  
+  
+                    data: {  
+  
+                      full_name:  
+                        fullName,  
+  
+                      phone:  
+                        phone,  
+  
+                      role:  
+                        "customer"  
+  
+                    }  
+  
+                  })  
+  
+              },  
+  
+              "ZYRE account creation"  
+  
+            );  
+  
+  
+          const signupText =  
+            await signupResponse.text();  
+  
+  
+          let signupData =  
+            {};  
+  
+  
+          try {  
+  
+            signupData =  
+              signupText  
+                ? JSON.parse(  
+                    signupText  
+                  )  
+                : {};  
+  
+          } catch {  
+  
+            signupData =  
+              {};  
+  
+          }  
+  
+  
+          if (  
+            signupResponse.ok  
+          ) {  
+  
+            userId =  
+              signupData.user?.id ||  
+              signupData.id ||  
+              null;  
+  
+            accessToken =  
+              signupData.access_token ||  
+              null;  
+  
+  
+            if (!userId) {  
+  
+              throw new Error(  
+                "Your account was created, but Supabase did not return the user ID."  
+              );  
+  
+            }  
+  
+  
+            if (!accessToken) {  
+  
+              showMessage(  
+                "registerMessage",  
+                "Your seller account has been created.\n\nPlease confirm your email address first. Then return to the main ZYRE Account page, sign in, and return here to complete your seller application.",  
+                "success"  
+              );  
+  
+              return;  
+  
+            }  
+  
+          } else {  
+  
+            const combinedError =  
+              (  
+                signupData.msg ||  
+                signupData.message ||  
+                signupData.error_description ||  
+                signupData.error ||  
+                signupText ||  
+                ""  
+              ).toLowerCase();  
+  
+  
+            const alreadyRegistered =  
+              combinedError.includes(  
+                "already registered"  
+              ) ||  
+              combinedError.includes(  
+                "already exists"  
+              ) ||  
+              combinedError.includes(  
+                "user already"  
+              ) ||  
+              combinedError.includes(  
+                "email already"  
+              );  
+  
+  
+            if (  
+              alreadyRegistered  
+            ) {  
+  
+              showMessage(  
+                "registerMessage",  
+                "This email address already has a ZYRE account.\n\nPlease go back to Account and sign in using the existing account password. After signing in, return here to complete the seller application.",  
+                "info"  
+              );  
+  
+              return;  
+  
+            }  
+  
+  
+            throw new Error(  
+              signupData.msg ||  
+              signupData.message ||  
+              signupData.error_description ||  
+              signupData.error ||  
+              signupText ||  
+              (  
+                "The seller account could not be created. " +  
+                "Supabase returned HTTP " +  
+                signupResponse.status +  
+                "."  
+              )  
+            );  
+  
+          }  
+  
+        }  
+  
+  
+        /* =========================  
+        VERIFY ACCOUNT EMAIL  
+        ========================= */  
+  
+        if (  
+          accountEmail &&  
+          email &&  
+          accountEmail.toLowerCase() !==  
+            email.toLowerCase()  
+        ) {  
+  
+          throw new Error(  
+            "The signed-in ZYRE account uses a different email address.\n\nPlease use the email address belonging to your signed-in account."  
+          );  
+  
+        }  
+  
+  
+        if (  
+          !accessToken ||  
+          !userId  
+        ) {  
+  
+          throw new Error(  
+            "A valid signed-in ZYRE session is required before the seller application can be submitted."  
+          );  
+  
+        }  
+  
+  
+        /* =========================  
+        PREPARE PROFILE  
+        ========================= */  
+  
+        button.textContent =  
+          "Preparing your ZYRE profile...";  
+  
+  
+        await ensureSellerProfile(  
+          userId,  
+          accessToken,  
+          fullName,  
+          phone  
+        );  
+  
+  
+        /* =========================  
+        CHECK EXISTING SELLER  
+        ========================= */  
+  
+        button.textContent =  
+          "Checking seller application...";  
+  
+  
+        const existingSeller =  
+          await findExistingSeller(  
+            userId,  
+            accessToken  
+          );  
+  
+  
+        if (existingSeller) {  
+  
+          if (  
+            !existingSeller.store_image_url &&  
+            storeImageFile  
+          ) {  
+  
+            button.textContent =  
+              "Uploading missing store picture...";  
+  
+  
+            try {  
+  
+              await uploadStoreImage(  
+                storeImageFile,  
+                userId,  
+                existingSeller.id,  
+                accessToken  
+              );  
+  
+            } catch (imageError) {  
+  
+              console.error(  
+                "Existing seller image upload error:",  
+                imageError  
+              );  
+  
+  
+              showMessage(  
+                "registerMessage",  
+                imageError.message ||  
+                "The existing seller application was found, but the store picture could not be uploaded.",  
+                "error"  
+              );  
+  
+              return;  
+  
+            }  
+  
+          }  
+  
+  
+          saveSellerSession(  
+            accessToken,  
+            userId,  
+            existingSeller.id,  
+            accountEmail ||  
+            email  
+          );  
+  
+  
+          const verification =  
+            await getVerificationStatus(  
+              existingSeller.id,  
+              accessToken  
+            );  
+  
+  
+          showApplicationStatus(  
+            existingSeller,  
+            verification  
+          );  
+  
+  
+          showMessage(  
+            "rentalMessage",  
+            "Your seller application already exists. We have not created a duplicate application.",  
+            "info"  
+          );  
+  
+  
+          return;  
+  
+        }  
+  
+  
+        /* =========================  
+        SECURE APPLICATION SUBMISSION  
+        ========================= */  
+  
+        button.textContent =  
+          "Securing seller application...";  
+  
+  
+        const application =  
+          await submitSellerApplication(  
+            accessToken,  
+            fullName,  
+            accountEmail ||  
+            email,  
+            phone,  
+            idNumber,  
+            residentialAddress,  
+            storeName,  
+            businessAddress,  
+            category,  
+            description  
+          );  
+  
+  
+        const sellerId =  
+          application.seller_id;  
+  
+  
+        /* =========================  
+        STORE IMAGE  
+        ========================= */  
+  
+        button.textContent =  
+          "Uploading store picture...";  
+  
+  
+        await uploadStoreImage(  
+          storeImageFile,  
+          userId,  
+          sellerId,  
+          accessToken  
+        );  
+  
+  
+        /* =========================  
+        SAVE SELLER SESSION  
+        ========================= */  
+  
+        saveSellerSession(  
+          accessToken,  
+          userId,  
+          sellerId,  
+          accountEmail ||  
+          email  
+        );  
+  
+  
+        /* =========================  
+        SHOW PENDING STATUS  
+        ========================= */  
+  
+        const createdSeller = {  
+  
+          id:  
+            sellerId,  
+  
+          store_name:  
+            application.store_name ||  
+            storeName,  
+  
+          approved:  
+            application.approved === true,  
+  
+          status:  
+            application.seller_status ||  
+            "seller_pending"  
+  
+        };  
+  
+  
+        const verificationStatus = {  
+  
+          id_verification_status:  
+            application.verification_status ||  
+            "pending"  
+  
+        };  
+  
+  
+        showApplicationStatus(  
+          createdSeller,  
+          verificationStatus  
+        );  
+  
+  
+        showMessage(  
+          "rentalMessage",  
+          "Your seller application has been submitted successfully.\n\nYour identity information has been stored privately for verification.\n\nComplete the secure Didit identity verification above so ZYRE Marketing can review your application.\n\nYour Seller Centre remains locked until approval and payment are completed.",  
+          "success"  
+        );  
+  
+  
+      } catch (error) {  
+  
+        console.error(  
+          "Seller registration error:",  
+          error  
+        );  
+  
+  
+        showMessage(  
+          "registerMessage",  
+          error.message ||  
+          "Registration failed.",  
+          "error"  
+        );  
+  
+  
+      } finally {  
+  
+        const authArea =  
+          document.getElementById(  
+            "authArea"  
+          );  
+  
+  
+        if (  
+          authArea &&  
+          authArea.style.display !==  
+            "none"  
+        ) {  
+  
+          button.disabled =  
+            false;  
+  
+          button.textContent =  
+            "Submit Seller Application";  
+  
+        }  
+  
+      }  
+  
+    }  
+  );  
+  
+  
+/* =========================  
+LOAD EXISTING SELLER ON PAGE  
+========================= */  
+  
+async function loadExistingSellerPage() {  
+  
+  try {  
+  
+    const session =  
+      await getCurrentSession();  
+  
+  
+    if (!session) {  
+  
+      return;  
+  
+    }  
+  
+  
+    const seller =  
+      await findExistingSeller(  
+        session.userId,  
+        session.accessToken  
+      );  
+  
+  
+    if (!seller) {  
+  
+      return;  
+  
+    }  
+  
+  
+    saveSellerSession(  
+      session.accessToken,  
+      session.userId,  
+      seller.id,  
+      session.email  
+    );  
+  
+  
+    const verification =  
+      await getVerificationStatus(  
+        seller.id,  
+        session.accessToken  
+      );  
+  
+  
+    showApplicationStatus(  
+      seller,  
+      verification  
+    );  
+  
+  } catch (error) {  
+  
+    console.error(  
+      "Could not load seller application:",  
+      error  
+    );  
+  
+  }  
+  
+}  
+  
+  
+/* =========================  
+START  
+========================= */  
+  
+loadExistingSellerPage();  
+  
+</script>  </body>  </html>
