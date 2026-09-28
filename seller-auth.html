@@ -1,15 +1,23 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1.0"
 >
+
 <meta
   name="theme-color"
   content="#111111"
 >
-<title>Seller Account | ZYRE Marketing</title><style>
+
+<title>Seller Account | ZYRE Marketing</title>
+
+<style>
 
 * {
   box-sizing: border-box;
@@ -235,7 +243,6 @@ select {
   color: #333;
 }
 
-
 /* =========================
 STORE IMAGE
 ========================= */
@@ -291,6 +298,10 @@ STORE IMAGE
   font-size: 11px;
   line-height: 1.5;
 }
+
+/* =========================
+BUTTONS
+========================= */
 
 .primary-button {
   width: 100%;
@@ -351,6 +362,10 @@ STORE IMAGE
   color: #555;
 }
 
+/* =========================
+MESSAGES
+========================= */
+
 .message {
   display: none;
   border-radius: 10px;
@@ -382,6 +397,10 @@ STORE IMAGE
   color: #27458f;
 }
 
+/* =========================
+APPLICATION NOTICE
+========================= */
+
 .application-notice {
   background: #f7f7f7;
   border: 1px solid #e5e5e5;
@@ -396,6 +415,10 @@ STORE IMAGE
 .application-notice strong {
   color: #111;
 }
+
+/* =========================
+RENTAL SECTION
+========================= */
 
 .rental-section {
   display: none;
@@ -500,6 +523,15 @@ STORE IMAGE
   background: #2a2a2a;
 }
 
+.pending-button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* =========================
+BENEFITS
+========================= */
+
 .benefits {
   margin-top: 30px;
   padding-top: 22px;
@@ -581,635 +613,722 @@ STORE IMAGE
 
 }
 
-</style></head><body><header class="header">  <div class="brand"><img
-  src="icon-192.png"
-  class="logo"
-  alt="ZYRE Marketing"
-  onerror="this.style.display='none'"
->
+</style>
 
-<div class="brand-text">
+</head>
 
-  <div class="brand-name">
-    ZYRE
+<body>
+
+<header class="header">
+
+  <div class="brand">
+
+    <img
+      src="icon-192.png"
+      class="logo"
+      alt="ZYRE Marketing"
+      onerror="this.style.display='none'"
+    >
+
+    <div class="brand-text">
+
+      <div class="brand-name">
+        ZYRE
+      </div>
+
+      <div class="brand-subtitle">
+        MARKETING • SELLER CENTRE
+      </div>
+
+    </div>
+
   </div>
 
-  <div class="brand-subtitle">
-    MARKETING • SELLER CENTRE
-  </div>
+  <button
+    type="button"
+    class="back-button"
+    id="accountButton"
+  >
+    ← Account
+  </button>
 
-</div>
+</header>
 
-  </div><button
-type="button"
-class="back-button"
-id="accountButton"
 
-«»
+<main class="main">
 
-← Account
+  <section class="intro">
 
-  </button></header><main class="main">  <section class="intro"><h1>
-  Sell on ZYRE Marketing
-</h1>
+    <h1>
+      Sell on ZYRE Marketing
+    </h1>
 
-<p>
-  Apply to become a ZYRE Marketing seller.
-  Your application will be reviewed before
-  your seller store is activated.
-</p>
+    <p>
+      Apply to become a ZYRE Marketing seller.
+      Your identity and application will be
+      reviewed before your seller store is activated.
+    </p>
 
-  </section>  <section
+  </section>
+
+
+  <!-- =========================
+  APPLICATION AREA
+  ========================= -->
+
+  <section
     class="auth-grid"
     id="authArea"
-  ><div class="card">
+  >
 
-  <h2>
-    Seller application
-  </h2>
+    <div class="card">
 
-  <p class="card-description">
-    Complete your details below to apply
-    for a ZYRE Marketing seller account.
-  </p>
+      <h2>
+        Seller application
+      </h2>
 
-
-  <div
-    id="registerMessage"
-    class="message"
-  ></div>
+      <p class="card-description">
+        Complete your details below to apply
+        for a ZYRE Marketing seller account.
+      </p>
 
 
-  <div class="application-notice">
-
-    <strong>Application process:</strong><br>
-
-    Submit your details → your application
-    becomes <strong>Seller Pending</strong> →
-    ZYRE Marketing reviews your application →
-    approved sellers receive access to the
-    Seller Centre.
-
-  </div>
+      <div
+        id="registerMessage"
+        class="message"
+      ></div>
 
 
-  <form id="registerForm">
+      <div class="application-notice">
 
-    <div class="form-section-title">
-      👤 Personal information
-    </div>
+        <strong>Secure application process:</strong><br>
 
+        Submit your details →
+        identity verification →
+        ZYRE Marketing review →
+        seller approval →
+        R100 monthly rental payment →
+        Seller Centre access.
 
-    <div class="form-group">
+        <br><br>
 
-      <label for="registerName">
-        Full legal name
-      </label>
-
-      <input
-        type="text"
-        id="registerName"
-        placeholder="Your full legal name"
-        autocomplete="name"
-        required
-      >
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="registerEmail">
-        Email address
-      </label>
-
-      <input
-        type="email"
-        id="registerEmail"
-        placeholder="you@example.com"
-        autocomplete="email"
-        required
-      >
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="registerPhone">
-        Phone number
-      </label>
-
-      <input
-        type="tel"
-        id="registerPhone"
-        placeholder="e.g. 081 234 5678"
-        autocomplete="tel"
-        required
-      >
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="idNumber">
-        South African ID number
-      </label>
-
-      <input
-        type="text"
-        id="idNumber"
-        placeholder="13-digit South African ID number"
-        inputmode="numeric"
-        autocomplete="off"
-        maxlength="13"
-        minlength="13"
-        required
-      >
-
-      <div class="field-help">
-        Enter your 13-digit South African ID number.
-        This information is used for seller verification.
-      </div>
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="residentialAddress">
-        Residential address
-      </label>
-
-      <textarea
-        id="residentialAddress"
-        placeholder="Enter your residential address"
-        autocomplete="street-address"
-        required
-      ></textarea>
-
-    </div>
-
-
-    <div class="form-section-title">
-      🔐 Account security
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="registerPassword">
-        Strong password
-      </label>
-
-      <div class="password-wrap">
-
-        <input
-          type="password"
-          id="registerPassword"
-          placeholder="Create a strong password"
-          autocomplete="new-password"
-          minlength="8"
-          required
-        >
-
-        <button
-          type="button"
-          class="password-toggle"
-          onclick="togglePassword('registerPassword', this)"
-        >
-          Show
-        </button>
+        Your ID number and residential address
+        are stored privately for seller verification
+        and marketplace security. They are not
+        displayed to customers.
 
       </div>
 
 
-      <div class="password-requirements">
+      <form id="registerForm">
 
-        <strong>Password must contain:</strong><br>
+        <!-- =========================
+        PERSONAL INFORMATION
+        ========================= -->
 
-        • At least 8 characters<br>
-        • At least one uppercase letter<br>
-        • At least one lowercase letter<br>
-        • At least one number<br>
-        • At least one special character
-
-      </div>
-
-    </div>
+        <div class="form-section-title">
+          👤 Personal information
+        </div>
 
 
-    <div class="form-group">
+        <div class="form-group">
 
-      <label for="confirmPassword">
-        Confirm password
-      </label>
+          <label for="registerName">
+            Full legal name
+          </label>
 
-      <div class="password-wrap">
-
-        <input
-          type="password"
-          id="confirmPassword"
-          placeholder="Enter your password again"
-          autocomplete="new-password"
-          minlength="8"
-          required
-        >
-
-        <button
-          type="button"
-          class="password-toggle"
-          onclick="togglePassword('confirmPassword', this)"
-        >
-          Show
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="form-section-title">
-      🏪 Store information
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="storeName">
-        Store name
-      </label>
-
-      <input
-        type="text"
-        id="storeName"
-        placeholder="Example: Sisanda Fashion"
-        autocomplete="organization"
-        required
-      >
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="storeImage">
-        Store picture / logo
-      </label>
-
-      <div class="store-image-upload">
-
-        <div class="store-image-preview-wrap">
-
-          <div
-            class="store-image-placeholder"
-            id="storeImagePlaceholder"
+          <input
+            type="text"
+            id="registerName"
+            placeholder="Your full legal name"
+            autocomplete="name"
+            required
           >
-            Store picture
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="registerEmail">
+            Email address
+          </label>
+
+          <input
+            type="email"
+            id="registerEmail"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="registerPhone">
+            Phone number
+          </label>
+
+          <input
+            type="tel"
+            id="registerPhone"
+            placeholder="e.g. 081 234 5678"
+            autocomplete="tel"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="idNumber">
+            South African ID number
+          </label>
+
+          <input
+            type="text"
+            id="idNumber"
+            placeholder="13-digit South African ID number"
+            inputmode="numeric"
+            autocomplete="off"
+            maxlength="13"
+            minlength="13"
+            required
+          >
+
+          <div class="field-help">
+            Your ID number is collected for seller
+            identity verification and fraud prevention.
+            It is not displayed publicly.
           </div>
 
-          <img
-            id="storeImagePreview"
-            class="store-image-preview"
-            alt="Store picture preview"
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="residentialAddress">
+            Residential address
+          </label>
+
+          <textarea
+            id="residentialAddress"
+            placeholder="Enter your residential address"
+            autocomplete="street-address"
+            required
+          ></textarea>
+
+          <div class="field-help">
+            This information is private and is used
+            for seller verification and marketplace security.
+          </div>
+
+        </div>
+
+
+        <!-- =========================
+        ACCOUNT SECURITY
+        ========================= -->
+
+        <div class="form-section-title">
+          🔐 Account security
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="registerPassword">
+            Strong password
+          </label>
+
+          <div class="password-wrap">
+
+            <input
+              type="password"
+              id="registerPassword"
+              placeholder="Create a strong password"
+              autocomplete="new-password"
+              minlength="8"
+              required
+            >
+
+            <button
+              type="button"
+              class="password-toggle"
+              onclick="togglePassword('registerPassword', this)"
+            >
+              Show
+            </button>
+
+          </div>
+
+
+          <div class="password-requirements">
+
+            <strong>Password must contain:</strong><br>
+
+            • At least 8 characters<br>
+            • At least one uppercase letter<br>
+            • At least one lowercase letter<br>
+            • At least one number<br>
+            • At least one special character
+
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="confirmPassword">
+            Confirm password
+          </label>
+
+          <div class="password-wrap">
+
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Enter your password again"
+              autocomplete="new-password"
+              minlength="8"
+              required
+            >
+
+            <button
+              type="button"
+              class="password-toggle"
+              onclick="togglePassword('confirmPassword', this)"
+            >
+              Show
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- =========================
+        STORE INFORMATION
+        ========================= -->
+
+        <div class="form-section-title">
+          🏪 Store information
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="storeName">
+            Store name
+          </label>
+
+          <input
+            type="text"
+            id="storeName"
+            placeholder="Example: Sisanda Fashion"
+            autocomplete="organization"
+            required
           >
 
         </div>
 
 
-        <input
-          type="file"
-          id="storeImage"
-          accept="image/*"
-          required
+        <div class="form-group">
+
+          <label for="storeImage">
+            Store picture / logo
+          </label>
+
+          <div class="store-image-upload">
+
+            <div class="store-image-preview-wrap">
+
+              <div
+                class="store-image-placeholder"
+                id="storeImagePlaceholder"
+              >
+                Store picture
+              </div>
+
+              <img
+                id="storeImagePreview"
+                class="store-image-preview"
+                alt="Store picture preview"
+              >
+
+            </div>
+
+
+            <input
+              type="file"
+              id="storeImage"
+              accept="image/*"
+              required
+            >
+
+
+            <div class="store-image-note">
+
+              Choose any picture or logo that represents
+              your store.
+
+              <br>
+
+              Maximum file size:
+              <strong>5 MB</strong>.
+
+              <br>
+
+              This picture will appear as a
+              <strong>circle</strong> on the ZYRE marketplace.
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="businessAddress">
+            Store / business address
+          </label>
+
+          <textarea
+            id="businessAddress"
+            placeholder="Enter your store or business address"
+            required
+          ></textarea>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="storeCategory">
+            Store category
+          </label>
+
+          <select
+            id="storeCategory"
+            required
+          >
+
+            <option value="">
+              Select a category
+            </option>
+
+            <option value="Electronics">
+              Electronics
+            </option>
+
+            <option value="Fashion">
+              Fashion
+            </option>
+
+            <option value="Home">
+              Home
+            </option>
+
+            <option value="Beauty">
+              Beauty
+            </option>
+
+            <option value="Food">
+              Food
+            </option>
+
+            <option value="Health">
+              Health
+            </option>
+
+            <option value="Automotive">
+              Automotive
+            </option>
+
+            <option value="Services">
+              Services
+            </option>
+
+            <option value="Other">
+              Other
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="storeDescription">
+            Store description
+          </label>
+
+          <textarea
+            id="storeDescription"
+            placeholder="Tell customers what your store sells..."
+            required
+          ></textarea>
+
+        </div>
+
+
+        <div class="checkbox-row">
+
+          <input
+            type="checkbox"
+            id="terms"
+            required
+          >
+
+          <label for="terms">
+
+            I confirm that the information I have
+            provided is accurate and I agree to the
+            ZYRE Marketing seller terms. I understand
+            that my application must be reviewed and
+            approved before I can manage a seller store.
+
+          </label>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="primary-button"
+          id="registerButton"
         >
+          Submit Seller Application
+        </button>
+
+      </form>
 
 
-        <div class="store-image-note">
+      <div class="benefits">
 
-          Choose any picture or logo that represents
-          your store.
+        <h3>
+          Approved seller accounts include
+        </h3>
 
-          <br>
+        <div class="benefit">
+          <span class="benefit-icon">🏪</span>
+          <span>Your own marketplace store</span>
+        </div>
 
-          Maximum file size:
-          <strong>5 MB</strong>.
+        <div class="benefit">
+          <span class="benefit-icon">📦</span>
+          <span>Product and inventory management</span>
+        </div>
 
-          <br>
+        <div class="benefit">
+          <span class="benefit-icon">🛍️</span>
+          <span>Access to ZYRE customers</span>
+        </div>
 
-          This picture will appear as a
-          <strong>circle</strong> on the ZYRE marketplace.
-
+        <div class="benefit">
+          <span class="benefit-icon">💰</span>
+          <span>Seller earnings and payout management</span>
         </div>
 
       </div>
 
     </div>
 
-
-    <div class="form-group">
-
-      <label for="businessAddress">
-        Store / business address
-      </label>
-
-      <textarea
-        id="businessAddress"
-        placeholder="Enter your store or business address"
-        required
-      ></textarea>
-
-    </div>
+  </section>
 
 
-    <div class="form-group">
+  <!-- =========================
+  SELLER STATUS / RENTAL AREA
+  ========================= -->
 
-      <label for="storeCategory">
-        Store category
-      </label>
-
-      <select
-        id="storeCategory"
-        required
-      >
-
-        <option value="">
-          Select a category
-        </option>
-
-        <option value="Electronics">
-          Electronics
-        </option>
-
-        <option value="Fashion">
-          Fashion
-        </option>
-
-        <option value="Home">
-          Home
-        </option>
-
-        <option value="Beauty">
-          Beauty
-        </option>
-
-        <option value="Food">
-          Food
-        </option>
-
-        <option value="Health">
-          Health
-        </option>
-
-        <option value="Automotive">
-          Automotive
-        </option>
-
-        <option value="Services">
-          Services
-        </option>
-
-        <option value="Other">
-          Other
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="storeDescription">
-        Store description
-      </label>
-
-      <textarea
-        id="storeDescription"
-        placeholder="Tell customers what your store sells..."
-        required
-      ></textarea>
-
-    </div>
-
-
-    <div class="checkbox-row">
-
-      <input
-        type="checkbox"
-        id="terms"
-        required
-      >
-
-      <label for="terms">
-
-        I confirm that the information I have
-        provided is accurate and I agree to the
-        ZYRE Marketing seller terms. I understand
-        that my application must be reviewed and
-        approved before I can manage a seller store.
-
-      </label>
-
-    </div>
-
-
-    <button
-      type="submit"
-      class="primary-button"
-      id="registerButton"
-    >
-      Submit Seller Application
-    </button>
-
-  </form>
-
-
-  <div class="benefits">
-
-    <h3>
-      Approved seller accounts include
-    </h3>
-
-    <div class="benefit">
-      <span class="benefit-icon">🏪</span>
-      <span>Your own marketplace store</span>
-    </div>
-
-    <div class="benefit">
-      <span class="benefit-icon">📦</span>
-      <span>Product and inventory management</span>
-    </div>
-
-    <div class="benefit">
-      <span class="benefit-icon">🛍️</span>
-      <span>Access to ZYRE customers</span>
-    </div>
-
-    <div class="benefit">
-      <span class="benefit-icon">💰</span>
-      <span>Seller earnings and payout management</span>
-    </div>
-
-  </div>
-
-</div>
-
-  </section>  <section
+  <section
     class="rental-section"
     id="rentalSection"
-  ><div class="rental-card">
-
-  <h2>
-    Seller Application Submitted
-  </h2>
-
-  <p class="rental-intro">
-
-    Your seller application has been registered.
-    Your account is currently waiting for
-    ZYRE Marketing review and approval.
-
-  </p>
-
-
-  <div class="rental-price">
-
-    <div class="rental-price-label">
-      Monthly store rental
-    </div>
-
-    <div class="rental-price-value">
-      R100
-    </div>
-
-    <div class="rental-price-period">
-      per month
-    </div>
-
-  </div>
-
-
-  <div class="rental-status">
-
-    <span class="rental-status-icon">
-      ⏳
-    </span>
-
-    <span>
-
-      <strong>Seller Pending</strong><br>
-
-      Your seller application is waiting for
-      ZYRE Marketing approval. You cannot access
-      the Seller Centre until your application
-      has been approved.
-
-    </span>
-
-  </div>
-
-
-  <button
-    type="button"
-    class="primary-button pending-button"
-    id="paystackRentalButton"
   >
-    💳 Pay R100 with Paystack
-  </button>
+
+    <div class="rental-card">
+
+      <h2 id="rentalTitle">
+        Seller Application Status
+      </h2>
+
+      <p
+        class="rental-intro"
+        id="rentalIntro"
+      >
+        Your seller application has been registered.
+      </p>
 
 
-  <button
-    type="button"
-    class="secondary-button"
-    onclick="returnToAccount()"
-  >
-    Return to Account
-  </button>
+      <div class="rental-price">
+
+        <div class="rental-price-label">
+          Monthly store rental
+        </div>
+
+        <div class="rental-price-value">
+          R100
+        </div>
+
+        <div class="rental-price-period">
+          per month
+        </div>
+
+      </div>
 
 
-  <div class="rental-info">
+      <div
+        class="rental-status"
+        id="rentalStatusBox"
+      >
 
-    <div class="rental-info-row">
+        <span
+          class="rental-status-icon"
+          id="rentalStatusIcon"
+        >
+          ⏳
+        </span>
 
-      <span>
-        Store
-      </span>
+        <span id="rentalStatusText">
 
-      <span id="rentalStoreName">
-        —
-      </span>
+          <strong>Seller Pending</strong><br>
+
+          Your application is waiting for
+          ZYRE Marketing review.
+
+        </span>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="primary-button pending-button"
+        id="paystackRentalButton"
+        disabled
+      >
+        💳 Pay R100 with Paystack
+      </button>
+
+
+      <button
+        type="button"
+        class="secondary-button"
+        onclick="returnToAccount()"
+      >
+        Return to Account
+      </button>
+
+
+      <div class="rental-info">
+
+        <div class="rental-info-row">
+
+          <span>
+            Store
+          </span>
+
+          <span id="rentalStoreName">
+            —
+          </span>
+
+        </div>
+
+
+        <div class="rental-info-row">
+
+          <span>
+            Application status
+          </span>
+
+          <span id="rentalApplicationStatus">
+            Seller Pending
+          </span>
+
+        </div>
+
+
+        <div class="rental-info-row">
+
+          <span>
+            Identity verification
+          </span>
+
+          <span id="rentalVerificationStatus">
+            Pending
+          </span>
+
+        </div>
+
+
+        <div class="rental-info-row">
+
+          <span>
+            Rental amount
+          </span>
+
+          <span>
+            R100 / month
+          </span>
+
+        </div>
+
+
+        <div class="rental-info-row">
+
+          <span>
+            Payment status
+          </span>
+
+          <span id="rentalPaymentStatus">
+            Waiting for approval
+          </span>
+
+        </div>
+
+
+        <div class="rental-info-row">
+
+          <span>
+            Seller Centre
+          </span>
+
+          <span id="rentalSellerCentreStatus">
+            Locked
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="rentalMessage"
+        class="message"
+        style="margin-top:20px;"
+      ></div>
 
     </div>
 
+  </section>
 
-    <div class="rental-info-row">
-
-      <span>
-        Application status
-      </span>
-
-      <span>
-        Seller Pending
-      </span>
-
-    </div>
+</main>
 
 
-    <div class="rental-info-row">
-
-      <span>
-        Rental amount
-      </span>
-
-      <span>
-        R100 / month
-      </span>
-
-    </div>
-
-
-    <div class="rental-info-row">
-
-      <span>
-        Payment status
-      </span>
-
-      <span id="rentalPaymentStatus">
-        Ready for Paystack payment
-      </span>
-
-    </div>
-
-
-    <div class="rental-info-row">
-
-      <span>
-        Seller approval
-      </span>
-
-      <span>
-        Waiting for owner approval
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="rentalMessage"
-    class="message"
-    style="margin-top:20px;"
-  ></div>
-
-</div>
-
-  </section></main><footer class="footer">
+<footer class="footer">
   © 2026 ZYRE Marketing.
   All rights reserved.
-</footer><script>
+</footer>
+
+
+<script>
 
 const SUPABASE_URL =
   "https://gaccizzlwswwynattgda.supabase.co";
@@ -1237,8 +1356,10 @@ document
   ?.addEventListener(
     "click",
     () => {
+
       window.location.href =
         "auth.html";
+
     }
   );
 
@@ -1343,7 +1464,7 @@ STORE IMAGE PREVIEW
 
 document
   .getElementById("storeImage")
-  .addEventListener(
+  ?.addEventListener(
     "change",
     function() {
 
@@ -1590,15 +1711,14 @@ async function getCurrentSession() {
 
 
 /* =========================
-ENSURE PROFILE EXISTS
+ENSURE PROFILE
 ========================= */
 
 async function ensureSellerProfile(
   userId,
   accessToken,
   fullName,
-  phone,
-  residentialAddress
+  phone
 ) {
 
   const profileResponse =
@@ -1641,9 +1761,6 @@ async function ensureSellerProfile(
             phone:
               phone,
 
-            address:
-              residentialAddress,
-
             role:
               "customer"
 
@@ -1667,24 +1784,15 @@ async function ensureSellerProfile(
 
 
 /* =========================
-CREATE SELLER STORE
+FIND EXISTING SELLER
 ========================= */
 
-async function createSellerStore(
+async function findExistingSeller(
   userId,
-  accessToken,
-  fullName,
-  storeName,
-  phone,
-  idNumber,
-  residentialAddress,
-  businessAddress,
-  category,
-  description,
-  email
+  accessToken
 ) {
 
-  const existingSellerResponse =
+  const response =
     await fetch(
 
       SUPABASE_URL +
@@ -1710,55 +1818,50 @@ async function createSellerStore(
     );
 
 
-  if (!existingSellerResponse.ok) {
+  if (!response.ok) {
 
     throw new Error(
-      "We could not check your existing seller application.\n\n" +
-      await existingSellerResponse.text()
+      "We could not check your seller application.\n\n" +
+      await response.text()
     );
 
   }
 
 
-  const existingSellers =
-    await existingSellerResponse.json();
+  const sellers =
+    await response.json();
 
 
   if (
-    Array.isArray(existingSellers) &&
-    existingSellers.length > 0
+    !Array.isArray(sellers) ||
+    sellers.length === 0
   ) {
 
-    return {
-
-      sellerId:
-        existingSellers[0].id,
-
-      existingStore:
-        existingSellers[0].store_name,
-
-      alreadyExists:
-        true,
-
-      approved:
-        existingSellers[0].approved === true,
-
-      status:
-        existingSellers[0].status ||
-        (
-          existingSellers[0].approved === true
-            ? "seller_approved"
-            : "seller_pending"
-        ),
-
-      storeImageUrl:
-        existingSellers[0].store_image_url ||
-        ""
-
-    };
+    return null;
 
   }
 
+
+  return sellers[0];
+
+}
+
+
+/* =========================
+CREATE SELLER STORE
+========================= */
+
+async function createSellerStore(
+  userId,
+  accessToken,
+  fullName,
+  storeName,
+  phone,
+  businessAddress,
+  category,
+  description,
+  email
+) {
 
   const sellerResponse =
     await fetch(
@@ -1768,7 +1871,8 @@ async function createSellerStore(
 
       {
 
-        method: "POST",
+        method:
+          "POST",
 
         headers: {
 
@@ -1804,12 +1908,6 @@ async function createSellerStore(
 
             phone:
               phone,
-
-            id_number:
-              idNumber,
-
-            residential_address:
-              residentialAddress,
 
             business_address:
               businessAddress,
@@ -1866,22 +1964,102 @@ async function createSellerStore(
     sellerId:
       sellerId,
 
-    existingStore:
-      storeName,
-
-    alreadyExists:
-      false,
-
-    approved:
-      false,
-
-    status:
-      "seller_pending",
-
-    storeImageUrl:
-      ""
+    storeName:
+      storeName
 
   };
+
+}
+
+
+/* =========================
+CREATE PRIVATE VERIFICATION
+========================= */
+
+async function createSellerVerification(
+  sellerId,
+  userId,
+  accessToken,
+  fullName,
+  idNumber,
+  residentialAddress,
+  phone,
+  email
+) {
+
+  const response =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/seller_verification",
+
+      {
+
+        method:
+          "POST",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            accessToken,
+
+          "Content-Type":
+            "application/json",
+
+          "Prefer":
+            "return=representation"
+
+        },
+
+        body:
+          JSON.stringify({
+
+            seller_id:
+              sellerId,
+
+            user_id:
+              userId,
+
+            legal_name:
+              fullName,
+
+            id_number:
+              idNumber,
+
+            residential_address:
+              residentialAddress,
+
+            phone:
+              phone,
+
+            email:
+              email,
+
+            id_verification_status:
+              "pending"
+
+          })
+
+      }
+
+    );
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      "Your seller application was created, but your private verification record could not be created.\n\n" +
+      await response.text()
+    );
+
+  }
+
+
+  return await response.json();
 
 }
 
@@ -2082,6 +2260,57 @@ async function uploadStoreImage(
 
 
 /* =========================
+GET VERIFICATION STATUS
+========================= */
+
+async function getVerificationStatus(
+  sellerId,
+  accessToken
+) {
+
+  const response =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/seller_verification?seller_id=eq." +
+      encodeURIComponent(sellerId) +
+      "&select=id_verification_status,reviewed_at",
+
+      {
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            accessToken
+
+        }
+
+      }
+
+    );
+
+
+  if (!response.ok) {
+
+    return null;
+
+  }
+
+
+  const data =
+    await response.json();
+
+
+  return data?.[0] || null;
+
+}
+
+
+/* =========================
 INITIALIZE PAYSTACK RENTAL
 ========================= */
 
@@ -2096,7 +2325,8 @@ async function initializePaystackRental(
       RENTAL_PAYSTACK_FUNCTION,
       {
 
-        method: "POST",
+        method:
+          "POST",
 
         headers: {
 
@@ -2182,12 +2412,12 @@ async function initializePaystackRental(
 
 
 /* =========================
-SHOW RENTAL PAYMENT
+SHOW APPLICATION STATUS
 ========================= */
 
-function showRentalPayment(
-  sellerName,
-  rentalPayment
+function showApplicationStatus(
+  seller,
+  verificationStatus
 ) {
 
   const authArea =
@@ -2198,16 +2428,6 @@ function showRentalPayment(
   const rentalSection =
     document.getElementById(
       "rentalSection"
-    );
-
-  const rentalStoreName =
-    document.getElementById(
-      "rentalStoreName"
-    );
-
-  const rentalPaymentStatus =
-    document.getElementById(
-      "rentalPaymentStatus"
     );
 
 
@@ -2227,20 +2447,244 @@ function showRentalPayment(
   }
 
 
-  if (rentalStoreName) {
+  const storeName =
+    document.getElementById(
+      "rentalStoreName"
+    );
 
-    rentalStoreName.textContent =
-      sellerName ||
+  const applicationStatus =
+    document.getElementById(
+      "rentalApplicationStatus"
+    );
+
+  const verification =
+    document.getElementById(
+      "rentalVerificationStatus"
+    );
+
+  const paymentStatus =
+    document.getElementById(
+      "rentalPaymentStatus"
+    );
+
+  const sellerCentre =
+    document.getElementById(
+      "rentalSellerCentreStatus"
+    );
+
+  const title =
+    document.getElementById(
+      "rentalTitle"
+    );
+
+  const intro =
+    document.getElementById(
+      "rentalIntro"
+    );
+
+  const statusText =
+    document.getElementById(
+      "rentalStatusText"
+    );
+
+  const statusIcon =
+    document.getElementById(
+      "rentalStatusIcon"
+    );
+
+  const payButton =
+    document.getElementById(
+      "paystackRentalButton"
+    );
+
+
+  if (storeName) {
+
+    storeName.textContent =
+      seller?.store_name ||
       "Your Store";
 
   }
 
 
-  if (rentalPaymentStatus) {
+  const sellerApproved =
+    seller?.approved === true ||
+    seller?.status ===
+      "seller_approved";
 
-    rentalPaymentStatus.textContent =
-      rentalPayment?.status ||
-      "Ready for Paystack payment";
+
+  const verificationState =
+    verificationStatus?.id_verification_status ||
+    "pending";
+
+
+  if (verification) {
+
+    verification.textContent =
+      verificationState;
+
+  }
+
+
+  if (sellerApproved) {
+
+    if (title) {
+
+      title.textContent =
+        "Seller Approved";
+
+    }
+
+
+    if (intro) {
+
+      intro.textContent =
+        "Your seller application has been approved by ZYRE Marketing. Complete the R100 monthly store rental payment to continue.";
+
+    }
+
+
+    if (applicationStatus) {
+
+      applicationStatus.textContent =
+        "Seller Approved";
+
+    }
+
+
+    if (statusIcon) {
+
+      statusIcon.textContent =
+        "✓";
+
+    }
+
+
+    if (statusText) {
+
+      statusText.innerHTML =
+        "<strong>Seller Approved</strong><br>" +
+        "Your seller application has been approved. Your R100 monthly store rental payment is now available.";
+
+    }
+
+
+    if (paymentStatus) {
+
+      paymentStatus.textContent =
+        "Ready for payment";
+
+    }
+
+
+    if (sellerCentre) {
+
+      sellerCentre.textContent =
+        "Locked until payment";
+
+    }
+
+
+    if (payButton) {
+
+      payButton.disabled =
+        false;
+
+      payButton.textContent =
+        "💳 Pay R100 with Paystack";
+
+    }
+
+  } else {
+
+    if (title) {
+
+      title.textContent =
+        "Seller Application Submitted";
+
+    }
+
+
+    if (intro) {
+
+      intro.textContent =
+        "Your seller application has been registered and is waiting for ZYRE Marketing verification and approval.";
+
+    }
+
+
+    if (applicationStatus) {
+
+      applicationStatus.textContent =
+        "Seller Pending";
+
+    }
+
+
+    if (statusIcon) {
+
+      statusIcon.textContent =
+        "⏳";
+
+    }
+
+
+    if (statusText) {
+
+      if (
+        verificationState ===
+        "rejected"
+      ) {
+
+        statusText.innerHTML =
+          "<strong>Verification requires attention</strong><br>" +
+          "Your seller identity verification was not approved. Please contact ZYRE Marketing for further information.";
+
+      } else if (
+        verificationState ===
+        "under_review"
+      ) {
+
+        statusText.innerHTML =
+          "<strong>Identity Under Review</strong><br>" +
+          "ZYRE Marketing is reviewing your seller identity information.";
+
+      } else {
+
+        statusText.innerHTML =
+          "<strong>Seller Pending</strong><br>" +
+          "Your application is waiting for ZYRE Marketing identity verification and approval.";
+
+      }
+
+    }
+
+
+    if (paymentStatus) {
+
+      paymentStatus.textContent =
+        "Waiting for approval";
+
+    }
+
+
+    if (sellerCentre) {
+
+      sellerCentre.textContent =
+        "Locked";
+
+    }
+
+
+    if (payButton) {
+
+      payButton.disabled =
+        true;
+
+      payButton.textContent =
+        "🔒 Pay R100 after approval";
+
+    }
 
   }
 
@@ -2313,7 +2757,7 @@ document
   )
   ?.addEventListener(
     "click",
-    function() {
+    async function() {
 
       if (
         currentPaystackAuthorizationUrl
@@ -2321,6 +2765,138 @@ document
 
         window.location.href =
           currentPaystackAuthorizationUrl;
+
+        return;
+
+      }
+
+
+      const session =
+        await getCurrentSession();
+
+
+      if (!session) {
+
+        showMessage(
+          "rentalMessage",
+          "Please sign in to your ZYRE account before making the seller rental payment.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const sellerId =
+        localStorage.getItem(
+          "zava_seller_id"
+        );
+
+
+      if (!sellerId) {
+
+        showMessage(
+          "rentalMessage",
+          "Your seller account could not be identified. Please return to Account and sign in again.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const seller =
+        await findExistingSeller(
+          session.userId,
+          session.accessToken
+        );
+
+
+      if (!seller) {
+
+        showMessage(
+          "rentalMessage",
+          "Your seller application could not be found.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const approved =
+        seller.approved === true ||
+        seller.status ===
+          "seller_approved";
+
+
+      if (!approved) {
+
+        showMessage(
+          "rentalMessage",
+          "Your seller application has not been approved yet. The R100 payment becomes available after ZYRE Marketing approval.",
+          "info"
+        );
+
+        return;
+
+      }
+
+
+      const button =
+        document.getElementById(
+          "paystackRentalButton"
+        );
+
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "Preparing Paystack payment...";
+
+
+      try {
+
+        const paystackData =
+          await initializePaystackRental(
+            seller.id,
+            session.email,
+            session.accessToken
+          );
+
+
+        currentPaystackAuthorizationUrl =
+          paystackData.authorization_url;
+
+
+        window.location.href =
+          paystackData.authorization_url;
+
+      } catch (error) {
+
+        console.error(
+          "Paystack rental error:",
+          error
+        );
+
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "💳 Pay R100 with Paystack";
+
+
+        showMessage(
+          "rentalMessage",
+          error.message ||
+          "Paystack payment could not be prepared.",
+          "error"
+        );
 
       }
 
@@ -2334,11 +2910,12 @@ REGISTER
 
 document
   .getElementById("registerForm")
-  .addEventListener(
+  ?.addEventListener(
     "submit",
     async function(event) {
 
       event.preventDefault();
+
 
       clearMessage(
         "registerMessage"
@@ -2468,6 +3045,19 @@ document
         showMessage(
           "registerMessage",
           "Please enter your full legal name.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (!email) {
+
+        showMessage(
+          "registerMessage",
+          "Please enter your email address.",
           "error"
         );
 
@@ -2637,7 +3227,7 @@ document
 
 
         /* =========================
-        CHECK IF ALREADY SIGNED IN
+        CHECK CURRENT SESSION
         ========================= */
 
         const currentSession =
@@ -2722,6 +3312,7 @@ document
           const signupText =
             await signupResponse.text();
 
+
           let signupData =
             {};
 
@@ -2778,9 +3369,7 @@ document
 
             }
 
-          }
-
-          else {
+          } else {
 
             const combinedError =
               (
@@ -2814,7 +3403,7 @@ document
 
               showMessage(
                 "registerMessage",
-                "This email address already has a ZYRE account.\n\nPlease go back to Account and sign in as Seller using your existing account password.\n\nAfter you are signed in, return to Seller registration to submit your seller application.",
+                "This email address already has a ZYRE account.\n\nPlease go back to Account and sign in as Seller using the existing account password.\n\nAfter signing in, return here to complete the seller application.",
                 "info"
               );
 
@@ -2838,7 +3427,7 @@ document
 
 
         /* =========================
-        VERIFY EMAIL MATCH
+        VERIFY EMAIL
         ========================= */
 
         if (
@@ -2856,7 +3445,7 @@ document
 
 
         /* =========================
-        ENSURE PROFILE EXISTS
+        PREPARE PROFILE
         ========================= */
 
         button.textContent =
@@ -2867,13 +3456,63 @@ document
           userId,
           accessToken,
           fullName,
-          phone,
-          residentialAddress
+          phone
         );
 
 
         /* =========================
-        CREATE SELLER APPLICATION
+        CHECK EXISTING SELLER
+        ========================= */
+
+        button.textContent =
+          "Checking seller application...";
+
+
+        const existingSeller =
+          await findExistingSeller(
+            userId,
+            accessToken
+          );
+
+
+        if (existingSeller) {
+
+          saveSellerSession(
+            accessToken,
+            userId,
+            existingSeller.id,
+            accountEmail ||
+            email
+          );
+
+
+          const verification =
+            await getVerificationStatus(
+              existingSeller.id,
+              accessToken
+            );
+
+
+          showApplicationStatus(
+            existingSeller,
+            verification
+          );
+
+
+          showMessage(
+            "rentalMessage",
+            "Your seller application already exists. We have not created a duplicate application.",
+            "info"
+          );
+
+
+          return;
+
+        }
+
+
+        /* =========================
+        CREATE STORE RECORD
         ========================= */
 
         button.textContent =
@@ -2887,155 +3526,105 @@ document
             fullName,
             storeName,
             phone,
-            idNumber,
-            residentialAddress,
             businessAddress,
             category,
             description,
+            accountEmail ||
             email
           );
+
+
+        /* =========================
+        CREATE PRIVATE
+        VERIFICATION RECORD
+        ========================= */
+
+        button.textContent =
+          "Securing identity information...";
+
+
+        await createSellerVerification(
+          seller.sellerId,
+          userId,
+          accessToken,
+          fullName,
+          idNumber,
+          residentialAddress,
+          phone,
+          accountEmail ||
+          email
+        );
 
 
         /* =========================
         STORE IMAGE
         ========================= */
 
-        if (
-          storeImageFile
-        ) {
-
-          button.textContent =
-            "Uploading store picture...";
+        button.textContent =
+          "Uploading store picture...";
 
 
-          await uploadStoreImage(
-            storeImageFile,
-            userId,
-            seller.sellerId,
-            accessToken
-          );
-
-        }
+        await uploadStoreImage(
+          storeImageFile,
+          userId,
+          seller.sellerId,
+          accessToken
+        );
 
 
         /* =========================
-        SAVE SESSION
+        SAVE SELLER SESSION
         ========================= */
 
         saveSellerSession(
           accessToken,
           userId,
           seller.sellerId,
+          accountEmail ||
           email
         );
 
 
         /* =========================
-        EXISTING SELLER
+        SHOW PENDING STATUS
         ========================= */
 
-        if (
-          seller.alreadyExists
-        ) {
+        const createdSeller = {
 
-          if (
-            seller.approved === true ||
-            seller.status ===
-              "seller_approved"
-          ) {
-
-            showMessage(
-              "registerMessage",
-              "Your seller store is already approved. Please return to the main Account page and sign in as Seller to access Seller Centre.",
-              "success"
-            );
-
-            return;
-
-          }
-
-
-          button.textContent =
-            "Preparing Paystack payment...";
-
-
-          const paystackData =
-            await initializePaystackRental(
-              seller.sellerId,
-              accountEmail ||
-              email,
-              accessToken
-            );
-
-
-          currentPaystackAuthorizationUrl =
-            paystackData.authorization_url;
-
-
-          showRentalPayment(
-            seller.existingStore,
-            {
-              status:
-                "Ready for Paystack payment"
-            }
-          );
-
-
-          showMessage(
-            "rentalMessage",
-            "Your seller application already exists and is still pending ZYRE Marketing approval.\n\nYour R100 monthly store rental is ready for secure payment through Paystack.\n\nComplete the Paystack payment to continue.",
-            "info"
-          );
-
-
-          window.location.href =
-            paystackData.authorization_url;
-
-
-          return;
-
-        }
-
-
-        /* =========================
-        NEW SELLER
-        ========================= */
-
-        button.textContent =
-          "Preparing Paystack payment...";
-
-
-        const paystackData =
-          await initializePaystackRental(
+          id:
             seller.sellerId,
-            accountEmail ||
-            email,
-            accessToken
-          );
+
+          store_name:
+            storeName,
+
+          approved:
+            false,
+
+          status:
+            "seller_pending"
+
+        };
 
 
-        currentPaystackAuthorizationUrl =
-          paystackData.authorization_url;
+        const verificationStatus = {
+
+          id_verification_status:
+            "pending"
+
+        };
 
 
-        showRentalPayment(
-          storeName,
-          {
-            status:
-              "Ready for Paystack payment"
-          }
+        showApplicationStatus(
+          createdSeller,
+          verificationStatus
         );
 
 
         showMessage(
           "rentalMessage",
-          "🎉 Your seller application has been submitted successfully.\n\nYour account is now Seller Pending.\n\nYour store picture has been saved.\n\nYour R100 monthly store rental is ready for secure payment through Paystack.\n\nComplete the Paystack payment to continue.\n\nZYRE Marketing must review and approve your seller application before you can access the Seller Centre.",
+          "Your seller application has been submitted successfully.\n\nYour identity information has been stored privately for verification.\n\nZYRE Marketing must review and approve your application before the R100 monthly rental payment becomes available.\n\nYour Seller Centre remains locked until approval and payment are completed.",
           "success"
         );
-
-
-        window.location.href =
-          paystackData.authorization_url;
 
 
       } catch (error) {
@@ -3045,6 +3634,7 @@ document
           error
         );
 
+
         showMessage(
           "registerMessage",
           error.message ||
@@ -3052,12 +3642,14 @@ document
           "error"
         );
 
+
       } finally {
 
         const authArea =
           document.getElementById(
             "authArea"
           );
+
 
         if (
           authArea &&
@@ -3078,5 +3670,8 @@ document
     }
   );
 
-</script></body>
+</script>
+
+</body>
+
 </html>
