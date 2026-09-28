@@ -655,33 +655,33 @@
 
     function selectAccountType(type) {
 
-      clearMessage();
+  clearMessage();
 
-      selectedAccountType = type;
+  selectedAccountType = type;
 
-      if (type === "customer") {
+  if (type === "customer") {
 
-        customerArea.classList.remove("hidden");
+    customerArea.classList.remove("hidden");
 
-        sellerArea.classList.add("hidden");
+    sellerArea.classList.add("hidden");
 
-        customerChoice.classList.add("active");
+    customerChoice.classList.add("active");
 
-        sellerChoice.classList.remove("active");
+    sellerChoice.classList.remove("active");
 
-        showLogin();
+    showLogin();
 
-        return;
+    return;
 
-      }
+  }
 
-      customerArea.classList.add("hidden");
+  customerArea.classList.add("hidden");
 
-      sellerArea.classList.remove("hidden");
+  sellerArea.classList.remove("hidden");
 
-      customerChoice.classList.remove("active");
+  customerChoice.classList.remove("active");
 
-      sellerChoice.classList.add("active");
+  sellerChoice.classList.add("active");
 
     }
 
