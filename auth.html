@@ -1,5 +1,4 @@
-<!DOCTYPE html><html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="UTF-8"><meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
@@ -18,7 +17,10 @@ content="noindex,nofollow"
 
 «»
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 </head><body class="zyre-auth-page">  <!-- =====================================================
        HEADER
        ===================================================== -->  <header class="auth-header"><div class="auth-brand">
@@ -150,7 +152,6 @@ content="noindex,nofollow"
           id="customerSigninEmail"
           type="email"
           autocomplete="email"
-          placeholder="you@example.com"
           required
         >
 
@@ -167,7 +168,6 @@ content="noindex,nofollow"
           id="customerSigninPassword"
           type="password"
           autocomplete="current-password"
-          placeholder="Your password"
           required
         >
 
@@ -178,7 +178,7 @@ content="noindex,nofollow"
         type="submit"
         class="auth-primary"
       >
-        Sign In as Customer
+        Sign In
       </button>
 
     </form>
@@ -195,12 +195,6 @@ content="noindex,nofollow"
     class="auth-panel hidden"
   >
 
-    <p class="subtitle">
-      Create your ZYRE Marketing customer account.
-      Your delivery information will be saved so you
-      don't have to enter it every time.
-    </p>
-
     <form
       id="customerCreateForm"
       novalidate
@@ -216,7 +210,6 @@ content="noindex,nofollow"
           id="customerFullName"
           type="text"
           autocomplete="name"
-          placeholder="Your full name"
           required
         >
 
@@ -233,7 +226,6 @@ content="noindex,nofollow"
           id="customerEmail"
           type="email"
           autocomplete="email"
-          placeholder="you@example.com"
           required
         >
 
@@ -250,7 +242,6 @@ content="noindex,nofollow"
           id="customerPhone"
           type="tel"
           autocomplete="tel"
-          placeholder="e.g. 0812345678"
           required
         >
 
@@ -260,14 +251,13 @@ content="noindex,nofollow"
       <div class="auth-form-group">
 
         <label for="customerAddress">
-          Physical / delivery address
+          Delivery address
         </label>
 
         <input
           id="customerAddress"
           type="text"
           autocomplete="street-address"
-          placeholder="House/flat number, street, suburb, city, province"
           required
         >
 
@@ -277,7 +267,7 @@ content="noindex,nofollow"
       <div class="auth-form-group">
 
         <label for="customerCreatePassword">
-          Create password
+          Password
         </label>
 
         <input
@@ -285,13 +275,12 @@ content="noindex,nofollow"
           type="password"
           autocomplete="new-password"
           minlength="8"
-          placeholder="Create a strong password"
           required
         >
 
         <small>
-          Use at least 8 characters with uppercase and
-          lowercase letters, a number and a special character.
+          Use at least 8 characters with uppercase,
+          lowercase, number and special character.
         </small>
 
       </div>
@@ -308,7 +297,6 @@ content="noindex,nofollow"
           type="password"
           autocomplete="new-password"
           minlength="8"
-          placeholder="Enter your password again"
           required
         >
 
@@ -344,14 +332,13 @@ content="noindex,nofollow"
       <div class="auth-form-group">
 
         <label for="sellerSigninEmail">
-          Seller email address
+          Seller email
         </label>
 
         <input
           id="sellerSigninEmail"
           type="email"
           autocomplete="email"
-          placeholder="seller@example.com"
           required
         >
 
@@ -361,14 +348,13 @@ content="noindex,nofollow"
       <div class="auth-form-group">
 
         <label for="sellerSigninPassword">
-          Seller password
+          Password
         </label>
 
         <input
           id="sellerSigninPassword"
           type="password"
           autocomplete="current-password"
-          placeholder="Your seller password"
           required
         >
 
@@ -379,7 +365,7 @@ content="noindex,nofollow"
         type="submit"
         class="auth-primary"
       >
-        Sign In as Seller
+        Seller Sign In
       </button>
 
     </form>
@@ -441,10 +427,6 @@ content="noindex,nofollow"
 
   </div>
 
-
-  <!-- =================================================
-       FOOTER
-       ================================================= -->
 
   <div class="auth-divider">
     ZYRE MARKETING
@@ -565,6 +547,19 @@ content="noindex,nofollow"
           originalText;
 
       };
+
+    }
+
+
+    function isStrongPassword(password) {
+
+      return (
+        password.length >= 8 &&
+        /[A-Z]/.test(password) &&
+        /[a-z]/.test(password) &&
+        /[0-9]/.test(password) &&
+        /[^A-Za-z0-9]/.test(password)
+      );
 
     }
 
@@ -1036,10 +1031,10 @@ content="noindex,nofollow"
           }
 
 
-          if (password.length < 8) {
+          if (!isStrongPassword(password)) {
 
             showMessage(
-              "Your password must contain at least 8 characters.",
+              "Password must be at least 8 characters and include uppercase, lowercase, number and special character.",
               "error"
             );
 
@@ -1049,28 +1044,12 @@ content="noindex,nofollow"
 
 
           if (
-            !/[A-Z]/.test(password) ||
-            !/[a-z]/.test(password) ||
-            !/[0-9]/.test(password) ||
-            !/[^A-Za-z0-9]/.test(password)
+            password !==
+            confirmPassword
           ) {
 
             showMessage(
-              "Use at least one uppercase letter, one lowercase letter, one number and one special character.",
-              "error"
-            );
-
-            return;
-
-          }
-
-
-          if (
-            password !== confirmPassword
-          ) {
-
-            showMessage(
-              "Your passwords do not match.",
+              "The passwords do not match.",
               "error"
             );
 
@@ -1192,7 +1171,9 @@ content="noindex,nofollow"
             );
 
 
-            showAuthPanel("signin");
+            showAuthPanel(
+              "signin"
+            );
 
 
             $("customerSigninEmail").value =
@@ -1557,5 +1538,7 @@ content="noindex,nofollow"
       }
     );
 
-  </script></body>
+  </script>
+
+</body>
 </html>
