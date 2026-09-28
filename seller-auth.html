@@ -803,10 +803,6 @@ BENEFITS
       <form id="registerForm">
 
 
-        <!-- =========================
-        PERSONAL INFORMATION
-        ========================= -->
-
         <div class="form-section-title">
           👤 Personal information
         </div>
@@ -911,10 +907,6 @@ BENEFITS
         </div>
 
 
-        <!-- =========================
-        ACCOUNT SECURITY
-        ========================= -->
-
         <div class="form-section-title">
           🔐 Account security
         </div>
@@ -992,10 +984,6 @@ BENEFITS
 
         </div>
 
-
-        <!-- =========================
-        STORE INFORMATION
-        ========================= -->
 
         <div class="form-section-title">
           🏪 Store information
@@ -1290,10 +1278,6 @@ BENEFITS
       </div>
 
 
-      <!-- =========================
-      DIDIT IDENTITY VERIFICATION
-      ========================= -->
-
       <div
         class="verification-section"
         id="verificationSection"
@@ -1317,10 +1301,12 @@ BENEFITS
           🔐 Verify Identity
         </button>
 
-        <div class="verification-note">
+        <div
+          class="verification-note"
+          id="verificationNote"
+        >
           Your verification is handled through Didit's
-          secure verification interface. ZYRE Marketing
-          does not receive or store your Didit API key.
+          secure verification interface.
         </div>
 
       </div>
@@ -1524,6 +1510,44 @@ function clearMessage(
 
   element.textContent =
     "";
+
+}
+
+
+/* =========================
+SAFE FETCH
+========================= */
+
+async function safeFetch(
+  url,
+  options,
+  operationName
+) {
+
+  try {
+
+    return await fetch(
+      url,
+      options
+    );
+
+  } catch (error) {
+
+    console.error(
+      operationName +
+      " network error:",
+      error
+    );
+
+    throw new Error(
+      operationName +
+      " could not connect to ZYRE's secure server.\n\n" +
+      "Please check your internet connection and try again.\n\n" +
+      "Technical error: " +
+      (error?.message || "Failed to fetch")
+    );
+
+  }
 
 }
 
@@ -1776,7 +1800,7 @@ async function getCurrentSession() {
 
 
   const response =
-    await fetch(
+    await safeFetch(
       SUPABASE_URL +
       "/auth/v1/user",
       {
@@ -1792,11 +1816,18 @@ async function getCurrentSession() {
 
         }
 
-      }
+      },
+      "Account session check"
     );
 
 
   if (!response.ok) {
+
+    console.warn(
+      "Supabase session is no longer valid:",
+      response.status,
+      await response.text()
+    );
 
     return null;
 
@@ -1842,7 +1873,7 @@ async function ensureSellerProfile(
 ) {
 
   const profileResponse =
-    await fetch(
+    await safeFetch(
 
       SUPABASE_URL +
       "/rest/v1/profiles",
@@ -1883,16 +1914,24 @@ async function ensureSellerProfile(
 
           })
 
-        }
+        },
+
+      "ZYRE profile preparation"
 
     );
 
 
   if (!profileResponse.ok) {
 
+    const errorText =
+      await profileResponse.text();
+
     throw new Error(
       "Your account was created, but your ZYRE profile could not be prepared.\n\n" +
-      await profileResponse.text()
+      "Server response (" +
+      profileResponse.status +
+      "):\n" +
+      errorText
     );
 
   }
@@ -1910,12 +1949,12 @@ async function findExistingSeller(
 ) {
 
   const response =
-    await fetch(
+    await safeFetch(
 
       SUPABASE_URL +
       "/rest/v1/sellers?user_id=eq." +
       encodeURIComponent(userId) +
-      "&select=id,store_name,approved,email,status,store_image_url",
+      "&select=id,store_name,approved,email,status,store_image_url&order=id.desc&limit=1",
 
       {
 
@@ -1930,16 +1969,24 @@ async function findExistingSeller(
 
         }
 
-      }
+      },
+
+      "Seller application check"
 
     );
 
 
   if (!response.ok) {
 
+    const errorText =
+      await response.text();
+
     throw new Error(
       "We could not check your seller application.\n\n" +
-      await response.text()
+      "Server response (" +
+      response.status +
+      "):\n" +
+      errorText
     );
 
   }
@@ -1982,7 +2029,7 @@ async function submitSellerApplication(
 ) {
 
   const response =
-    await fetch(
+    await safeFetch(
 
       SUPABASE_URL +
       "/rest/v1/rpc/submit_seller_application",
@@ -2002,6 +2049,9 @@ async function submitSellerApplication(
             accessToken,
 
           "Content-Type":
+            "application/json",
+
+          "Accept":
             "application/json"
 
         },
@@ -2038,7 +2088,9 @@ async function submitSellerApplication(
 
           })
 
-      }
+      },
+
+      "Seller application submission"
 
     );
 
@@ -2068,6 +2120,19 @@ async function submitSellerApplication(
 
   if (!response.ok) {
 
+    console.error(
+      "Seller application RPC failed:",
+      {
+        status:
+          response.status,
+
+        response:
+          data ||
+          responseText
+      }
+    );
+
+
     throw new Error(
 
       data?.message ||
@@ -2075,7 +2140,12 @@ async function submitSellerApplication(
       data?.details ||
       data?.hint ||
       responseText ||
-      "Your seller application could not be submitted."
+      (
+        "Seller application could not be submitted. " +
+        "Server returned HTTP " +
+        response.status +
+        "."
+      )
 
     );
 
@@ -2191,7 +2261,7 @@ async function uploadStoreImage(
 
 
   const uploadResponse =
-    await fetch(
+    await safeFetch(
 
       SUPABASE_URL +
       "/storage/v1/object/store-images/" +
@@ -2222,16 +2292,24 @@ async function uploadStoreImage(
         body:
           file
 
-      }
+      },
+
+      "Store picture upload"
 
     );
 
 
   if (!uploadResponse.ok) {
 
+    const errorText =
+      await uploadResponse.text();
+
     throw new Error(
       "Your seller application was created, but the store picture could not be uploaded.\n\n" +
-      await uploadResponse.text()
+      "Server response (" +
+      uploadResponse.status +
+      "):\n" +
+      errorText
     );
 
   }
@@ -2244,7 +2322,7 @@ async function uploadStoreImage(
 
 
   const updateResponse =
-    await fetch(
+    await safeFetch(
 
       SUPABASE_URL +
       "/rest/v1/sellers?id=eq." +
@@ -2280,16 +2358,24 @@ async function uploadStoreImage(
 
           })
 
-      }
+      },
+
+      "Seller store picture update"
 
     );
 
 
   if (!updateResponse.ok) {
 
+    const errorText =
+      await updateResponse.text();
+
     throw new Error(
       "The store picture was uploaded, but the seller profile could not be updated.\n\n" +
-      await updateResponse.text()
+      "Server response (" +
+      updateResponse.status +
+      "):\n" +
+      errorText
     );
 
   }
@@ -2310,7 +2396,7 @@ async function getVerificationStatus(
 ) {
 
   const response =
-    await fetch(
+    await safeFetch(
 
       SUPABASE_URL +
       "/rest/v1/seller_verification?seller_id=eq." +
@@ -2330,12 +2416,20 @@ async function getVerificationStatus(
 
         }
 
-      }
+      },
+
+      "Identity verification status check"
 
     );
 
 
   if (!response.ok) {
+
+    console.warn(
+      "Could not read identity verification status:",
+      response.status,
+      await response.text()
+    );
 
     return null;
 
@@ -2361,8 +2455,10 @@ async function createDiditSession(
 ) {
 
   const response =
-    await fetch(
+    await safeFetch(
+
       DIDIT_CREATE_SESSION_FUNCTION,
+
       {
 
         method:
@@ -2378,6 +2474,9 @@ async function createDiditSession(
             accessToken,
 
           "Content-Type":
+            "application/json",
+
+          "Accept":
             "application/json"
 
         },
@@ -2390,7 +2489,10 @@ async function createDiditSession(
 
           })
 
-      }
+      },
+
+      "Didit identity verification"
+
     );
 
 
@@ -2430,7 +2532,12 @@ async function createDiditSession(
       data?.message ||
       data?.details ||
       text ||
-      "Didit identity verification could not be started."
+      (
+        "Didit identity verification could not be started. " +
+        "The secure verification service returned HTTP " +
+        response.status +
+        "."
+      )
 
     );
 
@@ -2456,7 +2563,7 @@ async function createDiditSession(
     );
 
     throw new Error(
-      "Didit created a response, but no verification link was returned."
+      "Didit responded successfully, but no verification link was returned."
     );
 
   }
@@ -2532,11 +2639,6 @@ async function startDiditVerification() {
 
   try {
 
-    /*
-     * Re-check the seller from Supabase
-     * before creating a Didit session.
-     */
-
     const seller =
       await findExistingSeller(
         session.userId,
@@ -2564,11 +2666,6 @@ async function startDiditVerification() {
 
     }
 
-
-    /*
-     * If identity is already verified,
-     * don't create another Didit session.
-     */
 
     const verification =
       await getVerificationStatus(
@@ -2610,10 +2707,6 @@ async function startDiditVerification() {
     }
 
 
-    /*
-     * Create a fresh Didit hosted session.
-     */
-
     const didit =
       await createDiditSession(
         seller.id,
@@ -2643,13 +2736,6 @@ async function startDiditVerification() {
 
     }
 
-
-    /*
-     * Didit returns the hosted verification URL.
-     *
-     * The API key remains inside the Edge Function.
-     * Only the safe verification URL reaches this page.
-     */
 
     showMessage(
       "rentalMessage",
@@ -2699,8 +2785,10 @@ async function initializePaystackRental(
 ) {
 
   const response =
-    await fetch(
+    await safeFetch(
+
       RENTAL_PAYSTACK_FUNCTION,
+
       {
 
         method:
@@ -2716,6 +2804,9 @@ async function initializePaystackRental(
             accessToken,
 
           "Content-Type":
+            "application/json",
+
+          "Accept":
             "application/json"
 
         },
@@ -2727,14 +2818,17 @@ async function initializePaystackRental(
               "initialize",
 
             seller_id:
-              sellerId,
+              Number(sellerId),
 
             email:
               email
 
           })
 
-      }
+      },
+
+      "Paystack rental payment"
+
     );
 
 
@@ -2885,6 +2979,11 @@ function showApplicationStatus(
       "diditVerifyButton"
     );
 
+  const verificationNote =
+    document.getElementById(
+      "verificationNote"
+    );
+
 
   if (storeName) {
 
@@ -2925,20 +3024,54 @@ function showApplicationStatus(
       "approved";
 
 
+  const verificationInReview =
+    verificationState ===
+      "under_review" ||
+    verificationState ===
+      "in_review" ||
+    verificationState ===
+      "started" ||
+    verificationState ===
+      "processing";
+
+
   if (verification) {
 
-    verification.textContent =
-      verificationState;
+    if (identityVerified) {
+
+      verification.textContent =
+        "Verified";
+
+    } else if (verificationInReview) {
+
+      verification.textContent =
+        "Under Review";
+
+    } else if (
+      verificationState ===
+      "declined"
+    ) {
+
+      verification.textContent =
+        "Declined";
+
+    } else if (
+      verificationState ===
+      "resubmitted"
+    ) {
+
+      verification.textContent =
+        "Resubmitted";
+
+    } else {
+
+      verification.textContent =
+        "Pending";
+
+    }
 
   }
 
-
-  /*
-   * DIDIT BUTTON
-   *
-   * Show it whenever the seller still
-   * needs identity verification.
-   */
 
   const needsIdentityVerification =
     !identityVerified &&
@@ -2972,6 +3105,48 @@ function showApplicationStatus(
       diditButton.textContent =
         "✓ Identity Verified";
 
+      if (verificationNote) {
+
+        verificationNote.textContent =
+          "Your identity verification has been completed.";
+
+      }
+
+    } else if (
+      verificationInReview
+    ) {
+
+      diditButton.disabled =
+        true;
+
+      diditButton.textContent =
+        "⏳ Verification Under Review";
+
+      if (verificationNote) {
+
+        verificationNote.textContent =
+          "Your verification is being processed. Please wait for the verification result before starting another session.";
+
+      }
+
+    } else if (
+      verificationState ===
+      "declined"
+    ) {
+
+      diditButton.disabled =
+        false;
+
+      diditButton.textContent =
+        "↻ Retry Identity Verification";
+
+      if (verificationNote) {
+
+        verificationNote.textContent =
+          "The previous verification was not approved. You may start a new verification attempt.";
+
+      }
+
     } else {
 
       diditButton.disabled =
@@ -2980,20 +3155,17 @@ function showApplicationStatus(
       diditButton.textContent =
         "🔐 Verify Identity";
 
+      if (verificationNote) {
+
+        verificationNote.textContent =
+          "Complete the secure Didit identity verification before your seller application can be approved.";
+
+      }
+
     }
 
   }
 
-
-  /*
-   * PAYMENT SAFETY:
-   *
-   * Seller approval alone is NOT enough.
-   *
-   * Identity verification must also be
-   * completed before the Paystack button
-   * becomes available.
-   */
 
   const readyForPayment =
     sellerApproved &&
@@ -3305,7 +3477,9 @@ function showApplicationStatus(
     if (statusIcon) {
 
       statusIcon.textContent =
-        "⏳";
+        verificationInReview
+          ? "⏳"
+          : "🔐";
 
     }
 
@@ -3314,21 +3488,22 @@ function showApplicationStatus(
 
       if (
         verificationState ===
-        "rejected"
+          "declined" ||
+        verificationState ===
+          "rejected"
       ) {
 
         statusText.innerHTML =
           "<strong>Verification requires attention</strong><br>" +
-          "Your seller identity verification was not approved. Please contact ZYRE Marketing for further information.";
+          "Your previous identity verification was not approved. You may retry the secure verification.";
 
       } else if (
-        verificationState ===
-        "under_review"
+        verificationInReview
       ) {
 
         statusText.innerHTML =
           "<strong>Identity Under Review</strong><br>" +
-          "ZYRE Marketing is reviewing your seller identity information.";
+          "Your identity verification is being processed. ZYRE Marketing can review your seller application after the verification result is available.";
 
       } else {
 
@@ -3497,129 +3672,129 @@ document
       }
 
 
-      const session =
-        await getCurrentSession();
-
-
-      if (!session) {
-
-        showMessage(
-          "rentalMessage",
-          "Please sign in to your ZYRE account before making the seller rental payment.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      const sellerId =
-        localStorage.getItem(
-          "zava_seller_id"
-        );
-
-
-      if (!sellerId) {
-
-        showMessage(
-          "rentalMessage",
-          "Your seller account could not be identified. Please return to Account and sign in again.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      const seller =
-        await findExistingSeller(
-          session.userId,
-          session.accessToken
-        );
-
-
-      if (!seller) {
-
-        showMessage(
-          "rentalMessage",
-          "Your seller application could not be found.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      const verification =
-        await getVerificationStatus(
-          seller.id,
-          session.accessToken
-        );
-
-
-      const approved =
-        seller.approved === true ||
-        seller.status ===
-          "seller_approved";
-
-
-      const verificationState =
-        String(
-          verification?.id_verification_status ||
-          "pending"
-        ).toLowerCase();
-
-
-      const identityVerified =
-        verificationState ===
-          "verified" ||
-        verificationState ===
-          "approved";
-
-
-      if (!approved) {
-
-        showMessage(
-          "rentalMessage",
-          "Your seller application has not been approved yet. The R100 payment becomes available only after ZYRE Marketing approval.",
-          "info"
-        );
-
-        return;
-
-      }
-
-
-      if (!identityVerified) {
-
-        showMessage(
-          "rentalMessage",
-          "Your seller application cannot proceed to payment until identity verification has been completed.",
-          "info"
-        );
-
-        return;
-
-      }
-
-
-      const button =
-        document.getElementById(
-          "paystackRentalButton"
-        );
-
-
-      button.disabled =
-        true;
-
-      button.textContent =
-        "Preparing Paystack payment...";
-
-
       try {
+
+        const session =
+          await getCurrentSession();
+
+
+        if (!session) {
+
+          showMessage(
+            "rentalMessage",
+            "Please sign in to your ZYRE account before making the seller rental payment.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        const sellerId =
+          localStorage.getItem(
+            "zava_seller_id"
+          );
+
+
+        if (!sellerId) {
+
+          showMessage(
+            "rentalMessage",
+            "Your seller account could not be identified. Please return to Account and sign in again.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        const seller =
+          await findExistingSeller(
+            session.userId,
+            session.accessToken
+          );
+
+
+        if (!seller) {
+
+          showMessage(
+            "rentalMessage",
+            "Your seller application could not be found.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        const verification =
+          await getVerificationStatus(
+            seller.id,
+            session.accessToken
+          );
+
+
+        const approved =
+          seller.approved === true ||
+          seller.status ===
+            "seller_approved";
+
+
+        const verificationState =
+          String(
+            verification?.id_verification_status ||
+            "pending"
+          ).toLowerCase();
+
+
+        const identityVerified =
+          verificationState ===
+            "verified" ||
+          verificationState ===
+            "approved";
+
+
+        if (!approved) {
+
+          showMessage(
+            "rentalMessage",
+            "Your seller application has not been approved yet. The R100 payment becomes available only after ZYRE Marketing approval.",
+            "info"
+          );
+
+          return;
+
+        }
+
+
+        if (!identityVerified) {
+
+          showMessage(
+            "rentalMessage",
+            "Your seller application cannot proceed to payment until identity verification has been completed.",
+            "info"
+          );
+
+          return;
+
+        }
+
+
+        const button =
+          document.getElementById(
+            "paystackRentalButton"
+          );
+
+
+        button.disabled =
+          true;
+
+        button.textContent =
+          "Preparing Paystack payment...";
+
 
         const paystackData =
           await initializePaystackRental(
@@ -3642,6 +3817,12 @@ document
           "Paystack rental error:",
           error
         );
+
+
+        const button =
+          document.getElementById(
+            "paystackRentalButton"
+          );
 
 
         button.disabled =
@@ -4044,9 +4225,11 @@ document
 
 
           const signupResponse =
-            await fetch(
+            await safeFetch(
+
               SUPABASE_URL +
               "/auth/v1/signup",
+
               {
 
                 method:
@@ -4058,6 +4241,9 @@ document
                     SUPABASE_KEY,
 
                   "Content-Type":
+                    "application/json",
+
+                  "Accept":
                     "application/json"
 
                 },
@@ -4086,7 +4272,10 @@ document
 
                   })
 
-              }
+              },
+
+              "ZYRE account creation"
+
             );
 
 
@@ -4199,7 +4388,12 @@ document
               signupData.error_description ||
               signupData.error ||
               signupText ||
-              "The seller account could not be created."
+              (
+                "The seller account could not be created. " +
+                "Supabase returned HTTP " +
+                signupResponse.status +
+                "."
+              )
             );
 
           }
@@ -4220,6 +4414,18 @@ document
 
           throw new Error(
             "The signed-in ZYRE account uses a different email address.\n\nPlease use the email address belonging to your signed-in account."
+          );
+
+        }
+
+
+        if (
+          !accessToken ||
+          !userId
+        ) {
+
+          throw new Error(
+            "A valid signed-in ZYRE session is required before the seller application can be submitted."
           );
 
         }
@@ -4275,9 +4481,6 @@ document
                 existingSeller.id,
                 accessToken
               );
-
-              existingSeller.store_image_url =
-                "uploaded";
 
             } catch (imageError) {
 
