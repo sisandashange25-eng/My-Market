@@ -1,1771 +1,1435 @@
-/* =========================================================
-   ZYRE MARKETING
-   Clean Black + White Marketplace
-   ========================================================= */
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
+«»
+
+  <title>ZYRE Marketing | Account</title><meta
+name="description"
+content="Sign in or create your ZYRE Marketing customer or seller account."
+
+«»
+
+<meta
+name="robots"
+content="noindex,nofollow"
+
+«»
+
+  <link rel="stylesheet" href="style.css">
+</head><body class="zyre-auth-page">  <!-- =====================================================
+       HEADER
+       ===================================================== -->  <header class="auth-header"><div class="auth-brand">
+  <div class="auth-brand-main">
+    ZYRE
+  </div>
+
+  <div class="auth-brand-sub">
+    MARKETING • ONLINE MARKETPLACE
+  </div>
+</div>
+
+<button
+  type="button"
+  class="auth-back"
+  onclick="goHome()"
+>
+  ← Marketplace
+</button>
+
+  </header>  <!-- =====================================================
+       MAIN
+       ===================================================== -->  <main class="auth-main"><div class="auth-heading">
+
+  <div class="auth-eyebrow">
+    ZYRE MARKETING ACCOUNT
+  </div>
+
+  <h1>
+    Your ZYRE Account
+  </h1>
+
+  <p>
+    Choose how you want to use ZYRE Marketing.
+  </p>
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+</div>
 
-html {
-  scroll-behavior: smooth;
-}
 
-body {
-  font-family:
-    "Segoe UI",
-    Arial,
-    sans-serif;
+<section class="auth-card">
+
+  <!-- =================================================
+       CUSTOMER / SELLER CHOICE
+       ================================================= -->
+
+  <div class="auth-choice">
+
+    <button
+      type="button"
+      id="customerChoice"
+      class="auth-choice-btn active"
+      onclick="chooseAccountType('customer')"
+    >
+      👤 Customer
+    </button>
 
-  background: #ffffff;
+    <button
+      type="button"
+      id="sellerChoice"
+      class="auth-choice-btn"
+      onclick="chooseAccountType('seller')"
+    >
+      🏪 Seller
+    </button>
 
-  color: #000000;
+  </div>
 
-  min-height: 100vh;
 
-  line-height: 1.6;
-}
+  <!-- =================================================
+       SIGN IN / CREATE ACCOUNT TABS
+       ================================================= -->
 
-/* =========================================================
-   GLOBAL
-   ========================================================= */
+  <div class="auth-tabs">
 
-button,
-input,
-select {
-  font: inherit;
-}
+    <button
+      type="button"
+      id="signInTab"
+      class="auth-tab active"
+      onclick="showAuthPanel('signin')"
+    >
+      Sign In
+    </button>
 
-button {
-  cursor: pointer;
-}
+    <button
+      type="button"
+      id="createTab"
+      class="auth-tab"
+      onclick="showAuthPanel('create')"
+    >
+      Create Account
+    </button>
 
-section {
-  width: 100%;
-}
+  </div>
 
-.eyebrow {
-  color: #000000;
 
-  font-size: 11px;
-  font-weight: 700;
+  <!-- =================================================
+       MESSAGE
+       ================================================= -->
 
-  letter-spacing: 3px;
+  <div
+    id="authMessage"
+    class="auth-message"
+  ></div>
 
-  text-transform: uppercase;
-}
 
-/* =========================================================
-   HEADER
-   ========================================================= */
+  <!-- =================================================
+       CUSTOMER SIGN IN
+       ================================================= -->
 
-.zyre-header {
-  position: sticky;
-  top: 0;
+  <div
+    id="customerSigninPanel"
+    class="auth-panel"
+  >
 
-  z-index: 1000;
+    <form
+      id="customerSigninForm"
+      novalidate
+    >
 
-  min-height: 78px;
+      <div class="auth-form-group">
 
-  padding: 14px 5%;
+        <label for="customerSigninEmail">
+          Email address
+        </label>
 
-  display: flex;
+        <input
+          id="customerSigninEmail"
+          type="email"
+          autocomplete="email"
+          required
+        >
 
-  align-items: center;
+      </div>
 
-  gap: 30px;
 
-  background: #ffffff;
+      <div class="auth-form-group">
 
-  color: #000000;
+        <label for="customerSigninPassword">
+          Password
+        </label>
 
-  border-bottom: 1px solid #dddddd;
+        <input
+          id="customerSigninPassword"
+          type="password"
+          autocomplete="current-password"
+          required
+        >
 
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
+      </div>
 
-/* =========================================================
-   BRAND
-   ========================================================= */
 
-.brand {
-  min-width: 145px;
+      <button
+        type="submit"
+        class="auth-primary"
+      >
+        Sign In
+      </button>
 
-  display: flex;
+    </form>
 
-  flex-direction: column;
+  </div>
 
-  justify-content: center;
-}
 
-.brand-main {
-  color: #000000;
+  <!-- =================================================
+       CUSTOMER CREATE ACCOUNT
+       ================================================= -->
 
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
+  <div
+    id="customerCreatePanel"
+    class="auth-panel hidden"
+  >
 
-  font-size: 30px;
+    <form
+      id="customerCreateForm"
+      novalidate
+    >
 
-  font-weight: 700;
+      <div class="auth-form-group">
 
-  letter-spacing: 7px;
+        <label for="customerFullName">
+          Full name
+        </label>
 
-  line-height: 1;
-}
+        <input
+          id="customerFullName"
+          type="text"
+          autocomplete="name"
+          required
+        >
 
-.brand-sub {
-  margin-top: 4px;
+      </div>
 
-  color: #000000;
 
-  font-size: 8px;
+      <div class="auth-form-group">
 
-  font-weight: 700;
+        <label for="customerEmail">
+          Email address
+        </label>
 
-  letter-spacing: 5px;
-}
+        <input
+          id="customerEmail"
+          type="email"
+          autocomplete="email"
+          required
+        >
 
-/* =========================================================
-   SEARCH
-   ========================================================= */
+      </div>
 
-.header-search {
-  flex: 1;
 
-  max-width: 650px;
-}
+      <div class="auth-form-group">
 
-.header-search input {
-  width: 100%;
+        <label for="customerPhone">
+          Phone number
+        </label>
 
-  height: 45px;
+        <input
+          id="customerPhone"
+          type="tel"
+          autocomplete="tel"
+          required
+        >
 
-  padding: 0 18px;
+      </div>
 
-  color: #000000;
 
-  background: #ffffff;
+      <div class="auth-form-group">
 
-  border: 1px solid #000000;
+        <label for="customerAddress">
+          Delivery address
+        </label>
 
-  border-radius: 5px;
+        <input
+          id="customerAddress"
+          type="text"
+          autocomplete="street-address"
+          required
+        >
 
-  outline: none;
+      </div>
 
-  transition:
-    border-color 0.25s,
-    box-shadow 0.25s;
-}
 
-.header-search input::placeholder {
-  color: #777777;
-}
+      <div class="auth-form-group">
 
-.header-search input:focus {
-  border-color: #000000;
+        <label for="customerCreatePassword">
+          Password
+        </label>
 
-  box-shadow:
-    0 0 0 3px rgba(0, 0, 0, 0.08);
-}
+        <input
+          id="customerCreatePassword"
+          type="password"
+          autocomplete="new-password"
+          minlength="6"
+          required
+        >
 
-/* =========================================================
-   CART BUTTON
-   ========================================================= */
+      </div>
 
-.cart-button {
-  min-width: 105px;
 
-  height: 44px;
+      <button
+        type="submit"
+        class="auth-primary"
+      >
+        Create Customer Account
+      </button>
 
-  padding: 0 15px;
+    </form>
 
-  color: #ffffff;
+  </div>
 
-  background: #000000;
 
-  border: 1px solid #000000;
+  <!-- =================================================
+       SELLER SIGN IN
+       ================================================= -->
 
-  border-radius: 4px;
+  <div
+    id="sellerSigninPanel"
+    class="auth-panel hidden"
+  >
 
-  font-weight: 700;
+    <form
+      id="sellerSigninForm"
+      novalidate
+    >
 
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s,
-    background 0.2s;
-}
+      <div class="auth-form-group">
 
-.cart-button:hover {
-  transform: translateY(-2px);
+        <label for="sellerSigninEmail">
+          Seller email
+        </label>
 
-  background: #222222;
+        <input
+          id="sellerSigninEmail"
+          type="email"
+          autocomplete="email"
+          required
+        >
 
-  box-shadow:
-    0 8px 25px rgba(0, 0, 0, 0.15);
-}
+      </div>
 
-.cart-button b {
-  margin-left: 4px;
-}
 
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
+      <div class="auth-form-group">
 
-.zyre-nav {
-  min-height: 48px;
+        <label for="sellerSigninPassword">
+          Password
+        </label>
 
-  display: flex;
+        <input
+          id="sellerSigninPassword"
+          type="password"
+          autocomplete="current-password"
+          required
+        >
 
-  justify-content: center;
+      </div>
 
-  align-items: center;
 
-  gap: 8px;
+      <button
+        type="submit"
+        class="auth-primary"
+      >
+        Seller Sign In
+      </button>
 
-  padding: 7px 15px;
+    </form>
 
-  background: #ffffff;
 
-  border-bottom: 1px solid #dddddd;
-}
+    <div class="seller-continue-box">
 
-.zyre-nav button {
-  padding: 8px 20px;
+      <h3>
+        Already started a seller application?
+      </h3>
 
-  color: #333333;
+      <p>
+        Continue your seller application, identity
+        verification and payment process.
+      </p>
 
-  background: transparent;
+      <button
+        type="button"
+        class="auth-secondary"
+        onclick="continueSellerApplication()"
+      >
+        🔐 Continue Seller Application
+      </button>
 
-  border: 1px solid transparent;
+    </div>
 
-  border-radius: 3px;
+  </div>
 
-  font-size: 13px;
 
-  font-weight: 600;
+  <!-- =================================================
+       SELLER CREATE ACCOUNT
+       ================================================= -->
 
-  transition:
-    color 0.2s,
-    border-color 0.2s,
-    background 0.2s;
-}
+  <div
+    id="sellerCreatePanel"
+    class="auth-panel hidden"
+  >
 
-.zyre-nav button:hover {
-  color: #000000;
+    <div class="seller-continue-box">
 
-  border-color: #000000;
+      <h3>
+        Become a seller on ZYRE
+      </h3>
 
-  background: #f5f5f5;
-}
+      <p>
+        Seller registration is completed through the
+        secure seller application.
+      </p>
 
-/* =========================================================
-   HERO
-   ========================================================= */
+      <button
+        type="button"
+        class="auth-primary"
+        onclick="startSellerApplication()"
+      >
+        🏪 Start Seller Application
+      </button>
 
-.hero {
-  position: relative;
+    </div>
 
-  overflow: hidden;
+  </div>
 
-  min-height: 590px;
 
-  display: flex;
+  <div class="auth-divider">
+    ZYRE MARKETING
+  </div>
 
-  align-items: center;
+  <div class="auth-footer-note">
+    Your account gives you access to the appropriate
+    customer or seller features of the marketplace.
+  </div>
 
-  justify-content: space-between;
+</section>
 
-  padding: 80px 8%;
+  </main>  <!-- =====================================================
+       SUPABASE
+       ===================================================== -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script>
 
-  background: #ffffff;
+    /* =====================================================
+       SUPABASE CONFIG
+       ===================================================== */
 
-  color: #000000;
+    const SUPABASE_URL =
+      "https://gaccizzlwswwynattgda.supabase.co";
 
-  border-bottom: 1px solid #dddddd;
-}
+    const SUPABASE_KEY =
+      "sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
 
-.hero::before {
-  content: "";
-
-  position: absolute;
-
-  width: 500px;
-
-  height: 500px;
-
-  right: -180px;
-
-  top: -170px;
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(0, 0, 0, 0.05),
-      transparent 68%
-    );
-}
-
-.hero::after {
-  content: "";
-
-  position: absolute;
-
-  left: 8%;
-
-  bottom: 0;
-
-  width: 180px;
-
-  height: 1px;
-
-  background: #000000;
-}
-
-.hero-content {
-  position: relative;
-
-  z-index: 2;
-
-  max-width: 650px;
-}
-
-.hero h1 {
-  margin-top: 18px;
-
-  color: #000000;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: clamp(48px, 7vw, 82px);
-
-  font-weight: 500;
-
-  line-height: 0.98;
-
-  letter-spacing: -2px;
-}
-
-.hero h1 span {
-  color: #000000;
-}
-
-.hero-text {
-  max-width: 540px;
-
-  margin-top: 25px;
-
-  color: #555555;
-
-  font-size: 16px;
-
-  line-height: 1.8;
-}
-
-.hero-buttons {
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 12px;
-
-  margin-top: 35px;
-}
-
-/* =========================================================
-   HERO BUTTONS
-   ========================================================= */
-
-.primary-button,
-.secondary-button {
-  min-height: 46px;
-
-  padding: 0 24px;
-
-  border-radius: 3px;
-
-  font-weight: 700;
-
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s,
-    background 0.2s;
-}
-
-.primary-button {
-  color: #ffffff;
-
-  background: #000000;
-
-  border: 1px solid #000000;
-}
-
-.secondary-button {
-  color: #000000;
-
-  background: #ffffff;
-
-  border: 1px solid #000000;
-}
-
-.primary-button:hover,
-.secondary-button:hover {
-  transform: translateY(-2px);
-}
-
-.primary-button:hover {
-  background: #222222;
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
-.secondary-button:hover {
-  background: #f2f2f2;
-}
-
-/* =========================================================
-   HERO MARK
-   ========================================================= */
-
-.hero-mark {
-  position: relative;
-
-  z-index: 2;
-
-  width: 330px;
-
-  height: 330px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  color: #000000;
-
-  border: 1px solid #000000;
-
-  border-radius: 50%;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 20px;
-
-  letter-spacing: 7px;
-
-  box-shadow:
-    0 0 80px rgba(0, 0, 0, 0.05);
-}
-
-.hero-z {
-  color: #000000;
-
-  font-size: 150px;
-
-  line-height: 0.8;
-
-  letter-spacing: 0;
-}
-
-/* =========================================================
-   SELLER BANNER
-   ========================================================= */
-
-.seller-banner {
-  margin: 0;
-
-  padding: 45px 8%;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 30px;
-
-  background: #f7f7f7;
-
-  color: #000000;
-
-  border-bottom: 1px solid #dddddd;
-}
-
-.seller-banner h2 {
-  margin: 7px 0;
-
-  color: #000000;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 32px;
-
-  font-weight: 500;
-}
-
-.seller-banner p:not(.eyebrow) {
-  color: #555555;
-}
-
-.seller-banner strong {
-  color: #000000;
-}
-
-.seller-banner > button {
-  flex-shrink: 0;
-
-  min-height: 46px;
-
-  padding: 0 25px;
-
-  color: #ffffff;
-
-  background: #000000;
-
-  border: none;
-
-  border-radius: 3px;
-
-  font-weight: 700;
-
-  transition: 0.2s;
-}
-
-.seller-banner > button:hover {
-  background: #222222;
-
-  transform: translateY(-2px);
-}
-
-/* =========================================================
-   MARKETPLACE SECTIONS
-   ========================================================= */
-
-.marketplace {
-  padding: 80px 6%;
-
-  background: #ffffff;
-
-  color: #000000;
-}
-
-.toolbar {
-  display: flex;
-
-  align-items: flex-end;
-
-  justify-content: space-between;
-
-  gap: 30px;
-
-  margin-bottom: 35px;
-}
-
-.toolbar h2,
-.section-title h2 {
-  margin-top: 5px;
-
-  color: #000000;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 38px;
-
-  font-weight: 500;
-}
-
-.toolbar p:not(.eyebrow) {
-  margin-top: 8px;
-
-  color: #666666;
-
-  font-size: 14px;
-}
-
-.toolbar select {
-  min-width: 180px;
-
-  height: 42px;
-
-  padding: 0 12px;
-
-  color: #000000;
-
-  background: #ffffff;
-
-  border: 1px solid #000000;
-
-  border-radius: 3px;
-
-  outline: none;
-}
-
-.toolbar select:focus {
-  border-color: #000000;
-}
-
-/* =========================================================
-   GRIDS
-   ========================================================= */
-
-.grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(230px, 1fr)
-    );
-
-  gap: 22px;
-}
-
-/* =========================================================
-   PRODUCT / STORE CARDS
-   ========================================================= */
-
-.grid > article,
-.grid > .step {
-  position: relative;
-
-  overflow: hidden;
-
-  padding: 24px;
-
-  background: #ffffff;
-
-  border: 1px solid #dddddd;
-
-  border-radius: 6px;
-
-  transition:
-    transform 0.25s,
-    border-color 0.25s,
-    box-shadow 0.25s;
-}
-
-.grid > article:hover,
-.grid > .step:hover {
-  transform: translateY(-5px);
-
-  border-color: #000000;
-
-  box-shadow:
-    0 18px 45px rgba(0, 0, 0, 0.12);
-}
-
-.grid > article::before,
-.grid > .step::before {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-
-  left: 0;
-
-  width: 100%;
-
-  height: 2px;
-
-  background: #000000;
-
-  opacity: 0;
-
-  transition: opacity 0.25s;
-}
-
-.grid > article:hover::before,
-.grid > .step:hover::before {
-  opacity: 1;
-}
-
-.grid h3 {
-  color: #000000;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 21px;
-
-  font-weight: 500;
-}
-
-.grid p {
-  color: #666666;
-
-  font-size: 14px;
-}
-
-/* =========================================================
-   PRODUCT STORE NAME
-   ========================================================= */
-
-.grid article > div {
-  color: #000000;
-}
-
-/* =========================================================
-   PRICE
-   ========================================================= */
-
-.grid strong {
-  color: #000000;
-
-  font-size: 18px;
-}
-
-/* =========================================================
-   STOCK
-   ========================================================= */
-
-.grid small {
-  color: #777777;
-}
-
-/* =========================================================
-   PRODUCT IMAGE
-   ========================================================= */
-
-.pic {
-  width: 100%;
-
-  height: 220px;
-
-  overflow: hidden;
-
-  margin-bottom: 20px;
-
-  background: #f5f5f5;
-
-  border-radius: 4px;
-}
-
-.pic img {
-  width: 100%;
-
-  height: 100%;
-
-  display: block;
-
-  object-fit: cover;
-
-  transition: transform 0.4s;
-}
-
-.grid article:hover .pic img {
-  transform: scale(1.04);
-}
-
-/* =========================================================
-   CATEGORIES
-   ========================================================= */
-
-.categories {
-  padding: 80px 6%;
-
-  background: #f7f7f7;
-
-  color: #000000;
-
-  border-top: 1px solid #dddddd;
-
-  border-bottom: 1px solid #dddddd;
-}
-
-.section-title {
-  margin-bottom: 35px;
-}
-
-.category-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      4,
-      1fr
-    );
-
-  gap: 18px;
-}
-
-.category-card {
-  min-height: 190px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: flex-start;
-
-  justify-content: flex-end;
-
-  padding: 25px;
-
-  text-align: left;
-
-  color: #000000;
-
-  background: #ffffff;
-
-  border: 1px solid #dddddd;
-
-  border-radius: 5px;
-
-  transition:
-    transform 0.25s,
-    border-color 0.25s,
-    background 0.25s;
-}
-
-.category-card span {
-  margin-bottom: auto;
-
-  font-size: 34px;
-
-  filter: grayscale(100%);
-}
-
-.category-card strong {
-  color: #000000;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 22px;
-
-  font-weight: 500;
-}
-
-.category-card small {
-  margin-top: 4px;
-
-  color: #777777;
-}
-
-.category-card:hover {
-  transform: translateY(-5px);
-
-  border-color: #000000;
-
-  background: #f5f5f5;
-}
-
-.category-card:hover strong {
-  color: #000000;
-}
-
-/* =========================================================
-   HOW IT WORKS
-   ========================================================= */
-
-.how-it-works {
-  padding: 90px 6%;
-
-  background: #ffffff;
-
-  color: #000000;
-}
-
-.steps {
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      3,
-      1fr
-    );
-
-  gap: 25px;
-}
-
-.step {
-  position: relative;
-
-  padding: 30px;
-
-  background: #ffffff;
-
-  border: 1px solid #dddddd;
-
-  border-radius: 5px;
-}
-
-.step > span {
-  display: inline-block;
-
-  margin-bottom: 20px;
-
-  color: #000000;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 32px;
-}
-
-.step h3 {
-  color: #000000;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 22px;
-
-  font-weight: 500;
-}
-
-.step p {
-  margin-top: 10px;
-
-  color: #666666;
-
-  font-size: 14px;
-}
-
-/* =========================================================
-   CUSTOMER SERVICES
-   ========================================================= */
-
-.services {
-  padding: 40px 6%;
-
-  display: flex;
-
-  justify-content: center;
-
-  gap: 12px;
-
-  background: #f7f7f7;
-
-  border-top: 1px solid #dddddd;
-}
-
-.services button {
-  min-height: 44px;
-
-  padding: 0 22px;
-
-  color: #000000;
-
-  background: #ffffff;
-
-  border: 1px solid #000000;
-
-  border-radius: 3px;
-
-  transition: 0.2s;
-}
-
-.services button:hover {
-  color: #ffffff;
-
-  border-color: #000000;
-
-  background: #000000;
-}
-
-/* =========================================================
-   CART DRAWER
-   ========================================================= */
-
-.drawer {
-  position: fixed;
-
-  z-index: 2000;
-
-  top: 0;
-
-  right: 0;
-
-  width: min(420px, 92vw);
-
-  height: 100vh;
-
-  padding: 30px;
-
-  overflow-y: auto;
-
-  background: #ffffff;
-
-  color: #000000;
-
-  border-left: 1px solid #000000;
-
-  box-shadow:
-    -20px 0 60px rgba(0, 0, 0, 0.18);
-
-  transform: translateX(100%);
-
-  transition:
-    transform 0.3s ease;
-}
-
-.drawer.open {
-  transform: translateX(0);
-}
-
-.drawer .close {
-  position: absolute;
-
-  top: 18px;
-
-  right: 20px;
-
-  width: 35px;
-
-  height: 35px;
-
-  color: #000000;
-
-  background: #ffffff;
-
-  border: 1px solid #000000;
-
-  border-radius: 3px;
-}
-
-.drawer .close:hover {
-  color: #ffffff;
-
-  background: #000000;
-
-  border-color: #000000;
-}
-
-.drawer h2 {
-  margin-top: 30px;
-
-  margin-bottom: 25px;
-
-  color: #000000;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 30px;
-
-  font-weight: 500;
-}
-
-#cartItems {
-  color: #333333;
-}
-
-#cartItems > div {
-  padding: 15px 0;
-
-  border-bottom: 1px solid #dddddd;
-}
-
-.total {
-  margin-top: 25px;
-
-  padding: 20px 0;
-
-  color: #666666;
-
-  border-top: 1px solid #dddddd;
-}
-
-#total {
-  color: #000000;
-
-  font-size: 22px;
-
-  font-weight: 700;
-}
-
-.clear-cart,
-.checkout {
-  width: 100%;
-
-  min-height: 46px;
-
-  margin-top: 10px;
-
-  border-radius: 3px;
-
-  font-weight: 700;
-}
-
-.clear-cart {
-  color: #000000;
-
-  background: #ffffff;
-
-  border: 1px solid #000000;
-}
-
-.clear-cart:hover {
-  color: #ffffff;
-
-  background: #000000;
-
-  border-color: #000000;
-}
-
-.checkout {
-  color: #ffffff;
-
-  background: #000000;
-
-  border: 1px solid #000000;
-}
-
-.checkout:hover {
-  background: #222222;
-
-  box-shadow:
-    0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-/* =========================================================
-   FOOTER
-   ========================================================= */
-
-.zyre-footer {
-  padding: 60px 6% 25px;
-
-  background: #000000;
-
-  color: #ffffff;
-
-  border-top: 1px solid #000000;
-}
-
-.footer-brand strong {
-  display: block;
-
-  color: #ffffff;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 32px;
-
-  letter-spacing: 7px;
-}
-
-.footer-brand span {
-  color: #ffffff;
-
-  font-size: 8px;
-
-  font-weight: 700;
-
-  letter-spacing: 5px;
-}
-
-.footer-brand p {
-  margin-top: 15px;
-
-  color: #aaaaaa;
-
-  font-size: 13px;
-}
-
-.footer-links {
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 10px;
-
-  margin-top: 30px;
-}
-
-.footer-links button {
-  padding: 8px 14px;
-
-  color: #aaaaaa;
-
-  background: transparent;
-
-  border: none;
-
-  font-size: 13px;
-}
-
-.footer-links button:hover {
-  color: #ffffff;
-}
-
-.footer-bottom {
-  margin-top: 35px;
-
-  padding-top: 20px;
-
-  color: #777777;
-
-  border-top: 1px solid #333333;
-
-  font-size: 12px;
-}
-
-/* =========================================================
-   RESPONSIVE — TABLET
-   ========================================================= */
-
-@media (max-width: 1000px) {
-
-  .hero {
-    padding: 70px 6%;
-  }
-
-  .hero-mark {
-    width: 250px;
-
-    height: 250px;
-  }
-
-  .hero-z {
-    font-size: 110px;
-  }
-
-  .category-grid {
-    grid-template-columns:
-      repeat(
-        2,
-        1fr
-      );
-  }
-
-  .steps {
-    grid-template-columns:
-      1fr;
-  }
-}
-
-/* =========================================================
-   RESPONSIVE — MOBILE
-   ========================================================= */
-
-@media (max-width: 700px) {
-
-  /* HEADER */
-
-  .zyre-header {
-    min-height: auto;
-
-    display: grid;
-
-    grid-template-columns: 1fr auto;
-
-    gap: 12px;
-
-    padding: 15px;
-  }
-
-  .brand {
-    min-width: 0;
-  }
-
-  .brand-main {
-    font-size: 24px;
-
-    letter-spacing: 5px;
-  }
-
-  .brand-sub {
-    font-size: 7px;
-
-    letter-spacing: 4px;
-  }
-
-  .header-search {
-    grid-column: 1 / -1;
-
-    max-width: none;
-
-    width: 100%;
-  }
-
-  .cart-button {
-    min-width: 95px;
-  }
-
-  /* NAV */
-
-  .zyre-nav {
-    justify-content: flex-start;
-
-    overflow-x: auto;
-
-    padding: 8px 10px;
-
-    scrollbar-width: none;
-  }
-
-  .zyre-nav::-webkit-scrollbar {
-    display: none;
-  }
-
-  .zyre-nav button {
-    flex-shrink: 0;
-
-    padding: 8px 15px;
-  }
-
-  /* HERO */
-
-  .hero {
-    min-height: auto;
-
-    padding: 65px 22px;
-
-    display: block;
-  }
-
-  .hero h1 {
-    font-size: 52px;
-  }
-
-  .hero-text {
-    font-size: 14px;
-  }
-
-  .hero-mark {
-    width: 190px;
-
-    height: 190px;
-
-    margin: 55px auto 0;
-
-    font-size: 13px;
-  }
-
-  .hero-z {
-    font-size: 80px;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-  }
-
-  .primary-button,
-  .secondary-button {
-    width: 100%;
-  }
-
-  /* SELLER */
-
-  .seller-banner {
-    padding: 40px 22px;
-
-    flex-direction: column;
-
-    align-items: flex-start;
-  }
-
-  .seller-banner h2 {
-    font-size: 27px;
-  }
-
-  .seller-banner > button {
-    width: 100%;
-  }
-
-  /* SECTIONS */
-
-  .marketplace,
-  .categories,
-  .how-it-works {
-    padding: 60px 20px;
-  }
-
-  .toolbar {
-    align-items: flex-start;
-
-    flex-direction: column;
-  }
-
-  .toolbar h2,
-  .section-title h2 {
-    font-size: 32px;
-  }
-
-  .toolbar select {
-    width: 100%;
-  }
-
-  /* GRIDS */
-
-  .grid {
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
       );
 
-    gap: 12px;
-  }
 
-  .grid > article,
-  .grid > .step {
-    padding: 16px;
-  }
+    /* =====================================================
+       STATE
+       ===================================================== */
 
-  .grid h3 {
-    font-size: 17px;
-  }
+    let accountType = "customer";
+    let authPanel = "signin";
 
-  .grid p {
-    font-size: 12px;
-  }
 
-  .pic {
-    height: 150px;
-  }
+    /* =====================================================
+       LOCAL STORAGE KEYS
+       ===================================================== */
 
-  /* CATEGORIES */
+    const ACCESS_TOKEN_KEY =
+      "zava_access_token";
 
-  .category-grid {
-    grid-template-columns:
-      repeat(
-        2,
-        1fr
+    const USER_ID_KEY =
+      "zava_user_id";
+
+    const SELLER_ID_KEY =
+      "zava_seller_id";
+
+    const SELLER_EMAIL_KEY =
+      "zava_seller_email";
+
+
+    /* =====================================================
+       HELPERS
+       ===================================================== */
+
+    function $(id) {
+      return document.getElementById(id);
+    }
+
+
+    function showMessage(message, type = "") {
+
+      const box = $("authMessage");
+
+      if (!box) {
+        return;
+      }
+
+      box.textContent = message;
+
+      box.className =
+        "auth-message show" +
+        (type ? " " + type : "");
+    }
+
+
+    function clearMessage() {
+
+      const box = $("authMessage");
+
+      if (!box) {
+        return;
+      }
+
+      box.textContent = "";
+
+      box.className =
+        "auth-message";
+    }
+
+
+    function setLoading(button, loadingText) {
+
+      if (!button) {
+        return () => {};
+      }
+
+      const originalText =
+        button.textContent;
+
+      button.disabled = true;
+
+      button.textContent =
+        loadingText;
+
+      return function restore() {
+
+        button.disabled = false;
+
+        button.textContent =
+          originalText;
+      };
+    }
+
+
+    /* =====================================================
+       NAVIGATION
+       ===================================================== */
+
+    function goHome() {
+
+      window.location.href =
+        "index.html";
+    }
+
+
+    function startSellerApplication() {
+
+      window.location.href =
+        "seller-auth.html";
+    }
+
+
+    function continueSellerApplication() {
+
+      localStorage.setItem(
+        "pendingSellerActions",
+        "continue"
       );
 
-    gap: 12px;
-  }
+      window.location.href =
+        "seller-auth.html";
+    }
 
-  .category-card {
-    min-height: 150px;
 
-    padding: 18px;
-  }
+    /* =====================================================
+       ACCOUNT TYPE
+       ===================================================== */
 
-  .category-card strong {
-    font-size: 18px;
-  }
+    function chooseAccountType(type) {
 
-  /* SERVICES */
+      accountType = type;
 
-  .services {
-    padding: 30px 20px;
+      clearMessage();
 
-    flex-direction: column;
-  }
+      const customerButton =
+        $("customerChoice");
 
-  .services button {
-    width: 100%;
-  }
+      const sellerButton =
+        $("sellerChoice");
 
-  /* FOOTER */
+      if (customerButton) {
 
-  .zyre-footer {
-    padding: 50px 20px 25px;
-  }
-}
+        customerButton.classList.toggle(
+          "active",
+          type === "customer"
+        );
 
-/* =========================================================
-   VERY SMALL PHONES
-   ========================================================= */
+      }
 
-@media (max-width: 400px) {
+      if (sellerButton) {
 
-  .hero h1 {
-    font-size: 44px;
-  }
+        sellerButton.classList.toggle(
+          "active",
+          type === "seller"
+        );
 
-  .grid {
-    grid-template-columns: 1fr;
-  }
+      }
 
-  .category-grid {
-    grid-template-columns: 1fr;
-  }
+      showAuthPanel(authPanel);
+    }
 
-  .pic {
-    height: 200px;
-  }
 
-  .brand-main {
-    font-size: 21px;
-  }
-}
+    /* =====================================================
+       AUTH PANEL
+       ===================================================== */
 
-/* =========================================================
-   SELECTION
-   ========================================================= */
+    function showAuthPanel(panel) {
 
-::selection {
-  color: #ffffff;
+      authPanel = panel;
 
-  background: #000000;
-}
+      clearMessage();
 
-/* =========================================================
-   ZYRE MOBILE SIDE MENU
-   ========================================================= */
+      const signInTab =
+        $("signInTab");
 
-.menu-button {
-  background: #000000;
+      const createTab =
+        $("createTab");
 
-  color: #ffffff;
+      if (signInTab) {
 
-  border: 1px solid #000000;
+        signInTab.classList.toggle(
+          "active",
+          panel === "signin"
+        );
 
-  border-radius: 8px;
+      }
 
-  padding: 10px 13px;
+      if (createTab) {
 
-  font-size: 22px;
+        createTab.classList.toggle(
+          "active",
+          panel === "create"
+        );
 
-  cursor: pointer;
+      }
 
-  min-width: 48px;
-}
 
-/* =========================================================
-   SIDE MENU
-   ========================================================= */
+      $("customerSigninPanel")
+        ?.classList.add("hidden");
 
-.zyre-menu {
-  position: fixed !important;
+      $("customerCreatePanel")
+        ?.classList.add("hidden");
 
-  top: 0;
+      $("sellerSigninPanel")
+        ?.classList.add("hidden");
 
-  right: 0;
+      $("sellerCreatePanel")
+        ?.classList.add("hidden");
 
-  width: 290px;
 
-  max-width: 86%;
+      if (
+        accountType === "customer" &&
+        panel === "signin"
+      ) {
 
-  height: 100vh;
+        $("customerSigninPanel")
+          ?.classList.remove("hidden");
 
-  background: #000000;
+      }
 
-  color: #ffffff;
 
-  z-index: 99999;
+      if (
+        accountType === "customer" &&
+        panel === "create"
+      ) {
 
-  padding: 0;
+        $("customerCreatePanel")
+          ?.classList.remove("hidden");
 
-  box-sizing: border-box;
+      }
 
-  box-shadow:
-    -10px 0 35px rgba(0, 0, 0, 0.35);
 
-  overflow-y: auto;
-}
+      if (
+        accountType === "seller" &&
+        panel === "signin"
+      ) {
 
-/* =========================================================
-   MENU HEADER
-   ========================================================= */
+        $("sellerSigninPanel")
+          ?.classList.remove("hidden");
 
-.zyre-menu-header {
-  display: flex;
+      }
 
-  align-items: center;
 
-  justify-content: space-between;
+      if (
+        accountType === "seller" &&
+        panel === "create"
+      ) {
 
-  min-height: 150px;
+        $("sellerCreatePanel")
+          ?.classList.remove("hidden");
 
-  padding: 20px;
+      }
 
-  box-sizing: border-box;
+    }
 
-  border-bottom: 1px solid #333333;
-}
 
-.zyre-menu-brand {
-  display: flex;
+    /* =====================================================
+       SAVE SESSION
+       ===================================================== */
 
-  align-items: center;
+    function saveSession(session, user) {
 
-  justify-content: center;
+      if (session?.access_token) {
 
-  flex: 1;
-}
+        localStorage.setItem(
+          ACCESS_TOKEN_KEY,
+          session.access_token
+        );
 
-.zyre-menu-logo {
-  display: block;
+      }
 
-  width: 175px;
+      if (user?.id) {
 
-  max-width: 78%;
+        localStorage.setItem(
+          USER_ID_KEY,
+          user.id
+        );
 
-  height: auto;
+      }
 
-  object-fit: contain;
-}
+      if (user?.email) {
 
-.zyre-menu-header strong {
-  font-size: 18px;
+        localStorage.setItem(
+          SELLER_EMAIL_KEY,
+          user.email
+        );
 
-  letter-spacing: 2px;
-}
+      }
 
-.zyre-menu-header button {
-  flex-shrink: 0;
+    }
 
-  background: transparent;
 
-  color: #ffffff;
+    /* =====================================================
+       CUSTOMER PROFILE
+       ===================================================== */
 
-  border: none;
+    async function saveCustomerProfile(
+      user,
+      fullName,
+      phone,
+      address
+    ) {
 
-  font-size: 25px;
+      const payload = {
 
-  cursor: pointer;
+        id: user.id,
 
-  padding: 5px;
-}
+        full_name:
+          fullName.trim(),
 
-/* =========================================================
-   MENU ITEMS
-   ========================================================= */
+        phone:
+          phone.trim(),
 
-.zyre-menu-items {
-  padding: 15px 14px;
-}
+        address:
+          address.trim(),
 
-.zyre-menu-items button {
-  display: flex;
+        role:
+          "customer"
 
-  align-items: center;
+      };
 
-  gap: 14px;
 
-  width: 100%;
+      const { error } =
+        await supabaseClient
+          .from("profiles")
+          .upsert(
+            payload,
+            {
+              onConflict: "id"
+            }
+          );
 
-  padding: 16px 14px;
 
-  margin: 5px 0;
+      if (error) {
 
-  background: transparent;
+        console.error(
+          "Customer profile error:",
+          error
+        );
 
-  color: #ffffff;
+        throw new Error(
+          "Your account was created, but your customer profile could not be saved."
+        );
 
-  border: none;
+      }
 
-  border-radius: 8px;
+    }
 
-  text-align: left;
 
-  font-size: 16px;
+    /* =====================================================
+       CUSTOMER SIGN IN
+       ===================================================== */
 
-  cursor: pointer;
+    $("customerSigninForm")
+      ?.addEventListener(
+        "submit",
+        async function(event) {
 
-  box-sizing: border-box;
-}
+          event.preventDefault();
 
-.zyre-menu-items button span:first-child {
-  width: 28px;
+          clearMessage();
 
-  min-width: 28px;
+          const email =
+            $("customerSigninEmail")
+              .value
+              .trim();
 
-  text-align: center;
+          const password =
+            $("customerSigninPassword")
+              .value;
 
-  font-size: 20px;
-}
 
-.zyre-menu-items button:hover {
-  background: #222222;
-}
+          if (!email || !password) {
 
-.zyre-menu-items button:active {
-  background: #333333;
-}
+            showMessage(
+              "Please enter your email and password.",
+              "error"
+            );
 
-/* =========================================================
-   MENU FOOTER
-   ========================================================= */
+            return;
+          }
 
-.zyre-menu-footer {
-  margin: 15px 20px 30px;
 
-  padding-top: 20px;
+          const button =
+            this.querySelector(
+              "button[type='submit']"
+            );
 
-  border-top: 1px solid #333333;
+          const restore =
+            setLoading(
+              button,
+              "Signing In..."
+            );
 
-  text-align: center;
-}
 
-.zyre-menu-footer span {
-  display: block;
+          try {
 
-  font-size: 12px;
+            const {
+              data,
+              error
+            } =
+              await supabaseClient.auth
+                .signInWithPassword({
+                  email,
+                  password
+                });
 
-  letter-spacing: 2px;
 
-  font-weight: bold;
-}
+            if (error) {
+              throw error;
+            }
 
-.zyre-menu-footer small {
-  display: block;
 
-  margin-top: 7px;
+            if (!data.session || !data.user) {
 
-  color: #aaaaaa;
+              throw new Error(
+                "Your account session could not be created."
+              );
 
-  font-size: 11px;
-}
+            }
 
-/* =========================================================
-   MENU BUTTON
-   ========================================================= */
 
-.menu-button:hover {
-  background: #222222;
-}
+            saveSession(
+              data.session,
+              data.user
+            );
 
-@media (max-width: 700px) {
 
-  .menu-button {
-    display: block;
-  }
+            localStorage.setItem(
+              "zyre_account_type",
+              "customer"
+            );
 
-  .zyre-menu {
-    width: 290px;
-  }
 
-  .zyre-menu-logo {
-    width: 165px;
-  }
-}
+            showMessage(
+              "Signed in successfully. Opening your account...",
+              "success"
+            );
 
-@media (min-width: 701px) {
 
-  .menu-button {
-    display: block;
-  }
-}
+            setTimeout(
+              function() {
+
+                window.location.href =
+                  "account.html";
+
+              },
+              500
+            );
+
+          }
+          catch (error) {
+
+            console.error(
+              "Customer sign in error:",
+              error
+            );
+
+            showMessage(
+              error.message ||
+              "Unable to sign in. Please check your details.",
+              "error"
+            );
+
+          }
+          finally {
+
+            restore();
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       CUSTOMER CREATE ACCOUNT
+       ===================================================== */
+
+    $("customerCreateForm")
+      ?.addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+          clearMessage();
+
+          const fullName =
+            $("customerFullName")
+              .value
+              .trim();
+
+          const email =
+            $("customerEmail")
+              .value
+              .trim();
+
+          const phone =
+            $("customerPhone")
+              .value
+              .trim();
+
+          const address =
+            $("customerAddress")
+              .value
+              .trim();
+
+          const password =
+            $("customerCreatePassword")
+              .value;
+
+
+          if (
+            !fullName ||
+            !email ||
+            !phone ||
+            !address ||
+            !password
+          ) {
+
+            showMessage(
+              "Please complete all required fields.",
+              "error"
+            );
+
+            return;
+          }
+
+
+          if (password.length < 6) {
+
+            showMessage(
+              "Your password must contain at least 6 characters.",
+              "error"
+            );
+
+            return;
+          }
+
+
+          const button =
+            this.querySelector(
+              "button[type='submit']"
+            );
+
+          const restore =
+            setLoading(
+              button,
+              "Creating Account..."
+            );
+
+
+          try {
+
+            const {
+              data,
+              error
+            } =
+              await supabaseClient.auth
+                .signUp({
+
+                  email,
+
+                  password,
+
+                  options: {
+
+                    data: {
+
+                      full_name:
+                        fullName,
+
+                      phone:
+                        phone,
+
+                      address:
+                        address,
+
+                      role:
+                        "customer"
+
+                    }
+
+                  }
+
+                });
+
+
+            if (error) {
+              throw error;
+            }
+
+
+            if (!data.user) {
+
+              throw new Error(
+                "Your account could not be created."
+              );
+
+            }
+
+
+            if (data.session) {
+
+              saveSession(
+                data.session,
+                data.user
+              );
+
+              await saveCustomerProfile(
+                data.user,
+                fullName,
+                phone,
+                address
+              );
+
+              localStorage.setItem(
+                "zyre_account_type",
+                "customer"
+              );
+
+
+              showMessage(
+                "Your account has been created successfully.",
+                "success"
+              );
+
+
+              setTimeout(
+                function() {
+
+                  window.location.href =
+                    "account.html";
+
+                },
+                700
+              );
+
+              return;
+            }
+
+
+            showMessage(
+              "Your account was created. Please check your email to confirm your account before signing in.",
+              "success"
+            );
+
+
+            showAuthPanel("signin");
+
+            $("customerSigninEmail").value =
+              email;
+
+          }
+          catch (error) {
+
+            console.error(
+              "Customer registration error:",
+              error
+            );
+
+            showMessage(
+              error.message ||
+              "Unable to create your account.",
+              "error"
+            );
+
+          }
+          finally {
+
+            restore();
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       SELLER SIGN IN
+       ===================================================== */
+
+    $("sellerSigninForm")
+      ?.addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+          clearMessage();
+
+          const email =
+            $("sellerSigninEmail")
+              .value
+              .trim();
+
+          const password =
+            $("sellerSigninPassword")
+              .value;
+
+
+          if (!email || !password) {
+
+            showMessage(
+              "Please enter your seller email and password.",
+              "error"
+            );
+
+            return;
+          }
+
+
+          const button =
+            this.querySelector(
+              "button[type='submit']"
+            );
+
+          const restore =
+            setLoading(
+              button,
+              "Signing In..."
+            );
+
+
+          try {
+
+            const {
+              data,
+              error
+            } =
+              await supabaseClient.auth
+                .signInWithPassword({
+
+                  email,
+
+                  password
+
+                });
+
+
+            if (error) {
+              throw error;
+            }
+
+
+            if (!data.session || !data.user) {
+
+              throw new Error(
+                "Your seller session could not be created."
+              );
+
+            }
+
+
+            saveSession(
+              data.session,
+              data.user
+            );
+
+
+            localStorage.setItem(
+              "zyre_account_type",
+              "seller"
+            );
+
+
+            const {
+              data: seller,
+              error: sellerError
+            } =
+              await supabaseClient
+                .from("sellers")
+                .select(
+                  "id, user_id, store_name, approved, status, email"
+                )
+                .eq(
+                  "user_id",
+                  data.user.id
+                )
+                .order(
+                  "id",
+                  {
+                    ascending: false
+                  }
+                )
+                .limit(1)
+                .maybeSingle();
+
+
+            if (sellerError) {
+
+              console.error(
+                "Seller lookup error:",
+                sellerError
+              );
+
+              throw new Error(
+                "Your seller account could not be checked."
+              );
+
+            }
+
+
+            if (!seller) {
+
+              localStorage.setItem(
+                "pendingSellerActions",
+                "continue"
+              );
+
+              window.location.href =
+                "seller-auth.html";
+
+              return;
+
+            }
+
+
+            localStorage.setItem(
+              SELLER_ID_KEY,
+              seller.id
+            );
+
+
+            localStorage.setItem(
+              SELLER_EMAIL_KEY,
+              data.user.email ||
+              email
+            );
+
+
+            if (
+              seller.approved === true &&
+              seller.status !== "seller_pending"
+            ) {
+
+              showMessage(
+                "Seller sign in successful. Opening Seller Centre...",
+                "success"
+              );
+
+
+              setTimeout(
+                function() {
+
+                  window.location.href =
+                    "seller.html";
+
+                },
+                500
+              );
+
+              return;
+
+            }
+
+
+            localStorage.setItem(
+              "pendingSellerActions",
+              "continue"
+            );
+
+
+            showMessage(
+              "Your seller application is still pending. Opening your seller application...",
+              "success"
+            );
+
+
+            setTimeout(
+              function() {
+
+                window.location.href =
+                  "seller-auth.html";
+
+              },
+              700
+            );
+
+          }
+          catch (error) {
+
+            console.error(
+              "Seller sign in error:",
+              error
+            );
+
+            showMessage(
+              error.message ||
+              "Unable to sign in as a seller.",
+              "error"
+            );
+
+          }
+          finally {
+
+            restore();
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       AUTH STATE
+       ===================================================== */
+
+    supabaseClient.auth.onAuthStateChange(
+      function(event, session) {
+
+        if (
+          session &&
+          session.user
+        ) {
+
+          saveSession(
+            session,
+            session.user
+          );
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       EXISTING SESSION CHECK
+       ===================================================== */
+
+    async function checkExistingSession() {
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient.auth
+            .getSession();
+
+
+        if (error) {
+
+          console.error(
+            "Session check error:",
+            error
+          );
+
+          return;
+
+        }
+
+
+        if (
+          data.session &&
+          data.session.user
+        ) {
+
+          saveSession(
+            data.session,
+            data.session.user
+          );
+
+        }
+
+      }
+      catch (error) {
+
+        console.error(
+          "Existing session error:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       INITIALISE
+       ===================================================== */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function() {
+
+        chooseAccountType(
+          "customer"
+        );
+
+        showAuthPanel(
+          "signin"
+        );
+
+        checkExistingSession();
+
+      }
+    );
+
+  </script></body>
+</html>
