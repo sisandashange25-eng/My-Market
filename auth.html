@@ -1,5 +1,4 @@
-<!DOCTYPE html><html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="UTF-8"><meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
@@ -18,10 +17,7 @@ content="noindex,nofollow"
 
 «»
 
-  <!-- IMPORTANT:
-       All styling comes from the existing style.css.
-       There is intentionally NO inline <style> block here.
-  -->  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
 </head><body class="zyre-auth-page">  <!-- =====================================================
        HEADER
        ===================================================== -->  <header class="auth-header"><div class="auth-brand">
@@ -65,9 +61,7 @@ content="noindex,nofollow"
 
 <section class="auth-card">
 
-  <!-- =================================================
-       CUSTOMER / SELLER
-       ================================================= -->
+  <!-- CUSTOMER / SELLER -->
 
   <div class="auth-choice">
 
@@ -92,9 +86,7 @@ content="noindex,nofollow"
   </div>
 
 
-  <!-- =================================================
-       SIGN IN / CREATE ACCOUNT
-       ================================================= -->
+  <!-- SIGN IN / CREATE ACCOUNT -->
 
   <div class="auth-tabs">
 
@@ -119,9 +111,7 @@ content="noindex,nofollow"
   </div>
 
 
-  <!-- =================================================
-       MESSAGE
-       ================================================= -->
+  <!-- MESSAGE -->
 
   <div
     id="authMessage"
@@ -737,24 +727,16 @@ content="noindex,nofollow"
 
 
       $("customerSigninPanel")
-        ?.classList.add(
-          "hidden"
-        );
+        ?.classList.add("hidden");
 
       $("customerCreatePanel")
-        ?.classList.add(
-          "hidden"
-        );
+        ?.classList.add("hidden");
 
       $("sellerSigninPanel")
-        ?.classList.add(
-          "hidden"
-        );
+        ?.classList.add("hidden");
 
       $("sellerCreatePanel")
-        ?.classList.add(
-          "hidden"
-        );
+        ?.classList.add("hidden");
 
 
       if (
@@ -763,9 +745,7 @@ content="noindex,nofollow"
       ) {
 
         $("customerSigninPanel")
-          ?.classList.remove(
-            "hidden"
-          );
+          ?.classList.remove("hidden");
 
       }
 
@@ -776,9 +756,7 @@ content="noindex,nofollow"
       ) {
 
         $("customerCreatePanel")
-          ?.classList.remove(
-            "hidden"
-          );
+          ?.classList.remove("hidden");
 
       }
 
@@ -789,9 +767,7 @@ content="noindex,nofollow"
       ) {
 
         $("sellerSigninPanel")
-          ?.classList.remove(
-            "hidden"
-          );
+          ?.classList.remove("hidden");
 
       }
 
@@ -802,9 +778,7 @@ content="noindex,nofollow"
       ) {
 
         $("sellerCreatePanel")
-          ?.classList.remove(
-            "hidden"
-          );
+          ?.classList.remove("hidden");
 
       }
 
@@ -1167,7 +1141,6 @@ content="noindex,nofollow"
                 .signUp(
                   {
                     email,
-
                     password,
 
                     options: {
@@ -1625,5 +1598,7 @@ content="noindex,nofollow"
       }
     );
 
-  </script></body>
+  </script>
+
+</body>
 </html>
