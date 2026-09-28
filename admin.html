@@ -6,6 +6,11 @@
 
 <title>ZYRE Marketing | Owner Control Centre</title>
 
+<meta
+  name="robots"
+  content="noindex,nofollow,noarchive,nosnippet"
+/>
+
 <style>
 *{box-sizing:border-box}
 
@@ -32,6 +37,11 @@ border:0;
 border-radius:8px;
 padding:10px 14px;
 font-weight:700
+}
+
+button:disabled{
+opacity:.6;
+cursor:not-allowed
 }
 
 .login-wrap{
@@ -84,11 +94,6 @@ background:#111;
 color:#fff;
 margin-top:8px;
 font-size:15px
-}
-
-.login-button:disabled{
-opacity:.6;
-cursor:not-allowed
 }
 
 .hidden{
@@ -286,7 +291,7 @@ z-index:9999
 
 .modal-box{
 background:#fff;
-width:min(650px,100%);
+width:min(700px,100%);
 max-height:90vh;
 overflow:auto;
 border-radius:16px;
@@ -337,13 +342,27 @@ gap:10px
 .detail{
 background:#f7f7f7;
 padding:12px;
-border-radius:8px
+border-radius:8px;
+overflow-wrap:anywhere
 }
 
 .detail strong{
 display:block;
 font-size:12px;
 color:#777;
+margin-bottom:5px
+}
+
+.private-detail{
+border-left:4px solid #111
+}
+
+.private-label{
+font-size:11px;
+font-weight:800;
+text-transform:uppercase;
+letter-spacing:.5px;
+color:#555;
 margin-bottom:5px
 }
 
@@ -403,6 +422,30 @@ background:#eee;
 color:#555
 }
 
+.status-verified{
+background:#e8f7ec;
+color:#087f23
+}
+
+.status-review{
+background:#fff4d6;
+color:#7a5500
+}
+
+.status-rejected{
+background:#fdeaea;
+color:#a00000
+}
+
+.security-note{
+background:#f1f1f1;
+border-radius:10px;
+padding:12px;
+margin-top:12px;
+font-size:13px;
+line-height:1.5
+}
+
 @media(max-width:1100px){
 .grid,
 .monitor{
@@ -453,6 +496,12 @@ flex-direction:column
 Sign in to your private ZYRE Marketing control centre.
 </p>
 
+<div class="security-note">
+🔒 Owner access is restricted to an authenticated ZYRE
+administrator account. Seller and customer accounts cannot
+access this control centre.
+</div>
+
 <form id="loginForm">
 
 <label for="email">
@@ -463,7 +512,7 @@ Owner email
 id="email"
 type="email"
 placeholder="Enter owner email"
-autocomplete="off"
+autocomplete="username"
 autocapitalize="none"
 spellcheck="false"
 required
@@ -477,7 +526,7 @@ Password
 id="password"
 type="password"
 placeholder="Enter your password"
-autocomplete="off"
+autocomplete="current-password"
 required
 >
 
@@ -635,7 +684,7 @@ class="panel active"
 
 <div class="card">
 <h3>👥 Seller System</h3>
-<p>Monitor applications, approvals and seller records.</p>
+<p>Monitor applications, identity verification, approvals and seller records.</p>
 </div>
 
 <div class="card">
@@ -698,13 +747,13 @@ Loading...
 <b>Owner responsibility:</b>
 
 <p>
-Monitor seller applications, seller accounts,
-stores, products, payments and seller activity.
+Monitor seller applications, identity verification,
+seller accounts, stores, products, payments and activity.
 </p>
 
 <p>
 Sellers manage their own customer orders.
-The Owner monitors the company data.
+The Owner monitors company data.
 </p>
 
 </div>
@@ -726,6 +775,7 @@ The Owner monitors the company data.
 <th>Store</th>
 <th>Email</th>
 <th>Category</th>
+<th>Identity</th>
 <th>Status</th>
 <th>Approved</th>
 <th>Products</th>
@@ -1099,8 +1149,10 @@ const SUPABASE_KEY =
 
 let accessToken = null;
 let adminUserId = null;
+let adminEmail = null;
 
 let sellerMap = {};
+let verificationMap = {};
 
 let sellersData = [];
 let productsData = [];
@@ -1153,6 +1205,65 @@ const d=new Date(v);
 return Number.isNaN(d.getTime())
 ?esc(v)
 :d.toLocaleString();
+
+}
+
+
+function verificationStatusLabel(status){
+
+const value=
+String(status||"pending")
+.trim()
+.toLowerCase();
+
+
+if(
+value==="verified" ||
+value==="approved"
+){
+
+return `
+<span class="status-badge status-verified">
+Verified
+</span>
+`;
+
+}
+
+
+if(
+value==="rejected" ||
+value==="failed"
+){
+
+return `
+<span class="status-badge status-rejected">
+Rejected
+</span>
+`;
+
+}
+
+
+if(
+value==="review" ||
+value==="under_review"
+){
+
+return `
+<span class="status-badge status-review">
+Under Review
+</span>
+`;
+
+}
+
+
+return `
+<span class="status-badge status-pending">
+Pending
+</span>
+`;
 
 }
 
@@ -1286,7 +1397,7 @@ data.length===0
 ){
 
 throw new Error(
-"Owner profile was not found. Make sure your account has a row in the profiles table."
+"Owner profile was not found."
 );
 
 }
@@ -1305,13 +1416,38 @@ profile.role || ""
 if(role!=="admin"){
 
 throw new Error(
-"This account is not authorised as a ZYRE owner. Your profile role must be admin."
+"This account is not authorised as a ZYRE owner."
 );
 
 }
 
 
 return profile;
+
+}
+
+
+async function verifyCurrentOwner(){
+
+if(
+!accessToken ||
+!adminUserId
+){
+
+throw new Error(
+"Owner session is not active."
+);
+
+}
+
+
+await verifyOwnerProfile(
+adminUserId,
+accessToken
+);
+
+
+return true;
 
 }
 
@@ -1493,6 +1629,10 @@ data.access_token;
 adminUserId=
 data.user.id;
 
+adminEmail=
+data.user.email ||
+email;
+
 
 await verifyOwnerProfile(
 adminUserId,
@@ -1511,10 +1651,11 @@ document
 document
 .getElementById("ownerEmail")
 .textContent=
-email;
+adminEmail;
 
 
 msg.textContent="";
+
 
 try{
 
@@ -1546,6 +1687,8 @@ error
 accessToken=null;
 
 adminUserId=null;
+
+adminEmail=null;
 
 document
 .getElementById("adminPanel")
@@ -1580,7 +1723,10 @@ accessToken=null;
 
 adminUserId=null;
 
+adminEmail=null;
+
 sellerMap={};
+verificationMap={};
 
 sellersData=[];
 productsData=[];
@@ -1611,6 +1757,14 @@ document
 document
 .getElementById("loginMessage")
 .textContent="";
+
+document
+.getElementById("sellerModal")
+.classList.add("hidden");
+
+document
+.getElementById("storeModal")
+.classList.add("hidden");
 
 document
 .getElementById("email")
@@ -1648,9 +1802,13 @@ btn.classList.add("active");
 
 async function loadDashboard(){
 
+await verifyCurrentOwner();
+
 await loadSellers();
 
 await loadSellerMap();
+
+await loadVerifications();
 
 await Promise.all([
 
@@ -1690,7 +1848,42 @@ x.store_name ||
 
 }catch(e){
 
-console.error(e);
+console.error(
+"Seller map error:",
+e
+);
+
+}
+
+}
+
+
+async function loadVerifications(){
+
+try{
+
+const rows=await api(
+"/rest/v1/seller_verification?select=*"
+);
+
+verificationMap={};
+
+(rows||[]).forEach(row=>{
+
+verificationMap[
+String(row.seller_id)
+]=row;
+
+});
+
+}catch(e){
+
+verificationMap={};
+
+console.error(
+"Verification loading error:",
+e
+);
 
 }
 
@@ -1906,7 +2099,7 @@ const tb=
 document.getElementById("sellersTable");
 
 tb.innerHTML=
-'<tr><td colspan="12">Loading sellers...</td></tr>';
+'<tr><td colspan="13">Loading sellers...</td></tr>';
 
 
 try{
@@ -2005,12 +2198,6 @@ if(ordersData.length){
 
 try{
 
-/*
-FIXED:
-Actual table = order_items
-Actual column = product_id
-*/
-
 const items=await api(
 "/rest/v1/order_items?select=order_id,product_id,quantity"
 );
@@ -2100,7 +2287,7 @@ e
 if(!sellersData.length){
 
 tb.innerHTML=
-'<tr><td colspan="12">No sellers found.</td></tr>';
+'<tr><td colspan="13">No sellers found.</td></tr>';
 
 return;
 
@@ -2130,6 +2317,21 @@ const orderCount=
 sellerOrderCounts[String(x.id)]||0;
 
 
+const verification=
+verificationMap[String(x.id)];
+
+
+const verificationState=
+verification
+?
+String(
+verification.id_verification_status||"pending"
+)
+.toLowerCase()
+:
+"pending";
+
+
 return `
 
 <tr>
@@ -2153,6 +2355,12 @@ x.name ||
 <td>${esc(x.email||"-")}</td>
 
 <td>${esc(x.category||"-")}</td>
+
+<td>
+${verificationStatusLabel(
+verificationState
+)}
+</td>
 
 <td>${sellerStatusLabel(x)}</td>
 
@@ -2230,7 +2438,7 @@ Approve
 }catch(e){
 
 tb.innerHTML=
-'<tr><td colspan="12">Could not load sellers.</td></tr>';
+'<tr><td colspan="13">Could not load sellers.</td></tr>';
 
 console.error(e);
 
@@ -2282,11 +2490,6 @@ String(p.id)
 
 (orderItemsData||[])
 .forEach(item=>{
-
-/*
-FIXED:
-Actual column = product_id
-*/
 
 const productId=
 item.product_id ??
@@ -2504,11 +2707,6 @@ async function loadOrderItems(){
 
 try{
 
-/*
-FIXED:
-Actual table = order_items
-*/
-
 orderItemsData=
 await api(
 "/rest/v1/order_items?select=*"
@@ -2568,11 +2766,6 @@ const storeOrderIds=new Set();
 (orderItemsData||[])
 .forEach(item=>{
 
-/*
-FIXED:
-Actual column = product_id
-*/
-
 const productId=
 item.product_id ??
 item.Product_id;
@@ -2631,6 +2824,10 @@ const active=
 store.approved===true &&
 String(store.status||"")
 .toLowerCase()!=="seller_disabled";
+
+
+const verification=
+verificationMap[storeId];
 
 
 const details=
@@ -2707,6 +2904,19 @@ ${esc(store.category||"-")}
 </div>
 
 <div class="detail">
+<strong>Identity Verification</strong>
+${
+verificationStatusLabel(
+verification
+?
+verification.id_verification_status
+:
+"pending"
+)
+}
+</div>
+
+<div class="detail">
 <strong>Products</strong>
 ${storeProducts.length}
 </div>
@@ -2743,11 +2953,6 @@ ${esc(store.description||"-")}
 </div>
 
 <div class="detail">
-<strong>Residential Address</strong>
-${esc(store.residential_address||"-")}
-</div>
-
-<div class="detail">
 <strong>Business Address</strong>
 ${esc(store.business_address||"-")}
 </div>
@@ -2764,6 +2969,30 @@ store.store_image_url
 </div>
 
 </div>
+
+
+${
+verification
+?
+`
+<div class="security-note">
+🔒 <strong>Private identity record</strong><br>
+Identity verification status:
+${verificationStatusLabel(
+verification.id_verification_status
+)}
+<br>
+Reviewed:
+${dateText(verification.reviewed_at)}
+</div>
+`
+:
+`
+<div class="security-note">
+🔒 No identity verification record was found for this seller.
+</div>
+`
+}
 
 
 <div class="store-products">
@@ -2901,11 +3130,48 @@ document
 
 async function approveSeller(id){
 
-if(!confirm("Approve this seller?"))
+if(!confirm(
+"Approve this seller?\n\n"+
+"Only approve after the required identity review has been completed."
+))
 return;
 
 
 try{
+
+await verifyCurrentOwner();
+
+
+const verification=
+verificationMap[String(id)];
+
+
+const verificationState=
+verification
+?
+String(
+verification.id_verification_status||"pending"
+)
+.toLowerCase()
+.trim()
+:
+"pending";
+
+
+if(
+verificationState!=="verified" &&
+verificationState!=="approved"
+){
+
+alert(
+"Seller cannot be approved yet.\n\n"+
+"Identity verification must be completed first."
+);
+
+return;
+
+}
+
 
 await api(
 "/rest/v1/sellers?id=eq."+
@@ -2955,6 +3221,9 @@ return;
 
 
 try{
+
+await verifyCurrentOwner();
+
 
 await api(
 "/rest/v1/sellers?id=eq."+
@@ -3012,6 +3281,10 @@ return;
 }
 
 
+const verification=
+verificationMap[String(seller.id)];
+
+
 const ok=
 seller.approved===true &&
 String(seller.status||"")
@@ -3053,11 +3326,6 @@ const sellerOrders=new Set();
 
 (orderItemsData||[])
 .forEach(item=>{
-
-/*
-FIXED:
-Actual column = product_id
-*/
 
 const productId=
 item.product_id ??
@@ -3180,6 +3448,19 @@ ${sellerStatusLabel(seller)}
 </div>
 
 <div class="detail">
+<strong>Identity Verification</strong>
+${
+verificationStatusLabel(
+verification
+?
+verification.id_verification_status
+:
+"pending"
+)
+}
+</div>
+
+<div class="detail">
 <strong>Products</strong>
 ${productCount}
 </div>
@@ -3192,11 +3473,6 @@ ${sellerOrders.size}
 <div class="detail">
 <strong>Store Created</strong>
 ${dateText(seller.created_at)}
-</div>
-
-<div class="detail">
-<strong>Residential Address</strong>
-${esc(seller.residential_address||"-")}
 </div>
 
 <div class="detail">
@@ -3221,6 +3497,119 @@ seller.store_image_url
 </div>
 
 </div>
+
+
+${
+verification
+?
+`
+
+<div class="security-note">
+
+🔒 <strong>PRIVATE IDENTITY VERIFICATION</strong>
+
+<p>
+This information is retrieved from the protected
+seller verification record and is visible only
+inside the authenticated Owner Control Centre.
+</p>
+
+<div class="detail-grid">
+
+<div class="detail private-detail">
+<div class="private-label">
+Private identity
+</div>
+<strong>Legal Name</strong>
+${esc(
+verification.legal_name ||
+"-"
+)}
+</div>
+
+<div class="detail private-detail">
+<div class="private-label">
+Private identity
+</div>
+<strong>SA ID Number</strong>
+${esc(
+verification.id_number ||
+"-"
+)}
+</div>
+
+<div class="detail private-detail">
+<div class="private-label">
+Private identity
+</div>
+<strong>Residential Address</strong>
+${esc(
+verification.residential_address ||
+"-"
+)}
+</div>
+
+<div class="detail">
+<strong>Verification Status</strong>
+${verificationStatusLabel(
+verification.id_verification_status
+)}
+</div>
+
+<div class="detail">
+<strong>Verification Provider</strong>
+${esc(
+verification.verification_provider ||
+"Not connected"
+)}
+</div>
+
+<div class="detail">
+<strong>Verification Reference</strong>
+${esc(
+verification.verification_reference ||
+"-"
+)}
+</div>
+
+<div class="detail">
+<strong>Reviewed At</strong>
+${dateText(
+verification.reviewed_at
+)}
+</div>
+
+<div class="detail">
+<strong>Rejection Reason</strong>
+${esc(
+verification.rejection_reason ||
+"-"
+)}
+</div>
+
+</div>
+
+</div>
+
+`
+:
+`
+
+<div class="security-note">
+
+🔒 <strong>Identity record unavailable</strong>
+
+<p>
+No seller verification record was found for this seller.
+Do not approve the seller until the required identity
+verification process has been completed.
+
+</p>
+
+</div>
+
+`
+}
 
 
 <div class="modal-actions">
@@ -3517,8 +3906,7 @@ console.error(e);
 
 /* =========================================================
    PAYMENTS
-   FIXED FOR YOUR ACTUAL DATABASE COLUMNS
-
+   Actual database columns:
    amount
    zyre_commission
    seller_amount
@@ -3567,19 +3955,11 @@ x.amount ?? 0
 );
 
 
-/* FIX:
-   Your database column is zyre_commission
-*/
-
 const c=
 Number(
 x.zyre_commission ?? 0
 );
 
-
-/* FIX:
-   Your database already stores seller_amount
-*/
 
 const sa=
 Number(
@@ -3792,6 +4172,9 @@ return;
 
 try{
 
+await verifyCurrentOwner();
+
+
 await api(
 "/rest/v1/rpc/process_seller_payout",
 {
@@ -3829,13 +4212,15 @@ document
 .getElementById("recentActivity")
 .innerHTML=
 
-"<p>👥 Seller applications and approvals are monitored here.</p>"+
+"<p>👥 Seller applications, identity verification and approvals are monitored here.</p>"+
 
 "<p>🏪 Store and product activity is monitored across ZYRE.</p>"+
 
 "<p>📦 Sellers manage customer orders; the Owner monitors company order data.</p>"+
 
-"<p>💳 Payments, commission, rentals and seller payouts are monitored here.</p>";
+"<p>💳 Payments, commission, rentals and seller payouts are monitored here.</p>"+
+
+"<p>🔒 Private seller identity information is stored separately from public seller/store information.</p>";
 
 }
 
@@ -3846,6 +4231,7 @@ function(){
 
 accessToken=null;
 adminUserId=null;
+adminEmail=null;
 
 const loginForm=
 document.getElementById("loginForm");
