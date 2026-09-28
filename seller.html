@@ -1,30 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 
-<head>
+«»
 
-<meta charset="UTF-8">
+<title>ZYRE Marketing | Seller Dashboard</title><meta
+name="description"
+content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications."
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<title>ZYRE Marketing | Seller Dashboard</title>
+«»
 
 <meta
-  name="description"
-  content="ZYRE Marketing seller dashboard for managing products, customer orders, deliveries and seller notifications."
->
+name="robots"
+content="noindex,nofollow"
 
-<meta
-  name="robots"
-  content="noindex,nofollow"
->
+«»
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 
 window.ZYRE_SUPABASE_READY =
   new Promise(function(resolve, reject){
@@ -92,10 +84,7 @@ window.ZYRE_SUPABASE_READY =
 
   });
 
-</script>
-
-
-<style>
+</script><style>
 
 *{
   box-sizing:border-box;
@@ -495,11 +484,6 @@ textarea{
   display:none;
 }
 
-
-/* =====================================================
-   DELIVERY INFORMATION
-===================================================== */
-
 .delivery-info{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -548,11 +532,6 @@ textarea{
   margin-top:14px;
 }
 
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
 @media(max-width:850px){
 
   .grid{
@@ -568,7 +547,6 @@ textarea{
   }
 
 }
-
 
 @media(max-width:600px){
 
@@ -594,813 +572,441 @@ textarea{
 
 }
 
-</style>
-
-</head>
-
-
-<body>
-
-
-<div
+</style></head><body><div
   id="rentalLoading"
   class="loading"
->
-
-<strong>
+><strong>
 Checking Store Rental
-</strong>
+</strong><br><br>
 
-<br><br>
+Please wait while ZYRE Marketing checks your seller approval
+and current store rental.
 
-Please wait while ZYRE Marketing checks your current monthly store rental.
-
-</div>
-
-
-<div
+</div><div
   id="rentalLock"
   class="hidden"
->
-
-<main>
-
-<div class="lock-box">
-
-<h2>
+><main><div class="lock-box"><h2 id="lockTitle">
 🔒 Store Temporarily Locked
-</h2>
+</h2><p id="lockMessage">
+Your ZYRE Marketing seller account cannot access the Seller Centre yet.
+</p><p id="lockPaymentMessage">
+</p><button
+id="lockPayButton"
+class="btn-gold"
+onclick="payRental()"
 
-<p>
-Your ZYRE Marketing store rental for this month
-has not been confirmed.
-</p>
+«»
 
-<p>
-Pay the monthly rental of
-<strong>R100</strong>
-to unlock your seller dashboard.
-</p>
-
-<button
-  class="btn-gold"
-  onclick="payRental()"
->
 💳 Pay R100 Rental
 </button>
 
 <br><br>
 
 <button
-  class="btn-black"
-  onclick="checkRentalAgain()"
->
-🔄 Check Payment Again
+class="btn-black"
+onclick="checkRentalAgain()"
+
+«»
+
+🔄 Check Again
 </button>
 
-</div>
+<br><br>
 
-</main>
+<button
+class="btn-white"
+onclick="logoutSeller()"
 
-</div>
+«»
 
+Log Out
+</button>
 
-<div
+</div></main></div><div
   id="dashboard"
   class="hidden"
->
-
-<main>
-
-
-<section class="card welcome">
-
-<h1>
+><main><section class="card welcome"><h1>
 Welcome,
 <span id="sellerName">
 Seller
 </span>
-</h1>
-
-<p>
+</h1><p>
 Store:
 <strong id="sellerStoreName">
 ZYRE
 </strong>
-</p>
-
-<p>
+</p><p>
 Manage your products, orders,
 deliveries and store.
-</p>
+</p><span
+id="rentalPaidBadge"
+class="rental-paid"
 
-<span
-  id="rentalPaidBadge"
-  class="rental-paid"
->
+«»
+
 ✓ Rental Paid
 </span>
 
-</section>
-
-
-<section class="card">
-
-<h2>
+</section><section class="card"><h2>
 🔔 Notifications
-</h2>
-
-<div id="notificationsPreview">
-
-<div class="empty">
+</h2><div id="notificationsPreview"><div class="empty">
 No new notifications.
-</div>
-
-</div>
-
-</section>
-
-
-<section class="grid">
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div></section><section class="grid"><div class="stat"><div class="stat-label">
 Products
-</div>
-
-<div
+</div><div
   class="stat-number"
   id="productCount"
 >
 0
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div><div class="stat"><div class="stat-label">
 Orders
-</div>
-
-<div
+</div><div
   class="stat-number"
   id="orderCount"
 >
 0
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div><div class="stat"><div class="stat-label">
 Sales
-</div>
-
-<div
+</div><div
   class="stat-number"
   id="salesTotal"
 >
 R0.00
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div><div class="stat"><div class="stat-label">
 Rental
-</div>
-
-<div
+</div><div
   class="stat-number"
   style="font-size:20px"
+  id="rentalStat"
 >
 PAID
-</div>
+</div></div></section><br><div class="nav"><button
+class="active"
+onclick="showPanel('overview',this)"
 
-</div>
+«»
 
-
-</section>
-
-
-<br>
-
-
-<div class="nav">
-
-
-<button
-  class="active"
-  onclick="showPanel('overview',this)"
->
 📊 Overview
 </button>
 
-
 <button
-  onclick="showPanel('products',this)"
->
+onclick="showPanel('products',this)"
+
+«»
+
 🛍️ Products
 </button>
 
-
 <button
-  onclick="showPanel('orders',this)"
->
+onclick="showPanel('orders',this)"
+
+«»
+
 📦 Orders
 </button>
 
-
 <button
-  onclick="showPanel('delivery',this)"
->
+onclick="showPanel('delivery',this)"
+
+«»
+
 🚚 Delivery
 </button>
 
-
 <button
-  onclick="showPanel('rental',this)"
->
+onclick="showPanel('rental',this)"
+
+«»
+
 💳 Store Rental
 </button>
 
-
 <button
-  onclick="showPanel('notifications',this)"
->
+onclick="showPanel('notifications',this)"
+
+«»
+
 🔔 Notifications
 </button>
 
-
 <button
-  onclick="showPanel('sellerInfo',this)"
->
+onclick="showPanel('sellerInfo',this)"
+
+«»
+
 👤 Seller Information
 </button>
 
-
-</div>
-
-
-<section
+</div><section
   id="overview"
   class="panel active"
->
-
-<div class="card">
-
-<h2>
+><div class="card"><h2>
 📊 Dashboard Overview
-</h2>
-
-<p>
+</h2><p>
 Welcome to your ZYRE Marketing
 seller control centre.
-</p>
-
-<p>
+</p><p>
 From here you can manage your products,
 customer orders, delivery information
 and store rental.
-</p>
-
-</div>
-
-
-<div class="grid">
-
-
-<div class="stat">
-
-<div class="stat-label">
+</p></div><div class="grid"><div class="stat"><div class="stat-label">
 Pending Orders
-</div>
-
-<div
+</div><div
   id="pendingCount"
   class="stat-number"
 >
 0
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div><div class="stat"><div class="stat-label">
 Processing
-</div>
-
-<div
+</div><div
   id="processingCount"
   class="stat-number"
 >
 0
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div><div class="stat"><div class="stat-label">
 Shipped
-</div>
-
-<div
+</div><div
   id="shippedCount"
   class="stat-number"
 >
 0
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-label">
+</div></div><div class="stat"><div class="stat-label">
 Delivered
-</div>
-
-<div
+</div><div
   id="deliveredCount"
   class="stat-number"
 >
 0
-</div>
-
-</div>
-
-
-</div>
-
-</section>
-
-
-<section
+</div></div></div></section><section
   id="products"
   class="panel"
->
-
-
-<div class="card">
-
-<h2>
+><div class="card"><h2>
 ➕ Add Product
-</h2>
-
-
-<form id="productForm">
-
-
-<div class="form-grid">
-
-
-<div class="form-group">
-
-<label>
+</h2><form id="productForm"><div class="form-grid"><div class="form-group"><label>
 Product Name
-</label>
+</label><input
+id="productName"
+type="text"
+required
+placeholder="Product name"
 
-<input
-  id="productName"
-  type="text"
-  required
-  placeholder="Product name"
->
+«»
 
-</div>
-
-
-<div class="form-group">
-
-<label>
+</div><div class="form-group"><label>
 Price
-</label>
+</label><input
+id="productPrice"
+type="number"
+step="0.01"
+min="0"
+required
+placeholder="299.00"
 
-<input
-  id="productPrice"
-  type="number"
-  step="0.01"
-  min="0"
-  required
-  placeholder="299.00"
->
+«»
 
-</div>
-
-
-<div class="form-group">
-
-<label>
+</div><div class="form-group"><label>
 Stock
-</label>
+</label><input
+id="productStock"
+type="number"
+min="0"
+required
+placeholder="20"
 
-<input
-  id="productStock"
-  type="number"
-  min="0"
-  required
-  placeholder="20"
->
+«»
 
-</div>
-
-
-<div class="form-group">
-
-<label>
+</div><div class="form-group"><label>
 Category
-</label>
-
-<select id="productCategory">
-
-<option value="Electronics">
+</label><select id="productCategory"><option value="Electronics">
 Electronics
-</option>
-
-<option value="Fashion">
+</option><option value="Fashion">
 Fashion
-</option>
-
-<option value="Home">
+</option><option value="Home">
 Home
-</option>
-
-<option value="Beauty">
+</option><option value="Beauty">
 Beauty
-</option>
-
-</select>
-
-</div>
-
-
-<div class="form-group full">
-
-<label>
+</option></select></div><div class="form-group full"><label>
 📷 Product Picture
-</label>
+</label><input
+id="productImageFile"
+type="file"
+accept="image/*"
+required
 
-<input
-  id="productImageFile"
-  type="file"
-  accept="image/*"
-  required
->
+«»
 
 <small>
 Choose a picture from your phone gallery.
-</small>
+</small><img
+id="photoPreview"
+class="photo-preview"
+alt="Product preview"
 
-
-<img
-  id="photoPreview"
-  class="photo-preview"
-  alt="Product preview"
->
-
+«»
 
 <div
   id="uploadStatus"
   class="upload-status"
-></div>
+></div></div></div><br><button
+id="addProductButton"
+class="btn-black"
+type="submit"
 
-</div>
+«»
 
-
-</div>
-
-
-<br>
-
-
-<button
-  id="addProductButton"
-  class="btn-black"
-  type="submit"
->
 ➕ Add Product
 </button>
 
-
-</form>
-
-</div>
-
-
-<div class="card">
-
-<h2>
+</form></div><div class="card"><h2>
 🛍️ My Products
-</h2>
-
-<div
+</h2><div
   id="productsGrid"
   class="product-grid"
->
-
-<div class="empty">
+><div class="empty">
 Loading products...
-</div>
-
-</div>
-
-</div>
-
-
-</section>
-
-
-<section
+</div></div></div></section><section
   id="orders"
   class="panel"
->
-
-<div class="card">
-
-<h2>
+><div class="card"><h2>
 📦 Customer Orders
-</h2>
+</h2><div class="filters"><button
+class="active"
+onclick="setOrderFilter('all',this)"
 
+«»
 
-<div class="filters">
-
-
-<button
-  class="active"
-  onclick="setOrderFilter('all',this)"
->
 All
 </button>
 
-
 <button
-  onclick="setOrderFilter('pending',this)"
->
+onclick="setOrderFilter('pending',this)"
+
+«»
+
 Pending
 </button>
 
-
 <button
-  onclick="setOrderFilter('processing',this)"
->
+onclick="setOrderFilter('processing',this)"
+
+«»
+
 Processing
 </button>
 
-
 <button
-  onclick="setOrderFilter('shipped',this)"
->
+onclick="setOrderFilter('shipped',this)"
+
+«»
+
 Shipped
 </button>
 
-
 <button
-  onclick="setOrderFilter('delivered',this)"
->
+onclick="setOrderFilter('delivered',this)"
+
+«»
+
 Delivered
 </button>
 
-
-</div>
-
-
-<div
+</div><div
   id="ordersList"
   class="order-list"
->
-
-<div class="empty">
+><div class="empty">
 Loading orders...
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section
+</div></div></div></section><section
   id="delivery"
   class="panel"
->
-
-<div class="card">
-
-<h2>
+><div class="card"><h2>
 🚚 Delivery Management
-</h2>
-
-<p>
+</h2><p>
 Manage delivery information for
 your customer orders.
-</p>
-
-<div
+</p><div
   id="deliveryList"
   class="delivery-list"
->
-
-<div class="empty">
+><div class="empty">
 Loading delivery information...
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section
+</div></div></div></section><section
   id="rental"
   class="panel"
->
-
-<div class="card">
-
-<h2>
+><div class="card"><h2>
 💳 Store Rental
-</h2>
-
-
-<div class="rental-box">
-
-<p>
+</h2><div class="rental-box"><p>
 Monthly store rental
-</p>
-
-
-<div class="rental-status">
+</p><div class="rental-status">
 R100 / month
-</div>
-
-
-<p>
+</div><p>
 Current status:
 <strong id="rentalStatusText">
 Checking...
 </strong>
-</p>
+</p><p>
+Rental expiry:
+<strong id="rentalExpiryText">
+Checking...
+</strong>
+</p><p>
+Your store remains available while
+your rental period is active. Owner
+approval is only required once.
+After approval, future monthly
+renewals only require the R100 rental
+payment.
+</p><button
+id="rentalPayButton"
+class="btn-gold"
+onclick="payRental()"
 
+«»
 
-<p>
-Your store stays listed on
-ZYRE Marketing. If the monthly
-rental is not paid, the store is
-temporarily locked until payment
-is confirmed.
-</p>
-
-
-<button
-  id="rentalPayButton"
-  class="btn-gold"
-  onclick="payRental()"
->
 💳 Pay R100
 </button>
 
-
 <button
-  class="btn-black"
-  onclick="checkRentalAgain()"
->
+class="btn-black"
+onclick="checkRentalAgain()"
+
+«»
+
 🔄 Check Rental
 </button>
 
-
-</div>
-
-</div>
-
-</section>
-
-
-<section
+</div></div></section><section
   id="notifications"
   class="panel"
->
-
-<div class="card">
-
-<h2>
+><div class="card"><h2>
 🔔 Notifications
-</h2>
-
-
-<div id="notificationsList">
-
-<div class="empty">
+</h2><div id="notificationsList"><div class="empty">
 Loading notifications...
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section
+</div></div></div></section><section
   id="sellerInfo"
   class="panel"
->
-
-<div class="card">
-
-<h2>
+><div class="card"><h2>
 👤 Seller Information
-</h2>
-
-
-<div class="info-grid">
-
-
-<div class="info-box">
-
-<div class="info-label">
+</h2><div class="info-grid"><div class="info-box"><div class="info-label">
 Seller Name
-</div>
-
-<div
+</div><div
   id="sellerInfoName"
   class="info-value"
 >
 —
-</div>
-
-</div>
-
-
-<div class="info-box">
-
-<div class="info-label">
+</div></div><div class="info-box"><div class="info-label">
 Store Name
-</div>
-
-<div
+</div><div
   id="sellerInfoStore"
   class="info-value"
 >
 —
-</div>
-
-</div>
-
-
-<div class="info-box">
-
-<div class="info-label">
+</div></div><div class="info-box"><div class="info-label">
 Seller ID
-</div>
-
-<div
+</div><div
   id="sellerInfoId"
   class="info-value"
 >
 —
-</div>
-
-</div>
-
-
-</div>
-
-</div>
-
-</section>
-
-
-<div id="technicalArea">
-
-<div id="sellerId"></div>
-
-<div id="orderTable"></div>
-
-<div id="deliveryTable"></div>
-
-</div>
-
-
-</main>
-
-</div>
-
-
-<script>
+</div></div></div></div></section><div id="technicalArea"><div id="sellerId"></div><div id="orderTable"></div><div id="deliveryTable"></div></div></main></div><script>
 
 /* =====================================================
    ZYRE / SUPABASE CONFIGURATION
@@ -1428,6 +1034,8 @@ let SELLER_EMAIL =
 localStorage.getItem("zava_seller_email") || "";
 
 let CURRENT_SELLER = null;
+
+let CURRENT_SUBSCRIPTION = null;
 
 let PRODUCTS = [];
 
@@ -2010,72 +1618,12 @@ document
 
 
 /* =====================================================
-   CURRENT MONTH PAYMENT
-===================================================== */
-
-function isPaidThisMonth(payment){
-
-  if(!payment){
-
-    return false;
-
-  }
-
-  const status =
-    String(
-      payment.status || ""
-    )
-    .trim()
-    .toLowerCase();
-
-  if(status !== "paid"){
-
-    return false;
-
-  }
-
-  const dateValue =
-    payment.paid_at ||
-    payment.created_at;
-
-  if(!dateValue){
-
-    return false;
-
-  }
-
-  const paymentDate =
-    new Date(dateValue);
-
-  if(
-    Number.isNaN(
-      paymentDate.getTime()
-    )
-  ){
-
-    return false;
-
-  }
-
-  const now =
-    new Date();
-
-  return (
-    paymentDate.getFullYear() ===
-    now.getFullYear()
-    &&
-    paymentDate.getMonth() ===
-    now.getMonth()
-  );
-
-}
-
-
-/* =====================================================
    ACTIVE SUBSCRIPTION
 ===================================================== */
 
-function isActiveSubscription(subscription){
+function isActiveSubscription(
+  subscription
+){
 
   if(!subscription){
 
@@ -2126,12 +1674,261 @@ function isActiveSubscription(subscription){
 
 
 /* =====================================================
+   SELLER APPROVAL
+===================================================== */
+
+function isSellerApproved(
+  seller
+){
+
+  if(!seller){
+
+    return false;
+
+  }
+
+  /*
+    Owner approval is permanent.
+
+    The main approval field is sellers.approved.
+    seller_approved / approved statuses are also
+    accepted so the existing ZYRE workflow remains
+    compatible.
+  */
+
+  if(
+    seller.approved === true
+  ){
+
+    return true;
+
+  }
+
+  const status =
+    String(
+      seller.status || ""
+    )
+    .trim()
+    .toLowerCase();
+
+  return (
+    status === "seller_approved" ||
+    status === "approved"
+  );
+
+}
+
+
+/* =====================================================
+   FIND ACTIVE RENTAL SUBSCRIPTION
+===================================================== */
+
+async function getCurrentRental(){
+
+  const seller =
+    CURRENT_SELLER ||
+    await resolveSellerFromAccount();
+
+  const sellerId =
+    String(
+      seller.id
+    );
+
+  const subscriptions =
+    await supabaseRequest(
+      "store_subscriptions?select=id,seller_id,rental_plan_id,status,started_at,expires_at,created_at&seller_id=eq." +
+      encodeURIComponent(sellerId) +
+      "&order=id.desc"
+    );
+
+  if(
+    !Array.isArray(subscriptions)
+  ){
+
+    CURRENT_SUBSCRIPTION =
+      null;
+
+    return null;
+
+  }
+
+  const active =
+    subscriptions.find(
+      subscription =>
+        isActiveSubscription(
+          subscription
+        )
+    );
+
+  CURRENT_SUBSCRIPTION =
+    active ||
+    subscriptions[0] ||
+    null;
+
+  return (
+    active ||
+    null
+  );
+
+}
+
+
+/* =====================================================
+   VERIFY PAYSTACK RETURN PAYMENT
+
+   Paystack returns the seller to seller.html
+   with ?reference=...
+
+   We send that reference to the Edge Function.
+   The Edge Function verifies the transaction and
+   activates/extends the subscription.
+===================================================== */
+
+async function verifyPaystackReturn(){
+
+  const url =
+    new URL(
+      window.location.href
+    );
+
+  const reference =
+    url.searchParams.get(
+      "reference"
+    );
+
+  if(!reference){
+
+    return null;
+
+  }
+
+  console.log(
+    "ZYRE PAYSTACK RETURN REFERENCE:",
+    reference
+  );
+
+  try{
+
+    const token =
+      await getSellerAccessToken();
+
+    const response =
+      await fetch(
+        RENTAL_PAYSTACK_URL,
+        {
+          method:"POST",
+
+          headers:{
+
+            "Content-Type":
+              "application/json",
+
+            "Authorization":
+              "Bearer " +
+              token,
+
+            "apikey":
+              SUPABASE_KEY
+
+          },
+
+          body:JSON.stringify({
+
+            action:
+              "verify",
+
+            reference:
+              reference
+
+          })
+
+        }
+      );
+
+    const data =
+      await response.json();
+
+    console.log(
+      "ZYRE PAYSTACK VERIFY RESULT:",
+      data
+    );
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        data.error ||
+        data.message ||
+        "Payment verification failed."
+      );
+
+    }
+
+    if(
+      data.paid === true
+    ){
+
+      /*
+        Remove the reference from the URL so a
+        browser refresh does not repeatedly verify
+        the same payment.
+      */
+
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+      );
+
+      CURRENT_SUBSCRIPTION =
+        data.subscription ||
+        null;
+
+      return data;
+
+    }
+
+    return data;
+
+  }catch(error){
+
+    console.error(
+      "PAYSTACK RETURN VERIFICATION ERROR:",
+      error
+    );
+
+    /*
+      Do not destroy the seller session just because
+      verification temporarily failed.
+    */
+
+    return {
+      paid:false,
+      error:error.message
+    };
+
+  }
+
+}
+
+
+/* =====================================================
    RENTAL CHECK
+
+   NEW ACCESS RULE:
+
+   1. Seller must be owner-approved.
+   2. Seller must have an active subscription.
+   3. No calendar-month payment fallback.
+
+   The subscription expiry controls the rental period.
 ===================================================== */
 
 async function checkRental(){
 
   const seller =
+    CURRENT_SELLER ||
     await resolveSellerFromAccount();
 
   if(
@@ -2145,116 +1942,232 @@ async function checkRental(){
 
   }
 
-  const sellerId =
-    String(seller.id);
+  CURRENT_SELLER =
+    seller;
+
+  const approved =
+    isSellerApproved(
+      seller
+    );
 
   console.log(
-    "ZYRE RENTAL CHECK START",
+    "ZYRE APPROVAL CHECK:",
     {
-      sellerId,
-      storeName:seller.store_name
+      sellerId:seller.id,
+      approved,
+      status:seller.status
     }
   );
 
-  let subscriptions = [];
+  if(!approved){
 
-  try{
+    CURRENT_SUBSCRIPTION =
+      null;
 
-    subscriptions =
-      await supabaseRequest(
-        "store_subscriptions?select=id,seller_id,rental_plan_id,status,started_at,expires_at,created_at&seller_id=eq." +
-        encodeURIComponent(sellerId) +
-        "&order=id.desc"
-      );
-
-  }catch(error){
-
-    console.error(
-      "STORE SUBSCRIPTION CHECK FAILED:",
-      error
-    );
-
-    throw new Error(
-      "ZYRE could not read your store rental subscription. " +
-      error.message
-    );
+    return {
+      allowed:false,
+      reason:"approval_required",
+      seller,
+      subscription:null
+    };
 
   }
 
-  const activeSubscription =
-    Array.isArray(subscriptions) &&
-    subscriptions.some(
-      subscription =>
-        isActiveSubscription(
-          subscription
-        )
-    );
+  const subscription =
+    await getCurrentRental();
 
-  console.log(
-    "ZYRE ACTIVE SUBSCRIPTION:",
-    activeSubscription,
-    subscriptions
-  );
-
-  if(activeSubscription){
+  if(
+    subscription &&
+    isActiveSubscription(
+      subscription
+    )
+  ){
 
     console.log(
-      "ZYRE RENTAL UNLOCKED BY ACTIVE SUBSCRIPTION"
+      "ZYRE RENTAL ACTIVE:",
+      subscription
     );
 
-    return true;
+    return {
+      allowed:true,
+      reason:"active",
+      seller,
+      subscription
+    };
 
   }
-
-  let payments = [];
-
-  try{
-
-    payments =
-      await supabaseRequest(
-        "rental_payments?select=id,seller_id,subscription_id,amount,status,payment_reference,payment_method,paid_at,created_at&seller_id=eq." +
-        encodeURIComponent(sellerId) +
-        "&order=id.desc"
-      );
-
-  }catch(error){
-
-    console.error(
-      "RENTAL PAYMENT CHECK FAILED:",
-      error
-    );
-
-    throw new Error(
-      "ZYRE could not read your rental payment record. " +
-      error.message
-    );
-
-  }
-
-  const paidThisMonth =
-    Array.isArray(payments) &&
-    payments.some(
-      payment =>
-        isPaidThisMonth(payment)
-    );
 
   console.log(
-    "ZYRE PAID THIS MONTH:",
-    paidThisMonth,
-    payments
+    "ZYRE RENTAL EXPIRED OR NOT PAID"
   );
 
-  if(paidThisMonth){
+  return {
+    allowed:false,
+    reason:"rental_required",
+    seller,
+    subscription:
+      CURRENT_SUBSCRIPTION
+  };
 
-    console.log(
-      "ZYRE RENTAL UNLOCKED BY PAID RENTAL PAYMENT"
+}
+
+
+/* =====================================================
+   LOCK MESSAGE
+===================================================== */
+
+function showApprovalLock(){
+
+  document
+    .getElementById("rentalLoading")
+    ?.classList
+    .add("hidden");
+
+  document
+    .getElementById("dashboard")
+    ?.classList
+    .add("hidden");
+
+  const lock =
+    document.getElementById(
+      "rentalLock"
     );
 
-    return true;
+  lock?.classList.remove(
+    "hidden"
+  );
+
+  const title =
+    document.getElementById(
+      "lockTitle"
+    );
+
+  if(title){
+
+    title.textContent =
+      "⏳ Seller Approval Pending";
 
   }
 
-  return false;
+  const message =
+    document.getElementById(
+      "lockMessage"
+    );
+
+  if(message){
+
+    message.textContent =
+      "Your R100 rental payment may be recorded, but your seller account is still waiting for owner approval.";
+
+  }
+
+  const paymentMessage =
+    document.getElementById(
+      "lockPaymentMessage"
+    );
+
+  if(paymentMessage){
+
+    paymentMessage.innerHTML =
+      "<strong>No additional payment is required while you wait for approval.</strong><br><br>Once the owner approves your seller account, your paid store rental can become active immediately.";
+
+  }
+
+  const payButton =
+    document.getElementById(
+      "lockPayButton"
+    );
+
+  if(payButton){
+
+    payButton.classList.add(
+      "hidden"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   LOCK FOR RENTAL PAYMENT
+===================================================== */
+
+function showRentalLock(){
+
+  document
+    .getElementById("rentalLoading")
+    ?.classList
+    .add("hidden");
+
+  document
+    .getElementById("dashboard")
+    ?.classList
+    .add("hidden");
+
+  const lock =
+    document.getElementById(
+      "rentalLock"
+    );
+
+  lock?.classList.remove(
+    "hidden"
+  );
+
+  const title =
+    document.getElementById(
+      "lockTitle"
+    );
+
+  if(title){
+
+    title.textContent =
+      "🔒 Store Rental Expired";
+
+  }
+
+  const message =
+    document.getElementById(
+      "lockMessage"
+    );
+
+  if(message){
+
+    message.textContent =
+      "Your seller account is approved, but your current ZYRE Marketing store rental period has expired or has not yet been activated.";
+
+  }
+
+  const paymentMessage =
+    document.getElementById(
+      "lockPaymentMessage"
+    );
+
+  if(paymentMessage){
+
+    paymentMessage.innerHTML =
+      "Pay the monthly rental of <strong>R100</strong> to activate your next rental period.";
+
+  }
+
+  const payButton =
+    document.getElementById(
+      "lockPayButton"
+    );
+
+  if(payButton){
+
+    payButton.classList.remove(
+      "hidden"
+    );
+
+    payButton.disabled =
+      false;
+
+    payButton.textContent =
+      "💳 Pay R100 Rental";
+
+  }
 
 }
 
@@ -2277,30 +2190,6 @@ function showDashboard(){
 
   document
     .getElementById("dashboard")
-    ?.classList
-    .remove("hidden");
-
-}
-
-
-/* =====================================================
-   SHOW LOCK
-===================================================== */
-
-function showRentalLock(){
-
-  document
-    .getElementById("rentalLoading")
-    ?.classList
-    .add("hidden");
-
-  document
-    .getElementById("dashboard")
-    ?.classList
-    .add("hidden");
-
-  document
-    .getElementById("rentalLock")
     ?.classList
     .remove("hidden");
 
@@ -2355,13 +2244,68 @@ async function startDashboard(){
 
     }
 
-    const rentalPaid =
+    /*
+      If Paystack redirected the seller back with a
+      payment reference, verify that payment first.
+    */
+
+    const url =
+      new URL(
+        window.location.href
+      );
+
+    const reference =
+      url.searchParams.get(
+        "reference"
+      );
+
+    if(reference){
+
+      const verification =
+        await verifyPaystackReturn();
+
+      if(
+        verification &&
+        verification.paid === true
+      ){
+
+        alert(
+          "✓ R100 rental payment confirmed. Your rental period has been activated."
+        );
+
+      }
+
+    }
+
+    /*
+      Re-read seller and subscription after possible
+      Paystack verification.
+    */
+
+    const rental =
       await checkRental();
 
-    if(!rentalPaid){
+    if(
+      rental.reason ===
+      "approval_required"
+    ){
+
+      showApprovalLock();
+
+      dashboardStarted =
+        false;
+
+      return;
+
+    }
+
+    if(
+      !rental.allowed
+    ){
 
       updateRentalDisplay(
-        false
+        false,
+        rental.subscription
       );
 
       showRentalLock();
@@ -2376,7 +2320,8 @@ async function startDashboard(){
     showDashboard();
 
     updateRentalDisplay(
-      true
+      true,
+      rental.subscription
     );
 
     await loadSellerInformation();
@@ -2425,7 +2370,7 @@ async function startDashboard(){
       false;
 
     alert(
-      "ZYRE could not verify the rental.\n\n" +
+      "ZYRE could not verify your seller access.\n\n" +
       error.message
     );
 
@@ -2456,6 +2401,9 @@ async function loadSellerInformation(){
 
       const seller =
         sellers[0];
+
+      CURRENT_SELLER =
+        seller;
 
       const name =
         seller.full_name ||
@@ -2510,7 +2458,8 @@ async function loadSellerInformation(){
 ===================================================== */
 
 function updateRentalDisplay(
-  isPaid
+  isPaid,
+  subscription = null
 ){
 
   const status =
@@ -2522,7 +2471,7 @@ function updateRentalDisplay(
 
     status.textContent =
       isPaid
-        ? "✓ PAID"
+        ? "✓ ACTIVE"
         : "Payment Required";
 
   }
@@ -2536,8 +2485,22 @@ function updateRentalDisplay(
 
     badge.textContent =
       isPaid
-        ? "✓ Rental Paid"
+        ? "✓ Rental Active"
         : "⚠ Rental Required";
+
+  }
+
+  const stat =
+    document.getElementById(
+      "rentalStat"
+    );
+
+  if(stat){
+
+    stat.textContent =
+      isPaid
+        ? "ACTIVE"
+        : "PAY R100";
 
   }
 
@@ -2550,8 +2513,62 @@ function updateRentalDisplay(
 
     button.textContent =
       isPaid
-        ? "✓ Rental Paid"
+        ? "✓ Rental Active"
         : "💳 Pay R100";
+
+    button.disabled =
+      false;
+
+  }
+
+  const expiry =
+    document.getElementById(
+      "rentalExpiryText"
+    );
+
+  if(expiry){
+
+    if(
+      subscription &&
+      subscription.expires_at
+    ){
+
+      const expiryDate =
+        new Date(
+          subscription.expires_at
+        );
+
+      if(
+        !Number.isNaN(
+          expiryDate.getTime()
+        )
+      ){
+
+        expiry.textContent =
+          expiryDate.toLocaleString(
+            undefined,
+            {
+              day:"numeric",
+              month:"long",
+              year:"numeric",
+              hour:"2-digit",
+              minute:"2-digit"
+            }
+          );
+
+      }else{
+
+        expiry.textContent =
+          "Not available";
+
+      }
+
+    }else{
+
+      expiry.textContent =
+        "Not active";
+
+    }
 
   }
 
@@ -3343,8 +3360,7 @@ function updateOrderStats(){
       String(
         order.status ||
         "pending"
-      )
-      .toLowerCase();
+      ).toLowerCase();
 
     if(
       Object.prototype.hasOwnProperty
@@ -4038,18 +4054,6 @@ function renderDelivery(){
 
 /* =====================================================
    EDIT DELIVERY
-   Supports the complete deliveries table:
-
-   id
-   order_id
-   delivery_person_name
-   delivery_person_phone
-   tracking_number
-   status
-   estimated_delivery
-   notes
-   created_at
-   updated_at
 ===================================================== */
 
 async function editDelivery(id){
@@ -4067,7 +4071,6 @@ async function editDelivery(id){
 
   }
 
-
   const status =
     prompt(
       "Delivery status:\n\n" +
@@ -4076,13 +4079,11 @@ async function editDelivery(id){
       "Pending"
     );
 
-
   if(status === null){
 
     return;
 
   }
-
 
   const driverName =
     prompt(
@@ -4091,13 +4092,11 @@ async function editDelivery(id){
       ""
     );
 
-
   if(driverName === null){
 
     return;
 
   }
-
 
   const driverPhone =
     prompt(
@@ -4106,13 +4105,11 @@ async function editDelivery(id){
       ""
     );
 
-
   if(driverPhone === null){
 
     return;
 
   }
-
 
   const trackingNumber =
     prompt(
@@ -4121,18 +4118,15 @@ async function editDelivery(id){
       ""
     );
 
-
   if(trackingNumber === null){
 
     return;
 
   }
 
-
   const currentDate =
     delivery.estimated_delivery ||
     "";
-
 
   const estimatedDelivery =
     prompt(
@@ -4142,13 +4136,11 @@ async function editDelivery(id){
       currentDate
     );
 
-
   if(estimatedDelivery === null){
 
     return;
 
   }
-
 
   const notes =
     prompt(
@@ -4157,37 +4149,29 @@ async function editDelivery(id){
       ""
     );
 
-
   if(notes === null){
 
     return;
 
   }
 
-
   const cleanStatus =
     status.trim();
-
 
   const cleanDriverName =
     driverName.trim();
 
-
   const cleanDriverPhone =
     driverPhone.trim();
-
 
   const cleanTrackingNumber =
     trackingNumber.trim();
 
-
   const cleanEstimatedDelivery =
     estimatedDelivery.trim();
 
-
   const cleanNotes =
     notes.trim();
-
 
   if(!cleanStatus){
 
@@ -4198,7 +4182,6 @@ async function editDelivery(id){
     return;
 
   }
-
 
   if(
     cleanEstimatedDelivery &&
@@ -4214,7 +4197,6 @@ async function editDelivery(id){
     return;
 
   }
-
 
   try{
 
@@ -4262,14 +4244,11 @@ async function editDelivery(id){
       }
     );
 
-
     alert(
       "Delivery updated successfully."
     );
 
-
     await loadDelivery();
-
 
   }catch(error){
 
@@ -4327,8 +4306,8 @@ async function loadNotifications(){
       </strong>
 
       <div>
-        Your current monthly store rental
-        has been confirmed.
+        Your current rental period
+        is active.
       </div>
 
     </div>
@@ -4427,6 +4406,23 @@ async function payRental(){
 
     }
 
+    /*
+      Owner approval is required before a rental
+      renewal can be used.
+    */
+
+    if(
+      !isSellerApproved(
+        CURRENT_SELLER
+      )
+    ){
+
+      showApprovalLock();
+
+      return;
+
+    }
+
     const email =
       SELLER_EMAIL ||
       prompt(
@@ -4497,6 +4493,7 @@ async function payRental(){
     if(!response.ok){
 
       throw new Error(
+        data.error ||
         data.message ||
         "Rental payment could not be initialized."
       );
@@ -4588,13 +4585,64 @@ async function checkRentalAgain(){
     dashboardStarted =
       false;
 
-    const paid =
+    /*
+      Check for a Paystack reference in case the
+      seller has just returned from payment.
+    */
+
+    await refreshSellerAuthentication();
+
+    const seller =
+      await resolveSellerFromAccount();
+
+    const url =
+      new URL(
+        window.location.href
+      );
+
+    const reference =
+      url.searchParams.get(
+        "reference"
+      );
+
+    if(reference){
+
+      const verification =
+        await verifyPaystackReturn();
+
+      if(
+        verification &&
+        verification.paid === true
+      ){
+
+        alert(
+          "✓ Rental payment confirmed."
+        );
+
+      }
+
+    }
+
+    const result =
       await checkRental();
 
-    if(paid){
+    if(
+      result.reason ===
+      "approval_required"
+    ){
+
+      showApprovalLock();
+
+      return;
+
+    }
+
+    if(
+      result.allowed
+    ){
 
       alert(
-        "✓ Rental payment confirmed. Your dashboard is unlocked."
+        "✓ Your rental is active. Your seller dashboard is unlocked."
       );
 
       dashboardStarted =
@@ -4605,7 +4653,7 @@ async function checkRentalAgain(){
     }else{
 
       alert(
-        "The rental payment has not been confirmed for this month yet."
+        "The current rental period is not active. Please pay R100 to renew your store rental."
       );
 
     }
@@ -4618,19 +4666,21 @@ async function checkRentalAgain(){
     );
 
     alert(
-      "ZYRE could not verify the rental.\n\n" +
+      "ZYRE could not verify your seller access.\n\n" +
       error.message
     );
 
-  }
+  }finally{
 
-  if(button){
+    if(button){
 
-    button.disabled =
-      false;
+      button.disabled =
+        false;
 
-    button.textContent =
-      "🔄 Check Payment Again";
+      button.textContent =
+        "🔄 Check Again";
+
+    }
 
   }
 
@@ -4738,6 +4788,11 @@ document.addEventListener(
 
 /* =====================================================
    PERIODIC RENTAL CHECK
+
+   Check every minute so an expired rental can
+   automatically lock the Seller Centre.
+
+   Approval remains permanent.
 ===================================================== */
 
 setInterval(
@@ -4761,15 +4816,38 @@ setInterval(
 
     try{
 
-      const paid =
+      const result =
         await checkRental();
 
-      if(!paid){
+      if(
+        result.reason ===
+        "approval_required"
+      ){
+
+        showApprovalLock();
+
+        dashboardStarted =
+          false;
+
+        return;
+
+      }
+
+      if(
+        !result.allowed
+      ){
 
         showRentalLock();
 
         dashboardStarted =
           false;
+
+      }else{
+
+        updateRentalDisplay(
+          true,
+          result.subscription
+        );
 
       }
 
@@ -4786,8 +4864,5 @@ setInterval(
   60000
 );
 
-</script>
-
-
-</body>
+</script></body>
 </html>
