@@ -1,5963 +1,1230 @@
-const SUPABASE_URL =
-"https://gaccizzlwswwynattgda.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_902JguVx0M5DNLWVx8trpA_LUlUMDG0";
-
-/* =========================
-ZYRE MARKETING PUSH
-========================= */
-
-const ZYRE_VAPID_PUBLIC_KEY =
-"BOjLvTNv19TAOcTncMSkJkOkJ874DsdpzJx1Nh0l9TOYi_CSFeqALQ0ldhpB0v7rPHQ4VyIzcMCxJORjWtdLO2Q";
-
-let products = [];
-let category = "All";
-
-
 /* =========================================================
-CART
+ZYRE MARKETING
+Clean Black + White Marketplace
 ========================================================= */
 
-const CART_STORAGE_KEY =
-"zyre_cart_v2";
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  }
 
-let cart = [];
+html {
+scroll-behavior: smooth;
+}
 
+body {
+font-family:
+"Segoe UI",
+Arial,
+sans-serif;
+
+background: #ffffff;
+color: #000000;
+
+min-height: 100vh;
+line-height: 1.6;
+}
+
+button,
+input,
+select,
+textarea {
+font: inherit;
+}
+
+button {
+cursor: pointer;
+}
+
+img {
+max-width: 100%;
+display: block;
+}
+
+a {
+color: inherit;
+text-decoration: none;
+}
+
+.hidden {
+display: none !important;
+}
 
 /* =========================================================
-RENTAL SYSTEM
-ZYRE STORE RENTAL = R100 PER CALENDAR MONTH
-
-IMPORTANT:
-PAYSTACK IS NOW USED FOR SELLER RENTAL PAYMENTS.
-
-The old Google Apps Script / PayFast rental system
-has been completely removed from this file.
+GLOBAL
 ========================================================= */
 
-const ZYRE_RENTAL_PAYSTACK_URL =
-"https://gaccizzlwswwynattgda.supabase.co/functions/v1/rental-paystack";
-
-const ZYRE_RENTAL_AMOUNT = 100;
-
+.eyebrow {
+font-size: 12px;
+font-weight: 700;
+letter-spacing: 2px;
+text-transform: uppercase;
+}
 
 /* =========================================================
-RENTAL MONTH HELPERS
+HEADER
 ========================================================= */
 
-function getZYRECurrentMonthRange() {
+.zyre-header {
+width: 100%;
+background: #ffffff;
+border-bottom: 1px solid #e5e5e5;
 
-  const now =
-    new Date();
+padding: 18px 5%;
 
-  const year =
-    now.getFullYear();
+display: flex;
+align-items: center;
+justify-content: space-between;
 
-  const month =
-    now.getMonth();
+gap: 20px;
 
-  const nextMonthDate =
-    new Date(
-      year,
-      month + 1,
-      1,
-      0,
-      0,
-      0,
-      0
-    );
+position: sticky;
+top: 0;
+z-index: 1000;
+}
 
-  const monthStartDate =
-    new Date(
-      year,
-      month,
-      1,
-      0,
-      0,
-      0,
-      0
-    );
+.brand {
+display: flex;
+flex-direction: column;
+line-height: 1;
+}
 
-  return {
+.brand-main {
+font-size: 28px;
+font-weight: 900;
+letter-spacing: 2px;
+}
 
-    start:
-      monthStartDate.toISOString(),
+.brand-sub {
+font-size: 9px;
+font-weight: 700;
+letter-spacing: 3px;
+margin-top: 6px;
+}
 
-    end:
-      nextMonthDate.toISOString(),
+.header-search {
+flex: 1;
+max-width: 550px;
 
-    year:
-      year,
+display: flex;
+align-items: center;
+}
 
-    month:
-      month + 1
+.header-search input {
+width: 100%;
 
-  };
+padding: 12px 16px;
+
+border: 1px solid #d8d8d8;
+border-radius: 4px;
+
+background: #ffffff;
+color: #000000;
+
+outline: none;
+}
+
+.header-search input:focus {
+border-color: #000000;
+}
+
+.cart-button {
+border: 1px solid #000000;
+background: #000000;
+color: #ffffff;
+
+padding: 11px 18px;
+border-radius: 4px;
+
+font-weight: 700;
+}
+
+/* =========================================================
+NAVIGATION
+========================================================= */
+
+.zyre-nav {
+width: 100%;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+gap: 28px;
+
+padding: 13px 5%;
+
+background: #ffffff;
+border-bottom: 1px solid #eeeeee;
+}
+
+.zyre-nav a {
+font-size: 13px;
+font-weight: 700;
+letter-spacing: 1px;
+text-transform: uppercase;
+}
+
+.zyre-nav a:hover {
+text-decoration: underline;
+}
+
+/* =========================================================
+HERO
+========================================================= */
+
+.hero {
+width: 100%;
+
+background: #ffffff;
+
+padding: 90px 5%;
+
+border-bottom: 1px solid #eeeeee;
+}
+
+.hero-content {
+max-width: 1200px;
+margin: 0 auto;
+
+display: grid;
+grid-template-columns: 1fr 0.8fr;
+
+gap: 60px;
+align-items: center;
+}
+
+.hero h1 {
+font-size: clamp(42px, 7vw, 82px);
+line-height: 0.95;
+
+letter-spacing: -3px;
+
+margin: 16px 0 24px;
+
+font-weight: 900;
+}
+
+.hero-text {
+max-width: 600px;
+
+font-size: 18px;
+color: #444444;
+
+margin-bottom: 30px;
+}
+
+.hero-buttons {
+display: flex;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.primary-button,
+.secondary-button {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+
+padding: 14px 24px;
+
+border-radius: 4px;
+
+font-weight: 800;
+}
+
+.primary-button {
+background: #000000;
+color: #ffffff;
+border: 1px solid #000000;
+}
+
+.secondary-button {
+background: #ffffff;
+color: #000000;
+border: 1px solid #000000;
+}
+
+.hero-mark {
+width: 100%;
+min-height: 360px;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+background: #f5f5f5;
+
+border: 1px solid #e5e5e5;
+}
+
+.hero-z {
+font-size: 220px;
+font-weight: 900;
+line-height: 1;
+}
+
+/* =========================================================
+SELLER BANNER
+========================================================= */
+
+.seller-banner {
+background: #000000;
+color: #ffffff;
+
+padding: 30px 5%;
+
+display: flex;
+align-items: center;
+justify-content: space-between;
+
+gap: 20px;
+}
+
+.seller-banner h2 {
+font-size: 26px;
+}
+
+.seller-banner p {
+color: #cccccc;
+}
+
+/* =========================================================
+MARKETPLACE
+========================================================= */
+
+.marketplace {
+max-width: 1300px;
+margin: 0 auto;
+
+padding: 70px 5%;
+}
+
+.toolbar {
+display: flex;
+justify-content: space-between;
+align-items: center;
+
+gap: 20px;
+
+margin-bottom: 30px;
+}
+
+.grid {
+display: grid;
+
+grid-template-columns:
+repeat(4, minmax(0, 1fr));
+
+gap: 22px;
+}
+
+/* =========================================================
+CARDS
+========================================================= */
+
+.product-card,
+.store-card {
+background: #ffffff;
+
+border: 1px solid #e2e2e2;
+
+overflow: hidden;
+
+transition:
+transform 0.2s ease,
+box-shadow 0.2s ease;
+}
+
+.product-card:hover,
+.store-card:hover {
+transform: translateY(-3px);
+
+box-shadow:
+0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.pic {
+width: 100%;
+aspect-ratio: 1 / 1;
+
+background: #f4f4f4;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+overflow: hidden;
+}
+
+.pic img {
+width: 100%;
+height: 100%;
+
+object-fit: cover;
+}
+
+.product-card-content,
+.store-card-content {
+padding: 18px;
+}
+
+.product-card h3,
+.store-card h3 {
+font-size: 18px;
+margin-bottom: 6px;
+}
+
+.product-card p,
+.store-card p {
+color: #555555;
+font-size: 14px;
+}
+
+.price {
+font-weight: 900;
+font-size: 18px;
+
+margin-top: 12px;
+}
+
+/* =========================================================
+CATEGORIES
+========================================================= */
+
+.categories {
+max-width: 1300px;
+margin: 0 auto;
+
+padding: 20px 5% 70px;
+}
+
+.section-title {
+font-size: 34px;
+font-weight: 900;
+
+margin-bottom: 28px;
+}
+
+.category-grid {
+display: grid;
+
+grid-template-columns:
+repeat(4, minmax(0, 1fr));
+
+gap: 15px;
+}
+
+.category-card {
+border: 1px solid #dddddd;
+
+padding: 24px;
+
+background: #ffffff;
+
+font-weight: 800;
+
+transition:
+background 0.2s ease,
+color 0.2s ease;
+}
+
+.category-card:hover {
+background: #000000;
+color: #ffffff;
+}
+
+/* =========================================================
+HOW IT WORKS
+========================================================= */
+
+.how-it-works {
+background: #f7f7f7;
+
+padding: 70px 5%;
+}
+
+.steps {
+max-width: 1200px;
+margin: 0 auto;
+
+display: grid;
+
+grid-template-columns:
+repeat(3, minmax(0, 1fr));
+
+gap: 25px;
+}
+
+.step {
+background: #ffffff;
+
+border: 1px solid #dddddd;
+
+padding: 30px;
+}
+
+.step h3 {
+margin-bottom: 10px;
+}
+
+.step p {
+color: #555555;
+}
+
+/* =========================================================
+SERVICES
+========================================================= */
+
+.services {
+max-width: 1200px;
+margin: 0 auto;
+
+padding: 70px 5%;
+}
+
+/* =========================================================
+DRAWER
+========================================================= */
+
+.drawer {
+position: fixed;
+
+top: 0;
+right: 0;
+
+width: min(380px, 90vw);
+height: 100vh;
+
+background: #ffffff;
+
+box-shadow:
+-10px 0 35px rgba(0, 0, 0, 0.15);
+
+z-index: 3000;
+
+transform: translateX(100%);
+
+transition:
+transform 0.25s ease;
+}
+
+.drawer.open {
+transform: translateX(0);
+}
+
+/* =========================================================
+FOOTER
+========================================================= */
+
+.zyre-footer {
+background: #000000;
+color: #ffffff;
+
+padding: 50px 5%;
+
+text-align: center;
+}
+
+.zyre-footer p {
+color: #bbbbbb;
+}
+
+/* =========================================================
+MOBILE MENU
+========================================================= */
+
+.menu-button {
+display: none;
+
+background: #000000;
+color: #ffffff;
+
+border: 0;
+
+padding: 10px 14px;
+
+border-radius: 4px;
+
+font-weight: 800;
+}
+
+.zyre-menu {
+position: fixed;
+
+inset: 0;
+
+background: #ffffff;
+
+z-index: 5000;
+
+transform: translateX(-100%);
+
+transition:
+transform 0.25s ease;
+
+overflow-y: auto;
+}
+
+.zyre-menu.open {
+transform: translateX(0);
+}
+
+.zyre-menu-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+
+padding: 22px;
+
+border-bottom: 1px solid #eeeeee;
+}
+
+.zyre-menu-brand {
+display: flex;
+flex-direction: column;
+}
+
+.zyre-menu-logo {
+font-size: 25px;
+font-weight: 900;
+letter-spacing: 2px;
+}
+
+.zyre-menu-items {
+display: flex;
+flex-direction: column;
+}
+
+.zyre-menu-items a {
+padding: 18px 22px;
+
+border-bottom: 1px solid #eeeeee;
+
+font-weight: 800;
+}
+
+.zyre-menu-footer {
+padding: 22px;
+}
+
+/* =========================================================
+ACCOUNT / AUTH PAGE
+========================================================= */
+
+.zyre-auth-page {
+background: #050505 !important;
+color: #ffffff !important;
+
+min-height: 100vh;
+
+line-height: 1.5;
+}
+
+/* HEADER */
+
+.zyre-auth-page .auth-header {
+width: 100%;
+
+background: #050505;
+
+border-bottom: 1px solid #292929;
+
+padding: 20px 5%;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+gap: 20px;
+}
+
+.zyre-auth-page .auth-brand {
+display: flex;
+flex-direction: column;
+}
+
+.zyre-auth-page .auth-brand-main {
+color: #ffffff;
+
+font-size: 30px;
+
+font-weight: 900;
+
+letter-spacing: 3px;
+
+line-height: 1;
+}
+
+.zyre-auth-page .auth-brand-sub {
+color: #aaaaaa;
+
+font-size: 9px;
+
+font-weight: 700;
+
+letter-spacing: 2px;
+
+margin-top: 7px;
+
+text-transform: uppercase;
+}
+
+.zyre-auth-page .auth-back {
+background: #ffffff;
+
+color: #000000;
+
+border: 1px solid #ffffff;
+
+padding: 11px 18px;
+
+border-radius: 4px;
+
+font-weight: 800;
+}
+
+.zyre-auth-page .auth-back:hover {
+background: #dddddd;
+}
+
+/* MAIN */
+
+.zyre-auth-page .auth-main {
+width: 100%;
+
+max-width: 900px;
+
+margin: 0 auto;
+
+padding: 55px 20px 80px;
+}
+
+/* HEADING */
+
+.zyre-auth-page .auth-heading {
+text-align: center;
+
+margin-bottom: 30px;
+}
+
+.zyre-auth-page .auth-eyebrow {
+color: #aaaaaa;
+
+font-size: 11px;
+
+font-weight: 800;
+
+letter-spacing: 2px;
+
+text-transform: uppercase;
+
+margin-bottom: 10px;
+}
+
+.zyre-auth-page .auth-heading h1 {
+color: #ffffff;
+
+font-size: clamp(34px, 6vw, 54px);
+
+line-height: 1;
+
+font-weight: 900;
+
+letter-spacing: -1px;
+
+margin-bottom: 15px;
+}
+
+.zyre-auth-page .auth-heading p {
+color: #aaaaaa;
+
+font-size: 16px;
+}
+
+/* CARD */
+
+.zyre-auth-page .auth-card {
+background: #111111;
+
+border: 1px solid #2d2d2d;
+
+border-radius: 10px;
+
+padding: 30px;
+
+box-shadow:
+0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+/* CUSTOMER / SELLER */
+
+.zyre-auth-page .auth-choice {
+display: grid;
+
+grid-template-columns: 1fr 1fr;
+
+gap: 10px;
+
+margin-bottom: 20px;
+}
+
+.zyre-auth-page .auth-choice-btn {
+width: 100%;
+
+padding: 15px;
+
+background: #191919;
+
+color: #bbbbbb;
+
+border: 1px solid #333333;
+
+border-radius: 5px;
+
+font-weight: 800;
+
+transition:
+background 0.2s ease,
+color 0.2s ease,
+border-color 0.2s ease;
+}
+
+.zyre-auth-page .auth-choice-btn:hover {
+border-color: #777777;
+
+color: #ffffff;
+}
+
+.zyre-auth-page .auth-choice-btn.active {
+background: #ffffff;
+
+color: #000000;
+
+border-color: #ffffff;
+}
+
+/* TABS */
+
+.zyre-auth-page .auth-tabs {
+display: grid;
+
+grid-template-columns: 1fr 1fr;
+
+border-bottom: 1px solid #333333;
+
+margin-bottom: 25px;
+}
+
+.zyre-auth-page .auth-tab {
+background: transparent;
+
+color: #888888;
+
+border: 0;
+
+border-bottom: 2px solid transparent;
+
+padding: 14px 10px;
+
+font-weight: 800;
+}
+
+.zyre-auth-page .auth-tab.active {
+color: #ffffff;
+
+border-bottom-color: #ffffff;
+}
+
+/* MESSAGE */
+
+.zyre-auth-page .auth-message {
+display: none;
+
+padding: 13px 15px;
+
+margin-bottom: 20px;
+
+border-radius: 5px;
+
+font-size: 14px;
+
+line-height: 1.5;
+}
+
+.zyre-auth-page .auth-message.show {
+display: block;
+
+background: #202020;
+
+color: #ffffff;
+
+border: 1px solid #3b3b3b;
+}
+
+.zyre-auth-page .auth-message.error {
+background: #2a1515;
+
+color: #ffb3b3;
+
+border-color: #673434;
+}
+
+.zyre-auth-page .auth-message.success {
+background: #152719;
+
+color: #b8e7c1;
+
+border-color: #345b3c;
+}
+
+/* PANELS */
+
+.zyre-auth-page .auth-panel {
+width: 100%;
+}
+
+.zyre-auth-page .auth-panel.hidden {
+display: none !important;
+}
+
+.zyre-auth-page .auth-panel h2 {
+color: #ffffff;
+
+font-size: 25px;
+
+font-weight: 900;
+
+margin-bottom: 8px;
+}
+
+.zyre-auth-page .subtitle {
+color: #999999;
+
+font-size: 14px;
+
+margin-bottom: 25px;
+}
+
+/* FORM */
+
+.zyre-auth-page .auth-form-group {
+margin-bottom: 18px;
+}
+
+.zyre-auth-page .auth-form-group label {
+display: block;
+
+color: #dddddd;
+
+font-size: 13px;
+
+font-weight: 700;
+
+margin-bottom: 7px;
+}
+
+.zyre-auth-page .auth-form-group input {
+width: 100%;
+
+display: block;
+
+padding: 14px 15px;
+
+background: #050505;
+
+color: #ffffff;
+
+border: 1px solid #3a3a3a;
+
+border-radius: 5px;
+
+outline: none;
+}
+
+.zyre-auth-page .auth-form-group input::placeholder {
+color: #666666;
+}
+
+.zyre-auth-page .auth-form-group input:focus {
+border-color: #ffffff;
+
+box-shadow:
+0 0 0 2px rgba(255, 255, 255, 0.08);
+}
+
+.zyre-auth-page .auth-primary,
+.zyre-auth-page .auth-secondary {
+width: 100%;
+
+padding: 14px 18px;
+
+border-radius: 5px;
+
+font-weight: 800;
+
+transition:
+opacity 0.2s ease,
+background 0.2s ease;
+}
+
+.zyre-auth-page .auth-primary {
+background: #ffffff;
+
+color: #000000;
+
+border: 1px solid #ffffff;
+}
+
+.zyre-auth-page .auth-primary:hover {
+background: #dddddd;
+}
+
+.zyre-auth-page .auth-secondary {
+background: transparent;
+
+color: #ffffff;
+
+border: 1px solid #555555;
+}
+
+.zyre-auth-page .auth-secondary:hover {
+background: #222222;
+
+border-color: #888888;
+}
+
+.zyre-auth-page .auth-primary:disabled,
+.zyre-auth-page .auth-secondary:disabled {
+opacity: 0.5;
+
+cursor: not-allowed;
+}
+
+/* SELLER BOXES */
+
+.zyre-auth-page .seller-continue-box {
+background: #181818;
+
+border: 1px solid #333333;
+
+border-radius: 6px;
+
+padding: 20px;
+
+margin-top: 25px;
+}
+
+.zyre-auth-page .seller-continue-box h3 {
+color: #ffffff;
+
+font-size: 17px;
+
+font-weight: 800;
+
+margin-bottom: 7px;
+}
+
+.zyre-auth-page .seller-continue-box p {
+color: #999999;
+
+font-size: 14px;
+
+margin-bottom: 15px;
+}
+
+/* DIVIDER */
+
+.zyre-auth-page .auth-divider {
+display: flex;
+
+align-items: center;
+
+gap: 15px;
+
+color: #666666;
+
+font-size: 10px;
+
+font-weight: 800;
+
+letter-spacing: 2px;
+
+margin: 30px 0 18px;
+
+text-align: center;
+}
+
+.zyre-auth-page .auth-divider::before,
+.zyre-auth-page .auth-divider::after {
+content: "";
+
+flex: 1;
+
+height: 1px;
+
+background: #2d2d2d;
+}
+
+/* FOOTER NOTE */
+
+.zyre-auth-page .auth-footer-note {
+color: #777777;
+
+font-size: 12px;
+
+line-height: 1.5;
+}
+
+/* =========================================================
+RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+.hero-content {
+grid-template-columns: 1fr;
+}
+
+.grid {
+grid-template-columns:
+repeat(3, minmax(0, 1fr));
+}
+
+.category-grid {
+grid-template-columns:
+repeat(3, minmax(0, 1fr));
+}
 
 }
 
+@media (max-width: 700px) {
 
-/* =========================================================
-GET SELLER SUBSCRIPTION
-========================================================= */
+.zyre-header {
+padding: 15px 4%;
+}
 
-async function getZYRESellerSubscription(
-  sellerId,
-  accessToken
-) {
+.header-search {
+display: none;
+}
 
-  if (!sellerId) {
+.zyre-nav {
+display: none;
+}
 
-    return null;
+.menu-button {
+display: block;
+}
 
-  }
+.hero {
+padding: 60px 5%;
+}
 
-  try {
+.hero h1 {
+letter-spacing: -2px;
+}
 
-    const response =
-      await fetch(
+.hero-mark {
+min-height: 250px;
+}
 
-        SUPABASE_URL +
-        "/rest/v1/store_subscriptions?seller_id=eq." +
-        encodeURIComponent(
-          sellerId
-        ) +
-        "&select=id,seller_id,rental_plan_id,status&order=id.desc&limit=1",
+.hero-z {
+font-size: 150px;
+}
 
-        {
+.grid {
+grid-template-columns:
+repeat(2, minmax(0, 1fr));
+}
 
-          method:
-            "GET",
+.category-grid {
+grid-template-columns:
+repeat(2, minmax(0, 1fr));
+}
 
-          headers: {
+.steps {
+grid-template-columns: 1fr;
+}
 
-            "apikey":
-              SUPABASE_KEY,
+.seller-banner {
+flex-direction: column;
+align-items: flex-start;
+}
 
-            "Authorization":
-              "Bearer " +
-              (
-                accessToken ||
-                SUPABASE_KEY
-              )
+/* AUTH MOBILE */
 
-          }
+.zyre-auth-page .auth-header {
+padding: 17px 18px;
+}
 
-        }
+.zyre-auth-page .auth-brand-main {
+font-size: 25px;
+}
 
-      );
+.zyre-auth-page .auth-brand-sub {
+font-size: 8px;
+}
 
-    if (!response.ok) {
+.zyre-auth-page .auth-back {
+padding: 9px 12px;
 
-      console.warn(
-        "Could not load seller rental subscription:",
-        await response.text()
-      );
-
-      return null;
-
-    }
-
-    const subscriptions =
-      await response.json();
-
-    if (
-      !Array.isArray(
-        subscriptions
-      ) ||
-      !subscriptions.length
-    ) {
-
-      return null;
-
-    }
-
-    return subscriptions[0];
-
-  } catch (error) {
-
-    console.warn(
-      "Seller rental subscription error:",
-      error
-    );
-
-    return null;
-
-  }
+font-size: 12px;
 
 }
 
+.zyre-auth-page .auth-main {
+padding: 40px 14px 60px;
+}
 
-/* =========================================================
-CHECK WHETHER SELLER PAID THIS MONTH
-========================================================= */
+.zyre-auth-page .auth-card {
+padding: 20px 16px;
 
-async function getZYRESellerRentalAccess(
-  sellerId,
-  accessToken
-) {
-
-  const result = {
-
-    paid:
-      false,
-
-    sellerId:
-      sellerId,
-
-    payment:
-      null,
-
-    subscription:
-      null,
-
-    reason:
-      "Rental payment required.",
-
-    month:
-      null
-
-  };
-
-  if (!sellerId) {
-
-    result.reason =
-      "Seller ID is missing.";
-
-    return result;
-
-  }
-
-  const monthRange =
-    getZYRECurrentMonthRange();
-
-  result.month =
-    monthRange;
-
-  try {
-
-    /* =====================================================
-    LOAD SUBSCRIPTION
-    ===================================================== */
-
-    const subscription =
-      await getZYRESellerSubscription(
-        sellerId,
-        accessToken
-      );
-
-    result.subscription =
-      subscription;
-
-
-    /* =====================================================
-    FIND PAID PAYMENT IN CURRENT MONTH
-    ===================================================== */
-
-    const paymentResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/rental_payments?seller_id=eq." +
-        encodeURIComponent(
-          sellerId
-        ) +
-        "&status=eq.paid" +
-        "&created_at=gte." +
-        encodeURIComponent(
-          monthRange.start
-        ) +
-        "&created_at=lt." +
-        encodeURIComponent(
-          monthRange.end
-        ) +
-        "&select=id,seller_id,subscription_id,amount,status,payment_reference,payment_method,paid_at,created_at" +
-        "&order=created_at.desc&limit=1",
-
-        {
-
-          method:
-            "GET",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              (
-                accessToken ||
-                SUPABASE_KEY
-              )
-
-          }
-
-        }
-
-      );
-
-    if (!paymentResponse.ok) {
-
-      const errorText =
-        await paymentResponse.text();
-
-      console.error(
-        "Rental payment check failed:",
-        errorText
-      );
-
-      result.paid =
-        false;
-
-      result.reason =
-        "Rental payment could not be verified.";
-
-      return result;
-
-    }
-
-    const payments =
-      await paymentResponse.json();
-
-    if (
-      !Array.isArray(
-        payments
-      ) ||
-      !payments.length
-    ) {
-
-      result.paid =
-        false;
-
-      result.reason =
-        "No paid R100 rental payment was found for the current month.";
-
-      return result;
-
-    }
-
-    const payment =
-      payments[0];
-
-    if (
-      String(
-        payment.status || ""
-      ).toLowerCase() !== "paid"
-    ) {
-
-      result.paid =
-        false;
-
-      result.reason =
-        "Rental payment is not confirmed.";
-
-      return result;
-
-    }
-
-    result.paid =
-      true;
-
-    result.payment =
-      payment;
-
-    result.reason =
-      "Rental paid for the current month.";
-
-    return result;
-
-  } catch (error) {
-
-    console.error(
-      "Rental access check failed:",
-      error
-    );
-
-    result.paid =
-      false;
-
-    result.reason =
-      "Rental payment could not be verified.";
-
-    return result;
-
-  }
+border-radius: 8px;
 
 }
 
-
-/* =========================================================
-INITIALIZE SELLER RENTAL WITH PAYSTACK
-
-This replaces the old PayFast URL redirect.
-========================================================= */
-
-async function initializeZYRERentalPaystack(
-  sellerId,
-  email
-) {
-
-  if (!sellerId) {
-
-    throw new Error(
-      "Seller ID is missing."
-    );
-
-  }
-
-  if (
-    !email ||
-    !String(email).trim()
-  ) {
-
-    throw new Error(
-      "Seller email is missing."
-    );
-
-  }
-
-  const response =
-    await fetch(
-
-      ZYRE_RENTAL_PAYSTACK_URL,
-
-      {
-
-        method:
-          "POST",
-
-        headers: {
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Content-Type":
-            "application/json"
-
-        },
-
-        body:
-          JSON.stringify({
-
-            action:
-              "initialize",
-
-            seller_id:
-              Number(sellerId),
-
-            email:
-              String(email).trim()
-
-          })
-
-        }
-
-      );
-
-  const text =
-    await response.text();
-
-  let data = null;
-
-  try {
-
-    data =
-      JSON.parse(
-        text
-      );
-
-  } catch (error) {
-
-    console.error(
-      "Rental Paystack response was not JSON:",
-      text
-    );
-
-  }
-
-  if (
-    !response.ok
-  ) {
-
-    throw new Error(
-
-      data?.error ||
-      data?.message ||
-      text ||
-      "Paystack rental initialization failed."
-
-    );
-
-  }
-
-  if (
-    !data ||
-    !data.success ||
-    !data.authorization_url
-  ) {
-
-    throw new Error(
-
-      data?.error ||
-      "Paystack did not return a rental payment page."
-
-    );
-
-  }
-
-  if (
-    data.reference
-  ) {
-
-    localStorage.setItem(
-      "zyre_rental_reference",
-      data.reference
-    );
-
-  }
-
-  return data;
+.zyre-auth-page .auth-heading h1 {
+font-size: 38px;
+}
 
 }
 
+@media (max-width: 400px) {
 
-/* =========================================================
-GO TO RENTAL PAYMENT
+.grid {
+grid-template-columns: 1fr;
+}
 
-PAYSTACK ONLY
-========================================================= */
+.category-grid {
+grid-template-columns: 1fr;
+}
 
-async function redirectSellerToRentalPayment(
-  sellerId,
-  storeName,
-  accessToken,
-  sellerEmail
-) {
+.hero h1 {
+font-size: 42px;
+}
 
-  try {
+.zyre-auth-page .auth-choice {
+grid-template-columns: 1fr;
+}
 
-    let email =
-      sellerEmail ||
-      localStorage.getItem(
-        "zava_seller_email"
-      ) ||
-      "";
+.zyre-auth-page .auth-heading h1 {
+font-size: 34px;
+}
 
-    if (!email) {
-
-      const sellerResponse =
-        await fetch(
-
-          SUPABASE_URL +
-          "/rest/v1/sellers?id=eq." +
-          encodeURIComponent(
-            sellerId
-          ) +
-          "&select=id,email,store_name",
-
-          {
-
-            method:
-              "GET",
-
-            headers: {
-
-              "apikey":
-                SUPABASE_KEY,
-
-              "Authorization":
-                "Bearer " +
-                (
-                  accessToken ||
-                  SUPABASE_KEY
-                )
-
-            }
-
-          }
-
-        );
-
-      if (
-        sellerResponse.ok
-      ) {
-
-        const sellers =
-          await sellerResponse.json();
-
-        if (
-          Array.isArray(sellers) &&
-          sellers.length
-        ) {
-
-          email =
-            sellers[0].email ||
-            "";
-
-        }
-
-      }
-
-    }
-
-    if (
-      !email ||
-      !String(email).trim()
-    ) {
-
-      alert(
-
-        "Your monthly rental payment is required, but your seller email could not be found.\n\n" +
-        "Please log in again."
-
-      );
-
-      return false;
-
-    }
-
-    localStorage.setItem(
-      "zava_seller_email",
-      String(email).trim()
-    );
-
-
-    alert(
-
-      "⚠️ Monthly rental payment required.\n\n" +
-
-      "Your ZYRE Store rental for this month has not been paid.\n\n" +
-
-      "Amount due: R" +
-      ZYRE_RENTAL_AMOUNT.toFixed(2) +
-      "\n\n" +
-
-      "You will now be taken to secure Paystack checkout."
-
-    );
-
-
-    const paymentData =
-      await initializeZYRERentalPaystack(
-        sellerId,
-        email
-      );
-
-
-    window.location.href =
-      paymentData.authorization_url;
-
-    return true;
-
-  } catch (error) {
-
-    console.error(
-      "Could not open Paystack rental payment:",
-      error
-    );
-
-    alert(
-
-      "Your monthly rental payment is required, but Paystack could not be opened.\n\n" +
-      error.message
-
-    );
-
-    return false;
-
-  }
+.zyre-auth-page .auth-card {
+padding: 17px 13px;
+}
 
 }
 
-
 /* =========================================================
-VERIFY RENTAL PAYMENT FROM PAYSTACK CALLBACK
-
-This is also available to seller.html if needed.
+SELECTION
 ========================================================= */
 
-async function verifyZYRERentalPayment(
-  reference
-) {
-
-  if (
-    !reference
-  ) {
-
-    return {
-
-      success:
-        false,
-
-      paid:
-        false,
-
-      error:
-        "Payment reference is missing."
-
-    };
-
-  }
-
-  try {
-
-    const response =
-      await fetch(
-
-        ZYRE_RENTAL_PAYSTACK_URL,
-
-        {
-
-          method:
-            "POST",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Content-Type":
-              "application/json"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              action:
-                "verify",
-
-              reference:
-                reference
-
-            })
-
-          }
-
-        );
-
-    const text =
-      await response.text();
-
-    let data = null;
-
-    try {
-
-      data =
-        JSON.parse(
-          text
-        );
-
-    } catch (error) {
-
-      console.error(
-        "Rental verification response was not JSON:",
-        text
-      );
-
-    }
-
-    if (
-      response.ok &&
-      data?.success &&
-      data?.paid
-    ) {
-
-      localStorage.removeItem(
-        "zyre_rental_reference"
-      );
-
-      return {
-
-        success:
-          true,
-
-        paid:
-          true,
-
-        data:
-          data
-
-      };
-
-    }
-
-    return {
-
-      success:
-        false,
-
-      paid:
-        false,
-
-      error:
-        data?.error ||
-        data?.message ||
-        text ||
-        "Rental payment could not be verified."
-
-    };
-
-  } catch (error) {
-
-    console.error(
-      "Rental payment verification failed:",
-      error
-    );
-
-    return {
-
-      success:
-        false,
-
-      paid:
-        false,
-
-      error:
-        error.message
-
-    };
-
-  }
-
+::selection {
+background: #000000;
+color: #ffffff;
 }
-
-
-/* =========================================================
-CHECK CART SELLERS' RENTAL PAYMENTS
-========================================================= */
-
-async function verifyCartSellerRentalAccess(
-  orderItems,
-  accessToken
-) {
-
-  const sellerIds = [
-    ...new Set(
-
-      orderItems
-
-        .map(item => {
-
-          const product =
-            products.find(
-              p =>
-                String(p.id) ===
-                String(item.product_id)
-            );
-
-          return product
-            ? Number(
-                product.seller_id
-              )
-            : null;
-
-        })
-
-        .filter(
-          sellerId =>
-            Number.isFinite(
-              sellerId
-            ) &&
-            sellerId > 0
-        )
-
-    )
-  ];
-
-
-  if (!sellerIds.length) {
-
-    return {
-
-      allowed:
-        true,
-
-      lockedSellers:
-        []
-
-    };
-
-  }
-
-
-  const lockedSellers = [];
-
-
-  for (
-    const sellerId
-    of sellerIds
-  ) {
-
-    const access =
-      await getZYRESellerRentalAccess(
-        sellerId,
-        accessToken
-      );
-
-
-    if (!access.paid) {
-
-      const sellerProducts =
-        products.filter(
-          product =>
-            Number(
-              product.seller_id
-            ) ===
-            Number(
-              sellerId
-            )
-        );
-
-
-      const sellerName =
-        sellerProducts.length
-          ? sellerProducts[0].seller
-          : "This store";
-
-
-      lockedSellers.push({
-
-        sellerId:
-          sellerId,
-
-        sellerName:
-          sellerName,
-
-        reason:
-          access.reason
-
-      });
-
-    }
-
-  }
-
-
-  return {
-
-    allowed:
-      lockedSellers.length === 0,
-
-    lockedSellers:
-      lockedSellers
-
-  };
-
-}
-
-
-/* =========================================================
-READ CART SAFELY
-========================================================= */
-
-function readCartStorage() {
-
-  let raw = [];
-
-  try {
-
-    raw =
-      JSON.parse(
-        localStorage.getItem(
-          CART_STORAGE_KEY
-        ) || "[]"
-      );
-
-  } catch (error) {
-
-    console.warn(
-      "ZYRE cart could not be read:",
-      error
-    );
-
-    raw = [];
-
-  }
-
-
-  if (!Array.isArray(raw)) {
-
-    raw = [];
-
-  }
-
-
-  const cleanedCart =
-    raw
-      .map(item => {
-
-        if (
-          item &&
-          typeof item === "object"
-        ) {
-
-          return (
-            item.id ??
-            item.product_id ??
-            item.productId ??
-            null
-          );
-
-        }
-
-        return item;
-
-      })
-      .filter(id => {
-
-        return (
-          id !== null &&
-          id !== undefined &&
-          id !== "" &&
-          typeof id !== "object"
-        );
-
-      });
-
-
-  try {
-
-    localStorage.setItem(
-      CART_STORAGE_KEY,
-      JSON.stringify(cleanedCart)
-    );
-
-  } catch (error) {
-
-    console.warn(
-      "ZYRE cart could not be saved:",
-      error
-    );
-
-  }
-
-
-  return cleanedCart;
-
-}
-
-
-/* =========================================================
-LOAD CART
-========================================================= */
-
-function loadCart() {
-
-  cart =
-    readCartStorage();
-
-  return cart;
-
-}
-
-loadCart();
-
-
-/* =========================================================
-SAVE CART
-========================================================= */
-
-function save() {
-
-  try {
-
-    localStorage.setItem(
-      CART_STORAGE_KEY,
-      JSON.stringify(cart)
-    );
-
-  } catch (error) {
-
-    console.warn(
-      "ZYRE cart could not be saved:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-SYNC CART NUMBER
-========================================================= */
-
-function syncCartCount() {
-
-  const cartCount =
-    document.getElementById(
-      "cartCount"
-    );
-
-  if (!cartCount) {
-
-    return;
-
-  }
-
-  cartCount.textContent =
-    cart.length;
-
-}
-
-
-/* =========================================================
-ZYRE CUSTOMER ACCOUNT
-========================================================= */
-
-async function getZYRECurrentUser() {
-
-  try {
-
-    if (
-      window.ZYRE_CURRENT_SESSION &&
-      window.ZYRE_CURRENT_SESSION.user
-    ) {
-
-      return window.ZYRE_CURRENT_SESSION.user;
-
-    }
-
-
-    if (
-      !window.supabase ||
-      !window.supabase.createClient
-    ) {
-
-      return null;
-
-    }
-
-
-    if (!window.ZYRE_AUTH_CLIENT) {
-
-      window.ZYRE_AUTH_CLIENT =
-        window.supabase.createClient(
-          SUPABASE_URL,
-          SUPABASE_KEY
-        );
-
-    }
-
-
-    const {
-      data,
-      error
-    } =
-      await window.ZYRE_AUTH_CLIENT.auth.getUser();
-
-
-    if (error) {
-
-      console.warn(
-        "Could not get current ZYRE customer:",
-        error
-      );
-
-      return null;
-
-    }
-
-
-    return data?.user || null;
-
-  } catch (error) {
-
-    console.warn(
-      "Could not get current ZYRE user:",
-      error
-    );
-
-    return null;
-
-  }
-
-}
-
-
-/* =========================================================
-GET CUSTOMER PROFILE
-========================================================= */
-
-async function getZYRECustomerProfile() {
-
-  try {
-
-    const user =
-      await getZYRECurrentUser();
-
-
-    if (!user) {
-
-      return null;
-
-    }
-
-
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/profiles?id=eq." +
-        encodeURIComponent(user.id) +
-        "&select=id,full_name,phone,address,role",
-
-        {
-
-          method:
-            "GET",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              (
-                window.ZYRE_CURRENT_SESSION?.access_token ||
-                SUPABASE_KEY
-              )
-
-          }
-
-        }
-
-      );
-
-
-    if (!response.ok) {
-
-      console.warn(
-        "Customer profile could not be loaded:",
-        await response.text()
-      );
-
-      return null;
-
-    }
-
-
-    const profiles =
-      await response.json();
-
-
-    if (
-      !Array.isArray(profiles) ||
-      !profiles.length
-    ) {
-
-      return null;
-
-    }
-
-
-    return profiles[0];
-
-  } catch (error) {
-
-    console.warn(
-      "Could not load customer profile:",
-      error
-    );
-
-    return null;
-
-  }
-
-}
-
-
-/* =========================================================
-OPEN CUSTOMER ACCOUNT
-========================================================= */
-
-window.customerAccount =
-function() {
-
-  window.location.href =
-    "account.html";
-
-};
-
-
-/* =========================================================
-RENDER PRODUCTS
-========================================================= */
-
-function renderProducts() {
-
-  const searchBox =
-    document.getElementById("search");
-
-  const sortBox =
-    document.getElementById("sort");
-
-  const productsBox =
-    document.getElementById("products");
-
-
-  if (!productsBox) return;
-
-
-  let q =
-    searchBox
-      ? searchBox.value.toLowerCase()
-      : "";
-
-
-  let s =
-    sortBox
-      ? sortBox.value
-      : "popular";
-
-
-  let filtered =
-    products.filter(x => {
-
-      const productCategory =
-        x.cat || "Other";
-
-
-      return (
-        (category === "All" ||
-          productCategory === category) &&
-        x.name.toLowerCase().includes(q)
-      );
-
-    });
-
-
-  if (s === "low") {
-
-    filtered.sort(
-      (a, b) =>
-        a.price - b.price
-    );
-
-  }
-
-
-  if (s === "high") {
-
-    filtered.sort(
-      (a, b) =>
-        b.price - a.price
-    );
-
-  }
-
-
-  productsBox.innerHTML =
-    filtered.map(x => `
-
-      <article class="card">
-
-        <div class="pic">
-
-          ${
-            x.image_url
-              ?
-            `<img
-              src="${x.image_url}"
-              alt="${x.name}"
-              style="
-                width:100%;
-                height:100%;
-                object-fit:cover;
-              "
-            >`
-              :
-            `<span>🛍️</span>`
-          }
-
-        </div>
-
-        <h3>${x.name}</h3>
-
-        <div class="seller">
-          ${x.seller}
-        </div>
-
-        <div class="price">
-          R${Number(x.price).toFixed(2)}
-        </div>
-
-        ${
-          Number(x.stock) > 0
-            ?
-            `<div
-              style="
-                font-size:13px;
-                color:#777;
-                margin:6px 0;
-              "
-            >
-              ${x.stock} in stock
-            </div>
-
-            <button
-              class="add"
-              onclick="add(${x.id})"
-            >
-              Add to cart
-            </button>`
-            :
-            `<div
-              style="
-                font-size:13px;
-                color:#d00;
-                margin:6px 0;
-                font-weight:bold;
-              "
-            >
-              Out of stock
-            </div>
-
-            <button
-              class="add"
-              disabled
-              style="
-                opacity:.5;
-                cursor:not-allowed;
-              "
-            >
-              Out of stock
-            </button>`
-        }
-
-      </article>
-
-    `).join("") ||
-    "<p>No products found.</p>";
-
-}
-
-
-/* =========================================================
-LOAD PRODUCTS
-========================================================= */
-
-async function loadProducts() {
-
-  try {
-
-    const productsResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/products?select=*&active=eq.true&order=id.desc",
-
-        {
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_KEY
-
-          }
-
-        }
-
-      );
-
-
-    if (!productsResponse.ok) {
-
-      alert(
-        "Products error:\n\n" +
-        await productsResponse.text()
-      );
-
-      return;
-
-    }
-
-
-    const productData =
-      await productsResponse.json();
-
-
-    const sellersResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/sellers?select=id,store_name",
-
-        {
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_KEY
-
-          }
-
-        }
-
-      );
-
-
-    let sellers = [];
-
-
-    if (sellersResponse.ok) {
-
-      sellers =
-        await sellersResponse.json();
-
-    }
-
-
-    const sellerMap = {};
-
-
-    sellers.forEach(seller => {
-
-      sellerMap[seller.id] =
-        (
-          seller.store_name ||
-          "Zava Seller"
-        ).trim();
-
-    });
-
-
-    products =
-      productData.map(p => ({
-
-        id:
-          p.id,
-
-        name:
-          p.name,
-
-        price:
-          Number(p.price),
-
-        stock:
-          Number(
-            p.stock ?? 0
-          ),
-
-        cat:
-          p.category ||
-          "Other",
-
-        seller:
-          Number(p.seller_id) === 5
-            ? "ZAVAMARKET"
-            : (
-                sellerMap[p.seller_id] ||
-                "Zava Seller"
-              ),
-
-        seller_id:
-          Number(p.seller_id),
-
-        image_url:
-          p.image_url ||
-          ""
-
-      }));
-
-
-    loadCart();
-
-    renderProducts();
-
-    updateCart();
-
-    syncCartCount();
-
-  } catch (error) {
-
-    alert(
-      "Could not load products:\n\n" +
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-CATEGORY
-========================================================= */
-
-function setCategory(c) {
-
-  category = c;
-
-
-  const heading =
-    document.getElementById(
-      "heading"
-    );
-
-
-  if (heading) {
-
-    heading.textContent =
-      c + " products";
-
-  }
-
-
-  renderProducts();
-
-}
-
-
-/* =========================================================
-ADD TO CART
-========================================================= */
-
-function add(id) {
-
-  const product =
-    products.find(
-      p =>
-        String(p.id) ===
-        String(id)
-    );
-
-
-  if (!product) {
-
-    alert(
-      "Product could not be found."
-    );
-
-    return;
-
-  }
-
-
-  const currentQuantity =
-    cart.filter(
-      cartId =>
-        String(cartId) ===
-        String(id)
-    ).length;
-
-
-  if (
-    currentQuantity >=
-    Number(product.stock)
-  ) {
-
-    alert(
-      "Sorry, there is not enough stock available."
-    );
-
-    return;
-
-  }
-
-
-  cart.push(
-    product.id
-  );
-
-
-  save();
-
-  syncCartCount();
-
-  updateCart();
-
-
-  alert(
-    product.name +
-    " added to cart."
-  );
-
-}
-
-
-/* =========================================================
-REMOVE ONE QUANTITY
-========================================================= */
-
-function decreaseCartQuantity(id) {
-
-  loadCart();
-
-
-  const index =
-    cart.findIndex(
-      cartId =>
-        String(cartId) ===
-        String(id)
-    );
-
-
-  if (index === -1) {
-
-    return;
-
-  }
-
-
-  cart.splice(
-    index,
-    1
-  );
-
-
-  save();
-
-  updateCart();
-
-  syncCartCount();
-
-}
-
-
-/* =========================================================
-ADD ONE QUANTITY FROM CART
-========================================================= */
-
-function increaseCartQuantity(id) {
-
-  loadCart();
-
-
-  const product =
-    products.find(
-      p =>
-        String(p.id) ===
-        String(id)
-    );
-
-
-  if (!product) {
-
-    alert(
-      "Product could not be found."
-    );
-
-    return;
-
-  }
-
-
-  const currentQuantity =
-    cart.filter(
-      cartId =>
-        String(cartId) ===
-        String(id)
-    ).length;
-
-
-  if (
-    currentQuantity >=
-    Number(product.stock)
-  ) {
-
-    alert(
-      "You have reached the available stock for this product."
-    );
-
-    return;
-
-  }
-
-
-  cart.push(
-    product.id
-  );
-
-
-  save();
-
-  updateCart();
-
-  syncCartCount();
-
-}
-
-
-/* =========================================================
-REMOVE PRODUCT COMPLETELY
-========================================================= */
-
-function removeCartProduct(id) {
-
-  loadCart();
-
-
-  cart =
-    cart.filter(
-      cartId =>
-        String(cartId) !==
-        String(id)
-    );
-
-
-  save();
-
-  updateCart();
-
-  syncCartCount();
-
-}
-
-
-/* =========================================================
-CLEAR CART
-========================================================= */
-
-function clearCart() {
-
-  cart = [];
-
-  save();
-
-  updateCart();
-
-  syncCartCount();
-
-
-  alert(
-    "Cart cleared successfully."
-  );
-
-}
-
-
-/* =========================================================
-UPDATE CART
-========================================================= */
-
-function updateCart() {
-
-  loadCart();
-
-
-  const cartCount =
-    document.getElementById(
-      "cartCount"
-    );
-
-  const cartItems =
-    document.getElementById(
-      "cartItems"
-    );
-
-  const totalBox =
-    document.getElementById(
-      "total"
-    );
-
-
-  if (cartCount) {
-
-    cartCount.textContent =
-      cart.length;
-
-  }
-
-
-  if (
-    !cartItems ||
-    !totalBox
-  ) {
-
-    return;
-
-  }
-
-
-  const counts = {};
-
-
-  cart.forEach(id => {
-
-    const key =
-      String(id);
-
-
-    counts[key] =
-      (counts[key] || 0) + 1;
-
-  });
-
-
-  let total = 0;
-
-
-  const rows =
-    Object.entries(counts)
-      .map(([id, quantity]) => {
-
-        const product =
-          products.find(
-            p =>
-              String(p.id) ===
-              String(id)
-          );
-
-
-        if (!product) {
-
-          return `
-
-            <div class="cartrow">
-
-              <span>
-                Product #${id} × ${quantity}
-              </span>
-
-              <button
-                type="button"
-                onclick="removeCartProduct('${id}')"
-              >
-                Remove
-              </button>
-
-            </div>
-
-          `;
-
-        }
-
-
-        const price =
-          Number(product.price);
-
-
-        total +=
-          price * quantity;
-
-
-        return `
-
-          <div
-            class="cartrow"
-            style="
-              display:flex;
-              align-items:center;
-              justify-content:space-between;
-              gap:10px;
-              margin-bottom:14px;
-              padding-bottom:12px;
-              border-bottom:1px solid #eee;
-            "
-          >
-
-            <div
-              style="
-                flex:1;
-                min-width:0;
-              "
-            >
-
-              <div
-                style="
-                  font-weight:600;
-                  margin-bottom:6px;
-                "
-              >
-                ${product.name}
-              </div>
-
-
-              <div
-                style="
-                  font-size:13px;
-                  color:#777;
-                "
-              >
-                R${price.toFixed(2)} each
-              </div>
-
-            </div>
-
-
-            <div
-              style="
-                display:flex;
-                align-items:center;
-                gap:7px;
-                white-space:nowrap;
-              "
-            >
-
-              <button
-                type="button"
-                onclick="decreaseCartQuantity('${id}')"
-                style="
-                  width:32px;
-                  height:32px;
-                  border:1px solid #ccc;
-                  background:#fff;
-                  border-radius:6px;
-                  font-size:18px;
-                  cursor:pointer;
-                "
-              >
-                −
-              </button>
-
-
-              <strong
-                style="
-                  min-width:24px;
-                  text-align:center;
-                "
-              >
-                ${quantity}
-              </strong>
-
-
-              <button
-                type="button"
-                onclick="increaseCartQuantity('${id}')"
-                style="
-                  width:32px;
-                  height:32px;
-                  border:1px solid #111;
-                  background:#111;
-                  color:#fff;
-                  border-radius:6px;
-                  font-size:18px;
-                  cursor:pointer;
-                "
-              >
-                +
-              </button>
-
-            </div>
-
-
-            <div
-              style="
-                min-width:80px;
-                text-align:right;
-                font-weight:bold;
-              "
-            >
-              R${(
-                price *
-                quantity
-              ).toFixed(2)}
-            </div>
-
-
-            <button
-              type="button"
-              onclick="removeCartProduct('${id}')"
-              style="
-                border:0;
-                background:none;
-                color:#c00;
-                cursor:pointer;
-                font-size:12px;
-              "
-            >
-              Remove
-            </button>
-
-          </div>
-
-        `;
-
-      })
-      .join("");
-
-
-  cartItems.innerHTML =
-    rows ||
-    "<p>Your cart is empty.</p>";
-
-
-  totalBox.textContent =
-    total.toFixed(2);
-
-}
-
-
-/* =========================================================
-TOGGLE CART
-========================================================= */
-
-function toggleCart() {
-
-  const cartBox =
-    document.getElementById(
-      "cart"
-    );
-
-
-  if (!cartBox) {
-
-    console.warn(
-      "ZYRE cart drawer was not found."
-    );
-
-    return;
-
-  }
-
-
-  loadCart();
-
-  updateCart();
-
-
-  cartBox.classList.toggle(
-    "open"
-  );
-
-}
-
-
-/* =========================================================
-OPEN CART
-========================================================= */
-
-function openCartFromMarketplace() {
-
-  loadCart();
-
-  syncCartCount();
-
-
-  if (
-    typeof toggleCart ===
-    "function"
-  ) {
-
-    toggleCart();
-
-    return;
-
-  }
-
-
-  window.location.hash =
-    "cart";
-
-}
-
-
-/* =========================================================
-CART STORAGE LISTENER
-========================================================= */
-
-window.addEventListener(
-  "storage",
-  function(event) {
-
-    if (
-      event.key ===
-      CART_STORAGE_KEY
-    ) {
-
-      loadCart();
-
-      syncCartCount();
-
-      updateCart();
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-PAGE RETURN LISTENER
-========================================================= */
-
-window.addEventListener(
-  "pageshow",
-  function() {
-
-    loadCart();
-
-    syncCartCount();
-
-    updateCart();
-
-  }
-);
-
-
-/* =========================================================
-CART HASH HANDLER
-========================================================= */
-
-function handleCartHash() {
-
-  if (
-    window.location.hash !==
-    "#cart"
-  ) {
-
-    return;
-
-  }
-
-
-  let attempts = 0;
-
-
-  const tryOpen =
-    setInterval(
-      function() {
-
-        attempts++;
-
-
-        if (
-          typeof toggleCart ===
-          "function"
-        ) {
-
-          clearInterval(
-            tryOpen
-          );
-
-
-          loadCart();
-
-          syncCartCount();
-
-
-          const cartBox =
-            document.getElementById(
-              "cart"
-            );
-
-
-          if (
-            cartBox &&
-            !cartBox.classList.contains(
-              "open"
-            )
-          ) {
-
-            cartBox.classList.add(
-              "open"
-            );
-
-          }
-
-
-          updateCart();
-
-          return;
-
-        }
-
-
-        if (
-          attempts >= 50
-        ) {
-
-          clearInterval(
-            tryOpen
-          );
-
-        }
-
-      },
-      200
-    );
-
-}
-
-
-/* =========================================================
-GET VALID SUPABASE ACCESS TOKEN
-========================================================= */
-
-async function getZYRESupabaseAccessToken() {
-
-  try {
-
-    const currentToken =
-      window.ZYRE_CURRENT_SESSION?.access_token;
-
-
-    if (
-      currentToken &&
-      currentToken !== SUPABASE_KEY
-    ) {
-
-      return currentToken;
-
-    }
-
-
-    if (
-      !window.ZYRE_AUTH_CLIENT &&
-      window.supabase &&
-      window.supabase.createClient
-    ) {
-
-      window.ZYRE_AUTH_CLIENT =
-        window.supabase.createClient(
-          SUPABASE_URL,
-          SUPABASE_KEY
-        );
-
-    }
-
-
-    if (
-      window.ZYRE_AUTH_CLIENT
-    ) {
-
-      const {
-        data,
-        error
-      } =
-        await window.ZYRE_AUTH_CLIENT.auth.getSession();
-
-
-      if (
-        !error &&
-        data?.session?.access_token
-      ) {
-
-        return data.session.access_token;
-
-      }
-
-    }
-
-
-    const storedToken =
-      localStorage.getItem(
-        "zava_access_token"
-      );
-
-
-    if (
-      storedToken &&
-      storedToken !== SUPABASE_KEY
-    ) {
-
-      return storedToken;
-
-    }
-
-
-    return null;
-
-  } catch (error) {
-
-    console.warn(
-      "Could not get Supabase access token:",
-      error
-    );
-
-    return null;
-
-  }
-
-}
-
-
-/* =========================================================
-CUSTOMER CHECKOUT — PAYSTACK
-========================================================= */
-
-async function checkout() {
-
-  loadCart();
-
-
-  if (!cart.length) {
-
-    alert(
-      "Your cart is empty."
-    );
-
-    return;
-
-  }
-
-
-  const user =
-    await getZYRECurrentUser();
-
-
-  if (!user) {
-
-    alert(
-      "Your customer session could not be found.\n\nPlease sign in again."
-    );
-
-    window.location.href =
-      "auth.html";
-
-    return;
-
-  }
-
-
-  const profile =
-    await getZYRECustomerProfile();
-
-
-  if (!profile) {
-
-    alert(
-      "Your customer profile could not be found.\n\nPlease open your Customer Account and complete your profile before checkout."
-    );
-
-    return;
-
-  }
-
-
-  const fullName =
-    String(
-      profile.full_name || ""
-    ).trim();
-
-
-  const phone =
-    String(
-      profile.phone || ""
-    ).trim();
-
-
-  const deliveryAddress =
-    String(
-      profile.address || ""
-    ).trim();
-
-
-  if (!fullName) {
-
-    alert(
-      "Your full name is missing from your customer account.\n\nPlease update your account before checkout."
-    );
-
-    return;
-
-  }
-
-
-  if (!phone) {
-
-    alert(
-      "Your phone number is missing from your customer account.\n\nPlease update your account before checkout."
-    );
-
-    return;
-
-  }
-
-
-  if (!deliveryAddress) {
-
-    alert(
-      "Your delivery address is missing from your customer account.\n\nPlease update your account before checkout."
-    );
-
-    return;
-
-  }
-
-
-  const counts = {};
-
-
-  cart.forEach(id => {
-
-    const key =
-      String(id);
-
-
-    counts[key] =
-      (counts[key] || 0) + 1;
-
-  });
-
-
-  let total = 0;
-
-  const orderItems = [];
-
-
-  for (
-    const [id, quantity]
-    of Object.entries(counts)
-  ) {
-
-    const product =
-      products.find(
-        p =>
-          String(p.id) ===
-          String(id)
-      );
-
-
-    if (!product) {
-
-      alert(
-        "One of the products in your cart could not be found."
-      );
-
-      return;
-
-    }
-
-
-    const price =
-      Number(product.price);
-
-
-    if (
-      !Number.isFinite(price) ||
-      price < 0
-    ) {
-
-      alert(
-        "One of the products has an invalid price."
-      );
-
-      return;
-
-    }
-
-
-    total +=
-      price * quantity;
-
-
-    orderItems.push({
-
-      product_id:
-        product.id,
-
-      quantity:
-        quantity,
-
-      price:
-        price
-
-    });
-
-  }
-
-
-  if (
-    !Number.isFinite(total) ||
-    total <= 0
-  ) {
-
-    alert(
-      "The order total is invalid."
-    );
-
-    return;
-
-  }
-
-
-  try {
-
-    /* =====================================================
-    VERIFY STOCK
-    ===================================================== */
-
-    for (
-      const item
-      of orderItems
-    ) {
-
-      const product =
-        products.find(
-          p =>
-            String(p.id) ===
-            String(item.product_id)
-        );
-
-
-      if (
-        !product ||
-        Number(product.stock) <
-        Number(item.quantity)
-      ) {
-
-        alert(
-          "Sorry, there is not enough stock available for one of the products in your cart."
-        );
-
-        return;
-
-      }
-
-    }
-
-
-    /* =====================================================
-    GET REAL USER ACCESS TOKEN
-    ===================================================== */
-
-    const accessToken =
-      await getZYRESupabaseAccessToken();
-
-
-    if (!accessToken) {
-
-      alert(
-        "Your customer session has expired.\n\nPlease sign in again before checkout."
-      );
-
-      window.location.href =
-        "auth.html";
-
-      return;
-
-    }
-
-
-    /* =====================================================
-    VERIFY EVERY SELLER'S RENTAL PAYMENT
-    ===================================================== */
-
-    const rentalCheck =
-      await verifyCartSellerRentalAccess(
-        orderItems,
-        accessToken
-      );
-
-
-    if (!rentalCheck.allowed) {
-
-      const lockedStoreNames =
-        rentalCheck.lockedSellers
-          .map(
-            seller =>
-              seller.sellerName
-          )
-          .join(", ");
-
-
-      alert(
-
-        "⚠️ Store temporarily unavailable\n\n" +
-
-        (
-          lockedStoreNames ||
-          "One or more stores"
-        ) +
-
-        " has not paid the R" +
-        ZYRE_RENTAL_AMOUNT.toFixed(2) +
-        " rental for the current month.\n\n" +
-
-        "Your order cannot be placed from an unpaid store."
-
-      );
-
-
-      return;
-
-    }
-
-
-    /* =====================================================
-    UPDATE CUSTOMER PROFILE
-    ===================================================== */
-
-    const profileResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/profiles?id=eq." +
-        encodeURIComponent(user.id),
-
-        {
-
-          method:
-            "PATCH",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              accessToken,
-
-            "Content-Type":
-              "application/json",
-
-            "Prefer":
-              "return=minimal"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              full_name:
-                fullName,
-
-              phone:
-                phone,
-
-              address:
-                deliveryAddress,
-
-              role:
-                "customer"
-
-            })
-
-        }
-
-      );
-
-
-    if (!profileResponse.ok) {
-
-      console.warn(
-        "Customer profile update failed:",
-        await profileResponse.text()
-      );
-
-    }
-
-
-    /* =====================================================
-    CREATE ORDER
-    ===================================================== */
-
-    const orderResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/rpc/create_customer_order_with_items",
-
-        {
-
-          method:
-            "POST",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              accessToken,
-
-            "Content-Type":
-              "application/json"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              p_customer_id:
-                user.id,
-
-              p_total:
-                total,
-
-              p_status:
-                "Pending",
-
-              p_delivery_address:
-                deliveryAddress,
-
-              p_items:
-                orderItems
-
-            })
-
-        }
-
-      );
-
-
-    if (!orderResponse.ok) {
-
-      alert(
-        "Order could not be created.\n\n" +
-        await orderResponse.text()
-      );
-
-      return;
-
-    }
-
-
-    const orderId =
-      await orderResponse.json();
-
-
-    let normalizedOrderId =
-      orderId;
-
-
-    if (
-      orderId &&
-      typeof orderId === "object"
-    ) {
-
-      normalizedOrderId =
-        orderId.id ??
-        orderId.order_id ??
-        orderId.orderid ??
-        orderId;
-
-    }
-
-
-    if (
-      normalizedOrderId === null ||
-      normalizedOrderId === undefined ||
-      normalizedOrderId === ""
-    ) {
-
-      alert(
-        "The order was created, but no Order ID was returned.\n\nPayment cannot continue."
-      );
-
-      return;
-
-    }
-
-
-    console.log(
-      "ZYRE order created:",
-      normalizedOrderId
-    );
-
-
-    /* =====================================================
-    NOTIFY SELLERS
-    ===================================================== */
-
-    try {
-
-      const sellerIds = [
-        ...new Set(
-          orderItems
-            .map(item => {
-
-              const product =
-                products.find(
-                  p =>
-                    String(p.id) ===
-                    String(item.product_id)
-                );
-
-
-              return product
-                ? Number(
-                    product.seller_id
-                  )
-                : null;
-
-            })
-            .filter(
-              sellerId =>
-                Number.isFinite(
-                  sellerId
-                ) &&
-                sellerId > 0
-            )
-        )
-      ];
-
-
-      for (
-        const sellerId
-        of sellerIds
-      ) {
-
-        const notificationResponse =
-          await fetch(
-
-            SUPABASE_URL +
-            "/functions/v1/send-order-notification",
-
-            {
-
-              method:
-                "POST",
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Authorization":
-                  "Bearer " +
-                  accessToken,
-
-                "Content-Type":
-                  "application/json"
-
-              },
-
-              body:
-                JSON.stringify({
-
-                  seller_id:
-                    sellerId,
-
-                  title:
-                    "🛍️ New ZYRE Marketing Order",
-
-                  message:
-                    "Order #" +
-                    normalizedOrderId +
-                    " received — Total: R" +
-                    Number(total)
-                      .toFixed(2)
-
-                })
-
-            }
-
-          );
-
-
-        if (
-          !notificationResponse.ok
-        ) {
-
-          console.warn(
-            "Seller notification request failed:",
-            await notificationResponse.text()
-          );
-
-        } else {
-
-          console.log(
-            "ZYRE Marketing seller notification sent for Order #" +
-            normalizedOrderId
-          );
-
-        }
-
-      }
-
-    } catch (
-      notificationError
-    ) {
-
-      console.warn(
-        "Order notification could not be sent:",
-        notificationError
-      );
-
-    }
-
-
-    /* =====================================================
-    INITIALIZE CUSTOMER PAYSTACK PAYMENT
-    ===================================================== */
-
-    console.log(
-      "Starting Paystack payment initialization..."
-    );
-
-
-    const paystackResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/functions/v1/paystack-initialize8",
-
-        {
-
-          method:
-            "POST",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              accessToken,
-
-            "Content-Type":
-              "application/json"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              order_id:
-                normalizedOrderId
-
-            })
-
-        }
-
-      );
-
-
-    const paystackText =
-      await paystackResponse.text();
-
-
-    let paystackData = null;
-
-
-    try {
-
-      paystackData =
-        JSON.parse(
-          paystackText
-        );
-
-    } catch (jsonError) {
-
-      console.warn(
-        "Paystack response was not JSON:",
-        paystackText
-      );
-
-    }
-
-
-    if (
-      !paystackResponse.ok
-    ) {
-
-      console.error(
-        "Paystack initialization failed:",
-        paystackData ||
-        paystackText
-      );
-
-
-      alert(
-
-        "Payment could not be started.\n\n" +
-
-        (
-          paystackData?.error ||
-          "Paystack initialization failed."
-        ) +
-
-        (
-
-          paystackData?.details
-            ?
-            "\n\n" +
-            JSON.stringify(
-              paystackData.details,
-              null,
-              2
-            )
-            :
-            ""
-
-        ) +
-
-        "\n\nYour cart has NOT been cleared."
-
-      );
-
-
-      return;
-
-    }
-
-
-    if (
-      !paystackData ||
-      !paystackData.authorization_url
-    ) {
-
-      console.error(
-        "Invalid Paystack response:",
-        paystackData
-      );
-
-
-      alert(
-        "Paystack did not return a payment page.\n\nYour cart has NOT been cleared."
-      );
-
-
-      return;
-
-    }
-
-
-    console.log(
-      "Paystack payment initialized successfully.",
-      paystackData
-    );
-
-
-    /* =====================================================
-    CLEAR CART ONLY AFTER PAYMENT PAGE IS READY
-    ===================================================== */
-
-    cart = [];
-
-    save();
-
-    syncCartCount();
-
-    updateCart();
-
-
-    /* =====================================================
-    REDIRECT TO PAYSTACK
-    ===================================================== */
-
-    window.location.href =
-      paystackData.authorization_url;
-
-  } catch (error) {
-
-    console.error(
-      "ZYRE checkout error:",
-      error
-    );
-
-
-    alert(
-      "Checkout failed:\n\n" +
-      error.message +
-      "\n\nYour cart has NOT been cleared."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-SELLER CENTRE
-========================================================= */
-
-async function sellerCentre() {
-
-  try {
-
-    const user =
-      await getZYRECurrentUser();
-
-
-    if (!user) {
-
-      window.location.href =
-        "seller-auth.html";
-
-      return;
-
-    }
-
-
-    const accessToken =
-      await getZYRESupabaseAccessToken();
-
-
-    if (!accessToken) {
-
-      window.location.href =
-        "seller-auth.html";
-
-      return;
-
-    }
-
-
-    const sellerResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/sellers?user_id=eq." +
-        encodeURIComponent(user.id) +
-        "&select=id,store_name,approved,status,email",
-
-        {
-
-          method:
-            "GET",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              accessToken
-
-          }
-
-        }
-
-      );
-
-
-    if (!sellerResponse.ok) {
-
-      console.warn(
-        "Could not check seller approval:",
-        await sellerResponse.text()
-      );
-
-      window.location.href =
-        "seller-auth.html";
-
-      return;
-
-    }
-
-
-    const sellers =
-      await sellerResponse.json();
-
-
-    if (
-      !Array.isArray(sellers) ||
-      !sellers.length
-    ) {
-
-      window.location.href =
-        "seller-auth.html";
-
-      return;
-
-    }
-
-
-    const seller =
-      sellers[0];
-
-
-    if (
-      seller.approved === true ||
-      seller.status === "seller_approved"
-    ) {
-
-      localStorage.setItem(
-        "zava_seller_id",
-        seller.id
-      );
-
-      localStorage.setItem(
-        "zava_user_id",
-        user.id
-      );
-
-      localStorage.setItem(
-        "zava_access_token",
-        accessToken
-      );
-
-
-      if (
-        seller.email
-      ) {
-
-        localStorage.setItem(
-          "zava_seller_email",
-          seller.email
-        );
-
-      }
-
-
-      /* =================================================
-      CHECK CURRENT MONTH RENTAL
-      ================================================= */
-
-      const rentalAccess =
-        await getZYRESellerRentalAccess(
-          seller.id,
-          accessToken
-        );
-
-
-      if (!rentalAccess.paid) {
-
-        await redirectSellerToRentalPayment(
-          seller.id,
-          seller.store_name,
-          accessToken,
-          seller.email
-        );
-
-        return;
-
-      }
-
-
-      /* =================================================
-      RENTAL PAID — OPEN DASHBOARD
-      ================================================= */
-
-      window.location.href =
-        "seller.html";
-
-      return;
-
-    }
-
-
-    window.location.href =
-      "seller-auth.html";
-
-  } catch (error) {
-
-    console.error(
-      "Seller Centre routing error:",
-      error
-    );
-
-    window.location.href =
-      "seller-auth.html";
-
-  }
-
-}
-
-
-/* =========================================================
-REGISTER SELLER
-========================================================= */
-
-async function registerSeller() {
-
-  const storeName =
-    prompt(
-      "Enter your store name:"
-    );
-
-
-  if (
-    !storeName ||
-    !storeName.trim()
-  ) {
-
-    alert(
-      "Store registration cancelled."
-    );
-
-    return;
-
-  }
-
-
-  const email =
-    prompt(
-      "Enter your seller email:"
-    );
-
-
-  if (
-    !email ||
-    !email.trim()
-  ) {
-
-    alert(
-      "Store registration cancelled."
-    );
-
-    return;
-
-  }
-
-
-  const password =
-    prompt(
-      "Create a password:\n\n" +
-      "Use at least 6 characters."
-    );
-
-
-  if (
-    !password ||
-    password.length < 6
-  ) {
-
-    alert(
-      "Password must contain at least 6 characters."
-    );
-
-    return;
-
-  }
-
-
-  const description =
-    prompt(
-      "Enter a short description of your store:"
-    ) || "";
-
-
-  try {
-
-    let userId = null;
-
-    let accessToken =
-      SUPABASE_KEY;
-
-
-    /* =====================================================
-    CREATE / LOGIN AUTH ACCOUNT
-    ===================================================== */
-
-    const signupResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/auth/v1/signup",
-
-        {
-
-          method:
-            "POST",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Content-Type":
-              "application/json"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              email:
-                email.trim(),
-
-              password:
-                password
-
-            })
-
-        }
-
-      );
-
-
-    if (signupResponse.ok) {
-
-      const signupData =
-        await signupResponse.json();
-
-
-      if (signupData.user) {
-
-        userId =
-          signupData.user.id;
-
-      }
-
-
-      if (
-        signupData.access_token
-      ) {
-
-        accessToken =
-          signupData.access_token;
-
-      }
-
-    } else {
-
-      const signupError =
-        await signupResponse.text();
-
-
-      if (
-        signupError
-          .toLowerCase()
-          .includes(
-            "already registered"
-          )
-      ) {
-
-        const loginResponse =
-          await fetch(
-
-            SUPABASE_URL +
-            "/auth/v1/token?grant_type=password",
-
-            {
-
-              method:
-                "POST",
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Content-Type":
-                  "application/json"
-
-              },
-
-              body:
-                JSON.stringify({
-
-                  email:
-                    email.trim(),
-
-                  password:
-                    password
-
-                })
-
-            }
-
-          );
-
-
-        if (!loginResponse.ok) {
-
-          alert(
-            "This seller email already exists, but we could not log into it.\n\n" +
-            "If this was the account you just created, make sure you use the same password you entered earlier.\n\n" +
-            await loginResponse.text()
-          );
-
-          return;
-
-        }
-
-
-        const loginData =
-          await loginResponse.json();
-
-
-        userId =
-          loginData.user.id;
-
-
-        accessToken =
-          loginData.access_token;
-
-      } else {
-
-        alert(
-          "Seller account could not be created.\n\n" +
-          signupError
-        );
-
-        return;
-
-      }
-
-    }
-
-
-    if (!userId) {
-
-      alert(
-        "Seller account was created, but the user ID could not be found."
-      );
-
-      return;
-
-    }
-
-
-    /* =====================================================
-    CREATE / UPDATE PROFILE
-    ===================================================== */
-
-    const profileResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/profiles",
-
-        {
-
-          method:
-            "POST",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              accessToken,
-
-            "Content-Type":
-              "application/json",
-
-            "Prefer":
-              "resolution=merge-duplicates,return=representation"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              id:
-                userId,
-
-              full_name:
-                storeName.trim(),
-
-              phone:
-                "",
-
-              role:
-                "seller"
-
-            })
-
-        }
-
-      );
-
-
-    if (!profileResponse.ok) {
-
-      alert(
-        "Seller account exists, but the seller profile could not be created.\n\n" +
-        await profileResponse.text()
-      );
-
-      return;
-
-    }
-
-
-    /* =====================================================
-    CHECK EXISTING SELLER
-    ===================================================== */
-
-    const existingSellerResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/sellers?user_id=eq." +
-        userId +
-        "&select=id,store_name,approved,email",
-
-        {
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              accessToken
-
-          }
-
-        }
-
-      );
-
-
-    let sellerId = null;
-
-
-    if (
-      existingSellerResponse.ok
-    ) {
-
-      const existingSellers =
-        await existingSellerResponse.json();
-
-
-      if (existingSellers.length) {
-
-        sellerId =
-          existingSellers[0].id;
-
-      }
-
-    }
-
-
-    /* =====================================================
-    CREATE SELLER
-    ===================================================== */
-
-    if (!sellerId) {
-
-      const sellerResponse =
-        await fetch(
-
-          SUPABASE_URL +
-          "/rest/v1/sellers",
-
-          {
-
-            method:
-              "POST",
-
-            headers: {
-
-              "apikey":
-                SUPABASE_KEY,
-
-              "Authorization":
-                "Bearer " +
-                accessToken,
-
-              "Content-Type":
-                "application/json",
-
-              "Prefer":
-                "return=representation"
-
-            },
-
-            body:
-              JSON.stringify({
-
-                user_id:
-                  userId,
-
-                store_name:
-                  storeName.trim(),
-
-                description:
-                  description.trim(),
-
-                approved:
-                  false,
-
-                email:
-                  email.trim()
-
-              })
-
-            }
-
-          );
-
-
-      if (!sellerResponse.ok) {
-
-        alert(
-          "Seller store could not be created.\n\n" +
-          await sellerResponse.text()
-        );
-
-        return;
-
-      }
-
-
-      const sellerData =
-        await sellerResponse.json();
-
-
-      sellerId =
-        sellerData[0].id;
-
-    }
-
-
-    /* =====================================================
-    FIND RENTAL PLAN
-    ===================================================== */
-
-    const planResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/rental_plans?name=eq.ZYRE%20Store&active=eq.true&select=id,monthly_price",
-
-        {
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              accessToken
-
-          }
-
-        }
-
-      );
-
-
-    if (!planResponse.ok) {
-
-      alert(
-        "Seller store was created, but the R100 rental plan could not be found.\n\n" +
-        await planResponse.text()
-      );
-
-      return;
-
-    }
-
-
-    const plans =
-      await planResponse.json();
-
-
-    if (!plans.length) {
-
-      alert(
-        "Seller store was created, but the ZYRE Store rental plan was not found."
-      );
-
-      return;
-
-    }
-
-
-    const rentalPlan =
-      plans[0];
-
-
-    /* =====================================================
-    FIND OR CREATE SUBSCRIPTION
-    ===================================================== */
-
-    const existingSubscriptionResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/store_subscriptions?seller_id=eq." +
-        sellerId +
-        "&select=id,rental_plan_id,status&order=id.desc&limit=1",
-
-        {
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              accessToken
-
-          }
-
-        }
-
-      );
-
-
-    let subscriptionId = null;
-
-
-    if (
-      existingSubscriptionResponse.ok
-    ) {
-
-      const subscriptions =
-        await existingSubscriptionResponse.json();
-
-
-      if (subscriptions.length) {
-
-        subscriptionId =
-          subscriptions[0].id;
-
-      }
-
-    }
-
-
-    if (!subscriptionId) {
-
-      const subscriptionResponse =
-        await fetch(
-
-          SUPABASE_URL +
-          "/rest/v1/store_subscriptions",
-
-          {
-
-            method:
-              "POST",
-
-            headers: {
-
-              "apikey":
-                SUPABASE_KEY,
-
-              "Authorization":
-                "Bearer " +
-                accessToken,
-
-              "Content-Type":
-                "application/json",
-
-              "Prefer":
-                "return=representation"
-
-            },
-
-            body:
-              JSON.stringify({
-
-                seller_id:
-                  sellerId,
-
-                rental_plan_id:
-                  rentalPlan.id,
-
-                status:
-                  "pending"
-
-              })
-
-          }
-
-        );
-
-
-      if (!subscriptionResponse.ok) {
-
-        alert(
-          "Store was created, but the rental subscription could not be created.\n\n" +
-          await subscriptionResponse.text()
-        );
-
-        return;
-
-      }
-
-
-      const subscriptionData =
-        await subscriptionResponse.json();
-
-
-      subscriptionId =
-        subscriptionData[0].id;
-
-    }
-
-
-    /* =====================================================
-    SAVE SELLER LOGIN INFORMATION
-    ===================================================== */
-
-    localStorage.setItem(
-      "zava_seller_id",
-      sellerId
-    );
-
-
-    localStorage.setItem(
-      "zava_user_id",
-      userId
-    );
-
-
-    localStorage.setItem(
-      "zava_seller_email",
-      email.trim()
-    );
-
-
-    localStorage.setItem(
-      "zava_access_token",
-      accessToken
-    );
-
-
-    /* =====================================================
-    IMPORTANT:
-
-    DO NOT CREATE A PENDING rental_payments ROW HERE.
-
-    The rental-paystack Edge Function creates the payment
-    record securely when Paystack checkout is initialized.
-
-    This prevents duplicate pending rental payments and
-    avoids frontend RLS problems.
-    ===================================================== */
-
-
-    alert(
-
-      "🎉 Store application created!\n\n" +
-
-      "Store: " +
-      storeName.trim() +
-
-      "\n\n" +
-
-      "ZYRE Store rental: R" +
-      Number(
-        rentalPlan.monthly_price || ZYRE_RENTAL_AMOUNT
-      ).toFixed(2) +
-      " per month\n\n" +
-
-      "Next: You will be taken to secure Paystack checkout."
-
-    );
-
-
-    /* =====================================================
-    START PAYSTACK RENTAL PAYMENT
-    ===================================================== */
-
-    const rentalPayment =
-      await initializeZYRERentalPaystack(
-        sellerId,
-        email.trim()
-      );
-
-
-    if (
-      !rentalPayment ||
-      !rentalPayment.authorization_url
-    ) {
-
-      alert(
-        "The store was created, but Paystack did not return a payment page."
-      );
-
-      return;
-
-    }
-
-
-    window.location.href =
-      rentalPayment.authorization_url;
-
-
-  } catch (error) {
-
-    console.error(
-      "Seller registration failed:",
-      error
-    );
-
-
-    alert(
-      "Store registration failed:\n\n" +
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-SELLER LOGIN
-========================================================= */
-
-async function sellerLogin() {
-
-  const email =
-    prompt(
-      "Enter your ZavaMarket seller email:"
-    );
-
-
-  if (
-    !email ||
-    !email.trim()
-  ) {
-
-    alert(
-      "Seller login cancelled."
-    );
-
-    return;
-
-  }
-
-
-  const password =
-    prompt(
-      "Enter your ZavaMarket seller password:"
-    );
-
-
-  if (!password) {
-
-    alert(
-      "Seller login cancelled."
-    );
-
-    return;
-
-  }
-
-
-  try {
-
-    const loginResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/auth/v1/token?grant_type=password",
-
-        {
-
-          method:
-            "POST",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Content-Type":
-              "application/json"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              email:
-                email.trim(),
-
-              password:
-                password
-
-            })
-
-        }
-
-      );
-
-
-    if (!loginResponse.ok) {
-
-      alert(
-        "Seller login failed.\n\n" +
-        await loginResponse.text()
-      );
-
-      return;
-
-    }
-
-
-    const loginData =
-      await loginResponse.json();
-
-
-    const accessToken =
-      loginData.access_token;
-
-
-    const userId =
-      loginData.user.id;
-
-
-    const sellerResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/sellers?user_id=eq." +
-        userId +
-        "&select=id,store_name,approved,status,email",
-
-        {
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              accessToken
-
-          }
-
-        }
-
-      );
-
-
-    if (!sellerResponse.ok) {
-
-      alert(
-        "Could not check your seller account.\n\n" +
-        await sellerResponse.text()
-      );
-
-      return;
-
-    }
-
-
-    const sellers =
-      await sellerResponse.json();
-
-
-    if (!sellers.length) {
-
-      alert(
-        "This account is not registered as a ZavaMarket seller yet."
-      );
-
-      return;
-
-    }
-
-
-    const seller =
-      sellers[0];
-
-
-    if (
-      seller.approved !== true &&
-      seller.status !== "seller_approved"
-    ) {
-
-      alert(
-        "Your ZavaMarket seller account is still waiting for approval."
-      );
-
-      return;
-
-    }
-
-
-    localStorage.setItem(
-      "zava_access_token",
-      accessToken
-    );
-
-
-    localStorage.setItem(
-      "zava_user_id",
-      userId
-    );
-
-
-    localStorage.setItem(
-      "zava_seller_id",
-      seller.id
-    );
-
-
-    localStorage.setItem(
-      "zava_seller_email",
-      (
-        seller.email ||
-        email.trim()
-      )
-    );
-
-
-    /* =====================================================
-    CHECK CURRENT MONTH RENTAL BEFORE DASHBOARD
-    ===================================================== */
-
-    const rentalAccess =
-      await getZYRESellerRentalAccess(
-        seller.id,
-        accessToken
-      );
-
-
-    if (!rentalAccess.paid) {
-
-      await redirectSellerToRentalPayment(
-        seller.id,
-        seller.store_name,
-        accessToken,
-        seller.email ||
-        email.trim()
-      );
-
-      return;
-
-    }
-
-
-    alert(
-      "Seller login successful! 🎉"
-    );
-
-
-    window.location.href =
-      "seller.html";
-
-
-  } catch (error) {
-
-    alert(
-      "Seller login failed:\n\n" +
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-CHECK ORDER STATUS
-========================================================= */
-
-async function checkOrderStatus() {
-
-  const orderId =
-    prompt(
-      "Enter your Order ID:"
-    );
-
-
-  if (
-    !orderId ||
-    !orderId.trim()
-  ) {
-
-    return;
-
-  }
-
-
-  const phone =
-    prompt(
-      "Enter the phone number used for this order:"
-    );
-
-
-  if (
-    !phone ||
-    !phone.trim()
-  ) {
-
-    return;
-
-  }
-
-
-  try {
-
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/rpc/get_orders_by_phone",
-
-        {
-
-          method:
-            "POST",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_KEY,
-
-            "Content-Type":
-              "application/json"
-
-          },
-
-          body:
-            JSON.stringify({
-
-              user_phone:
-                phone.trim()
-
-            })
-
-          }
-
-        );
-
-
-    if (!response.ok) {
-
-      alert(
-        "Could not check your order.\n\n" +
-        await response.text()
-      );
-
-      return;
-
-    }
-
-
-    const orders =
-      await response.json();
-
-
-    if (
-      !Array.isArray(orders) ||
-      !orders.length
-    ) {
-
-      alert(
-        "No orders were found for that phone number."
-      );
-
-      return;
-
-    }
-
-
-    const wantedId =
-      Number(
-        orderId.trim()
-      );
-
-
-    const order =
-      orders.find(o => {
-
-        const possibleId =
-          o.id ??
-          o.order_id ??
-          o.orderid;
-
-
-        return (
-          Number(possibleId) ===
-          wantedId
-        );
-
-      });
-
-
-    if (!order) {
-
-      alert(
-        "Order #" +
-        orderId +
-        " was not found for that phone number."
-      );
-
-      return;
-
-    }
-
-
-    const displayId =
-      order.id ??
-      order.order_id ??
-      order.orderid;
-
-
-    const displayTotal =
-      order.total ??
-      order.order_total ??
-      order.amount ??
-      0;
-
-
-    const displayStatus =
-      order.status ??
-      "Pending";
-
-
-    const displayAddress =
-      order.delivery_address ??
-      order.deliveryaddress ??
-      "Not provided";
-
-
-    let delivery = null;
-
-
-    try {
-
-      const deliveryResponse =
-        await fetch(
-
-          SUPABASE_URL +
-          "/rest/v1/deliveries?order_id=eq." +
-          encodeURIComponent(
-            displayId
-          ) +
-          "&select=*",
-
-          {
-
-            method:
-              "GET",
-
-            headers: {
-
-              "apikey":
-                SUPABASE_KEY,
-
-              "Authorization":
-                "Bearer " +
-                SUPABASE_KEY
-
-            }
-
-          }
-
-        );
-
-
-      if (deliveryResponse.ok) {
-
-        const deliveryData =
-          await deliveryResponse.json();
-
-
-        if (
-          Array.isArray(
-            deliveryData
-          ) &&
-          deliveryData.length
-        ) {
-
-          delivery =
-            deliveryData[
-              deliveryData.length - 1
-            ];
-
-        }
-
-      } else {
-
-        console.warn(
-          "Delivery information could not be loaded:",
-          await deliveryResponse.text()
-        );
-
-      }
-
-    } catch (
-      deliveryError
-    ) {
-
-      console.warn(
-        "Could not load delivery information:",
-        deliveryError
-      );
-
-    }
-
-
-    let deliveryText =
-      "🚚 Delivery: Not assigned yet";
-
-
-    if (delivery) {
-
-      const deliveryStatus =
-        delivery.status ||
-        "Assigned";
-
-
-      const deliveryPerson =
-        delivery.delivery_person_name ||
-        "Not assigned";
-
-
-      const deliveryPhone =
-        delivery.delivery_person_phone ||
-        "Not provided";
-
-
-      const trackingNumber =
-        delivery.tracking_number ||
-        "Not provided";
-
-
-      let estimatedDelivery =
-        "Not provided";
-
-
-      if (
-        delivery.estimated_delivery
-      ) {
-
-        const date =
-          new Date(
-            delivery.estimated_delivery +
-            "T00:00:00"
-          );
-
-
-        if (
-          !Number.isNaN(
-            date.getTime()
-          )
-        ) {
-
-          estimatedDelivery =
-            date.toLocaleDateString(
-              "en-ZA",
-              {
-
-                day:
-                  "2-digit",
-
-                month:
-                  "2-digit",
-
-                year:
-                  "numeric"
-
-              }
-
-            );
-
-        } else {
-
-          estimatedDelivery =
-            delivery.estimated_delivery;
-
-        }
-
-      }
-
-
-      deliveryText =
-
-        "🚚 Delivery Status: " +
-        deliveryStatus +
-
-        "\n👤 Delivery Person: " +
-        deliveryPerson +
-
-        "\n📞 Delivery Phone: " +
-        deliveryPhone +
-
-        "\n🔢 Tracking Number: " +
-        trackingNumber +
-
-        "\n📅 Estimated Delivery: " +
-        estimatedDelivery;
-
-    }
-
-
-    alert(
-
-      "📦 Order #" +
-      displayId +
-
-      "\n\nStatus: " +
-      displayStatus +
-
-      "\nTotal: R" +
-      Number(
-        displayTotal
-      ).toFixed(2) +
-
-      "\n\n" +
-
-      deliveryText +
-
-      "\n\n🏠 Delivery Address: " +
-      displayAddress
-
-    );
-
-
-  } catch (error) {
-
-    alert(
-      "Could not check order status:\n\n" +
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-ZYRE MARKETING PUSH NOTIFICATION HELPERS
-========================================================= */
-
-function urlBase64ToUint8Array(
-  base64String
-) {
-
-  const padding =
-    "=".repeat(
-      (
-        4 -
-        base64String.length % 4
-      ) % 4
-    );
-
-
-  const base64 =
-    (
-      base64String +
-      padding
-    )
-      .replace(
-        /-/g,
-        "+"
-      )
-      .replace(
-        /_/g,
-        "/"
-      );
-
-
-  const rawData =
-    window.atob(
-      base64
-    );
-
-
-  const outputArray =
-    new Uint8Array(
-      rawData.length
-    );
-
-
-  for (
-    let i = 0;
-    i < rawData.length;
-    ++i
-  ) {
-
-    outputArray[i] =
-      rawData.charCodeAt(i);
-
-  }
-
-
-  return outputArray;
-
-}
-
-
-/* =========================================================
-GET SERVICE WORKER
-========================================================= */
-
-async function getZYREServiceWorkerRegistration() {
-
-  if (
-    !("serviceWorker" in navigator)
-  ) {
-
-    throw new Error(
-      "Service workers are not supported by this browser."
-    );
-
-  }
-
-
-  const registration =
-    await navigator.serviceWorker.register(
-      "./sw.js",
-      {
-        scope:
-          "./"
-      }
-    );
-
-
-  await navigator.serviceWorker.ready;
-
-
-  return registration;
-
-}
-
-
-/* =========================================================
-FIND NOTIFICATION BUTTON
-========================================================= */
-
-function getZYRENotificationButton() {
-
-  const buttons =
-    Array.from(
-      document.querySelectorAll(
-        "button"
-      )
-    );
-
-
-  return buttons.find(
-    button => {
-
-      const text =
-        (
-          button.textContent ||
-          ""
-        )
-          .toLowerCase()
-          .trim();
-
-
-      return (
-        text.includes(
-          "enable notifications"
-        ) ||
-        text.includes(
-          "notifications enabled"
-        ) ||
-        text.includes(
-          "enable notification"
-        )
-      );
-
-    }
-  ) || null;
-
-}
-
-
-/* =========================================================
-UPDATE NOTIFICATION BUTTON
-========================================================= */
-
-function updateZYRENotificationButton(
-  enabled
-) {
-
-  const button =
-    getZYRENotificationButton();
-
-
-  if (!button) {
-
-    console.log(
-      "ZYRE notification button was not found yet."
-    );
-
-    return;
-
-  }
-
-
-  if (enabled) {
-
-    button.textContent =
-      "✅ Notifications Enabled";
-
-
-    button.disabled =
-      true;
-
-
-    button.style.opacity =
-      "0.7";
-
-
-    button.style.cursor =
-      "default";
-
-
-    button.setAttribute(
-      "aria-label",
-      "ZYRE Marketing notifications are enabled"
-    );
-
-  } else {
-
-    button.textContent =
-      "🔔 Enable Notifications";
-
-
-    button.disabled =
-      false;
-
-
-    button.style.opacity =
-      "1";
-
-
-    button.style.cursor =
-      "pointer";
-
-
-    button.setAttribute(
-      "aria-label",
-      "Enable ZYRE Marketing notifications"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-SAVE PUSH SUBSCRIPTION
-========================================================= */
-
-async function saveZYREPushSubscription(
-  subscription
-) {
-
-  if (!subscription) {
-
-    throw new Error(
-      "No push subscription was provided."
-    );
-
-  }
-
-
-  const endpoint =
-    subscription.endpoint;
-
-  const subscriptionJson =
-    subscription.toJSON();
-
-
-  let user = null;
-  let profile = null;
-
-
-  try {
-
-    user =
-      await getZYRECurrentUser();
-
-  } catch (error) {
-
-    console.warn(
-      "Could not get current user for notifications:",
-      error
-    );
-
-  }
-
-
-  if (user) {
-
-    try {
-
-      profile =
-        await getZYRECustomerProfile();
-
-    } catch (error) {
-
-      console.warn(
-        "Could not get customer profile for notifications:",
-        error
-      );
-
-    }
-
-  }
-
-
-  /* =====================================================
-  CUSTOMER NOTIFICATION SUBSCRIPTION
-  ===================================================== */
-
-  if (user) {
-
-    try {
-
-      const customerData = {
-
-        user_id:
-          user.id,
-
-        phone:
-          profile?.phone || null,
-
-        endpoint:
-          endpoint,
-
-        p256dh:
-          subscriptionJson.keys?.p256dh || "",
-
-        auth:
-          subscriptionJson.keys?.auth || ""
-
-      };
-
-
-      const notificationHeaders = {
-
-        "apikey":
-          SUPABASE_KEY,
-
-        "Authorization":
-          "Bearer " +
-          (
-            window.ZYRE_CURRENT_SESSION?.access_token ||
-            SUPABASE_KEY
-          ),
-
-        "Content-Type":
-          "application/json"
-
-      };
-
-
-      const existingNotificationResponse =
-        await fetch(
-
-          SUPABASE_URL +
-          "/rest/v1/notification_subscriptions?endpoint=eq." +
-          encodeURIComponent(endpoint) +
-          "&select=id",
-
-          {
-
-            method:
-              "GET",
-
-            headers:
-              notificationHeaders
-
-          }
-
-        );
-
-
-      if (
-        existingNotificationResponse.ok
-      ) {
-
-        const existingSubscriptions =
-          await existingNotificationResponse.json();
-
-
-        if (
-          Array.isArray(
-            existingSubscriptions
-          ) &&
-          existingSubscriptions.length > 0
-        ) {
-
-          const updateResponse =
-            await fetch(
-
-              SUPABASE_URL +
-              "/rest/v1/notification_subscriptions?endpoint=eq." +
-              encodeURIComponent(endpoint),
-
-              {
-
-                method:
-                  "PATCH",
-
-                headers: {
-
-                  ...notificationHeaders,
-
-                  "Prefer":
-                    "return=minimal"
-
-                },
-
-                body:
-                  JSON.stringify({
-
-                    user_id:
-                      user.id,
-
-                    phone:
-                      profile?.phone || null,
-
-                    p256dh:
-                      subscriptionJson.keys?.p256dh || "",
-
-                    auth:
-                      subscriptionJson.keys?.auth || ""
-
-                  })
-
-              }
-
-            );
-
-
-          if (
-            updateResponse.ok
-          ) {
-
-            console.log(
-              "✅ Existing ZYRE customer notification subscription updated."
-            );
-
-          } else {
-
-            console.warn(
-              "Could not update existing customer notification subscription:",
-              await updateResponse.text()
-            );
-
-          }
-
-        } else {
-
-          const createResponse =
-            await fetch(
-
-              SUPABASE_URL +
-              "/rest/v1/notification_subscriptions",
-
-              {
-
-                method:
-                  "POST",
-
-                headers: {
-
-                  ...notificationHeaders,
-
-                  "Prefer":
-                    "return=minimal"
-
-                },
-
-                body:
-                  JSON.stringify(
-                    customerData
-                  )
-
-              }
-
-            );
-
-
-          if (
-            createResponse.ok
-          ) {
-
-            console.log(
-              "✅ New ZYRE customer notification subscription saved."
-            );
-
-          } else {
-
-            const createError =
-              await createResponse.text();
-
-
-            if (
-              createError.includes(
-                '"code":"23505"'
-              ) ||
-              createError.includes(
-                "duplicate key"
-              ) ||
-              createError.includes(
-                "notification_subscriptions_endpoint_key"
-              )
-            ) {
-
-              console.log(
-                "ℹ️ Customer notification subscription already exists."
-              );
-
-            } else {
-
-              console.warn(
-                "Customer notification subscription could not be created:",
-                createError
-              );
-
-            }
-
-          }
-
-        }
-
-      } else {
-
-        console.warn(
-          "Could not check existing customer notification subscription:",
-          await existingNotificationResponse.text()
-        );
-
-
-        const upsertResponse =
-          await fetch(
-
-            SUPABASE_URL +
-            "/rest/v1/notification_subscriptions?on_conflict=endpoint",
-
-            {
-
-              method:
-                "POST",
-
-              headers: {
-
-                ...notificationHeaders,
-
-                "Prefer":
-                  "resolution=merge-duplicates,return=minimal"
-
-              },
-
-              body:
-                JSON.stringify(
-                  customerData
-                )
-
-            }
-
-          );
-
-
-        if (
-          upsertResponse.ok
-        ) {
-
-          console.log(
-            "✅ ZYRE customer notification subscription saved with fallback upsert."
-          );
-
-        } else {
-
-          const upsertError =
-            await upsertResponse.text();
-
-
-          if (
-            upsertError.includes(
-              '"code":"23505"'
-            ) ||
-            upsertError.includes(
-              "duplicate key"
-            ) ||
-            upsertError.includes(
-              "notification_subscriptions_endpoint_key"
-            )
-          ) {
-
-            console.log(
-              "ℹ️ Customer notification subscription already exists."
-            );
-
-          } else {
-
-            console.warn(
-              "ZYRE customer notification subscription fallback failed:",
-              upsertError
-            );
-
-          }
-
-        }
-
-      }
-
-    } catch (customerError) {
-
-      console.warn(
-        "Customer notification database save was skipped:",
-        customerError
-      );
-
-    }
-
-  }
-
-
-  /* =====================================================
-  KEEP SELLER NOTIFICATIONS
-  ===================================================== */
-
-  try {
-
-    const existingResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/push_subscriptions?endpoint=eq." +
-        encodeURIComponent(
-          endpoint
-        ) +
-        "&select=id",
-
-        {
-
-          method:
-            "GET",
-
-          headers: {
-
-            "apikey":
-              SUPABASE_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_KEY
-
-          }
-
-        }
-
-      );
-
-
-    if (!existingResponse.ok) {
-
-      console.warn(
-        "Existing seller push subscription check failed:",
-        await existingResponse.text()
-      );
-
-    } else {
-
-      const existing =
-        await existingResponse.json();
-
-
-      if (
-        Array.isArray(existing) &&
-        existing.length > 0
-      ) {
-
-        console.log(
-          "ZYRE seller push subscription already exists."
-        );
-
-      } else {
-
-        const userId =
-          localStorage.getItem(
-            "zava_user_id"
-          );
-
-
-        const sellerId =
-          localStorage.getItem(
-            "zava_seller_id"
-          );
-
-
-        const sellerSubscriptionData = {
-
-          endpoint:
-            endpoint,
-
-          subscription:
-            subscriptionJson
-
-        };
-
-
-        if (userId) {
-
-          sellerSubscriptionData.user_id =
-            userId;
-
-        }
-
-
-        if (sellerId) {
-
-          sellerSubscriptionData.seller_id =
-            Number(
-              sellerId
-            );
-
-        }
-
-
-        const saveResponse =
-          await fetch(
-
-            SUPABASE_URL +
-            "/rest/v1/push_subscriptions",
-
-            {
-
-              method:
-                "POST",
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Authorization":
-                  "Bearer " +
-                  (
-                    window.ZYRE_CURRENT_SESSION?.access_token ||
-                    SUPABASE_KEY
-                  ),
-
-                "Content-Type":
-                  "application/json",
-
-                "Prefer":
-                  "return=minimal"
-
-              },
-
-              body:
-                JSON.stringify(
-                  sellerSubscriptionData
-                )
-
-            }
-
-          );
-
-
-        if (!saveResponse.ok) {
-
-          console.warn(
-            "Existing seller push subscription could not be saved:",
-            await saveResponse.text()
-          );
-
-        } else {
-
-          console.log(
-            "ZYRE seller push subscription saved successfully."
-          );
-
-        }
-
-      }
-
-    }
-
-  } catch (sellerError) {
-
-    console.warn(
-      "Existing seller notification save failed:",
-      sellerError
-    );
-
-  }
-
-
-  return subscription;
-
-}
-
-
-/* =========================================================
-CREATE PUSH SUBSCRIPTION
-========================================================= */
-
-async function subscribeToZYREPush() {
-
-  const registration =
-    await getZYREServiceWorkerRegistration();
-
-
-  if (
-    !registration.pushManager
-  ) {
-
-    throw new Error(
-      "Push notifications are not supported by this browser."
-    );
-
-  }
-
-
-  let subscription =
-    await registration.pushManager.getSubscription();
-
-
-  if (!subscription) {
-
-    subscription =
-      await registration.pushManager.subscribe({
-
-        userVisibleOnly:
-          true,
-
-        applicationServerKey:
-          urlBase64ToUint8Array(
-            ZYRE_VAPID_PUBLIC_KEY
-          )
-
-      });
-
-  }
-
-
-  console.log(
-    "ZYRE push subscription:",
-    subscription
-  );
-
-
-  await saveZYREPushSubscription(
-    subscription
-  );
-
-
-  return subscription;
-
-}
-
-
-/* =========================================================
-CHECK EXISTING NOTIFICATION SUBSCRIPTION
-========================================================= */
-
-async function checkZYRENotificationStatus() {
-
-  try {
-
-    if (
-      !("Notification" in window)
-    ) {
-
-      updateZYRENotificationButton(
-        false
-      );
-
-      return false;
-
-    }
-
-
-    if (
-      !navigator.serviceWorker ||
-      !window.PushManager
-    ) {
-
-      updateZYRENotificationButton(
-        false
-      );
-
-      return false;
-
-    }
-
-
-    const permission =
-      Notification.permission;
-
-
-    if (
-      permission !== "granted"
-    ) {
-
-      updateZYRENotificationButton(
-        false
-      );
-
-      return false;
-
-    }
-
-
-    const registration =
-      await getZYREServiceWorkerRegistration();
-
-
-    const subscription =
-      await registration.pushManager.getSubscription();
-
-
-    if (!subscription) {
-
-      console.log(
-        "ZYRE notification permission is granted, but no push subscription exists yet."
-      );
-
-
-      updateZYRENotificationButton(
-        false
-      );
-
-
-      return false;
-
-    }
-
-
-    console.log(
-      "Existing ZYRE push subscription found."
-    );
-
-
-    await saveZYREPushSubscription(
-      subscription
-    );
-
-
-    updateZYRENotificationButton(
-      true
-    );
-
-
-    return true;
-
-  } catch (error) {
-
-    console.error(
-      "Could not check ZYRE notification status:",
-      error
-    );
-
-
-    updateZYRENotificationButton(
-      false
-    );
-
-
-    return false;
-
-  }
-
-}
-
-
-/* =========================================================
-ENABLE ZYRE NOTIFICATIONS
-========================================================= */
-
-window.enableZYRENotifications =
-async function() {
-
-  if (
-    !("Notification" in window)
-  ) {
-
-    alert(
-      "Your browser does not support notifications."
-    );
-
-    return false;
-
-  }
-
-
-  if (
-    !("serviceWorker" in navigator)
-  ) {
-
-    alert(
-      "Your browser does not support service workers."
-    );
-
-    return false;
-
-  }
-
-
-  if (
-    !window.PushManager
-  ) {
-
-    alert(
-      "Your browser does not support push notifications."
-    );
-
-    return false;
-
-  }
-
-
-  try {
-
-    let permission =
-      Notification.permission;
-
-
-    if (
-      permission !== "granted"
-    ) {
-
-      permission =
-        await Notification.requestPermission();
-
-    }
-
-
-    if (
-      permission !== "granted"
-    ) {
-
-      alert(
-        "Notifications were not enabled.\n\n" +
-        "Please allow notifications for ZYRE Marketing in your browser settings."
-      );
-
-
-      updateZYRENotificationButton(
-        false
-      );
-
-
-      return false;
-
-    }
-
-
-    const subscription =
-      await subscribeToZYREPush();
-
-
-    if (!subscription) {
-
-      throw new Error(
-        "The push subscription was not created."
-      );
-
-    }
-
-
-    updateZYRENotificationButton(
-      true
-    );
-
-
-    console.log(
-      "ZYRE Marketing notifications enabled.",
-      subscription
-    );
-
-
-    alert(
-      "🔔 ZYRE Marketing notifications are enabled!\n\n" +
-      "This phone is now registered for push notifications."
-    );
-
-
-    return true;
-
-  } catch (error) {
-
-    console.error(
-      "Notification setup failed:",
-      error
-    );
-
-
-    updateZYRENotificationButton(
-      false
-    );
-
-
-    alert(
-      "Notification setup failed:\n\n" +
-      error.message
-    );
-
-
-    return false;
-
-  }
-
-};
-
-
-/* =========================================================
-REFRESH PUSH SUBSCRIPTION
-========================================================= */
-
-window.refreshZYREPushSubscription =
-async function() {
-
-  try {
-
-    if (
-      !("Notification" in window) ||
-      Notification.permission !==
-        "granted"
-    ) {
-
-      updateZYRENotificationButton(
-        false
-      );
-
-      return false;
-
-    }
-
-
-    if (
-      !("serviceWorker" in navigator) ||
-      !("PushManager" in window)
-    ) {
-
-      updateZYRENotificationButton(
-        false
-      );
-
-      return false;
-
-    }
-
-
-    const registration =
-      await getZYREServiceWorkerRegistration();
-
-
-    let subscription =
-      await registration.pushManager.getSubscription();
-
-
-    if (!subscription) {
-
-      subscription =
-        await registration.pushManager.subscribe({
-
-          userVisibleOnly:
-            true,
-
-          applicationServerKey:
-            urlBase64ToUint8Array(
-              ZYRE_VAPID_PUBLIC_KEY
-            )
-
-        });
-
-    }
-
-
-    await saveZYREPushSubscription(
-      subscription
-    );
-
-
-    updateZYRENotificationButton(
-      true
-    );
-
-
-    console.log(
-      "ZYRE push subscription checked and restored."
-    );
-
-
-    return true;
-
-  } catch (error) {
-
-    console.error(
-      "Could not refresh ZYRE push subscription:",
-      error
-    );
-
-
-    updateZYRENotificationButton(
-      false
-    );
-
-
-    return false;
-
-  }
-
-};
-
-
-/* =========================================================
-MAKE IMPORTANT FUNCTIONS AVAILABLE GLOBALLY
-========================================================= */
-
-window.getZYRESellerRentalAccess =
-getZYRESellerRentalAccess;
-
-window.initializeZYRERentalPaystack =
-initializeZYRERentalPaystack;
-
-window.verifyZYRERentalPayment =
-verifyZYRERentalPayment;
-
-window.redirectSellerToRentalPayment =
-redirectSellerToRentalPayment;
-
-
-/* =========================================================
-START
-========================================================= */
-
-loadCart();
-
-syncCartCount();
-
-handleCartHash();
-
-loadProducts();
-
-
-/* =========================================================
-NOTIFICATION STARTUP
-========================================================= */
-
-window.addEventListener(
-  "load",
-  function() {
-
-    loadCart();
-
-    syncCartCount();
-
-    updateCart();
-
-
-    if (
-      window.location.hash ===
-      "#cart"
-    ) {
-
-      handleCartHash();
-
-    }
-
-
-    setTimeout(
-      async function() {
-
-        const alreadyEnabled =
-          await checkZYRENotificationStatus();
-
-
-        if (
-          !alreadyEnabled &&
-          "Notification" in window &&
-          Notification.permission ===
-            "default"
-        ) {
-
-          updateZYRENotificationButton(
-            false
-          );
-
-        }
-
-      },
-      1500
-    );
-
-  }
-);
