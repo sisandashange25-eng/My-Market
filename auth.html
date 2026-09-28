@@ -1109,7 +1109,33 @@
       );
 
     }
+/*
+CONTINUE SELLER APPLICATION
+*/
 
+const urlParams =
+  new URLSearchParams(
+    window.location.search
+  );
+
+if (
+  urlParams.get("mode") === "seller" &&
+  urlParams.get("continue") === "1"
+) {
+
+  selectedAccountType = "seller";
+
+  customerArea.classList.add("hidden");
+
+  sellerArea.classList.remove("hidden");
+
+  customerChoice.classList.remove("active");
+
+  sellerChoice.classList.add("active");
+
+  clearMessage();
+
+}
     /*
     CUSTOMER REDIRECT
     */
