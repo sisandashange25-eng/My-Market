@@ -422,6 +422,66 @@ APPLICATION NOTICE
 
 
 /* =========================
+IDENTITY VERIFICATION
+========================= */
+
+.verification-section {
+  display: none;
+  margin-top: 22px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #f7f7f7;
+  border: 1px solid #e3e3e3;
+}
+
+.verification-section.visible {
+  display: block;
+}
+
+.verification-title {
+  margin: 0 0 7px;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.verification-description {
+  margin: 0 0 15px;
+  color: #666;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.verify-button {
+  width: 100%;
+  border: 0;
+  border-radius: 11px;
+  padding: 14px;
+  background: #111;
+  color: white;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.verify-button:hover {
+  background: #2a2a2a;
+}
+
+.verify-button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.verification-note {
+  margin-top: 10px;
+  color: #777;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+
+/* =========================
 RENTAL SECTION
 ========================= */
 
@@ -1230,6 +1290,42 @@ BENEFITS
       </div>
 
 
+      <!-- =========================
+      DIDIT IDENTITY VERIFICATION
+      ========================= -->
+
+      <div
+        class="verification-section"
+        id="verificationSection"
+      >
+
+        <h3 class="verification-title">
+          🔐 Verify your identity
+        </h3>
+
+        <p class="verification-description">
+          Complete your identity verification securely
+          through Didit. You will be guided through the
+          ID document and liveness verification process.
+        </p>
+
+        <button
+          type="button"
+          class="verify-button"
+          id="diditVerifyButton"
+        >
+          🔐 Verify Identity
+        </button>
+
+        <div class="verification-note">
+          Your verification is handled through Didit's
+          secure verification interface. ZYRE Marketing
+          does not receive or store your Didit API key.
+        </div>
+
+      </div>
+
+
       <button
         type="button"
         class="primary-button pending-button"
@@ -1367,6 +1463,10 @@ const STORE_RENTAL_METHOD =
 const RENTAL_PAYSTACK_FUNCTION =
   SUPABASE_URL +
   "/functions/v1/rental-paystack";
+
+const DIDIT_CREATE_SESSION_FUNCTION =
+  SUPABASE_URL +
+  "/functions/v1/didit-create-session";
 
 
 /* =========================
@@ -1741,15 +1841,6 @@ async function ensureSellerProfile(
   phone
 ) {
 
-  /*
-   * IMPORTANT:
-   *
-   * We intentionally do NOT send role here.
-   *
-   * An existing account must not have its
-   * role changed accidentally.
-   */
-
   const profileResponse =
     await fetch(
 
@@ -1991,11 +2082,6 @@ async function submitSellerApplication(
   }
 
 
-  /*
-   * PostgreSQL returns a TABLE result
-   * as an array through PostgREST.
-   */
-
   const result =
     Array.isArray(data)
       ? data[0]
@@ -2229,7 +2315,7 @@ async function getVerificationStatus(
       SUPABASE_URL +
       "/rest/v1/seller_verification?seller_id=eq." +
       encodeURIComponent(sellerId) +
-      "&select=id_verification_status,reviewed_at",
+      "&select=id,id_verification_status,reviewed_at,verification_provider,verification_reference&order=id.desc&limit=1",
 
       {
 
@@ -2261,6 +2347,343 @@ async function getVerificationStatus(
 
 
   return data?.[0] || null;
+
+}
+
+
+/* =========================
+DIDIT CREATE SESSION
+========================= */
+
+async function createDiditSession(
+  sellerId,
+  accessToken
+) {
+
+  const response =
+    await fetch(
+      DIDIT_CREATE_SESSION_FUNCTION,
+      {
+
+        method:
+          "POST",
+
+        headers: {
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " +
+            accessToken,
+
+          "Content-Type":
+            "application/json"
+
+        },
+
+        body:
+          JSON.stringify({
+
+            seller_id:
+              Number(sellerId)
+
+          })
+
+      }
+    );
+
+
+  const text =
+    await response.text();
+
+
+  let data =
+    {};
+
+  try {
+
+    data =
+      text
+        ? JSON.parse(text)
+        : {};
+
+  } catch {
+
+    data =
+      {};
+
+  }
+
+
+  if (!response.ok) {
+
+    console.error(
+      "Didit session error:",
+      response.status,
+      data
+    );
+
+    throw new Error(
+
+      data?.error ||
+      data?.message ||
+      data?.details ||
+      text ||
+      "Didit identity verification could not be started."
+
+    );
+
+  }
+
+
+  if (
+    data?.already_verified
+  ) {
+
+    return data;
+
+  }
+
+
+  if (
+    !data?.verification_url
+  ) {
+
+    console.error(
+      "Didit response did not contain verification_url:",
+      data
+    );
+
+    throw new Error(
+      "Didit created a response, but no verification link was returned."
+    );
+
+  }
+
+
+  return data;
+
+}
+
+
+/* =========================
+START DIDIT VERIFICATION
+========================= */
+
+async function startDiditVerification() {
+
+  clearMessage(
+    "rentalMessage"
+  );
+
+
+  const button =
+    document.getElementById(
+      "diditVerifyButton"
+    );
+
+
+  if (!button) return;
+
+
+  const session =
+    await getCurrentSession();
+
+
+  if (!session) {
+
+    showMessage(
+      "rentalMessage",
+      "Please sign in to your ZYRE account before starting identity verification.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const sellerId =
+    localStorage.getItem(
+      "zava_seller_id"
+    );
+
+
+  if (!sellerId) {
+
+    showMessage(
+      "rentalMessage",
+      "Your seller account could not be identified. Please return to Account and sign in again.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  button.disabled =
+    true;
+
+  button.textContent =
+    "Starting secure verification...";
+
+
+  try {
+
+    /*
+     * Re-check the seller from Supabase
+     * before creating a Didit session.
+     */
+
+    const seller =
+      await findExistingSeller(
+        session.userId,
+        session.accessToken
+      );
+
+
+    if (!seller) {
+
+      throw new Error(
+        "Your seller application could not be found."
+      );
+
+    }
+
+
+    if (
+      String(seller.id) !==
+      String(sellerId)
+    ) {
+
+      throw new Error(
+        "The seller session does not match your signed-in account."
+      );
+
+    }
+
+
+    /*
+     * If identity is already verified,
+     * don't create another Didit session.
+     */
+
+    const verification =
+      await getVerificationStatus(
+        seller.id,
+        session.accessToken
+      );
+
+
+    const verificationState =
+      String(
+        verification?.id_verification_status ||
+        "pending"
+      ).toLowerCase();
+
+
+    if (
+      verificationState ===
+        "verified" ||
+      verificationState ===
+        "approved"
+    ) {
+
+      showMessage(
+        "rentalMessage",
+        "Your identity is already verified. No new Didit session is required.",
+        "success"
+      );
+
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "✓ Identity Verified";
+
+
+      return;
+
+    }
+
+
+    /*
+     * Create a fresh Didit hosted session.
+     */
+
+    const didit =
+      await createDiditSession(
+        seller.id,
+        session.accessToken
+      );
+
+
+    if (
+      didit?.already_verified
+    ) {
+
+      showMessage(
+        "rentalMessage",
+        "Your identity is already verified.",
+        "success"
+      );
+
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "✓ Identity Verified";
+
+
+      return;
+
+    }
+
+
+    /*
+     * Didit returns the hosted verification URL.
+     *
+     * The API key remains inside the Edge Function.
+     * Only the safe verification URL reaches this page.
+     */
+
+    showMessage(
+      "rentalMessage",
+      "Your secure Didit verification session is ready. Opening the identity verification page...",
+      "info"
+    );
+
+
+    window.location.href =
+      didit.verification_url;
+
+  } catch (error) {
+
+    console.error(
+      "Didit verification error:",
+      error
+    );
+
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      "🔐 Verify Identity";
+
+
+    showMessage(
+      "rentalMessage",
+      error.message ||
+      "Identity verification could not be started. Please try again.",
+      "error"
+    );
+
+  }
 
 }
 
@@ -2452,6 +2875,16 @@ function showApplicationStatus(
       "paystackRentalButton"
     );
 
+  const verificationSection =
+    document.getElementById(
+      "verificationSection"
+    );
+
+  const diditButton =
+    document.getElementById(
+      "diditVerifyButton"
+    );
+
 
   if (storeName) {
 
@@ -2496,6 +2929,58 @@ function showApplicationStatus(
 
     verification.textContent =
       verificationState;
+
+  }
+
+
+  /*
+   * DIDIT BUTTON
+   *
+   * Show it whenever the seller still
+   * needs identity verification.
+   */
+
+  const needsIdentityVerification =
+    !identityVerified &&
+    !sellerRejected &&
+    !sellerSuspended;
+
+
+  if (
+    verificationSection
+  ) {
+
+    verificationSection.classList.toggle(
+      "visible",
+      needsIdentityVerification
+    );
+
+  }
+
+
+  if (
+    diditButton
+  ) {
+
+    if (
+      identityVerified
+    ) {
+
+      diditButton.disabled =
+        true;
+
+      diditButton.textContent =
+        "✓ Identity Verified";
+
+    } else {
+
+      diditButton.disabled =
+        false;
+
+      diditButton.textContent =
+        "🔐 Verify Identity";
+
+    }
 
   }
 
@@ -2553,7 +3038,7 @@ function showApplicationStatus(
 
       statusText.innerHTML =
         "<strong>Identity verification required</strong><br>" +
-        "Your seller application has approval recorded, but ZYRE Marketing must complete identity verification before payment can be made.";
+        "Complete the secure Didit identity verification below before payment can be made.";
 
     }
 
@@ -2849,7 +3334,7 @@ function showApplicationStatus(
 
         statusText.innerHTML =
           "<strong>Seller Pending</strong><br>" +
-          "Your application is waiting for ZYRE Marketing identity verification and approval.";
+          "Complete identity verification below so ZYRE Marketing can review your seller application.";
 
       }
 
@@ -2946,6 +3431,42 @@ function returnToAccount() {
     "auth.html";
 
 }
+
+
+/* =========================
+DIDIT BUTTON
+========================= */
+
+document
+  .getElementById(
+    "diditVerifyButton"
+  )
+  ?.addEventListener(
+    "click",
+    async function() {
+
+      try {
+
+        await startDiditVerification();
+
+      } catch (error) {
+
+        console.error(
+          "Unexpected Didit button error:",
+          error
+        );
+
+        showMessage(
+          "rentalMessage",
+          error.message ||
+          "Identity verification could not be started.",
+          "error"
+        );
+
+      }
+
+    }
+  );
 
 
 /* =========================
@@ -3458,7 +3979,7 @@ document
 
         showMessage(
           "registerMessage",
-          "Please accept the seller terms before submitting your application.",
+          "Please accept the seller terms before submitting your seller application.",
           "error"
         );
 
@@ -3737,13 +4258,6 @@ document
 
         if (existingSeller) {
 
-          /*
-           * If an earlier application exists
-           * but the store image was not uploaded,
-           * allow recovery without creating a
-           * duplicate seller application.
-           */
-
           if (
             !existingSeller.store_image_url &&
             storeImageFile
@@ -3918,7 +4432,7 @@ document
 
         showMessage(
           "rentalMessage",
-          "Your seller application has been submitted successfully.\n\nYour identity information has been stored privately for verification.\n\nZYRE Marketing must complete identity verification and approve your application before the R100 monthly rental payment becomes available.\n\nYour Seller Centre remains locked until approval and payment are completed.",
+          "Your seller application has been submitted successfully.\n\nYour identity information has been stored privately for verification.\n\nComplete the secure Didit identity verification above so ZYRE Marketing can review your application.\n\nYour Seller Centre remains locked until approval and payment are completed.",
           "success"
         );
 
@@ -3965,6 +4479,78 @@ document
 
     }
   );
+
+
+/* =========================
+LOAD EXISTING SELLER ON PAGE
+========================= */
+
+async function loadExistingSellerPage() {
+
+  try {
+
+    const session =
+      await getCurrentSession();
+
+
+    if (!session) {
+
+      return;
+
+    }
+
+
+    const seller =
+      await findExistingSeller(
+        session.userId,
+        session.accessToken
+      );
+
+
+    if (!seller) {
+
+      return;
+
+    }
+
+
+    saveSellerSession(
+      session.accessToken,
+      session.userId,
+      seller.id,
+      session.email
+    );
+
+
+    const verification =
+      await getVerificationStatus(
+        seller.id,
+        session.accessToken
+      );
+
+
+    showApplicationStatus(
+      seller,
+      verification
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Could not load seller application:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================
+START
+========================= */
+
+loadExistingSellerPage();
 
 </script>
 
