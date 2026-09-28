@@ -1,24 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>ZYRE Marketing | Account</title><meta
+name="description"
+content="Create or sign in to your ZYRE Marketing customer or seller account."
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>ZYRE Marketing | Account</title>
-
-  <meta
-    name="description"
-    content="Create or sign in to your ZYRE Marketing customer or seller account."
-  >
+«»
 
   <style>
-
     * {
       box-sizing: border-box;
     }
@@ -241,10 +229,14 @@
       cursor: pointer;
     }
 
+    /* CONTINUE SELLER APPLICATION */
+
     .continue-application {
-      margin-top: 14px;
-      padding-top: 18px;
-      border-top: 1px solid #292929;
+      margin-top: 16px;
+      padding: 13px;
+      border-radius: 10px;
+      background: #181818;
+      border: 1px solid #292929;
     }
 
     .continue-application p {
@@ -256,383 +248,342 @@
 
     .continue-btn {
       width: 100%;
-      padding: 14px;
-      border: 1px solid #fff;
+      padding: 13px;
+      border: 1px solid #444;
       border-radius: 10px;
-      background: #181818;
-      color: #fff;
-      font-size: 15px;
+      background: #fff;
+      color: #000;
+      font-size: 14px;
       font-weight: bold;
       cursor: pointer;
     }
 
     .continue-btn:hover {
-      background: #fff;
-      color: #000;
+      opacity: .9;
     }
 
     .hidden {
       display: none;
     }
+  </style></head><body>  <div class="container"><div class="logo">
 
-  </style>
+  <h1>ZYRE</h1>
 
-</head>
+  <p>Marketing • Online Marketplace</p>
 
-<body>
+</div>
 
-  <div class="container">
+<div class="card">
 
-    <div class="logo">
+  <!-- ACCOUNT TYPE -->
 
-      <h1>ZYRE</h1>
+  <div class="account-choice">
 
-      <p>
-        Marketing • Online Marketplace
-      </p>
-
+    <div class="choice-title">
+      Choose how you want to use ZYRE Marketing
     </div>
 
+    <div class="choice-buttons">
 
-    <div class="card">
-
-      <!-- ACCOUNT TYPE -->
-
-      <div class="account-choice">
-
-        <div class="choice-title">
-          Choose how you want to use ZYRE Marketing
-        </div>
-
-        <div class="choice-buttons">
-
-          <button
-            type="button"
-            class="choice-btn active"
-            id="customerChoice"
-            onclick="selectAccountType('customer')"
-          >
-            👤 Customer
-          </button>
-
-          <button
-            type="button"
-            class="choice-btn"
-            id="sellerChoice"
-            onclick="selectAccountType('seller')"
-          >
-            🏪 Seller
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <!-- CUSTOMER ACCOUNT AREA -->
-
-      <div id="customerArea">
-
-        <div class="tabs">
-
-          <button
-            type="button"
-            class="tab active"
-            id="loginTab"
-            onclick="showLogin()"
-          >
-            Sign In
-          </button>
-
-          <button
-            type="button"
-            class="tab"
-            id="signupTab"
-            onclick="showSignup()"
-          >
-            Create Account
-          </button>
-
-        </div>
-
-
-        <!-- CUSTOMER LOGIN -->
-
-        <div id="loginSection">
-
-          <h2>
-            Welcome back
-          </h2>
-
-          <div class="subtitle">
-            Sign in to your ZYRE Marketing customer account to continue
-            shopping.
-          </div>
-
-          <form id="loginForm">
-
-            <label for="loginEmail">
-              Customer email address
-            </label>
-
-            <input
-              type="email"
-              id="loginEmail"
-              placeholder="you@example.com"
-              autocomplete="email"
-              required
-            >
-
-            <label for="loginPassword">
-              Password
-            </label>
-
-            <input
-              type="password"
-              id="loginPassword"
-              placeholder="Your password"
-              autocomplete="current-password"
-              required
-            >
-
-            <button
-              type="submit"
-              class="main-btn"
-              id="loginButton"
-            >
-              Sign In as Customer
-            </button>
-
-          </form>
-
-        </div>
-
-
-        <!-- CUSTOMER CREATE ACCOUNT -->
-
-        <div
-          id="signupSection"
-          class="hidden"
-        >
-
-          <h2>
-            Create your customer account
-          </h2>
-
-          <div class="subtitle">
-            Create your ZYRE Marketing customer account. Your delivery
-            information will be saved so you don't have to enter it every
-            time.
-          </div>
-
-          <form id="signupForm">
-
-            <label for="fullName">
-              Full name
-            </label>
-
-            <input
-              type="text"
-              id="fullName"
-              placeholder="Your full name"
-              autocomplete="name"
-              required
-            >
-
-            <label for="signupEmail">
-              Email address
-            </label>
-
-            <input
-              type="email"
-              id="signupEmail"
-              placeholder="you@example.com"
-              autocomplete="email"
-              required
-            >
-
-            <label for="phone">
-              Phone number
-            </label>
-
-            <input
-              type="tel"
-              id="phone"
-              placeholder="e.g. 0812345678"
-              autocomplete="tel"
-              required
-            >
-
-            <label for="address">
-              Physical / delivery address
-            </label>
-
-            <textarea
-              id="address"
-              placeholder="House/flat number, street, suburb, city, province"
-              autocomplete="street-address"
-              required
-            ></textarea>
-
-            <label for="signupPassword">
-              Create password
-            </label>
-
-            <input
-              type="password"
-              id="signupPassword"
-              placeholder="Create a strong password"
-              autocomplete="new-password"
-              required
-            >
-
-            <div class="password-help">
-              Use at least 8 characters with uppercase and lowercase letters,
-              a number and a special character.
-            </div>
-
-            <label for="confirmPassword">
-              Confirm password
-            </label>
-
-            <input
-              type="password"
-              id="confirmPassword"
-              placeholder="Enter your password again"
-              autocomplete="new-password"
-              required
-            >
-
-            <button
-              type="submit"
-              class="main-btn"
-              id="signupButton"
-            >
-              Create Customer Account
-            </button>
-
-          </form>
-
-        </div>
-
-      </div>
-
-
-      <!-- SELLER ACCOUNT AREA -->
-
-      <div
-        id="sellerArea"
-        class="hidden"
+      <button
+        type="button"
+        class="choice-btn active"
+        id="customerChoice"
+        onclick="selectAccountType('customer')"
       >
+        👤 Customer
+      </button>
 
-        <h2>
-          Seller account
-        </h2>
-
-        <div class="subtitle">
-          Sellers must register with their real personal and business
-          information before they can access the Seller Centre.
-        </div>
-
-        <button
-          type="button"
-          class="main-btn"
-          onclick="openSellerRegistration()"
-        >
-          Create Seller Account
-        </button>
-
-
-        <div class="seller-note">
-
-          <strong>
-            Already registered as a seller?
-          </strong>
-          <br>
-
-          Sign in below using the same email address and password you
-          registered with.
-
-        </div>
-
-
-        <!-- CONTINUE SELLER APPLICATION -->
-
-        <div class="continue-application">
-
-          <p>
-            Already started a seller application?
-            Continue your application, identity verification
-            and payment process.
-          </p>
-
-          <button
-            type="button"
-            class="continue-btn"
-            onclick="continueSellerApplication()"
-          >
-            🔐 Continue Seller Application
-          </button>
-
-        </div>
-
-
-        <!-- SELLER LOGIN -->
-
-        <form id="sellerLoginForm">
-
-          <label for="sellerLoginEmail">
-            Seller email address
-          </label>
-
-          <input
-            type="email"
-            id="sellerLoginEmail"
-            placeholder="seller@example.com"
-            autocomplete="email"
-            required
-          >
-
-          <label for="sellerLoginPassword">
-            Seller password
-          </label>
-
-          <input
-            type="password"
-            id="sellerLoginPassword"
-            placeholder="Your seller password"
-            autocomplete="current-password"
-            required
-          >
-
-          <button
-            type="submit"
-            class="main-btn"
-            id="sellerLoginButton"
-          >
-            Sign In as Seller
-          </button>
-
-        </form>
-
-      </div>
-
-
-      <div
-        id="message"
-        class="message"
-      ></div>
+      <button
+        type="button"
+        class="choice-btn"
+        id="sellerChoice"
+        onclick="selectAccountType('seller')"
+      >
+        🏪 Seller
+      </button>
 
     </div>
 
   </div>
 
 
-  <!-- SUPABASE -->
+  <!-- CUSTOMER ACCOUNT AREA -->
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <div id="customerArea">
 
-  <script>
+    <div class="tabs">
+
+      <button
+        type="button"
+        class="tab active"
+        id="loginTab"
+        onclick="showLogin()"
+      >
+        Sign In
+      </button>
+
+      <button
+        type="button"
+        class="tab"
+        id="signupTab"
+        onclick="showSignup()"
+      >
+        Create Account
+      </button>
+
+    </div>
+
+
+    <!-- CUSTOMER LOGIN -->
+
+    <div id="loginSection">
+
+      <h2>Welcome back</h2>
+
+      <div class="subtitle">
+        Sign in to your ZYRE Marketing customer account to continue
+        shopping.
+      </div>
+
+      <form id="loginForm">
+
+        <label for="loginEmail">
+          Customer email address
+        </label>
+
+        <input
+          type="email"
+          id="loginEmail"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        >
+
+        <label for="loginPassword">
+          Password
+        </label>
+
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Your password"
+          autocomplete="current-password"
+          required
+        >
+
+        <button
+          type="submit"
+          class="main-btn"
+          id="loginButton"
+        >
+          Sign In as Customer
+        </button>
+
+      </form>
+
+    </div>
+
+
+    <!-- CUSTOMER CREATE ACCOUNT -->
+
+    <div id="signupSection" class="hidden">
+
+      <h2>Create your customer account</h2>
+
+      <div class="subtitle">
+        Create your ZYRE Marketing customer account. Your delivery
+        information will be saved so you don't have to enter it every
+        time.
+      </div>
+
+      <form id="signupForm">
+
+        <label for="fullName">
+          Full name
+        </label>
+
+        <input
+          type="text"
+          id="fullName"
+          placeholder="Your full name"
+          autocomplete="name"
+          required
+        >
+
+        <label for="signupEmail">
+          Email address
+        </label>
+
+        <input
+          type="email"
+          id="signupEmail"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        >
+
+        <label for="phone">
+          Phone number
+        </label>
+
+        <input
+          type="tel"
+          id="phone"
+          placeholder="e.g. 0812345678"
+          autocomplete="tel"
+          required
+        >
+
+        <label for="address">
+          Physical / delivery address
+        </label>
+
+        <textarea
+          id="address"
+          placeholder="House/flat number, street, suburb, city, province"
+          autocomplete="street-address"
+          required
+        ></textarea>
+
+        <label for="signupPassword">
+          Create password
+        </label>
+
+        <input
+          type="password"
+          id="signupPassword"
+          placeholder="Create a strong password"
+          autocomplete="new-password"
+          required
+        >
+
+        <div class="password-help">
+          Use at least 8 characters with uppercase and lowercase letters,
+          a number and a special character.
+        </div>
+
+        <label for="confirmPassword">
+          Confirm password
+        </label>
+
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Enter your password again"
+          autocomplete="new-password"
+          required
+        >
+
+        <button
+          type="submit"
+          class="main-btn"
+          id="signupButton"
+        >
+          Create Customer Account
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- SELLER ACCOUNT AREA -->
+
+  <div id="sellerArea" class="hidden">
+
+    <h2>Seller account</h2>
+
+    <div class="subtitle">
+      Sellers must register with their real personal and business
+      information before they can access the Seller Centre.
+    </div>
+
+    <button
+      type="button"
+      class="main-btn"
+      onclick="openSellerRegistration()"
+    >
+      Create Seller Account
+    </button>
+
+    <div class="seller-note">
+
+      <strong>Already registered as a seller?</strong><br>
+
+      Sign in below using the same email address and password you
+      registered with.
+
+    </div>
+
+
+    <!-- CONTINUE SELLER APPLICATION -->
+
+    <div class="continue-application">
+
+      <p>
+        Already started a seller application?
+        Continue your application, identity verification
+        and payment process.
+      </p>
+
+      <button
+        type="button"
+        class="continue-btn"
+        onclick="continueSellerApplication()"
+      >
+        🔐 Continue Seller Application
+      </button>
+
+    </div>
+
+
+    <form id="sellerLoginForm">
+
+      <label for="sellerLoginEmail">
+        Seller email address
+      </label>
+
+      <input
+        type="email"
+        id="sellerLoginEmail"
+        placeholder="seller@example.com"
+        autocomplete="email"
+        required
+      >
+
+      <label for="sellerLoginPassword">
+        Seller password
+      </label>
+
+      <input
+        type="password"
+        id="sellerLoginPassword"
+        placeholder="Your seller password"
+        autocomplete="current-password"
+        required
+      >
+
+      <button
+        type="submit"
+        class="main-btn"
+        id="sellerLoginButton"
+      >
+        Sign In as Seller
+      </button>
+
+    </form>
+
+  </div>
+
+
+  <div id="message" class="message"></div>
+
+</div>
+
+  </div>  <!-- SUPABASE -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script>
 
     const SUPABASE_URL =
       "https://gaccizzlwswwynattgda.supabase.co";
@@ -647,63 +598,40 @@
       );
 
 
-    let selectedAccountType =
-      "customer";
+    let selectedAccountType = "customer";
 
 
     const customerArea =
-      document.getElementById(
-        "customerArea"
-      );
+      document.getElementById("customerArea");
 
     const sellerArea =
-      document.getElementById(
-        "sellerArea"
-      );
+      document.getElementById("sellerArea");
 
     const customerChoice =
-      document.getElementById(
-        "customerChoice"
-      );
+      document.getElementById("customerChoice");
 
     const sellerChoice =
-      document.getElementById(
-        "sellerChoice"
-      );
+      document.getElementById("sellerChoice");
 
     const loginSection =
-      document.getElementById(
-        "loginSection"
-      );
+      document.getElementById("loginSection");
 
     const signupSection =
-      document.getElementById(
-        "signupSection"
-      );
+      document.getElementById("signupSection");
 
     const loginTab =
-      document.getElementById(
-        "loginTab"
-      );
+      document.getElementById("loginTab");
 
     const signupTab =
-      document.getElementById(
-        "signupTab"
-      );
+      document.getElementById("signupTab");
 
     const message =
-      document.getElementById(
-        "message"
-      );
+      document.getElementById("message");
 
 
-    function showMessage(
-      text,
-      type
-    ) {
+    function showMessage(text, type) {
 
-      message.textContent =
-        text;
+      message.textContent = text;
 
       message.className =
         "message " + type;
@@ -713,11 +641,9 @@
 
     function clearMessage() {
 
-      message.textContent =
-        "";
+      message.textContent = "";
 
-      message.className =
-        "message";
+      message.className = "message";
 
     }
 
@@ -726,75 +652,36 @@
       CUSTOMER / SELLER SELECTION
     */
 
-    function selectAccountType(
-      type
-    ) {
+    function selectAccountType(type) {
 
       clearMessage();
 
-      selectedAccountType =
-        type;
+      selectedAccountType = type;
 
 
-      if (
-        type ===
-        "customer"
-      ) {
+      if (type === "customer") {
 
-        customerArea
-          .classList
-          .remove(
-            "hidden"
-          );
+        customerArea.classList.remove("hidden");
 
-        sellerArea
-          .classList
-          .add(
-            "hidden"
-          );
+        sellerArea.classList.add("hidden");
 
-        customerChoice
-          .classList
-          .add(
-            "active"
-          );
+        customerChoice.classList.add("active");
 
-        sellerChoice
-          .classList
-          .remove(
-            "active"
-          );
+        sellerChoice.classList.remove("active");
 
         showLogin();
 
         return;
-
       }
 
 
-      customerArea
-        .classList
-        .add(
-          "hidden"
-        );
+      customerArea.classList.add("hidden");
 
-      sellerArea
-        .classList
-        .remove(
-          "hidden"
-        );
+      sellerArea.classList.remove("hidden");
 
-      customerChoice
-        .classList
-        .remove(
-          "active"
-        );
+      customerChoice.classList.remove("active");
 
-      sellerChoice
-        .classList
-        .add(
-          "active"
-        );
+      sellerChoice.classList.add("active");
 
     }
 
@@ -807,29 +694,13 @@
 
       clearMessage();
 
-      loginSection
-        .classList
-        .remove(
-          "hidden"
-        );
+      loginSection.classList.remove("hidden");
 
-      signupSection
-        .classList
-        .add(
-          "hidden"
-        );
+      signupSection.classList.add("hidden");
 
-      loginTab
-        .classList
-        .add(
-          "active"
-        );
+      loginTab.classList.add("active");
 
-      signupTab
-        .classList
-        .remove(
-          "active"
-        );
+      signupTab.classList.remove("active");
 
     }
 
@@ -838,29 +709,13 @@
 
       clearMessage();
 
-      loginSection
-        .classList
-        .add(
-          "hidden"
-        );
+      loginSection.classList.add("hidden");
 
-      signupSection
-        .classList
-        .remove(
-          "hidden"
-        );
+      signupSection.classList.remove("hidden");
 
-      loginTab
-        .classList
-        .remove(
-          "active"
-        );
+      loginTab.classList.remove("active");
 
-      signupTab
-        .classList
-        .add(
-          "active"
-        );
+      signupTab.classList.add("active");
 
     }
 
@@ -878,15 +733,10 @@
 
 
     /*
-      CONTINUE EXISTING SELLER APPLICATION
+      CONTINUE SELLER APPLICATION
     */
 
     function continueSellerApplication() {
-
-      localStorage.setItem(
-        "pendingSellerActions",
-        "continue"
-      );
 
       window.location.href =
         "seller-auth.html";
@@ -898,9 +748,7 @@
       STRONG PASSWORD
     */
 
-    function strongPassword(
-      password
-    ) {
+    function strongPassword(password) {
 
       return (
         password.length >= 8 &&
@@ -975,12 +823,9 @@
       if (
         profile &&
         (
-          profile.role ===
-            "seller_pending" ||
-          profile.role ===
-            "seller_approved" ||
-          profile.role ===
-            "seller"
+          profile.role === "seller_pending" ||
+          profile.role === "seller_approved" ||
+          profile.role === "seller"
         )
       ) {
 
@@ -994,10 +839,8 @@
       if (
         profile &&
         (
-          profile.role ===
-            "admin" ||
-          profile.role ===
-            "owner"
+          profile.role === "admin" ||
+          profile.role === "owner"
         )
       ) {
 
@@ -1054,8 +897,7 @@
       if (
         profile &&
         profile.role &&
-        profile.role !==
-          "customer"
+        profile.role !== "customer"
       ) {
 
         throw new Error(
@@ -1169,8 +1011,7 @@
           Array.isArray(
             emailLookup.data
           ) &&
-          emailLookup.data.length >
-            0
+          emailLookup.data.length > 0
         ) {
 
           seller =
@@ -1217,10 +1058,8 @@
         if (
           profile &&
           (
-            profile.role ===
-              "admin" ||
-            profile.role ===
-              "owner"
+            profile.role === "admin" ||
+            profile.role === "owner"
           )
         ) {
 
@@ -1272,10 +1111,8 @@
       if (
         profile &&
         (
-          profile.role ===
-            "admin" ||
-          profile.role ===
-            "owner"
+          profile.role === "admin" ||
+          profile.role === "owner"
         )
       ) {
 
@@ -1288,8 +1125,7 @@
 
       if (
         profile &&
-        profile.role ===
-          "customer"
+        profile.role === "customer"
       ) {
 
         throw new Error(
@@ -1319,8 +1155,7 @@
             session
           }
         } =
-          await supabaseClient.auth
-            .getSession();
+          await supabaseClient.auth.getSession();
 
 
         if (!session) {
@@ -1350,8 +1185,7 @@
         );
 
 
-        await supabaseClient.auth
-          .signOut();
+        await supabaseClient.auth.signOut();
 
 
         clearSellerStorage();
@@ -1373,9 +1207,7 @@
     */
 
     document
-      .getElementById(
-        "signupForm"
-      )
+      .getElementById("signupForm")
       .addEventListener(
         "submit",
         async function(event) {
@@ -1387,18 +1219,14 @@
 
           const fullName =
             document
-              .getElementById(
-                "fullName"
-              )
+              .getElementById("fullName")
               .value
               .trim();
 
 
           const email =
             document
-              .getElementById(
-                "signupEmail"
-              )
+              .getElementById("signupEmail")
               .value
               .trim()
               .toLowerCase();
@@ -1406,35 +1234,27 @@
 
           const phone =
             document
-              .getElementById(
-                "phone"
-              )
+              .getElementById("phone")
               .value
               .trim();
 
 
           const address =
             document
-              .getElementById(
-                "address"
-              )
+              .getElementById("address")
               .value
               .trim();
 
 
           const password =
             document
-              .getElementById(
-                "signupPassword"
-              )
+              .getElementById("signupPassword")
               .value;
 
 
           const confirmPassword =
             document
-              .getElementById(
-                "confirmPassword"
-              )
+              .getElementById("confirmPassword")
               .value;
 
 
@@ -1444,11 +1264,7 @@
             );
 
 
-          if (
-            !strongPassword(
-              password
-            )
-          ) {
+          if (!strongPassword(password)) {
 
             showMessage(
               "Password must be at least 8 characters and contain uppercase and lowercase letters, a number and a special character.",
@@ -1460,10 +1276,7 @@
           }
 
 
-          if (
-            password !==
-            confirmPassword
-          ) {
+          if (password !== confirmPassword) {
 
             showMessage(
               "The passwords do not match.",
@@ -1475,8 +1288,7 @@
           }
 
 
-          button.disabled =
-            true;
+          button.disabled = true;
 
           button.textContent =
             "Creating account...";
@@ -1511,9 +1323,7 @@
 
 
             if (
-              Array.isArray(
-                existingSeller
-              ) &&
+              Array.isArray(existingSeller) &&
               existingSeller.length
             ) {
 
@@ -1528,33 +1338,27 @@
               data,
               error
             } =
-              await supabaseClient.auth
-                .signUp({
+              await supabaseClient.auth.signUp({
 
-                  email:
-                    email,
+                email: email,
 
-                  password:
-                    password,
+                password: password,
 
-                  options: {
+                options: {
 
-                    data: {
+                  data: {
 
-                      full_name:
-                        fullName,
+                    full_name: fullName,
 
-                      phone:
-                        phone,
+                    phone: phone,
 
-                      role:
-                        "customer"
-
-                    }
+                    role: "customer"
 
                   }
 
-                });
+                }
+
+              });
 
 
             if (error) {
@@ -1580,20 +1384,15 @@
                 .from("profiles")
                 .upsert({
 
-                  id:
-                    data.user.id,
+                  id: data.user.id,
 
-                  full_name:
-                    fullName,
+                  full_name: fullName,
 
-                  phone:
-                    phone,
+                  phone: phone,
 
-                  address:
-                    address,
+                  address: address,
 
-                  role:
-                    "customer"
+                  role: "customer"
 
                 });
 
@@ -1617,8 +1416,7 @@
                 .getElementById(
                   "loginEmail"
                 )
-                .value =
-                  email;
+                .value = email;
 
 
               showLogin();
@@ -1657,8 +1455,7 @@
 
           } finally {
 
-            button.disabled =
-              false;
+            button.disabled = false;
 
             button.textContent =
               "Create Customer Account";
@@ -1674,9 +1471,7 @@
     */
 
     document
-      .getElementById(
-        "loginForm"
-      )
+      .getElementById("loginForm")
       .addEventListener(
         "submit",
         async function(event) {
@@ -1688,9 +1483,7 @@
 
           const email =
             document
-              .getElementById(
-                "loginEmail"
-              )
+              .getElementById("loginEmail")
               .value
               .trim()
               .toLowerCase();
@@ -1698,9 +1491,7 @@
 
           const password =
             document
-              .getElementById(
-                "loginPassword"
-              )
+              .getElementById("loginPassword")
               .value;
 
 
@@ -1710,8 +1501,7 @@
             );
 
 
-          button.disabled =
-            true;
+          button.disabled = true;
 
           button.textContent =
             "Signing in...";
@@ -1726,11 +1516,9 @@
               await supabaseClient.auth
                 .signInWithPassword({
 
-                  email:
-                    email,
+                  email: email,
 
-                  password:
-                    password
+                  password: password
 
                 });
 
@@ -1787,8 +1575,7 @@
 
             try {
 
-              await supabaseClient.auth
-                .signOut();
+              await supabaseClient.auth.signOut();
 
             } catch (signOutError) {
 
@@ -1810,8 +1597,7 @@
             );
 
 
-            button.disabled =
-              false;
+            button.disabled = false;
 
             button.textContent =
               "Sign In as Customer";
@@ -1827,9 +1613,7 @@
     */
 
     document
-      .getElementById(
-        "sellerLoginForm"
-      )
+      .getElementById("sellerLoginForm")
       .addEventListener(
         "submit",
         async function(event) {
@@ -1863,8 +1647,7 @@
             );
 
 
-          button.disabled =
-            true;
+          button.disabled = true;
 
           button.textContent =
             "Signing in...";
@@ -1879,11 +1662,9 @@
               await supabaseClient.auth
                 .signInWithPassword({
 
-                  email:
-                    email,
+                  email: email,
 
-                  password:
-                    password
+                  password: password
 
                 });
 
@@ -1919,13 +1700,17 @@
             /*
               APPROVED SELLER
 
-              Approved sellers go directly
+              IMPORTANT:
+              Approved sellers now go directly
               to the main marketplace.
+
+              They can still access Seller
+              Dashboard from the marketplace
+              after logging in.
             */
 
             const approved =
-              seller.approved ===
-              true;
+              seller.approved === true;
 
             const approvedStatus =
               seller.status ===
@@ -1939,16 +1724,12 @@
 
               localStorage.setItem(
                 "zava_seller_id",
-                String(
-                  seller.id
-                )
+                String(seller.id)
               );
 
               localStorage.setItem(
                 "zava_user_id",
-                String(
-                  data.user.id
-                )
+                String(data.user.id)
               );
 
               localStorage.setItem(
@@ -1971,6 +1752,11 @@
               setTimeout(
                 function() {
 
+                  /*
+                    APPROVED SELLER
+                    → MARKETPLACE
+                  */
+
                   window.location.replace(
                     "index.html"
                   );
@@ -1991,16 +1777,12 @@
 
             localStorage.setItem(
               "zava_seller_id",
-              String(
-                seller.id
-              )
+              String(seller.id)
             );
 
             localStorage.setItem(
               "zava_user_id",
-              String(
-                data.user.id
-              )
+              String(data.user.id)
             );
 
             localStorage.setItem(
@@ -2025,8 +1807,7 @@
             );
 
 
-            button.disabled =
-              false;
+            button.disabled = false;
 
             button.textContent =
               "Sign In as Seller";
@@ -2042,8 +1823,7 @@
 
             try {
 
-              await supabaseClient.auth
-                .signOut();
+              await supabaseClient.auth.signOut();
 
             } catch (signOutError) {
 
@@ -2065,8 +1845,7 @@
             );
 
 
-            button.disabled =
-              false;
+            button.disabled = false;
 
             button.textContent =
               "Sign In as Seller";
@@ -2088,8 +1867,4 @@
       validated before any redirect.
     */
 
-  </script>
-
-</body>
-
-</html>
+  </script></body></html>
