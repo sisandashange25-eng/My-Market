@@ -1744,20 +1744,57 @@ return;
           data.session.access_token  
         );  
 
-        showMessage(  
-          "Your Seller account is signed in, but your Seller application is still pending approval.\n\nStore: " +  
-          (  
-            seller.store_name ||  
-            "Your Store"  
-          ) +  
-          "\n\nYou cannot access the Seller Centre until ZYRE Marketing approves your application.",  
-          "info"  
-        );  
+        /*
+  CONTINUE SELLER APPLICATION
 
-        button.disabled = false;  
+  If the seller came here through
+  "Continue Seller Application",
+  open their existing application.
+*/
 
-        button.textContent =  
-          "Sign In as Seller";  
+if (
+  urlParams.get("mode") === "seller" &&
+  urlParams.get("continue") === "1"
+) {
+
+  showMessage(
+    "Seller account verified. Opening your existing seller application...",
+    "success"
+  );
+
+  setTimeout(
+    function() {
+
+      window.location.replace(
+        "seller-auth.html?continue=1"
+      );
+
+    },
+    700
+  );
+
+  return;
+
+}
+
+/*
+  NORMAL PENDING SELLER LOGIN
+*/
+
+showMessage(
+  "Your Seller account is signed in, but your Seller application is still pending approval.\n\nStore: " +
+  (
+    seller.store_name ||
+    "Your Store"
+  ) +
+  "\n\nYou cannot access the Seller Centre until ZYRE Marketing approves your application.",
+  "info"
+);
+
+button.disabled = false;
+
+button.textContent =
+  "Sign In as Seller";
 
       } catch (error) {  
 
