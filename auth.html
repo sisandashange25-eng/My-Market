@@ -1682,23 +1682,41 @@ document
             "success"  
           );  
 
-          setTimeout(  
-            function() {  
+          setTimeout(
+  function() {
 
-              /*  
-                APPROVED SELLER  
-                → MARKETPLACE  
-              */  
+    /*
+      CONTINUE SELLER APPLICATION
+      → EXISTING APPLICATION
+    */
 
-              window.location.replace(  
-                "index.html"  
-              );  
+    if (
+      urlParams.get("mode") === "seller" &&
+      urlParams.get("continue") === "1"
+    ) {
 
-            },  
-            700  
-          );  
+      window.location.replace(
+        "seller-auth.html?continue=1"
+      );
 
-          return;  
+      return;
+
+    }
+
+    /*
+      NORMAL APPROVED SELLER LOGIN
+      → MARKETPLACE
+    */
+
+    window.location.replace(
+      "index.html"
+    );
+
+  },
+  700
+);
+
+return;
 
         }  
 
