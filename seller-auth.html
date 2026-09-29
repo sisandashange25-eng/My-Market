@@ -4796,11 +4796,21 @@ START
 ========================= */
 
 /*
-Do not automatically load an existing
-seller application when this page opens.
-
-The seller must sign in first.
+CONTINUE SELLER APPLICATION
 */
+
+const sellerAuthParams =
+  new URLSearchParams(
+    window.location.search
+  );
+
+if (
+  sellerAuthParams.get("continue") === "1"
+) {
+
+  loadExistingSellerPage();
+
+}
 
   
 </script>  </body>  </html>
