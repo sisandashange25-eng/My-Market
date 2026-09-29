@@ -2465,17 +2465,25 @@ async function getVerificationStatus(
     );  
   
   
-  if (!response.ok) {  
-  
-    console.warn(  
-      "Could not read identity verification status:",  
-      response.status,  
-      await response.text()  
-    );  
-  
-    return null;  
-  
-  }  
+  if (!response.ok) {
+
+  const errorText =
+    await response.text();
+
+  console.error(
+    "Identity verification status request failed:",
+    response.status,
+    errorText
+  );
+
+  throw new Error(
+    "Verification record request failed (" +
+    response.status +
+    "): " +
+    errorText
+  );
+
+  } 
   
   
   const data =  
